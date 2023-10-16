@@ -1,0 +1,28 @@
+require("dotenv").config({
+  path: `.env.development`,
+})
+
+module.exports = {
+  flags: {
+    DEV_SSR: false,
+  },
+  siteMetadata: {
+    siteUrl: `http://localhost:8000`,
+  },
+  // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
+  // If you use VSCode you can also use the GraphQL plugin
+  // Learn more at: https://gatsby.dev/graphql-typegen
+  graphqlTypegen: true,
+  plugins: [
+    `gatsby-plugin-sass`,
+    `gatsby-plugin-typescript`,
+    {
+      resolve: "gatsby-source-graphql",
+      options: {
+        typeName: 'RootQuery',
+        fieldName: 'graphql',
+        url: "http://localhost:4000/graphql", // Replace with your GraphQL server URL
+      },
+    },
+  ],
+};
