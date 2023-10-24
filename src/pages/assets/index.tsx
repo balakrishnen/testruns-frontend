@@ -5,7 +5,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import DeletePopup from "../../components/DeletePopup";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
@@ -126,7 +125,7 @@ export default function Assets() {
   };
   const [isAnyCheckboxSelected, setIsAnyCheckboxSelected] = React.useState(false);
 
-  
+
 
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
@@ -151,7 +150,7 @@ export default function Assets() {
     confirmationPopupRef.current.open(false);
   };
 
-  
+
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
     const updatedRows = Rows.map((row: any) => ({

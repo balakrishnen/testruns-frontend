@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React from 'react'
 import Dialog from "@mui/material/Dialog";
 import { Box, Typography, Grid, TextField, FormControl, Select, MenuItem, Button } from '@mui/material';
@@ -10,7 +11,7 @@ import Avatars from "../../assets/images/Avatars.svg";
 import AddIcon from '@mui/icons-material/Add';
 import AddPeoplePopup from "../../components/AddPeoplePopup";
 
-const RunsForm = React.forwardRef(({ open, close, closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
+const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     const [answers, setAnswers] = React.useState("");

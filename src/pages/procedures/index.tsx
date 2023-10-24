@@ -4,14 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControl,
-  FormControlLabel,
-  InputAdornment,
-  MenuItem,
-  Select,
-  TextField,
   Typography,
-  Grid,
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TablePagination from "../../components/table/TablePagination";
@@ -19,19 +12,9 @@ import TableBody from "@mui/material/TableBody";
 import DeletePopup from "../../components/DeletePopup";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import { visuallyHidden } from "@mui/utils";
-import { Pagination } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import search from "../../assets/images/search.svg";
 import "../../assets/styles/procedure.scss";
-import bin from "../../assets/images/bin.svg";
-import CloseIcon from "@mui/icons-material/Close";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 // import Deleteconfirmationpopup from "../../components/deleteconfirmationpopup";
 import ProcedureForm from "./ProcedureForm";
 import TableFilters from "../../components/table/TableFilters";
@@ -48,12 +31,9 @@ import {
 } from "../../utils/data";
 import { ProceduresRowData } from "../../modals/Procedures.modal";
 import TableHeader from "../../components/table/TableHeader";
-import EnhancedTableHead from '../../components/table/TableHeader';
 import Confirmationpopup from "../../components/ConfirmationPopup";
 import SuccessPopup from "../../components/SuccessPopup";
 import { navigate } from "gatsby";
-import { log } from "console";
-
 const rows: ProceduresRowData[] = ProcedureRows;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -109,7 +89,7 @@ export default function Procedures() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [deletePopup, setDeletePopup] = React.useState(false);
+  // const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
 
   const handleRequestSort = (
@@ -149,20 +129,20 @@ export default function Procedures() {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event: unknown, newPage: number) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
+  // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setDense(event.target.checked);
+  // };
 
-  const isSelected = (id: number) => selected.indexOf(id) !== -1;
+  // const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =

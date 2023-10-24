@@ -4,24 +4,12 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import google from "../../assets/images/common/google.svg";
-import microsoft from "../../assets/images/common/micro.svg";
-import linkedin from "../../assets/images/common/linkedin.svg";
-import authbg from "../../assets/images/auth-bg.svg";
-import { Card, Link } from "@mui/material";
 import { withCardLayout } from "../../components/auth";
 import { navigate } from "gatsby";
 import { useFormik } from "formik";
@@ -42,10 +30,10 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), ""], "Passwords mismatch"),
 });
 
-const SignUp = (props: any) => {
+const SignUp = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showPassword2, setShowPassword2] = React.useState(false);
-  const [ConfirmshowPassword, setConfirmShowPassword] = React.useState(false);
+  // const [ConfirmshowPassword, setConfirmShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
@@ -74,14 +62,14 @@ const SignUp = (props: any) => {
     }
   };
 
-  const checkCredentials = (
-    fullname: any,
-    email: any,
-    password: any,
-    confirm_password: any
-  ) => {
-    return false;
-  };
+  // const checkCredentials = (
+  //   fullname: any,
+  //   email: any,
+  //   password: any,
+  //   confirm_password: any
+  // ) => {
+  //   return false;
+  // };
 
   const formik = useFormik({
     initialValues: {

@@ -1,43 +1,42 @@
-import React from "react";
-import PrivateRoute from "../../components/PrivateRoute";
-import TableFilters from "../../components/table/TableFilters";
-import TablePagination from "../../components/table/TablePagination";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React from 'react';
+import PrivateRoute from '../../components/PrivateRoute';
+import TableFilters from '../../components/table/TableFilters';
+import TablePagination from '../../components/table/TablePagination';
 import {
   Box,
   Button,
   Checkbox,
-  FormControl,
-  InputAdornment,
   MenuItem,
   Select,
-  TextField,
   Typography,
-} from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import { visuallyHidden } from "@mui/utils";
-import { Pagination } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import search from "../../../assets/images/search.svg";
-import RunsForm from "./RunsForm";
-import { DepartmentList, LaboratoryList, RunsHeaders, RunsRows } from "../../utils/data";
-import TableHeader from "../../components/table/TableHeader";
-import { RunsRowData } from "../../modals/runs.modal";
+} from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import search from '../../../assets/images/search.svg';
+import {
+  DepartmentList,
+  LaboratoryList,
+  RunsHeaders,
+  RunsRows,
+} from '../../utils/data';
+import TableHeader from '../../components/table/TableHeader';
+import { RunsRowData } from '../../modals/runs.modal';
 import {
   handleCheckboxChange,
   handleDeCheckboxChange,
   handledAllSelected,
-} from "../../utils/common-services";
-import DeletePopup from "../../components/DeletePopup";
-import { navigate } from "gatsby";
-import Confirmationpopup from "../../components/ConfirmationPopup";
-import SuccessPopup from "../../components/SuccessPopup";
+} from '../../utils/common-services';
+import DeletePopup from '../../components/DeletePopup';
+import { navigate } from 'gatsby';
+import Confirmationpopup from '../../components/ConfirmationPopup';
+import SuccessPopup from '../../components/SuccessPopup';
+import RunsForm from './RunsForm';
 
 // table start
 
@@ -53,7 +52,7 @@ export default function Runs() {
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
-  const [deletePopup, setDeletePopup] = React.useState(false);
+  // const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -67,7 +66,7 @@ export default function Runs() {
   const handlePageChange = (even: any, page: number) => {
     setCurrentPage(page);
   };
-  const [visibleRow, setVisibleRow] = React.useState<any>(Data)
+  const [visibleRow, setVisibleRow] = React.useState<any>(Data);
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       Rows,
@@ -75,7 +74,7 @@ export default function Runs() {
       setIsDeselectAllChecked,
       setIsselectAllChecked,
       setTableHeaderVisible,
-      setVisibleRow
+      setVisibleRow,
     )(event, id);
   };
   const handleDeChange = handleDeCheckboxChange(
@@ -85,7 +84,7 @@ export default function Runs() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setVisibleRow
+    setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
@@ -93,10 +92,10 @@ export default function Runs() {
     setSelectedRows,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
-    setVisibleRow
+    setVisibleRow,
   );
 
-  const handleRequestSort = () => { };
+  const handleRequestSort = () => {};
 
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
@@ -119,7 +118,6 @@ export default function Runs() {
     });
   };
 
-  
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
   };
@@ -133,19 +131,15 @@ export default function Runs() {
 
   const handleSubmitFormPopup = () => {
     formPopupRef.current.open(false);
-    successPopupRef.current.open(true, "Field");
+    successPopupRef.current.open(true, 'Field');
     setTimeout(() => {
-      successPopupRef.current.open(false, "Field");
+      successPopupRef.current.open(false, 'Field');
     }, 3000);
   };
 
   const handleOpenConfirmationPopup = (state: any) => {
     confirmationPopupRef.current.open(state);
   };
-
-
-  
-  
 
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
@@ -165,9 +159,8 @@ export default function Runs() {
   };
 
   const handleOpenDeletePopup = () => {
-    deletePopupRef.current.open(true, "Runs");
+    deletePopupRef.current.open(true, 'Runs');
   };
-
 
   return (
     <PrivateRoute>
@@ -197,26 +190,27 @@ export default function Runs() {
           deleteRecord={handleOpenDeletePopup}
         />
 
-        <Box className="table-outer" sx={{ width: "100%" }}>
+        <Box className="table-outer" sx={{ width: '100%' }}>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-            // size={dense ? "small" : "medium"}
+              // size={dense ? "small" : "medium"}
             >
               <TableHeader
                 numSelected={0}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={function (
-                  event: React.ChangeEvent<HTMLInputElement>
+                  event: React.ChangeEvent<HTMLInputElement>,
                 ): void {
-                  throw new Error("Function not implemented.");
+                  throw new Error('Function not implemented.');
                 }}
-                order={"asc"}
-                orderBy={""}
+                order={'asc'}
+                orderBy={''}
                 rowCount={0}
                 columns={headers}
-                filters={()=>{console.log("runz")
+                filters={() => {
+                  console.log('runz');
                 }}
               />
 
@@ -234,15 +228,15 @@ export default function Runs() {
                       tabIndex={-1}
                       key={index}
                       // selected={isItemSelected}
-                      sx={{ cursor: "pointer" }}
-                      onClick={(e:any) =>
-                        (e.target.name==undefined &&
-                        navigate(`/runs/details/${row.runNumber}`))
+                      sx={{ cursor: 'pointer' }}
+                      onClick={(e: any) =>
+                        e.target.name == undefined &&
+                        navigate(`/runs/details/${row.runNumber}`)
                       }
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">
-                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box sx={{ mt: 0, mr: 1 }}>
                               <Checkbox
                                 color="primary"
@@ -256,7 +250,6 @@ export default function Runs() {
                               onClick={() =>
                                 navigate(`/runs/details/${row.runNumber}`)
                               }
-                             
                             >
                               {row.runNumber}
                             </Box>
@@ -291,8 +284,8 @@ export default function Runs() {
                           <Select
                             className={
                               row.isActive === 1
-                                ? "active-select td-select"
-                                : "inactive-select td-select"
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
                             }
                             value={row.isActive}
                             displayEmpty
@@ -307,16 +300,16 @@ export default function Runs() {
                         <TableCell>
                           <Select
                             className={
-                              row.availability === "AVAILABLE"
-                                ? "active-select td-select"
-                                : "inactive-select td-select"
+                              row.availability === 'AVAILABLE'
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
                             }
                             value={row.availability}
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={"AVAILABLE"}>Available</MenuItem>
-                            <MenuItem value={"NOTAVAILABLE"}>
+                            <MenuItem value={'AVAILABLE'}>Available</MenuItem>
+                            <MenuItem value={'NOTAVAILABLE'}>
                               Not available
                             </MenuItem>
                           </Select>
@@ -337,9 +330,11 @@ export default function Runs() {
           />
         </Box>
         <Box>
-          <DeletePopup ref={deletePopupRef}
-            closeDeletePopup={() => deletePopupRef.current.open(false, "Runs")}
-            deleteConfirmation={handleDeleteConfirmation} />
+          <DeletePopup
+            ref={deletePopupRef}
+            closeDeletePopup={() => deletePopupRef.current.open(false, 'Runs')}
+            deleteConfirmation={handleDeleteConfirmation}
+          />
         </Box>
         <Box>
           <RunsForm
@@ -353,7 +348,6 @@ export default function Runs() {
             confirmationDone={handleConfirmationDone}
           />
           <SuccessPopup ref={successPopupRef} />
-
         </Box>
       </Box>
     </PrivateRoute>

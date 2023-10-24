@@ -1,5 +1,4 @@
 // src/theme.js
-import { blue, red } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
 const lightTheme = createTheme({

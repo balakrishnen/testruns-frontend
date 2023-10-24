@@ -18,13 +18,13 @@ const authorizedLink: any = setContext((_, { headers }) => {
   };
 });
 
-const unAuthorizedLink: any = setContext((_, { headers }) => {
-  return {
-    headers: {
-      ...headers,
-    },
-  };
-});
+// const unAuthorizedLink: any = setContext((_, { headers }) => {
+//   return {
+//     headers: {
+//       ...headers,
+//     },
+//   };
+// });
 
 // Create the Apollo Client instance with the HTTP and auth links
 export const client = new ApolloClient({

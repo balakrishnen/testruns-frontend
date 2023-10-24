@@ -3,13 +3,8 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  InputAdornment,
   MenuItem,
   Select,
-  TextField,
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -17,21 +12,12 @@ import TablePagination from "../../../components/table/TablePagination";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import { visuallyHidden } from "@mui/utils";
-import { Pagination } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import search from "../../../assets/images/search.svg";
-import bin from "../../../assets/images/bin.svg";
 import { withSettingsLayout } from "../../../components/settings";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
-import CloseIcon from "@mui/icons-material/Close";
 import TableHeader from "../../../components/table/TableHeader";
-import { CustomHeaders, UserHeaders } from "../../../utils/data";
+import { CustomHeaders } from "../../../utils/data";
 import TableFilters from "../../../components/table/TableFilters";
 import DeletePopup from "../../../components/DeletePopup";
 import CustomFieldsForm from "./CustomFieldsForm";
@@ -94,9 +80,9 @@ const fields: CustomRowData[] = [
 
 // table end
 const CustomFields = () => {
-  const [openDlg1Dialog, setDialog1Open] = React.useState(false);
+  // const [openDlg1Dialog, setDialog1Open] = React.useState(false);
   const [headers, setHeaders] = React.useState(CustomHeaders);
-  const [deletePopup, setDeletePopup] = React.useState(false);
+  // const [deletePopup, setDeletePopup] = React.useState(false);
   const [Rows, setSelectedRows] = React.useState(fields);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
@@ -122,7 +108,7 @@ const CustomFields = () => {
     confirmationPopupRef.current.open(state);
   };
 
-  const handleRequestSort = () => {};
+  const handleRequestSort = () => { };
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -131,6 +117,7 @@ const CustomFields = () => {
       setIsDeselectAllChecked,
       setIsselectAllChecked,
       setTableHeaderVisible
+
     )(event, id);
   };
 
@@ -224,7 +211,7 @@ const CustomFields = () => {
           <AddIcon sx={{ mr: 1 }} />
           Add new
         </Button>
-      </Box> 
+      </Box>
       <TableFilters
         columns={headers}
         handleMenuCheckboxChange={handleMenuCheckboxChange}
@@ -244,7 +231,7 @@ const CustomFields = () => {
               numSelected={0}
               onRequestSort={handleRequestSort}
               onSelectAllClick={function (
-                event: React.ChangeEvent<HTMLInputElement>
+                // event: React.ChangeEvent<HTMLInputElement>
               ): void {
                 throw new Error("Function not implemented.");
               }}

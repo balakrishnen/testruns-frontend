@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Switch, { SwitchProps } from "@mui/material/Switch";
+import Switch, { } from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import search from "../../../assets/images/search.svg";
 import { withSettingsLayout } from "../../../components/settings";

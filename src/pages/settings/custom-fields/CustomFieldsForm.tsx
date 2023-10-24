@@ -16,7 +16,7 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 const CustomFieldsForm = React.forwardRef(
   ({ closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
     const [formPopup, setFormPopup] = React.useState(false);
-    const [alertBox, setAlertBox] = React.useState(false);
+    // const [alertBox, setAlertBox] = React.useState(false);
     const [fieldType, setFieldType] = React.useState<any>(null);
     const [fieldGroup, setFieldGroup] = React.useState<any>(null);
     const [fieldStatus, setFieldStatus] = React.useState<any>(null);
@@ -31,17 +31,17 @@ const CustomFieldsForm = React.forwardRef(
       return <div>{children}</div>;
     };
 
-    const handleAddButtonClick = () => {
-      setAlertBox(true);
-      closeFormPopup();
-      setTimeout(() => {
-        setAlertBox(false);
-      }, 2000);
-    };
-    const handleConfirmationYes = () => {
-      setFormPopup(false);
-      closeFormPopup();
-    };
+    // const handleAddButtonClick = () => {
+    //   setAlertBox(true);
+    //   closeFormPopup();
+    //   setTimeout(() => {
+    //     setAlertBox(false);
+    //   }, 2000);
+    // };
+    // const handleConfirmationYes = () => {
+    //   setFormPopup(false);
+    //   closeFormPopup();
+    // };
     return (
       <Dialog
         open={formPopup}
