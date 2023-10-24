@@ -383,6 +383,11 @@ export default function Procedures() {
                       key={index}
                       // selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
+                      onClick={(e:any) =>
+                        (e.target.name==undefined && navigate(
+                           `/procedures/details/${row.procedureNumber}`
+                         ))
+                       }
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">
@@ -398,11 +403,7 @@ export default function Procedures() {
                             </Box>
                             <Box
                               sx={{ display: "flex", alignItems: "center" }}
-                              onClick={() =>
-                                navigate(
-                                  `/procedures/details/${row.procedureNumber}`
-                                )
-                              }
+                             
                             >
                               <Box sx={{ ml: 2 }}>
                                 <Box>{row.procedureNumber}</Box>

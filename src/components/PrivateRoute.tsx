@@ -9,13 +9,12 @@ import AppNotificationDrawer from './layout/notification-drawer';
 // import AppProfileDrawer from "./layout/profile-drawer";
 // import AppNotificationDrawer from "./layout/notification-drawer";
 
-let isLoggedIn = null;
+const PrivateRoute = ({ children }: any) => {
+  let isLoggedIn = null;
 
 if (typeof window !== 'undefined') {
   isLoggedIn = sessionStorage.getItem('isLoggedIn');
 }
-
-const PrivateRoute = ({ children }: any) => {
   const [width, setWidth] = React.useState(290);
   const [editProfile, setEditProfile] = React.useState(false);
   const [notificationList, setNotificationList] = React.useState(false);
@@ -40,13 +39,11 @@ const PrivateRoute = ({ children }: any) => {
   };
 
   if (isLoggedIn === 'false') {
+    console.log("false");
+    
     navigate('/login');
     return null;
   }
-
-  useEffect(() => {
-    console.log('ROUTE INIT');
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -83,6 +80,8 @@ const PrivateRoute = ({ children }: any) => {
       </Box>
     </ThemeProvider>
   );
+// }
+  
 };
 
 export default PrivateRoute;
