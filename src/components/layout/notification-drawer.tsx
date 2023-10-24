@@ -3,9 +3,10 @@ import React from "react";
 import "../../assets/styles/App.scss";
 import Avatars from "../../assets/images/Avatars.svg";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-export default function AppNotificationDrawer({ openDrawer }: any) {
+export default function AppNotificationDrawer({ openDrawer, toggleNotificationDrawer }: any) {
   return (
     <Drawer
+      className="profile-head"
       variant="temporary"
       anchor="right"
       open={openDrawer}
@@ -17,12 +18,13 @@ export default function AppNotificationDrawer({ openDrawer }: any) {
         },
         boxShadow: "-12px 4px 19px 0px #0000001A",
       }}
+      onClose={toggleNotificationDrawer}
     >
       <Toolbar />
       <Box className="notification-header">
         <Box className="notification-title">
           <Typography>Notifications</Typography>
-          <Typography className="mark-read">Mark all as read <span style={{width:"24px",height:"24px",marginLeft: "2rem"}}><OpenInNewIcon style={{width:"24px",height:"24px"}}/></span></Typography>
+          <Typography className="mark-read"><span style={{cursor:"pointer"}}>Mark all as read</span> <span style={{width:"24px",height:"24px",marginLeft: "2rem",cursor:"pointer"}}><OpenInNewIcon style={{width:"24px",height:"24px"}}/></span></Typography>
         </Box>
         <Box sx={{ height: 'calc(100vh - 150px)', overflowY: 'auto' }}>
           <Box className="notifications">

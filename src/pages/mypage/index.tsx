@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined"
 import MenuItem from '@mui/material/MenuItem';
 import Avatars from "../../assets/images/Avatars.svg";
+import viewarrow from "../../assets/images/chevrondown-gray.svg";
 import { useState } from 'react';
 import Calendar from 'react-calendar';
 import Emptystate from '../../assets/images/Emptystate.svg';
@@ -67,7 +68,7 @@ export default function MyPage() {
           </TableContainer>
           <Box className="show-page">
             <Typography>Showing 1 - 10 out of 200</Typography>
-            <FormControl className="view-all">
+            {/* <FormControl className="view-all">
               <Select
                 labelId="view-all-label"
                 id="view-all"
@@ -85,7 +86,8 @@ export default function MyPage() {
                 <MenuItem value={"2"}>2</MenuItem>
                 <MenuItem value={"3"}>3</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
+            <Typography style={{display:'flex', alignItems:'center', cursor: 'pointer'}}>View all <img src={viewarrow} alt="arrow" style={{marginLeft:'0.5rem'}}/></Typography>
           </Box>
         </Box>
         <Grid container spacing={2} sx={{ width: '100%', marginLeft: '0rem', marginTop: '1rem' }}>
@@ -226,7 +228,7 @@ export default function MyPage() {
               </Box>
               <Box className="show-page">
                 <Typography>Showing 1 - 10 out of 200</Typography>
-                <FormControl className="view-all">
+                {/* <FormControl className="view-all">
                   <Select
                     labelId="view-all-label"
                     id="view-all"
@@ -244,7 +246,8 @@ export default function MyPage() {
                     <MenuItem value={"2"}>2</MenuItem>
                     <MenuItem value={"3"}>3</MenuItem>
                   </Select>
-                </FormControl>
+                </FormControl> */}
+                <Typography style={{display:'flex', alignItems:'center', cursor: 'pointer'}}>View all <img src={viewarrow} alt="arrow" style={{marginLeft:'0.5rem'}}/></Typography>
               </Box>
             </Box>
           </Grid>

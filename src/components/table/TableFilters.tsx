@@ -94,7 +94,6 @@ export default function TableFilters({
   
 
   
-  console.log("dfdf",isTableHeaderVisible)
   return (
     <>
       <AssignPopup open={openAssign} close={() => setAssignOpen(false)} />
@@ -102,7 +101,7 @@ export default function TableFilters({
       <Grid container spacing={2} sx={{ mt: 0 }}>
         <Grid item xs={12} sm={12} md={12} lg={6} xl={9}>
           <Box className="search-action">
-            <Button type="submit" onClick={()=>closeTableHeader(false)} variant="contained" className="close-actions">
+            <Button type="submit" onClick={()=>handleDeCheckboxChange(false)} variant="contained" className="close-actions">
               <CloseIcon sx={{ mr: 1 }} />
               Close actions
             </Button>

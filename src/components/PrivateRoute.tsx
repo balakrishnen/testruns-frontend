@@ -1,15 +1,19 @@
-import React, { useEffect } from "react";
-import { navigate } from "gatsby";
-import { darkTheme, lightTheme } from "../utils/theme";
-import { Box, CssBaseline, ThemeProvider } from "@mui/material";
-import AppHeader from "./layout/header";
-import AppMenu from "./layout/menu";
-import AppProfileDrawer from "./layout/profile-drawer";
-import AppNotificationDrawer from "./layout/notification-drawer";
+import React, { useEffect } from 'react';
+import { navigate } from 'gatsby';
+import { darkTheme, lightTheme } from '../utils/theme';
+import { Box, CssBaseline, ThemeProvider } from '@mui/material';
+import AppHeader from './layout/header';
+import AppMenu from './layout/menu';
+import AppProfileDrawer from './layout/profile-drawer';
+import AppNotificationDrawer from './layout/notification-drawer';
 // import AppProfileDrawer from "./layout/profile-drawer";
 // import AppNotificationDrawer from "./layout/notification-drawer";
 
-const isLoggedIn = true;
+let isLoggedIn = null;
+
+if (typeof window !== 'undefined') {
+  isLoggedIn = sessionStorage.getItem('isLoggedIn');
+}
 
 const PrivateRoute = ({ children }: any) => {
   const [width, setWidth] = React.useState(290);
@@ -31,22 +35,22 @@ const PrivateRoute = ({ children }: any) => {
 
   const toggleTheme = () => {
     setTheme((prevTheme: any) =>
-      prevTheme === lightTheme ? darkTheme : lightTheme
+      prevTheme === lightTheme ? darkTheme : lightTheme,
     );
   };
 
-  if (!isLoggedIn) {
-    navigate("/login");
+  if (isLoggedIn === 'false') {
+    navigate('/login');
     return null;
   }
 
   useEffect(() => {
-    console.log('ROUTE INIT')
-  }, [])
+    console.log('ROUTE INIT');
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppHeader
           toggleDrawer={toggleDrawer}
@@ -56,15 +60,21 @@ const PrivateRoute = ({ children }: any) => {
         />
         <AppMenu width={width} />
 
-        <AppProfileDrawer openDrawer={editProfile} />
-        <AppNotificationDrawer openDrawer={notificationList} />
+        <AppProfileDrawer
+          openDrawer={editProfile}
+          toggleProfileDrawer={toggleProfileDrawer}
+        />
+        <AppNotificationDrawer
+          openDrawer={notificationList}
+          toggleNotificationDrawer={toggleNotificationDrawer}
+        />
 
         <Box
           component="main"
-          sx={{       
-            width: "100%",            
-            position:'relative',
-            top:'65px'
+          sx={{
+            width: '100%',
+            position: 'relative',
+            top: '65px',
           }}
           className={`${width === 290 ? 'wide-class' : 'narrow-class'}`}
         >

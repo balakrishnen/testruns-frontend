@@ -359,28 +359,13 @@ function EnhancedTableHead(props: any) {
                                           InputProps={{
                                             ...params.InputProps,
                                             endAdornment: (
-                                              <>
-                                                <img
-                                                  style={{
-                                                    marginRight: "-31px",
-                                                    marginTop: "-5px",
-                                                  }}
-                                                  src={search}
-                                                />
-                                              </>
+                                              <InputAdornment position="end">
+                                                <img src={search} />
+                                              </InputAdornment>
                                             ),
                                           }}
                                           inputProps={{
-                                            ...params.inputProps,
-                                            style: {
-                                              padding: "0px 0 5px",
-                                              margin: -3,
-                                              alignSelf: "start",
-                                              display: "block",
-                                              minWidth: 0,
-                                              width: "100%",
-                                              fontSize: "12px",
-                                            },
+                                            ...params.inputProps,                                            
                                           }}
                                         />
                                       )}

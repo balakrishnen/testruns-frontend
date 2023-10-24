@@ -350,6 +350,9 @@ button.delete-actions {
       font-weight: 500;
       letter-spacing: 0.35px;
     }
+    .MuiButtonBase-root.MuiCheckbox-root.Mui-checked{
+      color: #FFC60B !important;
+    }
   }
   .read-check {
     margin-right: 1px;
@@ -488,6 +491,9 @@ p.forgot-pass {
   line-height: normal;
   letter-spacing: 0.35px;
   cursor: pointer;
+  &:hover{
+    color: $primary-color;
+  }
 }
 p.reg-text {
   color: $black-shade-1;
@@ -611,7 +617,7 @@ p.reg-text {
 .search-field-inner{
   .MuiInputBase-root{
     display: flex;
-    width: 350px;
+    width: auto;
     height: 44px;
     padding: 10px 15px 10px 0px;
     justify-content: center;
@@ -701,6 +707,9 @@ fieldset.MuiOutlinedInput-notchedOutline {
       font-size: 40px;
     }
   }
+  .profile-head .MuiPaper-root {
+    width: 90% !important;
+  }
 }
 @media (max-width:599px){
   .app-bar-block {
@@ -761,10 +770,17 @@ fieldset.MuiOutlinedInput-notchedOutline {
         border: 1px solid #9F9F9F;
         background: $white;
         height: 30px;
+        padding: 0px 14px 0px !important;
+        padding-left: 0px !important;
+        font-size: 12px;
         fieldset{
           display: none;
         }
-      }      
+      }     
+      .MuiAutocomplete-input {
+        padding: 0px !important;
+        padding-left: 14px !important;
+      } 
       #table-select{
         padding-left: 10px;
         div {
@@ -781,12 +797,15 @@ fieldset.MuiOutlinedInput-notchedOutline {
       font-weight: 500;
       line-height: normal;
       letter-spacing: 0.24px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       white-space: nowrap;
       text-align: center;
       &:first-child {
 				text-align: left !important;
 			}
+    }
+    th{
+      margin-bottom: 0rem;
     }
   }
   td{
@@ -860,9 +879,9 @@ fieldset.MuiOutlinedInput-notchedOutline {
 .calender-sec{
   svg{
     background-image: url('../images/calender.svg');
-    background-size: cover;
     background-repeat: no-repeat;
     color: transparent;
+    background-position: center;
   }
 }
 .edit-profile-btn {
@@ -1071,28 +1090,7 @@ tbody td .td-select {
   }
 }
 // accordion end 
-.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
-  font: inherit;
-  letter-spacing: inherit;
-  color: currentColor;
-  padding: 4px 0 5px;
-  border: 0;
-  box-sizing: content-box;
-  background: none;
-  height: 1.4375em;
-  margin: 0;
-  -webkit-tap-highlight-color: transparent;
-  display: block;
-  min-width: 0;
-  width: 100%;
-  -webkit-animation-name: mui-auto-fill-cancel;
-  animation-name: mui-auto-fill-cancel;
-  -webkit-animation-duration: 10ms;
-  animation-duration: 10ms;
-  padding: 16.5px 14px;
-  padding-right: 0;
-  font-size: 12px !important;
-}
+
 // asset details end
 
 // .filter-search{
@@ -1222,7 +1220,7 @@ p.follow-people {
       line-height: normal;
       letter-spacing: 0.35px;
       position: relative;
-      top: -2px;
+      top: -1px;
       img {
         position: relative;
         top: 5px;
@@ -1256,9 +1254,11 @@ p.follow-people {
       width: 100%;
     }
   } 
-  .runz-height{
-    height: calc(100vh - 225px);
-  }
+  @media (min-width:1200px){
+    .runz-height{
+      height: calc(100vh - 177px);
+    }
+  }  
   .leftside-runz::-webkit-scrollbar {
     width: 10px;
     height: 10px;    
@@ -1278,7 +1278,68 @@ p.follow-people {
     background-size: 10px;
     background-repeat: no-repeat;
     background-position: left 1% center;
+    @media (max-width:1199px){
+      background-image: none;
+    }
   }
+.add-chart {
+    border-radius: 4px;
+    background: #FFF4D0;
+    box-shadow: none;
+    color: #181818;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.24px;
+    text-transform: capitalize;
+}
+.chart-title{
+  color: #181818;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: normal;
+}
+.color-chart {
+  display: flex;
+  align-items: center;
+  // justify-content: space-between;
+  margin-bottom: 1rem;
+}
+div#time-sec {
+  width: 100%;
+}
+.color-chart fieldset {
+  border-radius: 10px;
+}
+.xy-sec{
+  color: #181818;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-right: 0.5rem;
+}
+div#simple-tabpanel-1{
+  overflow-y: auto;
+  height: calc(100vh - 300px);
+}
+.recharts-wrapper{
+  width: 100% !important;
+  svg.recharts-surface,
+  rect {
+    width: 100% !important;
+  }
+}
+.color-picker {
+  position: relative;
+  margin-left: 0.5rem;
+}
+.sketch-picker {
+  position: absolute;
+  right: 0px;
+  z-index: 9;
+}
   @media (min-width:1200px){
     p.id-detail {
       white-space: nowrap;
@@ -1300,6 +1361,12 @@ p.follow-people {
   li button.edit-btn img {
     width: 21px;
     height: 21px;
+  }
+  .main-runzdetails div[data-type="SplitPane"] {
+    display: block;
+  }
+  div#simple-tabpanel-0, div#simple-tabpanel-2 {
+    padding-bottom: 6rem;
   }
 }
 @media (max-width:599px){
@@ -1362,6 +1429,10 @@ p.follow-people {
   align-items:center;
   padding:15px 20px;
   border-bottom: 2px solid #f5f5f5;
+  cursor: pointer;
+}
+.notifications:hover {
+  background: #FFF4D0;
 }
 .image-container{
   display: flex;
@@ -1444,6 +1515,13 @@ p.follow-people {
       text-decoration: underline;
       display: flex;
       align-items: center;
+    }
+    @media(max-width:450px){
+      display: block;
+      p.mark-read {
+        margin-top: 1rem;
+        justify-content: end;
+      }
     }
   }
 }
@@ -1576,6 +1654,21 @@ hr.hr-calender {
 }
 .calender-rightside .id-detail-title{
   font-size: 16px;
+}
+.color-input{
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  border: 4px solid #f3f3f3;
+  box-shadow: none;
+  padding: 0px;
+}
+input[type="color" i]::-webkit-color-swatch-wrapper {
+  padding: 0px;
+}
+input[type="color" i]::-webkit-color-swatch {
+  border: 0px;
+  border-radius: 4px;
 }
 @media (max-width:450px){
   .react-calendar__tile ,.react-calendar__month-view__weekdays__weekday{

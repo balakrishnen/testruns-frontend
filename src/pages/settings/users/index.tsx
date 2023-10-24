@@ -31,7 +31,7 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import TableHeader from "../../../components/table/TableHeader";
-import { UserHeaders } from "../../../utils/data";
+import { UserHeaders, UserRows } from "../../../utils/data";
 import { UserRowData } from "../../../modals/user.modal";
 import TableFilters from "../../../components/table/TableFilters";
 import DeletePopup from "../../../components/DeletePopup";
@@ -43,156 +43,11 @@ import {
   handleCheckboxChange,
   handleDeCheckboxChange,
   handledAllSelected,
-} from "../../../utils/commonServices";
+} from "../../../utils/common-services";
 // table start
-function createData(
-  is_checked: boolean,
-  id: string,
-  firstName: string,
-  lastName: string,
-  status: string,
-  password: string,
-  token: string,
-  provider: string,
-  providerDetails: string,
-  extraData: string,
-  organisationId: string,
-  roleId: string,
-  isActive: number,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string
-): UserRowData {
-  return {
-    is_checked,
-    id,
-    firstName,
-    lastName,
-    status,
-    password,
-    token,
-    provider,
-    providerDetails,
-    extraData,
-    organisationId,
-    roleId,
-    isActive,
-    createdAt,
-    updatedAt,
-    deletedAt,
-  };
-}
 
-// interface RowData {
-//   is_checked: boolean;
-//   id: string;
-//   name: string;
-//   dept: string;
-//   category: string;
-//   added_on: string;
-//   role: string;
-//   status: string;
-// }
 
-// function createData(
-//   is_checked: boolean,
-//   id: string,
-//   name: string,
-//   dept: string,
-//   category: string,
-//   added_on: string,
-//   role: string,
-//   status: string
-// ): RowData {
-//   return {
-//     is_checked,
-//     id,
-//     name,
-//     dept,
-//     category,
-//     added_on,
-//     role,
-//     status,
-//   };
-// }
-const users = [
-  createData(
-    false,
-    "ID1001",
-    "Ammeter",
-    "",
-    "1",
-    "",
-    "",
-    "",
-    "Computer Science",
-    "Data mining",
-
-    "02/10/2023",
-    "Requester",
-    2,
-    "",
-    "",
-    ""
-  ),
-  createData(
-    false,
-    "ID1002",
-    "VoltMeter",
-    "computerScience",
-    "2",
-    "",
-    "",
-    "",
-    "Cyber Security",
-    "Data Warehouse",
-
-    "02/10/2023",
-    "Tester",
-    2,
-    "",
-    "",
-    ""
-  ),
-  createData(
-    false,
-    "ID1003",
-    "Ammeter",
-    "Computer Science",
-    "1",
-    "",
-    "",
-    "",
-    "computer Science",
-    "OOPs",
-
-    "02/10/2023",
-    "Requester",
-    2,
-    "",
-    "",
-    ""
-  ),
-  createData(
-    false,
-    "ID1004",
-    "Manometer",
-    "computerScience",
-    "2",
-    "",
-    "AVAILABLE",
-    "101",
-    "Computer Science",
-    "Data Warehouse",
-
-    "02/10/2023",
-    "Admin",
-    2,
-    "",
-    "",
-    ""
-  ),
-];
+const users: UserRowData[] = UserRows;
 
 // table end
 const Users = () => {
@@ -203,37 +58,11 @@ const Users = () => {
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
   const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
-  const handleRequestSort = () => {};
+  const handleRequestSort = () => { };
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const deletePopupRef: any = React.useRef(null);
-
-  const handleChange = (event:any, id:any) => {
-    handleCheckboxChange(
-      Rows,
-      setSelectedRows,
-      setIsDeselectAllChecked,
-      setIsselectAllChecked,
-      setTableHeaderVisible,
-    )(event, id); 
-  };
-  
-  const handleDeChange = handleDeCheckboxChange(
-    isDeselectAllChecked,
-    Rows,
-    setSelectedRows,
-    setIsDeselectAllChecked,
-    setIsselectAllChecked,
-    setTableHeaderVisible
-  );
-  const handledAllchange = handledAllSelected(
-    isselectAllChecked,
-    Rows,
-    setSelectedRows,
-    setIsDeselectAllChecked,
-    setIsselectAllChecked
-  );
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const itemsPerPage = 5;
@@ -246,7 +75,38 @@ const Users = () => {
   const handlePageChange = (even: any, page: number) => {
     setCurrentPage(page);
   };
+  const [visibleRow, setVisibleRow] = React.useState<any>(Data)
+  
+  const handleChange = (event: any, id: any) => {
+    handleCheckboxChange(
+      Rows,
+      setSelectedRows,
+      setIsDeselectAllChecked,
+      setIsselectAllChecked,
+      setTableHeaderVisible,
+      setVisibleRow
+    )(event, id);
+  };
 
+  const handleDeChange = handleDeCheckboxChange(
+    isDeselectAllChecked,
+    Rows,
+    setSelectedRows,
+    setIsDeselectAllChecked,
+    setIsselectAllChecked,
+    setTableHeaderVisible,
+    setVisibleRow
+  );
+  const handledAllchange = handledAllSelected(
+    isselectAllChecked,
+    Rows,
+    setSelectedRows,
+    setIsDeselectAllChecked,
+    setIsselectAllChecked,
+    setVisibleRow
+  );
+  
+  
   const handleMenuCheckboxChange = (e: any, index: any) => {
     setHeaders((prevColumns: any) => {
       return prevColumns.map((column: any, i: any) => {
@@ -257,18 +117,18 @@ const Users = () => {
       });
     });
   };
-  
 
-  
+
+
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
-    const updatedRows = Rows.map((row:any) => ({
+    const updatedRows = Rows.map((row: any) => ({
       ...row,
       is_checked: false,
     }));
-  
+
     setSelectedRows(updatedRows);
-    setIsDeselectAllChecked(true); 
+    setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
   const handleCloseFormPopup = (state: any) => {
@@ -302,7 +162,7 @@ const Users = () => {
   };
 
   const handleOpenDeletePopup = () => {
-    deletePopupRef.current.open(true, "field/s");
+    deletePopupRef.current.open(true, "User");
   };
   // table end
   return (
@@ -407,15 +267,15 @@ const Users = () => {
                     {headers[6].is_show && (
                       <TableCell>
                         <Select
-                            className={
-                              row.status === "1"
-                                ? "active-select td-select"
-                                : "inactive-select td-select"
-                            }
-                            value={row.status}
-                            displayEmpty
-                            IconComponent={ExpandMoreOutlinedIcon}
-                          >
+                          className={
+                            row.status === "1"
+                              ? "active-select td-select"
+                              : "inactive-select td-select"
+                          }
+                          value={row.status}
+                          displayEmpty
+                          IconComponent={ExpandMoreOutlinedIcon}
+                        >
                           <MenuItem value={1}>Active</MenuItem>
                           <MenuItem value={2}>Inactive</MenuItem>
                         </Select>
@@ -437,21 +297,21 @@ const Users = () => {
       </Box>
       <Box>
         <UserForm ref={formPopupRef}
-        closeFormPopup={handleCloseFormPopup}
-        submitFormPopup={handleSubmitFormPopup}
-        openConfirmationPopup={handleOpenConfirmationPopup}/>
+          closeFormPopup={handleCloseFormPopup}
+          submitFormPopup={handleSubmitFormPopup}
+          openConfirmationPopup={handleOpenConfirmationPopup} />
       </Box>
       <Box>
         <DeletePopup ref={deletePopupRef}
-        closeDeletePopup={() => deletePopupRef.current.open(false, "field/s")}
-        deleteConfirmation={handleDeleteConfirmation} />
+          closeDeletePopup={() => deletePopupRef.current.open(false, "User")}
+          deleteConfirmation={handleDeleteConfirmation} />
       </Box>
       <Confirmationpopup
         ref={confirmationPopupRef}
         confirmationDone={handleConfirmationDone}
       />
       <SuccessPopup ref={successPopupRef} />
-      
+
     </Box>
   );
 };

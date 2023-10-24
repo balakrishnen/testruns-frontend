@@ -210,7 +210,7 @@ const Profile = () => {
                           autoComplete="last"
                           autoFocus
                           InputLabelProps={{ shrink: false }}
-                          placeholder="v +91     |  000000023"
+                          placeholder=""
                         />
                       </Box>
                     </Grid>

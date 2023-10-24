@@ -13,16 +13,14 @@ import microsoft from "../../assets/images/common/micro.svg";
 import linkedin from "../../assets/images/common/linkedin.svg";
 import authbg from "../../assets/images/auth-bg.svg";
 import { Card, Link } from "@mui/material";
-// import "../../assets/styles/Signup.scss";
-// import {
-//   LoginSocialGoogle,
-//   LoginSocialLinkedin,
-//   LoginSocialMicrosoft,
-//   IResolveParams,
-// } from "reactjs-social-login";
+import { auth, provider } from "../../firebase.config";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  OAuthProvider,
+} from "firebase/auth";
 
 export const CardLayout = ({ children }: any, props: any) => {
- 
   const [answer, setAnswer] = React.useState<any>(10);
 
   const Placeholder = ({ children }: any) => {
@@ -32,6 +30,28 @@ export const CardLayout = ({ children }: any, props: any) => {
   const onLoginStart = React.useCallback((e: void) => {
     return e;
   }, []);
+
+  const googleSignup = () => {
+    const googleProvider = provider("google.com");
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const microsoftSignup = () => {
+    const microsoftProvider = provider("microsoft.com");
+    signInWithPopup(auth, microsoftProvider)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <Box
@@ -80,19 +100,20 @@ export const CardLayout = ({ children }: any, props: any) => {
                     console.log(err);
                   }}
                 > */}
-                  <Button
-                    variant="contained"
-                    style={{
-                      fontWeight: 600,
-                      color: "#181818",
-                      fontSize: "15px",
-                      textTransform: 'none'
-                    }}
-                  >
-                    {" "}
-                    <img src={google} alt="google" />
-                    Sign up with Google
-                  </Button>
+                <Button
+                  variant="contained"
+                  style={{
+                    fontWeight: 600,
+                    color: "#181818",
+                    fontSize: "15px",
+                    textTransform: "none",
+                  }}
+                  onClick={() => googleSignup()}
+                >
+                  {" "}
+                  <img src={google} alt="google" />
+                  Sign up with Google
+                </Button>
                 {/* </LoginSocialGoogle> */}
                 {/* <LoginSocialMicrosoft
                   client_id="911d1fd2-9c9e-4a0e-bd71-90c3ec04f27f"
@@ -109,19 +130,20 @@ export const CardLayout = ({ children }: any, props: any) => {
                     console.log(err);
                   }}
                 > */}
-                  <Button
-                    variant="contained"
-                    style={{
-                      fontWeight: 600,
-                      color: "#181818",
-                      fontSize: "15px",
-                      textTransform: 'none'
-                    }}
-                  >
-                    {" "}
-                    <img src={microsoft} alt="microsoft" />
-                    Sign up with Microsoft
-                  </Button>
+                <Button
+                  variant="contained"
+                  style={{
+                    fontWeight: 600,
+                    color: "#181818",
+                    fontSize: "15px",
+                    textTransform: "none",
+                  }}
+                  onClick={() => microsoftSignup()}
+                >
+                  {" "}
+                  <img src={microsoft} alt="microsoft" />
+                  Sign up with Microsoft
+                </Button>
                 {/* </LoginSocialMicrosoft> */}
                 {/* <LoginSocialLinkedin
                   client_id="86j2ru56b16cq6"
@@ -137,7 +159,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     console.log(err);
                   }}
                 > */}
-                  <Button
+                {/* <Button
                     variant="contained"
                     style={{
                       fontWeight: 600,
@@ -149,7 +171,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     {" "}
                     <img src={linkedin} alt="linkedin" />
                     Sign up with Linkedin
-                  </Button>
+                  </Button> */}
                 {/* </LoginSocialLinkedin> */}
               </Box>
             </Box>

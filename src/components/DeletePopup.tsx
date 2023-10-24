@@ -25,7 +25,7 @@ const DeletePopup = React.forwardRef(({ closeDeletePopup, deleteConfirmation }: 
         aria-labelledby="confirmation-title"
         aria-describedby="confirmation"
         fullWidth
-        maxWidth="md"
+        maxWidth="sm"
         className="popup-outer"
       >
         <Box className="popup-section">

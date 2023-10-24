@@ -39,7 +39,7 @@ import {
   handleCheckboxChange,
   handleDeCheckboxChange,
   handledAllSelected,
-} from "../../../utils/commonServices";
+} from "../../../utils/common-services";
 import { CustomRowData } from "../../../modals";
 import Confirmationpopup from "../../../components/ConfirmationPopup";
 import SuccessPopup from "../../../components/SuccessPopup";

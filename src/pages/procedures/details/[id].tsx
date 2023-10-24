@@ -145,7 +145,7 @@ export default function ProcedureDetails() {
             Back
           </Button>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <img src={printer} alt="printer" style={{ marginRight: "1rem" }} />
+            <img src={printer} alt="printer" style={{ marginRight: "1rem" , cursor:"pointer" }} />
             <Button type="submit" variant="contained" className="add-btn">
               Save
             </Button>
