@@ -124,7 +124,7 @@ function AppHeader(props: any) {
           </IconButton>
           <Box>
             <Typography variant="h6" className="app-bar-title">
-              Test <span className="app-bar-label">Runz</span>
+              Test <span className="app-bar-label">Runs</span>
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 1 }} />

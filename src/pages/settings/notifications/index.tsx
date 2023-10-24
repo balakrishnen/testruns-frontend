@@ -235,7 +235,7 @@ const Notification = () => {
               <Typography>Messages</Typography>
               <Typography className="sub-text">
                 You will receive notifications whenever a new message or comment
-                is received on runz.
+                is received on runs.
               </Typography>
             </Box>
           </Grid>

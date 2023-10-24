@@ -97,7 +97,7 @@ const SignUp = (props: any) => {
   return (
     <>
       <Typography variant="h5" className="title-text">
-        Sign up for a <span>free</span> Test Runz account
+        Sign up for a <span>free</span> Test Runs account
       </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Box sx={{ mt: 4 }} className="auth-inner">
@@ -259,7 +259,7 @@ const SignUp = (props: any) => {
             />
             <Typography className="read-text">
               I have read and understood and agree with terms of service and
-              Privacy policy of Test Runz.{" "}
+              Privacy policy of Test Runs.{" "}
               <span style={{ cursor: "pointer" }}>[Read more]</span>
             </Typography>
           </Box>

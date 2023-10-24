@@ -25,10 +25,10 @@ import { visuallyHidden } from "@mui/utils";
 import { Pagination } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import search from "../../../assets/images/search.svg";
-import RunzForm from "./RunzForm";
-import { DepartmentList, LaboratoryList, RunzHeaders, RunzRows } from "../../utils/data";
+import RunsForm from "./RunsForm";
+import { DepartmentList, LaboratoryList, RunsHeaders, RunsRows } from "../../utils/data";
 import TableHeader from "../../components/table/TableHeader";
-import { RunzRowData } from "../../modals/runz.modal";
+import { RunsRowData } from "../../modals/runs.modal";
 import {
   handleCheckboxChange,
   handleDeCheckboxChange,
@@ -41,11 +41,11 @@ import SuccessPopup from "../../components/SuccessPopup";
 
 // table start
 
-const rows: RunzRowData[] = RunzRows;
+const rows: RunsRowData[] = RunsRows;
 
-export default function Runz() {
-  const [runzOpen, setRunzOpen] = React.useState(false);
-  const [headers, setHeaders] = React.useState<any>(RunzHeaders);
+export default function Runs() {
+  const [runsOpen, setRunsOpen] = React.useState(false);
+  const [headers, setHeaders] = React.useState<any>(RunsHeaders);
   const [Rows, setSelectedRows] = React.useState(rows);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
@@ -165,7 +165,7 @@ export default function Runz() {
   };
 
   const handleOpenDeletePopup = () => {
-    deletePopupRef.current.open(true, "Runz");
+    deletePopupRef.current.open(true, "Runs");
   };
 
 
@@ -173,7 +173,7 @@ export default function Runz() {
     <PrivateRoute>
       <Box className="main-padding runz-page">
         <Box className="title-main">
-          <Typography>Runz</Typography>
+          <Typography>Runs</Typography>
           <Button
             type="submit"
             variant="contained"
@@ -182,7 +182,7 @@ export default function Runz() {
             }}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create runz
+            Create runs
           </Button>
         </Box>
         <TableFilters
@@ -248,7 +248,7 @@ export default function Runz() {
                             </Box>
                             <Box
                               onClick={() =>
-                                navigate(`/runz/details/${row.runNumber}`)
+                                navigate(`/runs/details/${row.runNumber}`)
                               }
                             >
                               {row.runNumber}
@@ -331,11 +331,11 @@ export default function Runz() {
         </Box>
         <Box>
           <DeletePopup ref={deletePopupRef}
-            closeDeletePopup={() => deletePopupRef.current.open(false, "Runz")}
+            closeDeletePopup={() => deletePopupRef.current.open(false, "Runs")}
             deleteConfirmation={handleDeleteConfirmation} />
         </Box>
         <Box>
-          <RunzForm
+          <RunsForm
             ref={formPopupRef}
             closeFormPopup={handleCloseFormPopup}
             submitFormPopup={handleSubmitFormPopup}

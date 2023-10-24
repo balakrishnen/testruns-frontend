@@ -30,7 +30,7 @@ const rows = [
 
 
 export default function Assign({ open, close }: any) {
-    const [runzOpen, setRunzOpen] = React.useState(false);
+    const [runsOpen, setRunsOpen] = React.useState(false);
     return (
         <div>
             <Dialog
@@ -45,17 +45,17 @@ export default function Assign({ open, close }: any) {
             >
                 <Box className="popup-section">
                     <Box className="title-popup">
-                        <Typography>Assign runz</Typography>
+                        <Typography>Assign runs</Typography>
                         <CloseIcon />
                     </Box>
                     <Box>
-                        <Typography className="follow-people">You have selected following runz to assign.</Typography>
+                        <Typography className="follow-people">You have selected following runs to assign.</Typography>
                         <Box className="table-outer" sx={{ width: "100%" }}>
                             <TableContainer>
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Runz details</TableCell>
+                                            <TableCell>Runs details</TableCell>
                                             <TableCell align="right">Created by</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -93,7 +93,7 @@ export default function Assign({ open, close }: any) {
                                             variant="contained"
                                             className="avatar-add"
                                             onClick={() => {
-                                                setRunzOpen(true);
+                                                setRunsOpen(true);
                                             }}
                                         >
                                             <AddIcon sx={{ mr: 1 }}/>
@@ -112,8 +112,8 @@ export default function Assign({ open, close }: any) {
             </Dialog>
             <Box>
                 <AddPeoplePopup
-                    open={runzOpen}
-                    close={() => setRunzOpen(false)}
+                    open={runsOpen}
+                    close={() => setRunsOpen(false)}
                 />
             </Box>
         </div>

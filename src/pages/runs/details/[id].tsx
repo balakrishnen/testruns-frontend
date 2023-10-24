@@ -75,7 +75,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function RunzDetails() {
+export default function RunsDetails() {
   const [openDlg2Dialog, setDialog2Open] = React.useState(false);
   const [answers, setAnswers] = React.useState("");
   const Placeholder = ({ children }: any) => {

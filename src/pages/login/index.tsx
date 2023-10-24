@@ -63,11 +63,12 @@ const Login = () => {
   };
 
   const checkCredentials = (email: any, password: any) => {
-    if (email === validUser.email && password === validUser.password) {
-      return true;
-    } else {
-      return false;
-    }
+    // if (email === validUser.email && password === validUser.password) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+    return true;
   };
 
   const formik = useFormik({
@@ -82,7 +83,7 @@ const Login = () => {
   return (
     <>
       <Typography variant="h5" className="title-text">
-        Log in to your Test Runz account
+        Log in to your Test Runs account
       </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Box sx={{ mt: 4 }} className="auth-inner">

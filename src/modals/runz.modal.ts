@@ -1,6 +1,6 @@
 import { Filters } from ".";
 
-export interface RunzRowData {
+export interface RunsRowData {
   is_checked: boolean;
   id: string;
   objective: string;
@@ -34,7 +34,7 @@ interface HeaderId {
 }
 
 
-export interface RunzHead {
+export interface RunsHead {
   id: keyof HeaderId;
   label: string;
   filters: Filters[];

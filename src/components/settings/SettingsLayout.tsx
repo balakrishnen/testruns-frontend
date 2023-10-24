@@ -57,13 +57,13 @@ const menuOption = [
     activeIcon: RoleActive,
     path: "/settings/roles",
   },
-  {
-    id: 5,
-    name: "Custom fields",
-    icon: procedures,
-    activeIcon: proceduresActive,
-    path: "/settings/custom-fields",
-  },
+  // {
+  //   id: 5,
+  //   name: "Custom fields",
+  //   icon: procedures,
+  //   activeIcon: proceduresActive,
+  //   path: "/settings/custom-fields",
+  // },
 ];
 export const SettingsLayout = ({ children }: any, props: any) => {
   const [selectedItem, setSelectedItem] = React.useState(menuOption[0].id);

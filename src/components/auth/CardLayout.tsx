@@ -76,7 +76,7 @@ export const CardLayout = ({ children }: any, props: any) => {
         <Grid item xs={12} sm={12} md={6} lg={6} className="sign-left">
           <Box>
             <Typography className="welcome-to">Welcome to</Typography>
-            <Typography className="test-runz">Test Runz</Typography>
+            <Typography className="test-runz">Test Runs</Typography>
           </Box>
           {children.props.uri === "/login" && (
             <Box className="login-center"></Box>

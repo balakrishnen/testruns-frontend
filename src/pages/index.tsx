@@ -2,8 +2,8 @@ import React from "react";
 import PrivateRoute from "../components/PrivateRoute";
 import { Router } from "@reach/router";
 import MyPage from "./mypage";
-import Runz from "./runz";
-import RunzDetails from "./runz/details/[id]";
+import Runs from "./runs";
+import RunsDetails from "./runs/details/[id]";
 import Login from "./login";
 import ForgotPassword from "./forgot-password";
 import ResetPassword from "./reset-password";
@@ -18,7 +18,7 @@ import NotificationPage from "./settings/notifications";
 import UsersPage from "./settings/users";
 import ProfilePage from "./settings/profile";
 import RolesPage from "./settings/roles";
-import CustomFields from "./settings/custom-fields";
+// import CustomFields from "./settings/custom-fields";
 import { Provider } from "react-redux";
 import store from "../utils/store";
 import { ApolloProvider } from "@apollo/client";
@@ -35,8 +35,8 @@ const IndexPage: React.FC = () => {
           <ResetPassword path="/reset-password" />
           <ForgotPassword path="/forgot-password" />
           <PrivateRoute path="/mypage" component={MyPage} />
-          <PrivateRoute path="/runz" component={Runz} />
-          <PrivateRoute path="/details/:id" component={RunzDetails} />
+          <PrivateRoute path="/runs" component={Runs} />
+          <PrivateRoute path="/details/:id" component={RunsDetails} />
           <PrivateRoute path="/procedures" component={Procedures} />
           <PrivateRoute path="/projects" component={Projects} />
           <PrivateRoute path="/assets" component={Assets} />
@@ -46,7 +46,7 @@ const IndexPage: React.FC = () => {
           <PrivateRoute path="/profile" component={ProfilePage} />
           <PrivateRoute path="/users" component={UsersPage} />
           <PrivateRoute path="/roles" component={RolesPage} />
-          <PrivateRoute path="/custom-fields" component={CustomFields} />
+          {/* <PrivateRoute path="/custom-fields" component={CustomFields} /> */}
           <PrivateRoute path="/billings" component={Billings} />
         </Router>
       </ApolloProvider>

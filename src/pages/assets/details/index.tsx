@@ -144,7 +144,7 @@ const headCells: readonly HeadCell[] = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Runz details"
+    label: "Runs details"
   },
   {
     id: "calories",

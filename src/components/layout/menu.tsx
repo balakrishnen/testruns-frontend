@@ -35,7 +35,7 @@ const menuOption = [
     activeIcon: mypageActive,
     path: "/mypage",
   },
-  { id: 2, name: "Runs", icon: runs, activeIcon: runsActive, path: "/runz" },
+  { id: 2, name: "Runs", icon: runs, activeIcon: runsActive, path: "/runs" },
   {
     id: 3,
     name: "Procedures",

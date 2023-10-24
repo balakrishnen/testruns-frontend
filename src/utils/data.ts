@@ -3,7 +3,7 @@
 import { CustomHead, Department, Laboratory, Organization } from "../modals";
 import { AssetsHead } from "../modals/assets.modal";
 import { UserHead } from "../modals/user.modal";
-import { RunzHead } from "../modals/runz.modal";
+import { RunsHead } from "../modals/runs.modal";
 import { ProceduresHead } from "../modals/Procedures.modal";
 
 export const AssetsHeaders: readonly AssetsHead[] = [
@@ -823,7 +823,7 @@ export const LaboratoryList: readonly Laboratory[] = [
   },
 ];
 
-export const RunzHeaders: readonly RunzHead[] = [
+export const RunsHeaders: readonly RunsHead[] = [
   {
     id: "runNumber",
     label: "ID",
@@ -959,7 +959,7 @@ export const RunzHeaders: readonly RunzHead[] = [
     is_show: true,
   },
 ];
-export const RunzRows = [
+export const RunsRows = [
   {
     is_checked: false,
     id: "1",

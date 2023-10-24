@@ -78,9 +78,9 @@ export default function TableFilters({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [runzOpen, setRunzOpen] = React.useState(false);
+  const [runsOpen, setRunsOpen] = React.useState(false);
   const handleAssignClick = () => {
-    setRunzOpen(true);
+    setRunsOpen(true);
   };
   const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
 
@@ -160,7 +160,7 @@ export default function TableFilters({
         Assign
       </Button>
       
-        <AddPeoplePopup open={runzOpen} close={() => setRunzOpen(false)} />
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} />
       
         <Button className="delete-actions" onClick={handleAssignClick}>
               <img src={share} alt="Share" />
