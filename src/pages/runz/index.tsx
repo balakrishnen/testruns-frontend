@@ -6,25 +6,17 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControl,
-  InputAdornment,
   MenuItem,
   Select,
-  TextField,
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import { visuallyHidden } from "@mui/utils";
-import { Pagination } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import search from "../../../assets/images/search.svg";
 import RunzForm from "./RunzForm";
 import { DepartmentList, LaboratoryList, RunzHeaders, RunzRows } from "../../utils/data";
 import TableHeader from "../../components/table/TableHeader";
@@ -44,7 +36,7 @@ import SuccessPopup from "../../components/SuccessPopup";
 const rows: RunzRowData[] = RunzRows;
 
 export default function Runz() {
-  const [runzOpen, setRunzOpen] = React.useState(false);
+  // const [runzOpen, setRunzOpen] = React.useState(false);
   const [headers, setHeaders] = React.useState<any>(RunzHeaders);
   const [Rows, setSelectedRows] = React.useState(rows);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
@@ -53,7 +45,7 @@ export default function Runz() {
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
-  const [deletePopup, setDeletePopup] = React.useState(false);
+  // const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -119,7 +111,7 @@ export default function Runz() {
     });
   };
 
-  
+
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
   };
@@ -144,8 +136,8 @@ export default function Runz() {
   };
 
 
-  
-  
+
+
 
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);

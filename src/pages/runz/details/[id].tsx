@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PrivateRoute from "../../../components/PrivateRoute";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -18,8 +18,7 @@ import EditPopup from "./editpopup";
 import SplitPane from "react-split-pane";
 import { Editor } from "@tinymce/tinymce-react";
 import AddIcon from '@mui/icons-material/Add';
-import { PhotoshopPicker } from "react-color";
-import { SketchPicker } from "react-color";
+
 
 
 
@@ -27,10 +26,8 @@ import {
   LineChart,
   Line,
   XAxis,
-  YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
 } from "recharts";
 
 const data = [
@@ -95,12 +92,12 @@ export default function RunzDetails() {
     setValue(newValue);
   };
   const editorRef: any = React.useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
-  const [color, setColor] = useState("#ff0000");
+  // const log = () => {
+  //   if (editorRef.current) {
+  //     console.log(editorRef.current.getContent());
+  //   }
+  // };
+
   return (
     <PrivateRoute>
       <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} />
@@ -306,7 +303,7 @@ export default function RunzDetails() {
                   across its ends, provided the physical state of the conductor
                   remains unchanged. If I be the current flowing through the
                   conductor and V the potential difference across its ends, then
-                  according to Ohm's law V I ∝ and hence V = RI where R is the
+                  according to Ohm s law V I ∝ and hence V = RI where R is the
                   constant of proportionality and is termed as the electrical
                   resistance of the conductor. If V is expressed in volts and I
                   in amperes, then R is expressed in ohms. The resistance R,
@@ -347,7 +344,7 @@ export default function RunzDetails() {
                   ends, provided the physical state of the conductor remains
                   unchanged. If I be the current flowing through the conductor
                   and V the potential difference across its ends, then according
-                  to Ohm's law V I ∝ and hence V = RI where R is the constant of
+                  to Ohms law V I ∝ and hence V = RI where R is the constant of
                   proportionality and is termed as the electrical resistance of
                   the conductor. If V is expressed in volts and I in amperes,
                   then R is expressed in ohms. The resistance R, depends upon
@@ -610,7 +607,7 @@ export default function RunzDetails() {
                   <img
                     src={printer}
                     alt="printer"
-                    style={{ marginRight: "1rem" ,  cursor:"pointer" }}
+                    style={{ marginRight: "1rem", cursor: "pointer" }}
                   />
                   <Button type="submit" variant="contained" className="add-btn">
                     Save

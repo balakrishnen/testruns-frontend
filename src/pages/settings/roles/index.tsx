@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, InputLabel, TextField, Typography, } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, InputAdornment, TextField, Typography, } from "@mui/material";
 import search from "../../../assets/images/search.svg";
 import { withSettingsLayout } from "../../../components/settings";
 import Table from '@mui/material/Table';
@@ -8,17 +8,15 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Radio from '@mui/material/Radio';
-import { handledAllSelected } from "../../../utils/common-services";
 import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 
 const Roles = () => {
-  const [selectedValue, setSelectedValue] = React.useState('a');
+  // const [selectedValue, setSelectedValue] = React.useState('a');
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedValue(event.target.value);
-  };
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSelectedValue(event.target.value);
+  // };
   return (
     <Box className="role-setting-page">
       <Box

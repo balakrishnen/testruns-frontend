@@ -3,13 +3,10 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  InputAdornment,
+
   MenuItem,
   Select,
-  TextField,
+
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -17,19 +14,10 @@ import TablePagination from "../../../components/table/TablePagination";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import { visuallyHidden } from "@mui/utils";
-import { Pagination } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import search from "../../../assets/images/search.svg";
-import bin from "../../../assets/images/bin.svg";
 import { withSettingsLayout } from "../../../components/settings";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
-import CloseIcon from "@mui/icons-material/Close";
 import TableHeader from "../../../components/table/TableHeader";
 import { UserHeaders, UserRows } from "../../../utils/data";
 import { UserRowData } from "../../../modals/user.modal";
@@ -51,9 +39,9 @@ const users: UserRowData[] = UserRows;
 
 // table end
 const Users = () => {
-  const [openDlg1Dialog, setDialog1Open] = React.useState(false);
+  // const [openDlg1Dialog, setDialog1Open] = React.useState(false);
   const [headers, setHeaders] = React.useState(UserHeaders);
-  const [deletePopup, setDeletePopup] = React.useState(false);
+  // const [deletePopup, setDeletePopup] = React.useState(false);
   const [Rows, setSelectedRows] = React.useState(users);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
@@ -76,7 +64,7 @@ const Users = () => {
     setCurrentPage(page);
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data)
-  
+
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       Rows,
@@ -105,8 +93,8 @@ const Users = () => {
     setIsselectAllChecked,
     setVisibleRow
   );
-  
-  
+
+
   const handleMenuCheckboxChange = (e: any, index: any) => {
     setHeaders((prevColumns: any) => {
       return prevColumns.map((column: any, i: any) => {

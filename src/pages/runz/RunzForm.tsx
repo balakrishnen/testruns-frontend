@@ -10,7 +10,7 @@ import Avatars from "../../assets/images/Avatars.svg";
 import AddIcon from '@mui/icons-material/Add';
 import AddPeoplePopup from "../../components/AddPeoplePopup";
 
-const RunzForm = React.forwardRef(({ open, close, closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
+const RunzForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     const [answers, setAnswers] = React.useState("");

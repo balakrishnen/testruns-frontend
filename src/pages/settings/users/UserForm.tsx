@@ -15,9 +15,9 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 // import Successpopup from "../../../components/SuccessPopup";
 // import Confirmationpopup from "../../../components/ConfirmationPopup";
 
-const UserForm = React.forwardRef(({ open, close,closeFormPopup, openConfirmationPopup, submitFormPopup }: any,ref) => {
-  const [openDlg2Dialog, setDialog2Open] = React.useState(false);
-  const [openSuccess, setSuccessOpen] = React.useState(false);
+const UserForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
+  // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
+  // const [openSuccess, setSuccessOpen] = React.useState(false);
   const [answers, setAnswers] = React.useState("");
   const [formPopup, setFormPopup] = React.useState(false);
 
@@ -34,7 +34,7 @@ const UserForm = React.forwardRef(({ open, close,closeFormPopup, openConfirmatio
   // const handleAddButtonClick = () => {
   //   setSuccessOpen(true);
   //   closeFormPopup();
-   
+
   //   setTimeout(() => {
   //     setSuccessOpen(false);
   //   }, 2000);
@@ -301,8 +301,8 @@ const UserForm = React.forwardRef(({ open, close,closeFormPopup, openConfirmatio
                         answers !== ""
                           ? undefined
                           : () => (
-                              <Placeholder>Select laboratory/ies</Placeholder>
-                            )
+                            <Placeholder>Select laboratory/ies</Placeholder>
+                          )
                       }
                     >
                       <MenuItem value={"1"}>1</MenuItem>
