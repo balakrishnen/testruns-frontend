@@ -564,6 +564,9 @@ p.reg-text {
     top: -17px;
   }
 }
+.captiontext{
+  user-select: none !important;
+}
 .valid-field{
   color:#32E46F;
   position:absolute;

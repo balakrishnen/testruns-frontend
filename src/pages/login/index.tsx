@@ -30,9 +30,10 @@ const validUser = {
   email: 'admin@testrunz.com',
   password: 'Test@123',
 };
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required('Email is required').email('Invalid email'),
+  email: Yup.string().required('Email is required').email('Invalid email').matches(emailRegex, "In-correct email"),
   password: Yup.string()
     .required('Password is required')
     .min(8, 'Wrong password'),
@@ -68,12 +69,11 @@ const Login = () => {
   };
 
   const checkCredentials = (email: any, password: any) => {
-    // if (email === validUser.email && password === validUser.password) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
-    return true;
+    if (email === validUser.email && password === validUser.password) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const formik = useFormik({
@@ -126,6 +126,7 @@ const Login = () => {
             <TextField
               type={showPassword ? 'text' : 'password'}
               fullWidth
+              inputProps={{ maxLength: 24 }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">

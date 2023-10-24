@@ -16,9 +16,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
 
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
 const validationSchema = Yup.object().shape({
   fullname: Yup.string().required("Fullname is required"),
-  email: Yup.string().required("Email is required").email("Invalid email"),
+  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
   password: Yup.string()
     .required("Password is required")
     .matches(
@@ -53,7 +55,7 @@ const SignUp = () => {
     );
 
     if (isMatch) {
-      alert("Login successful!");
+      alert("Signin successful!");
     } else {
       formik.setFieldError("fullname", "Invalid fullname");
       formik.setFieldError("email", "Invalid email");
@@ -62,14 +64,19 @@ const SignUp = () => {
     }
   };
 
-  // const checkCredentials = (
-  //   fullname: any,
-  //   email: any,
-  //   password: any,
-  //   confirm_password: any
-  // ) => {
-  //   return false;
-  // };
+  const checkCredentials = (
+    fullname: any,
+    email: any,
+    password: any,
+    confirm_password: any
+  ) => {
+    if(fullname!=="" && email!=="" && password!== "" && confirm_password!==""){
+      return true
+    }
+    else{
+    return false;
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -134,6 +141,7 @@ const SignUp = () => {
             <TextField
               type={showPassword ? "text" : "password"}
               fullWidth
+              inputProps={{ maxLength: 24 }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">

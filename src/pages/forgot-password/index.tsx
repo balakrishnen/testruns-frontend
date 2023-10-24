@@ -32,8 +32,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
 
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required("Email is required").email("Invalid email"),
+  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
   captcha: Yup.string().required("Captcha is required"),
 });
 
@@ -57,15 +59,19 @@ const ForgotPassword = () => {
     const isMatch = checkCredentials(values.email, values.captcha);
 
     if (isMatch) {
-      alert("Login successful!");
+      alert("An OTP is sent to your registered email-ID");
     } else {
-      formik.setFieldError("email", "Invalid email");
+      // formik.setFieldError("email", "Invalid email");
       formik.setFieldError("captcha", "Invalid captcha");
     }
   };
 
   const checkCredentials = (email: any, captcha: any) => {
-    return true;
+    if (email!=="" && captcha === captchaText) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const formik = useFormik({
@@ -115,7 +121,7 @@ const ForgotPassword = () => {
             </Box>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6} md={6} lg={6}>
-                <Box
+                <Box className="captiontext"
                   sx={{
                     width: "100%",
                     background: "#FFE3C5",
