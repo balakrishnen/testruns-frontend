@@ -19,8 +19,23 @@ const Profile = () => {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+    interface FormValidation {
+      password: boolean;
+      newpassword: boolean;
+      confirmpassword: boolean;
+    }
+    
+    const [initalStatus,setInitalStatus] = React.useState<FormValidation>({
+      password: false,
+      newpassword: false,
+      confirmpassword: false,
+    });
+
+  const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) => {
+    const updatedValidation = { ...initalStatus };
+    updatedValidation[key] = newValue;
+    setInitalStatus(updatedValidation);
+  };
 
   return (
     <Box className="profile-setting-page">
@@ -378,18 +393,18 @@ const Profile = () => {
                   <Box style={{ position: "relative" }}>
                     <InputLabel>Enter old password</InputLabel>
                     <TextField
-                      type={showPassword ? "text" : "password"}
+                      type={initalStatus.password ? "text" : "password"}
                       fullWidth
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
                               aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
+                              onClick={(e)=>handleClickShowPassword("password",!initalStatus.password)}
                               edge="end"
                               sx={{ mr: 0 }}
                             >
-                              {!showPassword ? (
+                              {!initalStatus.password ? (
                                 <VisibilityOff />
                               ) : (
                                 <Visibility />
@@ -407,18 +422,18 @@ const Profile = () => {
                   <Box style={{ position: "relative" }}>
                     <InputLabel>Enter new Password</InputLabel>
                     <TextField
-                      type={showPassword ? "text" : "password"}
+                      type={initalStatus.newpassword ? "text" : "password"}
                       fullWidth
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
                               aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
+                              onClick={(e)=>handleClickShowPassword("newpassword",!initalStatus.newpassword)}
                               edge="end"
                               sx={{ mr: 0 }}
                             >
-                              {!showPassword ? (
+                              {!initalStatus.newpassword ? (
                                 <VisibilityOff />
                               ) : (
                                 <Visibility />
@@ -427,7 +442,7 @@ const Profile = () => {
                           </InputAdornment>
                         ),
                       }}
-                      name="password"
+                      name="newpassword"
                       id="password"
                       variant="outlined"
                       placeholder="Password"
@@ -436,18 +451,18 @@ const Profile = () => {
                   <Box style={{ position: "relative" }}>
                     <InputLabel>Confirm new password</InputLabel>
                     <TextField
-                      type={showPassword ? "text" : "password"}
+                      type={initalStatus.confirmpassword ? "text" : "password"}
                       fullWidth
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
                               aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
+                              onClick={(e)=>handleClickShowPassword("confirmpassword",!initalStatus.confirmpassword)}
                               edge="end"
                               sx={{ mr: 0 }}
                             >
-                              {!showPassword ? (
+                              {!initalStatus.confirmpassword ? (
                                 <VisibilityOff />
                               ) : (
                                 <Visibility />
@@ -456,7 +471,7 @@ const Profile = () => {
                           </InputAdornment>
                         ),
                       }}
-                      name="password"
+                      name="confirmpassword"
                       id="password"
                       variant="outlined"
                       placeholder="Password"

@@ -33,12 +33,22 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showPassword2, setShowPassword2] = React.useState(false);
-  // const [ConfirmshowPassword, setConfirmShowPassword] = React.useState(false);
+  interface FormValidation {
+    password: boolean;
+    confirmpassword: boolean;
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
+  }
+  
+  const [initalStatus,setInitalStatus] = React.useState<FormValidation>({
+    password: false,
+    confirmpassword: false,
+  });
+
+const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) => {
+  const updatedValidation = { ...initalStatus };
+  updatedValidation[key] = newValue;
+  setInitalStatus(updatedValidation);
+};
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -139,7 +149,7 @@ const SignUp = () => {
           <Box style={{ position: "relative" }}>
             <InputLabel>Password</InputLabel>
             <TextField
-              type={showPassword ? "text" : "password"}
+              type={initalStatus.password ? "text" : "password"}
               fullWidth
               inputProps={{ maxLength: 24 }}
               InputProps={{
@@ -147,12 +157,12 @@ const SignUp = () => {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
+                      onClick={(e)=>handleClickShowPassword("password",!initalStatus.password)}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                       sx={{ mr: 0 }}
                     >
-                      {!showPassword ? <VisibilityOff /> : <Visibility />}
+                      {!initalStatus.password ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -178,19 +188,19 @@ const SignUp = () => {
           <Box style={{ position: "relative" }}>
             <InputLabel>Confirm password</InputLabel>
             <TextField
-              type={showPassword2 ? "text" : "password"}
+              type={initalStatus.confirmpassword ? "text" : "password"}
               fullWidth
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle confirm password visibility"
-                      onClick={handleClickShowPassword2}
+                      onClick={(e)=>handleClickShowPassword("confirmpassword",!initalStatus.confirmpassword)}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                       sx={{ mr: 0 }}
                     >
-                      {!showPassword2 ? <VisibilityOff /> : <Visibility />}
+                      {!initalStatus.confirmpassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),

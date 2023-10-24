@@ -14,8 +14,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
 
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required("Email is required").email("Invalid email"),
+  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
   password: Yup.string()
     .required("Password is required")
     .matches(
@@ -28,12 +30,27 @@ const validationSchema = Yup.object().shape({
 });
 
 const ResetPassword = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showPassword2, setShowPassword2] = React.useState(false);
+  // const [showPassword, setShowPassword] = React.useState(false);
+  // const [showPassword2, setShowPassword2] = React.useState(false);
+  interface FormValidation {
+    newpassword: boolean;
+    confirmpassword: boolean;
+  }
+  
+  const [initalStatus,setInitalStatus] = React.useState<FormValidation>({
+    newpassword: false,
+    confirmpassword: false,
+  });
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) => {
+  const updatedValidation = { ...initalStatus };
+  updatedValidation[key] = newValue;
+  setInitalStatus(updatedValidation);
+};
 
-  const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
+  // const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  // const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -62,7 +79,11 @@ const ResetPassword = () => {
     password: any,
     confirm_password: any
   ) => {
-    return true;
+    if (email!=="" && password !== "" && confirm_password!== "") {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const formik = useFormik({
@@ -109,19 +130,19 @@ const ResetPassword = () => {
           <Box style={{ position: "relative" }}>
             <InputLabel>New password</InputLabel>
             <TextField
-              type={showPassword ? "text" : "password"}
+              type={initalStatus.newpassword ? "text" : "password"}
               fullWidth
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
+                      onClick={(e)=>handleClickShowPassword("newpassword",!initalStatus.newpassword)}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                       sx={{ mr: 0 }}
                     >
-                      {!showPassword ? <VisibilityOff /> : <Visibility />}
+                      {!initalStatus.newpassword  ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -147,19 +168,19 @@ const ResetPassword = () => {
           <Box style={{ position: "relative" }}>
             <InputLabel>Confirm password</InputLabel>
             <TextField
-              type={showPassword2 ? "text" : "password"}
+              type={initalStatus.confirmpassword ? "text" : "password"}
               fullWidth
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword2}
+                      onClick={(e)=>handleClickShowPassword("confirmpassword",!initalStatus.confirmpassword)}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                       sx={{ mr: 0 }}
                     >
-                      {!showPassword ? <VisibilityOff /> : <Visibility />}
+                      {!initalStatus.confirmpassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
