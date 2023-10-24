@@ -38,7 +38,12 @@ const validationSchema = Yup.object().shape({
     .min(8, 'Wrong password'),
 });
 
-const Login = () => {
+const Login = () => {  
+  let isLoggedIn = null;
+
+  if (typeof window !== 'undefined') {
+    isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  }
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -79,6 +84,14 @@ const Login = () => {
     validationSchema: validationSchema,
     onSubmit: onSubmit,
   });
+
+
+  if (isLoggedIn === 'true') {
+    console.log("false");
+    
+    navigate('/mypage');
+    return null;
+  }
 
   return (
     <>
@@ -214,7 +227,7 @@ const Login = () => {
     </>
   );
 };
-
+// if (isLoggedIn === 'true') {
 const EnhancedLoginPage = withCardLayout(Login);
 
 export default EnhancedLoginPage;

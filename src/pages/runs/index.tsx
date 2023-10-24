@@ -216,6 +216,8 @@ export default function Runs() {
                 orderBy={""}
                 rowCount={0}
                 columns={headers}
+                filters={()=>{console.log("runz")
+                }}
               />
 
               <TableBody>
@@ -233,6 +235,10 @@ export default function Runs() {
                       key={index}
                       // selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
+                      onClick={(e:any) =>
+                        (e.target.name==undefined &&
+                        navigate(`/runz/details/${row.runNumber}`))
+                      }
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">
@@ -250,6 +256,7 @@ export default function Runs() {
                               onClick={() =>
                                 navigate(`/runs/details/${row.runNumber}`)
                               }
+                             
                             >
                               {row.runNumber}
                             </Box>

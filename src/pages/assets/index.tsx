@@ -221,6 +221,7 @@ export default function Assets() {
                 orderBy={""}
                 rowCount={0}
                 columns={headers}
+                filters={()=>{console.log("runz")}}
               />
 
               <TableBody>
@@ -235,6 +236,8 @@ export default function Assets() {
                       key={index}
                       // selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
+                      onClick={(e:any) =>
+                        (e.target.name==undefined && navigate(`/assets/details/${row.assetNumber}`))}
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">
@@ -249,7 +252,7 @@ export default function Assets() {
                               />
                             </Box>
 
-                            <Box sx={{ display: "flex", alignItems: "center" }} onClick={() => navigate(`/assets/details/${row.assetNumber}`)}>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
                               <Box>
                                 <img src={image_holder} alt="no_image" />
                               </Box>
