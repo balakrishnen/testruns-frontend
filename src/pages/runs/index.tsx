@@ -237,7 +237,7 @@ export default function Runs() {
                       sx={{ cursor: "pointer" }}
                       onClick={(e:any) =>
                         (e.target.name==undefined &&
-                        navigate(`/runz/details/${row.runNumber}`))
+                        navigate(`/runs/details/${row.runNumber}`))
                       }
                     >
                       {headers[0].is_show && (
