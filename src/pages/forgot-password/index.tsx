@@ -32,12 +32,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
 
-const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-
-const validationSchema = Yup.object().shape({
-  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
-  captcha: Yup.string().required("Captcha is required"),
-});
 
 const generateRandomText = () => {
   // Generate a random string for the CAPTCHA (you can customize this)
@@ -54,20 +48,35 @@ const generateRandomText = () => {
 
 const ForgotPassword = () => {
   const [captchaText, setCaptchaText] = React.useState(generateRandomText());
-
+  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
+    // captcha: Yup.string().required("Captcha is required").when('isCompany', {
+    //   is: (isCompany) => true, then: Yup.string().required('Field is required'), })
+    captcha: Yup.string()
+      .test('captcha-required', 'Captcha is arequired', function (value) {
+        if (value === captchaText) {
+          return true;
+        } else {
+          return false;
+        }
+      }),
+  })
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(values.email, values.captcha);
 
     if (isMatch) {
       alert("An OTP is sent to your registered email-ID");
     } else {
-      // formik.setFieldError("email", "Invalid email");
+      formik.setFieldError("email", "Invalid email");
       formik.setFieldError("captcha", "Invalid captcha");
     }
   };
 
   const checkCredentials = (email: any, captcha: any) => {
-    if (email!=="" && captcha === captchaText) {
+    console.log(captcha , captchaText);
+    
+    if (captcha == captchaText) {
       return true;
     } else {
       return false;
@@ -102,6 +111,7 @@ const ForgotPassword = () => {
               fullWidth
               name="email"
               id="email"
+              inputProps={{ maxLength: 50 }}
               InputLabelProps={{ shrink: false }}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

@@ -158,6 +158,7 @@ export default function AppProfileDrawer({
                     autoComplete="Email"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Email"
+                    inputProps={{ maxLength: 50 }}
                   />
                 </Box>
               </Grid>

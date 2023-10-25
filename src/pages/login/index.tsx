@@ -107,6 +107,7 @@ const Login = () => {
               fullWidth
               name="email"
               id="email"
+              inputProps={{ maxLength: 50 }}
               InputLabelProps={{ shrink: false }}
               placeholder="E-mail"
               onChange={formik.handleChange}

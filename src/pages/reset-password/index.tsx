@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
     ),
   confirm_password: Yup.string()
     .required("Confirm password is required")
-    .oneOf([Yup.ref("password"), ""], "Passwords mismatch"),
+    .oneOf([Yup.ref("password"), ""], "Password mismatch"),
 });
 
 const ResetPassword = () => {
@@ -114,6 +114,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
               fullWidth
               name="email"
               id="email"
+              inputProps={{ maxLength: 50 }}
               InputLabelProps={{ shrink: false }}
               placeholder="E-mail"
               onChange={formik.handleChange}
@@ -147,6 +148,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
                   </InputAdornment>
                 ),
               }}
+              inputProps={{ maxLength: 24 }}
               name="password"
               id="password"
               onChange={formik.handleChange}

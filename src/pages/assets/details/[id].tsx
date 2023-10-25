@@ -116,6 +116,7 @@ export default function AssetDetails() {
                           id="Email"
                           name="Email"
                           autoComplete="Email"
+                          inputProps={{ maxLength: 50 }}
                           autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Asset Id"

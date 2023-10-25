@@ -120,6 +120,7 @@ const Addnewpopup =  React.forwardRef(({ open, close ,closeFormPopup, openConfir
                     autoFocus
                     InputLabelProps={{ shrink: false }}
                     placeholder="Asset Id"
+                    inputProps={{ maxLength: 50 }}
                   />
                 </Box>
                 <Box>
