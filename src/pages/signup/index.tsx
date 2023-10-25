@@ -29,7 +29,10 @@ const validationSchema = Yup.object().shape({
     ),
   confirm_password: Yup.string()
     .required("Confirm password is required")
-    .oneOf([Yup.ref("password"), ""], "Passwords mismatch"),
+    .oneOf([Yup.ref("password"), ""], "Password mismatch"),
+  // agree: Yup.boolean()
+  //   .required('You must accept the Terms of Service to proceed')
+    // .oneOf([true], 'Error')
 });
 
 const SignUp = () => {
@@ -133,6 +136,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
               fullWidth
               name="email"
               id="email"
+              inputProps={{ maxLength: 50 }}
               InputLabelProps={{ shrink: false }}
               placeholder="E-mail"
               onChange={formik.handleChange}

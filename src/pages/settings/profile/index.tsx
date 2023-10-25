@@ -191,6 +191,7 @@ const Profile = () => {
                           required
                           fullWidth
                           id="Email"
+                          inputProps={{ maxLength: 50 }}
                           name="Email"
                           autoComplete="Email"
                           autoFocus

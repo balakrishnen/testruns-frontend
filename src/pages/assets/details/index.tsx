@@ -190,7 +190,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort(event, property);
   };
 
-  const Placeholder = ({ children }) => {
+  const Placeholder = ({ children }: any) => {
 
     return <div>{children}</div>;
   };
@@ -257,7 +257,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 export default function AssetDetails() {
   const [value, setValue] = React.useState(0);
   const [answers, setAnswers] = React.useState("");
-  const Placeholder = ({ children }) => {
+  const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -404,6 +404,7 @@ export default function AssetDetails() {
                           id="Email"
                           name="Email"
                           autoComplete="Email"
+                          inputProps={{ maxLength: 50 }}
                           autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Asset Id"

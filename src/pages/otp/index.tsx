@@ -28,8 +28,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
 
+const regex=/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/
 const validationSchema = Yup.object().shape({
-  otp: Yup.string().required("OTP is required"),
+  otp: Yup.string().required("OTP is required") .min(4, 'Invalid OTP!')
+  .max(8, 'Invalid OTP!').matches(regex, "Invalid OTP!"),
 });
 
 const OTP = () => {
@@ -82,6 +84,7 @@ const OTP = () => {
             <TextField
               margin="normal"
               fullWidth
+              inputProps={{ maxLength: 8 }}
               type={showPassword ? "text" : "password"}
               placeholder="OTP"
               name="otp"
