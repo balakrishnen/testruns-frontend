@@ -169,7 +169,7 @@ function AppHeader(props: any) {
               onClick={openEditProfile}
             >
                <Typography variant="inherit" className="app-bar-username">
-                Hi Tester
+                Hi Admin
               </Typography>
               <img src={account} alt="help_icon" className="app-bar-images" />
             </IconButton>

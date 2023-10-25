@@ -1,6 +1,6 @@
-require("dotenv").config({
+require('dotenv').config({
   path: `.env.development`,
-})
+});
 
 module.exports = {
   flags: {
@@ -16,12 +16,13 @@ module.exports = {
   plugins: [
     `gatsby-plugin-sass`,
     `gatsby-plugin-typescript`,
+    'gatsby-plugin-react-helmet',
     {
-      resolve: "gatsby-source-graphql",
+      resolve: 'gatsby-source-graphql',
       options: {
         typeName: 'RootQuery',
         fieldName: 'graphql',
-        url: "http://localhost:8000/__graphql", // Replace with your GraphQL server URL
+        url: 'http://localhost:8000/__graphql', // Replace with your GraphQL server URL
       },
     },
   ],

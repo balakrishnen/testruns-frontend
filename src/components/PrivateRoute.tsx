@@ -8,6 +8,7 @@ import AppProfileDrawer from './layout/profile-drawer';
 import AppNotificationDrawer from './layout/notification-drawer';
 // import AppProfileDrawer from "./layout/profile-drawer";
 // import AppNotificationDrawer from "./layout/notification-drawer";
+import { Helmet } from "react-helmet";
 
 const PrivateRoute = ({ children }: any) => {
   let isLoggedIn = null;
@@ -15,7 +16,7 @@ const PrivateRoute = ({ children }: any) => {
 if (typeof window !== 'undefined') {
   isLoggedIn = sessionStorage.getItem('isLoggedIn');
 }
-  const [width, setWidth] = React.useState(290);
+  const [width, setWidth] = React.useState(95);
   const [editProfile, setEditProfile] = React.useState(false);
   const [notificationList, setNotificationList] = React.useState(false);
   const [theme, setTheme] = React.useState(lightTheme);
@@ -47,6 +48,9 @@ if (typeof window !== 'undefined') {
 
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>Test Runs</title>
+      </Helmet>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppHeader
