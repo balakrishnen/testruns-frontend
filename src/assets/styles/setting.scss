@@ -63,10 +63,10 @@
 // comman style end 
 p.setting-title {
     color: #565656;
-    font-size: 20px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     line-height: normal;
-    padding: 24px 16px;
+    padding: 20px 16px;
 }
 
 .setting-sidebar {
@@ -77,7 +77,7 @@ p.setting-title {
     }
 
     .MuiListItemButton-root {
-        padding: 16px;
+        padding: 10px;
 
         &:hover {
             background-color: transparent !important;
@@ -87,7 +87,7 @@ p.setting-title {
     .MuiListItemText-root {
         span {
             color: #9F9F9F;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             line-height: normal;
             letter-spacing: 0.24px;
@@ -129,7 +129,7 @@ p.setting-title {
 
         &:last-child {
             color: #9F9F9F;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 400;
             letter-spacing: 0.24px;
         }
@@ -146,11 +146,13 @@ p.setting-title {
             color: #181818;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            font-size: 14px;
         }
 
         &:last-child {
             color: #565656;
             font-weight: 400;
+            font-size: 14px;
         }
     }
 }
@@ -174,6 +176,7 @@ p.setting-title {
 .notification-page {
     .p-top {
         padding-top: 0px !important;
+        padding-left: 0px !important;
 
         @media (max-width:1199px) {
             padding-top: 16px !important;

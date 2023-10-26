@@ -229,9 +229,10 @@ export default function Runs() {
                       key={index}
                       // selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
-                      onClick={(e: any) =>
+                      onClick={(e: any) =>{
                         e.target.name == undefined &&
-                        navigate(`/runs/details/${row.runNumber}`)
+                        navigate(`/runs/details/${row.runNumber}`),console.log(e);
+                        }
                       }
                     >
                       {headers[0].is_show && (
@@ -282,6 +283,7 @@ export default function Runs() {
                       {headers[6].is_show && (
                         <TableCell>
                           <Select
+                          name="select"
                             className={
                               row.isActive === 1
                                 ? 'active-select td-select'

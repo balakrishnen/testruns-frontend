@@ -98,7 +98,7 @@ export default function TableFilters({
     <>
       <AssignPopup open={openAssign} close={() => setAssignOpen(false)} />
       {isTableHeaderVisible && (
-      <Grid container spacing={2} sx={{ mt: 0 }}>
+      <Grid container sx={{ mb: 2 }} alignItems="center" >
         <Grid item xs={12} sm={12} md={12} lg={6} xl={9}>
           <Box className="search-action">
             <Button type="submit" onClick={()=>handleDeCheckboxChange(false)} variant="contained" className="close-actions">
@@ -136,6 +136,9 @@ export default function TableFilters({
                     "&.Mui-checked": {
                       color: "#FFC60B",
                     },
+                    "& .MuiFormControlLabel-label": {
+                      fontSize: '10px', // Adjust the font size as per your preference
+                    }
                   }}
                   checkedIcon={<CheckCircleOutlineOutlinedIcon />}
                   icon={<HighlightOffOutlinedIcon />}
@@ -152,18 +155,18 @@ export default function TableFilters({
               className="delete-actions"
               onClick={deleteRecord}
             >
-              <img src={bin} alt="Delete" />
+              <img src={bin} alt="Delete"   className="Image-actions"/>
               Delete
             </Button>
             <Button className="delete-actions" onClick={handleAssignClick}>
-        <img src={assign} alt="assign" />
+        <img src={assign} alt="assign"  className="Image-actions" />
         Assign
       </Button>
       
         <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} />
       
         <Button className="delete-actions" onClick={handleAssignClick}>
-              <img src={share} alt="Share" />
+              <img src={share} alt="Share"   className="Image-actions"/>
               Share
             </Button>
             <IconButton onClick={handleClick}>
@@ -219,6 +222,7 @@ export default function TableFilters({
               fullWidth
               name="Search"
               id="Search"
+              style={{margin:"0px"}}
               InputLabelProps={{ shrink: false }}
               placeholder="Search"
               InputProps={{

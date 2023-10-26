@@ -12,8 +12,8 @@ import Stack from "@mui/material/Stack";
 import search from "../../../assets/images/search.svg";
 import { withSettingsLayout } from "../../../components/settings";
 const AntSwitch = styled(Switch)(({ theme }) => ({
-  width: 48,
-  height: 24,
+  width: 43,
+  height: 20,
   borderRadius: 99,
   padding: 0,
   display: "flex",
@@ -38,8 +38,8 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
   "& .MuiSwitch-thumb": {
     boxShadow: "0 2px 4px 0 rgb(0 35 11 / 20%)",
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     borderRadius: 99,
     transition: theme.transitions.create(["width"], {
       duration: 200,
@@ -55,10 +55,10 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 
 const Notification = () => {
   return (
-    <Box className="notification-page" style={{ padding: "24px" }}>
+    <Box className="notification-page" style={{ padding: "8px 24px"}}>
       <Box
         className="title-main"
-        sx={{ borderBottom: "3px solid #F3F3F3", paddingBottom: "1rem" }}
+        sx={{ borderBottom: "3px solid #F3F3F3", paddingBottom: "8px" }}
       >
         <Box>
           <Typography>Notification settings</Typography>
@@ -92,7 +92,7 @@ const Notification = () => {
           Select the options you want to get alerted via email and notification.
         </Typography>
       </Box>
-      <Box sx={{ mt: 3 }}>
+      <Box >
         <Grid
           container
           spacing={2}
@@ -100,8 +100,8 @@ const Notification = () => {
             width: "100%",
             m: 0,
             borderBottom: "2px solid #F3F3F3",
-            paddingBottom: "1rem",
-            paddingTop: "1rem",
+            paddingBottom: "12px",
+            paddingTop: "12px",
           }}
         >
           <Grid item xs={12} sm={12} md={12} lg={8} xl={8} className="p-top">
@@ -131,7 +131,7 @@ const Notification = () => {
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ color: "#767676", fontWeight: "500" }}>
+                <Typography style={{ fontWeight: "500", fontSize:"12px" }}>
                   Notification
                 </Typography>
                 <AntSwitch
@@ -145,7 +145,7 @@ const Notification = () => {
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ color: "#767676", fontWeight: "500" }}>
+                <Typography style={{ fontWeight: "500", fontSize:"12px"  }}>
                   Email
                 </Typography>
                 <AntSwitch
@@ -163,8 +163,8 @@ const Notification = () => {
             width: "100%",
             m: 0,
             borderBottom: "2px solid #F3F3F3",
-            paddingBottom: "1rem",
-            paddingTop: "1rem",
+            paddingBottom: "12px",
+            paddingTop: "12px",
           }}
         >
           <Grid item xs={12} sm={12} md={12} lg={8} xl={8} className="p-top">
@@ -194,7 +194,7 @@ const Notification = () => {
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ color: "#767676", fontWeight: "500" }}>
+                <Typography style={{ fontWeight: "500" , fontSize:"12px" }}>
                   Notification
                 </Typography>
                 <AntSwitch
@@ -208,7 +208,7 @@ const Notification = () => {
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ color: "#767676", fontWeight: "500" }}>
+                <Typography style={{ fontWeight: "500", fontSize:"12px"  }}>
                   Email
                 </Typography>
                 <AntSwitch
@@ -226,8 +226,8 @@ const Notification = () => {
             width: "100%",
             m: 0,
             borderBottom: "2px solid #F3F3F3",
-            paddingBottom: "1rem",
-            paddingTop: "1rem",
+            paddingBottom: "12px",
+            paddingTop: "12px",
           }}
         >
           <Grid item xs={12} sm={12} md={12} lg={8} xl={8} className="p-top">
@@ -257,7 +257,7 @@ const Notification = () => {
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ color: "#767676", fontWeight: "500" }}>
+                <Typography style={{ fontWeight: "500" , fontSize:"12px" }}>
                   Notification
                 </Typography>
                 <AntSwitch
@@ -271,7 +271,7 @@ const Notification = () => {
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ color: "#767676", fontWeight: "500" }}>
+                <Typography style={{ fontWeight: "500", fontSize:"12px"  }}>
                   Email
                 </Typography>
                 <AntSwitch

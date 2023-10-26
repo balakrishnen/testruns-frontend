@@ -188,12 +188,17 @@ span.MuiTouchRipple-root {
   opacity: 1 !important;
 }
 .common-checkbox {
+  .MuiFormControlLabel-label{
+    font-size: 13px;
+  }
 	svg.MuiSvgIcon-root {
 		background-image: url('../images/Check.svg');
 		background-repeat: no-repeat;
 		background-size: cover;
 		color: transparent !important;
 		opacity: 1 !important;
+    width: 18px;
+    height: 18px;
 	}
 	.Mui-checked {
 		svg.MuiSvgIcon-root {
@@ -209,13 +214,13 @@ span.MuiTouchRipple-root {
   }
 }
 button.close-actions {
-  height: 44px;
-  padding: 10px 15px;
+  height: 40px;
+  padding: 6px 9px;
   border-radius: 50px;
   background: rgba(255, 185, 185, 0.50) !important;
   box-shadow: none;
   color: #E2445C;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.24px;
   text-transform: capitalize;
@@ -223,21 +228,25 @@ button.close-actions {
 }
 button.delete-actions {
   color: #565656;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.24px;
   text-transform: capitalize;
   padding: 0px;
+  .Image-actions{
+      width: 39px;
+      height: 39px;
+  }
   img{
     padding: 9px;
   }
 }
 .search-action {
-  margin-top: 16px;
+  // margin-top: 16px;
 	label.MuiFormControlLabel-root {
 		color: #565656;
-		font-size: 16px;
+		font-size: 13px !important;
 		font-weight: 400;
 		letter-spacing: 0.24px;
 		line-height: normal;
@@ -586,6 +595,7 @@ p.reg-text {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 17px;
   p {
     color: $black-shade-2;
     font-size: 20px;
@@ -593,7 +603,7 @@ p.reg-text {
     line-height: normal;
   }
   p.sub-text {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.24px;
     margin-top: 0.5rem;
@@ -601,11 +611,11 @@ p.reg-text {
   button {
     border-radius: 8px;
     background: $primary-color !important;
-    padding: 10px 20px;
+    padding: 8px 16px;
     box-shadow: none;
     color: $black-shade-1;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 400;
     line-height: normal;
     letter-spacing: 0.3px;
     text-transform: capitalize;
@@ -753,7 +763,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   border-radius: 10px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
   background: $white;
-  margin-top: 1.5rem;
+  // margin-top: 1.5rem;
   margin-right: -90rem;
   thead {
     background: #FFF4D0;    
@@ -813,9 +823,11 @@ fieldset.MuiOutlinedInput-notchedOutline {
   }
   td{
     color: #181818;
-    font-weight: 500;
+    font-weight: 400;
     letter-spacing: 0.24px;
     text-align: center;
+    padding: 10px;
+    line-height: 0.43;
   }
 }
 .table-outer thead th:first-child tr th .MuiFormControl-root, .table-outer thead th:first-child tr th .MuiInputBase-root {
@@ -968,6 +980,8 @@ tbody td .td-select {
     background-image: url('../images/chevrondown.svg');
     background-size: cover;
     background-repeat: no-repeat;
+    width: 19px;
+    height: 19px;
     path{
       display: none;
     }
@@ -982,7 +996,7 @@ tbody td .td-select {
 .inactive-select.td-select .MuiSelect-select , .active-select.td-select .MuiSelect-select{
   width: 124px;
   border-radius: 20px;
-  height: 30px;
+  height: 23px;
   display: flex;
   justify-content: center;
   align-items: center;
