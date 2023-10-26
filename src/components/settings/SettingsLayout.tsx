@@ -105,13 +105,14 @@ export const SettingsLayout = ({ children }: any, props: any) => {
         <Box sx={{ display: "flex" }}>
           <Box
             sx={{
-              flexGrow: 1,
+              // flexGrow: 1,
               background: "#fff",
               boxShadow: "3px 4px 4px 0px rgba(0, 0, 0, 0.10)",
             }}
             className={`${
               show ? "side-hide" : "side-show"
             }`}
+            style={{width:"15%"}}
           >
             <Box className="setting-sidebar">
               <Box className="close-mobile" onClick={() => setShow(!show)}>
@@ -154,7 +155,9 @@ export const SettingsLayout = ({ children }: any, props: any) => {
               </List>
             </Box>
           </Box>
-          <Box sx={{ flexGrow: 20 }}>
+          <Box 
+          sx={{ flexGrow: 20 }}
+          >
             <ArrowBackIosNewOutlinedIcon
               className="mobile-arrow"
               // onClick={() => setIsMobile(!isMobile)}

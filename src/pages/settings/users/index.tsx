@@ -154,10 +154,10 @@ const Users = () => {
   };
   // table end
   return (
-    <Box className="user-setting-page" style={{ padding: "24px" }}>
+    <Box className="user-setting-page"  style={{ padding: "8px 24px"}}>
       <Box
         className="title-main"
-        sx={{ borderBottom: "3px solid #F3F3F3", paddingBottom: "1rem" }}
+        sx={{ borderBottom: "3px solid #F3F3F3", paddingBottom: "8px" }}
       >
         <Box>
           <Typography>User settings</Typography>
@@ -166,6 +166,7 @@ const Users = () => {
           </Typography>
         </Box>
         <Button
+        style={{marginBottom:"8px" , marginTop:"16px"}}
           type="submit"
           variant="contained"
           onClick={() => formPopupRef.current.open(true)}

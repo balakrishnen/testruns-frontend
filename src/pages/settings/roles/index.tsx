@@ -18,14 +18,14 @@ const Roles = () => {
   //   setSelectedValue(event.target.value);
   // };
   return (
-    <Box className="role-setting-page">
+    <Box className="role-setting-page"  style={{ padding: "8px 24px"}}>
       <Box
         className="title-main"
         sx={{
           borderBottom: "3px solid #F3F3F3",
-          padding: "24px 0px",
-          paddingBottom: "1rem",
-          margin: "0px 24px"
+          // padding: "24px 0px",
+          paddingBottom: "8px",
+          // margin: "0px 24px"
         }}
       >
         <Box>
@@ -55,7 +55,8 @@ const Roles = () => {
       </Box>
       <Box
         sx={{
-          width: "100%", m: 0, padding: "24px",
+          width: "100%", m: 0, 
+          // padding: "24px",
         }}
       >
         <Typography className="Access-control">Access control</Typography>

@@ -38,14 +38,14 @@ const Profile = () => {
   };
 
   return (
-    <Box className="profile-setting-page">
+    <Box className="profile-setting-page"  style={{ padding: "8px 24px"}}>
       <Box
         className="title-main"
         sx={{
           borderBottom: "3px solid #F3F3F3",
-          padding: "24px 0px",
-          paddingBottom: "1rem",
-          margin:"0px 24px"
+          // padding: "24px 0px",
+          paddingBottom: "8px",
+          // margin:"0px 24px"
         }}
       >
         <Box>
@@ -77,7 +77,7 @@ const Profile = () => {
         sx={{
           width: "100%",
           m: 0,
-          padding: "24px",
+          // padding: "24px",
           display: { xs: "block", lg: "flex" },
         }}
       >
