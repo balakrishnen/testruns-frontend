@@ -101,6 +101,7 @@ function AppHeader(props: any) {
   const changeTheme = () => {
     props.toggleTheme();
   };
+// console.log(window.location.pathname.split("/")[1]);
 
   return (
     <Box className="app-bar-block">
@@ -129,7 +130,7 @@ function AppHeader(props: any) {
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box className="header-right-side" sx={{ display: { xs: "none", md: "flex" } }}>
-            <Box className="search-field">
+          {typeof window !== 'undefined' &&  window.location.pathname.split("/")[1]=='mypage' && <Box className="search-field">
               <TextField
                 margin="normal"
                 required
@@ -146,7 +147,7 @@ function AppHeader(props: any) {
                   ),
                 }}           
               />
-            </Box>
+            </Box>}
             <IconButton size="large" aria-label="help icon" color="inherit">
               <img src={help} alt="help_icon" className="app-bar-images" />
             </IconButton>

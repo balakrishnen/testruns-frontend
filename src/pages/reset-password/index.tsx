@@ -67,6 +67,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
 
     if (isMatch) {
       alert("Reset successful!");
+      navigate('/login')
     } else {
       formik.setFieldError("email", "Invalid email");
       formik.setFieldError("password", "Invalid password");

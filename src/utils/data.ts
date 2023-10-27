@@ -846,7 +846,7 @@ export const RunsHeaders: readonly RunsHead[] = [
   },
   {
     id: "objective",
-    label: "Objective Name",
+    label: "Runs Name",
     filters: [
       {
         id: "search",

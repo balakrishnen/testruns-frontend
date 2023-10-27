@@ -50,6 +50,7 @@ const OTP = () => {
 
     if (isMatch) {
       alert("OTP successful!");
+      navigate('/reset-password')
     } else {
       formik.setFieldError("otp", "Invalid OTP");
     }

@@ -53,8 +53,8 @@ const ForgotPassword = () => {
     email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
     // captcha: Yup.string().required("Captcha is required").when('isCompany', {
     //   is: (isCompany) => true, then: Yup.string().required('Field is required'), })
-    captcha: Yup.string()
-      .test('captcha-required', 'Captcha is arequired', function (value) {
+    captcha: Yup.string().required("Captcha is required")
+      .test('captcha-required', 'Invalid Captcha', function (value) {
         if (value == captchaText) {
           return true;
         } else {
@@ -67,6 +67,7 @@ const ForgotPassword = () => {
 
     if (isMatch) {
       alert("An OTP is sent to your registered email-ID");
+      navigate('/otp')
     } else {
       formik.setFieldError("email", "Invalid email");
       formik.setFieldError("captcha", "Invalid captcha");
