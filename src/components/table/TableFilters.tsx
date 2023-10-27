@@ -97,10 +97,9 @@ export default function TableFilters({
   return (
     <>
       <AssignPopup open={openAssign} close={() => setAssignOpen(false)} />
-      {isTableHeaderVisible && (
-      <Grid container sx={{ mb: 2 }} alignItems="center" >
-        <Grid item xs={12} sm={12} md={12} lg={6} xl={9}>
-          <Box className="search-action">
+      <Grid container sx={{ mb: 2 }} alignItems="center" justifyContent={isTableHeaderVisible?"space-between":"flex-end"} >
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={9}>
+      {isTableHeaderVisible && ( <Box className="search-action">
             <Button type="submit" onClick={()=>handleDeCheckboxChange(false)} variant="contained" className="close-actions">
               <CloseIcon sx={{ mr: 1 }} />
               Close actions
@@ -191,8 +190,8 @@ export default function TableFilters({
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
-        </Grid>
+          </Box> )}
+        </Grid>  
         <Grid item xs={12} sm={12} md={12} lg={6} xl={3}>
           <Box className="filter-search">
             <FormControl>
@@ -237,7 +236,6 @@ export default function TableFilters({
           </Box>
         </Grid>
       </Grid>
-      )}
     </>
   );
 }

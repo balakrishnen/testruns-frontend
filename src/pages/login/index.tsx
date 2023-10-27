@@ -63,8 +63,10 @@ const Login = () => {
         navigate('/mypage');
       }
     } else {
-      formik.setFieldError('email', 'Invalid email');
-      formik.setFieldError('password', 'Invalid password');
+      if(values.email !== validUser.email ){
+      formik.setFieldError('email', 'Invalid email');}
+      if(values.password !== validUser.password) {
+      formik.setFieldError('password', 'Invalid password');}
     }
   };
 

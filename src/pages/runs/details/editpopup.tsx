@@ -31,7 +31,7 @@ export default function EditPopup({ open, close }: any) {
             >
                 <Box className="popup-section editrunz-popup">
                     <Box className="title-popup">
-                        <Typography>Create new Runs</Typography>
+                        <Typography>Edit Runs</Typography>
                         <CloseIcon />
                     </Box>
                     <Box>

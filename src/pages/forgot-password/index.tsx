@@ -55,7 +55,7 @@ const ForgotPassword = () => {
     //   is: (isCompany) => true, then: Yup.string().required('Field is required'), })
     captcha: Yup.string()
       .test('captcha-required', 'Captcha is arequired', function (value) {
-        if (value === captchaText) {
+        if (value == captchaText) {
           return true;
         } else {
           return false;
