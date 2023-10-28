@@ -22,7 +22,7 @@ module.exports = {
       options: {
         typeName: 'RootQuery',
         fieldName: 'graphql',
-        url: 'http://localhost:8000/__graphql', // Replace with your GraphQL server URL
+        url: 'https://api.dev.testrunz.com/graphql', // Replace with your GraphQL server URL
       },
     },
   ],

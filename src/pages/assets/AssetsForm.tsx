@@ -1,7 +1,6 @@
-import React from "react";
-import Confirmationpopup from "../../components/ConfirmationPopup";
-import Successpopup from "../../components/SuccessPopup";
-import Dialog from "@mui/material/Dialog";
+/* eslint-disable react/display-name */
+import React from 'react';
+import Dialog from '@mui/material/Dialog';
 import {
   Box,
   Button,
@@ -11,429 +10,631 @@ import {
   Select,
   TextField,
   Typography,
-} from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import CloseIcon from "@mui/icons-material/Close";
-import "../../assets/styles/asset-popup.scss";
-import assetimg from "../../assets/images/assetimg.svg";
-import darkcircle from "../../assets/images/darkgary-circle.svg";
-import lightcircle from "../../assets/images/lightgary-circle.svg";
-import Timeline from "@mui/lab/Timeline";
-import TimelineItem from "@mui/lab/TimelineItem";
-import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import TimelineConnector from "@mui/lab/TimelineConnector";
-import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineDot from "@mui/lab/TimelineDot";
-import { Organization } from "../../modals";
-import { OrganizationList } from "../../utils/data";
+  Checkbox,
+  Autocomplete,
+} from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import CloseIcon from '@mui/icons-material/Close';
+import '../../assets/styles/asset-popup.scss';
+import assetimg from '../../assets/images/assetimg.svg';
+import darkcircle from '../../assets/images/darkgary-circle.svg';
+import lightcircle from '../../assets/images/lightgary-circle.svg';
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+import { Organization } from '../../modals';
+import {
+  AvailabilityList,
+  DepartmentList,
+  LaboratoryList,
+  OrganizationList,
+  StatusList,
+} from '../../utils/data';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { postAssetsData } from '../../api/assetsAPI';
 
-const Addnewpopup =  React.forwardRef(({ open, close ,closeFormPopup, openConfirmationPopup, submitFormPopup }: any,ref) => {
-  const [openDlg2Dialog, setDialog2Open] = React.useState(false);
-  const [openSuccess, setSuccessOpen] = React.useState(false);
-  const [answers, setAnswers] = React.useState("");
-  const [formPopup, setFormPopup] = React.useState(false);
-  const [organizations, setOrganizations] =
-    React.useState<Organization[]>(OrganizationList);
+const validationSchema = Yup.object().shape({
+  name: Yup.string().notRequired(),
+  purchase_date: Yup.string().notRequired(),
+  warranty_date: Yup.string().notRequired(),
+  department: Yup.array().notRequired(),
+  laboratory: Yup.array().notRequired(),
+  organization: Yup.string().notRequired(),
+  status: Yup.string().notRequired(),
+  assets_image: Yup.string().notRequired(),
+  availability: Yup.string().notRequired(),
+  assets_id: Yup.string().notRequired(),
+});
 
-  const Placeholder = ({ children }: any) => {
-    return <div>{children}</div>;
-  };
-  const handleAddButtonClick = () => {
-    setSuccessOpen(true);
-    closeFormPopup(false)
-    setTimeout(() => {
-      setSuccessOpen(false);
-    }, 2000);
-  };
-  const handleConfirmationYes = () => {
-    setDialog2Open(false);
-    closeFormPopup(false)
-  };
+const Addnewpopup = React.forwardRef(
+  ({ closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
+    const [answers, setAnswers] = React.useState('');
+    const [formPopup, setFormPopup] = React.useState(false);
+    const [organizations] = React.useState<Organization[]>(OrganizationList);
+    const dispatch: any = useDispatch();
+    const departments: any = [];
+    const laboratory: any = [];
+    React.useImperativeHandle(ref, () => ({
+      open(state: any) {
+        setFormPopup(state);
+      },
+    }));
 
-  React.useImperativeHandle(ref, () => ({
-    open(state: any) {
-      setFormPopup(state);
-    },
-  }));
+    const checkCredentials = (name: any) => {
+      return true;
+    };
 
-  return (
-    <div>
-      {/* <Confirmationpopup
-        open={openDlg2Dialog}
-        close={() => setDialog2Open(false)}
-        handleConfirmationYes={handleConfirmationYes}
-      />
-      <Successpopup
-        open={openSuccess}
-        type={"Assest"}
-        close={() => setSuccessOpen(false)}
-      /> */}
-      <Dialog
-        open={formPopup}
-        keepMounted
-        onClose={()=>closeFormPopup(false)}
-        aria-labelledby="add-new-asset-title"
-        aria-describedby="add-new-asset"
-        fullWidth
-        maxWidth="md"
-        className="popup-outer"
-      >
-        <Box className="popup-section">
-          <Box className="title-popup">
-            <Typography>Add new asset</Typography>
-            <CloseIcon onClick={()=>closeFormPopup(false)} />
-          </Box>
-          <Grid container spacing={2} sx={{ width: "100%", m: 0 }}>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={5}
-              lg={4}
-              sx={{
-                padding: "0px !important",
-                paddingRight: { xs: "0px !important", md: "30px !important" },
-              }}
-            >
-              <Box>
-                <Box className="asset-upload">
-                  <img src={assetimg} alt="assetimg" />
-                </Box>
-                <Box
-                  className="edit-profile-btn"
-                  sx={{ mt: 3, mb: 3, pb: "0px !important" }}
-                >
-                  <Button>Upload photo</Button>
-                </Box>
-                <Box className="asset-id">
-                  <label>Asset Id (autogenerated)</label>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="Email"
-                    name="Email"
-                    autoComplete="Email"
-                    autoFocus
-                    InputLabelProps={{ shrink: false }}
-                    placeholder="Asset Id"
-                    inputProps={{ maxLength: 50 }}
-                  />
-                </Box>
-                <Box>
-                  <Typography className="recent-use">Recently used</Typography>
-                  <Box className="data-detail">
-                    <img src={darkcircle} alt="darkcircle" />
-                    <Typography>no data found</Typography>
-                  </Box>
-                  <Timeline className="asset-timeline">
-                    <TimelineItem>
-                      <TimelineSeparator>
-                        <TimelineDot>
-                          <img src={darkcircle} alt="darkcircle" />
-                        </TimelineDot>
-                        <TimelineConnector />
-                      </TimelineSeparator>
-                      <TimelineContent className="timeline-content">
-                        <Typography>Date:22/05/2023</Typography>
-                        <Typography>Dept-Computer science</Typography>
-                        <Typography>Dept-Computer science</Typography>
-                      </TimelineContent>
-                    </TimelineItem>
-                    <TimelineItem>
-                      <TimelineSeparator>
-                        <TimelineDot>
-                          <img src={lightcircle} alt="lightcircle" />
-                        </TimelineDot>
-                        <TimelineConnector />
-                      </TimelineSeparator>
-                      <TimelineContent className="timeline-content">
-                        <Typography>Date:22/05/2023</Typography>
-                        <Typography>Dept-Computer science</Typography>
-                        <Typography>Dept-Computer science</Typography>
-                      </TimelineContent>
-                    </TimelineItem>
-                    <TimelineItem>
-                      <TimelineSeparator>
-                        <TimelineDot>
-                          <img src={lightcircle} alt="lightcircle" />
-                        </TimelineDot>
-                      </TimelineSeparator>
-                      <TimelineContent>
-                        <Box className="edit-profile-btn view-more">
-                          <Button>View more</Button>
-                        </Box>
-                      </TimelineContent>
-                    </TimelineItem>
-                  </Timeline>
-                </Box>
+    const onSubmit = (values: any) => {
+      const isMatch = checkCredentials(values.first_name);
+      const assets: any = {
+        name: 'Stenography2',
+        asset_number: 'ASSET_1002',
+        department_id: '653b80a0301e33001265a64a',
+        laboratory_id: '653b7fd4301e33001265a646',
+        user_id: 'USER_1001',
+        perchased_date: '28/10/2023',
+        last_used_date: '28/10/2023',
+        status: true,
+        availability: true,
+        expiry_date: '28/12/2023',
+      };
+      if (isMatch) {
+        dispatch(postAssetsData(assets));
+      } else {
+        formik.setFieldError('first_name', 'Invalid first name');
+      }
+    };
+
+    const Placeholder = ({ children }: any) => {
+      return <div>{children}</div>;
+    };
+
+    const formik = useFormik({
+      initialValues: {
+        name: '',
+        purchase_date: new Date(),
+        warranty_date: new Date(),
+        department: [],
+        laboratory: [],
+        organization: '',
+        status: '',
+        assets_image: '',
+        availability: '',
+        assets_id: 'ASSET_1001',
+      },
+      validationSchema: validationSchema,
+      onSubmit: onSubmit,
+    });
+
+    return (
+      <div>
+        <Dialog
+          open={formPopup}
+          keepMounted
+          onClose={() => closeFormPopup(false)}
+          aria-labelledby="add-new-asset-title"
+          aria-describedby="add-new-asset"
+          fullWidth
+          maxWidth="md"
+          className="popup-outer"
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <Box className="popup-section">
+              <Box className="title-popup">
+                <Typography>Add new asset</Typography>
+                <CloseIcon onClick={() => closeFormPopup(false)} />
               </Box>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={7}
-              lg={8}
-              sx={{
-                padding: "0px !important",
-                paddingTop: { xs: "30px !important", md: "0px !important" },
-              }}
-            >
-              <Box>
-                <Grid container spacing={2} className="asset-popup">
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Box>
-                      <label>Name</label>
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="name"
-                        name="name"
-                        autoComplete="name"
-                        autoFocus
-                        InputLabelProps={{ shrink: false }}
-                        placeholder="Assets name"
-                      />
+              <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={5}
+                  lg={4}
+                  sx={{
+                    padding: '0px !important',
+                    paddingRight: {
+                      xs: '0px !important',
+                      md: '30px !important',
+                    },
+                  }}
+                >
+                  <Box>
+                    <Box className="asset-upload">
+                      <img src={assetimg} alt="assetimg" />
                     </Box>
-                  </Grid>
+                    <Box
+                      className="edit-profile-btn"
+                      sx={{ mt: 3, mb: 3, pb: '0px !important' }}
+                    >
+                      {/* <Button>Upload photo</Button> */}
+                      <TextField
+                        margin="none"
+                        type="file"
+                        fullWidth
+                        id="assets_image"
+                        name="assets_image"
+                        autoComplete="assets_image"
+                        InputLabelProps={{ shrink: false }}
+                        // placeholder="First name"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.assets_image}
+                        size="small"
+                        error={
+                          formik.touched.assets_image &&
+                          Boolean(formik.errors.assets_image)
+                        }
+                      />
+                      {formik.touched.assets_image &&
+                        formik.errors.assets_image && (
+                          <Typography className="error-field">
+                            {formik.errors.assets_image}
+                          </Typography>
+                        )}
+                    </Box>
+                    <Box className="asset-id">
+                      <label>Asset Id (autogenerated)</label>
+                      <TextField
+                        margin="none"
+                        fullWidth
+                        id="assets_id"
+                        name="assets_id"
+                        autoComplete="assets_id"
+                        InputLabelProps={{ shrink: false }}
+                        placeholder="User ID"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.assets_id}
+                        size="small"
+                        error={
+                          formik.touched.assets_id &&
+                          Boolean(formik.errors.assets_id)
+                        }
+                        disabled
+                      />
+                      {formik.touched.assets_id && formik.errors.assets_id && (
+                        <Typography className="error-field">
+                          {formik.errors.assets_id}
+                        </Typography>
+                      )}
+                    </Box>
+                    <Box>
+                      <Typography className="recent-use">
+                        Recently used
+                      </Typography>
+                      <Box className="data-detail">
+                        <img src={darkcircle} alt="darkcircle" />
+                        <Typography>no data found</Typography>
+                      </Box>
+                      <Timeline className="asset-timeline">
+                        <TimelineItem>
+                          <TimelineSeparator>
+                            <TimelineDot>
+                              <img src={darkcircle} alt="darkcircle" />
+                            </TimelineDot>
+                            <TimelineConnector />
+                          </TimelineSeparator>
+                          <TimelineContent className="timeline-content">
+                            <Typography>Date:22/05/2023</Typography>
+                            <Typography>Dept-Computer science</Typography>
+                            <Typography>Dept-Computer science</Typography>
+                          </TimelineContent>
+                        </TimelineItem>
+                        <TimelineItem>
+                          <TimelineSeparator>
+                            <TimelineDot>
+                              <img src={lightcircle} alt="lightcircle" />
+                            </TimelineDot>
+                            <TimelineConnector />
+                          </TimelineSeparator>
+                          <TimelineContent className="timeline-content">
+                            <Typography>Date:22/05/2023</Typography>
+                            <Typography>Dept-Computer science</Typography>
+                            <Typography>Dept-Computer science</Typography>
+                          </TimelineContent>
+                        </TimelineItem>
+                        <TimelineItem>
+                          <TimelineSeparator>
+                            <TimelineDot>
+                              <img src={lightcircle} alt="lightcircle" />
+                            </TimelineDot>
+                          </TimelineSeparator>
+                          <TimelineContent>
+                            <Box className="edit-profile-btn view-more">
+                              <Button>View more</Button>
+                            </Box>
+                          </TimelineContent>
+                        </TimelineItem>
+                      </Timeline>
+                    </Box>
+                  </Box>
                 </Grid>
                 <Grid
-                  container
-                  spacing={2}
-                  className="asset-popup calender-sec"
+                  item
+                  xs={12}
+                  sm={12}
+                  md={7}
+                  lg={8}
+                  sx={{
+                    padding: '0px !important',
+                    paddingTop: { xs: '30px !important', md: '0px !important' },
+                  }}
                 >
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{ paddingRight: { sm: "1rem !important" } }}
-                  >
-                    <Box>
-                      <label>Purchase date</label>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" />
-                      </LocalizationProvider>
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{
-                      paddingLeft: { sm: "1rem !important" },
-                      paddingTop: {
-                        xs: "0rem !important",
-                        sm: "1rem !important",
-                      },
-                    }}
-                  >
-                    <Box>
-                      <label>Guaranty/warranty/expiry date</label>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" />
-                      </LocalizationProvider>
-                    </Box>
-                  </Grid>
+                  <Box>
+                    <Grid container spacing={2} className="asset-popup">
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Box>
+                          <label>Assets name</label>
+                          <TextField
+                            margin="normal"
+                            fullWidth
+                            id="name"
+                            name="name"
+                            autoComplete="name"
+                            InputLabelProps={{ shrink: false }}
+                            placeholder="Assets name"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.name}
+                            size="small"
+                            error={
+                              formik.touched.name && Boolean(formik.errors.name)
+                            }
+                          />
+                          {formik.touched.name && formik.errors.name && (
+                            <Typography className="error-field">
+                              {formik.errors.name}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      spacing={2}
+                      className="asset-popup calender-sec"
+                    >
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        sx={{ paddingRight: { sm: '1rem !important' } }}
+                      >
+                        <Box>
+                          <label>Purchase date</label>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker format="DD/MM/YYYY" />
+                          </LocalizationProvider>
+                          {formik.touched.purchase_date &&
+                            formik.errors.purchase_date && (
+                              <Typography className="error-field">
+                                Date required
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        sx={{
+                          paddingLeft: { sm: '1rem !important' },
+                          paddingTop: {
+                            xs: '0rem !important',
+                            sm: '1rem !important',
+                          },
+                        }}
+                      >
+                        <Box>
+                          <label>Guaranty/warranty/expiry date</label>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker format="DD/MM/YYYY" />
+                          </LocalizationProvider>
+                          {formik.touched.warranty_date &&
+                            formik.errors.warranty_date && (
+                              <Typography className="error-field">
+                                Date required
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2} className="asset-popup">
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Box>
+                          <label style={{ display: 'block' }}>
+                            Organisation
+                          </label>
+                          <Select
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                            renderValue={
+                              formik.values.organization !== ''
+                                ? undefined
+                                : () => (
+                                    <Placeholder>
+                                      Select Organization
+                                    </Placeholder>
+                                  )
+                            }
+                            margin="none"
+                            fullWidth
+                            id="organization"
+                            name="organization"
+                            autoComplete="organization"
+                            placeholder="Organization"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.organization}
+                            size="small"
+                            error={
+                              formik.touched.organization &&
+                              Boolean(formik.errors.organization)
+                            }
+                          >
+                            {OrganizationList.map((item, index) => (
+                              <MenuItem key={index} value={item.id}>
+                                {item.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+
+                          {formik.touched.organization &&
+                            formik.errors.organization && (
+                              <Typography className="error-field">
+                                {formik.errors.organization}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2} className="asset-popup">
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Box>
+                          <label style={{ display: 'block' }}>
+                            Department/s
+                          </label>
+
+                          <Autocomplete
+                            multiple
+                            id="department"
+                            options={DepartmentList}
+                            disableCloseOnSelect
+                            getOptionLabel={(option) => option.name}
+                            renderOption={(props, option, { selected }) => (
+                              <li {...props}>
+                                <Checkbox
+                                  style={{ marginRight: 0 }}
+                                  checked={selected}
+                                />
+                                {option.name}
+                              </li>
+                            )}
+                            renderInput={(params) => <TextField {...params} />}
+                            fullWidth
+                            placeholder="Department"
+                            size="medium"
+                            onChange={(e, f) => {
+                              f.forEach((element) =>
+                                departments.push(element.id),
+                              );
+                              formik.setFieldValue('department', departments);
+                            }}
+                            // onChange={formik.handleChange}
+                            // onBlur={formik.handleBlur}
+                            // value={formik.values.department}
+                            // error={
+                            //   formik.touched.department &&
+                            //   Boolean(formik.errors.department)
+                            // }
+                          />
+                          {formik.touched.department &&
+                            formik.errors.department && (
+                              <Typography className="error-field">
+                                {formik.errors.department}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2} className="asset-popup">
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Box>
+                          <label style={{ display: 'block' }}>
+                            Laboratory/ies
+                          </label>
+
+                          <Autocomplete
+                            multiple
+                            id="laboratory"
+                            options={LaboratoryList}
+                            disableCloseOnSelect
+                            getOptionLabel={(option) => option.name}
+                            renderOption={(props, option, { selected }) => (
+                              <li {...props}>
+                                <Checkbox
+                                  style={{ marginRight: 0 }}
+                                  checked={selected}
+                                />
+                                {option.name}
+                              </li>
+                            )}
+                            renderInput={(params) => <TextField {...params} />}
+                            fullWidth
+                            placeholder="Laboratory"
+                            size="medium"
+                            onChange={(e, f) => {
+                              f.forEach((element) =>
+                                laboratory.push(element.id),
+                              );
+                              formik.setFieldValue('laboratory', laboratory);
+                            }}
+                          />
+                          {formik.touched.laboratory &&
+                            formik.errors.laboratory && (
+                              <Typography className="error-field">
+                                {formik.errors.laboratory}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2} className="asset-popup">
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        sx={{ paddingRight: { sm: '1rem !important' } }}
+                      >
+                        <Box>
+                          <label style={{ display: 'block' }}>Status</label>
+
+                          <Select
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                            renderValue={
+                              formik.values.status !== ''
+                                ? undefined
+                                : () => <Placeholder>Select Status</Placeholder>
+                            }
+                            margin="none"
+                            fullWidth
+                            id="status"
+                            name="status"
+                            autoComplete="status"
+                            placeholder="Laboratory"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.status}
+                            size="small"
+                            error={
+                              formik.touched.status &&
+                              Boolean(formik.errors.status)
+                            }
+                          >
+                            {StatusList.map((item) => (
+                              <MenuItem key={item.id} value={item.id}>
+                                {item.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          {formik.touched.status && formik.errors.status && (
+                            <Typography className="error-field">
+                              {formik.errors.status}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        sx={{
+                          paddingLeft: { sm: '1rem !important' },
+                          paddingTop: {
+                            xs: '0rem !important',
+                            sm: '1rem !important',
+                          },
+                        }}
+                      >
+                        <Box>
+                          <label style={{ display: 'block' }}>
+                            Availability
+                          </label>
+
+                          <Select
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                            renderValue={
+                              formik.values.availability !== ''
+                                ? undefined
+                                : () => (
+                                    <Placeholder>
+                                      Select Availability
+                                    </Placeholder>
+                                  )
+                            }
+                            margin="none"
+                            fullWidth
+                            id="availability"
+                            name="availability"
+                            autoComplete="availability"
+                            placeholder="Laboratory"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.availability}
+                            size="small"
+                            error={
+                              formik.touched.availability &&
+                              Boolean(formik.errors.availability)
+                            }
+                          >
+                            {AvailabilityList.map((item) => (
+                              <MenuItem key={item.id} value={item.id}>
+                                {item.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          {formik.touched.availability &&
+                            formik.errors.availability && (
+                              <Typography className="error-field">
+                                {formik.errors.availability}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
                 </Grid>
-                <Grid container spacing={2} className="asset-popup">
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Box>
-                      <label style={{ display: "block" }}>Organisation</label>
-                      <FormControl sx={{ width: "100%" }}>
-                        <Select
-                          labelId="tselect-popup-label"
-                          id="select-popup"
-                          value={answers}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswers(event.target.value)}
-                          renderValue={
-                            answers !== ""
-                              ? undefined
-                              : () => <Placeholder>Organisation</Placeholder>
-                          }
-                        >
-                          {organizations.map((item, index) => (
-                            <MenuItem value={item.id} key={index}>
-                              {item.name}
-                            </MenuItem>
-                          ))}
-                          {/* <MenuItem value={"1"}>1</MenuItem>
-                          <MenuItem value={"2"}>2</MenuItem>
-                          <MenuItem value={"3"}>3</MenuItem> */}
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} className="asset-popup">
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Box>
-                      <label style={{ display: "block" }}>Department/s</label>
-                      <FormControl sx={{ width: "100%" }}>
-                        <Select
-                          labelId="tselect-popup-label"
-                          id="select-popup"
-                          value={answers}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswers(event.target.value)}
-                          renderValue={
-                            answers !== ""
-                              ? undefined
-                              : () => (
-                                  <Placeholder>Select department</Placeholder>
-                                )
-                          }
-                        >
-                          <MenuItem value={"1"}>1</MenuItem>
-                          <MenuItem value={"2"}>2</MenuItem>
-                          <MenuItem value={"3"}>3</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} className="asset-popup">
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Box>
-                      <label style={{ display: "block" }}>Laboratory/ies</label>
-                      <FormControl sx={{ width: "100%" }}>
-                        <Select
-                          labelId="tselect-popup-label"
-                          id="select-popup"
-                          value={answers}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswers(event.target.value)}
-                          renderValue={
-                            answers !== ""
-                              ? undefined
-                              : () => <Placeholder>Select lab</Placeholder>
-                          }
-                        >
-                          <MenuItem value={"1"}>1</MenuItem>
-                          <MenuItem value={"2"}>2</MenuItem>
-                          <MenuItem value={"3"}>3</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} className="asset-popup">
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{ paddingRight: { sm: "1rem !important" } }}
-                  >
-                    <Box>
-                      <label style={{ display: "block" }}>Status</label>
-                      <FormControl sx={{ width: "100%" }}>
-                        <Select
-                          labelId="tselect-popup-label"
-                          id="select-popup"
-                          value={answers}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswers(event.target.value)}
-                          renderValue={
-                            answers !== ""
-                              ? undefined
-                              : () => <Placeholder>Select status</Placeholder>
-                          }
-                        >
-                          <MenuItem value={"1"}>1</MenuItem>
-                          <MenuItem value={"2"}>2</MenuItem>
-                          <MenuItem value={"3"}>3</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{
-                      paddingLeft: { sm: "1rem !important" },
-                      paddingTop: {
-                        xs: "0rem !important",
-                        sm: "1rem !important",
-                      },
-                    }}
-                  >
-                    <Box>
-                      <label style={{ display: "block" }}>Availability</label>
-                      <FormControl sx={{ width: "100%" }}>
-                        <Select
-                          labelId="tselect-popup-label"
-                          id="select-popup"
-                          value={answers}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswers(event.target.value)}
-                          renderValue={
-                            answers !== ""
-                              ? undefined
-                              : () => (
-                                  <Placeholder>Select availability</Placeholder>
-                                )
-                          }
-                        >
-                          <MenuItem value={"1"}>1</MenuItem>
-                          <MenuItem value={"2"}>2</MenuItem>
-                          <MenuItem value={"3"}>3</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                </Grid>
+              </Grid>
+              <Box
+                sx={{
+                  display: { xs: 'block', sm: 'flex' },
+                  justifyContent: 'flex-end',
+                  mt: 3,
+                }}
+              >
+                <Button
+                  type="submit"
+                  variant="contained"
+                  onClick={() => {
+                    openConfirmationPopup(true);
+                  }}
+                  className="cancel-btn"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  // onClick={submitFormPopup}
+                  className="add-btn"
+                >
+                  Add
+                </Button>
               </Box>
-            </Grid>
-          </Grid>
-          <Box
-            sx={{
-              display: { xs: "block", sm: "flex" },
-              justifyContent: "flex-end",
-              mt: 3,
-            }}
-          >
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={() => {
-                openConfirmationPopup(true);
-              }}
-              className="cancel-btn"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={submitFormPopup}
-              className="add-btn"
-            >
-              Add
-            </Button>
-          </Box>
-        </Box>
-      </Dialog>
-    </div>
-  );
-}
-)
+            </Box>
+          </form>
+        </Dialog>
+      </div>
+    );
+  },
+);
 export default Addnewpopup;

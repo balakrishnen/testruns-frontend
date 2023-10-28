@@ -43,6 +43,8 @@ import { AssetsRowData } from "../../modals/assets.modal";
 import TableFilters from "../../components/table/TableFilters";
 import Confirmationpopup from "../../components/ConfirmationPopup";
 import SuccessPopup from "../../components/SuccessPopup";
+import { fetchAssetsData } from "../../api/assetsAPI";
+import { useDispatch, useSelector } from "react-redux";
 
 
 
@@ -60,14 +62,25 @@ export default function Assets() {
   const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
-
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-
   const Data = Rows.slice(startIndex, endIndex);
+  const dispatch: any = useDispatch();
+
+  const dataAss = useSelector((state) => state);
+
+  React.useEffect(() => {
+    dispatch(
+      fetchAssetsData(),
+    );
+  }, [])
+
+  React.useEffect(() => {
+    console.log('dataAss', dataAss)
+  }, [dataAss])
 
   const handlePageChange = (even: any, page: number) => {
     setCurrentPage(page);
