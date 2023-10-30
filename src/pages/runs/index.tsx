@@ -247,7 +247,7 @@ export default function Runs() {
                                 }
                               />
                             </Box>
-                            <Box sx={{marginLeft: "16px"}}
+                            <Box 
                               onClick={() =>
                                 navigate(`/runs/details/${row.runNumber}`)
                               }

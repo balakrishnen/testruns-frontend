@@ -385,7 +385,7 @@ export default function Procedures() {
                               sx={{ display: "flex", alignItems: "center" }}
                              
                             >
-                              <Box sx={{ ml: 2 }}>
+                              <Box>
                                 <Box>{row.procedureNumber}</Box>
                               </Box>
                             </Box>
