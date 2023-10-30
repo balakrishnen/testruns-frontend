@@ -295,7 +295,7 @@ const CustomFields = () => {
                           IconComponent={ExpandMoreOutlinedIcon}
                         >
                           <MenuItem value={1}>Active</MenuItem>
-                          <MenuItem value={2}>Inactive</MenuItem>
+                          <MenuItem value={2}>In-Active</MenuItem>
                         </Select>
                       </TableCell>
                     )}

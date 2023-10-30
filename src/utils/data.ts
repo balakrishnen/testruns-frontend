@@ -8,7 +8,7 @@ import { ProceduresHead } from '../modals/Procedures.modal';
 
 export const StatusList = [
   { id: 1, name: 'Active' },
-  { id: 2, name: 'Inactive' },
+  { id: 2, name: 'In-Active' },
 ];
 
 export const AvailabilityList = [
@@ -56,7 +56,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
       {
         id: 'search',
         type: 'textfield',
-        label: 'search',
+        label: 'Search',
         options: [],
       },
     ],
@@ -281,7 +281,7 @@ export const UserHeaders: readonly UserHead[] = [
       {
         id: 'search',
         type: 'textfield',
-        label: 'search',
+        label: 'Search',
         options: [],
       },
     ],
@@ -344,7 +344,7 @@ export const UserHeaders: readonly UserHead[] = [
       {
         id: 'search',
         type: 'textfield',
-        label: 'search',
+        label: 'Search',
         options: [],
       },
     ],
@@ -360,8 +360,8 @@ export const UserHeaders: readonly UserHead[] = [
         type: 'autocomplete',
         label: '-Select Status-',
         options: [
-          { value: '1', label: 'Available' },
-          { value: '2', label: 'Not available' },
+          { value: '1', label: 'Active' },
+          { value: '2', label: 'In-Active' },
         ],
       },
     ],
@@ -487,7 +487,7 @@ export const CustomHeaders: readonly CustomHead[] = [
       {
         id: 'search',
         type: 'textfield',
-        label: 'search',
+        label: 'Search',
         options: [],
       },
     ],
@@ -541,7 +541,7 @@ export const CustomHeaders: readonly CustomHead[] = [
         label: '-Select Status-',
         options: [
           { value: '1', label: 'Active' },
-          { value: '2', label: 'Inactive' },
+          { value: '2', label: 'In-Active' },
         ],
       },
     ],
@@ -572,7 +572,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
       {
         id: 'assetNumber',
         type: 'select',
-        label: 'ID  ',
+        label: 'Procedure Id  ',
         options: [
           { value: 'PRO1001', label: 'PRO1001' },
           { value: 'PRO1002', label: 'PRO1002' },
@@ -592,7 +592,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
       {
         id: 'search',
         type: 'textfield',
-        label: 'search',
+        label: 'Search',
         options: [],
       },
     ],
@@ -657,10 +657,10 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
       {
         id: 'availability',
         type: 'autocomplete',
-        label: 'ID',
+        label: '-Select User-',
         options: [
-          { value: '1', label: 'Available' },
-          { value: '2', label: 'Not available' },
+          { value: '1', label: 'username' },
+          // { value: '2', label: 'Not available' },
         ],
       },
     ],
@@ -855,18 +855,18 @@ export const LaboratoryList: readonly Laboratory[] = [
 export const RunsHeaders: readonly RunsHead[] = [
   {
     id: 'runNumber',
-    label: 'ID',
+    label: 'Runs Id',
     filters: [
       {
         id: 'assetNumber',
         type: 'select',
-        label: 'Id',
+        label: 'Runs Id',
         options: [
-          { value: 'ID1001', label: 'ID1001' },
-          { value: 'ID1002', label: 'ID1002' },
-          { value: 'ID1003', label: 'ID1003' },
-          { value: 'ID1004', label: 'ID1004' },
-          { value: 'ID1005', label: 'ID1005' },
+          { value: 'RUNS1001', label: 'RUNS1001' },
+          { value: 'RUNS1002', label: 'RUNS1002' },
+          { value: 'RUNS1003', label: 'RUNS1003' },
+          { value: 'RUNS1004', label: 'RUNS1004' },
+          { value: 'RUNS1005', label: 'RUNS1005' },
         ],
       },
     ],
@@ -880,7 +880,7 @@ export const RunsHeaders: readonly RunsHead[] = [
       {
         id: 'search',
         type: 'textfield',
-        label: 'search',
+        label: 'Search',
         options: [],
       },
     ],
@@ -976,11 +976,11 @@ export const RunsHeaders: readonly RunsHead[] = [
       {
         id: 'status',
         type: 'autocomplete',
-        label: '-Select teacher-',
+        label: '-Select Assignee-',
         options: [
-          { value: '1', label: 'User 1' },
-          { value: '2', label: 'User 2' },
-          { value: '3', label: 'User 3' },
+          { value: 'User 1', label: 'User 1' },
+          { value: 'User 2', label: 'User 2' },
+          { value: 'User 3', label: 'User 3' },
         ],
       },
     ],
@@ -992,11 +992,11 @@ export const RunsRows = [
   {
     is_checked: false,
     id: '1',
-    objective: 'Procedure Title',
-    runNumber: '1003',
+    objective: 'Stored Procedure',
+    runNumber: 'RUNS1001',
     availability: 'AVAILABLE',
-    departmentId: 'DEPT-1003',
-    laboratoryId: 'LAB-1003',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1002',
     extraData: '',
     isActive: 1,
     dueDate: '02/10/2023',
@@ -1007,11 +1007,11 @@ export const RunsRows = [
   {
     is_checked: false,
     id: '2',
-    objective: 'Procedure Title',
-    runNumber: '1003',
+    objective: 'Data Collection',
+    runNumber: 'RUNS1002',
     availability: 'AVAILABLE',
-    departmentId: 'DEPT-1003',
-    laboratoryId: 'LAB-1003',
+    departmentId: 'DEPT-1002',
+    laboratoryId: 'LAB-1001',
     extraData: '',
     isActive: 1,
     dueDate: '02/10/2023',
@@ -1022,8 +1022,8 @@ export const RunsRows = [
   {
     is_checked: false,
     id: '3',
-    objective: 'Procedure Title',
-    runNumber: '1003',
+    objective: 'Algorithms',
+    runNumber: 'RUNS1003',
     availability: 'AVAILABLE',
     departmentId: 'DEPT-1003',
     laboratoryId: 'LAB-1003',
@@ -1037,11 +1037,11 @@ export const RunsRows = [
   {
     is_checked: false,
     id: '4',
-    objective: 'Procedure Title',
-    runNumber: '1003',
+    objective: 'Pattern recognition',
+    runNumber: 'RUNS1004',
     availability: 'AVAILABLE',
-    departmentId: 'DEPT-1003',
-    laboratoryId: 'LAB-1003',
+    departmentId: 'DEPT-1002',
+    laboratoryId: 'LAB-1001',
     extraData: '',
     isActive: 1,
     dueDate: '02/10/2023',
@@ -1052,11 +1052,11 @@ export const RunsRows = [
   {
     is_checked: false,
     id: '5',
-    objective: 'Procedure Title',
-    runNumber: '1001',
+    objective: 'Hypothesis',
+    runNumber: 'RUNS1005',
     availability: 'AVAILABLE',
-    departmentId: 'DEPT-1003',
-    laboratoryId: 'LAB-1003',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1004',
     extraData: '',
     isActive: 1,
     dueDate: '02/10/2023',

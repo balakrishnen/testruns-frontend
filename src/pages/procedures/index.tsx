@@ -163,9 +163,9 @@ export default function Procedures() {
 
   const handleSubmitFormPopup = () => {
     formPopupRef.current.open(false);
-    successPopupRef.current.open(true, "Field");
+    successPopupRef.current.open(true, "Procedure");
     setTimeout(() => {
-      successPopupRef.current.open(false, "Field");
+      successPopupRef.current.open(false, "Procedure");
     }, 3000);
   };
 

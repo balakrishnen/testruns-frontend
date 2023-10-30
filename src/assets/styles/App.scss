@@ -172,6 +172,7 @@ span.MuiTouchRipple-root {
 }
 .MuiCheckbox-root , .MuiRadio-root{
   color: rgba(0, 0, 0, 0.6) !important;
+  padding: 9px 0px 9px !important;
 }
 .common-checkbox svg.MuiSvgIcon-root{
   background-image: url('../images/Check.svg');
@@ -782,7 +783,8 @@ fieldset.MuiOutlinedInput-notchedOutline {
   // margin-top: 1.5rem;
   margin-right: -90rem;
   thead {
-    background: #FFF4D0;    
+    background: #FFF4D0;  
+    padding: 10px;  
     th {
       &:first-child {
         border-radius: 10px 0px 0px 0px;
@@ -792,7 +794,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
       }
       .MuiInputBase-root , .MuiFormControl-root{
         width: 100%;
-        margin: auto;
+        // margin: auto;
       }
       .MuiInputBase-root{
         border-radius: 5px;
@@ -828,7 +830,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
       letter-spacing: 0.24px;
       margin-bottom: 0.8rem;
       white-space: nowrap;
-      text-align: center;
+      text-align: left;
       &:first-child {
 				text-align: left !important;
 			}
@@ -842,7 +844,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
     font-weight: 400;
     letter-spacing: 0.24px;
     text-align: left;
-    padding: 10px;
+   padding: 10px 16px 10px;
     line-height: 0.43;
   }
 }

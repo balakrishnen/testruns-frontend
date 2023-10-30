@@ -125,9 +125,9 @@ const Users = () => {
 
   const handleSubmitFormPopup = () => {
     formPopupRef.current.open(false);
-    successPopupRef.current.open(true, "Field");
+    successPopupRef.current.open(true, "User");
     setTimeout(() => {
-      successPopupRef.current.open(false, "Field");
+      successPopupRef.current.open(false, "User");
     }, 3000);
   };
 
@@ -266,7 +266,7 @@ const Users = () => {
                           IconComponent={ExpandMoreOutlinedIcon}
                         >
                           <MenuItem value={1}>Active</MenuItem>
-                          <MenuItem value={2}>Inactive</MenuItem>
+                          <MenuItem value={2}>In-Active</MenuItem>
                         </Select>
                       </TableCell>
                     )}

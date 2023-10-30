@@ -146,9 +146,9 @@ export default function Assets() {
 
   const handleSubmitFormPopup = () => {
     formPopupRef.current.open(false);
-    successPopupRef.current.open(true, "Field");
+    successPopupRef.current.open(true, "Assets");
     setTimeout(() => {
-      successPopupRef.current.open(false, "Field");
+      successPopupRef.current.open(false, "Assets");
     }, 3000);
   };
 

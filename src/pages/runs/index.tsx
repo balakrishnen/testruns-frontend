@@ -131,9 +131,9 @@ export default function Runs() {
 
   const handleSubmitFormPopup = () => {
     formPopupRef.current.open(false);
-    successPopupRef.current.open(true, 'Field');
+    successPopupRef.current.open(true, 'Runs');
     setTimeout(() => {
-      successPopupRef.current.open(false, 'Field');
+      successPopupRef.current.open(false, 'Runs');
     }, 3000);
   };
 
@@ -247,7 +247,7 @@ export default function Runs() {
                                 }
                               />
                             </Box>
-                            <Box
+                            <Box sx={{marginLeft: "16px"}}
                               onClick={() =>
                                 navigate(`/runs/details/${row.runNumber}`)
                               }
@@ -293,29 +293,31 @@ export default function Runs() {
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={1}>Fully Working</MenuItem>
-                            <MenuItem value={2}>Issues</MenuItem>
+                            <MenuItem value={1}>New Task</MenuItem>
+                            <MenuItem value={2}>Completed</MenuItem>
+                            <MenuItem value={3}>Not Started</MenuItem>
+
                           </Select>
                         </TableCell>
                       )}
                       {headers[7].is_show && (
-                        <TableCell>
-                          <Select
-                            className={
-                              row.availability === 'AVAILABLE'
-                                ? 'active-select td-select'
-                                : 'inactive-select td-select'
-                            }
-                            value={row.availability}
-                            displayEmpty
-                            IconComponent={ExpandMoreOutlinedIcon}
-                          >
-                            <MenuItem value={'AVAILABLE'}>Available</MenuItem>
-                            <MenuItem value={'NOTAVAILABLE'}>
-                              Not available
-                            </MenuItem>
-                          </Select>
-                        </TableCell>
+                         <TableCell align="center">Username</TableCell>
+                          //</TableRow>{/* <Select
+                          //   className={
+                          //     row.availability === 'AVAILABLE'
+                          //       ? 'active-select td-select'
+                          //       : 'inactive-select td-select'
+                          //   }
+                          //   value={row.availability}
+                          //   displayEmpty
+                          //   IconComponent={ExpandMoreOutlinedIcon}
+                          // >
+                          //   <MenuItem value={'AVAILABLE'}>Available</MenuItem>
+                          //   <MenuItem value={'NOTAVAILABLE'}>
+                          //     Not available
+                          //   </MenuItem>
+                          // </Select> */}
+                        // </TableCell>
                       )}
                     </TableRow>
                   );
