@@ -558,6 +558,22 @@ p.reg-text {
     margin-bottom: 1rem !important;
   }
 }
+.error-field-checkbox{
+  color:#E2445C;
+  // position:absolute;
+  // padding-top:10px;
+  top:0px; 
+  right: 0px;
+  font-size:$font-small !important;
+  // @media (min-width:900px) and (max-width:1000px){
+  //   position: relative;
+  //   top: -17px;
+  // }
+  // @media(max-width:500px){
+  //   position: relative;
+  //   top: -17px;
+  // }
+}
 .error-field{
   color:#E2445C;
   position:absolute;
@@ -825,7 +841,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
     color: #181818;
     font-weight: 400;
     letter-spacing: 0.24px;
-    text-align: center;
+    text-align: left;
     padding: 10px;
     line-height: 0.43;
   }

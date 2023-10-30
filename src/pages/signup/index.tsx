@@ -30,6 +30,9 @@ const validationSchema = Yup.object().shape({
   confirm_password: Yup.string()
     .required("Confirm password is required")
     .oneOf([Yup.ref("password"), ""], "Password mismatch"),
+    termsAndConditions: Yup
+    .bool()
+    .oneOf([true], 'You need to accept the terms and conditions'),
   // agree: Yup.boolean()
   //   .required('You must accept the Terms of Service to proceed')
     // .oneOf([true], 'Error')
@@ -64,7 +67,8 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
       values.fullname,
       values.email,
       values.password,
-      values.confirm_password
+      values.confirm_password,
+      values.termsAndConditions
     );
 
     if (isMatch) {
@@ -81,9 +85,10 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
     fullname: any,
     email: any,
     password: any,
-    confirm_password: any
+    confirm_password: any,
+    termsAndConditions:boolean
   ) => {
-    if(fullname!=="" && email!=="" && password!== "" && confirm_password!==""){
+    if(fullname!=="" && email!=="" && password!== "" && confirm_password!==""&& termsAndConditions===true){
       return true
     }
     else{
@@ -97,6 +102,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
       email: "",
       password: "",
       confirm_password: "",
+      termsAndConditions:false
     },
     validationSchema: validationSchema,
     onSubmit: onSubmit,
@@ -254,25 +260,34 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
             <FormControlLabel
               control={
                 <Checkbox
-                  value="remember"
-                  color="primary"
-                  sx={{
-                    color: "#181818",
-                    "&.Mui-checked": {
-                      color: "#FFC60B",
-                    },
-                  }}
-                />
-              }
-              className="read-check"
-              label={undefined}
-            />
+                inputProps={{ autoComplete: 'off' }} // Add autoComplete="off" for the Checkbox
+                checked={formik.values.termsAndConditions}
+                onChange={formik.handleChange}
+                name="termsAndConditions"
+                color="primary"
+                sx={{
+                  color: "#181818",
+                  "&.Mui-checked": {
+                    color: "#FFC60B",
+                  },
+                }}
+              />
+            }
+            className="read-check"
+            label={undefined}
+          />
             <Typography className="read-text">
               I have read and understood and agree with terms of service and
               Privacy policy of Test Runs.{" "}
               <span style={{ cursor: "pointer" }}>[Read more]</span>
             </Typography>
           </Box>
+          {formik.touched.termsAndConditions && formik.errors.termsAndConditions && (
+              <Typography className="error-field-checkbox">
+                {formik.errors.termsAndConditions}
+              </Typography>
+            )}
+          {/* {errors.termsAndConditions && <p>{errors.termsAndConditions}</p>} */}
           <Button
             type="submit"
             fullWidth
