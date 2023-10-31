@@ -291,6 +291,7 @@ export default function Runs() {
                             }
                             value={row.isActive}
                             displayEmpty
+                            onChange={(e)=>handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
                             <MenuItem value={1}>New Task</MenuItem>

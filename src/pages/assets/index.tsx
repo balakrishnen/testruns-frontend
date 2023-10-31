@@ -302,6 +302,7 @@ export default function Assets() {
                             }
                             value={row.status}
                             displayEmpty
+                            onChange={(e)=>handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
                             <MenuItem value={1}>Fully Working</MenuItem>
@@ -319,6 +320,7 @@ export default function Assets() {
                             }
                             value={row.availability}
                             displayEmpty
+                            onChange={(e)=>handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
                             <MenuItem value={"AVAILABLE"}>Available</MenuItem>
