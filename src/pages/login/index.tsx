@@ -39,7 +39,7 @@ const validationSchema = Yup.object().shape({
     .min(8, 'Wrong password'),
 });
 
-const Login = () => {  
+const Login = () => {
   let isLoggedIn = null;
 
   if (typeof window !== 'undefined') {
@@ -63,10 +63,12 @@ const Login = () => {
         navigate('/mypage');
       }
     } else {
-      if(values.email !== validUser.email ){
-      formik.setFieldError('email', 'Invalid email');}
-      if(values.password !== validUser.password) {
-      formik.setFieldError('password', 'Invalid password');}
+      if (values.email !== validUser.email) {
+        formik.setFieldError('email', 'Invalid email');
+      }
+      if (values.password !== validUser.password) {
+        formik.setFieldError('password', 'Invalid password');
+      }
     }
   };
 
@@ -90,7 +92,7 @@ const Login = () => {
 
   if (isLoggedIn === 'true') {
     console.log("false");
-    
+
     navigate('/mypage');
     return null;
   }
@@ -171,7 +173,7 @@ const Login = () => {
               textAlign: 'center',
             }}
           >
-            <Box>
+            <Box sx={{ paddingLeft: '8px' }}>
               <FormControlLabel
                 control={
                   <Checkbox

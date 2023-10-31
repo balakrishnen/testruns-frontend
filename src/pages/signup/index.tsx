@@ -30,12 +30,12 @@ const validationSchema = Yup.object().shape({
   confirm_password: Yup.string()
     .required("Confirm password is required")
     .oneOf([Yup.ref("password"), ""], "Password mismatch"),
-    termsAndConditions: Yup
+  termsAndConditions: Yup
     .bool()
     .oneOf([true], 'You need to accept the terms and conditions'),
   // agree: Yup.boolean()
   //   .required('You must accept the Terms of Service to proceed')
-    // .oneOf([true], 'Error')
+  // .oneOf([true], 'Error')
 });
 
 const SignUp = () => {
@@ -44,17 +44,17 @@ const SignUp = () => {
     confirmpassword: boolean;
 
   }
-  
-  const [initalStatus,setInitalStatus] = React.useState<FormValidation>({
+
+  const [initalStatus, setInitalStatus] = React.useState<FormValidation>({
     password: false,
     confirmpassword: false,
   });
 
-const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) => {
-  const updatedValidation = { ...initalStatus };
-  updatedValidation[key] = newValue;
-  setInitalStatus(updatedValidation);
-};
+  const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) => {
+    const updatedValidation = { ...initalStatus };
+    updatedValidation[key] = newValue;
+    setInitalStatus(updatedValidation);
+  };
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -86,13 +86,13 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
     email: any,
     password: any,
     confirm_password: any,
-    termsAndConditions:boolean
+    termsAndConditions: boolean
   ) => {
-    if(fullname!=="" && email!=="" && password!== "" && confirm_password!==""&& termsAndConditions===true){
+    if (fullname !== "" && email !== "" && password !== "" && confirm_password !== "" && termsAndConditions === true) {
       return true
     }
-    else{
-    return false;
+    else {
+      return false;
     }
   };
 
@@ -102,7 +102,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
       email: "",
       password: "",
       confirm_password: "",
-      termsAndConditions:false
+      termsAndConditions: false
     },
     validationSchema: validationSchema,
     onSubmit: onSubmit,
@@ -113,7 +113,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
       <Typography variant="h5" className="title-text">
         Sign up for a <span>free</span> Test Runs account
       </Typography>
-      <form onSubmit={formik.handleSubmit}  autoComplete="off">
+      <form onSubmit={formik.handleSubmit} autoComplete="off">
         <Box sx={{ mt: 4 }} className="auth-inner">
           <Box style={{ position: "relative" }}>
             <InputLabel>Full name</InputLabel>
@@ -138,7 +138,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
           <Box style={{ position: "relative" }}>
             <InputLabel>E-mail</InputLabel>
             <TextField
-            autoComplete="off"
+              autoComplete="off"
               margin="normal"
               fullWidth
               name="email"
@@ -160,7 +160,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
           <Box style={{ position: "relative" }}>
             <InputLabel>Password</InputLabel>
             <TextField
-            autoComplete="new-password"
+              autoComplete="new-password"
               type={initalStatus.password ? "text" : "password"}
               fullWidth
               inputProps={{ maxLength: 24 }}
@@ -169,7 +169,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={(e)=>handleClickShowPassword("password",!initalStatus.password)}
+                      onClick={(e) => handleClickShowPassword("password", !initalStatus.password)}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                       sx={{ mr: 0 }}
@@ -207,7 +207,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle confirm password visibility"
-                      onClick={(e)=>handleClickShowPassword("confirmpassword",!initalStatus.confirmpassword)}
+                      onClick={(e) => handleClickShowPassword("confirmpassword", !initalStatus.confirmpassword)}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                       sx={{ mr: 0 }}
@@ -242,42 +242,44 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
                 </Typography>
               )}
           </Box>
-          <FormControlLabel
-            control={
-              <Checkbox
-                value="remember"
-                color="primary"
-                sx={{
-                  color: "#9F9F9F",
-                  "&.Mui-checked": {
-                    color: "#FFC60B",
-                  },
-                }}
-              />
-            }
-            label="Remember me"
-            className="remember-me"
-          />
-          <Box sx={{ display: "flex", alignItems: "flex-start", mt: -2 }}>
+          <Box sx={{ paddingLeft: '8px' }}>
             <FormControlLabel
               control={
                 <Checkbox
-                inputProps={{ autoComplete: 'off' }} // Add autoComplete="off" for the Checkbox
-                checked={formik.values.termsAndConditions}
-                onChange={formik.handleChange}
-                name="termsAndConditions"
-                color="primary"
-                sx={{
-                  color: "#181818",
-                  "&.Mui-checked": {
-                    color: "#FFC60B",
-                  },
-                }}
-              />
-            }
-            className="read-check"
-            label={undefined}
-          />
+                  value="remember"
+                  color="primary"
+                  sx={{
+                    color: "#9F9F9F",
+                    "&.Mui-checked": {
+                      color: "#FFC60B",
+                    },
+                  }}
+                />
+              }
+              label="Remember me"
+              className="remember-me"
+            />
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "flex-start", mt: -2, paddingLeft: '8px' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  inputProps={{ autoComplete: 'off' }} // Add autoComplete="off" for the Checkbox
+                  checked={formik.values.termsAndConditions}
+                  onChange={formik.handleChange}
+                  name="termsAndConditions"
+                  color="primary"
+                  sx={{
+                    color: "#181818",
+                    "&.Mui-checked": {
+                      color: "#FFC60B",
+                    },
+                  }}
+                />
+              }
+              className="read-check"
+              label={undefined}
+            />
             <Typography className="read-text">
               I have read and understood and agree with terms of service and
               Privacy policy of Test Runs.{" "}
@@ -285,10 +287,10 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
             </Typography>
           </Box>
           {formik.touched.termsAndConditions && formik.errors.termsAndConditions && (
-              <Typography className="error-field-checkbox">
-                {formik.errors.termsAndConditions}
-              </Typography>
-            )}
+            <Typography className="error-field-checkbox">
+              {formik.errors.termsAndConditions}
+            </Typography>
+          )}
           {/* {errors.termsAndConditions && <p>{errors.termsAndConditions}</p>} */}
           <Button
             type="submit"
