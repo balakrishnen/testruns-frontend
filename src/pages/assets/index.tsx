@@ -249,7 +249,7 @@ export default function Assets() {
                       // selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
                       onClick={(e:any) =>
-                        (e.target.name==undefined && navigate(`/assets/details/${row.assetNumber}`))}
+                       { (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && navigate(`/assets/details/${row.assetNumber}`))}}
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">

@@ -230,8 +230,10 @@ export default function Runs() {
                       // selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
                       onClick={(e: any) =>{
-                        e.target.name == undefined &&
-                        navigate(`/runs/details/${row.runNumber}`),console.log(e);
+                       (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && 
+                        navigate(`/runs/details/${row.runNumber}`)),
+                        console.log(e.target.tagName)
+                        
                         }
                       }
                     >
