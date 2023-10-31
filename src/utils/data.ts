@@ -36,7 +36,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
       {
         id: 'assetNumber',
         type: 'select',
-        label: 'Assest Id',
+        label: 'Assest ID',
         options: [
           { value: 'ID1001', label: 'ID1001' },
           { value: 'ID1002', label: 'ID1002' },
@@ -263,7 +263,7 @@ export const UserHeaders: readonly UserHead[] = [
       {
         id: 'user_id',
         type: 'select',
-        label: 'User Id',
+        label: 'User ID',
         options: [
           { value: 'ID1001', label: 'ID1001' },
           { value: 'ID1002', label: 'ID1002' },
@@ -567,12 +567,12 @@ export const CustomHeaders: readonly CustomHead[] = [
 export const ProceduresHeaders: readonly ProceduresHead[] = [
   {
     id: 'procedureNumber',
-    label: 'Procedure Id',
+    label: 'Procedure ID',
     filters: [
       {
         id: 'assetNumber',
         type: 'select',
-        label: 'Procedure Id  ',
+        label: 'Procedure ID  ',
         options: [
           { value: 'PRO1001', label: 'PRO1001' },
           { value: 'PRO1002', label: 'PRO1002' },
@@ -855,12 +855,12 @@ export const LaboratoryList: readonly Laboratory[] = [
 export const RunsHeaders: readonly RunsHead[] = [
   {
     id: 'runNumber',
-    label: 'Runs Id',
+    label: 'Runs ID',
     filters: [
       {
         id: 'assetNumber',
         type: 'select',
-        label: 'Runs Id',
+        label: 'Runs ID',
         options: [
           { value: 'RUNS1001', label: 'RUNS1001' },
           { value: 'RUNS1002', label: 'RUNS1002' },
