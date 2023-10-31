@@ -12,6 +12,24 @@ import document from "../../../assets/images/profile/document.svg";
 import profile2 from "../../../assets/images/profile/profile2.svg";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { withSettingsLayout } from "../../../components/settings";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import {navigate} from 'gatsby'
+
+const validationSchema = Yup.object().shape({
+  password:Yup.string()
+  .required("Password is required"),
+  newpassword: Yup.string()
+    .required("New Password is required")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Weak password"
+    ),
+    confirmpassword: Yup.string()
+    .required("Confirm password is required")
+    .oneOf([Yup.ref("newpassword"), ""], "Password mismatch"),
+
+});
 
 const Profile = () => {
   const [expanded, setExpanded] = React.useState<string | false>("panel1");
@@ -36,7 +54,49 @@ const Profile = () => {
     updatedValidation[key] = newValue;
     setInitalStatus(updatedValidation);
   };
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
 
+  const onSubmit = (values: any) => {
+    const isMatch = checkCredentials(
+      values.password,
+      values.newpassword,
+      values.confirmpassword
+    );
+
+    if (isMatch) {
+      alert("password updated successful!");
+      navigate('/login')
+    } else {
+      formik.setFieldError("password", "Invalid password");
+       }
+  };
+
+  const checkCredentials = (
+    password: any,
+    newpassword: any,
+    confirmpassword:any
+  ) => {
+    if(newpassword!=="" && confirmpassword!=="" && password!== ""){
+      return true
+    }
+    else{
+    return false;
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      password: '',
+      newpassword: '',
+      confirmpassword: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: onSubmit,
+  });
   return (
     <Box className="profile-setting-page"  style={{ padding: "8px 24px"}}>
       <Box
@@ -226,7 +286,14 @@ const Profile = () => {
                           autoComplete="last"
                           autoFocus
                           InputLabelProps={{ shrink: false }}
-                          placeholder=""
+                          placeholder="Mobile number"
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment sx={{ mx: 2 }} position="start">
+                                +91{' '}
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Box>
                     </Grid>
@@ -390,6 +457,7 @@ const Profile = () => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
+              <form onSubmit={formik.handleSubmit}  autoComplete="off">
                 <Box className="auth-inner">
                   <Box style={{ position: "relative" }}>
                     <InputLabel>Enter old password</InputLabel>
@@ -416,9 +484,18 @@ const Profile = () => {
                       }}
                       name="password"
                       id="password"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.password}
                       variant="outlined"
+                      error={formik.touched.password && Boolean(formik.errors.password)}
                       placeholder="Password"
                     />
+                      {formik.touched.password && formik.errors.password && (
+              <Typography className="error-field">
+                {formik.errors.password}
+              </Typography>
+            )}
                   </Box>
                   <Box style={{ position: "relative" }}>
                     <InputLabel>Enter new Password</InputLabel>
@@ -431,6 +508,7 @@ const Profile = () => {
                             <IconButton
                               aria-label="toggle password visibility"
                               onClick={(e)=>handleClickShowPassword("newpassword",!initalStatus.newpassword)}
+                              onMouseDown={handleMouseDownPassword} 
                               edge="end"
                               sx={{ mr: 0 }}
                             >
@@ -445,9 +523,21 @@ const Profile = () => {
                       }}
                       name="newpassword"
                       id="password"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.newpassword}
                       variant="outlined"
-                      placeholder="Password"
+                      error={formik.touched.newpassword && Boolean(formik.errors.newpassword)}
+                      placeholder="New Password"
                     />
+                      {formik.touched.newpassword && formik.errors.newpassword && (
+              <Typography className="error-field">
+                {formik.errors.newpassword}
+              </Typography>
+            )}
+            {formik.touched.newpassword && !formik.errors.newpassword && (
+              <Typography className="valid-field">Strong password</Typography>
+            )}
                   </Box>
                   <Box style={{ position: "relative" }}>
                     <InputLabel>Confirm new password</InputLabel>
@@ -460,6 +550,7 @@ const Profile = () => {
                             <IconButton
                               aria-label="toggle password visibility"
                               onClick={(e)=>handleClickShowPassword("confirmpassword",!initalStatus.confirmpassword)}
+                              onMouseDown={handleMouseDownPassword}
                               edge="end"
                               sx={{ mr: 0 }}
                             >
@@ -474,11 +565,31 @@ const Profile = () => {
                       }}
                       name="confirmpassword"
                       id="password"
-                      variant="outlined"
-                      placeholder="Password"
-                    />
+                      onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.confirmpassword}
+              variant="outlined"
+              error={
+                formik.touched.confirmpassword &&
+                Boolean(formik.errors.confirmpassword)
+              }
+              placeholder="Confirm Password"
+            />
+            {formik.touched.confirmpassword &&
+              formik.errors.confirmpassword && (
+                <Typography className="error-field">
+                  {formik.errors.confirmpassword}
+                </Typography>
+              )}
+            {formik.touched.confirmpassword &&
+              !formik.errors.confirmpassword && (
+                <Typography className="valid-field">
+                  Password matched
+                </Typography>
+              )}
                   </Box>
                 </Box>
+                </form>
               </AccordionDetails>
             </Accordion>
           </Box>

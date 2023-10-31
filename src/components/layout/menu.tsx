@@ -131,9 +131,9 @@ export default function AppMenu(props: any) {
             ))}
           </List>
         </Box>
-        <Box className="upgrade-seaction">
+       { props.width === 290 &&   <Box className="upgrade-seaction">
           <img src={upgrade} />
-        </Box>
+        </Box>}
       </Drawer>
     </>
   );

@@ -113,7 +113,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
       <Typography variant="h5" className="title-text">
         Sign up for a <span>free</span> Test Runs account
       </Typography>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit}  autoComplete="off">
         <Box sx={{ mt: 4 }} className="auth-inner">
           <Box style={{ position: "relative" }}>
             <InputLabel>Full name</InputLabel>
@@ -138,6 +138,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
           <Box style={{ position: "relative" }}>
             <InputLabel>E-mail</InputLabel>
             <TextField
+            autoComplete="off"
               margin="normal"
               fullWidth
               name="email"
@@ -159,6 +160,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
           <Box style={{ position: "relative" }}>
             <InputLabel>Password</InputLabel>
             <TextField
+            autoComplete="new-password"
               type={initalStatus.password ? "text" : "password"}
               fullWidth
               inputProps={{ maxLength: 24 }}
