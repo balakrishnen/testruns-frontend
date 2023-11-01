@@ -71,6 +71,7 @@ p.setting-title {
 
 .setting-sidebar {
     height: calc(100vh - 65px);
+    width: 240px;
 
     .app-drawer-list-item-active {
         background: #FFDC6B;
@@ -229,7 +230,7 @@ p.setting-title {
 }
 
 main.narrow-class .profile-setting-page .edit-details {
-    width: calc(100% - 416px);
+    width: calc(100% - 338px);
 }
 
 @media (min-width:900px) {
@@ -288,6 +289,14 @@ main.narrow-class .profile-setting-page .edit-details {
 
     .mobile-class.side-hide {
         display: block;
+        position: fixed;
+        z-index: 1;
+        height: 100%;
+    }
+    .side-show{
+        position: fixed;
+        z-index: 3;
+        height: 100%;
     }
 }
 
@@ -354,6 +363,7 @@ $width1: 200px;
         width: 100%;
         bottom: 0;
         background: #fff;
+        z-index: 2;
     }
 
     @media (max-width:1199px) {

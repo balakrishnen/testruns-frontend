@@ -98,7 +98,7 @@ export default function AppMenu(props: any) {
           },
           boxShadow: "3px 4px 4px 0px rgba(0, 0, 0, 0.10)",
         }}
-        className="app-drawer"
+        className={`${props.classn} app-drawer`}
       >
         <Box>
           <List style={{ padding: "0px" }}>

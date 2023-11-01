@@ -42,7 +42,7 @@ export default function MyPage() {
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
-        <Box className="table-outer" sx={{ width: "100%", marginTop: "0rem !important" }}>
+        <Box className="table-outer mypage-table" sx={{ width: "100%", marginTop: "0rem !important" }}>
           <TableContainer>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -57,8 +57,16 @@ export default function MyPage() {
                     key={row.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
-                      {row.name}
+                    <TableCell>
+                      <Box className="text-container" sx={{ marginLeft: '0rem' }}>
+                        <Box className="content">
+                          <Typography className="id-detail">
+                            ID023659ADN&ensp;/&ensp;Dept-Computer
+                            science&ensp;/&ensp;Lab-Data structure
+                          </Typography>
+                        </Box>
+                        <Box className="heading" sx={{ marginBottom: '0rem' }}>Requester name has assigned you a task ID09876</Box>
+                      </Box>
                     </TableCell>
                     <TableCell align="right">{row.calories}</TableCell>
                   </TableRow>
@@ -87,14 +95,14 @@ export default function MyPage() {
                 <MenuItem value={"3"}>3</MenuItem>
               </Select>
             </FormControl> */}
-            <Typography style={{display:'flex', alignItems:'center', cursor: 'pointer'}}>View all <img src={viewarrow} alt="arrow" style={{marginLeft:'0.5rem'}}/></Typography>
+            <Typography style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>View all <img src={viewarrow} alt="arrow" style={{ marginLeft: '0.5rem' }} /></Typography>
           </Box>
         </Box>
         <Grid container spacing={2} sx={{ width: '100%', marginLeft: '0rem', marginTop: '1rem' }}>
           <Grid item xs={12} sm={12} md={12} lg={8} xl={8} sx={{ paddingLeft: '0px !important' }}>
             <Box className="notification-mypage">
               <Box className="notification-title"><Typography>Notifications</Typography></Box>
-              <Box sx={{ overflowY: 'auto' , maxHeight:'800px' , paddingBottom:'3rem'}}>
+              <Box sx={{ overflowY: 'auto', maxHeight: '800px', paddingBottom: '3rem' }}>
                 <Box className="notifications">
                   <Box className="image-container">
                     <img src={Avatars} className="dp-iamge" />
@@ -247,7 +255,7 @@ export default function MyPage() {
                     <MenuItem value={"3"}>3</MenuItem>
                   </Select>
                 </FormControl> */}
-                <Typography style={{display:'flex', alignItems:'center', cursor: 'pointer'}}>View all <img src={viewarrow} alt="arrow" style={{marginLeft:'0.5rem'}}/></Typography>
+                <Typography style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>View all <img src={viewarrow} alt="arrow" style={{ marginLeft: '0.5rem' }} /></Typography>
               </Box>
             </Box>
           </Grid>

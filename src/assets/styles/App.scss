@@ -80,7 +80,18 @@
 }
 .MuiDrawer-docked.app-drawer {
   box-shadow: none;
+  @media (max-width:899px){
+    display: none;
+  }
 }
+@media (max-width:899px){
+  .MuiDrawer-docked.app-drawer.openmenu {
+    display: block;
+    position: fixed;
+    z-index: 5;
+  }
+}
+
 .app-drawer{
   ul{
     padding-top: 1rem !important;
@@ -840,12 +851,13 @@ fieldset.MuiOutlinedInput-notchedOutline {
     }
   }
   td{
-    color: #181818;
-    font-weight: 400;
-    letter-spacing: 0.24px;
-    text-align: left;
-   padding: 10px 16px 10px;
-    line-height: 0.43;
+      color: #181818;
+      font-weight: 400;
+      letter-spacing: 0.24px;
+      text-align: left;
+      padding: 10px 16px 10px;
+      line-height: 0.43;
+      border-bottom: 1px solid #F3F3F3;
   }
 }
 .table-outer thead th:first-child tr th .MuiFormControl-root, .table-outer thead th:first-child tr th .MuiInputBase-root {
@@ -856,6 +868,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   justify-content: space-between;
   align-items: center;
   padding: 16px;
+  border-top: 1px solid #F3F3F3;
   @media (max-width:767px){
     display: block;
     p{
@@ -1753,4 +1766,28 @@ input[type="color" i]::-webkit-color-swatch {
   animation-duration: 10ms;
   padding: 8px 14px !important;
   padding-right: 0;
+}
+
+.mypage-page {
+	.table-outer {
+		thead {
+			th {
+				color: #565656 !important;
+				font-size: 16px;
+				font-weight: 500;
+				line-height: normal;
+				letter-spacing: 0.24px;
+			}
+		}
+	}
+  .mypage-table{
+    td{
+      color: #9F9F9F;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0.35px;
+      padding: 13px 16px;
+    }
+  }
 }
