@@ -6,11 +6,12 @@ import {
 import { GET_ASSETS, POST_ASSETS } from '../graphql/assets/assets.graphql';
 import { client } from '../utils/config';
 
-export const fetchAssetsData = () => async (dispatch: any) => {
+export const fetchAssetsData = (payload: any) => async (dispatch: any) => {
   dispatch(fetchAssetsStart());
   try {
     const response = await client.query({
       query: GET_ASSETS,
+      variables: payload,
     });
     dispatch(fetchAssetsSuccess(response.data));
   } catch (error: any) {

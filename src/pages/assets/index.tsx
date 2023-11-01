@@ -1,19 +1,21 @@
-import * as React from "react";
-import PrivateRoute from "../../components/PrivateRoute";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import DeletePopup from "../../components/DeletePopup";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import { visuallyHidden } from "@mui/utils";
-import TablePagination from "../../components/table/TablePagination"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from 'react';
+import PrivateRoute from '../../components/PrivateRoute';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import DeletePopup from '../../components/DeletePopup';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import { visuallyHidden } from '@mui/utils';
+import TablePagination from '../../components/table/TablePagination';
 import {
   handleCheckboxChange,
   handleDeCheckboxChange,
   handledAllSelected,
-} from "../../utils/common-services";
+} from '../../utils/common-services';
 import {
   Box,
   Button,
@@ -25,35 +27,33 @@ import {
   TextField,
   Typography,
   Checkbox,
-} from "@mui/material";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import search from "../../assets/images/search.svg";
-import Addnewpopup from "./AssetsForm";
-import { navigate } from "gatsby";
-import TableHeader from "../../components/table/TableHeader";
-import image_holder from "../../assets/images/image-holder.svg";
+} from '@mui/material';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import search from '../../assets/images/search.svg';
+import Addnewpopup from './AssetsForm';
+import { navigate } from 'gatsby';
+import TableHeader from '../../components/table/TableHeader';
+import image_holder from '../../assets/images/image-holder.svg';
 import {
   AssetsHeaders,
   DepartmentList,
   LaboratoryList,
   AssetsRows,
-} from "../../utils/data";
-import { AssetsRowData } from "../../modals/assets.modal";
-import TableFilters from "../../components/table/TableFilters";
-import Confirmationpopup from "../../components/ConfirmationPopup";
-import SuccessPopup from "../../components/SuccessPopup";
-import { fetchAssetsData } from "../../api/assetsAPI";
-import { useDispatch, useSelector } from "react-redux";
-
-
+} from '../../utils/data';
+import { AssetsRowData } from '../../modals/assets.modal';
+import TableFilters from '../../components/table/TableFilters';
+import Confirmationpopup from '../../components/ConfirmationPopup';
+import SuccessPopup from '../../components/SuccessPopup';
+import { fetchAssetsData } from '../../api/assetsAPI';
+import { useDispatch, useSelector } from 'react-redux';
 
 const rows: AssetsRowData[] = AssetsRows;
 
 export default function Assets() {
   const [openDlg1Dialog, setDialog1Open] = React.useState(false);
   const [headers, setHeaders] = React.useState<any>(AssetsHeaders);
-  const [Rows, setSelectedRows] = React.useState(rows);
+  // const [assetsData, setAssetsData] = React.useState(rows);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
   const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
@@ -64,57 +64,83 @@ export default function Assets() {
   const successPopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(Rows.length / itemsPerPage);
+  // const totalPages = Math.ceil(assetsData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const Data = Rows.slice(startIndex, endIndex);
+  // const Data = assetsData.slice(startIndex, endIndex);
   const dispatch: any = useDispatch();
+  const [assetsData, setAssetsData] = React.useState([]);
+  const [pageInfo, setPageInfo] = React.useState({
+    currentPage: 1,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
+  const [queryStrings, setQueryString] = React.useState({
+    page: 1,
+    perPage: 5,
+    searchBy: null,
+    search: null,
+    sortBy: null,
+    sortOrder: null,
+  });
 
-  const dataAss = useSelector((state) => state);
+  const assetsSliceData = useSelector(
+    (state: any) => state.assets.data?.get_all_assets,
+  );
 
   React.useEffect(() => {
-    dispatch(
-      fetchAssetsData(),
-    );
-  }, [])
+    dispatch(fetchAssetsData(queryStrings));
+  }, [pageInfo]);
 
   React.useEffect(() => {
-    console.log('dataAss', dataAss)
-  }, [dataAss])
+    const page: any = { ...pageInfo };
+    page['currentPage'] = assetsSliceData?.pageInfo.currentPage;
+    page['totalPages'] = assetsSliceData?.pageInfo.totalPages;
+    page['hasNextPage'] = assetsSliceData?.pageInfo.hasNextPage;
+    page['hasPreviousPage'] = assetsSliceData?.pageInfo.hasPreviousPage;
+    setAssetsData(assetsSliceData?.Assets);
+    setPageInfo(page);
+  }, [assetsSliceData]);
 
-  const handlePageChange = (even: any, page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (even: any, pageNo: number) => {
+    const payload: any = { ...queryStrings };
+    payload['page'] = pageNo;
+    payload['perPage'] = 5;
+    setPageInfo(payload);
   };
-  const [visibleRow, setVisibleRow] = React.useState<any>(Data)
+
+  const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
+
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
-      Rows,
-      setSelectedRows,
+      assetsData,
+      setAssetsData,
       setIsDeselectAllChecked,
       setIsselectAllChecked,
       setTableHeaderVisible,
-      setVisibleRow
+      setVisibleRow,
     )(event, id);
   };
 
   const handleDeChange = handleDeCheckboxChange(
     isDeselectAllChecked,
-    Rows,
-    setSelectedRows,
+    assetsData,
+    setAssetsData,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setVisibleRow
+    setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
-    Rows,
-    setSelectedRows,
+    assetsData,
+    setAssetsData,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
-    setVisibleRow
+    setVisibleRow,
   );
-  const handleRequestSort = () => { };
+  const handleRequestSort = () => {};
 
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
@@ -136,9 +162,8 @@ export default function Assets() {
       });
     });
   };
-  const [isAnyCheckboxSelected, setIsAnyCheckboxSelected] = React.useState(false);
-
-
+  const [isAnyCheckboxSelected, setIsAnyCheckboxSelected] =
+    React.useState(false);
 
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
@@ -146,9 +171,9 @@ export default function Assets() {
 
   const handleSubmitFormPopup = () => {
     formPopupRef.current.open(false);
-    successPopupRef.current.open(true, "Assets");
+    successPopupRef.current.open(true, 'Assets');
     setTimeout(() => {
-      successPopupRef.current.open(false, "Assets");
+      successPopupRef.current.open(false, 'Assets');
     }, 3000);
   };
 
@@ -163,15 +188,14 @@ export default function Assets() {
     confirmationPopupRef.current.open(false);
   };
 
-
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
-    const updatedRows = Rows.map((row: any) => ({
+    const updatedRows = assetsData.map((row: any) => ({
       ...row,
       is_checked: false,
     }));
 
-    setSelectedRows(updatedRows);
+    setAssetsData(updatedRows);
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
@@ -183,9 +207,8 @@ export default function Assets() {
   };
 
   const handleOpenDeletePopup = () => {
-    deletePopupRef.current.open(true, "Assest");
+    deletePopupRef.current.open(true, 'Assest');
   };
-
 
   return (
     <PrivateRoute>
@@ -214,46 +237,48 @@ export default function Assets() {
           deleteRecord={handleOpenDeletePopup}
         />
 
-        <Box className="table-outer" sx={{ width: "100%" }}>
+        <Box className="table-outer" sx={{ width: '100%' }}>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-            // size={dense ? "small" : "medium"}
+              // size={dense ? "small" : "medium"}
             >
               <TableHeader
                 numSelected={0}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={function (
-                  event: React.ChangeEvent<HTMLInputElement>
+                  event: React.ChangeEvent<HTMLInputElement>,
                 ): void {
-                  throw new Error("Function not implemented.");
+                  throw new Error('Function not implemented.');
                 }}
-                order={"asc"}
-                orderBy={""}
+                order={'asc'}
+                orderBy={''}
                 rowCount={0}
                 columns={headers}
-                filters={()=>{console.log("runz")}}
+                filters={() => {
+                  console.log('runz');
+                }}
               />
 
               <TableBody>
-                {Data.map((row: any, index: number) => {
-
-
+                {assetsData?.map((row: any, index: number) => {
                   return (
                     <TableRow
                       hover
-
                       tabIndex={-1}
                       key={index}
                       // selected={isItemSelected}
-                      sx={{ cursor: "pointer" }}
-                      onClick={(e:any) =>
-                       { (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && navigate(`/assets/details/${row.assetNumber}`))}}
+                      sx={{ cursor: 'pointer' }}
+                      onClick={(e: any) => {
+                        e.target.tagName !== 'INPUT' &&
+                          e.target.tagName !== 'LI' &&
+                          navigate(`/assets/details/${row.assetNumber}`);
+                      }}
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">
-                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box sx={{ mt: 0, mr: 1 }}>
                               <Checkbox
                                 color="primary"
@@ -264,7 +289,7 @@ export default function Assets() {
                               />
                             </Box>
 
-                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                               <Box>
                                 <img src={image_holder} alt="no_image" />
                               </Box>
@@ -281,32 +306,44 @@ export default function Assets() {
                         </TableCell>
                       )}
                       {headers[2].is_show && (
-                        <TableCell>{getDepartment(row.departmentId)}</TableCell>
+                        <TableCell>
+                          {row.department_id === null ? '-' : row.department_id}
+                        </TableCell>
                       )}
                       {headers[3].is_show && (
-                        <TableCell>{getLaboratory(row.laboratoryId)}</TableCell>
+                        <TableCell>
+                          {row.laboratory_id === null ? '-' : row.laboratory_id}
+                        </TableCell>
                       )}
                       {headers[4].is_show && (
-                        <TableCell>{row.purchasedDate}</TableCell>
+                        <TableCell>
+                          {row.perchased_date === null
+                            ? '-'
+                            : row.perchased_date}
+                        </TableCell>
                       )}
                       {headers[5].is_show && (
-                        <TableCell>{row.updatedAt}</TableCell>
+                        <TableCell>
+                          {row.last_used_date === null
+                            ? '-'
+                            : row.last_used_date}
+                        </TableCell>
                       )}
                       {headers[6].is_show && (
                         <TableCell>
                           <Select
                             className={
-                              row.status === 1
-                                ? "active-select td-select"
-                                : "inactive-select td-select"
+                              row.status === true
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
                             }
                             value={row.status}
                             displayEmpty
-                            onChange={(e)=>handleChange(e, row.id)}
+                            onChange={(e) => handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={1}>Fully Working</MenuItem>
-                            <MenuItem value={2}>Issues</MenuItem>
+                            <MenuItem value={true}>Fully Working</MenuItem>
+                            <MenuItem value={false}>Issues</MenuItem>
                           </Select>
                         </TableCell>
                       )}
@@ -314,38 +351,35 @@ export default function Assets() {
                         <TableCell>
                           <Select
                             className={
-                              row.availability === "AVAILABLE"
-                                ? "active-select td-select"
-                                : "inactive-select td-select"
+                              row.availability === true
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
                             }
                             value={row.availability}
                             displayEmpty
-                            onChange={(e)=>handleChange(e, row.id)}
+                            onChange={(e) => handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={"AVAILABLE"}>Available</MenuItem>
-                            <MenuItem value={"NOTAVAILABLE"}>
-                              Not available
-                            </MenuItem>
+                            <MenuItem value={true}>Available</MenuItem>
+                            <MenuItem value={false}>Not available</MenuItem>
                           </Select>
                         </TableCell>
                       )}
                     </TableRow>
                   );
                 })}
-
               </TableBody>
             </Table>
           </TableContainer>
 
           <TablePagination
             currentPage={currentPage}
-            totalPages={totalPages}
+            perPage={queryStrings.perPage}
             handlePageChange={handlePageChange}
-            currentPageData={Data}
-            Rows={Rows}
+            currentPageNumber={queryStrings.page}
+            totalRecords={assetsData?.length}
+            page={pageInfo}
           />
-
         </Box>
         <Box>
           <Addnewpopup
@@ -355,9 +389,13 @@ export default function Assets() {
             openConfirmationPopup={handleOpenConfirmationPopup}
           />
           <Box>
-            <DeletePopup ref={deletePopupRef}
-              closeDeletePopup={() => deletePopupRef.current.open(false, "Assests")}
-              deleteConfirmation={handleDeleteConfirmation} />
+            <DeletePopup
+              ref={deletePopupRef}
+              closeDeletePopup={() =>
+                deletePopupRef.current.open(false, 'Assests')
+              }
+              deleteConfirmation={handleDeleteConfirmation}
+            />
           </Box>
           <Confirmationpopup
             ref={confirmationPopupRef}

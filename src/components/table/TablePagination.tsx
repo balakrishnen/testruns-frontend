@@ -4,27 +4,27 @@ import Pagination from '@mui/material/Pagination';
 
 interface CommonPaginationProps {
   currentPage: number;
-  totalPages: number;
+  perPage: number;
   handlePageChange: (event: React.ChangeEvent<unknown>, page: number) => void;
-  currentPageData: any[];
-  Rows: any[]; 
+  currentPageNumber: any[];
+  totalRecords: any[];
 }
 
-const TablePagination: React.FC<CommonPaginationProps> = ({ 
-  currentPage, 
-  totalPages, 
-  handlePageChange, 
-  currentPageData, 
-  Rows 
+const TablePagination: React.FC<any> = ({
+  currentPage,
+  perPage,
+  handlePageChange,
+  currentPageNumber,
+  totalRecords,
+  page
 }) => {
-  
-
-
   return (
     <Box className="show-page">
-      <Typography>Showing {currentPageData.length} out of {Rows.length}</Typography>
+      <Typography>
+        Showing {page?.currentPage} out of {totalRecords}
+      </Typography>
       <Pagination
-        count={totalPages}
+        count={page?.totalPages}
         variant="outlined"
         shape="rounded"
         page={currentPage}

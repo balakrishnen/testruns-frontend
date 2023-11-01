@@ -1,0 +1,15 @@
+import { gql } from '@apollo/client';
+
+export const GET_DEPARTMENT = gql`
+   query Get_all_departments {
+    get_all_departments {
+      _id
+      name
+      user_id
+      is_active
+      is_deleted
+      createdAt
+      updatedAt
+    }
+  }
+`;
