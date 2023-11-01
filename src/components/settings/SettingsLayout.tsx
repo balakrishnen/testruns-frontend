@@ -112,7 +112,7 @@ export const SettingsLayout = ({ children }: any, props: any) => {
             className={`${
               show ? "side-hide" : "side-show"
             }`}
-            style={{width:"15%"}}
+            style={{width:"240px"}}
           >
             <Box className="setting-sidebar">
               <Box className="close-mobile" onClick={() => setShow(!show)}>

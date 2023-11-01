@@ -154,7 +154,7 @@ const Users = () => {
   };
   // table end
   return (
-    <Box className="user-setting-page"  style={{ padding: "8px 24px"}}>
+    <Box className="user-setting-page"  style={{ padding: "24px" , paddingTop:"15px"}}>
       <Box
         className="title-main"
         sx={{ borderBottom: "3px solid #F3F3F3", paddingBottom: "8px" }}

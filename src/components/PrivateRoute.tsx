@@ -17,12 +17,14 @@ if (typeof window !== 'undefined') {
   isLoggedIn = sessionStorage.getItem('isLoggedIn');
 }
   const [width, setWidth] = React.useState(95);
+  const [classn, setClassn] = React.useState<any>('');
   const [editProfile, setEditProfile] = React.useState(false);
   const [notificationList, setNotificationList] = React.useState(false);
   const [theme, setTheme] = React.useState(lightTheme);
 
   const toggleDrawer = () => {
     setWidth(width === 290 ? 95 : 290);
+    setClassn(width === 290 ? 'closemenu' : 'openmenu');
   };
 
   const toggleProfileDrawer = () => {
@@ -59,7 +61,7 @@ if (typeof window !== 'undefined') {
           toggleNotificationDrawer={toggleNotificationDrawer}
           toggleTheme={toggleTheme}
         />
-        <AppMenu width={width} />
+        <AppMenu width={width} classn={classn} />
 
         <AppProfileDrawer
           openDrawer={editProfile}

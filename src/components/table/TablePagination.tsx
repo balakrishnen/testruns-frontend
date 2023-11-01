@@ -21,13 +21,13 @@ const TablePagination: React.FC<any> = ({
   return (
     <Box className="show-page">
       <Typography>
-        Showing {page?.currentPage} out of {totalRecords}
+        Showing {currentPage} - {perPage} out of {perPage * page?.totalPages}
       </Typography>
       <Pagination
         count={page?.totalPages}
         variant="outlined"
         shape="rounded"
-        page={currentPage}
+        page={page?.currentPage}
         onChange={handlePageChange}
       />
     </Box>
