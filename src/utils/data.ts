@@ -35,7 +35,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     filters: [
       {
         id: 'assetNumber',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Assest ID',
         options: [
           { value: 'ID1001', label: 'ID1001' },
@@ -69,7 +69,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     filters: [
       {
         id: 'dept',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Department',
         options: [
           { value: 'Computer science', label: 'Computer science' },
@@ -86,7 +86,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     filters: [
       {
         id: 'lab',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Lab',
         options: [
           { value: 'Data mining', label: 'Data mining' },
@@ -262,7 +262,7 @@ export const UserHeaders: readonly UserHead[] = [
     filters: [
       {
         id: 'user_id',
-        type: 'select',
+        type: 'autocomplete',
         label: 'User ID',
         options: [
           { value: 'ID1001', label: 'ID1001' },
@@ -294,7 +294,7 @@ export const UserHeaders: readonly UserHead[] = [
     filters: [
       {
         id: 'dept',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Department',
         options: [
           { value: 'Computer science', label: 'Computer science' },
@@ -311,7 +311,7 @@ export const UserHeaders: readonly UserHead[] = [
     filters: [
       {
         id: 'category',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Category',
         options: [
           { value: 'Data mining', label: 'Data mining' },
@@ -468,7 +468,7 @@ export const CustomHeaders: readonly CustomHead[] = [
     filters: [
       {
         id: 'id',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Field Id',
         options: [
           { value: 'CF1001', label: 'CF1001' },
@@ -571,7 +571,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     filters: [
       {
         id: 'assetNumber',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Procedure ID  ',
         options: [
           { value: 'PRO1001', label: 'PRO1001' },
@@ -605,7 +605,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     filters: [
       {
         id: 'dept',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Department',
         options: [
           { value: 'Computer science', label: 'Computer science' },
@@ -623,7 +623,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     filters: [
       {
         id: 'lab',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Lab',
         options: [
           { value: 'Data mining', label: 'Data mining' },
@@ -859,7 +859,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     filters: [
       {
         id: 'assetNumber',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Runs ID',
         options: [
           { value: 'RUNS1001', label: 'RUNS1001' },
@@ -893,7 +893,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     filters: [
       {
         id: 'dept',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Department',
         options: [
           { value: 'Computer science', label: 'Computer science' },
@@ -910,7 +910,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     filters: [
       {
         id: 'lab',
-        type: 'select',
+        type: 'autocomplete',
         label: 'Lab',
         options: [
           { value: 'Data mining', label: 'Data mining' },
