@@ -782,6 +782,17 @@ fieldset.MuiOutlinedInput-notchedOutline {
   background: $white;
   // margin-top: 1.5rem;
   margin-right: -90rem;
+  .tableCellRow{
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    gap: 60px;
+  }
+  .tableCellcurrentTask{
+    display: flex;
+    gap: 93px;
+    justify-content: flex-end;
+  }
   thead {
     background: #FFF4D0;  
     padding: 10px;  
@@ -822,6 +833,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
           letter-spacing: 0.24px;
         }
       } 
+      
     }
     span , th{
       color: $black-shade-3 !important;
@@ -1124,6 +1136,11 @@ tbody td .td-select {
     }
   }
 }
+.filter-search{
+    display: flex;
+    align-items: flex-end;
+}
+
 // accordion end 
 
 // asset details end

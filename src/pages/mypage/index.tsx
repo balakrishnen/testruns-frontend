@@ -15,19 +15,23 @@ import { useState } from 'react';
 import Calendar from 'react-calendar';
 import Emptystate from '../../assets/images/Emptystate.svg';
 
+
 function createData(
   name: string,
-  calories: number,
+  user: string,
+  date: string,
+  status:number
 ) {
-  return { name, calories };
+  return { name, user,date,status };
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159),
-  createData('Ice cream sandwich', 237),
-  createData('Eclair', 262,),
-  createData('Cupcake', 305),
-  createData('Gingerbread', 356,),
+  createData('Thickness of a paper by vernier calliperse', 'username','02/05/2023',2),
+  createData('Demonstrate that carbon dioxide is released during the process of respiration', 'username','02/05/2023',1),
+  createData('Qualitative analysis for Cu, Zn, Fe, Al',  'username','02/05/2023',3),
+  createData('Thickness of a paper by vernier calliperse', 'username','02/05/2023',2),
+  // createData('Cupcake', 305),
+  // createData('Gingerbread', 356,),
 ];
 type ValuePiece = Date | null;
 
@@ -48,7 +52,12 @@ export default function MyPage() {
               <TableHead>
                 <TableRow>
                   <TableCell>Current tasks</TableCell>
-                  <TableCell align="right">Created by</TableCell>
+                  <TableCell align="right" className='tableCellRow'>
+                  <p >All tasks</p>
+                  <p >New tasks</p>
+                  <p >Submitted</p>
+                  <p >Due</p>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -60,7 +69,30 @@ export default function MyPage() {
                     <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
+                  
+                    <TableCell className='tableCellcurrentTask'>
+                    <p style={{textAlign:'right'}}>{row.user}</p>
+                    <p style={{textAlign:'right'}}>{row.date}</p>
+                    <p style={{textAlign:'right'}}>
+                          <Select
+                          name="select"
+                            className={
+                              row.status === 1
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
+                            }
+                            value={row.status}
+                            displayEmpty
+                            // onChange={(e)=>handleChange(e, row.id)}
+                            IconComponent={ExpandMoreOutlinedIcon}
+                          >
+                            <MenuItem value={1}>New Task</MenuItem>
+                            <MenuItem value={2}>Completed</MenuItem>
+                            <MenuItem value={3}>Not Started</MenuItem>
+
+                          </Select>
+                        </p>
+                        </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
