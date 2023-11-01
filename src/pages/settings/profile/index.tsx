@@ -255,7 +255,7 @@ const Profile = () => {
                         },
                       }}
                     >
-                      <Box>
+                      <Box  style={{ position: "relative" }}>
                         <label>
                           First name<span style={{ color: "#E2445C" }}>*</span>
                         </label>
@@ -297,7 +297,7 @@ const Profile = () => {
                         },
                       }}
                     >
-                      <Box>
+                      <Box  style={{ position: "relative" }}>
                         <label>
                           Last name<span style={{ color: "#E2445C" }}>*</span>
                         </label>
@@ -340,7 +340,7 @@ const Profile = () => {
                         },
                       }}
                     >
-                      <Box>
+                      <Box  style={{ position: "relative" }}>
                         <label>
                           Email<span style={{ color: "#E2445C" }}>*</span>
                         </label>
@@ -381,7 +381,7 @@ const Profile = () => {
                         },
                       }}
                     >
-                      <Box>
+                      <Box  style={{ position: "relative" }}>
                         <label>
                           Mobile<span style={{ color: "#E2445C" }}>*</span>
                         </label>
@@ -420,7 +420,7 @@ const Profile = () => {
                   </Grid>
                   <Grid container spacing={2} className="profile-inner">
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Box>
+                      <Box style={{ position: "relative" }}>
                         <label>Organisation</label>
                         <Select
                         displayEmpty
@@ -465,7 +465,7 @@ const Profile = () => {
                   </Grid>
                   <Grid container spacing={2} className="profile-inner">
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Box>
+                      <Box style={{ position: "relative" }}>
                         <label>Department/s</label>
                         <Autocomplete
                         multiple
@@ -509,7 +509,7 @@ const Profile = () => {
                   </Grid>
                   <Grid container spacing={2} className="profile-inner">
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Box>
+                      <Box style={{ position: "relative" }}>
                         <label>Labs assigned</label>
                         <Autocomplete
                         multiple
@@ -558,16 +558,16 @@ const Profile = () => {
                         },
                       }}
                     >
-                      <Box>
+                      <Box style={{ position: "relative" }}>
                         <label>Designation</label>
                         <TextField
                           margin="normal"
-                          required
+                          // required
                           fullWidth
                           id="Designation"
                           name="designation"
                           autoComplete="Designation"
-                          autoFocus
+                          // autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Designation"
                           InputProps={{
@@ -612,16 +612,16 @@ const Profile = () => {
                         },
                       }}
                     >
-                      <Box>
+                      <Box style={{ position: "relative" }}>
                         <label>Requestor ID/Tester ID</label>
                         <TextField
                           margin="normal"
-                          required
+                          // required
                           fullWidth
                           id="Organisation"
                           name="reqstId"
                           autoComplete="Organisation"
-                          autoFocus
+                          // autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Requestor ID/Tester ID"
                           InputProps={{

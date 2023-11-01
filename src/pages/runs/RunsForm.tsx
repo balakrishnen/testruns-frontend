@@ -141,7 +141,7 @@ const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, subm
                         </Grid>
                         <Grid container spacing={2} className='asset-popup'>
                             <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingRight: { sm: '1rem !important' } }}>
-                                <Box>
+                                <Box style={{ position: "relative" }}>
                                     <label style={{ display: 'block' }}>Department</label>
                                     <Autocomplete
                             multiple
@@ -179,7 +179,7 @@ const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, subm
                         </Box>
                             </Grid>
                             <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingLeft: { sm: '1rem !important' }, paddingTop: { xs: '0rem !important', sm: '1rem !important' } }}>
-                                <Box>
+                                <Box style={{ position: "relative" }}>
                                     <label style={{ display: 'block' }}>Laboratory</label>
                                     <Autocomplete
                             multiple
@@ -218,38 +218,39 @@ const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, subm
                         </Grid>
                         <Grid container spacing={2} className='asset-popup'>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
-                                <Box>
+                                <Box style={{ position: "relative" }}>
                                     <label style={{ display: 'block' }}>Procedure name<span style={{ color: '#E2445C' }}>*</span></label>
-                                    <FormControl sx={{ width: "100%" }}>
-                                        <Select
+                                    {/* <FormControl sx={{ width: "100%" }}> */}
+                                    <TextField
+                                        margin="normal"
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
                                         size="small"
-                                        name='procedure_name'
-                                            labelId="tselect-popup-label"
-                                            id="select-popup"
-                                            value={answers}
-                                            displayEmpty
-                                            IconComponent={ExpandMoreOutlinedIcon}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-
-                                            // onChange={(event) => setAnswers(event.target.value)}
-                                            renderValue={
-                                                answers !== ""
-                                                    ? undefined
-                                                    : () => <Placeholder>Organisation</Placeholder>
-                                            }
-                                        >
-                                            <MenuItem value={"1"}>1</MenuItem>
-                                            <MenuItem value={"2"}>2</MenuItem>
-                                            <MenuItem value={"3"}>3</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                        // required
+                                        fullWidth
+                                        id="name"
+                                        name="procedure_name"
+                                        autoComplete="name"
+                                        autoFocus
+                                        InputLabelProps={{ shrink: false }}
+                                        placeholder="The simple pendulum"
+                                        value={formik.values.procedure_name}
+                                        error={
+                                          formik.touched.procedure_name && Boolean(formik.errors.procedure_name)
+                                        }
+                                      />
+                                       {formik.touched.procedure_name && formik.errors.procedure_name && (
+                                        <Typography className="error-field">
+                                          {formik.errors.procedure_name}
+                                        </Typography>
+                                      )}
+                                    {/* </FormControl> */}
                                 </Box>
                             </Grid>
                         </Grid>
                         <Grid container spacing={2} className='asset-popup'>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
-                                <Box>
+                                <Box style={{ position: "relative" }}>
                                     <label style={{ display: 'block' }}>Test objective</label>
                                     <TextField
                                     size="small"
@@ -277,7 +278,7 @@ const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, subm
                         </Grid>
                         <Grid container spacing={2} className='asset-popup calender-sec'>
                             <Grid item xs={12} sm={6} md={6} lg={6}>
-                                <Box>
+                                <Box style={{ position: "relative" }}>
                                     <label style={{ display: 'block' }}>Set due date</label>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker format="DD/MM/YYYY" />
