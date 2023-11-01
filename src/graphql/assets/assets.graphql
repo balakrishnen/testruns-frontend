@@ -1,31 +1,51 @@
 import { gql } from '@apollo/client';
 
 export const GET_ASSETS = gql`
-  query Get_all_assets($page: Int!, $perPage: Int!) {
+ query Get_all_assets($page: Int!, $perPage: Int!) {
     get_all_assets(page: $page, perPage: $perPage) {
-      Assets {
-        _id
-        name
-        asset_number
-        department_id
-        laboratory_id
-        user_id
-        perchased_date
-        last_used_date
-        status
-        availability
-        expiry_date
+     Assets {
+          _id
+          name
+          assetNumber
+          organisationId
+          perchasedDate
+          lastUsedDate
+          status
+          availability
+          expiryDate
+          isActive
+          isDeleted
+          createdAt
+          updatedAt
+          departmentId {
+              _id
+              name
+              userId
+              isActive
+              isDeleted
+              createdAt
+              updatedAt
+          }
+          laboratoryId {
+              _id
+              name
+              userId
+              departmentId
+              isActive
+              isDeleted
+              createdAt
+              updatedAt
+          }
       }
       pageInfo {
-        currentPage
-        totalPages
-        hasNextPage
-        hasPreviousPage
+          currentPage
+          totalPages
+          hasNextPage
+          hasPreviousPage
       }
     }
   }
-`;
-
+`; 
 export const POST_ASSETS = gql`
   mutation Create_asset(
     $name: String!

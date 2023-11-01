@@ -90,6 +90,10 @@ export default function Assets() {
   );
 
   React.useEffect(() => {
+    setAssetsData(assetsData)
+  }, [assetsData])
+
+  React.useEffect(() => {
     dispatch(fetchAssetsData(queryStrings));
   }, [pageInfo]);
 
@@ -103,11 +107,14 @@ export default function Assets() {
     setPageInfo(page);
   }, [assetsSliceData]);
 
-  const handlePageChange = (even: any, pageNo: number) => {
+  const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
-    payload['page'] = pageNo;
+    const page: any = { ...pageInfo };
+    payload['page'] = page_no;
     payload['perPage'] = 5;
-    setPageInfo(payload);
+    page['currentPage'] = page_no;
+    setPageInfo(page);
+    setQueryString(payload)
   };
 
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
