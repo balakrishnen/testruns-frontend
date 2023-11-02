@@ -169,8 +169,7 @@ console.log(labData);
                       } else if (filter.type === "textfield") {
                         return (
                           <FormControl key={index}>
-                            <TextField
-                              style={{ width: "160px" }}
+                            <TextField                              
                               required
                               fullWidth
                               name={filter.id}
@@ -225,17 +224,13 @@ console.log(labData);
                                   value={answer[filter.id] || ""}
                                   id="Search"
                                   placeholder={filter.label}
-                                  InputProps={{ 
-                                    ...params.InputProps,
+                                  InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="end">
                                         <img src={search} />
                                       </InputAdornment>
                                     ),
-                                  }}
-                                  inputProps={{
-                                    ...params.inputProps,
-                                  }}
+                                  }}                                 
                                   onChange={(event) => {
                                     setAnswer({
                                       ...answer,

@@ -631,7 +631,7 @@ p.reg-text {
     line-height: normal;
   }
   p.sub-text {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.24px;
     margin-top: 0.5rem;
@@ -833,6 +833,8 @@ fieldset.MuiOutlinedInput-notchedOutline {
       .MuiAutocomplete-input {
         padding: 0px !important;
         padding-left: 14px !important;
+        width: 100% !important;
+        min-width: auto !important;
       } 
       #table-select{
         padding-left: 10px;
@@ -1757,34 +1759,6 @@ input[type="color" i]::-webkit-color-swatch {
   }
 }
 // calender end 
-
-.css-1kkal6p-MuiAutocomplete-root .MuiOutlinedInput-root {
-  padding: 5px !important;
-  min-height: 51px !important;
-}
-
-.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
-  font: inherit;
-  letter-spacing: inherit;
-  color: currentColor;
-  padding: 4px 0 5px;
-  border: 0;
-  box-sizing: content-box;
-  background: none;
-  height: 1.4375em;
-  margin: 0;
-  -webkit-tap-highlight-color: transparent;
-  display: block;
-  min-width: 0;
-  width: 100%;
-  -webkit-animation-name: mui-auto-fill-cancel;
-  animation-name: mui-auto-fill-cancel;
-  -webkit-animation-duration: 10ms;
-  animation-duration: 10ms;
-  padding: 8px 14px !important;
-  padding-right: 0;
-}
-
 .mypage-page {
 	.table-outer {
 		thead {
@@ -1807,4 +1781,7 @@ input[type="color" i]::-webkit-color-swatch {
       padding: 13px 16px;
     }
   }
+}
+.multi-selection .MuiInputBase-root {
+  height: 100% !important;
 }
