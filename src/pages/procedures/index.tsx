@@ -1,39 +1,34 @@
-import React from "react";
-import PrivateRoute from "../../components/PrivateRoute";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Typography,
-} from "@mui/material";
-import Table from "@mui/material/Table";
-import TablePagination from "../../components/table/TablePagination";
-import TableBody from "@mui/material/TableBody";
-import DeletePopup from "../../components/DeletePopup";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import AddIcon from "@mui/icons-material/Add";
-import "../../assets/styles/procedure.scss";
+import React from 'react';
+import PrivateRoute from '../../components/PrivateRoute';
+import { Box, Button, Checkbox, Typography } from '@mui/material';
+import Table from '@mui/material/Table';
+import TablePagination from '../../components/table/TablePagination';
+import TableBody from '@mui/material/TableBody';
+import DeletePopup from '../../components/DeletePopup';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import AddIcon from '@mui/icons-material/Add';
+import '../../assets/styles/procedure.scss';
 // import Deleteconfirmationpopup from "../../components/deleteconfirmationpopup";
-import ProcedureForm from "./ProcedureForm";
-import TableFilters from "../../components/table/TableFilters";
+import ProcedureForm from './ProcedureForm';
+import TableFilters from '../../components/table/TableFilters';
 import {
   handleCheckboxChange,
   handleDeCheckboxChange,
   handledAllSelected,
-} from "../../utils/common-services";
+} from '../../utils/common-services';
 import {
   ProceduresHeaders,
   DepartmentList,
   LaboratoryList,
   ProcedureRows,
-} from "../../utils/data";
-import { ProceduresRowData } from "../../modals/Procedures.modal";
-import TableHeader from "../../components/table/TableHeader";
-import Confirmationpopup from "../../components/ConfirmationPopup";
-import SuccessPopup from "../../components/SuccessPopup";
-import { navigate } from "gatsby";
+} from '../../utils/data';
+import { ProceduresRowData } from '../../modals/Procedures.modal';
+import TableHeader from '../../components/table/TableHeader';
+import Confirmationpopup from '../../components/ConfirmationPopup';
+import SuccessPopup from '../../components/SuccessPopup';
+import { navigate } from 'gatsby';
 const rows: ProceduresRowData[] = ProcedureRows;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -70,7 +65,10 @@ const getLaboratory = (id: any) => {
   return data?.name;
 };
 
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
+function stableSort<T>(
+  array: readonly T[],
+  comparator: (a: T, b: T) => number,
+) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -148,7 +146,6 @@ export default function Procedures() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-
   const [Rows, setSelectedRows] = React.useState(rows);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
@@ -163,9 +160,9 @@ export default function Procedures() {
 
   const handleSubmitFormPopup = () => {
     formPopupRef.current.open(false);
-    successPopupRef.current.open(true, "Procedure");
+    successPopupRef.current.open(true, 'Procedure');
     setTimeout(() => {
-      successPopupRef.current.open(false, "Procedure");
+      successPopupRef.current.open(false, 'Procedure');
     }, 3000);
   };
 
@@ -200,7 +197,7 @@ export default function Procedures() {
         return column;
       });
     });
-  }
+  };
   const [headers, setHeaders] = React.useState<any>(ProceduresHeaders);
   const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -210,19 +207,20 @@ export default function Procedures() {
   const endIndex = startIndex + itemsPerPage;
   const Data = Rows.slice(startIndex, endIndex);
 
-  const [visibleRow, setVisibleRow] = React.useState<any>(Data)
+  const [visibleRow, setVisibleRow] = React.useState<any>(Data);
 
-  React.useEffect(
-    () => {
-      const sortedRows = stableSort(rows, getComparator(order, orderBy));
-      const newVisibleRows = sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  React.useEffect(() => {
+    const sortedRows = stableSort(rows, getComparator(order, orderBy));
+    const newVisibleRows = sortedRows.slice(
+      page * rowsPerPage,
+      page * rowsPerPage + rowsPerPage,
+    );
 
-      setVisibleRow(newVisibleRows);
-    }, [order, orderBy, page, rowsPerPage],
-  )
+    setVisibleRow(newVisibleRows);
+  }, [order, orderBy, page, rowsPerPage]);
   const handlePageChange = (even: any, page: number) => {
     setCurrentPage(page);
-  }
+  };
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       Rows,
@@ -230,7 +228,7 @@ export default function Procedures() {
       setIsDeselectAllChecked,
       setIsselectAllChecked,
       setTableHeaderVisible,
-      setVisibleRow
+      setVisibleRow,
     )(event, id);
     // setVisibleRow(Data)
   };
@@ -241,7 +239,7 @@ export default function Procedures() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setVisibleRow
+    setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
@@ -249,13 +247,11 @@ export default function Procedures() {
     setSelectedRows,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
-    setVisibleRow
+    setVisibleRow,
   );
   const filters = (idVaule: any) => {
-
     if (Object.keys(idVaule).length !== 0) {
       const filteredRows = Data.filter(function (el: any) {
-
         if (el.procedureNumber == idVaule.assetNumber) {
           return true;
         }
@@ -263,31 +259,25 @@ export default function Procedures() {
           if (el.name == idVaule.search) {
             return true;
           }
-
+        } else {
+          return true;
         }
-        else {
-
-          return true
-        }
-
       });
       console.log(filteredRows);
-      setVisibleRow(filteredRows)
+      setVisibleRow(filteredRows);
+    } else {
+      setVisibleRow(Data);
     }
-    else {
-      setVisibleRow(Data)
-    }
-
-  }
+  };
 
   const data = [
     { id: 1, name: 'Alice' },
     { id: 2, name: 'Bob' },
     { id: 3, name: 'Charlie' },
-    // ... more objects 
+    // ... more objects
   ];
   function getObjectBySearchString(searchString: any) {
-    const foundObject = data.find(item => item.name === searchString);
+    const foundObject = data.find((item) => item.name === searchString);
 
     return foundObject;
   }
@@ -304,18 +294,24 @@ export default function Procedures() {
   };
 
   const handleOpenDeletePopup = () => {
-    deletePopupRef.current.open(true, "procedures");
+    deletePopupRef.current.open(true, 'procedures');
   };
   return (
     <PrivateRoute>
       <Box className="main-padding">
         <Box className="title-main">
           <Typography>Procedures</Typography>
-          <Button type="submit" variant="contained" onClick={() => formPopupRef.current.open(true)}>
-            <AddIcon sx={{ mr: 1 }} />
-            Add
-          </Button>
+          <Button
+          variant="contained"
+          onClick={() => {
+            formPopupRef.current.open(true);
+          }}
+        >
+          <AddIcon sx={{ mr: 1 }} />
+          Add procedure
+        </Button>
         </Box>
+        
         <TableFilters
           columns={headers}
           handleMenuCheckboxChange={handleMenuCheckboxChange}
@@ -327,7 +323,7 @@ export default function Procedures() {
           closeTableHeader={handleCloseTableHeader}
           deleteRecord={handleOpenDeletePopup}
         />
-        <Box className="table-outer" sx={{ width: "100%" }}>
+        <Box className="table-outer" sx={{ width: '100%' }}>
           {/* <Grid container mt={4}>
             <Grid item lg={6} xs={11} margin="auto">
               <EnhancedTable columns={headers} />
@@ -337,7 +333,7 @@ export default function Procedures() {
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-            // size={dense ? "small" : "medium"}
+              // size={dense ? "small" : "medium"}
             >
               <TableHeader
                 numSelected={selected.length}
@@ -362,16 +358,15 @@ export default function Procedures() {
                       tabIndex={-1}
                       key={index}
                       // selected={isItemSelected}
-                      sx={{ cursor: "pointer" }}
-                      onClick={(e:any) =>
-                        (e.target.name==undefined && navigate(
-                           `/procedures/details/${row.procedureNumber}`
-                         ))
-                       }
+                      sx={{ cursor: 'pointer' }}
+                      onClick={(e: any) =>
+                        e.target.name == undefined &&
+                        navigate(`/procedures/details/${row.procedureNumber}`)
+                      }
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">
-                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box sx={{ mt: 0, mr: 1 }}>
                               <Checkbox
                                 color="primary"
@@ -381,10 +376,7 @@ export default function Procedures() {
                                 }
                               />
                             </Box>
-                            <Box
-                              sx={{ display: "flex", alignItems: "center" }}
-                             
-                            >
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                               <Box>
                                 <Box>{row.procedureNumber}</Box>
                               </Box>
@@ -423,15 +415,20 @@ export default function Procedures() {
             Rows={Rows}
           />
         </Box>
-        <ProcedureForm ref={formPopupRef}
+        <ProcedureForm
+          ref={formPopupRef}
           closeFormPopup={handleCloseFormPopup}
           submitFormPopup={handleSubmitFormPopup}
           openConfirmationPopup={handleOpenConfirmationPopup}
         />
         <Box>
-          <DeletePopup ref={deletePopupRef}
-            closeDeletePopup={() => deletePopupRef.current.open(false, "procedures")}
-            deleteConfirmation={handleDeleteConfirmation} />
+          <DeletePopup
+            ref={deletePopupRef}
+            closeDeletePopup={() =>
+              deletePopupRef.current.open(false, 'procedures')
+            }
+            deleteConfirmation={handleDeleteConfirmation}
+          />
         </Box>
         <Confirmationpopup
           ref={confirmationPopupRef}

@@ -228,7 +228,7 @@ export default function Assets() {
             onClick={() => formPopupRef.current.open(true)}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Add
+            Add assets
           </Button>
         </Box>
 
