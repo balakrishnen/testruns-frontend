@@ -9,6 +9,10 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { LaboratoryList, DepartmentList } from '../../utils/data';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { fetchDepartmentData } from '../../api/departmentAPI';
+import { fetchLabData } from '../../api/labAPI';
 // import Confirmationpopup from "../../components/ConfirmationPopup";
 // import Successpopup from "../../components/SuccessPopup";
 const validationSchema = Yup.object().shape({
@@ -25,6 +29,9 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
     const [openForm , setFormOpen]=React.useState(false)
     const departments: any = [];
     const laboratory: any = [];
+    const [departmentData, setDepartmentData] = React.useState([]);
+    const [labData, setLabData] = React.useState([]);
+    const dispatch: any = useDispatch();
     // const handleAddButtonClick = () => {
     //     setSuccessOpen(true);
     //     closeFormPopup();
@@ -64,6 +71,32 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
         onSubmit: onSubmit,
       });
 
+      const departmentSliceData = useSelector(
+        (state: any) => state.department.data?.get_all_departments,
+      );
+      const labSliceData = useSelector(
+        (state: any) => state.lab.data?.get_all_labs,
+      );
+      React.useEffect(() => {
+        setDepartmentData(departmentSliceData?.map((item:any) => ({
+          label: item.name,
+          value: item.name
+        })))
+        setLabData(labSliceData?.map((item:any) => ({
+          label: item.name,
+          value: item.name
+        })))
+      }, [departmentSliceData,labSliceData])
+    
+      console.log(departmentData);
+    
+    console.log(DepartmentList);
+    
+      React.useEffect(() => {
+        dispatch(fetchDepartmentData());
+        dispatch(fetchLabData());
+      }, []);
+    
     return (
         <div>
             {/* <Confirmationpopup
@@ -136,16 +169,16 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                     <Autocomplete
                             multiple
                             id="department"
-                            options={DepartmentList}
+                            options={departmentData!==undefined ? departmentData:[]}
                             disableCloseOnSelect
-                            getOptionLabel={(option:any) => option.name}
+                            getOptionLabel={(option:any) => option.label}
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
                                   style={{ marginRight: 0 }}
                                   checked={selected}
                                 />
-                                {option.name}
+                                {option.label}
                               </li>
                             )}
                             renderInput={(params) => <TextField {...params} />}
@@ -173,16 +206,16 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                     <Autocomplete
                             multiple
                             id="laboratory"
-                            options={LaboratoryList}
+                            options={labData!==undefined ?labData:[]}
                             disableCloseOnSelect
-                            getOptionLabel={(option:any) => option.name}
+                            getOptionLabel={(option:any) => option.label}
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
                                   style={{ marginRight: 0 }}
                                   checked={selected}
                                 />
-                                {option.name}
+                                {option.label}
                               </li>
                             )}
                             renderInput={(params) => <TextField {...params} />}

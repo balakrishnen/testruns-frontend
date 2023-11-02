@@ -88,6 +88,13 @@ button.edit-btn {
 .MuiFormControl-root.calender-sec.theadCalender{
     width: 150px;
 }
+.menuItem{
+    font-size: 12px;
+    border-bottom: 1px solid #F3F3F3;
+}
+.menuItem:hover{
+    background-color: #565656;
+}
 // .css-cx3av1-MuiGrid-root{
 //     max-width: 100% !important;
 // }

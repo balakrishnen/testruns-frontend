@@ -38,8 +38,11 @@ import {
 } from '../../utils/data';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { postAssetsData } from '../../api/assetsAPI';
+import { fetchDepartmentData } from '../../api/departmentAPI';
+import { fetchLabData } from '../../api/labAPI';
+import { fetchOrganizationData } from '../../api/organizationAPI';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -59,6 +62,10 @@ const Addnewpopup = React.forwardRef(
     const [answers, setAnswers] = React.useState('');
     const [formPopup, setFormPopup] = React.useState(false);
     const [organizations] = React.useState<Organization[]>(OrganizationList);
+    const [departmentData, setDepartmentData] = React.useState([]);
+    const [labData, setLabData] = React.useState([]);
+    const [organizationData, setOrganizationData] = React.useState([]);
+
     const dispatch: any = useDispatch();
     const departments: any = [];
     const laboratory: any = [];
@@ -113,7 +120,39 @@ const Addnewpopup = React.forwardRef(
       validationSchema: validationSchema,
       onSubmit: onSubmit,
     });
-
+    const departmentSliceData = useSelector(
+      (state: any) => state.department.data?.get_all_departments,
+    );
+    const labSliceData = useSelector(
+      (state: any) => state.lab.data?.get_all_labs,
+    );
+    const organizationSliceData = useSelector(
+      (state: any) => state.organization.data?.get_all_organisations,
+    );
+    React.useEffect(() => {
+      setDepartmentData(departmentSliceData?.map((item:any) => ({
+        label: item.name,
+        value: item.name
+      })))
+      setLabData(labSliceData?.map((item:any) => ({
+        label: item.name,
+        value: item.name
+      })))
+      setOrganizationData(organizationSliceData?.map((item:any) => ({
+        label: item.name,
+        value: item.name
+      })))
+    }, [departmentSliceData,labSliceData,organizationData])
+  
+    console.log(departmentData);
+  
+  console.log(labData);
+  
+    React.useEffect(() => {
+      dispatch(fetchDepartmentData());
+      dispatch(fetchLabData());
+    }, []);
+  
     return (
       <div>
         <Dialog
@@ -411,16 +450,16 @@ const Addnewpopup = React.forwardRef(
                           <Autocomplete
                             multiple
                             id="department"
-                            options={DepartmentList}
+                            options={departmentData!==undefined ? departmentData:[]}
                             disableCloseOnSelect
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option:any) => option.label}
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
                                   style={{ marginRight: 0 }}
                                   checked={selected}
                                 />
-                                {option.name}
+                                {option.label}
                               </li>
                             )}
                             renderInput={(params) => <TextField {...params} />}
@@ -460,16 +499,16 @@ const Addnewpopup = React.forwardRef(
                           <Autocomplete
                             multiple
                             id="laboratory"
-                            options={LaboratoryList}
+                            options={labData!==undefined ?labData:[]}
                             disableCloseOnSelect
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option:any) => option.label}
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
                                   style={{ marginRight: 0 }}
                                   checked={selected}
                                 />
-                                {option.name}
+                                {option.label}
                               </li>
                             )}
                             renderInput={(params) => <TextField {...params} />}

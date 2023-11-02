@@ -16,6 +16,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {navigate} from 'gatsby'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDepartmentData } from '../../../api/departmentAPI';
+import { fetchLabData } from '../../../api/labAPI';
 
 import { DepartmentList, LaboratoryList ,OrganizationList} from "../../../utils/data";
 
@@ -53,6 +56,9 @@ const validationSchema = Yup.object().shape({
 
 const Profile = () => {
   const [expanded, setExpanded] = React.useState<string | false>("panel1");
+  const [departmentData, setDepartmentData] = React.useState([]);
+  const [labData, setLabData] = React.useState([]);
+  const dispatch: any = useDispatch();
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
@@ -171,6 +177,33 @@ const Profile = () => {
     validationSchema: validationSchema,
     onSubmit: onSubmitProfile,
   });
+
+  const departmentSliceData = useSelector(
+    (state: any) => state.department.data?.get_all_departments,
+  );
+  const labSliceData = useSelector(
+    (state: any) => state.lab.data?.get_all_labs,
+  );
+  React.useEffect(() => {
+    setDepartmentData(departmentSliceData?.map((item:any) => ({
+      label: item.name,
+      value: item.name
+    })))
+    setLabData(labSliceData?.map((item:any) => ({
+      label: item.name,
+      value: item.name
+    })))
+  }, [departmentSliceData,labSliceData])
+
+  console.log(departmentData);
+
+console.log(DepartmentList);
+
+  React.useEffect(() => {
+    dispatch(fetchDepartmentData());
+    dispatch(fetchLabData());
+  }, []);
+
   return (
     <Box className="profile-setting-page">
       <Box
@@ -470,16 +503,16 @@ const Profile = () => {
                         <Autocomplete
                         multiple
                         id="department"
-                        options={DepartmentList}
+                        options={departmentData!==undefined ? departmentData:[]}
                         disableCloseOnSelect
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option:any) => option.label}
                         renderOption={(props, option, { selected }) => (
                           <li {...props}>
                             <Checkbox
                               style={{ marginRight: 0 }}
                               checked={selected}
                             />
-                            {option.name}
+                            {option.label}
                           </li>
                         )}
                         renderInput={(params) => <TextField {...params} />}
@@ -514,16 +547,16 @@ const Profile = () => {
                         <Autocomplete
                         multiple
                         id="lab"
-                        options={LaboratoryList}
+                        options={labData!==undefined ?labData:[]}
                         disableCloseOnSelect
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option:any) => option.label}
                         renderOption={(props, option, { selected }) => (
                           <li {...props}>
                             <Checkbox
                               style={{ marginRight: 0 }}
                               checked={selected}
                             />
-                            {option.name}
+                            {option.label}
                           </li>
                         )}
                         renderInput={(params) => <TextField {...params} />}

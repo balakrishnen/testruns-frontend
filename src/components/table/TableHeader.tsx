@@ -25,6 +25,10 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import search from "../../assets/images/search.svg";
 import Autocomplete from "@mui/material/Autocomplete";
 import { ProceduresRowData } from "../../modals/Procedures.modal";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDepartmentData } from "../../api/departmentAPI";
+import { fetchLabData } from "../../api/labAPI";
+import { log } from "console";
 
 type Order = 'asc' | 'desc';
 
@@ -50,15 +54,45 @@ export default function TableHeader(props: EnhancedTableProps) {
   {
     console.log("headCell", answer);
   }
+  const [departmentData, setDepartmentData] = React.useState([]);
+  const [labData, setLabData] = React.useState([]);
+
 
   const Placeholder = ({ children }: any) => {
     return <div style={{ fontSize: "12px" }}>{children}</div>;
   };
+  const dispatch: any = useDispatch();
 
   React.useEffect(() => {
     if(filters!==undefined)
     filters(answer)
   },[answer])
+
+  const departmentSliceData = useSelector(
+    (state: any) => state.department.data?.get_all_departments,
+  );
+  const labSliceData = useSelector(
+    (state: any) => state.lab.data?.get_all_labs,
+  );
+  React.useEffect(() => {
+    setDepartmentData(departmentSliceData?.map((item:any) => ({
+      label: item.name,
+      value: item.name
+    })))
+    setLabData(labSliceData?.map((item:any) => ({
+      label: item.name,
+      value: item.name
+    })))
+  }, [departmentSliceData,labSliceData])
+
+  console.log(departmentData);
+
+console.log(labData);
+
+  React.useEffect(() => {
+    dispatch(fetchDepartmentData());
+    dispatch(fetchLabData());
+  }, []);
 
   return (
     <TableHead>
@@ -161,13 +195,29 @@ export default function TableHeader(props: EnhancedTableProps) {
                           </FormControl>
                         );
                       } else if (filter.type === "autocomplete") {
+                        // console.log(assetsData!==undefined && assetsData.map((item:any)=>item.name));
+                        // console.log(filter.options);
+                        
+                        
                         return (
-                          <FormControl key={index}>
+                          <FormControl key={index}>                           
                             <Autocomplete
-                              options={filter.options}
+                            //  style={{ fontSize: "12px" }}
+                             
+                            size="small"
+                              options={filter.label=='Department'?departmentData:filter.label=='Lab'?labData:filter.options}
                               getOptionLabel={(option: any) => option.label}
+                              classes={{
+                               option:'menuItem',
+                              
+                                      listbox: 'menuList',
+                                      noOptions: 'noOptions',
+                                      groupLabel: 'headerItem',
+                              }}
+                            
                               renderInput={(params) => (
                                 <TextField
+
                                   {...params}
                                   required
                                   fullWidth
@@ -175,7 +225,7 @@ export default function TableHeader(props: EnhancedTableProps) {
                                   value={answer[filter.id] || ""}
                                   id="Search"
                                   placeholder={filter.label}
-                                  InputProps={{
+                                  InputProps={{ 
                                     ...params.InputProps,
                                     endAdornment: (
                                       <InputAdornment position="end">

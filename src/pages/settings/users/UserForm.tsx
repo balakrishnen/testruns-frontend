@@ -21,7 +21,6 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CheckBoxOutlineBlank } from '@mui/icons-material';
-import { useDispatch } from 'react-redux';
 import { postUserData } from '../../../api/userAPI';
 import {
   DepartmentList,
@@ -31,6 +30,9 @@ import {
   RoleList,
   StatusList,
 } from '../../../utils/data';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDepartmentData } from '../../../api/departmentAPI';
+import { fetchLabData } from '../../../api/labAPI';
 
 // const departmentList = [
 //   { id: 1, name: 'Computer Science' },
@@ -87,6 +89,8 @@ const UserForm = React.forwardRef(
     const departments: any = [];
     const laboratory: any = [];
     const [formPopup, setFormPopup] = React.useState(false);
+    const [departmentData, setDepartmentData] = React.useState([]);
+    const [labData, setLabData] = React.useState([]);
     const dispatch: any = useDispatch();
 
     const Placeholder = ({ children }: any) => {
@@ -130,6 +134,32 @@ const UserForm = React.forwardRef(
       onSubmit: onSubmit,
     });
 
+    const departmentSliceData = useSelector(
+      (state: any) => state.department.data?.get_all_departments,
+    );
+    const labSliceData = useSelector(
+      (state: any) => state.lab.data?.get_all_labs,
+    );
+    React.useEffect(() => {
+      setDepartmentData(departmentSliceData?.map((item:any) => ({
+        label: item.name,
+        value: item.name
+      })))
+      setLabData(labSliceData?.map((item:any) => ({
+        label: item.name,
+        value: item.name
+      })))
+    }, [departmentSliceData,labSliceData])
+  
+    console.log(departmentData);
+  
+  console.log(DepartmentList);
+  
+    React.useEffect(() => {
+      dispatch(fetchDepartmentData());
+      dispatch(fetchLabData());
+    }, []);
+  
     return (
       <div>
         <Dialog
@@ -436,16 +466,16 @@ const UserForm = React.forwardRef(
                       <Autocomplete
                         multiple
                         id="department"
-                        options={DepartmentList}
+                        options={departmentData!==undefined ? departmentData:[]}
                         disableCloseOnSelect
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option:any) => option.label}
                         renderOption={(props, option, { selected }) => (
                           <li {...props}>
                             <Checkbox
                               style={{ marginRight: 0 }}
                               checked={selected}
                             />
-                            {option.name}
+                            {option.label}
                           </li>
                         )}
                         renderInput={(params) => <TextField {...params} />}
@@ -492,16 +522,16 @@ const UserForm = React.forwardRef(
                       <Autocomplete
                         multiple
                         id="laboratory"
-                        options={LaboratoryList}
+                        options={labData!==undefined ?labData:[] }
                         disableCloseOnSelect
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option:any) => option.label}
                         renderOption={(props, option, { selected }) => (
                           <li {...props}>
                             <Checkbox
                               style={{ marginRight: 0 }}
                               checked={selected}
                             />
-                            {option.name}
+                            {option.label}
                           </li>
                         )}
                         renderInput={(params) => <TextField {...params} />}

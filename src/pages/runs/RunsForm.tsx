@@ -13,7 +13,10 @@ import AddIcon from '@mui/icons-material/Add';
 import AddPeoplePopup from "../../components/AddPeoplePopup";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
 import { DepartmentList ,LaboratoryList} from '../../utils/data';
+import { fetchDepartmentData } from '../../api/departmentAPI';
+import { fetchLabData } from '../../api/labAPI';
 
 const validationSchema = Yup.object().shape({
     procedureId: Yup.string().notRequired(),
@@ -28,6 +31,9 @@ const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, subm
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     const [answers, setAnswers] = React.useState("");
+    const [departmentData, setDepartmentData] = React.useState([]);
+    const [labData, setLabData] = React.useState([]);
+    const dispatch: any = useDispatch();
 
     const Placeholder = ({ children }: any) => {
         return <div>{children}</div>;
@@ -63,6 +69,33 @@ const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, subm
         validationSchema: validationSchema,
         onSubmit: onSubmit,
       });
+
+      const departmentSliceData = useSelector(
+        (state: any) => state.department.data?.get_all_departments,
+      );
+      const labSliceData = useSelector(
+        (state: any) => state.lab.data?.get_all_labs,
+      );
+      React.useEffect(() => {
+        setDepartmentData(departmentSliceData?.map((item:any) => ({
+          label: item.name,
+          value: item.name
+        })))
+        setLabData(labSliceData?.map((item:any) => ({
+          label: item.name,
+          value: item.name
+        })))
+      }, [departmentSliceData,labSliceData])
+    
+      console.log(departmentData);
+    
+    console.log(DepartmentList);
+    
+      React.useEffect(() => {
+        dispatch(fetchDepartmentData());
+        dispatch(fetchLabData());
+      }, []);
+    
     // const handleAddButtonClick = () => {
     //     setSuccessOpen(true);
     //     closeFormPopup(false) 
@@ -146,16 +179,16 @@ const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, subm
                                     <Autocomplete
                             multiple
                             id="department"
-                            options={DepartmentList}
+                            options={departmentData!==undefined ? departmentData:[]}
                             disableCloseOnSelect
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option:any) => option.label}
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
                                   style={{ marginRight: 0 }}
                                   checked={selected}
                                 />
-                                {option.name}
+                                {option.label}
                               </li>
                             )}
                             renderInput={(params) => <TextField {...params} />}
@@ -184,16 +217,16 @@ const RunsForm = React.forwardRef(({ closeFormPopup, openConfirmationPopup, subm
                                     <Autocomplete
                             multiple
                             id="laboratory"
-                            options={LaboratoryList}
+                            options={labData!==undefined ?labData:[] }
                             disableCloseOnSelect
-                            getOptionLabel={(option:any) => option.name}
+                            getOptionLabel={(option:any) => option.label}
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
                                   style={{ marginRight: 0 }}
                                   checked={selected}
                                 />
-                                {option.name}
+                                {option.label}
                               </li>
                             )}
                             renderInput={(params) => <TextField {...params} />}
