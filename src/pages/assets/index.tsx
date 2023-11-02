@@ -90,8 +90,8 @@ export default function Assets() {
   );
 
   React.useEffect(() => {
-    setAssetsData(assetsData);
-  }, [assetsData]);
+    setAssetsData(assetsData)
+  }, [assetsData])
 
   React.useEffect(() => {
     dispatch(fetchAssetsData(queryStrings));
@@ -114,7 +114,7 @@ export default function Assets() {
     payload['perPage'] = 5;
     page['currentPage'] = page_no;
     setPageInfo(page);
-    setQueryString(payload);
+    setQueryString(payload)
   };
 
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
@@ -314,30 +314,26 @@ export default function Assets() {
                       )}
                       {headers[2].is_show && (
                         <TableCell>
-                          {row.departmentId[0] === null
-                            ? '-'
-                            : row.departmentId.map((item: any) => (
-                                <Box key={item.id}>{item.name}</Box>
-                              ))}
+                          {row.department_id === null ? '-' : row.department_id}
                         </TableCell>
                       )}
                       {headers[3].is_show && (
                         <TableCell>
-                          {row.laboratoryId[0] === null
-                            ? '-'
-                            : row.laboratoryId.map((item: any) => (
-                                <Box key={item.id}>{item.name}</Box>
-                              ))}
+                          {row.laboratory_id === null ? '-' : row.laboratory_id}
                         </TableCell>
                       )}
                       {headers[4].is_show && (
                         <TableCell>
-                          {row.perchasedDate === null ? '-' : row.perchasedDate}
+                          {row.perchased_date === null
+                            ? '-'
+                            : row.perchased_date}
                         </TableCell>
                       )}
                       {headers[5].is_show && (
                         <TableCell>
-                          {row.lastUsedDate === null ? '-' : row.lastUsedDate}
+                          {row.last_used_date === null
+                            ? '-'
+                            : row.last_used_date}
                         </TableCell>
                       )}
                       {headers[6].is_show && (

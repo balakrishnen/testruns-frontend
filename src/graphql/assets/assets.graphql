@@ -46,45 +46,42 @@ export const GET_ASSETS = gql`
     }
   }
 `; 
-
 export const POST_ASSETS = gql`
   mutation Create_asset(
     $name: String!
-    $departmentId: [String]!
-    $laboratoryId: [String]!
-    $perchasedDate: String!
-    $lastUsedDate: String!
+    $asset_number: String!
+    $department_id: String!
+    $laboratory_id: String!
+    $user_id: String!
+    $perchased_date: String!
+    $last_used_date: String!
     $status: Boolean!
     $availability: Boolean!
-    $expiryDate: String!
-    $organisationId: String!
+    $expiry_date: String!
   ) {
     create_asset(
       name: $name
-      organisationId: $organisationId
-      perchasedDate: $perchasedDate
+      asset_number: $asset_number
+      department_id: $department_id
+      laboratory_id: $laboratory_id
+      user_id: $user_id
+      perchased_date: $perchased_date
+      last_used_date: $last_used_date
       status: $status
       availability: $availability
-      expiryDate: $expiryDate
-      departmentId: $departmentId
-      laboratoryId: $laboratoryId
-      lastUsedDate: $lastUsedDate
+      expiry_date: $expiry_date
     ) {
-       _id
-        name
-        assetNumber
-        departmentId
-        laboratoryId
-        organisationId
-        perchasedDate
-        lastUsedDate
-        status
-        availability
-        expiryDate
-        isActive
-        isDeleted
-        createdAt
-        updatedAt
+      _id
+      name
+      asset_number
+      department_id
+      laboratory_id
+      user_id
+      perchased_date
+      last_used_date
+      status
+      availability
+      expiry_date
     }
   }
 `;

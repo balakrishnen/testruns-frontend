@@ -38,7 +38,7 @@ import {
 } from '../../utils/data';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { postAssetsData } from '../../api/assetsAPI';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
@@ -46,23 +46,19 @@ import { fetchOrganizationData } from '../../api/organizationAPI';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
-  perchasedDate: Yup.string().notRequired(),
-  expiryDate: Yup.string().notRequired(),
-  departmentId: Yup.array().notRequired(),
-  laboratoryId: Yup.array().notRequired(),
-  organisationId: Yup.string().notRequired(),
+  purchase_date: Yup.string().notRequired(),
+  warranty_date: Yup.string().notRequired(),
+  department: Yup.array().notRequired(),
+  laboratory: Yup.array().notRequired(),
+  organization: Yup.string().notRequired(),
   status: Yup.string().notRequired(),
-  // assets_image: Yup.string().notRequired(),
+  assets_image: Yup.string().notRequired(),
   availability: Yup.string().notRequired(),
   assets_id: Yup.string().notRequired(),
-  lastUsedDate: Yup.string().notRequired(),
 });
 
 const Addnewpopup = React.forwardRef(
-  (
-    { closeFormPopup, openConfirmationPopup, submitFormPopup, fetchData }: any,
-    ref,
-  ) => {
+  ({ closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
     const [answers, setAnswers] = React.useState('');
     const [formPopup, setFormPopup] = React.useState(false);
     const [organizations] = React.useState<Organization[]>(OrganizationList);
@@ -84,12 +80,23 @@ const Addnewpopup = React.forwardRef(
     };
 
     const onSubmit = (values: any) => {
-      const isMatch = checkCredentials(values.name);
+      const isMatch = checkCredentials(values.first_name);
+      const assets: any = {
+        name: 'Stenography2',
+        asset_number: 'ASSET_1002',
+        department_id: '653b80a0301e33001265a64a',
+        laboratory_id: '653b7fd4301e33001265a646',
+        user_id: 'USER_1001',
+        perchased_date: '28/10/2023',
+        last_used_date: '28/10/2023',
+        status: true,
+        availability: true,
+        expiry_date: '28/12/2023',
+      };
       if (isMatch) {
-        dispatch(postAssetsData(values));
-        setFormPopup(false);
+        dispatch(postAssetsData(assets));
       } else {
-        formik.setFieldError('name', 'Invalid first name');
+        formik.setFieldError('first_name', 'Invalid first name');
       }
     };
 
@@ -100,16 +107,15 @@ const Addnewpopup = React.forwardRef(
     const formik = useFormik({
       initialValues: {
         name: '',
-        perchasedDate: new Date(),
-        expiryDate: new Date(),
-        departmentId: [],
-        laboratoryId: [],
-        organisationId: '',
+        purchase_date: new Date(),
+        warranty_date: new Date(),
+        department: [],
+        laboratory: [],
+        organization: '',
         status: '',
-        // assets_image: '',
+        assets_image: '',
         availability: '',
         assets_id: 'ASSET_1001',
-        lastUsedDate: new Date(),
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
@@ -124,38 +130,29 @@ const Addnewpopup = React.forwardRef(
       (state: any) => state.organization.data?.get_all_organisations,
     );
     React.useEffect(() => {
-      setDepartmentData(
-        departmentSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
-      setLabData(
-        labSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
-      setOrganizationData(
-        organizationSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
-    }, [departmentSliceData, labSliceData, organizationData]);
-
+      setDepartmentData(departmentSliceData?.map((item:any) => ({
+        label: item.name,
+        value: item.name
+      })))
+      setLabData(labSliceData?.map((item:any) => ({
+        label: item.name,
+        value: item.name
+      })))
+      setOrganizationData(organizationSliceData?.map((item:any) => ({
+        label: item.name,
+        value: item.name
+      })))
+    }, [departmentSliceData,labSliceData,organizationData])
+  
     console.log(departmentData);
-
-    console.log(labData);
-
+  
+  console.log(labData);
+  
     React.useEffect(() => {
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
     }, []);
-
+  
     return (
       <div>
         <Dialog
@@ -209,19 +206,19 @@ const Addnewpopup = React.forwardRef(
                         // placeholder="First name"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        // value={formik.values.assets_image}
+                        value={formik.values.assets_image}
                         size="small"
-                        // error={
-                        //   formik.touched.assets_image &&
-                        //   Boolean(formik.errors.assets_image)
-                        // }
+                        error={
+                          formik.touched.assets_image &&
+                          Boolean(formik.errors.assets_image)
+                        }
                       />
-                      {/* {formik.touched.assets_image &&
+                      {formik.touched.assets_image &&
                         formik.errors.assets_image && (
                           <Typography className="error-field">
                             {formik.errors.assets_image}
                           </Typography>
-                        )} */}
+                        )}
                     </Box>
                     <Box className="asset-id">
                       <label>Asset Id (autogenerated)</label>
@@ -358,8 +355,8 @@ const Addnewpopup = React.forwardRef(
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker format="DD/MM/YYYY" />
                           </LocalizationProvider>
-                          {formik.touched.perchasedDate &&
-                            formik.errors.perchasedDate && (
+                          {formik.touched.purchase_date &&
+                            formik.errors.purchase_date && (
                               <Typography className="error-field">
                                 Date required
                               </Typography>
@@ -385,8 +382,8 @@ const Addnewpopup = React.forwardRef(
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker format="DD/MM/YYYY" />
                           </LocalizationProvider>
-                          {formik.touched.expiryDate &&
-                            formik.errors.expiryDate && (
+                          {formik.touched.warranty_date &&
+                            formik.errors.warranty_date && (
                               <Typography className="error-field">
                                 Date required
                               </Typography>
@@ -404,7 +401,7 @@ const Addnewpopup = React.forwardRef(
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={
-                              formik.values.organisationId !== ''
+                              formik.values.organization !== ''
                                 ? undefined
                                 : () => (
                                     <Placeholder>
@@ -414,17 +411,17 @@ const Addnewpopup = React.forwardRef(
                             }
                             margin="none"
                             fullWidth
-                            id="organisationId"
-                            name="organisationId"
-                            autoComplete="organisationId"
+                            id="organization"
+                            name="organization"
+                            autoComplete="organization"
                             placeholder="Organization"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            value={formik.values.organisationId}
+                            value={formik.values.organization}
                             size="small"
                             error={
-                              formik.touched.organisationId &&
-                              Boolean(formik.errors.organisationId)
+                              formik.touched.organization &&
+                              Boolean(formik.errors.organization)
                             }
                           >
                             {OrganizationList.map((item, index) => (
@@ -434,10 +431,10 @@ const Addnewpopup = React.forwardRef(
                             ))}
                           </Select>
 
-                          {formik.touched.organisationId &&
-                            formik.errors.organisationId && (
+                          {formik.touched.organization &&
+                            formik.errors.organization && (
                               <Typography className="error-field">
-                                {formik.errors.organisationId}
+                                {formik.errors.organization}
                               </Typography>
                             )}
                         </Box>
@@ -452,12 +449,10 @@ const Addnewpopup = React.forwardRef(
 
                           <Autocomplete
                             multiple
-                            id="departmentId"
-                            options={
-                              departmentData !== undefined ? departmentData : []
-                            }
+                            id="department"
+                            options={departmentData!==undefined ? departmentData:[]}
                             disableCloseOnSelect
-                            getOptionLabel={(option: any) => option.label}
+                            getOptionLabel={(option:any) => option.label}
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
@@ -475,7 +470,7 @@ const Addnewpopup = React.forwardRef(
                               f.forEach((element) =>
                                 departments.push(element.id),
                               );
-                              formik.setFieldValue('departmentId', departments);
+                              formik.setFieldValue('department', departments);
                             }}
                             // onChange={formik.handleChange}
                             // onBlur={formik.handleBlur}
@@ -485,10 +480,10 @@ const Addnewpopup = React.forwardRef(
                             //   Boolean(formik.errors.department)
                             // }
                           />
-                          {formik.touched.departmentId &&
-                            formik.errors.departmentId && (
+                          {formik.touched.department &&
+                            formik.errors.department && (
                               <Typography className="error-field">
-                                {formik.errors.departmentId}
+                                {formik.errors.department}
                               </Typography>
                             )}
                         </Box>
@@ -503,10 +498,10 @@ const Addnewpopup = React.forwardRef(
 
                           <Autocomplete
                             multiple
-                            id="laboratoryId"
-                            options={labData !== undefined ? labData : []}
+                            id="laboratory"
+                            options={labData!==undefined ?labData:[]}
                             disableCloseOnSelect
-                            getOptionLabel={(option: any) => option.label}
+                            getOptionLabel={(option:any) => option.label}
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
@@ -524,13 +519,13 @@ const Addnewpopup = React.forwardRef(
                               f.forEach((element) =>
                                 laboratory.push(element.id),
                               );
-                              formik.setFieldValue('laboratoryId', laboratory);
+                              formik.setFieldValue('laboratory', laboratory);
                             }}
                           />
-                          {formik.touched.laboratoryId &&
-                            formik.errors.laboratoryId && (
+                          {formik.touched.laboratory &&
+                            formik.errors.laboratory && (
                               <Typography className="error-field">
-                                {formik.errors.laboratoryId}
+                                {formik.errors.laboratory}
                               </Typography>
                             )}
                         </Box>
@@ -572,7 +567,7 @@ const Addnewpopup = React.forwardRef(
                             }
                           >
                             {StatusList.map((item) => (
-                              <MenuItem key={item.id} value={item.state}>
+                              <MenuItem key={item.id} value={item.id}>
                                 {item.name}
                               </MenuItem>
                             ))}
@@ -631,7 +626,7 @@ const Addnewpopup = React.forwardRef(
                             }
                           >
                             {AvailabilityList.map((item) => (
-                              <MenuItem key={item.id} value={item.state}>
+                              <MenuItem key={item.id} value={item.id}>
                                 {item.name}
                               </MenuItem>
                             ))}
