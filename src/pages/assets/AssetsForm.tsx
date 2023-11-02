@@ -443,7 +443,7 @@ const Addnewpopup = React.forwardRef(
                         </Box>
                       </Grid>
                     </Grid>
-                    <Grid container spacing={2} className="asset-popup">
+                    <Grid container spacing={2} className="asset-popup multi-selection">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box>
                           <label style={{ display: 'block' }}>
@@ -494,7 +494,7 @@ const Addnewpopup = React.forwardRef(
                         </Box>
                       </Grid>
                     </Grid>
-                    <Grid container spacing={2} className="asset-popup">
+                    <Grid container spacing={2} className="asset-popup multi-selection">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box>
                           <label style={{ display: 'block' }}>

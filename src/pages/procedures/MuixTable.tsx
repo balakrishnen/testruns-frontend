@@ -326,8 +326,7 @@ function EnhancedTableHead(props: any) {
                               } else if (filter.type === "textfield") {
                                 return (
                                   <FormControl key={index}>
-                                    <TextField
-                                      style={{ width: "160px" }}
+                                    <TextField                                      
                                       required
                                       fullWidth
                                       name="Search"
@@ -357,16 +356,12 @@ function EnhancedTableHead(props: any) {
                                           name="Search"
                                           placeholder={filter.label}
                                           InputProps={{
-                                            ...params.InputProps,
                                             endAdornment: (
                                               <InputAdornment position="end">
                                                 <img src={search} />
                                               </InputAdornment>
                                             ),
-                                          }}
-                                          inputProps={{
-                                            ...params.inputProps,                                            
-                                          }}
+                                          }}                                          
                                         />
                                       )}
                                     />
