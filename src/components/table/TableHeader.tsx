@@ -224,13 +224,16 @@ console.log(labData);
                                   value={answer[filter.id] || ""}
                                   id="Search"
                                   placeholder={filter.label}
-                                  InputProps={{
+                                  InputProps={{...params.InputProps,
                                     endAdornment: (
                                       <InputAdornment position="end">
                                         <img src={search} />
                                       </InputAdornment>
                                     ),
-                                  }}                                 
+                                  }}   
+                                  inputProps={{
+                                    ...params.inputProps,
+                                  }}                              
                                   onChange={(event) => {
                                     setAnswer({
                                       ...answer,
