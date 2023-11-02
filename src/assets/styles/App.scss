@@ -710,7 +710,7 @@ button.Delete-btn{
 /* width */
 ::-webkit-scrollbar {
   width: 3px;
-  height: 3px;
+  height: 6px;
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
@@ -793,17 +793,6 @@ fieldset.MuiOutlinedInput-notchedOutline {
   background: $white;
   // margin-top: 1.5rem;
   margin-right: -90rem;
-  .tableCellRow{
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: row;
-    gap: 60px;
-  }
-  .tableCellcurrentTask{
-    display: flex;
-    gap: 93px;
-    justify-content: flex-end;
-  }
   thead {
     background: #FFF4D0;  
     padding: 10px;  
@@ -856,6 +845,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
       margin-bottom: 0.8rem;
       white-space: nowrap;
       text-align: left;
+      width: 160px;
       &:first-child {
 				text-align: left !important;
 			}
@@ -870,7 +860,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
       letter-spacing: 0.24px;
       text-align: left;
       padding: 10px 16px 10px;
-      line-height: 0.43;
+      // line-height: 0.43;
       border-bottom: 1px solid #F3F3F3;
   }
 }
@@ -1041,7 +1031,7 @@ tbody td .td-select {
 .inactive-select.td-select .MuiSelect-select , .active-select.td-select .MuiSelect-select{
   width: 124px;
   border-radius: 20px;
-  height: 23px;
+  height: 26px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1159,31 +1149,6 @@ tbody td .td-select {
 // accordion end 
 
 // asset details end
-
-// .filter-search{
-//   float: right;
-//   .search-field-inner {
-//     margin-left: 15px !important;
-//     width: auto;
-//   }
-//   .MuiFormControl-root {
-//     margin: 0px;
-//   }
-//   .MuiInputBase-root {
-//     width: 230px;
-//     height: 44px;
-//     padding: 10px 15px 10px 0px;
-//     justify-content: center;
-//     border-radius: 10px;
-//     border: 1px solid #9F9F9F;
-//     background: #FFFFFF;
-//     margin-left: auto;
-//     margin-bottom: 8px;
-//     fieldset{
-//       display: none;
-//     }
-//   }
-// }
 
 // runz start 
 p.id-detail{
@@ -1782,6 +1747,47 @@ input[type="color" i]::-webkit-color-swatch {
     }
   }
 }
-.multi-selection .MuiInputBase-root {
-  height: 100% !important;
+.multi-selection {
+  .MuiAutocomplete-root.Mui-expanded
+	.MuiInputBase-root {
+		height: 100% !important;
+	}
+  .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot {
+    height: 100%;
+  }
+}
+.multi-selection button.MuiAutocomplete-popupIndicator svg{
+  background-image: url('../images/chevrondown.svg');
+  background-size: 18px;
+  background-repeat: no-repeat;
+  color: transparent !important;
+  opacity: 1 !important;
+  background-position: center;
+}
+.MuiAutocomplete-root {
+	.MuiInputAdornment-root {
+		position: absolute;
+		right: 14px;
+	}
+}
+.mypage-page {
+	tr {
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.04);
+		}
+		cursor: pointer;
+	}
+}
+.hover-calender {
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.04);
+	}
+	padding: 1rem;
+	cursor: pointer;
+}
+.table-outer thead th tr th {
+  width: 100%;
+}
+.notification-mypage .notifications:hover{
+  background-color: rgba(0, 0, 0, 0.04);
 }
