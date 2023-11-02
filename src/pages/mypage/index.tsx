@@ -336,22 +336,27 @@ export default function MyPage() {
           </TableContainer>
           <Box className="show-page">
             <Typography>
-              {viewAll ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${firstRowIndex} - ${lastRowIndex} out of ${totalRows}`}
+              {totalRows > rowsPerPage
+                ? (viewAll ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${firstRowIndex} - ${lastRowIndex} out of ${totalRows}`)
+                : `Showing ${totalRows} out of ${totalRows}`
+              }
             </Typography>
-            <Typography
-              onClick={toggleView}
-              style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }}
-            >
-              {viewAll ? 'View Less' : 'View All'}{' '}
-              {viewAll ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </Typography>
+            {totalRows > rowsPerPage && (
+              <Typography
+                onClick={toggleView}
+                style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }}
+              >
+                {viewAll ? 'View Less' : 'View All'}{' '}
+                {viewAll ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </Typography>
+            )}
           </Box>
         </Box>
         <Grid container spacing={2} sx={{ width: '100%', marginLeft: '0rem', marginTop: '1rem' }}>
           <Grid item xs={12} sm={12} md={12} lg={8} xl={8} sx={{ paddingLeft: '0px !important' }}>
             <Box className="notification-mypage">
               <Box className="notification-title"><Typography>Notifications</Typography></Box>
-              <Box sx={{ overflowY: 'auto', maxHeight: '500px', paddingBottom: '0rem' }}>
+              <Box sx={{ overflowY: 'auto', paddingBottom: '0rem' }}>
                 {rows.slice(0, viewAlls ? rows.length : localRowsPerPage).map((row) => (
                   <Box className="notifications" key={row.name} style={{ backgroundColor: row.expiryDate === "1" ? '#F3F3F3' : 'white' }}>
                     <Box className="image-container">
@@ -375,15 +380,20 @@ export default function MyPage() {
               </Box>
               <Box className="show-page">
                 <Typography>
-                  {viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`}
+                  {totalRows > localRowsPerPage
+                    ? (viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`)
+                    : `Showing ${totalRows} out of ${totalRows}`
+                  }
                 </Typography>
-                <Typography
-                  onClick={toggleViews}
-                  style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }}
-                >
-                  {viewAlls ? 'View Less' : 'View All'}{' '}
-                  {viewAlls ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </Typography>
+                {totalRows > localRowsPerPage && (
+                  <Typography
+                    onClick={toggleViews}
+                    style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }}
+                  >
+                    {viewAlls ? 'View Less' : 'View All'}{' '}
+                    {viewAlls ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Grid>

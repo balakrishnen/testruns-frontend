@@ -2157,4 +2157,10 @@ input[type="color" i]::-webkit-color-swatch {
 .mypagescreen_selected__\+hXYS {
   border-bottom: 4px solid var(--color-primary-shade-1)!important;
 }
-
+.notification-mypage .show-page {
+  position: absolute;
+  bottom: 20px !important;
+  width: 100%;
+  background: #fff;
+  border-radius: 0px 0px 10px 10px;
+}
