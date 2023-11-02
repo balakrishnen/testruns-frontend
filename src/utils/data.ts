@@ -7,13 +7,13 @@ import { RunsHead } from '../modals/runs.modal';
 import { ProceduresHead } from '../modals/Procedures.modal';
 
 export const StatusList = [
-  { id: 1, name: 'Active' },
-  { id: 2, name: 'In-Active' },
+  { id: 1, name: 'Active', status: true },
+  { id: 2, name: 'In-Active', status: false },
 ];
 
 export const AvailabilityList = [
-  { id: 1, name: 'Available' },
-  { id: 2, name: 'Not available' },
+  { id: 1, name: 'Available', status: true },
+  { id: 2, name: 'Not available', status: false },
 ];
 
 export const RoleList = [
