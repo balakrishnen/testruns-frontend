@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PrivateRoute from '../../components/PrivateRoute';
 import { Box, Divider, FormControl, Grid, Select, Typography } from '@mui/material';
@@ -10,308 +11,421 @@ import TableRow from '@mui/material/TableRow';
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined"
 import MenuItem from '@mui/material/MenuItem';
 import Avatars from "../../assets/images/Avatars.svg";
+import image_holder from "../../assets/images/image-holder.svg";
 import viewarrow from "../../assets/images/chevrondown-gray.svg";
 import { useState } from 'react';
 import Calendar from 'react-calendar';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
+export const mypageRows = [
+  {
+    is_checked: false,
+    id: '1',
+    name: 'Username',
+    mypageNumber: 'ID1002',
+    status: 1,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '1',
+    extraData: 'Thickness of a paper by vernier calliperse',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '2',
+    name: 'Username',
+    mypageNumber: 'ID1001',
+    status: 1,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '1',
+    extraData: 'Qualitative analysis for Cu, Zn, Fe, Al',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '3',
+    name: 'Username',
+    mypageNumber: 'ID1001',
+    status: 1,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '02/10/2023',
+    extraData: 'Qualitative analysis for Cu, Zn, Fe, Al',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '4',
+    name: 'Username',
+    mypageNumber: 'ID1001',
+    status: 2,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '02/10/2023',
+    extraData: 'Qualitative analysis for Cu, Zn, Fe, Al',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '5',
+    name: 'Username',
+    mypageNumber: 'ID1001',
+    status: 3,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '02/10/2023',
+    extraData: 'Qualitative analysis for Cu, Zn, Fe, Al',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '6',
+    name: 'Username',
+    mypageNumber: 'ID1001',
+    status: 3,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '02/10/2023',
+    extraData: 'Qualitative analysis for Cu, Zn, Fe, Al',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '7',
+    name: 'Username',
+    mypageNumber: 'ID1002',
+    status: 3,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '02/10/2023',
+    extraData: 'Thickness of a paper by vernier calliperse',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '8',
+    name: 'Username',
+    mypageNumber: 'ID1003',
+    status: 3,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '02/10/2023',
+    extraData: 'Thickness of a paper by vernier calliperse',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '9',
+    name: 'Username',
+    mypageNumber: 'ID1001',
+    status: 3,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '02/10/2023',
+    extraData: 'Qualitative analysis for Cu, Zn, Fe, Al',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
+  {
+    is_checked: false,
+    id: '10',
+    name: 'Username',
+    mypageNumber: 'ID1001',
+    status: 3,
+    availability: 'AVAILABLE',
+    userId: '101',
+    departmentId: 'DEPT-1001',
+    laboratoryId: 'LAB-1001',
+    isActive: 1,
+    expiryDate: '02/10/2023',
+    extraData: 'Thickness of a paper by vernier calliperse',
+    createdAt: '02/10/2023',
+    purchasedDate: '02/10/2023',
+    updatedAt: 'Requester name has assigned you a task ID09876',
+    deletedAt: 'Thickness of a paper by vernier calliperse',
+  },
 
-
-function createData(
-  name: string,
-  user: string,
-  date: string,
-  status:number
-) {
-  return { name, user,date,status };
-}
-
-const rows = [
-  createData('Thickness of a paper by vernier calliperse', 'username','02/05/2023',2),
-  createData('Demonstrate that carbon dioxide is released during the process of respiration', 'username','02/05/2023',1),
-  createData('Qualitative analysis for Cu, Zn, Fe, Al',  'username','02/05/2023',3),
-  createData('Thickness of a paper by vernier calliperse', 'username','02/05/2023',2),
-  // createData('Cupcake', 305),
-  // createData('Gingerbread', 356,),
 ];
+
+import { MypageRowData } from '../../modals/mypage.modal';
+
+// function createData(
+//   name: string,
+//   description: string,
+//   calories: string,
+// ) {
+//   return { name, description, calories };
+// }
+const rows: MypageRowData[] = mypageRows;
+// const rows = [
+//   createData('Dept-physics/Lab-Mechanical/ID05828ADN', 'Thickness of a paper by vernier calliperse', "02/05/2022"),
+//   createData('Dept- Biology/Lab- Botany/ID023659ADN', 'Demonstrate that carbon dioxide is released during the process of respiration.', "02/05/2022"),
+//   createData('Dept- Chemistry/Lab- Chemical kinematics/ID065359ADN', 'Qualitative analysis for Cu, Zn, Fe, Al', "02/05/2022"),
+//   createData('Dept- Biology/Lab- Botany/ID023659ADN', 'Demonstrate that carbon dioxide is released during the process of respiration.', "02/05/2022"),
+//   createData('Dept-physics/Lab-Mechanical/ID05828ADN', 'Demonstrate that carbon dioxide is released during the process of respiration.', "02/05/2022"),
+// ];
+
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function MyPage() {
+  const [clickedDate, setClickedDate] = useState(null);
+  const handleDateClick = (date: any) => {
+    setClickedDate(date);
+  };
   const [answers, setAnswers] = React.useState("");
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
   const [value, onChange] = useState<Value>(new Date());
+  const [viewAll, setViewAll] = useState(false);
+  const [viewAlls, setViewAlls] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [localRowsPerPage, setLocalRowsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const toggleView = () => {
+    setViewAll((prev) => !prev);
+  };
+  const toggleViews = () => {
+    setViewAlls((prev) => !prev);
+  };
+
+  const handleChangeRowsPerPage = (event: any) => {
+    setRowsPerPage(event.target.value);
+  };
+
+  const totalRows = rows.length;
+
+  const firstRowIndex = (currentPage - 1) * rowsPerPage + 1;
+  const lastRowIndex = Math.min(currentPage * rowsPerPage, totalRows);
+  const rowIndex = (currentPage - 1) * localRowsPerPage + 1;
+  const lastIndex = Math.min(currentPage * localRowsPerPage, totalRows);
+  const [notifications, setNotifications] = useState([
+    // Your notification data goes here
+  ]);
+  const [viewAllNotifications, setViewAllNotifications] = useState(false);
+
+  const toggleViewNotifications = () => {
+    setViewAllNotifications((prev) => !prev);
+  };
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
-        <Box className="table-outer mypage-table" sx={{ width: "100%", marginTop: "0rem !important" }}>
+        <Box className="table-outer" sx={{ width: "100%", marginTop: "0rem !important" }}>
           <TableContainer>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Current tasks</TableCell>
-                  <TableCell align="right" className='tableCellRow'>
-                  <p >All tasks</p>
-                  <p >New tasks</p>
-                  <p >Submitted</p>
-                  <p >Due</p>
-                  </TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell align="right">Current Tasks</TableCell>
+                  <TableCell align="right">Department</TableCell>
+
+                  <TableCell align="right">Lab</TableCell>
+                  <TableCell align="right">Assigned By</TableCell>
+                  <TableCell align="right">Created On</TableCell>
+
+                  <TableCell align="right">Status</TableCell>
+
+
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice(0, viewAll ? rows.length : rowsPerPage).map((row) => (
                   <TableRow
                     key={row.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
+                    <TableCell scope="row">
+                      <Box >
+                        <Box>{row.mypageNumber}</Box>
+                      </Box>
+
+                    </TableCell>
+                    <TableCell>{(row.extraData)}</TableCell>
+                    <TableCell>{(row.departmentId)}</TableCell>
+                    <TableCell>{(row.laboratoryId)}</TableCell>
+                    <TableCell>{(row.createdAt)}</TableCell>
+
+                    <TableCell component="th" scope="row">
+                      <Box>{row.name}</Box>
+                    </TableCell>
                     <TableCell>
-                      <Box className="text-container" sx={{ marginLeft: '0rem' }}>
-                        <Box className="content">
-                          <Typography className="id-detail">
-                            ID023659ADN&ensp;/&ensp;Dept-Computer
-                            science&ensp;/&ensp;Lab-Data structure
-                          </Typography>
-                        </Box>
-                        <Box className="heading" sx={{ marginBottom: '0rem' }}>Requester name has assigned you a task ID09876</Box>
+                      <Box
+                        style={{
+                          borderRadius: '20px',
+                          color: 'white',
+                          width: '124px',
+                          padding: '9px 0px',
+                          alignItems: "center",
+                          textAlign: 'center',
+                          height: '23px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          fontSize: '12px',
+                          backgroundColor: row.status === 1
+                            ? '#F8A83C'
+                            : row.status === 2
+                              ? '#E2445C'
+                              : '#00bf70',
+                        }}
+                      >
+                        {row.status === 1 ? 'New Task' : row.status === 2 ? 'Not Started' : 'Completed'}
                       </Box>
                     </TableCell>
-                  
-                    <TableCell className='tableCellcurrentTask'>
-                    <p style={{textAlign:'right'}}>{row.user}</p>
-                    <p style={{textAlign:'right'}}>{row.date}</p>
-                    <p style={{textAlign:'right'}}>
-                          <Select
-                          name="select"
-                            className={
-                              row.status === 1
-                                ? 'active-select td-select'
-                                : 'inactive-select td-select'
-                            }
-                            value={row.status}
-                            displayEmpty
-                            // onChange={(e)=>handleChange(e, row.id)}
-                            IconComponent={ExpandMoreOutlinedIcon}
-                          >
-                            <MenuItem value={1}>New Task</MenuItem>
-                            <MenuItem value={2}>Completed</MenuItem>
-                            <MenuItem value={3}>Not Started</MenuItem>
 
-                          </Select>
-                        </p>
-                        </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
           <Box className="show-page">
-            <Typography>Showing 1 - 10 out of 200</Typography>
-            {/* <FormControl className="view-all">
-              <Select
-                labelId="view-all-label"
-                id="view-all"
-                value={answers}
-                displayEmpty
-                IconComponent={ExpandMoreOutlinedIcon}
-                onChange={(event) => setAnswers(event.target.value)}
-                renderValue={
-                  answers !== ""
-                    ? undefined
-                    : () => <Placeholder>View all</Placeholder>
-                }
+            <Typography>
+              {totalRows > rowsPerPage
+                ? (viewAll ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${firstRowIndex} - ${lastRowIndex} out of ${totalRows}`)
+                : `Showing ${totalRows} out of ${totalRows}`
+              }
+            </Typography>
+            {totalRows > rowsPerPage && (
+              <Typography
+                onClick={toggleView}
+                style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }}
               >
-                <MenuItem value={"1"}>1</MenuItem>
-                <MenuItem value={"2"}>2</MenuItem>
-                <MenuItem value={"3"}>3</MenuItem>
-              </Select>
-            </FormControl> */}
-            <Typography style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>View all <img src={viewarrow} alt="arrow" style={{ marginLeft: '0.5rem' }} /></Typography>
+                {viewAll ? 'View Less' : 'View All'}{' '}
+                {viewAll ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </Typography>
+            )}
           </Box>
         </Box>
         <Grid container spacing={2} sx={{ width: '100%', marginLeft: '0rem', marginTop: '1rem' }}>
           <Grid item xs={12} sm={12} md={12} lg={8} xl={8} sx={{ paddingLeft: '0px !important' }}>
             <Box className="notification-mypage">
               <Box className="notification-title"><Typography>Notifications</Typography></Box>
-              <Box sx={{ overflowY: 'auto', maxHeight: '800px', paddingBottom: '3rem' }}>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Requester name has assigned you a task ID09876</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
+              <Box sx={{ overflowY: 'auto', paddingBottom: '0rem' }}>
+                {rows.slice(0, viewAlls ? rows.length : localRowsPerPage).map((row) => (
+                  <Box className="notifications" key={row.name} style={{ backgroundColor: row.expiryDate === "1" ? '#F3F3F3' : 'white' }}>
+                    <Box className="image-container">
+                      <img src={Avatars} className="dp-iamge" />
+                      <Box className="text-container">
+                        <Box className="heading">{row.updatedAt}</Box>
+                        <Box className="content">{row.deletedAt}</Box>
+                      </Box>
                     </Box>
+                    <Box className="time">2h ago</Box>
                   </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Requester name has assigned you a task ID09876</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Requester name has assigned you a task ID09876</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Tester B had commented on task ID05828ADN.</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Tester B had commented on task ID05828ADN.</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications read-notification">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Tester B had commented on task ID05828ADN.</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications read-notification">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Tester B had commented on task ID05828ADN.</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications read-notification">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Tester B had commented on task ID05828ADN.</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications read-notification">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Tester B had commented on task ID05828ADN.</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Requester name has assigned you a task ID09876</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Requester name has assigned you a task ID09876</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Tester B had commented on task ID05828ADN.</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
-                </Box>
-                <Box className="notifications">
-                  <Box className="image-container">
-                    <img src={Avatars} className="dp-iamge" />
-                    <Box className="text-container">
-                      <Box className="heading">Tester B had commented on task ID05828ADN.</Box>
-                      <Box className="content">Thickness of a paper by vernier calliperse</Box>
-                    </Box>
-                  </Box>
-                  <Box className="time">2h ago</Box>
+                ))}
+                <Box className="show-page">
+                  <Typography>
+                    {viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`}
+                  </Typography>
+                  <Typography onClick={toggleViews} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                    {viewAlls ? 'View Less' : 'View All'} <img src={viewarrow} alt="arrow" style={{ marginLeft: '0.5rem', transform: viewAlls ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                  </Typography>
                 </Box>
               </Box>
               <Box className="show-page">
-                <Typography>Showing 1 - 10 out of 200</Typography>
-                {/* <FormControl className="view-all">
-                  <Select
-                    labelId="view-all-label"
-                    id="view-all"
-                    value={answers}
-                    displayEmpty
-                    IconComponent={ExpandMoreOutlinedIcon}
-                    onChange={(event) => setAnswers(event.target.value)}
-                    renderValue={
-                      answers !== ""
-                        ? undefined
-                        : () => <Placeholder>View all</Placeholder>
-                    }
+                <Typography>
+                  {totalRows > localRowsPerPage
+                    ? (viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`)
+                    : `Showing ${totalRows} out of ${totalRows}`
+                  }
+                </Typography>
+                {totalRows > localRowsPerPage && (
+                  <Typography
+                    onClick={toggleViews}
+                    style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }}
                   >
-                    <MenuItem value={"1"}>1</MenuItem>
-                    <MenuItem value={"2"}>2</MenuItem>
-                    <MenuItem value={"3"}>3</MenuItem>
-                  </Select>
-                </FormControl> */}
-                <Typography style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>View all <img src={viewarrow} alt="arrow" style={{ marginLeft: '0.5rem' }} /></Typography>
+                    {viewAlls ? 'View Less' : 'View All'}{' '}
+                    {viewAlls ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={4} xl={4} sx={{ paddingLeft: { xs: '0px !important', lg: '16px !important' } }}>
             <Box className="calender-rightside">
-              <Calendar onChange={onChange} value={value} />
+              <Calendar onChange={handleDateClick} value={value} />
+              <Divider className="hr-calender" />
+
               <Box>
-                <Divider className="hr-calender" />
-                <Box sx={{ textAlign: 'center' }}>
-                  <img src={Emptystate} alt='' />
-                  <Typography className="no-remainder">No remainders yet!</Typography>
-                </Box>
-                <Box sx={{ p: 3 }}>
-                  <Typography className="id-detail">Submission / ID023659ADN</Typography>
-                  <Typography className="id-detail-title">
-                    Bubble sort
-                  </Typography>
-                  <hr style={{ border: '1px solid #f5f5f5', margin: '1rem 0rem' }} />
-                  <Typography className="id-detail">Test / 08:30 AM</Typography>
-                  <Typography className="id-detail-title">
-                    Department:<br />
-                    Lab
-                  </Typography>
-                </Box>
+                {clickedDate && clickedDate.toISOString().split('T')[0] === '2023-11-04' ? (
+                  <Box sx={{ textAlign: 'left' }} >
+                    <Box className="hover-calender">
+                      <Typography className="id-detail" style={{ textDecoration: 'underline' }}>Submission / ID023659ADN</Typography>
+                      <Typography className="id-detail-title">Bubble sort</Typography>
+                    </Box>
+                    <hr style={{ border: '1px solid #f5f5f5', margin: '0.5rem 0rem' }} />
+                    <Box className="hover-calender">
+                      <Typography className="id-detail" style={{ textDecoration: 'underline' }}>Test / 08:30 AM</Typography>
+                      <Typography className="id-detail-title">
+                        Department:<br />
+                        Lab
+                      </Typography>
+                    </Box>
+                  </Box>
+                ) : (
+                  <Box sx={{ textAlign: 'center' }}>
+                    <img src={Emptystate} alt='' />
+                    <Typography className="no-remainder">
+                      {clickedDate ? "No reminders yet!" : "Select a date"}
+                    </Typography>
+                  </Box>
+                )}
               </Box>
             </Box>
           </Grid>
