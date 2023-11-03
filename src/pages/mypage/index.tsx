@@ -18,6 +18,10 @@ import Calendar from 'react-calendar';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
+import { fetchNotificationData } from '../../api/notification.API';
+import { useDispatch, useSelector } from 'react-redux';
+import Avatar from '@mui/material/Avatar';
+import data from 'assets/images/common/notification.png'
 export const mypageRows = [
   {
     is_checked: false,
@@ -223,8 +227,36 @@ const rows: MypageRowData[] = mypageRows;
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
+const customDayStyle = {
+  borderBottom: '2px solid yellow',
+};
 
 export default function MyPage() {
+
+  const getTimeDifference = (notificationTime: any) => {
+    const currentTime: Date = new Date();
+    const postedTime: Date = new Date("2023-11-01T12:00:00");
+    const timeDifference: number = Math.abs(currentTime.getTime() - postedTime.getTime());
+    const hoursDifference: number = Math.floor(timeDifference / (1000 * 60 * 60));
+
+    if (hoursDifference >= 24) {
+      const daysDifference: number = Math.floor(hoursDifference / 24);
+      return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
+    }
+
+    return `${hoursDifference}h ago`;
+  };
+
+  const NotificationSliceData = useSelector(
+
+    (state: any) => state.notification.data?.get_all_notifications,
+  );
+  const dispatch: any = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(fetchNotificationData());
+  }, []);
+
   const [clickedDate, setClickedDate] = useState(null);
   const handleDateClick = (date: any) => {
     setClickedDate(date);
@@ -354,29 +386,34 @@ export default function MyPage() {
         </Box>
         <Grid container spacing={2} sx={{ width: '100%', marginLeft: '0rem', marginTop: '1rem' }}>
           <Grid item xs={12} sm={12} md={12} lg={8} xl={8} sx={{ paddingLeft: '0px !important' }}>
+
             <Box className="notification-mypage">
-              <Box className="notification-title"><Typography>Notifications</Typography></Box>
-              <Box sx={{ overflowY: 'auto', paddingBottom: '0rem' }}>
-                {rows.slice(0, viewAlls ? rows.length : localRowsPerPage).map((row) => (
-                  <Box className="notifications" key={row.name} style={{ backgroundColor: row.expiryDate === "1" ? '#F3F3F3' : 'white' }}>
+               <Box className="notification-title"><Typography>Notifications</Typography></Box>
+              <Box sx={{ overflowY: 'scroll', paddingBottom: '0rem' ,height: 'calc(100vh - 48vh)'}}>
+                {NotificationSliceData?.slice(0, viewAlls ? NotificationSliceData.length : localRowsPerPage).map((row: any, index: any) => (
+                  <Box className="notifications" key={index} style={{ backgroundColor: row.i === "1" ? '#F3F3F3' : 'white' }}>
                     <Box className="image-container">
-                      <img src={Avatars} className="dp-iamge" />
+                      <Avatar
+                        alt="User Avatar"
+                        src={data}
+                        sx={{ width: 56, height: 56, borderRadius: '50%' }}
+                      />
                       <Box className="text-container">
-                        <Box className="heading">{row.updatedAt}</Box>
-                        <Box className="content">{row.deletedAt}</Box>
+                        <Box className="heading">{row.title}</Box>
+                        <Box className="content">{row.message}</Box>
                       </Box>
                     </Box>
-                    <Box className="time">2h ago</Box>
+                    <Box className="time">{getTimeDifference(row.postedTime)}</Box>
                   </Box>
                 ))}
-                <Box className="show-page">
+                {/* <Box className="show-page">
                   <Typography>
                     {viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`}
                   </Typography>
                   <Typography onClick={toggleViews} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                     {viewAlls ? 'View Less' : 'View All'} <img src={viewarrow} alt="arrow" style={{ marginLeft: '0.5rem', transform: viewAlls ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-                  </Typography>
-                </Box>
+                  </Typography> 
+                </Box> */}
               </Box>
               <Box className="show-page">
                 <Typography>
@@ -399,9 +436,11 @@ export default function MyPage() {
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={4} xl={4} sx={{ paddingLeft: { xs: '0px !important', lg: '16px !important' } }}>
             <Box className="calender-rightside">
-              <Calendar onChange={handleDateClick} value={value} />
+              <Calendar
+                onChange={handleDateClick}
+                value={'2023-11-05'}
+              />
               <Divider className="hr-calender" />
-
               <Box>
                 {clickedDate && clickedDate.toISOString().split('T')[0] === '2023-11-04' ? (
                   <Box sx={{ textAlign: 'left' }} >
@@ -422,13 +461,14 @@ export default function MyPage() {
                   <Box sx={{ textAlign: 'center' }}>
                     <img src={Emptystate} alt='' />
                     <Typography className="no-remainder">
-                      {clickedDate ? "No reminders yet!" : "Select a date"}
+                      No reminders yet!
                     </Typography>
                   </Box>
                 )}
               </Box>
             </Box>
           </Grid>
+
         </Grid>
       </Box>
     </PrivateRoute>

@@ -5,13 +5,15 @@ import userReducer from '../features/userSlice';
 import departmentReducer from '../features/departmentSlice';
 import labReducer from '../features/labSlice'
 import organizationReducer from '../features/organizationSlice'
+import notificationReducer from '../features/notificationSlice';
 
 const rootStore = combineReducers({
   assets: assetsReducer,
   user: userReducer,
   department: departmentReducer,
   lab: labReducer,
-  organization: organizationReducer
+  organization: organizationReducer,
+  notification: notificationReducer
 });
 
 const store = configureStore({
