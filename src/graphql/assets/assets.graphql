@@ -105,3 +105,22 @@ mutation Delete_asset($_id: String!) {
     }
 }
 `;
+export const GET_SINGLE_ASSETS = gql`
+query Get_asset($_id: String!,) {
+    get_asset(_id: $_id) {
+        _id
+        name
+        assetNumber
+        organisationId
+        perchasedDate
+        lastUsedDate
+        status
+        availability
+        expiryDate
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;

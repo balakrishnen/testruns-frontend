@@ -300,7 +300,7 @@ console.log(assetsData);
                       onClick={(e: any) => {
                         // e.target.tagName !== 'INPUT' &&
                         //   e.target.tagName !== 'LI' &&
-                          navigate(`/assets/details/${row.assetNumber}`);
+                          navigate(`/assets/details/${row._id}`);
                       }}
                     >
                       {headers[0].is_show && (
