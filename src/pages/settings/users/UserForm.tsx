@@ -354,6 +354,7 @@ const UserForm = React.forwardRef(
                       <label style={{ display: 'block' }}>Organisation</label>
 
                       <Select
+                        className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
@@ -411,6 +412,7 @@ const UserForm = React.forwardRef(
                       <label style={{ display: 'block' }}>Institution</label>
 
                       <Select
+                        className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
@@ -595,6 +597,7 @@ const UserForm = React.forwardRef(
                       <label style={{ display: 'block' }}>Select role</label>
 
                       <Select
+                        className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
@@ -644,6 +647,7 @@ const UserForm = React.forwardRef(
                       <label style={{ display: 'block' }}>Current status</label>
 
                       <Select
+                        className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={

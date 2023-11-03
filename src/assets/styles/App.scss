@@ -837,8 +837,11 @@ button.Delete-btn {
   background-repeat: no-repeat;
   color: transparent !important;
   opacity: 1 !important;
+  
 }
-
+.MuiTableSortLabel-iconDirectionAsc{
+  transform: none !important;
+}
 .main-padding {
   padding: 24px;
 }
@@ -2182,6 +2185,16 @@ ul.MuiList-root[aria-labelledby="Status-popup-label"] {
   svg{
     top:6px;
   }
+}
+.placeholder-color .MuiSelect-select div {
+  color: #9F9F9F;
+}
+input#mobile_number {
+  background-image: url('../images/mobile-line.svg');
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 15px;
 }
 @media (min-width:1200px){
   .assign-create .MuiGrid-grid-xl-3.MuiGrid-grid-lg-4 {

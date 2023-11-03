@@ -195,7 +195,7 @@ const CustomFields = () => {
     <Box className="user-setting-page" style={{ padding: "24px" }}>
       <Box
         className="title-main"
-        sx={{ borderBottom: "3px solid #F3F3F3", paddingBottom: "1rem" }}
+        sx={{ borderBottom: "1px solid #F3F3F3", paddingBottom: "1rem" }}
       >
         <Box>
           <Typography>Custom fields</Typography>

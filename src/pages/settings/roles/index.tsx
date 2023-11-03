@@ -22,7 +22,7 @@ const Roles = () => {
       <Box
         className="title-main"
         sx={{
-          borderBottom: "3px solid #F3F3F3",
+          borderBottom: "1px solid #F3F3F3",
           padding: "15px 0px",
           paddingBottom: "8px",
           margin: "0px 24px"

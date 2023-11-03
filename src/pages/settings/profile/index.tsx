@@ -209,7 +209,7 @@ console.log(DepartmentList);
       <Box
         className="title-main"
         sx={{
-          borderBottom: "3px solid #F3F3F3",
+          borderBottom: "1px solid #F3F3F3",
           padding: "15px 0px",
           paddingBottom: "8px",
           margin:"0px 24px"
@@ -455,7 +455,7 @@ console.log(DepartmentList);
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                       <Box style={{ position: "relative" }}>
                         <label>Organisation</label>
-                        <Select
+                        <Select                        
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
