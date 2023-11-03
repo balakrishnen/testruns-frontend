@@ -177,7 +177,7 @@ export default function Runs() {
             }}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Add run
+            Create Run
           </Button>
         </Box>
         <TableFilters

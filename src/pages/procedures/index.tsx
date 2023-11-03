@@ -312,7 +312,7 @@ export default function Procedures() {
           }}
         >
           <AddIcon sx={{ mr: 1 }} />
-          Add procedure
+          Create Procedure
         </Button>
         </Box>
         

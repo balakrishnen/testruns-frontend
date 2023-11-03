@@ -172,7 +172,7 @@ const Users = () => {
           onClick={() => formPopupRef.current.open(true)}
         >
           <AddIcon sx={{ mr: 1 }} />
-          Add new
+          Add User
         </Button>
       </Box>
       <TableFilters
