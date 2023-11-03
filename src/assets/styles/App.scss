@@ -261,7 +261,7 @@ span.MuiTouchRipple-root {
 
 button.close-actions {
   height: 33px;
-  padding: 6px 9px;
+  padding: 6px 12px 6px 9px;
   border-radius: 50px;
   background: rgba(255, 185, 185, 0.50) !important;
   box-shadow: none;
@@ -764,7 +764,7 @@ p.reg-text {
     box-shadow: none;
     color: $black-shade-1;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 600;
     line-height: normal;
     letter-spacing: 0.3px;
     text-transform: capitalize;
@@ -2157,10 +2157,4 @@ input[type="color" i]::-webkit-color-swatch {
 .mypagescreen_selected__\+hXYS {
   border-bottom: 4px solid var(--color-primary-shade-1)!important;
 }
-.notification-mypage .show-page {
-  position: absolute;
-  bottom: 20px !important;
-  width: 100%;
-  background: #fff;
-  border-radius: 0px 0px 10px 10px;
-}
+

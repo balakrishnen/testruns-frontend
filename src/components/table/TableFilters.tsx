@@ -101,7 +101,7 @@ export default function TableFilters({
       <Grid item xs={12} sm={12} md={12} lg={6} xl={9}>
       {isTableHeaderVisible && ( <Box className="search-action">
             <Button type="submit" onClick={()=>handleDeCheckboxChange(false)} variant="contained" className="close-actions">
-              <CloseIcon sx={{ mr: 1 }} />
+              <CloseIcon sx={{ fontSize:'20px' , marginRight:'5px' }} />
               Close actions
             </Button>
             <FormControlLabel

@@ -171,14 +171,13 @@ export default function Runs() {
         <Box className="title-main">
           <Typography>Runs</Typography>
           <Button
-            type="submit"
             variant="contained"
             onClick={() => {
               formPopupRef.current.open(true);
             }}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create runs
+            Add run
           </Button>
         </Box>
         <TableFilters

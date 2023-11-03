@@ -222,7 +222,7 @@ export default function AppProfileDrawer({
                 </Box>
               </Grid>
             </Grid>
-            <Grid container spacing={2} className="profile-inner">
+            <Grid container spacing={2} className="profile-inner multi-selection">
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Box>
                   <label>Organisation</label>
@@ -255,7 +255,7 @@ export default function AppProfileDrawer({
                 </Box>
               </Grid>
             </Grid>
-            <Grid container spacing={2} className="profile-inner">
+            <Grid container spacing={2} className="profile-inner multi-selection">
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Box>
                   <label>Department</label>

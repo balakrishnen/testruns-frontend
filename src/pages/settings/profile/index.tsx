@@ -496,7 +496,7 @@ console.log(DepartmentList);
                       </Box>
                     </Grid>
                   </Grid>
-                  <Grid container spacing={2} className="profile-inner">
+                  <Grid container spacing={2} className="profile-inner multi-selection">
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                       <Box style={{ position: "relative" }}>
                         <label>Department/s</label>
@@ -540,7 +540,7 @@ console.log(DepartmentList);
                       </Box>
                     </Grid>
                   </Grid>
-                  <Grid container spacing={2} className="profile-inner">
+                  <Grid container spacing={2} className="profile-inner multi-selection">
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                       <Box style={{ position: "relative" }}>
                         <label>Labs assigned</label>

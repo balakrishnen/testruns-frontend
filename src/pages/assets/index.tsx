@@ -248,7 +248,7 @@ console.log(assetsData);
             onClick={() => formPopupRef.current.open(true)}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Add
+            Add assets
           </Button>
         </Box>
 

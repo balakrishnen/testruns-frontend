@@ -1,7 +1,9 @@
 import React from 'react'
 import Dialog from "@mui/material/Dialog";
-import { Box, Typography, Grid, TextField,Checkbox,
-    Autocomplete, FormControl, Select, MenuItem, Button } from '@mui/material';
+import {
+  Box, Typography, Grid, TextField, Checkbox,
+  Autocomplete, FormControl, Select, MenuItem, Button
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -16,268 +18,268 @@ import { fetchLabData } from '../../api/labAPI';
 // import Confirmationpopup from "../../components/ConfirmationPopup";
 // import Successpopup from "../../components/SuccessPopup";
 const validationSchema = Yup.object().shape({
-    procedure_id: Yup.string().notRequired(),
-    created_on: Yup.string().notRequired(),
-    dept: Yup.array().notRequired(),
-    lab: Yup.array().notRequired(),
-    procedure_name: Yup.string().notRequired(),
+  procedure_id: Yup.string().notRequired(),
+  created_on: Yup.string().notRequired(),
+  dept: Yup.array().notRequired(),
+  lab: Yup.array().notRequired(),
+  procedure_name: Yup.string().notRequired(),
+});
+
+const ProcedureForm = React.forwardRef(({ open, close, closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
+  // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
+  // const [openSuccess, setSuccessOpen] = React.useState(false);
+  const [openForm, setFormOpen] = React.useState(false)
+  const departments: any = [];
+  const laboratory: any = [];
+  const [departmentData, setDepartmentData] = React.useState([]);
+  const [labData, setLabData] = React.useState([]);
+  const dispatch: any = useDispatch();
+  // const handleAddButtonClick = () => {
+  //     setSuccessOpen(true);
+  //     closeFormPopup();
+  //     setTimeout(() => {
+  //       setSuccessOpen(false);
+  //     }, 2000);
+  //   };
+  //   const handleConfirmationYes = () => {
+  //     setDialog2Open(false);
+  //     closeFormPopup();
+  //   };
+  const checkCredentials = (values: any) => {
+    return true;
+  }
+  const onSubmit = (values: any) => {
+    const isMatch = checkCredentials(values);
+    if (isMatch) {
+      submitFormPopup()
+    }
+
+  };
+  React.useImperativeHandle(ref, () => ({
+    open(state: any) {
+      setFormOpen(state);
+    },
+  }));
+
+  const formik = useFormik({
+    initialValues: {
+      procedure_id: '',
+      created_on: new Date(),
+      dept: [],
+      lab: [],
+      procedure_name: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: onSubmit,
   });
 
-const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirmationPopup, submitFormPopup }: any,ref) =>{
-    // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
-    // const [openSuccess, setSuccessOpen] = React.useState(false);
-    const [openForm , setFormOpen]=React.useState(false)
-    const departments: any = [];
-    const laboratory: any = [];
-    const [departmentData, setDepartmentData] = React.useState([]);
-    const [labData, setLabData] = React.useState([]);
-    const dispatch: any = useDispatch();
-    // const handleAddButtonClick = () => {
-    //     setSuccessOpen(true);
-    //     closeFormPopup();
-    //     setTimeout(() => {
-    //       setSuccessOpen(false);
-    //     }, 2000);
-    //   };
-    //   const handleConfirmationYes = () => {
-    //     setDialog2Open(false);
-    //     closeFormPopup();
-    //   };
-    const checkCredentials = (values: any) => {
-        return true;
-    }
-    const onSubmit = (values: any) => {
-        const isMatch = checkCredentials(values);
-        if(isMatch){
-          submitFormPopup()
-        }
-   
-      };
-    React.useImperativeHandle(ref, () => ({
-        open(state: any) {
-            setFormOpen(state);
-        },
-      }));
+  const departmentSliceData = useSelector(
+    (state: any) => state.department.data?.get_all_departments,
+  );
+  const labSliceData = useSelector(
+    (state: any) => state.lab.data?.get_all_labs,
+  );
+  React.useEffect(() => {
+    setDepartmentData(departmentSliceData?.map((item: any) => ({
+      label: item.name,
+      value: item.name
+    })))
+    setLabData(labSliceData?.map((item: any) => ({
+      label: item.name,
+      value: item.name
+    })))
+  }, [departmentSliceData, labSliceData])
 
-      const formik = useFormik({
-        initialValues: {
-            procedure_id: '',
-            created_on: new Date(),
-          dept: [],
-          lab: [],
-          procedure_name: '',
-        },
-        validationSchema: validationSchema,
-        onSubmit: onSubmit,
-      });
+  console.log(departmentData);
 
-      const departmentSliceData = useSelector(
-        (state: any) => state.department.data?.get_all_departments,
-      );
-      const labSliceData = useSelector(
-        (state: any) => state.lab.data?.get_all_labs,
-      );
-      React.useEffect(() => {
-        setDepartmentData(departmentSliceData?.map((item:any) => ({
-          label: item.name,
-          value: item.name
-        })))
-        setLabData(labSliceData?.map((item:any) => ({
-          label: item.name,
-          value: item.name
-        })))
-      }, [departmentSliceData,labSliceData])
-    
-      console.log(departmentData);
-    
-    console.log(DepartmentList);
-    
-      React.useEffect(() => {
-        dispatch(fetchDepartmentData());
-        dispatch(fetchLabData());
-      }, []);
-    
-    return (
-        <div>
-            {/* <Confirmationpopup
+  console.log(DepartmentList);
+
+  React.useEffect(() => {
+    dispatch(fetchDepartmentData());
+    dispatch(fetchLabData());
+  }, []);
+
+  return (
+    <div>
+      {/* <Confirmationpopup
                 open={openDlg2Dialog}
                 close={() => setDialog2Open(false)}
                 handleConfirmationYes={handleConfirmationYes}
             />
             <Successpopup open={openSuccess} type={"Procedures"} close={() => setSuccessOpen(false)} /> */}
-            <Dialog
-                open={openForm}
-                keepMounted
-                onClose={() => closeFormPopup(false)}
-                aria-labelledby="add-new-asset-title"
-                aria-describedby="add-new-asset"
-                fullWidth
-                maxWidth="md"
-                className="popup-outer"
-            >
-                <Box className="popup-section">
-                    <Box className="title-popup">
-                        <Typography>Create new Procedure</Typography>
-                        <CloseIcon onClick={() => closeFormPopup(false)} />
-                    </Box>
-                    <form onSubmit={formik.handleSubmit}>
-                    <Box>
-                        <Grid container spacing={2} className='asset-popup calender-sec'>
-                            <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingRight: { sm: '1rem !important' } }}>
-                                <Box>
-                                    <label style={{ display: 'block' }}>Procedure ID (autogenerated)</label>
-                                    <TextField
-                                        margin="normal"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        // required
-                                        fullWidth
-                                        id="name"
-                                        name="procedure_id"
-                                        autoComplete="name"
-                                        autoFocus
-                                        InputLabelProps={{ shrink: false }}
-                                        placeholder="ID023659ADN"
-                                        className="bg-gray-input"
-                                        value={formik.values.procedure_id}
-                                        size="small"
-                                        error={
-                                          formik.touched.procedure_id && Boolean(formik.errors.procedure_id)
-                                        }
-                                      />
-                                      {formik.touched.procedure_id && formik.errors.procedure_id && (
-                                        <Typography className="error-field">
-                                          {formik.errors.procedure_id}
-                                        </Typography>
-                                      )}
-                                 
-                                </Box>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingLeft: { sm: '1rem !important' }, paddingTop: { xs: '0rem !important', sm: '1rem !important' } }}>
-                                <Box className="bg-gray-input">
-                                    <label style={{ display: 'block' }}>Created on</label>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker format="DD/MM/YYYY" />
-                                    </LocalizationProvider>
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2} className='asset-popup'>
-                            <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingRight: { sm: '1rem !important' } }}>
-                                <Box>
-                                    <label style={{ display: 'block' }}>Department</label>
-                                    <Autocomplete
-                            multiple
-                            id="department"
-                            options={departmentData!==undefined ? departmentData:[]}
-                            disableCloseOnSelect
-                            getOptionLabel={(option:any) => option.label}
-                            renderOption={(props, option, { selected }) => (
-                              <li {...props}>
-                                <Checkbox
-                                  style={{ marginRight: 0 }}
-                                  checked={selected}
-                                />
-                                {option.label}
-                              </li>
-                            )}
-                            renderInput={(params) => <TextField {...params} />}
-                            fullWidth
-                            placeholder="Department"
-                            size="medium"
-                            onChange={(e, f) => {
-                              f.forEach((element) =>
-                                departments.push(element.id),
-                              );
-                              formik.setFieldValue('department', departments);
-                            }}
-                            
+      <Dialog
+        open={openForm}
+        keepMounted
+        onClose={() => closeFormPopup(false)}
+        aria-labelledby="add-new-asset-title"
+        aria-describedby="add-new-asset"
+        fullWidth
+        maxWidth="md"
+        className="popup-outer"
+      >
+        <Box className="popup-section">
+          <Box className="title-popup">
+            <Typography>Create new Procedure</Typography>
+            <CloseIcon onClick={() => closeFormPopup(false)} />
+          </Box>
+          <form onSubmit={formik.handleSubmit}>
+            <Box>
+              <Grid container spacing={2} className='asset-popup calender-sec'>
+                <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingRight: { sm: '1rem !important' } }}>
+                  <Box>
+                    <label style={{ display: 'block' }}>Procedure ID (autogenerated)</label>
+                    <TextField
+                      margin="normal"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      // required
+                      fullWidth
+                      id="name"
+                      name="procedure_id"
+                      autoComplete="name"
+                      autoFocus
+                      InputLabelProps={{ shrink: false }}
+                      placeholder="ID023659ADN"
+                      className="bg-gray-input"
+                      value={formik.values.procedure_id}
+                      size="small"
+                      error={
+                        formik.touched.procedure_id && Boolean(formik.errors.procedure_id)
+                      }
+                    />
+                    {formik.touched.procedure_id && formik.errors.procedure_id && (
+                      <Typography className="error-field">
+                        {formik.errors.procedure_id}
+                      </Typography>
+                    )}
+
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingLeft: { sm: '1rem !important' }, paddingTop: { xs: '0rem !important', sm: '1rem !important' } }}>
+                  <Box className="bg-gray-input">
+                    <label style={{ display: 'block' }}>Created on</label>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker format="DD/MM/YYYY" />
+                    </LocalizationProvider>
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} className='asset-popup multi-selection'>
+                <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingRight: { sm: '1rem !important' } }}>
+                  <Box>
+                    <label style={{ display: 'block' }}>Department</label>
+                    <Autocomplete
+                      multiple
+                      id="department"
+                      options={departmentData !== undefined ? departmentData : []}
+                      disableCloseOnSelect
+                      getOptionLabel={(option: any) => option.label}
+                      renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                          <Checkbox
+                            style={{ marginRight: 0 }}
+                            checked={selected}
                           />
-                                      {formik.touched.dept && formik.errors.dept && (
-                                        <Typography className="error-field">
-                                          {formik.errors.dept}
-                                        </Typography>
-                                      )}
-                                </Box>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingLeft: { sm: '1rem !important' }, paddingTop: { xs: '0rem !important', sm: '1rem !important' } }}>
-                                <Box>
-                                    <label style={{ display: 'block' }}>Laboratory</label>
-                                    <Autocomplete
-                            multiple
-                            id="laboratory"
-                            options={labData!==undefined ?labData:[]}
-                            disableCloseOnSelect
-                            getOptionLabel={(option:any) => option.label}
-                            renderOption={(props, option, { selected }) => (
-                              <li {...props}>
-                                <Checkbox
-                                  style={{ marginRight: 0 }}
-                                  checked={selected}
-                                />
-                                {option.label}
-                              </li>
-                            )}
-                            renderInput={(params) => <TextField {...params} />}
-                            fullWidth
-                            placeholder="Laboratory"
-                            size="medium"
-                            onChange={(e, f) => {
-                              f.forEach((element) =>
-                                laboratory.push(element.id),
-                              );
-                              formik.setFieldValue('laboratory', laboratory);
-                            }}
+                          {option.label}
+                        </li>
+                      )}
+                      renderInput={(params) => <TextField {...params} />}
+                      fullWidth
+                      placeholder="Department"
+                      size="medium"
+                      onChange={(e, f) => {
+                        f.forEach((element) =>
+                          departments.push(element.id),
+                        );
+                        formik.setFieldValue('department', departments);
+                      }}
+
+                    />
+                    {formik.touched.dept && formik.errors.dept && (
+                      <Typography className="error-field">
+                        {formik.errors.dept}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingLeft: { sm: '1rem !important' }, paddingTop: { xs: '0rem !important', sm: '1rem !important' } }}>
+                  <Box>
+                    <label style={{ display: 'block' }}>Laboratory</label>
+                    <Autocomplete
+                      multiple
+                      id="laboratory"
+                      options={labData !== undefined ? labData : []}
+                      disableCloseOnSelect
+                      getOptionLabel={(option: any) => option.label}
+                      renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                          <Checkbox
+                            style={{ marginRight: 0 }}
+                            checked={selected}
                           />
-                                      {formik.touched.lab && formik.errors.lab && (
-                                        <Typography className="error-field">
-                                          {formik.errors.lab}
-                                        </Typography>
-                                      )}
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2} className='asset-popup'>
-                            <Grid item xs={12} sm={12} md={12} lg={12}>
-                                <Box>
-                                    <label style={{ display: 'block' }}>Procedure name<span style={{ color: '#E2445C' }}>*</span></label>
-                                    <TextField
-                                        margin="normal"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        size="small"
-                                        // required
-                                        fullWidth
-                                        id="name"
-                                        name="procedure_name"
-                                        autoComplete="name"
-                                        autoFocus
-                                        InputLabelProps={{ shrink: false }}
-                                        placeholder="The simple pendulum"
-                                        value={formik.values.procedure_name}
-                                        error={
-                                          formik.touched.procedure_name && Boolean(formik.errors.procedure_name)
-                                        }
-                                      />
-                                      {formik.touched.procedure_name && formik.errors.procedure_name && (
-                                        <Typography className="error-field">
-                                          {formik.errors.procedure_name}
-                                        </Typography>
-                                      )}
-                                </Box>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    <Box sx={{ display: { xs: "block", sm: 'flex' }, justifyContent: 'flex-end', mt: 3 }}>
-                        <Button  variant="contained" onClick={() => openConfirmationPopup(true)} className="cancel-btn">Cancel</Button>
-                        <Button type="submit" variant="contained"  className="add-btn">Create</Button>
-                    </Box>
-                    </form>
-                   
-                </Box>
-            </Dialog>
-        </div>
-    )
+                          {option.label}
+                        </li>
+                      )}
+                      renderInput={(params) => <TextField {...params} />}
+                      fullWidth
+                      placeholder="Laboratory"
+                      size="medium"
+                      onChange={(e, f) => {
+                        f.forEach((element) =>
+                          laboratory.push(element.id),
+                        );
+                        formik.setFieldValue('laboratory', laboratory);
+                      }}
+                    />
+                    {formik.touched.lab && formik.errors.lab && (
+                      <Typography className="error-field">
+                        {formik.errors.lab}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} className='asset-popup'>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Box>
+                    <label style={{ display: 'block' }}>Procedure name<span style={{ color: '#E2445C' }}>*</span></label>
+                    <TextField
+                      margin="normal"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      size="small"
+                      // required
+                      fullWidth
+                      id="name"
+                      name="procedure_name"
+                      autoComplete="name"
+                      autoFocus
+                      InputLabelProps={{ shrink: false }}
+                      placeholder="The simple pendulum"
+                      value={formik.values.procedure_name}
+                      error={
+                        formik.touched.procedure_name && Boolean(formik.errors.procedure_name)
+                      }
+                    />
+                    {formik.touched.procedure_name && formik.errors.procedure_name && (
+                      <Typography className="error-field">
+                        {formik.errors.procedure_name}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+            <Box sx={{ display: { xs: "block", sm: 'flex' }, justifyContent: 'flex-end', mt: 3 }}>
+              <Button variant="contained" onClick={() => openConfirmationPopup(true)} className="cancel-btn">Cancel</Button>
+              <Button type="submit" variant="contained" className="add-btn">Create</Button>
+            </Box>
+          </form>
+
+        </Box>
+      </Dialog>
+    </div>
+  )
 }
 )
 export default ProcedureForm
