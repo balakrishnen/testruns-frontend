@@ -62,7 +62,7 @@
 
 // comman style end 
 p.setting-title {
-    color: #565656;
+    color: $black-shade-2;
     font-size: 18px;
     font-weight: 600;
     line-height: normal;
@@ -121,7 +121,7 @@ p.setting-title {
 
     p {
         &:first-child {
-            color: #565656;
+            color: $black-shade-2;
             font-size: 18px;
             font-weight: 600;
             letter-spacing: 0.3px;
@@ -151,7 +151,7 @@ p.setting-title {
         }
 
         &:last-child {
-            color: #565656;
+            color: $black-shade-2;
             font-weight: 400;
             font-size: 14px;
         }
@@ -378,7 +378,7 @@ $width1: 200px;
 }
 
 p.Access-control {
-    color: #565656;
+    color: $black-shade-2;
     font-size: 20px;
     font-weight: 600;
     line-height: normal;
@@ -416,7 +416,7 @@ p.Access-control {
     td.MuiTableCell-root {
         width: $width1;
         text-align: center;
-        color: #565656;
+        color: $black-shade-2;
         font-size: 16px;
         font-weight: 400;
         line-height: normal;
@@ -456,7 +456,7 @@ p.Access-control {
             }
 
             &:last-child {
-                color: #565656;
+                color: $black-shade-2;
                 font-weight: 400;
                 margin-top: 0.5rem;
             }

@@ -18,7 +18,7 @@ import EditPopup from "./editpopup";
 import SplitPane from "react-split-pane";
 import { Editor } from "@tinymce/tinymce-react";
 import AddIcon from '@mui/icons-material/Add';
-
+import KeyboardArrowDownIcon from '../../../assets/images/chevrondown-thin.svg';
 
 
 
@@ -160,25 +160,9 @@ export default function RunsDetails() {
                     <img src={edit} alt="edit" style={{ marginRight: "8px" }} />
                     Edit
                   </Button>
-                  <FormControl className="more-info">
-                    <Select
-                      labelId="tselect-popup-label"
-                      id="more-info"
-                      value={answers}
-                      displayEmpty
-                      IconComponent={ExpandMoreOutlinedIcon}
-                      onChange={(event) => setAnswers(event.target.value)}
-                      renderValue={
-                        answers !== ""
-                          ? undefined
-                          : () => <Placeholder>More Info</Placeholder>
-                      }
-                    >
-                      <MenuItem value={"1"}>1</MenuItem>
-                      <MenuItem value={"2"}>2</MenuItem>
-                      <MenuItem value={"3"}>3</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <Button className="edit-btn" style={{ display: 'flex', alignItems: 'center', cursor: "pointer", marginRight: "0rem" }}>
+                    More Info <img src={KeyboardArrowDownIcon} alt="KeyboardArrowDownIcon" style={{ marginLeft: "8px" }} />
+                  </Button>
                 </Box>
                 <Box
                   sx={{
@@ -251,27 +235,96 @@ export default function RunsDetails() {
                       </Button>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
-                      <FormControl className="more-info">
-                        <Select
-                          labelId="tselect-popup-label"
-                          id="more-info"
-                          value={answers}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswers(event.target.value)}
-                          renderValue={
-                            answers !== ""
-                              ? undefined
-                              : () => <Placeholder>More Info</Placeholder>
-                          }
-                        >
-                          <MenuItem value={"1"}>1</MenuItem>
-                          <MenuItem value={"2"}>2</MenuItem>
-                          <MenuItem value={"3"}>3</MenuItem>
-                        </Select>
-                      </FormControl>
+                      <Button className="edit-btn" style={{ display: 'flex', alignItems: 'center', cursor: "pointer", marginRight: "0rem" }}>
+                        More Info <img src={KeyboardArrowDownIcon} alt="KeyboardArrowDownIcon" style={{ marginLeft: "8px" }} />
+                      </Button>
                     </MenuItem>
                   </Menu>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+          <Box className="assign-create" sx={{ padding: "24px 0px", margin: "0px 24px" }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Test objective</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{                      
+                      fontSize: "16px",
+                      marginTop: "0.4rem",                      
+                    }}
+                  >
+                    Testing
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Assigned by</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{                      
+                      fontSize: "16px",
+                      marginTop: "0.4rem",
+                    }}
+                  >
+                    Abinaya
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Created by</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{                      
+                      fontSize: "16px",
+                      marginTop: "0.4rem",
+                    }}
+                  >
+                    Teacher A
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Created on</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{                      
+                      fontSize: "16px",
+                      marginTop: "0.4rem",
+                    }}
+                  >
+                    28/05/2023 (Wed)
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Status</Typography>
+                  <FormControl className="Status-info">
+                    <Select
+                      labelId="Status-popup-label"
+                      id="Status-info"
+                      value={answers}
+                      displayEmpty
+                      IconComponent={ExpandMoreOutlinedIcon}
+                      onChange={(event) => setAnswers(event.target.value)}
+                      renderValue={
+                        answers !== ""
+                          ? undefined
+                          : () => <Placeholder>Status</Placeholder>
+                      }
+                      className="list-completed"
+                    >
+                      <MenuItem value={"1"} style={{background:'#E2445C',color:'#fff',fontSize:'14px'}}>Not Started</MenuItem>
+                      <MenuItem value={"2"} style={{background:'#00BF70',color:'#fff',fontSize:'14px'}}>Completed</MenuItem>
+                      <MenuItem value={"3"} style={{background:'#F8A83C',color:'#fff',fontSize:'14px'}}>Working</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Box>
               </Grid>
             </Grid>
@@ -282,18 +335,9 @@ export default function RunsDetails() {
         <Box className="main-runzdetails runz-height">
           {/* <Grid container spacing={2} sx={{ width: '100%', margin: '0px' }}> */}
           <SplitPane>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={7}
-              xl={7}
-              className="runz-height leftside-runz"
-              sx={{ padding: "24px!important", overflowY: "auto" }}
-            >
+            <Grid item xs={12} sm={12} md={12} lg={7} xl={7} className="runz-height leftside-runz" sx={{ padding: "24px!important", overflowY: "auto" }}            >
               <Box>
-                <Box>
+                <Box sx={{fontSize:'14px'}}>
                   Aim To measure the time period of a simple pendulum. Apparatus
                   required A wire of unknown resistance (~10Ω), battery
                   eliminator or an accumulator (0 to 3V) or two dry cells (1.5 V
@@ -379,16 +423,7 @@ export default function RunsDetails() {
                 </Box>
               </Box>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={5}
-              xl={5}
-              className="rightside-runz"
-              sx={{ borderLeft: { xs: "0px", lg: "2px solid #9F9F9F;" } }}
-            >
+            <Grid item xs={12} sm={12} md={12} lg={5} xl={5} className="rightside-runz" sx={{ borderLeft: { xs: "0px", lg: "2px solid #9F9F9F;" } }}            >
               <Box className="runz-height" sx={{ width: "100%" }}>
                 <Box sx={{ borderBottom: 0 }}>
                   <Tabs

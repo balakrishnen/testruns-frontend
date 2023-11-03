@@ -274,7 +274,7 @@ button.close-actions {
 }
 
 button.delete-actions {
-  color: #565656;
+  color: $black-shade-2;
   font-size: 13px;
   font-weight: 400;
   line-height: normal;
@@ -296,7 +296,7 @@ button.delete-actions {
 
   // margin-top: 16px;
   label.MuiFormControlLabel-root {
-    color: #565656;
+    color: $black-shade-2;
     font-size: 13px !important;
     font-weight: 400;
     letter-spacing: 0.24px;
@@ -1102,7 +1102,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   cursor: pointer;
 
   p {
-    color: #565656;
+    color: $black-shade-2;
     font-size: 20px;
     font-weight: 600;
     line-height: normal;
@@ -1345,7 +1345,7 @@ tbody td .td-select {
   }
 
   p.accordion-title {
-    color: #565656;
+    color: $black-shade-2;
     font-size: 20px;
     font-weight: 500;
     line-height: normal;
@@ -1455,7 +1455,7 @@ button.add-more {
 }
 
 p.follow-people {
-  color: #565656;
+  color: $black-shade-2;
   font-size: 14px;
   font-weight: 500;
   line-height: normal;
@@ -1579,7 +1579,7 @@ p.follow-people {
 
   .chart-title {
     color: #181818;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     line-height: normal;
   }
@@ -1591,8 +1591,9 @@ p.follow-people {
     margin-bottom: 1rem;
   }
 
-  div#time-sec {
+  #time-sec {
     width: 100%;
+    padding: 10px 32px 10px 14px;
   }
 
   .color-chart fieldset {
@@ -1601,7 +1602,7 @@ p.follow-people {
 
   .xy-sec {
     color: #181818;
-    font-size: 20px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -1724,7 +1725,7 @@ p.follow-people {
   border-radius: 10px 10px 0px 0px;
 
   p {
-    color: #565656;
+    color: $black-shade-2;
     font-size: 16px;
     font-weight: 500;
     line-height: normal;
@@ -1782,7 +1783,7 @@ p.follow-people {
 }
 
 .time {
-  color: #565656;
+  color: $black-shade-2;
   white-space: nowrap;
 }
 
@@ -1953,7 +1954,7 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 
 .react-calendar__month-view__weekdays__weekday {
   padding: 0.5em;
-  color: #565656;
+  color: $black-shade-2;
   font-size: 16px;
   font-weight: 500;
   line-height: normal;
@@ -2025,8 +2026,8 @@ hr.hr-calender {
 }
 
 .color-input {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 6px;
   border: 4px solid #f3f3f3;
   box-shadow: none;
@@ -2077,7 +2078,7 @@ input[type="color" i]::-webkit-color-swatch {
   .table-outer {
     thead {
       th {
-        color: #565656 !important;
+        color: $black-shade-2 !important;
         font-size: 16px;
         font-weight: 500;
         line-height: normal;
@@ -2157,4 +2158,33 @@ input[type="color" i]::-webkit-color-swatch {
 .mypagescreen_selected__\+hXYS {
   border-bottom: 4px solid var(--color-primary-shade-1)!important;
 }
-
+.assign-create .id-detail:last-child {
+  color: $black-shade-2;
+}
+ul.MuiList-root[aria-labelledby="Status-popup-label"] {
+  padding: 0px;
+}
+.list-completed{
+  fieldset{
+    display: none;
+  } 
+  #Status-info {
+    width: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 6px 35px 6px 15px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    background: #00BF70;
+  }
+  svg{
+    top:6px;
+  }
+}
+@media (min-width:1200px){
+  .assign-create .MuiGrid-grid-xl-3.MuiGrid-grid-lg-4 {
+    max-width: 20%;
+  }
+}
