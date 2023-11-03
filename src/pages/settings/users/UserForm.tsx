@@ -141,25 +141,25 @@ const UserForm = React.forwardRef(
       (state: any) => state.lab.data?.get_all_labs,
     );
     React.useEffect(() => {
-      setDepartmentData(departmentSliceData?.map((item:any) => ({
+      setDepartmentData(departmentSliceData?.map((item: any) => ({
         label: item.name,
         value: item.name
       })))
-      setLabData(labSliceData?.map((item:any) => ({
+      setLabData(labSliceData?.map((item: any) => ({
         label: item.name,
         value: item.name
       })))
-    }, [departmentSliceData,labSliceData])
-  
+    }, [departmentSliceData, labSliceData])
+
     console.log(departmentData);
-  
-  console.log(DepartmentList);
-  
+
+    console.log(DepartmentList);
+
     React.useEffect(() => {
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
     }, []);
-  
+
     return (
       <div>
         <Dialog
@@ -360,8 +360,8 @@ const UserForm = React.forwardRef(
                           formik.values.organization !== ''
                             ? undefined
                             : () => (
-                                <Placeholder>Select Organization</Placeholder>
-                              )
+                              <Placeholder>Select Organization</Placeholder>
+                            )
                         }
                         margin="none"
                         fullWidth
@@ -417,8 +417,8 @@ const UserForm = React.forwardRef(
                           formik.values.institution !== ''
                             ? undefined
                             : () => (
-                                <Placeholder>Select Institution</Placeholder>
-                              )
+                              <Placeholder>Select Institution</Placeholder>
+                            )
                         }
                         margin="none"
                         fullWidth
@@ -451,24 +451,16 @@ const UserForm = React.forwardRef(
                     </Box>
                   </Grid>
                 </Grid>
-                <Grid container spacing={2} className="asset-popup">
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{ paddingRight: { sm: '1rem !important' } }}
-                  >
+                <Grid container spacing={2} className="asset-popup multi-selection">
+                  <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingRight: { sm: '1rem !important' } }}>
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Department/s</label>
-
                       <Autocomplete
                         multiple
                         id="department"
-                        options={departmentData!==undefined ? departmentData:[]}
+                        options={departmentData !== undefined ? departmentData : []}
                         disableCloseOnSelect
-                        getOptionLabel={(option:any) => option.label}
+                        getOptionLabel={(option: any) => option.label}
                         renderOption={(props, option, { selected }) => (
                           <li {...props}>
                             <Checkbox
@@ -486,13 +478,13 @@ const UserForm = React.forwardRef(
                           f.forEach((element) => departments.push(element.id));
                           formik.setFieldValue('department', departments);
                         }}
-                        // onChange={formik.handleChange}
-                        // onBlur={formik.handleBlur}
-                        // value={formik.values.department}
-                        // error={
-                        //   formik.touched.department &&
-                        //   Boolean(formik.errors.department)
-                        // }
+                      // onChange={formik.handleChange}
+                      // onBlur={formik.handleBlur}
+                      // value={formik.values.department}
+                      // error={
+                      //   formik.touched.department &&
+                      //   Boolean(formik.errors.department)
+                      // }
                       />
                       {formik.touched.department &&
                         formik.errors.department && (
@@ -502,12 +494,7 @@ const UserForm = React.forwardRef(
                         )}
                     </Box>
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
+                  <Grid item  xs={12} sm={6} md={6} lg={6}
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
@@ -522,9 +509,9 @@ const UserForm = React.forwardRef(
                       <Autocomplete
                         multiple
                         id="laboratory"
-                        options={labData!==undefined ?labData:[] }
+                        options={labData !== undefined ? labData : []}
                         disableCloseOnSelect
-                        getOptionLabel={(option:any) => option.label}
+                        getOptionLabel={(option: any) => option.label}
                         renderOption={(props, option, { selected }) => (
                           <li {...props}>
                             <Checkbox
