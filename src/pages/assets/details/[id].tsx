@@ -1,7 +1,7 @@
 import React from "react";
 import PrivateRoute from '../../../components/PrivateRoute'
 import Successpopup from "../../../components/SuccessPopup"
-import { Box, Button, FormControl, Grid, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, Grid,Autocomplete,Checkbox, MenuItem, Select, TextField, Typography } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -9,7 +9,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import test from '../../../assets/images/test.svg'
-
+import { fetchSingleAssetsData } from "../../../api/assetsAPI";
+import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { AvailabilityList, OrganizationList, StatusList } from "../../../utils/data";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -42,7 +46,18 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-
+const validationSchema = Yup.object().shape({
+  procedure_id: Yup.string().notRequired(),
+  created_on: Yup.string().notRequired(),
+  dept: Yup.array().notRequired(),
+  lab: Yup.array().notRequired(),
+  organisationId:  Yup.array().notRequired(),
+  status: Yup.boolean().notRequired(),
+  name: Yup.string().notRequired(),
+  availability: Yup.string().notRequired(),
+  assets_id: Yup.string().notRequired(),
+  lastUsedDate: Yup.string().notRequired(),
+})
 export default function AssetDetails() {
   const [value, setValue] = React.useState(0);
   const [answers, setAnswers] = React.useState("");
@@ -53,6 +68,101 @@ export default function AssetDetails() {
     setValue(newValue);
   };
   const [openSuccess, setSuccessOpen] = React.useState(false);
+  const [departmentData, setDepartmentData] = React.useState([]);
+  const [labData, setLabData] = React.useState([]);
+  const [organizationData, setOrganizationData] = React.useState([]);
+  const [assetsData, setAssetsData] = React.useState<any>({});
+  console.log(assetsData?.assetNumber);
+  
+  const dispatch: any = useDispatch();
+  const departments: any = [];
+  const laboratory: any = [];
+  const AssetSliceData = useSelector(
+    (state: any) => state.assets.data?.get_asset,
+  );
+  console.log(AssetSliceData);
+  const checkCredentials = (values: any) => {
+    return true;
+}
+const onSubmit = (values: any) => {
+  console.log(values);
+  
+    const isMatch = checkCredentials(values);
+    // const procedures: any = {
+    //   name: 'Stenography2',
+    //   assectId: 'ASSET_1002',
+    //   departmentId: '653b80a0301e33001265a64a',
+    //   laboratoryId: '653b7fd4301e33001265a646',
+    //   userId: 'USER_1001',
+    //   procedureDetials:"Stenography2"
+    
+    // };
+    if(isMatch){
+    //  dispatch(postProcedureData(values))
+    }
+
+  };
+  const departmentSliceData = useSelector(
+    (state: any) => state.department.data?.get_all_departments,
+  );
+  const labSliceData = useSelector(
+    (state: any) => state.lab.data?.get_all_labs,
+  );
+  const organizationSliceData = useSelector(
+    (state: any) => state.organization.data?.get_all_organisations,
+  );
+  React.useEffect(() => {
+    setDepartmentData(
+      departmentSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),
+    );
+    setLabData(
+      labSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),
+    );
+    setOrganizationData(
+      organizationSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),
+    );
+  }, [departmentSliceData, labSliceData, organizationData]);
+  React.useEffect(() => {
+    setAssetsData(AssetSliceData);
+  }, [AssetSliceData]);
+
+  React.useEffect(() => {
+    if(typeof window !== 'undefined'){
+      console.log(window.location.pathname.split("/")[3] )
+      const AssetId = {_id:window.location.pathname.split("/")[3]}
+      dispatch(fetchSingleAssetsData(AssetId));
+     }
+  }, []);
+  const formik = useFormik({
+    initialValues: {
+      name:'',
+      procedureDetials: '',
+      organisationId:'',
+      departmentId: [],
+      laboratoryId: [],
+      assectId: 'ASSE-1000',
+      userId: 'USER_1001',
+      status:'',
+      // assets_image: '',
+      availability: '',
+      assets_id: 'ASSE-1000',
+      lastUsedDate: new Date(),
+    },
+    validationSchema: validationSchema,
+    onSubmit: onSubmit,
+  });
 
   return (
     <PrivateRoute>
@@ -101,7 +211,19 @@ export default function AssetDetails() {
                           autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Assets name"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.name}
+                          size="small"
+                          error={
+                            formik.touched.name && Boolean(formik.errors.name)
+                          }
                         />
+                        {formik.touched.name && formik.errors.name && (
+                            <Typography className="error-field">
+                              {formik.errors.name}
+                            </Typography>
+                          )}
                       </Box>
                     </Grid>
                   </Grid>
@@ -113,9 +235,12 @@ export default function AssetDetails() {
                           margin="normal"
                           required
                           fullWidth
-                          id="Email"
-                          name="Email"
-                          autoComplete="Email"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.assectId}
+                          id="assectId"
+                          name="assectId"
+                          autoComplete="assectId"
                           inputProps={{ maxLength: 50 }}
                           autoFocus
                           InputLabelProps={{ shrink: false }}
@@ -148,19 +273,37 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Organisation</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
-                            labelId="tselect-popup-label"
-                            id="select-popup"
-                            value={answers}
-                            displayEmpty
-                            IconComponent={ExpandMoreOutlinedIcon}
-                            onChange={event => setAnswers(event.target.value)}
-                            renderValue={
-                              answers !== "" ? undefined : () => <Placeholder>Organisation</Placeholder>
-                            }
+                             displayEmpty
+                             IconComponent={ExpandMoreOutlinedIcon}
+                             renderValue={
+                               formik.values.organisationId !== ''
+                                 ? undefined
+                                 : () => (
+                                     <Placeholder>
+                                       Select Organization
+                                     </Placeholder>
+                                   )
+                             }
+                             margin="none"
+                             fullWidth
+                             id="organisationId"
+                             name="organisationId"
+                             autoComplete="organisationId"
+                             placeholder="Organization"
+                             onChange={formik.handleChange}
+                             onBlur={formik.handleBlur}
+                             value={formik.values.organisationId}
+                             size="small"
+                             error={
+                               formik.touched.organisationId &&
+                               Boolean(formik.errors.organisationId)
+                             }
                           >
-                            <MenuItem value={"1"}>1</MenuItem>
-                            <MenuItem value={"2"}>2</MenuItem>
-                            <MenuItem value={"3"}>3</MenuItem>
+                            {OrganizationList.map((item, index) => (
+                              <MenuItem key={index} value={item.id}>
+                                {item.name}
+                              </MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
                       </Box>
@@ -171,21 +314,40 @@ export default function AssetDetails() {
                       <Box>
                         <label style={{ display: 'block' }}>Department/s</label>
                         <FormControl sx={{ width: '100%' }}>
-                          <Select
-                            labelId="tselect-popup-label"
-                            id="select-popup"
-                            value={answers}
-                            displayEmpty
-                            IconComponent={ExpandMoreOutlinedIcon}
-                            onChange={event => setAnswers(event.target.value)}
-                            renderValue={
-                              answers !== "" ? undefined : () => <Placeholder>Select department</Placeholder>
+                        <Autocomplete
+                            multiple
+                            id="departmentId"
+                            options={
+                              departmentData !== undefined ? departmentData : []
                             }
-                          >
-                            <MenuItem value={"1"}>1</MenuItem>
-                            <MenuItem value={"2"}>2</MenuItem>
-                            <MenuItem value={"3"}>3</MenuItem>
-                          </Select>
+                            disableCloseOnSelect
+                            getOptionLabel={(option: any) => option.label}
+                            renderOption={(props, option, { selected }) => (
+                              <li {...props}>
+                                <Checkbox
+                                  style={{ marginRight: 0 }}
+                                  checked={selected}
+                                />
+                                {option.label}
+                              </li>
+                            )}
+                            renderInput={(params) => <TextField {...params} />}
+                            fullWidth
+                            placeholder="Department"
+                            size="medium"
+                            onChange={(e, f) => {
+                              f.forEach((element) =>
+                                departments.push(element.id),
+                              );
+                              formik.setFieldValue('departmentId', departments);
+                            }}
+                            />
+                          {formik.touched.departmentId &&
+                            formik.errors.departmentId && (
+                              <Typography className="error-field">
+                                {formik.errors.departmentId}
+                              </Typography>
+                            )}
                         </FormControl>
                       </Box>
                     </Grid>
@@ -194,23 +356,38 @@ export default function AssetDetails() {
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                       <Box>
                         <label style={{ display: 'block' }}>Laboratory/ies</label>
-                        <FormControl sx={{ width: '100%' }}>
-                          <Select
-                            labelId="tselect-popup-label"
-                            id="select-popup"
-                            value={answers}
-                            displayEmpty
-                            IconComponent={ExpandMoreOutlinedIcon}
-                            onChange={event => setAnswers(event.target.value)}
-                            renderValue={
-                              answers !== "" ? undefined : () => <Placeholder>Select lab</Placeholder>
-                            }
-                          >
-                            <MenuItem value={"1"}>1</MenuItem>
-                            <MenuItem value={"2"}>2</MenuItem>
-                            <MenuItem value={"3"}>3</MenuItem>
-                          </Select>
-                        </FormControl>
+                        <Autocomplete
+                            multiple
+                            id="laboratoryId"
+                            options={labData !== undefined ? labData : []}
+                            disableCloseOnSelect
+                            getOptionLabel={(option: any) => option.label}
+                            renderOption={(props, option, { selected }) => (
+                              <li {...props}>
+                                <Checkbox
+                                  style={{ marginRight: 0 }}
+                                  checked={selected}
+                                />
+                                {option.label}
+                              </li>
+                            )}
+                            renderInput={(params) => <TextField {...params} />}
+                            fullWidth
+                            placeholder="Laboratory"
+                            size="medium"
+                            onChange={(e, f) => {
+                              f.forEach((element) =>
+                                laboratory.push(element.id),
+                              );
+                              formik.setFieldValue('laboratoryId', laboratory);
+                            }}
+                          />
+                          {formik.touched.laboratoryId &&
+                            formik.errors.laboratoryId && (
+                              <Typography className="error-field">
+                                {formik.errors.laboratoryId}
+                              </Typography>
+                            )}
                       </Box>
                     </Grid>
                   </Grid>
@@ -218,45 +395,84 @@ export default function AssetDetails() {
                     <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingRight: { sm: '1rem !important' } }}>
                       <Box>
                         <label style={{ display: 'block' }}>Status</label>
-                        <FormControl sx={{ width: '100%' }}>
-                          <Select
-                            labelId="tselect-popup-label"
-                            id="select-popup"
-                            value={answers}
+                        <Select
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
-                            onChange={event => setAnswers(event.target.value)}
                             renderValue={
-                              answers !== "" ? undefined : () => <Placeholder>Select status</Placeholder>
+                              formik.values.status !== ''
+                                ? undefined
+                                : () => <Placeholder>Select Status</Placeholder>
+                            }
+                            margin="none"
+                            fullWidth
+                            id="status"
+                            name="status"
+                            autoComplete="status"
+                            placeholder="Laboratory"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.status}
+                            size="small"
+                            error={
+                              formik.touched.status &&
+                              Boolean(formik.errors.status)
                             }
                           >
-                            <MenuItem value={"1"}>1</MenuItem>
-                            <MenuItem value={"2"}>2</MenuItem>
-                            <MenuItem value={"3"}>3</MenuItem>
+                            {StatusList.map((item:any) => (
+                              <MenuItem key={item.id} value={item.state}>
+                                {item.name}
+                              </MenuItem>
+                            ))}
                           </Select>
-                        </FormControl>
+                          {formik.touched.status && formik.errors.status && (
+                            <Typography className="error-field">
+                              {formik.errors.status}
+                            </Typography>
+                          )}
                       </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingLeft: { sm: '1rem !important' }, paddingTop: { xs: '0rem !important', sm: '1rem !important' } }}>
                       <Box>
                         <label style={{ display: 'block' }}>Availability</label>
-                        <FormControl sx={{ width: '100%' }}>
-                          <Select
-                            labelId="tselect-popup-label"
-                            id="select-popup"
-                            value={answers}
+                        <Select
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
-                            onChange={event => setAnswers(event.target.value)}
                             renderValue={
-                              answers !== "" ? undefined : () => <Placeholder>Select availability</Placeholder>
+                              formik.values.availability !== ''
+                                ? undefined
+                                : () => (
+                                    <Placeholder>
+                                      Select Availability
+                                    </Placeholder>
+                                  )
+                            }
+                            margin="none"
+                            fullWidth
+                            id="availability"
+                            name="availability"
+                            autoComplete="availability"
+                            placeholder="Laboratory"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.availability}
+                            size="small"
+                            error={
+                              formik.touched.availability &&
+                              Boolean(formik.errors.availability)
                             }
                           >
-                            <MenuItem value={"1"}>1</MenuItem>
-                            <MenuItem value={"2"}>2</MenuItem>
-                            <MenuItem value={"3"}>3</MenuItem>
+                            {AvailabilityList.map((item:any) => (
+                              <MenuItem key={item.id} value={item.state}>
+                                {item.name}
+                              </MenuItem>
+                            ))}
                           </Select>
-                        </FormControl>
+                          {formik.touched.availability &&
+                            formik.errors.availability && (
+                              <Typography className="error-field">
+                                {formik.errors.availability}
+                              </Typography>
+                            )}
                       </Box>
                     </Grid>
                   </Grid>

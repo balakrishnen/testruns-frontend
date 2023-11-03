@@ -143,11 +143,11 @@ const UserForm = React.forwardRef(
     React.useEffect(() => {
       setDepartmentData(departmentSliceData?.map((item: any) => ({
         label: item.name,
-        value: item.name
+        value: item._id
       })))
       setLabData(labSliceData?.map((item: any) => ({
         label: item.name,
-        value: item.name
+        value: item._id
       })))
     }, [departmentSliceData, labSliceData])
 

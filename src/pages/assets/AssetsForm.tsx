@@ -93,7 +93,7 @@ const Addnewpopup = React.forwardRef(
       }
     };
 
-    const Placeholder = ({ children }: any) => {
+    const Placeholder = ({ children }: any) => { 
       return <div>{children}</div>;
     };
 
@@ -149,7 +149,7 @@ const Addnewpopup = React.forwardRef(
 
     console.log(departmentData);
 
-    console.log(labData);
+    console.log(formik);
 
     React.useEffect(() => {
       dispatch(fetchDepartmentData());
@@ -571,7 +571,7 @@ const Addnewpopup = React.forwardRef(
                               Boolean(formik.errors.status)
                             }
                           >
-                            {StatusList.map((item) => (
+                            {StatusList.map((item:any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
                               </MenuItem>

@@ -1,0 +1,33 @@
+import { gql } from '@apollo/client';
+
+export const POST_PROCEDURE = gql`
+
+mutation Create_procedure(
+        $name: String!
+        $procedureDetials: String!
+        $departmentId: String!
+        $laboratoryId: String!
+        $assectId: String!
+        $userId: String!
+        ) {
+    create_procedure(
+        name: $name
+        procedureDetials: $procedureDetials
+        departmentId: $departmentId
+        laboratoryId: $laboratoryId
+        assectId: $assectId
+        userId: $userId
+    ) {
+        _id
+        name
+        procedureNumber
+        procedureDetials
+        assectId
+        userId
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;
