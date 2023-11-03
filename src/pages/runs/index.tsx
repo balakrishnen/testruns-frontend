@@ -162,6 +162,9 @@ export default function Runs() {
     deletePopupRef.current.open(true, 'Runs');
   };
 
+  const clickHandler=(e:MouseEvent)=>{
+    e.stopPropagation();
+  }
   return (
     <PrivateRoute>
       <Box className="main-padding runz-page">
@@ -230,9 +233,9 @@ export default function Runs() {
                       // selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
                       onClick={(e: any) =>{
-                       (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && 
-                        navigate(`/runs/details/${row.runNumber}`)),
-                        console.log(e.target.tagName)
+                      //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && 
+                        navigate(`/runs/details/${row.runNumber}`)
+                        // console.log(e.target.tagName)
                         
                         }
                       }
@@ -244,6 +247,7 @@ export default function Runs() {
                               <Checkbox
                                 color="primary"
                                 checked={row.is_checked}
+                                onClick={(e:any)=>clickHandler(e)}
                                 onChange={(event) =>
                                   handleChange(event, row.id)
                                 }
@@ -292,7 +296,8 @@ export default function Runs() {
                                 : 'inactive-select td-select'
                             }
                             value={row.isActive}
-                            displayEmpty
+                            displayEmpty 
+                            onClick={(e:any)=>clickHandler(e)}
                             onChange={(e)=>handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >

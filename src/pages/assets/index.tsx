@@ -45,8 +45,9 @@ import { AssetsRowData } from '../../modals/assets.modal';
 import TableFilters from '../../components/table/TableFilters';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
-import { fetchAssetsData } from '../../api/assetsAPI';
+import { deleteAssetsData, fetchAssetsData } from '../../api/assetsAPI';
 import { useDispatch, useSelector } from 'react-redux';
+import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 
 const rows: AssetsRowData[] = AssetsRows;
 
@@ -62,6 +63,7 @@ export default function Assets() {
   const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
+  const deleteSuccessPopupRef:any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
   // const totalPages = Math.ceil(assetsData.length / itemsPerPage);
@@ -70,6 +72,9 @@ export default function Assets() {
   // const Data = assetsData.slice(startIndex, endIndex);
   const dispatch: any = useDispatch();
   const [assetsData, setAssetsData] = React.useState([]);
+  const [rowId,setRowId]=React.useState('')
+  console.log(rowId);
+  
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -206,17 +211,32 @@ export default function Assets() {
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
+  const asset: any={_id:rowId}
+  console.log(asset);
+  
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
-      deletePopupRef.current.open(false);
+      // deletePopupRef.current.open(false);
+      dispatch(deleteAssetsData(asset));
+      setTimeout(() => {
+      deleteSuccessPopupRef.current.open(true);
+    }, 3000);
     }
     deletePopupRef.current.open(false);
   };
+console.log(assetsData);
 
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'Assest');
   };
 
+  const filters=()=>{ 
+    console.log('filters');
+    dispatch(fetchAssetsData(queryStrings));}
+
+    const clickHandler=(e:MouseEvent)=>{
+      e.stopPropagation();
+    }
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -263,23 +283,23 @@ export default function Assets() {
                 orderBy={''}
                 rowCount={0}
                 columns={headers}
-                filters={() => {
-                  console.log('runz');
-                }}
+                filters={
+                 filters
+                }
               />
 
               <TableBody>
                 {assetsData?.map((row: any, index: number) => {
                   return (
-                    <TableRow
+                  ( row.isDeleted!==true && <TableRow
                       hover
                       tabIndex={-1}
                       key={index}
                       // selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
                       onClick={(e: any) => {
-                        e.target.tagName !== 'INPUT' &&
-                          e.target.tagName !== 'LI' &&
+                        // e.target.tagName !== 'INPUT' &&
+                        //   e.target.tagName !== 'LI' &&
                           navigate(`/assets/details/${row.assetNumber}`);
                       }}
                     >
@@ -290,8 +310,9 @@ export default function Assets() {
                               <Checkbox
                                 color="primary"
                                 checked={row.is_checked}
-                                onChange={(event) =>
-                                  handleChange(event, row.id)
+                                onClick={(e:any)=>clickHandler(e)}
+                                onChange={(event) =>{setRowId(row._id),
+                                  handleChange(event, row._id)}
                                 }
                               />
                             </Box>
@@ -351,6 +372,7 @@ export default function Assets() {
                             value={row.status}
                             displayEmpty
                             onChange={(e) => handleChange(e, row.id)}
+                            onClick={(e:any)=>clickHandler(e)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
                             <MenuItem value={true}>Fully Working</MenuItem>
@@ -370,6 +392,7 @@ export default function Assets() {
                             displayEmpty
                             onChange={(e) => handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
+                            onClick={(e:any)=>clickHandler(e)}
                           >
                             <MenuItem value={true}>Available</MenuItem>
                             <MenuItem value={false}>Not available</MenuItem>
@@ -377,6 +400,7 @@ export default function Assets() {
                         </TableCell>
                       )}
                     </TableRow>
+                  )
                   );
                 })}
               </TableBody>
@@ -401,9 +425,10 @@ export default function Assets() {
           />
           <Box>
             <DeletePopup
+            rowId={rowId}
               ref={deletePopupRef}
               closeDeletePopup={() =>
-                deletePopupRef.current.open(false, 'Assests')
+                deletePopupRef.current.open(false, 'Assests',rowId)
               }
               deleteConfirmation={handleDeleteConfirmation}
             />
@@ -413,6 +438,7 @@ export default function Assets() {
             confirmationDone={handleConfirmationDone}
           />
           <SuccessPopup ref={successPopupRef} />
+          <DeleteSuccessPopup ref={deleteSuccessPopupRef}/>
         </Box>
       </Box>
     </PrivateRoute>

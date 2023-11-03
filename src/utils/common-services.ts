@@ -10,7 +10,7 @@ export const handleCheckboxChange = (
 ) => (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
   const checked = event.target.checked;
   const updatedRows = Rows.map((row) => {
-    if (row.id === id) {
+    if (row._id === id) {
       return { ...row, is_checked: checked };
     }
     return row;

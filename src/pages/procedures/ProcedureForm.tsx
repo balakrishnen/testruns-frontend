@@ -269,7 +269,7 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                         </Grid>
                     </Box>
                     <Box sx={{ display: { xs: "block", sm: 'flex' }, justifyContent: 'flex-end', mt: 3 }}>
-                        <Button type="submit" variant="contained" onClick={() => openConfirmationPopup(true)} className="cancel-btn">Cancel</Button>
+                        <Button  variant="contained" onClick={() => openConfirmationPopup(true)} className="cancel-btn">Cancel</Button>
                         <Button type="submit" variant="contained"  className="add-btn">Create</Button>
                     </Box>
                     </form>

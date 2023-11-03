@@ -29,6 +29,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from "../../api/departmentAPI";
 import { fetchLabData } from "../../api/labAPI";
 import { log } from "console";
+import { fetchAssetsData } from '../../api/assetsAPI';
+
 
 type Order = 'asc' | 'desc';
 
@@ -40,9 +42,9 @@ interface EnhancedTableProps {
   orderBy: string;
   rowCount: number;
   columns: []
-  filters: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  filters: (event: React.MouseEvent<unknown>) => void;
 }
-export default function TableHeader(props: EnhancedTableProps) {
+export default function TableHeader(props: any) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, columns, filters } =
     props;
   const createSortHandler =
@@ -51,6 +53,7 @@ export default function TableHeader(props: EnhancedTableProps) {
     };
 
   const [answer, setAnswer] = React.useState<any>({});
+  const [filterProps,setFilterProps]=React.useState<any>({})
   {
     console.log("headCell", answer);
   }
@@ -188,7 +191,10 @@ console.log(labData);
                                   ...answer,
                                   [event.target.name]: event.target.value,
                                 });
-
+                                setFilterProps({
+                                    ...answer,
+                                    [filter.id]: event.target.value,
+                                  });
                               }}
                             />
                           </FormControl>
@@ -199,51 +205,44 @@ console.log(labData);
                         
                         
                         return (
-                          <FormControl key={index}>                           
+                          <FormControl key={index}>    
                             <Autocomplete
-                            //  style={{ fontSize: "12px" }}
-                             
-                            size="small"
-                              options={filter.label=='Department'?departmentData:filter.label=='Lab'?labData:filter.options}
-                              getOptionLabel={(option: any) => option.label}
-                              classes={{
-                               option:'menuItem',
-                              
-                                      listbox: 'menuList',
-                                      noOptions: 'noOptions',
-                                      groupLabel: 'headerItem',
-                              }}
-                            
-                              renderInput={(params) => (
-                                <TextField
-
-                                  {...params}
-                                  required
-                                  fullWidth
-                                  name={filter.id}
-                                  value={answer[filter.id] || ""}
-                                  id="Search"
-                                  placeholder={filter.label}
-                                  InputProps={{...params.InputProps,
-                                    endAdornment: (
-                                      <InputAdornment position="end">
-                                        <img src={search} />
-                                      </InputAdornment>
-                                    ),
-                                  }}   
-                                  inputProps={{
-                                    ...params.inputProps,
-                                  }}                              
-                                  onChange={(event) => {
-                                    setAnswer({
-                                      ...answer,
-                                      [event.target.name]: event.target.value,
-                                    });
-
-                                  }}
-                                />
-                              )}
-                            />
+      size="small"
+      options={filter.options}
+      getOptionLabel={(option) => option.label}
+      value={answer[filter.id] || null}
+      onChange={(event, newValue) => {
+        // filters(newValue?.value),
+        setAnswer({
+          ...answer,
+          [filter.id]: newValue,
+        })
+        //  filters(newValue?.value)
+      }}
+      classes={{
+        option: 'menuItem',
+        listbox: 'menuList',
+        noOptions: 'noOptions',
+        groupLabel: 'headerItem',
+      }}
+      id="Search"
+      placeholder={filter.label}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          required
+          fullWidth
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <InputAdornment position="end">
+                <img src={search} alt="Search" />
+              </InputAdornment>
+            ),
+          }}
+        />
+      )}
+    />
                           </FormControl>
                         );
                       } else if (filter.type === "date") {

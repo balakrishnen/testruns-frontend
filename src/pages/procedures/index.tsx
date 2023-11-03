@@ -306,6 +306,10 @@ export default function Procedures() {
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, "procedures");
   };
+
+  const clickHandler=(e:MouseEvent)=>{
+    e.stopPropagation();
+  }
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -364,9 +368,10 @@ export default function Procedures() {
                       // selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
                       onClick={(e:any) =>
-                        (e.target.name==undefined && navigate(
+                        // (e.target.name==undefined && 
+                          navigate(
                            `/procedures/details/${row.procedureNumber}`
-                         ))
+                         )
                        }
                     >
                       {headers[0].is_show && (
@@ -376,6 +381,7 @@ export default function Procedures() {
                               <Checkbox
                                 color="primary"
                                 checked={row.is_checked}
+                                onClick={(e:any)=>clickHandler(e)}
                                 onChange={(event) =>
                                   handleChange(event, row.id)
                                 }
