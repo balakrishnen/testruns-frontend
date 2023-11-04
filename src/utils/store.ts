@@ -14,7 +14,7 @@ const rootStore = combineReducers({
   department: departmentReducer,
   lab: labReducer,
   organization: organizationReducer,
-  notification: notificationReducer
+  notification: notificationReducer,
   procedure: procedureReducer
 });
 
