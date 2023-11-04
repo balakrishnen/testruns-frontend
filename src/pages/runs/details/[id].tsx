@@ -1,42 +1,35 @@
-import React from "react";
-import PrivateRoute from "../../../components/PrivateRoute";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import { Button, Divider, FormControl, Grid, Select } from "@mui/material";
-import edit from "../../../assets/images/edit.svg";
-import shareimg from "../../../assets/images/Share-black.svg";
-import shareimgarrow from "../../../assets/images/share-arrow-black.svg";
-import printer from "../../../assets/images/printer.svg";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import EditPopup from "./editpopup";
-import SplitPane from "react-split-pane";
-import { Editor } from "@tinymce/tinymce-react";
+import React from 'react';
+import PrivateRoute from '../../../components/PrivateRoute';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { Button, Divider, FormControl, Grid, Select } from '@mui/material';
+import edit from '../../../assets/images/edit.svg';
+import shareimg from '../../../assets/images/Share-black.svg';
+import shareimgarrow from '../../../assets/images/share-arrow-black.svg';
+import printer from '../../../assets/images/printer.svg';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import EditPopup from './editpopup';
+import SplitPane from 'react-split-pane';
+import { Editor } from '@tinymce/tinymce-react';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '../../../assets/images/chevrondown-thin.svg';
 
-
-
-import {
-  LineChart,
-  Line,
-  XAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
+import { LineChart, Line, XAxis, CartesianGrid, Tooltip } from 'recharts';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
 const data = [
-  { name: "Jul", plot1: 2684, plot2: 2400, plot3: 1544, amt: 2400 },
-  { name: "Aug", plot1: 3000, plot2: 1398, plot3: 2844, amt: 2210 },
-  { name: "Sep", plot1: 1544, plot2: 1754, plot3: 1472, amt: 2290 },
-  { name: "Oct", plot1: 4654, plot2: 4575, plot3: 3574, amt: 2355 },
-  { name: "Nov", plot1: 3613, plot2: 4564, plot3: 1475, amt: 4323 },
-  { name: "Dec", plot1: 1581, plot2: 2544, plot3: 2965, amt: 3547 },
+  { name: 'Jul', plot1: 2684, plot2: 2400, plot3: 1544, amt: 2400 },
+  { name: 'Aug', plot1: 3000, plot2: 1398, plot3: 2844, amt: 2210 },
+  { name: 'Sep', plot1: 1544, plot2: 1754, plot3: 1472, amt: 2290 },
+  { name: 'Oct', plot1: 4654, plot2: 4575, plot3: 3574, amt: 2355 },
+  { name: 'Nov', plot1: 3613, plot2: 4564, plot3: 1475, amt: 4323 },
+  { name: 'Dec', plot1: 1581, plot2: 2544, plot3: 2965, amt: 3547 },
 ];
 
 interface TabPanelProps {
@@ -68,13 +61,15 @@ function CustomTabPanel(props: TabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
 export default function RunsDetails() {
   const [openDlg2Dialog, setDialog2Open] = React.useState(false);
-  const [answers, setAnswers] = React.useState("");
+  const [answers, setAnswers] = React.useState('');
+  const [moreInfo, setMoreInfo] = React.useState(false);
+
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -103,7 +98,7 @@ export default function RunsDetails() {
       <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} />
       <Box className="runzdetails-page">
         <Box className="top-section">
-          <Box sx={{ padding: "24px 0px", margin: "0px 24px" }}>
+          <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={10} md={10} lg={5} xl={6}>
                 <Box>
@@ -119,10 +114,10 @@ export default function RunsDetails() {
               <Grid item xs={12} sm={2} md={2} lg={7} xl={6}>
                 <Box
                   sx={{
-                    display: { xs: "none", lg: "flex" },
-                    alignItems: "center",
-                    height: "100%",
-                    justifyContent: "end",
+                    display: { xs: 'none', lg: 'flex' },
+                    alignItems: 'center',
+                    height: '100%',
+                    justifyContent: 'end',
                   }}
                 >
                   <Button
@@ -133,7 +128,7 @@ export default function RunsDetails() {
                     <img
                       src={shareimgarrow}
                       alt="edit"
-                      style={{ marginRight: "8px" }}
+                      style={{ marginRight: '8px' }}
                     />
                     Assign
                   </Button>
@@ -145,7 +140,7 @@ export default function RunsDetails() {
                     <img
                       src={shareimg}
                       alt="edit"
-                      style={{ marginRight: "8px" }}
+                      style={{ marginRight: '8px' }}
                     />
                     Share
                   </Button>
@@ -157,24 +152,39 @@ export default function RunsDetails() {
                       setDialog2Open(true);
                     }}
                   >
-                    <img src={edit} alt="edit" style={{ marginRight: "8px" }} />
+                    <img src={edit} alt="edit" style={{ marginRight: '8px' }} />
                     Edit
                   </Button>
-                  <Button className="edit-btn" style={{ display: 'flex', alignItems: 'center', cursor: "pointer", marginRight: "0rem" }}>
-                    More Info <img src={KeyboardArrowDownIcon} alt="KeyboardArrowDownIcon" style={{ marginLeft: "8px" }} />
+                  <Button
+                    className="edit-btn"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      marginRight: '0rem',
+                    }}
+                    onClick={() => setMoreInfo(!moreInfo)}
+                  >
+                    More Info &nbsp;
+                    {/* <img
+                      src={KeyboardArrowDownIcon}
+                      alt="KeyboardArrowDownIcon"
+                      style={{ marginLeft: '8px' }}
+                    /> */}
+                    {!moreInfo ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
                   </Button>
                 </Box>
                 <Box
                   sx={{
-                    display: { xs: "block", lg: "none" },
-                    textAlign: "right",
+                    display: { xs: 'block', lg: 'none' },
+                    textAlign: 'right',
                   }}
                 >
                   <IconButton
                     aria-label="more"
                     id="long-button"
-                    aria-controls={open ? "long-menu" : undefined}
-                    aria-expanded={open ? "true" : undefined}
+                    aria-controls={open ? 'long-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
                     aria-haspopup="true"
                     onClick={handleClick}
                   >
@@ -183,7 +193,7 @@ export default function RunsDetails() {
                   <Menu
                     id="long-menu"
                     MenuListProps={{
-                      "aria-labelledby": "long-button",
+                      'aria-labelledby': 'long-button',
                     }}
                     anchorEl={anchorEl}
                     open={open}
@@ -198,7 +208,7 @@ export default function RunsDetails() {
                         <img
                           src={shareimgarrow}
                           alt="edit"
-                          style={{ marginRight: "8px" }}
+                          style={{ marginRight: '8px' }}
                         />
                         Assign
                       </Button>
@@ -212,7 +222,7 @@ export default function RunsDetails() {
                         <img
                           src={shareimg}
                           alt="edit"
-                          style={{ marginRight: "8px" }}
+                          style={{ marginRight: '8px' }}
                         />
                         Share
                       </Button>
@@ -229,14 +239,27 @@ export default function RunsDetails() {
                         <img
                           src={edit}
                           alt="edit"
-                          style={{ marginRight: "8px" }}
+                          style={{ marginRight: '8px' }}
                         />
                         Edit
                       </Button>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
-                      <Button className="edit-btn" style={{ display: 'flex', alignItems: 'center', cursor: "pointer", marginRight: "0rem" }}>
-                        More Info <img src={KeyboardArrowDownIcon} alt="KeyboardArrowDownIcon" style={{ marginLeft: "8px" }} />
+                      <Button
+                        className="edit-btn"
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          cursor: 'pointer',
+                          marginRight: '0rem',
+                        }}
+                      >
+                        More Info{' '}
+                        <img
+                          src={KeyboardArrowDownIcon}
+                          alt="KeyboardArrowDownIcon"
+                          style={{ marginLeft: '8px' }}
+                        />
                       </Button>
                     </MenuItem>
                   </Menu>
@@ -244,16 +267,23 @@ export default function RunsDetails() {
               </Grid>
             </Grid>
           </Box>
-          <Box className="assign-create" sx={{ padding: "24px 0px", margin: "0px 24px" }}>
+          <Box
+            className="assign-create"
+            sx={{
+              padding: '24px 0px',
+              margin: '0px 24px',
+              display: moreInfo ? 'block' : 'none',
+            }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
                 <Box>
                   <Typography className="id-detail">Test objective</Typography>
                   <Typography
                     className="id-detail"
-                    style={{                      
-                      fontSize: "16px",
-                      marginTop: "0.4rem",                      
+                    style={{
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
                     }}
                   >
                     Testing
@@ -265,9 +295,9 @@ export default function RunsDetails() {
                   <Typography className="id-detail">Assigned by</Typography>
                   <Typography
                     className="id-detail"
-                    style={{                      
-                      fontSize: "16px",
-                      marginTop: "0.4rem",
+                    style={{
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
                     }}
                   >
                     Abinaya
@@ -279,9 +309,9 @@ export default function RunsDetails() {
                   <Typography className="id-detail">Created by</Typography>
                   <Typography
                     className="id-detail"
-                    style={{                      
-                      fontSize: "16px",
-                      marginTop: "0.4rem",
+                    style={{
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
                     }}
                   >
                     Teacher A
@@ -293,9 +323,9 @@ export default function RunsDetails() {
                   <Typography className="id-detail">Created on</Typography>
                   <Typography
                     className="id-detail"
-                    style={{                      
-                      fontSize: "16px",
-                      marginTop: "0.4rem",
+                    style={{
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
                     }}
                   >
                     28/05/2023 (Wed)
@@ -314,30 +344,66 @@ export default function RunsDetails() {
                       IconComponent={ExpandMoreOutlinedIcon}
                       onChange={(event) => setAnswers(event.target.value)}
                       renderValue={
-                        answers !== ""
+                        answers !== ''
                           ? undefined
                           : () => <Placeholder>Status</Placeholder>
                       }
                       className="list-completed"
                     >
-                      <MenuItem value={"1"} style={{background:'#E2445C',color:'#fff',fontSize:'14px'}}>Not Started</MenuItem>
-                      <MenuItem value={"2"} style={{background:'#00BF70',color:'#fff',fontSize:'14px'}}>Completed</MenuItem>
-                      <MenuItem value={"3"} style={{background:'#F8A83C',color:'#fff',fontSize:'14px'}}>Working</MenuItem>
+                      <MenuItem
+                        value={'1'}
+                        style={{
+                          background: '#E2445C',
+                          color: '#fff',
+                          fontSize: '14px',
+                        }}
+                      >
+                        Not Started
+                      </MenuItem>
+                      <MenuItem
+                        value={'2'}
+                        style={{
+                          background: '#00BF70',
+                          color: '#fff',
+                          fontSize: '14px',
+                        }}
+                      >
+                        Completed
+                      </MenuItem>
+                      <MenuItem
+                        value={'3'}
+                        style={{
+                          background: '#F8A83C',
+                          color: '#fff',
+                          fontSize: '14px',
+                        }}
+                      >
+                        Working
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </Grid>
             </Grid>
           </Box>
-          <Divider sx={{ borderColor: "#FFEAA5", borderBottomWidth: "5px" }} />
+          <Divider sx={{ borderColor: '#FFEAA5', borderBottomWidth: '5px' }} />
         </Box>
 
         <Box className="main-runzdetails runz-height">
           {/* <Grid container spacing={2} sx={{ width: '100%', margin: '0px' }}> */}
           <SplitPane>
-            <Grid item xs={12} sm={12} md={12} lg={7} xl={7} className="runz-height leftside-runz" sx={{ padding: "24px!important", overflowY: "auto" }}            >
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={7}
+              xl={7}
+              className="runz-height leftside-runz"
+              sx={{ padding: '24px!important', overflowY: 'auto' }}
+            >
               <Box>
-                <Box sx={{fontSize:'14px'}}>
+                <Box sx={{ fontSize: '14px' }}>
                   Aim To measure the time period of a simple pendulum. Apparatus
                   required A wire of unknown resistance (~10Ω), battery
                   eliminator or an accumulator (0 to 3V) or two dry cells (1.5 V
@@ -423,8 +489,17 @@ export default function RunsDetails() {
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={5} xl={5} className="rightside-runz" sx={{ borderLeft: { xs: "0px", lg: "2px solid #9F9F9F;" } }}            >
-              <Box className="runz-height" sx={{ width: "100%" }}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={5}
+              xl={5}
+              className="rightside-runz"
+              sx={{ borderLeft: { xs: '0px', lg: '2px solid #9F9F9F;' } }}
+            >
+              <Box className="runz-height" sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 0 }}>
                   <Tabs
                     value={value}
@@ -446,25 +521,34 @@ export default function RunsDetails() {
                         height: 400,
                         menubar: false,
                         plugins: [
-                          "advlist autolink lists link image charmap print preview anchor",
-                          "searchreplace visualblocks code fullscreen",
-                          "insertdatetime media table paste code help wordcount",
+                          'advlist autolink lists link image charmap print preview anchor',
+                          'searchreplace visualblocks code fullscreen',
+                          'insertdatetime media table paste code help wordcount',
                         ],
                         toolbar:
-                          "undo redo | formatselect | " +
-                          "bold italic backcolor | alignleft aligncenter " +
-                          "alignright alignjustify | bullist numlist outdent indent | " +
-                          "removeformat | help",
+                          'undo redo | formatselect | ' +
+                          'bold italic backcolor | alignleft aligncenter ' +
+                          'alignright alignjustify | bullist numlist outdent indent | ' +
+                          'removeformat | help',
                         content_style:
-                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                          'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                       }}
                     />
                   </CustomTabPanel>
                   <CustomTabPanel value={value} index={1}>
                     <Box>
                       <Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                          <Typography className="chart-title">Chart no. 1</Typography>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '1rem',
+                          }}
+                        >
+                          <Typography className="chart-title">
+                            Chart no. 1
+                          </Typography>
                           <Button
                             type="submit"
                             variant="contained"
@@ -475,10 +559,23 @@ export default function RunsDetails() {
                           </Button>
                         </Box>
                         <Box>
-                          <Grid container spacing={2} style={{ justifyContent: 'space-between', marginBottom: '2rem' }}>
+                          <Grid
+                            container
+                            spacing={2}
+                            style={{
+                              justifyContent: 'space-between',
+                              marginBottom: '2rem',
+                            }}
+                          >
                             <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
                               <Box className="color-chart">
-                                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                  }}
+                                >
                                   <Typography className="xy-sec">X</Typography>
                                   <FormControl fullWidth size="medium">
                                     <Select
@@ -487,16 +584,20 @@ export default function RunsDetails() {
                                       value={answers}
                                       displayEmpty
                                       IconComponent={ExpandMoreOutlinedIcon}
-                                      onChange={(event) => setAnswers(event.target.value)}
+                                      onChange={(event) =>
+                                        setAnswers(event.target.value)
+                                      }
                                       renderValue={
-                                        answers !== ""
+                                        answers !== ''
                                           ? undefined
-                                          : () => <Placeholder>Time</Placeholder>
+                                          : () => (
+                                              <Placeholder>Time</Placeholder>
+                                            )
                                       }
                                     >
-                                      <MenuItem value={"1"}>1</MenuItem>
-                                      <MenuItem value={"2"}>2</MenuItem>
-                                      <MenuItem value={"3"}>3</MenuItem>
+                                      <MenuItem value={'1'}>1</MenuItem>
+                                      <MenuItem value={'2'}>2</MenuItem>
+                                      <MenuItem value={'3'}>3</MenuItem>
                                     </Select>
                                   </FormControl>
                                 </Box>
@@ -508,8 +609,16 @@ export default function RunsDetails() {
                             <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
                               <Box>
                                 <Box className="color-chart">
-                                  <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                                    <Typography className="xy-sec">Y1</Typography>
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      width: '100%',
+                                    }}
+                                  >
+                                    <Typography className="xy-sec">
+                                      Y1
+                                    </Typography>
                                     <FormControl fullWidth size="medium">
                                       <Select
                                         labelId="view-all-label"
@@ -517,26 +626,41 @@ export default function RunsDetails() {
                                         value={answers}
                                         displayEmpty
                                         IconComponent={ExpandMoreOutlinedIcon}
-                                        onChange={(event) => setAnswers(event.target.value)}
+                                        onChange={(event) =>
+                                          setAnswers(event.target.value)
+                                        }
                                         renderValue={
-                                          answers !== ""
+                                          answers !== ''
                                             ? undefined
-                                            : () => <Placeholder>Time</Placeholder>
+                                            : () => (
+                                                <Placeholder>Time</Placeholder>
+                                              )
                                         }
                                       >
-                                        <MenuItem value={"1"}>1</MenuItem>
-                                        <MenuItem value={"2"}>2</MenuItem>
-                                        <MenuItem value={"3"}>3</MenuItem>
+                                        <MenuItem value={'1'}>1</MenuItem>
+                                        <MenuItem value={'2'}>2</MenuItem>
+                                        <MenuItem value={'3'}>3</MenuItem>
                                       </Select>
                                     </FormControl>
                                   </Box>
                                   <Box className="color-picker">
-                                    <input type="color" className="color-input" />
+                                    <input
+                                      type="color"
+                                      className="color-input"
+                                    />
                                   </Box>
                                 </Box>
                                 <Box className="color-chart">
-                                  <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                                    <Typography className="xy-sec">Y2</Typography>
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      width: '100%',
+                                    }}
+                                  >
+                                    <Typography className="xy-sec">
+                                      Y2
+                                    </Typography>
                                     <FormControl fullWidth size="medium">
                                       <Select
                                         labelId="view-all-label"
@@ -544,21 +668,28 @@ export default function RunsDetails() {
                                         value={answers}
                                         displayEmpty
                                         IconComponent={ExpandMoreOutlinedIcon}
-                                        onChange={(event) => setAnswers(event.target.value)}
+                                        onChange={(event) =>
+                                          setAnswers(event.target.value)
+                                        }
                                         renderValue={
-                                          answers !== ""
+                                          answers !== ''
                                             ? undefined
-                                            : () => <Placeholder>Time</Placeholder>
+                                            : () => (
+                                                <Placeholder>Time</Placeholder>
+                                              )
                                         }
                                       >
-                                        <MenuItem value={"1"}>1</MenuItem>
-                                        <MenuItem value={"2"}>2</MenuItem>
-                                        <MenuItem value={"3"}>3</MenuItem>
+                                        <MenuItem value={'1'}>1</MenuItem>
+                                        <MenuItem value={'2'}>2</MenuItem>
+                                        <MenuItem value={'3'}>3</MenuItem>
                                       </Select>
                                     </FormControl>
                                   </Box>
                                   <Box className="color-picker">
-                                    <input type="color" className="color-input" />
+                                    <input
+                                      type="color"
+                                      className="color-input"
+                                    />
                                   </Box>
                                 </Box>
                               </Box>
@@ -614,17 +745,17 @@ export default function RunsDetails() {
                         height: 400,
                         menubar: false,
                         plugins: [
-                          "advlist autolink lists link image charmap print preview anchor",
-                          "searchreplace visualblocks code fullscreen",
-                          "insertdatetime media table paste code help wordcount",
+                          'advlist autolink lists link image charmap print preview anchor',
+                          'searchreplace visualblocks code fullscreen',
+                          'insertdatetime media table paste code help wordcount',
                         ],
                         toolbar:
-                          "undo redo | formatselect | " +
-                          "bold italic backcolor | alignleft aligncenter " +
-                          "alignright alignjustify | bullist numlist outdent indent | " +
-                          "removeformat | help",
+                          'undo redo | formatselect | ' +
+                          'bold italic backcolor | alignleft aligncenter ' +
+                          'alignright alignjustify | bullist numlist outdent indent | ' +
+                          'removeformat | help',
                         content_style:
-                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                          'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                       }}
                     />
                   </CustomTabPanel>
@@ -638,11 +769,11 @@ export default function RunsDetails() {
                 >
                   Back
                 </Button>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <img
                     src={printer}
                     alt="printer"
-                    style={{ marginRight: "1rem", cursor: "pointer" }}
+                    style={{ marginRight: '1rem', cursor: 'pointer' }}
                   />
                   <Button type="submit" variant="contained" className="add-btn">
                     Save
