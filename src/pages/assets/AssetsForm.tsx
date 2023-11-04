@@ -54,7 +54,7 @@ const validationSchema = Yup.object().shape({
   status: Yup.string().notRequired(),
   // assets_image: Yup.string().notRequired(),
   availability: Yup.string().notRequired(),
-  assets_id: Yup.string().notRequired(),
+  // assets_id: Yup.string().notRequired(),
   lastUsedDate: Yup.string().notRequired(),
 });
 
@@ -108,7 +108,7 @@ const Addnewpopup = React.forwardRef(
         status: '',
         // assets_image: '',
         availability: '',
-        assets_id: 'ASSE-1000',
+        // assets_id: 'ASSE-1000',
         lastUsedDate: new Date(),
       },
       validationSchema: validationSchema,
@@ -232,22 +232,22 @@ const Addnewpopup = React.forwardRef(
                         name="assets_id"
                         autoComplete="assets_id"
                         InputLabelProps={{ shrink: false }}
-                        placeholder="User ID"
+                        placeholder="Assets Id"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.assets_id}
+                        // value={formik.values.assets_id}
                         size="small"
-                        error={
-                          formik.touched.assets_id &&
-                          Boolean(formik.errors.assets_id)
-                        }
+                        // error={
+                        //   formik.touched.assets_id &&
+                        //   Boolean(formik.errors.assets_id)
+                        // }
                         disabled
                       />
-                      {formik.touched.assets_id && formik.errors.assets_id && (
+                      {/* {formik.touched.assets_id && formik.errors.assets_id && (
                         <Typography className="error-field">
                           {formik.errors.assets_id}
                         </Typography>
-                      )}
+                      )} */}
                     </Box>
                     <Box>
                       <Typography className="recent-use">

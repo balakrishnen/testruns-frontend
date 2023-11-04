@@ -49,39 +49,41 @@ export const GET_ASSETS = gql`
 export const POST_ASSETS = gql`
   mutation Create_asset(
     $name: String!
-    $asset_number: String!
-    $department_id: String!
-    $laboratory_id: String!
-    $user_id: String!
-    $perchased_date: String!
-    $last_used_date: String!
+    $assetNumber: String!
+    $departmentId: String!
+    $laboratoryId: String!
+    $organisationId: String!
+    $userId: String!
+    $perchasedDate: String!
+    $lastUsedDate: String!
     $status: Boolean!
     $availability: Boolean!
-    $expiry_date: String!
+    $expiryDate: String!
   ) {
     create_asset(
       name: $name
-      asset_number: $asset_number
-      department_id: $department_id
-      laboratory_id: $laboratory_id
-      user_id: $user_id
-      perchased_date: $perchased_date
-      last_used_date: $last_used_date
+      assetNumber: $assetNumber
+      departmentId: $departmentId
+      laboratoryId: $laboratoryId
+      organisationId: $organisationId
+      userId: $userId
+      perchasedDate: $perchasedDate
+      lastUsedDate: $lastUsedDate
       status: $status
       availability: $availability
-      expiry_date: $expiry_date
+      expiryDate: $expiryDate
     ) {
       _id
       name
-      asset_number
-      department_id
-      laboratory_id
-      user_id
-      perchased_date
-      last_used_date
+      assetNumber
+      departmentId
+      laboratoryId
+      userId
+      perchasedDate
+      lastUsedDate
       status
       availability
-      expiry_date
+      expiryDate
     }
   }
 `;

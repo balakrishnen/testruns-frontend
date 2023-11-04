@@ -2202,3 +2202,15 @@ input#mobile_number {
     max-width: 20%;
   }
 }
+
+.multi-selection .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot {
+  height: 100%;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+.css-1kkal6p-MuiAutocomplete-root .MuiOutlinedInput-root {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  padding-left: 7px !important;
+}
