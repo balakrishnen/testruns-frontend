@@ -194,7 +194,7 @@ const SignUp = () => {
               </Typography>
             )}
             {formik.touched.password && !formik.errors.password && (
-              <Typography className="valid-field">Strong password</Typography>
+              <Typography className="valid-field">Strong strength</Typography>
             )}
           </Box>
           <Box style={{ position: "relative" }}>
