@@ -48,6 +48,8 @@ import SuccessPopup from '../../components/SuccessPopup';
 import { deleteAssetsData, fetchAssetsData } from '../../api/assetsAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
+import { Value } from 'sass';
+import { bool } from 'yup';
 
 const rows: AssetsRowData[] = AssetsRows;
 
@@ -71,7 +73,7 @@ export default function Assets() {
   const endIndex = startIndex + itemsPerPage;
   // const Data = assetsData.slice(startIndex, endIndex);
   const dispatch: any = useDispatch();
-  const [assetsData, setAssetsData] = React.useState([]);
+  const [assetsData, setAssetsData] = React.useState<any>([]);
   const [rowId,setRowId]=React.useState('')
   console.log(rowId);
   
@@ -121,6 +123,10 @@ export default function Assets() {
     setPageInfo(page);
     setQueryString(payload);
   };
+
+  const filters=()=>{ 
+    dispatch(fetchAssetsData(queryStrings));
+  }
 
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
 
@@ -229,10 +235,6 @@ console.log(assetsData);
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'Assest');
   };
-
-  const filters=()=>{ 
-    console.log('filters');
-    dispatch(fetchAssetsData(queryStrings));}
 
     const clickHandler=(e:MouseEvent)=>{
       e.stopPropagation();
@@ -375,8 +377,8 @@ console.log(assetsData);
                             onClick={(e:any)=>clickHandler(e)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={true}>Fully Working</MenuItem>
-                            <MenuItem value={false}>Issues</MenuItem>
+                            <MenuItem value={true as any}>Fully Working</MenuItem>
+                            <MenuItem value={false as any}>Issues</MenuItem>
                           </Select>
                         </TableCell>
                       )}
@@ -394,8 +396,8 @@ console.log(assetsData);
                             IconComponent={ExpandMoreOutlinedIcon}
                             onClick={(e:any)=>clickHandler(e)}
                           >
-                            <MenuItem value={true}>Available</MenuItem>
-                            <MenuItem value={false}>Not available</MenuItem>
+                            <MenuItem value={true as any}>Available</MenuItem>
+                            <MenuItem value={false as any}>Not available</MenuItem>
                           </Select>
                         </TableCell>
                       )}

@@ -19,8 +19,8 @@ import { postProcedureData } from '../../api/procedureAPI';
 const validationSchema = Yup.object().shape({
     procedure_id: Yup.string().notRequired(),
     created_on: Yup.string().notRequired(),
-    dept: Yup.array().notRequired(),
-    lab: Yup.array().notRequired(),
+    departmentId: Yup.array().notRequired(),
+    laboratoryId: Yup.array().notRequired(),
     procedure_name: Yup.string().notRequired(),
   });
 
@@ -51,17 +51,17 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
       console.log(values);
       
         const isMatch = checkCredentials(values);
-        // const procedures: any = {
-        //   name: 'Stenography2',
-        //   assectId: 'ASSET_1002',
-        //   departmentId: '653b80a0301e33001265a64a',
-        //   laboratoryId: '653b7fd4301e33001265a646',
-        //   userId: 'USER_1001',
-        //   procedureDetials:"Stenography2"
+        const procedures: any = {
+          name: values.name,
+          assectId: 'ASSET_1002',
+          departmentId: '6545d98a8f9ab44668db6ecb',
+          laboratoryId: '653b7fd4301e33001265a646',
+          userId: 'USER_1001',
+          procedureDetials:values.procedureDetials
         
-        // };
+        };
         if(isMatch){
-         dispatch(postProcedureData(values))
+         dispatch(postProcedureData(procedures))
         }
    
       };
@@ -75,8 +75,8 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
         initialValues: {
           name:"",
           procedureDetials: '',
-          departmentId: [],
-          laboratoryId: [],
+          departmentId: '6545d98a8f9ab44668db6ecb',
+          laboratoryId: '653b7fd4301e33001265a646',
           assectId: 'ASSE-1000',
           userId: 'USER_1001',
          
@@ -190,6 +190,7 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                             renderOption={(props, option, { selected }) => (
                               <li {...props}>
                                 <Checkbox
+                                 name='departmentId'
                                   style={{ marginRight: 0 }}
                                   checked={selected}
                                 />
@@ -221,7 +222,6 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                     <Autocomplete
                             multiple
                             id="laboratoryId"
-                            // name='laboratoryId'
                             options={labData!==undefined ?labData:[]}
                             disableCloseOnSelect
                             getOptionLabel={(option:any) => option.label}

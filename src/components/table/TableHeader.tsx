@@ -42,7 +42,7 @@ interface EnhancedTableProps {
   orderBy: string;
   rowCount: number;
   columns: []
-  filters: (event: React.MouseEvent<unknown>) => void;
+  filters: (answer : React.MouseEvent<unknown>) => void;
 }
 export default function TableHeader(props: any) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, columns, filters } =
@@ -52,7 +52,7 @@ export default function TableHeader(props: any) {
       onRequestSort(event, property);
     };
 
-  const [answer, setAnswer] = React.useState<any>({});
+  const [answer, setAnswer] = React.useState<any>([]);
   const [filterProps,setFilterProps]=React.useState<any>({})
   {
     console.log("headCell", answer);
@@ -66,10 +66,13 @@ export default function TableHeader(props: any) {
   };
   const dispatch: any = useDispatch();
 
-  React.useEffect(() => {
-    if(filters!==undefined)
-    filters(answer)
-  },[answer])
+  // React.useEffect(() => {
+  // //  if(Object.keys(answer).length !== 0){
+  // //   console.log('answer',answer);
+  //   filters()
+  // //  }
+  //   // filters(answer)
+  // },[answer])
 
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
@@ -186,7 +189,7 @@ console.log(labData);
                                   </InputAdornment>
                                 ),
                               }}
-                              onChange={(event) => {
+                              onChange={(event) => {filters(),
                                 setAnswer({
                                   ...answer,
                                   [event.target.name]: event.target.value,

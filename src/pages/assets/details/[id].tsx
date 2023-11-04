@@ -152,7 +152,7 @@ const onSubmit = (values: any) => {
       organisationId:'',
       departmentId: [],
       laboratoryId: [],
-      assectId: 'ASSE-1000',
+      assetId: 'ASSE-1000',
       userId: 'USER_1001',
       status:'',
       // assets_image: '',
@@ -237,15 +237,23 @@ const onSubmit = (values: any) => {
                           fullWidth
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
-                          value={formik.values.assectId}
-                          id="assectId"
-                          name="assectId"
-                          autoComplete="assectId"
+                          value={formik.values.assetId}
+                          id="assetId"
+                          name="assetId"
+                          autoComplete="assetId"
                           inputProps={{ maxLength: 50 }}
                           autoFocus
-                          InputLabelProps={{ shrink: false }}
+                          InputLabelProps={{ shrink: false }} 
                           placeholder="Asset Id"
+                          error={
+                            formik.touched.assetId && Boolean(formik.errors.assetId)
+                          }
                         />
+                        {formik.touched.assetId && formik.errors.assetId && (
+                            <Typography className="error-field">
+                              {formik.errors.assetId}
+                            </Typography>
+                          )}
                       </Box>
                     </Grid>
                   </Grid>
