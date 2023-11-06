@@ -1,8 +1,10 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { Box, Drawer, Toolbar, Typography,Checkbox,
-  Autocomplete,  Button } from '@mui/material';
+import {
+  Box, Drawer, Toolbar, Typography, Checkbox,
+  Autocomplete, Button
+} from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import logout from '../../assets/images/profile/logout.svg';
@@ -34,19 +36,19 @@ export default function AppProfileDrawer({
     (state: any) => state.lab.data?.get_all_labs,
   );
   React.useEffect(() => {
-    setDepartmentData(departmentSliceData?.map((item:any) => ({
+    setDepartmentData(departmentSliceData?.map((item: any) => ({
       label: item.name,
       value: item._id
     })))
-    setLabData(labSliceData?.map((item:any) => ({
+    setLabData(labSliceData?.map((item: any) => ({
       label: item.name,
       value: item._id
     })))
-  }, [departmentSliceData,labSliceData])
+  }, [departmentSliceData, labSliceData])
 
   console.log(departmentData);
 
-// console.log(DepartmentList);
+  // console.log(DepartmentList);
 
   React.useEffect(() => {
     dispatch(fetchDepartmentData());
@@ -161,7 +163,7 @@ export default function AppProfileDrawer({
                     name="last"
                     autoComplete="last"
                     InputLabelProps={{ shrink: false }}
-                    placeholder="Last Name"
+                    placeholder="Last name"
                   />
                 </Box>
               </Grid>
@@ -227,31 +229,31 @@ export default function AppProfileDrawer({
                 <Box>
                   <label>Organisation</label>
                   <Autocomplete
-                            multiple
-                            id="Organisation"
-                            options={[]}
-                            disableCloseOnSelect
-                            getOptionLabel={(option:any) => option.label}
-                            renderOption={(props, option, { selected }) => (
-                              <li {...props}>
-                                <Checkbox
-                                  style={{ marginRight: 0 }}
-                                  checked={selected}
-                                />
-                                {option.label}
-                              </li>
-                            )}
-                            renderInput={(params) => <TextField {...params} />}
-                            fullWidth
-                            placeholder="Organisation"
-                            size="medium"
-                            onChange={(e, f) => {
-                              f.forEach((element) =>
-                                departments.push(element.id),
-                              );
-                            }}
-                            
-                          />
+                    multiple
+                    id="Organisation"
+                    options={[]}
+                    disableCloseOnSelect
+                    getOptionLabel={(option: any) => option.label}
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          style={{ marginRight: 0 }}
+                          checked={selected}
+                        />
+                        {option.label}
+                      </li>
+                    )}
+                    renderInput={(params) => <TextField {...params} />}
+                    fullWidth
+                    placeholder="Organisation"
+                    size="medium"
+                    onChange={(e, f) => {
+                      f.forEach((element) =>
+                        departments.push(element.id),
+                      );
+                    }}
+
+                  />
                 </Box>
               </Grid>
             </Grid>
@@ -260,31 +262,31 @@ export default function AppProfileDrawer({
                 <Box>
                   <label>Department</label>
                   <Autocomplete
-                            multiple
-                            id="department"
-                            options={departmentData!==undefined ? departmentData:[]}
-                            disableCloseOnSelect
-                            getOptionLabel={(option:any) => option.label}
-                            renderOption={(props, option, { selected }) => (
-                              <li {...props}>
-                                <Checkbox
-                                  style={{ marginRight: 0 }}
-                                  checked={selected}
-                                />
-                                {option.label}
-                              </li>
-                            )}
-                            renderInput={(params) => <TextField {...params} />}
-                            fullWidth
-                            placeholder="Department"
-                            size="medium"
-                            onChange={(e, f) => {
-                              f.forEach((element) =>
-                                departments.push(element.id),
-                              );
-                            }}
-                            
-                          />
+                    multiple
+                    id="department"
+                    options={departmentData !== undefined ? departmentData : []}
+                    disableCloseOnSelect
+                    getOptionLabel={(option: any) => option.label}
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          style={{ marginRight: 0 }}
+                          checked={selected}
+                        />
+                        {option.label}
+                      </li>
+                    )}
+                    renderInput={(params) => <TextField {...params} />}
+                    fullWidth
+                    placeholder="Department"
+                    size="medium"
+                    onChange={(e, f) => {
+                      f.forEach((element) =>
+                        departments.push(element.id),
+                      );
+                    }}
+
+                  />
                 </Box>
               </Grid>
             </Grid>
@@ -357,7 +359,12 @@ export default function AppProfileDrawer({
                 </Box>
               </Grid>
             </Grid>
-            <Box>
+            <Box  >
+              <Box style={{ height: "150px" }}>
+
+              </Box>
+            </Box>
+            {/* <Box>
               <label>Labs assigned</label>
               <Box className="lab-list">
                 <span>Mechanical</span>
@@ -367,7 +374,7 @@ export default function AppProfileDrawer({
                 <span>Biotechnology</span>
                 <span>Botany</span>
               </Box>
-            </Box>
+            </Box> */}
           </Box>
         </Box>
       </Box>

@@ -55,7 +55,7 @@ const Roles = () => {
       </Box>
       <Box
         sx={{
-          width: "100%", m: 0, 
+          width: "100%", m: 0,
           padding: "24px",
         }}
       >
@@ -661,8 +661,225 @@ const Roles = () => {
                       />
                     </TableCell>
                   </TableRow>
+
                   <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell>Can edit organisation</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can change department</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can change laboratory</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can change contact info</TableCell>
                     <TableCell>
                       <FormControlLabel
                         control={
@@ -740,7 +957,7 @@ const Roles = () => {
                     </TableCell>
                   </TableRow>
                   <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell>Can edit username</TableCell>
+                    <TableCell>Can edit access control</TableCell>
                     <TableCell>
                       <FormControlLabel
                         control={
@@ -818,7 +1035,7 @@ const Roles = () => {
                     </TableCell>
                   </TableRow>
                   <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell>Can edit username</TableCell>
+                    <TableCell>Can add user</TableCell>
                     <TableCell>
                       <FormControlLabel
                         control={
@@ -890,7 +1107,79 @@ const Roles = () => {
                     </TableCell>
                   </TableRow>
                   <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell>Can edit username</TableCell>
+                    <TableCell>Can delete user </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can edit user</TableCell>
                     <TableCell>
                       <FormControlLabel
                         control={
