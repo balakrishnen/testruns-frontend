@@ -12,7 +12,7 @@ import {
   MenuItem,
   Pagination,
   Select,
-  TextField,
+  TextField,Grid,
   Typography,
   InputLabel,
 } from "@mui/material";
@@ -30,7 +30,12 @@ import { fetchDepartmentData } from "../../api/departmentAPI";
 import { fetchLabData } from "../../api/labAPI";
 import { log } from "console";
 import { fetchAssetsData } from '../../api/assetsAPI';
+import Checkbox from '@mui/material/Checkbox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 type Order = 'asc' | 'desc';
 
@@ -99,7 +104,7 @@ console.log(labData);
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
   }, []);
-
+  const departments: any = [];
   return (
     <TableHead>
       <TableRow>
@@ -141,6 +146,7 @@ console.log(labData);
                               id="table-select"
                               value={answer[filter.id] || ""}
                               displayEmpty
+                              // className="table-search"
                               name={filter.id}
                               IconComponent={ExpandMoreOutlinedIcon}
                               onChange={(event) => {
@@ -178,6 +184,7 @@ console.log(labData);
                             <TextField                              
                               required
                               fullWidth
+                              className="table-search"
                               name={filter.id}
                               value={answer[filter.id] || ""}
                               id="Search"
@@ -208,45 +215,44 @@ console.log(labData);
                         
                         
                         return (
-                          <FormControl key={index}>    
+                          // <Grid item xs={12} sm={12} md={12} lg={12} className="multi-selection">
+                           <Box key={index}>
                             <Autocomplete
-      size="small"
-      options={filter.options}
-      getOptionLabel={(option) => option.label}
-      value={answer[filter.id] || null}
-      onChange={(event, newValue) => {
-        // filters(newValue?.value),
-        setAnswer({
-          ...answer,
-          [filter.id]: newValue,
-        })
-        //  filters(newValue?.value)
-      }}
-      classes={{
-        option: 'menuItem',
-        listbox: 'menuList',
-        noOptions: 'noOptions',
-        groupLabel: 'headerItem',
-      }}
-      id="Search"
-      placeholder={filter.label}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          required
-          fullWidth
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <InputAdornment position="end">
-                <img src={search} alt="Search" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      )}
-    />
-                          </FormControl>
+                            multiple
+                            limitTags={1}
+                            id="Search"
+                            className="multiselect-chip multi-selection"
+                            classes={{
+                              option: 'menuItem',
+                              listbox: 'menuList',
+                              noOptions: 'noOptions',
+                              groupLabel: 'headerItem',
+                            }}
+                           options={filter.options}
+                            disableCloseOnSelect
+                            getOptionLabel={(option:any) => option.label}
+                            renderOption={(props, option, { selected }) => (
+                              <li {...props}>
+                                <Checkbox
+                                  style={{ marginRight: 0 }}
+                                  checked={selected}
+                                />
+                                {option.label}
+                              </li>
+                            )}
+                            renderInput={(params) => <TextField {...params} />}
+                            // fullWidth
+                            placeholder="Department"
+                            size="small"
+                            onChange={(e, f) => {
+                              f.forEach((element) =>
+                                departments.push(element.id),
+                              );
+                            }}
+                            
+                          />
+                          </Box> 
+                          // </Grid>
                         );
                       } else if (filter.type === "date") {
                         return (
