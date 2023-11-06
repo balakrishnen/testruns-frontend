@@ -31,3 +31,47 @@ mutation Create_procedure(
     }
 }
 `;
+
+export const GET_PROCEDURE = gql`
+query Get_all_procedures($page: Int!, $perPage: Int!) {
+    get_all_procedures(page: $page, perPage: $perPage) {
+        Procedures {
+            _id
+            name
+            procedureNumber
+            procedureDetials
+            assectId
+            userId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+            departmentId {
+                _id
+                name
+                userId
+                isActive
+                isDeleted
+                createdAt
+                updatedAt
+            }
+            laboratoryId {
+                _id
+                name
+                userId
+                departmentId
+                isActive
+                isDeleted
+                createdAt
+                updatedAt
+            }
+        }
+        pageInfo {
+            currentPage
+            totalPages
+            hasNextPage
+            hasPreviousPage
+        }
+    }
+}
+`;
