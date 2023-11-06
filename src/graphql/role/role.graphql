@@ -1,0 +1,15 @@
+import { gql } from '@apollo/client';
+
+export const GET_ROLE = gql`
+  
+query Get_all_roles {
+    get_all_roles {
+        _id
+        name
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;

@@ -32,6 +32,7 @@ import {
 } from '../../../utils/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from '../../../api/departmentAPI';
+import { fetchRoleData } from '../../../api/roleApi';
 import { fetchLabData } from '../../../api/labAPI';
 
 // const departmentList = [
@@ -90,6 +91,7 @@ const UserForm = React.forwardRef(
     const laboratory: any = [];
     const [formPopup, setFormPopup] = React.useState(false);
     const [departmentData, setDepartmentData] = React.useState([]);
+    const [roleData, setRoleData] = React.useState([]);
     const [labData, setLabData] = React.useState([]);
     const dispatch: any = useDispatch();
 
@@ -140,6 +142,9 @@ const UserForm = React.forwardRef(
     const labSliceData = useSelector(
       (state: any) => state.lab.data?.get_all_labs,
     );
+    const roleSliceData = useSelector(
+      (state: any) => state.role.data?.get_all_roles,
+    );
     React.useEffect(() => {
       setDepartmentData(departmentSliceData?.map((item: any) => ({
         label: item.name,
@@ -149,7 +154,11 @@ const UserForm = React.forwardRef(
         label: item.name,
         value: item._id
       })))
-    }, [departmentSliceData, labSliceData])
+      setRoleData(roleSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item._id
+      })))
+    }, [departmentSliceData, labSliceData, roleSliceData])
 
     console.log(departmentData);
 
@@ -158,6 +167,7 @@ const UserForm = React.forwardRef(
     React.useEffect(() => {
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
+      dispatch(fetchRoleData());
     }, []);
 
     return (
@@ -496,7 +506,7 @@ const UserForm = React.forwardRef(
                         )}
                     </Box>
                   </Grid>
-                  <Grid item  xs={12} sm={6} md={6} lg={6}
+                  <Grid item xs={12} sm={6} md={6} lg={6}
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
@@ -597,6 +607,14 @@ const UserForm = React.forwardRef(
                       <label style={{ display: 'block' }}>Select role</label>
 
                       <Select
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: '150px',
+                              overflowY: 'auto',
+                            },
+                          },
+                        }}
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
@@ -619,9 +637,9 @@ const UserForm = React.forwardRef(
                           formik.touched.role && Boolean(formik.errors.role)
                         }
                       >
-                        {RoleList.map((item) => (
-                          <MenuItem key={item.id} value={item.id}>
-                            {item.name}
+                        {roleData && roleData.map((item: any) => (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
                           </MenuItem>
                         ))}
                       </Select>

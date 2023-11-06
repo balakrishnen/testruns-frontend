@@ -7,6 +7,7 @@ import labReducer from '../features/labSlice'
 import organizationReducer from '../features/organizationSlice'
 import notificationReducer from '../features/notificationSlice';
 import procedureReducer from '../features/procedureSlice';
+import roleReducer from '../features/roleSlice';
 
 const rootStore = combineReducers({
   assets: assetsReducer,
@@ -15,7 +16,8 @@ const rootStore = combineReducers({
   lab: labReducer,
   organization: organizationReducer,
   notification: notificationReducer,
-  procedure: procedureReducer
+  procedure: procedureReducer,
+  role: roleReducer,
 });
 
 const store = configureStore({
