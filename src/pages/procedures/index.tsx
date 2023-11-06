@@ -29,6 +29,8 @@ import TableHeader from '../../components/table/TableHeader';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
 import { navigate } from 'gatsby';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProcedureData } from '../../api/procedureAPI';
 const rows: ProceduresRowData[] = ProcedureRows;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -106,6 +108,58 @@ export default function Procedures() {
       return;
     }
     setSelected([]);
+  };
+ 
+  const [pageInfo, setPageInfo] = React.useState({
+    currentPage: 1,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
+  const [queryStrings, setQueryString] = React.useState({
+    page: 1,
+    perPage: 5,
+    searchBy: null,
+    search: null,
+    sortBy: null,
+    sortOrder: null,
+  });
+
+  const procedureSliceData = useSelector(
+    (state: any) => state.procedure.data?.get_all_procedures,
+  );
+  console.log('procedureSliceData',procedureSliceData);
+  
+  const dispatch: any = useDispatch();
+  const [procedureData, setProcedureData] = React.useState<any>([]);
+  const [rowId,setRowId]=React.useState('')
+  React.useEffect(() => {
+    setProcedureData(procedureData);
+  }, [procedureData]);
+
+  React.useEffect(() => {
+    dispatch(fetchProcedureData(queryStrings));
+  }, [pageInfo]);
+  // console.log('procedureData',procedureData[0].departmentId.length);
+
+  React.useEffect(() => {
+    const page: any = { ...pageInfo };
+    page['currentPage'] = procedureSliceData?.pageInfo.currentPage;
+    page['totalPages'] = procedureSliceData?.pageInfo.totalPages;
+    page['hasNextPage'] = procedureSliceData?.pageInfo.hasNextPage;
+    page['hasPreviousPage'] = procedureSliceData?.pageInfo.hasPreviousPage;
+    setProcedureData(procedureSliceData?.Procedures);
+    setPageInfo(page);
+  }, [procedureSliceData]);
+
+  const handlePageChange = (even: any, page_no: number) => {
+    const payload: any = { ...queryStrings };
+    const page: any = { ...pageInfo };
+    payload['page'] = page_no;
+    payload['perPage'] = 5;
+    page['currentPage'] = page_no;
+    setPageInfo(page);
+    setQueryString(payload);
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
@@ -205,9 +259,9 @@ export default function Procedures() {
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const Data = Rows.slice(startIndex, endIndex);
+  // const Data = Rows.slice(startIndex, endIndex);
 
-  const [visibleRow, setVisibleRow] = React.useState<any>(Data);
+  const [visibleRow, setVisibleRow] = React.useState<any>(procedureData);
 
   React.useEffect(() => {
     const sortedRows = stableSort(rows, getComparator(order, orderBy));
@@ -218,12 +272,13 @@ export default function Procedures() {
 
     setVisibleRow(newVisibleRows);
   }, [order, orderBy, page, rowsPerPage]);
-  const handlePageChange = (even: any, page: number) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (even: any, page: number) => {
+  //   setCurrentPage(page);
+  // };
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
-      Rows,
+      procedureData,
+      setProcedureData,
       setSelectedRows,
       setIsDeselectAllChecked,
       setIsselectAllChecked,
@@ -234,7 +289,8 @@ export default function Procedures() {
   };
   const handleDeChange = handleDeCheckboxChange(
     isDeselectAllChecked,
-    Rows,
+    procedureData,
+    setProcedureData,
     setSelectedRows,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
@@ -243,7 +299,8 @@ export default function Procedures() {
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
-    Rows,
+    procedureData,
+    setProcedureData,
     setSelectedRows,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
@@ -251,7 +308,7 @@ export default function Procedures() {
   );
   const filters = (idVaule: any) => {
     if (Object.keys(idVaule).length !== 0) {
-      const filteredRows = Data.filter(function (el: any) {
+      const filteredRows = procedureData.filter(function (el: any) {
         if (el.procedureNumber == idVaule.assetNumber) {
           return true;
         }
@@ -266,7 +323,7 @@ export default function Procedures() {
       console.log(filteredRows);
       setVisibleRow(filteredRows);
     } else {
-      setVisibleRow(Data);
+      setVisibleRow(procedureData);
     }
   };
 
@@ -285,6 +342,8 @@ export default function Procedures() {
   const searchString = 'B';
   const foundItem = getObjectBySearchString(searchString);
   console.log(visibleRow);
+  const Procedure: any={_id:rowId}
+  console.log(Procedure);
 
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
@@ -350,12 +409,12 @@ export default function Procedures() {
                 filters={filters}
               />
               <TableBody>
-                {visibleRow.map((row: any, index: number) => {
+                {procedureData?.map((row: any, index: number) => {
                   // const isItemSelected = isSelected(row.name);
                   // const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow
+                    row.isDeleted!==true &&  <TableRow
                       hover
                       // onClick={(event) => handleClick(event, row.name, index)}
                       // aria-checked={isItemSelected}
@@ -378,8 +437,8 @@ export default function Procedures() {
                                 color="primary"
                                 checked={row.is_checked}
                                 onClick={(e:any)=>clickHandler(e)}
-                                onChange={(event) =>
-                                  handleChange(event, row.id)
+                                onChange={(event) =>{setRowId(row._id),
+                                  handleChange(event, row.id)}
                                 }
                               />
                             </Box>
@@ -391,16 +450,26 @@ export default function Procedures() {
                           </Box>
                         </TableCell>
                       )}
+  
+                      {console.log('procedureData',row.departmentId.length)}
                       {headers[1].is_show && (
                         <TableCell>
                           <Box>{row.name}</Box>
                         </TableCell>
                       )}
                       {headers[2].is_show && (
-                        <TableCell>{getDepartment(row.departmentId)}</TableCell>
+                        <TableCell> {(row.departmentId[0]?.id==undefined || row.departmentId[0] === null)
+                          ? '-'
+                          : row.departmentId.length==0 && row.departmentId.map((item: any) => (
+                              <Box key={item.id}>{item.name}</Box>
+                            ))}</TableCell>
                       )}
                       {headers[3].is_show && (
-                        <TableCell>{getLaboratory(row.laboratoryID)}</TableCell>
+                        <TableCell> {(row.laboratoryId[0]?.id==undefined || row.laboratoryId[0] === null)
+                          ? '-'
+                          : row.departmentId.map((item: any) => (
+                              <Box key={item.id}>{item.name}</Box>
+                            ))}</TableCell>
                       )}
                       {headers[4].is_show && (
                         <TableCell>{row.updatedAt}</TableCell>
@@ -416,10 +485,11 @@ export default function Procedures() {
           </TableContainer>
           <TablePagination
             currentPage={currentPage}
-            totalPages={totalPages}
+            perPage={queryStrings.perPage}
             handlePageChange={handlePageChange}
-            currentPageData={visibleRow}
-            Rows={Rows}
+            currentPageNumber={queryStrings.page}
+            totalRecords={procedureData?.length}
+            page={pageInfo}
           />
         </Box>
         <ProcedureForm
@@ -430,9 +500,10 @@ export default function Procedures() {
         />
         <Box>
           <DeletePopup
+            rowId={rowId}
             ref={deletePopupRef}
             closeDeletePopup={() =>
-              deletePopupRef.current.open(false, 'procedures')
+              deletePopupRef.current.open(false, 'procedures',rowId)
             }
             deleteConfirmation={handleDeleteConfirmation}
           />
