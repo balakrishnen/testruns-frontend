@@ -135,7 +135,7 @@ console.log(labData);
                   sx={{ border: "0px", width: "100%", display: "block" }}
                   colSpan={headCell.colSpan}
                 >
-                  <Box sx={{ width: "100%", display: "flex" }}>
+                  <Box sx={{ width: "100%", }}>
                     {headCell.filters.map((filter: any, index: any) => {
                       if (filter.type === "select") {
                         return (

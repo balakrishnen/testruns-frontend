@@ -42,6 +42,8 @@ import { MoreVertOutlined } from "@mui/icons-material";
 import AssignPopup from "../../components/AssignPopup";
 import AddPeoplePopup from "../../components/AddPeoplePopup";
 import DeletePopup from '../../components/DeletePopup';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -92,7 +94,10 @@ export default function TableFilters({
     setIsDeletePopupOpen(false);
   };
   
-
+  const [answer, setAnswer] = React.useState("");
+  const Placeholder = ({ children }: any) => {
+    return <div>{children}</div>;
+  };
   
   return (
     <>
@@ -233,6 +238,41 @@ export default function TableFilters({
               }}
               className="search-field-inner"
             />
+            <Box sx={{position:'relative'}}>
+              <FilterAltOutlinedIcon style={{fontSize:'2rem', marginLeft:'1rem'}}/>
+              <Box className="filter-seaction">
+                <Box sx={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid #d0d0d0',alignContent:'center',padding:'1rem'}}>
+                  <Typography>Filters</Typography>
+                  <CloseIcon/>
+                </Box>
+                <Box sx={{padding:'1rem'}}>
+                  <Box>
+                    <Typography>Sort By</Typography>
+                    <FormControl style={{width:'100%',marginTop:'0.5rem'}} size="small">
+                      <Select
+                        labelId="table-select-label"
+                        id="table-select"
+                        value={answer}
+                        displayEmpty
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        onChange={event => setAnswer(event.target.value)}
+                        renderValue={
+                          answer !== "" ? undefined : () => <Placeholder>Sort By</Placeholder>
+                        }
+                      >
+                        <MenuItem value={"1"}>1</MenuItem>
+                        <MenuItem value={"2"}>2</MenuItem>
+                        <MenuItem value={"3"}>3</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Box>
+                <Box sx={{display:'flex',justifyContent:'space-between',borderTop:'1px solid #d0d0d0',alignContent:'center',padding:'1rem'}}>
+                  <Button style={{border: '1px solid #d3d3d3',color: '#181818',textTransform:'capitalize'}}>Clear</Button>
+                  <Button style={{border: '1px solid #d3d3d3',background:'#FFC60B',color: '#181818',textTransform:'capitalize'}}>Show results</Button>
+                </Box>
+              </Box>
+            </Box>
           </Box>
         </Grid>
       </Grid>

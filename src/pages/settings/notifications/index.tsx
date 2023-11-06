@@ -121,7 +121,7 @@ const Notification = () => {
             lg={4}
             xl={4}
             sx={{ pr: 2 }}
-            className="p-top"
+            className="p-top notification-email"
           >
             <Box>
               <Stack
@@ -131,7 +131,7 @@ const Notification = () => {
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ fontWeight: "500", fontSize:"12px" }}>
+                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
                   Notification
                 </Typography>
                 <AntSwitch
@@ -145,7 +145,7 @@ const Notification = () => {
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ fontWeight: "500", fontSize:"12px"  }}>
+                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
                   Email
                 </Typography>
                 <AntSwitch
@@ -184,7 +184,7 @@ const Notification = () => {
             lg={4}
             xl={4}
             sx={{ pr: 2 }}
-            className="p-top"
+            className="p-top notification-email"
           >
             <Box>
               <Stack
@@ -194,7 +194,7 @@ const Notification = () => {
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ fontWeight: "500" , fontSize:"12px" }}>
+                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
                   Notification
                 </Typography>
                 <AntSwitch
@@ -208,7 +208,7 @@ const Notification = () => {
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ fontWeight: "500", fontSize:"12px"  }}>
+                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
                   Email
                 </Typography>
                 <AntSwitch
@@ -247,7 +247,7 @@ const Notification = () => {
             lg={4}
             xl={4}
             sx={{ pr: 2 }}
-            className="p-top"
+            className="p-top notification-email"
           >
             <Box>
               <Stack
@@ -257,7 +257,7 @@ const Notification = () => {
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ fontWeight: "500" , fontSize:"12px" }}>
+                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
                   Notification
                 </Typography>
                 <AntSwitch
@@ -271,7 +271,7 @@ const Notification = () => {
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ fontWeight: "500", fontSize:"12px"  }}>
+                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
                   Email
                 </Typography>
                 <AntSwitch

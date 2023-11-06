@@ -11,11 +11,8 @@
 
 .app-bar-block {
   header {
-    box-shadow:
-      0px 0px 0px 0px rgba(0, 0, 0, 0.2),
-      0px 0px 0px 0px rgba(0, 0, 0, 0.14),
-      0px 0px 0px 0px rgba(0, 0, 0, 0.12);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 0px 0px rgb(46 46 46 / 20%), 0px 0px 5px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+    // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     button[aria-label="open drawer"] {
       margin-right: 15px !important;
@@ -972,7 +969,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
         border-radius: 5px;
         border: 1px solid #9F9F9F;
         background: $white;
-        height: 30px;
+        // height: 30px;
         padding: 0px 14px 0px !important;
         padding-left: 0px !important;
         font-size: 12px;
@@ -1367,7 +1364,7 @@ tbody td .td-select {
 
 .filter-search {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 }
 
 // accordion end 
@@ -2202,15 +2199,46 @@ input#mobile_number {
     max-width: 20%;
   }
 }
-
 .multi-selection .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot {
   height: 100%;
   padding-top: 5px !important;
   padding-bottom: 5px !important;
 }
-
 .css-1kkal6p-MuiAutocomplete-root .MuiOutlinedInput-root {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
   padding-left: 7px !important;
+}
+.table-outer {
+  thead{
+    th{
+      .MuiInputBase-root {
+        height: 30px;
+      }
+    }
+  }
+}
+.multiselect-chip span.MuiChip-label {
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100px;
+  margin-bottom: 0px !important;
+}
+.notification-email{
+  span.MuiSwitch-root {
+    margin-left: 10px;
+  }
+}
+.filter-seaction {
+  background-color: rgb(255, 255, 255);
+  color: rgba(0, 0, 0, 0.87);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+  width: 285px;
+  position: absolute;
+  right: 0px;
+  z-index: 9;
 }
