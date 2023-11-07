@@ -501,6 +501,7 @@ export default function Procedures() {
           />
         </Box>
         <ProcedureForm
+          formType={'create'}
           ref={formPopupRef}
           closeFormPopup={handleCloseFormPopup}
           submitFormPopup={handleSubmitFormPopup}

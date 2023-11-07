@@ -13,16 +13,43 @@ import printer from "../../../assets/images/printer.svg";
 import { Editor } from "@tinymce/tinymce-react";
 import { fetchSingleProcedureData } from "../../../api/procedureAPI";
 import { useDispatch,useSelector } from "react-redux";
+import ProcedureForm from "../ProcedureForm";
+import Confirmationpopup from "../../../components/ConfirmationPopup";
+import SuccessPopup from "../../../components/SuccessPopup";
 
 export default function ProcedureDetails() {
   const editorRef: any = React.useRef(null);
   const dispatch:any =useDispatch()
   const [procedureData, setprocedureData] = React.useState<any>({});
+  const formPopupRef: any = React.useRef(null);
+  const confirmationPopupRef: any = React.useRef(null);
+  const successPopupRef: any = React.useRef(null);
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_procedure,
   );
   console.log(procedureSliceData);
   // console.log('log',window.location)
+  const handleCloseFormPopup = (state: any) => {
+    formPopupRef.current.open(state);
+  };
+
+  const handleSubmitFormPopup = () => {
+    formPopupRef.current.open(false);
+    successPopupRef.current.open(true, 'Procedure');
+    setTimeout(() => {
+      successPopupRef.current.open(false, 'Procedure');
+    }, 3000);
+  };
+
+  const handleOpenConfirmationPopup = (state: any) => {
+    confirmationPopupRef.current.open(state);
+  };
+  const handleConfirmationDone = (state: any) => {
+    if (state === 1) {
+      formPopupRef.current.open(false);
+    }
+    confirmationPopupRef.current.open(false);
+  };
   React.useEffect(() => {
     setprocedureData(procedureSliceData);
   }, [procedureSliceData]);
@@ -34,11 +61,11 @@ export default function ProcedureDetails() {
      }
   }, []);
 
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
+  // const log = () => {
+  //   if (editorRef.current) {
+  //     console.log(editorRef.current.getContent());
+  //   }
+  // };
   return (
     <PrivateRoute>
       <Box className="proceduredetails-page">
@@ -69,6 +96,9 @@ export default function ProcedureDetails() {
                     type="submit"
                     variant="contained"
                     className="edit-btn"
+                    onClick={() => {
+                      formPopupRef.current.open(true);
+                    }}
                   >
                     <img src={edit} alt="edit" style={{ marginRight: "8px" }} />
                     Edit
@@ -171,6 +201,19 @@ export default function ProcedureDetails() {
             </Button>
           </Box>
         </Box>
+        <ProcedureForm
+          // formData={procedureData}
+          formType={'edit'}
+          ref={formPopupRef}
+          closeFormPopup={handleCloseFormPopup}
+          submitFormPopup={handleSubmitFormPopup}
+          openConfirmationPopup={handleOpenConfirmationPopup}
+        />
+                <Confirmationpopup
+          ref={confirmationPopupRef}
+          confirmationDone={handleConfirmationDone}
+        />
+        <SuccessPopup ref={successPopupRef} />
       </Box>
     </PrivateRoute>
   );

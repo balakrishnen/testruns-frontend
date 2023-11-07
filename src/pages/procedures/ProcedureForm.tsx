@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Dialog from "@mui/material/Dialog";
 import { Box, Typography, Grid, TextField,Checkbox,
     Autocomplete, FormControl, Select, MenuItem, Button } from '@mui/material';
@@ -24,9 +24,11 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().notRequired(),
   });
 
-const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirmationPopup, submitFormPopup }: any,ref) =>{
+const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirmationPopup, submitFormPopup, formType }: any,ref) =>{
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
+    // console.log(formData);
+    
     const [openForm , setFormOpen]=React.useState(false)
     const departments: any = [];
     const laboratory: any = [];
@@ -69,19 +71,27 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
             setFormOpen(state);
         },
       }));
+      // const[formValues,setFormValues]=React.useState<any>({})
 
+      // React.useEffect(()=>{
+      //   if(formData?.name)
+      //   setFormValues(formData)
+      // },[])
+      
+      const initialValues =  {
+        name:'',
+        createdBy: new Date(),
+        departmentId: '',
+        laboratoryId: '',
+        organisationId: 'ASSE-1000',
+    
+      }
       const formik = useFormik({
-        initialValues: {
-          name:"",
-          createdBy: new Date(),
-          departmentId: '',
-          laboratoryId: '',
-          organisationId: 'ASSE-1000',
-         
-        },
+        initialValues,
         validationSchema: validationSchema,
         onSubmit: onSubmit,
       });
+      // console.log(formValues);
 
       const departmentSliceData = useSelector(
         (state: any) => state.department.data?.get_all_departments,
@@ -130,7 +140,7 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                 <form onSubmit={formik.handleSubmit}>
                 <Box className="popup-section">
                     <Box className="title-popup">
-                        <Typography>Create new Procedure</Typography>
+                        <Typography>{formType=='create' ?'Create new':'Edit'} Procedure</Typography>
                         <CloseIcon onClick={() => closeFormPopup(false)} />
                     </Box>
                   
@@ -152,7 +162,7 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                         InputLabelProps={{ shrink: false }}
                                         placeholder="ID023659ADN"
                                         className="bg-gray-input"
-                                        value={formik.values.organisationId}
+                                        value={formik.values.name}
                                         disabled
                                         size="small"
                                         error={
@@ -197,8 +207,8 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                 {option.label}
                               </li>
                             )}
-                            disabled
-                            renderInput={(params) => <TextField {...params}    className="bg-gray-input" />}
+                            disabled={formType=='create'?true:false}
+                            renderInput={(params) => <TextField {...params}    className={formType=='create'?"bg-gray-input":""} />}
                             fullWidth
                             placeholder="Department"
                             size="medium"
@@ -236,11 +246,11 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                 {option.label}
                               </li>
                             )}
-                            renderInput={(params) => <TextField {...params}  className="bg-gray-input" />}
+                            renderInput={(params) => <TextField {...params}  className={formType=='create'?"bg-gray-input":"" }/>}
                             fullWidth
                             placeholder="Laboratory"
                             size="medium"
-                           disabled
+                           disabled={formType=='create'?true:false}
                             onChange={(e, f) => {
                               f.forEach((element) =>
                                 laboratory.push(element.value)
