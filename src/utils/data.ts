@@ -37,6 +37,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
         id: 'assetNumber',
         type: 'autocomplete',
         label: 'Assest ID',
+        value: [],
         options: [
           { value: 'ID1001', label: 'ID1001' },
           { value: 'ID1002', label: 'ID1002' },
@@ -57,6 +58,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
         id: 'search',
         type: 'textfield',
         label: 'Search',
+        value: "",
         options: [],
       },
     ],
@@ -68,9 +70,10 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     label: 'Department',
     filters: [
       {
-        id: 'dept',
+        id: 'departmentId',
         type: 'autocomplete',
         label: 'Department',
+        value: [],
         options: [
           { value: 'Computer science', label: 'Computer science' },
           { value: 'Cyber security', label: 'Cyber security' },
@@ -88,6 +91,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
         id: 'lab',
         type: 'autocomplete',
         label: 'Lab',
+        value: [],
         options: [
           { value: 'Data mining', label: 'Data mining' },
           { value: 'Data warehouse', label: 'Data warehouse' },
@@ -99,13 +103,14 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     is_show: true,
   },
   {
-    id: 'purchasedDate',
+    id: 'perchasedDate',
     label: 'Purchased on',
     filters: [
       {
         id: 'date',
         type: 'date',
         label: 'DD/MM/YYYY',
+        value: "",
         options: [],
       },
     ],
@@ -113,13 +118,14 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     is_show: true,
   },
   {
-    id: 'updatedAt',
+    id: 'lastUsedDate',
     label: 'Last used',
     filters: [
       {
         id: 'date',
         type: 'date',
         label: 'DD/MM/YYYY',
+        value: "",
         options: [],
       },
     ],
@@ -127,13 +133,14 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     is_show: true,
   },
   {
-    id: 'status',
+    id: 'isActive',
     label: 'Status',
     filters: [
       {
         id: 'status',
         type: 'autocomplete',
         label: '-Select status-',
+        value: [],
         options: [
           { value: '1', label: 'Fully Working' },
           { value: '2', label: 'Not Working' },
@@ -152,6 +159,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
         id: 'availability',
         type: 'autocomplete',
         label: '-Select availablity-',
+        value: [],
         options: [
           { value: '1', label: 'Available' },
           { value: '2', label: 'Not available' },

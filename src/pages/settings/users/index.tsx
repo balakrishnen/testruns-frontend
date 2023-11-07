@@ -52,7 +52,22 @@ const Users = () => {
   const successPopupRef: any = React.useRef(null);
   const deletePopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
-
+  const [usersData, setUsersData] = React.useState<any>([]);
+  const [queryStrings, setQueryString] = React.useState({
+    page: 1,
+    perPage: 5,
+    searchBy: null,
+    search: null,
+    sortBy: null,
+    sortOrder: null,
+  });
+  const [pageInfo, setPageInfo] = React.useState({
+    currentPage: 1,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+    totalCount: 15,
+  });
   const itemsPerPage = 5;
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -278,10 +293,11 @@ const Users = () => {
         </TableContainer>
         <TablePagination
           currentPage={currentPage}
-          totalPages={totalPages}
+          perPage={queryStrings.perPage}
           handlePageChange={handlePageChange}
-          currentPageData={Data}
-          Rows={Rows}
+          currentPageNumber={queryStrings.page}
+          totalRecords={usersData?.length}
+          page={pageInfo}
         />
       </Box>
       <Box>

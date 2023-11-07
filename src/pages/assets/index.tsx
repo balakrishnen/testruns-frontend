@@ -65,7 +65,7 @@ export default function Assets() {
   const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
-  const deleteSuccessPopupRef:any = React.useRef(null);
+  const deleteSuccessPopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
   // const totalPages = Math.ceil(assetsData.length / itemsPerPage);
@@ -76,13 +76,15 @@ export default function Assets() {
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [rowId,setRowId]=React.useState<any>([])
   console.log(rowId);
-  
+
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
     hasNextPage: false,
     hasPreviousPage: false,
+    totalCount: 15,
   });
+
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 5,
@@ -90,6 +92,17 @@ export default function Assets() {
     search: null,
     sortBy: null,
     sortOrder: null,
+  });
+
+  const [filterValues, setFilterValues] = React.useState<any>({
+    assetNumber: [],
+    name: null,
+    departmentId: [],
+    laboratoryId: [],
+    perchasedDate: null,
+    lastUsedDate: null,
+    isActive: [],
+    availability: [],
   });
 
   const assetsSliceData = useSelector(
@@ -108,6 +121,7 @@ export default function Assets() {
     const page: any = { ...pageInfo };
     page['currentPage'] = assetsSliceData?.pageInfo.currentPage;
     page['totalPages'] = assetsSliceData?.pageInfo.totalPages;
+    page['totalCount'] = assetsSliceData?.pageInfo.totalCount;
     page['hasNextPage'] = assetsSliceData?.pageInfo.hasNextPage;
     page['hasPreviousPage'] = assetsSliceData?.pageInfo.hasPreviousPage;
     setAssetsData(assetsSliceData?.Assets);
@@ -124,9 +138,9 @@ export default function Assets() {
     setQueryString(payload);
   };
 
-  const filters=()=>{ 
+  const filtersOptions = () => {
     dispatch(fetchAssetsData(queryStrings));
-  }
+  };
 
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
 
@@ -221,7 +235,7 @@ export default function Assets() {
 
   const assetVal: any={_id:rowId}
   console.log(asset);
-  
+
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
       // deletePopupRef.current.open(false);
@@ -233,15 +247,29 @@ export default function Assets() {
     }
     deletePopupRef.current.open(false);
   };
-console.log(assetsData);
+  console.log(assetsData);
 
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'Assest');
   };
 
-    const clickHandler=(e:MouseEvent)=>{
-      e.stopPropagation();
-    }
+  const clickHandler = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  const onSelectChange = (_event, hIndex, fIndex, element) => {
+    let H = [...headers];
+    _event.forEach((item) => {
+      console.log('#######', item)
+      H[hIndex].filters[fIndex].value.push({
+        label: item.label,
+        value: item.value,
+      });
+    });
+
+    setHeaders(H);
+    // headers[hIndex].filters[fIndex].value = element.map((item) => item.value)
+  };
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -288,23 +316,23 @@ console.log(assetsData);
                 orderBy={''}
                 rowCount={0}
                 columns={headers}
-                filters={
-                 filters
-                }
+                onSelectChange={onSelectChange}
+                filters={filtersOptions}
               />
 
               <TableBody>
                 {assetsData?.map((row: any, index: number) => {
                   return (
-                  ( row.isDeleted!==true && <TableRow
-                      hover
-                      tabIndex={-1}
-                      key={index}
-                      // selected={isItemSelected}
-                      sx={{ cursor: 'pointer' }}
-                      onClick={(e: any) => {
-                        // e.target.tagName !== 'INPUT' &&
-                        //   e.target.tagName !== 'LI' &&
+                    row.isDeleted !== true && (
+                      <TableRow
+                        hover
+                        tabIndex={-1}
+                        key={index}
+                        // selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
+                        onClick={(e: any) => {
+                          // e.target.tagName !== 'INPUT' &&
+                          //   e.target.tagName !== 'LI' &&
                           navigate(`/assets/details/${row._id}`);
                       }}
                     >
@@ -323,11 +351,27 @@ console.log(assetsData);
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Box>
-                                <img src={image_holder} alt="no_image" />
+                              <Box sx={{ mt: 0, mr: 1 }}>
+                                <Checkbox
+                                  color="primary"
+                                  checked={row.is_checked}
+                                  onClick={(e: any) => clickHandler(e)}
+                                  onChange={(event) => {
+                                    setRowId(row._id),
+                                      handleChange(event, row._id);
+                                  }}
+                                />
                               </Box>
-                              <Box sx={{ ml: 2 }}>
-                                <Box>{row.assetNumber}</Box>
+
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                <Box>
+                                  <img src={image_holder} alt="no_image" />
+                                </Box>
+                                <Box sx={{ ml: 2 }}>
+                                  <Box>{row.assetNumber}</Box>
+                                </Box>
                               </Box>
                             </Box>
                           </Box>
@@ -430,10 +474,10 @@ console.log(assetsData);
           />
           <Box>
             <DeletePopup
-            rowId={rowId}
+              rowId={rowId}
               ref={deletePopupRef}
               closeDeletePopup={() =>
-                deletePopupRef.current.open(false, 'Assests',rowId)
+                deletePopupRef.current.open(false, 'Assests', rowId)
               }
               deleteConfirmation={handleDeleteConfirmation}
             />
@@ -443,7 +487,7 @@ console.log(assetsData);
             confirmationDone={handleConfirmationDone}
           />
           <SuccessPopup ref={successPopupRef} />
-          <DeleteSuccessPopup ref={deleteSuccessPopupRef}/>
+          <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
         </Box>
       </Box>
     </PrivateRoute>

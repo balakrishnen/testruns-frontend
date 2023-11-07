@@ -779,14 +779,15 @@ p.reg-text {
 .search-field-inner {
   .MuiInputBase-root {
     display: flex;
-    width: auto;
-    height: 44px;
+    width: 300px;
+    height: 40px;
     padding: 10px 15px 10px 0px;
     justify-content: center;
-    border-radius: 10px;
+    border-radius: 6px;
     border: 1px solid $black-shade-3;
     background: $white;
     margin-left: auto;
+    
 
     fieldset {
       display: none;
@@ -2213,7 +2214,8 @@ input#mobile_number {
   thead{
     th{
       .MuiInputBase-root {
-        height: 30px;
+        height: 35px;
+        font-weight: 500 !important;
       }
     }
   }
@@ -2244,4 +2246,13 @@ input#mobile_number {
 }
 .filter-dropdown .MuiPaper-root {
   width: 285px;
+}
+
+.rmsc .dropdown-heading { 
+  height: 35px !important;
+  font-size: 12px !important;
+}
+
+.css-4hp9yi {
+  width: auto !important;
 }
