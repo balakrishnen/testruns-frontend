@@ -19,6 +19,7 @@ import {
 import {
   Box,
   Button,
+  Chip,
   FormControl,
   InputAdornment,
   MenuItem,
@@ -50,6 +51,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import { Value } from 'sass';
 import { bool } from 'yup';
+import moment from 'moment'
 
 const rows: AssetsRowData[] = AssetsRows;
 
@@ -351,27 +353,11 @@ export default function Assets() {
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Box sx={{ mt: 0, mr: 1 }}>
-                                <Checkbox
-                                  color="primary"
-                                  checked={row.is_checked}
-                                  onClick={(e: any) => clickHandler(e)}
-                                  onChange={(event) => {
-                                    setRowId(row._id),
-                                      handleChange(event, row._id);
-                                  }}
-                                />
+                              <Box>
+                                <img src={image_holder} alt="no_image" />
                               </Box>
-
-                              <Box
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                              >
-                                <Box>
-                                  <img src={image_holder} alt="no_image" />
-                                </Box>
-                                <Box sx={{ ml: 2 }}>
-                                  <Box>{row.assetNumber}</Box>
-                                </Box>
+                              <Box sx={{ ml: 2 }}>
+                                <Box>{row.assetNumber}</Box>
                               </Box>
                             </Box>
                           </Box>
@@ -385,7 +371,7 @@ export default function Assets() {
                       {headers[2].is_show && (
                         <TableCell>
                           {row.departmentId[0] === null
-                            ? '-'
+                            ? <><Chip key={index} label={'Data science'} sx={{ m: 0.5 }} /><span>+1 more...</span></>
                             : row.departmentId.map((item: any) => (
                                 <Box key={item.id}>{item.name}</Box>
                               ))}
@@ -394,20 +380,22 @@ export default function Assets() {
                       {headers[3].is_show && (
                         <TableCell>
                           {row.laboratoryId[0] === null
-                            ? '-'
+                            ?  <><Chip key={index} label={'Data mining'} sx={{ m: 0.5 }} /><span>+1 more...</span></>
                             : row.laboratoryId.map((item: any) => (
                                 <Box key={item.id}>{item.name}</Box>
                               ))}
                         </TableCell>
                       )}
+                      {console.log(moment(row.perchasedDate).local().format('MM/DD/YYYY'))
+                      }
                       {headers[4].is_show && (
                         <TableCell>
-                          {row.perchasedDate === null ? '-' : row.perchasedDate}
+                          {row.perchasedDate === null ? '-' : moment(row.perchasedDate).isValid()? moment(row.perchasedDate).local().format('MM/DD/YYYY'):moment().format('MM/DD/YYYY') }
                         </TableCell>
                       )}
                       {headers[5].is_show && (
                         <TableCell>
-                          {row.lastUsedDate === null ? '-' : row.lastUsedDate}
+                          {row.lastUsedDate === null ? '-' :  moment(row.lastUsedDate).isValid()? moment(row.lastUsedDate).local().format('MM/DD/YYYY'):moment().format('MM/DD/YYYY')}
                         </TableCell>
                       )}
                       {headers[6].is_show && (
@@ -474,10 +462,10 @@ export default function Assets() {
           />
           <Box>
             <DeletePopup
-              rowId={rowId}
+            rowId={rowId}
               ref={deletePopupRef}
               closeDeletePopup={() =>
-                deletePopupRef.current.open(false, 'Assests', rowId)
+                deletePopupRef.current.open(false, 'Assests',rowId)
               }
               deleteConfirmation={handleDeleteConfirmation}
             />
@@ -487,7 +475,7 @@ export default function Assets() {
             confirmationDone={handleConfirmationDone}
           />
           <SuccessPopup ref={successPopupRef} />
-          <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
+          <DeleteSuccessPopup ref={deleteSuccessPopupRef}/>
         </Box>
       </Box>
     </PrivateRoute>
