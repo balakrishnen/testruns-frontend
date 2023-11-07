@@ -74,7 +74,7 @@ export default function Assets() {
   // const Data = assetsData.slice(startIndex, endIndex);
   const dispatch: any = useDispatch();
   const [assetsData, setAssetsData] = React.useState<any>([]);
-  const [rowId,setRowId]=React.useState('')
+  const [rowId,setRowId]=React.useState<any>([])
   console.log(rowId);
   
   const [pageInfo, setPageInfo] = React.useState({
@@ -217,15 +217,18 @@ export default function Assets() {
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
-  const asset: any={_id:rowId}
+  const asset:any=[]
+
+  const assetVal: any={_id:rowId}
   console.log(asset);
   
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
       // deletePopupRef.current.open(false);
-      dispatch(deleteAssetsData(asset));
-      setTimeout(() => {
+      dispatch(deleteAssetsData(assetVal));
       deleteSuccessPopupRef.current.open(true);
+      setTimeout(() => {
+      deleteSuccessPopupRef.current.open(false);
     }, 3000);
     }
     deletePopupRef.current.open(false);
@@ -313,7 +316,7 @@ console.log(assetsData);
                                 color="primary"
                                 checked={row.is_checked}
                                 onClick={(e:any)=>clickHandler(e)}
-                                onChange={(event) =>{setRowId(row._id),
+                                onChange={(event) =>{setRowId([...rowId,row._id]),
                                   handleChange(event, row._id)}
                                 }
                               />
@@ -371,7 +374,7 @@ console.log(assetsData);
                                 ? 'active-select td-select'
                                 : 'inactive-select td-select'
                             }
-                            value={row.status}
+                            value={true}
                             displayEmpty
                             onChange={(e) => handleChange(e, row.id)}
                             onClick={(e:any)=>clickHandler(e)}

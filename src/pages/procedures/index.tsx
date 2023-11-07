@@ -30,7 +30,8 @@ import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
 import { navigate } from 'gatsby';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProcedureData } from '../../api/procedureAPI';
+import { fetchProcedureData,deleteProcedureData } from '../../api/procedureAPI';
+import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 const rows: ProceduresRowData[] = ProcedureRows;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -132,7 +133,7 @@ export default function Procedures() {
   
   const dispatch: any = useDispatch();
   const [procedureData, setProcedureData] = React.useState<any>([]);
-  const [rowId,setRowId]=React.useState('')
+  const [rowId,setRowId]=React.useState<any>([])
   React.useEffect(() => {
     setProcedureData(procedureData);
   }, [procedureData]);
@@ -207,7 +208,7 @@ export default function Procedures() {
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
-
+  const deleteSuccessPopupRef:any = React.useRef(null);
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
   };
@@ -342,12 +343,17 @@ export default function Procedures() {
   const searchString = 'B';
   const foundItem = getObjectBySearchString(searchString);
   console.log(visibleRow);
-  const Procedure: any={_id:rowId}
-  console.log(Procedure);
-
+  const Procedure:any=[]
+  console.log(rowId);
+  const ProcedureVal:any={_id:rowId}
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
-      deletePopupRef.current.open(false);
+      dispatch(deleteProcedureData(ProcedureVal));
+      deleteSuccessPopupRef.current.open(true);
+      setTimeout(() => {
+      deleteSuccessPopupRef.current.open(false);
+    }, 3000);
+      // deletePopupRef.current.open(false);
     }
     deletePopupRef.current.open(false);
   };
@@ -425,7 +431,7 @@ export default function Procedures() {
                       onClick={(e:any) =>
                         // (e.target.name==undefined && 
                           navigate(
-                           `/procedures/details/${row.procedureNumber}`
+                           `/procedures/details/${row._id}`
                          )
                        }
                     >
@@ -437,8 +443,10 @@ export default function Procedures() {
                                 color="primary"
                                 checked={row.is_checked}
                                 onClick={(e:any)=>clickHandler(e)}
-                                onChange={(event) =>{setRowId(row._id),
-                                  handleChange(event, row.id)}
+                                onChange={(event) =>{
+                                  // Procedure.push(row._id)
+                                setRowId([...rowId,row._id]),
+                                  handleChange(event, row._id)}
                                 }
                               />
                             </Box>
@@ -513,6 +521,7 @@ export default function Procedures() {
           confirmationDone={handleConfirmationDone}
         />
         <SuccessPopup ref={successPopupRef} />
+        <DeleteSuccessPopup ref={deleteSuccessPopupRef}/>
       </Box>
     </PrivateRoute>
   );

@@ -17,11 +17,11 @@ import { postProcedureData } from '../../api/procedureAPI';
 // import Confirmationpopup from "../../components/ConfirmationPopup";
 // import Successpopup from "../../components/SuccessPopup";
 const validationSchema = Yup.object().shape({
-    procedure_id: Yup.string().notRequired(),
-    created_on: Yup.string().notRequired(),
+    organisationId: Yup.string().notRequired(),
+    createdBy: Yup.string().notRequired(),
     departmentId: Yup.array().notRequired(),
     laboratoryId: Yup.array().notRequired(),
-    procedure_name: Yup.string().notRequired(),
+    name: Yup.string().notRequired(),
   });
 
 const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirmationPopup, submitFormPopup }: any,ref) =>{
@@ -50,14 +50,13 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
     const onSubmit = (values: any) => {
       console.log(values);
       
-        const isMatch = checkCredentials(values);
+        const isMatch = checkCredentials(values.name);
         const procedures: any = {
           name: values.name,
-          assectId: 'ASSET_1002',
-          departmentId: '6545d98a8f9ab44668db6ecb',
-          laboratoryId: '653b7fd4301e33001265a646',
-          userId: 'USER_1001',
-          procedureDetials:values.procedureDetials
+          organisationId: values.organisationId,
+          departmentId: values.departmentId,
+          laboratoryId: values.laboratoryId,
+          createdBy:values.createdBy,
         
         };
         if(isMatch){
@@ -74,11 +73,10 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
       const formik = useFormik({
         initialValues: {
           name:"",
-          procedureDetials: '',
-          departmentId: '6545d98a8f9ab44668db6ecb',
-          laboratoryId: '653b7fd4301e33001265a646',
-          assectId: 'ASSE-1000',
-          userId: 'USER_1001',
+          createdBy: new Date(),
+          departmentId: '',
+          laboratoryId: '',
+          organisationId: 'ASSE-1000',
          
         },
         validationSchema: validationSchema,
@@ -148,21 +146,22 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                         // required
                                         fullWidth
                                         id="name"
-                                        name="procedureDetials"
+                                        name="organisationId"
                                         autoComplete="name"
                                         autoFocus
                                         InputLabelProps={{ shrink: false }}
                                         placeholder="ID023659ADN"
                                         className="bg-gray-input"
-                                        value={formik.values.procedureDetials}
+                                        value={formik.values.organisationId}
+                                        disabled
                                         size="small"
                                         error={
-                                          formik.touched.procedureDetials && Boolean(formik.errors.procedureDetials)
+                                          formik.touched.organisationId && Boolean(formik.errors.organisationId)
                                         }
                                       />
-                                      {formik.touched.procedureDetials && formik.errors.procedureDetials && (
+                                      {formik.touched.organisationId && formik.errors.organisationId && (
                                         <Typography className="error-field">
-                                          {formik.errors.procedureDetials}
+                                          {formik.errors.organisationId}
                                         </Typography>
                                       )}
                                  
@@ -183,6 +182,7 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                     <label style={{ display: 'block' }}>Department</label>
                                     <Autocomplete
                             multiple
+                          
                             id="departmentId"
                             options={departmentData!==undefined ? departmentData:[]}
                             disableCloseOnSelect
@@ -197,7 +197,8 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                 {option.label}
                               </li>
                             )}
-                            renderInput={(params) => <TextField {...params} />}
+                            disabled
+                            renderInput={(params) => <TextField {...params}    className="bg-gray-input" />}
                             fullWidth
                             placeholder="Department"
                             size="medium"
@@ -235,11 +236,11 @@ const ProcedureForm= React.forwardRef(({ open, close,closeFormPopup, openConfirm
                                 {option.label}
                               </li>
                             )}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => <TextField {...params}  className="bg-gray-input" />}
                             fullWidth
                             placeholder="Laboratory"
                             size="medium"
-                           
+                           disabled
                             onChange={(e, f) => {
                               f.forEach((element) =>
                                 laboratory.push(element.value)

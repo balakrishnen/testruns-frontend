@@ -10,7 +10,6 @@ export const GET_ASSETS = gql`
           organisationId
           perchasedDate
           lastUsedDate
-          status
           availability
           expiryDate
           isActive
@@ -89,21 +88,9 @@ export const POST_ASSETS = gql`
 `;
 
 export const DELETE_ASSETS = gql`
-mutation Delete_asset($_id: String!) {
+mutation Delete_asset($_id: [String]!) {
   delete_asset(_id: $_id) {
-        _id
-        name
-        assetNumber
-        organisationId
-        perchasedDate
-        lastUsedDate
-        status
-        availability
-        expiryDate
-        isActive
-        isDeleted
-        createdAt
-        updatedAt
+      data
     }
 }
 `;

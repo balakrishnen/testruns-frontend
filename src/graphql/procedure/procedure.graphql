@@ -4,19 +4,19 @@ export const POST_PROCEDURE = gql`
 
 mutation Create_procedure(
         $name: String!
-        $procedureDetials: String!
-        $departmentId: String!
-        $laboratoryId: String!
-        $assectId: String!
-        $userId: String!
+        $organisationId: String!
+        $departmentId: [String]!
+        $laboratoryId: [String]!
+        $createdBy: String!
+       
         ) {
     create_procedure(
         name: $name
-        procedureDetials: $procedureDetials
+        organisationId: $organisationId
         departmentId: $departmentId
         laboratoryId: $laboratoryId
-        assectId: $assectId
-        userId: $userId
+        createdBy: $createdBy
+      
     ) {
         _id
         name
@@ -72,6 +72,31 @@ query Get_all_procedures($page: Int!, $perPage: Int!) {
             hasNextPage
             hasPreviousPage
         }
+    }
+}
+`;
+
+export const DELETE_PROCEDURE = gql`
+mutation Delete_procedure($_id:[String]!) {
+    delete_procedure(_id: $_id ) {
+        data
+    }
+}
+`;
+
+export const GET_SINGLE_PROCEDURE = gql`
+query Get_procedure($_id: String!) {
+    get_procedure(_id: $_id) {
+        _id
+        name
+        procedureNumber
+        procedureDetials
+        assectId
+        userId
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
     }
 }
 `;

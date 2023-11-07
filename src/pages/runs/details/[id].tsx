@@ -92,7 +92,6 @@ export default function RunsDetails() {
   //     console.log(editorRef.current.getContent());
   //   }
   // };
-
   return (
     <PrivateRoute>
       <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} />

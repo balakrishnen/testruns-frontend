@@ -11,9 +11,29 @@ import {
 import edit from "../../../assets/images/edit.svg";
 import printer from "../../../assets/images/printer.svg";
 import { Editor } from "@tinymce/tinymce-react";
+import { fetchSingleProcedureData } from "../../../api/procedureAPI";
+import { useDispatch,useSelector } from "react-redux";
 
 export default function ProcedureDetails() {
   const editorRef: any = React.useRef(null);
+  const dispatch:any =useDispatch()
+  const [procedureData, setprocedureData] = React.useState<any>({});
+  const procedureSliceData = useSelector(
+    (state: any) => state.procedure.data?.get_procedure,
+  );
+  console.log(procedureSliceData);
+  // console.log('log',window.location)
+  React.useEffect(() => {
+    setprocedureData(procedureSliceData);
+  }, [procedureSliceData]);
+  React.useEffect(() => {
+    if(typeof window !== 'undefined'){
+      console.log(window.location.pathname.split("/") )
+      const procedureId = {_id:window.location.pathname.split("/")[3]}
+      dispatch(fetchSingleProcedureData(procedureId));
+     }
+  }, []);
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
@@ -113,7 +133,7 @@ export default function ProcedureDetails() {
           <Grid container spacing={2} className="asset-popup">
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Box>
-                <label style={{ color: "#181818" }}>Full procedure</label>
+                <label style={{ color: "#181818" }}>Full procedures</label>
                 <Box sx={{ mt: 2 }}>
                   <Editor
                     apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
