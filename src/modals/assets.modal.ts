@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Filters, SelectOptions } from ".";
 
 export interface AssetsRowData {
@@ -45,4 +46,5 @@ export interface AssetsHead {
   filters: Filters[];
   sort: string;
   is_show: boolean;
+  value: any;
 }
