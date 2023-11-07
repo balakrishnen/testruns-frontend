@@ -779,15 +779,14 @@ p.reg-text {
 .search-field-inner {
   .MuiInputBase-root {
     display: flex;
-    width: 300px;
-    height: 40px;
+    width: auto;
+    height: 44px;
     padding: 10px 15px 10px 0px;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 10px;
     border: 1px solid $black-shade-3;
     background: $white;
     margin-left: auto;
-    
 
     fieldset {
       display: none;
@@ -2214,8 +2213,7 @@ input#mobile_number {
   thead{
     th{
       .MuiInputBase-root {
-        height: 35px;
-        font-weight: 500 !important;
+        height: 30px;
       }
     }
   }
@@ -2247,12 +2245,43 @@ input#mobile_number {
 .filter-dropdown .MuiPaper-root {
   width: 285px;
 }
-
-.rmsc .dropdown-heading { 
-  height: 35px !important;
-  font-size: 12px !important;
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  padding: 4px 0 5px;
+  border: 0;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  -webkit-animation-name: mui-auto-fill-cancel;
+  animation-name: mui-auto-fill-cancel;
+  -webkit-animation-duration: 10ms;
+  animation-duration: 10ms;
+  padding: 7.5px 14px !important; ;
 }
-
-.css-4hp9yi {
-  width: auto !important;
-}
+.css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input {
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  padding: 4px 0 5px;
+  border: 0;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  -webkit-animation-name: mui-auto-fill-cancel;
+  animation-name: mui-auto-fill-cancel;
+  -webkit-animation-duration: 10ms;
+  animation-duration: 10ms;
+  padding-top: 1px;
+  padding: 7.5px 14px !important;}

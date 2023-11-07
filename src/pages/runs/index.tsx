@@ -55,22 +55,7 @@ export default function Runs() {
   // const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [runsData, setRunsData] = React.useState<any>([]);
-  const [queryStrings, setQueryString] = React.useState({
-    page: 1,
-    perPage: 5,
-    searchBy: null,
-    search: null,
-    sortBy: null,
-    sortOrder: null,
-  });
-  const [pageInfo, setPageInfo] = React.useState({
-    currentPage: 1,
-    totalPages: 1,
-    hasNextPage: false,
-    hasPreviousPage: false,
-    totalCount: 15,
-  });
+
   const itemsPerPage = 5;
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -177,9 +162,9 @@ export default function Runs() {
     deletePopupRef.current.open(true, 'Runs');
   };
 
-  const clickHandler = (e: MouseEvent) => {
+  const clickHandler=(e:MouseEvent)=>{
     e.stopPropagation();
-  };
+  }
   return (
     <PrivateRoute>
       <Box className="main-padding runz-page">
@@ -246,11 +231,13 @@ export default function Runs() {
                       key={index}
                       // selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
-                      onClick={(e: any) => {
-                        //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" &&
-                        navigate(`/runs/details/${row.runNumber}`);
+                      onClick={(e: any) =>{
+                      //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && 
+                        navigate(`/runs/details/${row.runNumber}`)
                         // console.log(e.target.tagName)
-                      }}
+                        
+                        }
+                      }
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">
@@ -259,13 +246,13 @@ export default function Runs() {
                               <Checkbox
                                 color="primary"
                                 checked={row.is_checked}
-                                onClick={(e: any) => clickHandler(e)}
+                                onClick={(e:any)=>clickHandler(e)}
                                 onChange={(event) =>
                                   handleChange(event, row.id)
                                 }
                               />
                             </Box>
-                            <Box
+                            <Box 
                               onClick={() =>
                                 navigate(`/runs/details/${row.runNumber}`)
                               }
@@ -301,41 +288,42 @@ export default function Runs() {
                       {headers[6].is_show && (
                         <TableCell>
                           <Select
-                            name="select"
+                          name="select"
                             className={
                               row.isActive === 1
                                 ? 'active-select td-select'
                                 : 'inactive-select td-select'
                             }
                             value={row.isActive}
-                            displayEmpty
-                            onClick={(e: any) => clickHandler(e)}
-                            onChange={(e) => handleChange(e, row.id)}
+                            displayEmpty 
+                            onClick={(e:any)=>clickHandler(e)}
+                            onChange={(e)=>handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
                             <MenuItem value={1}>New Task</MenuItem>
                             <MenuItem value={2}>Completed</MenuItem>
                             <MenuItem value={3}>Not Started</MenuItem>
+
                           </Select>
                         </TableCell>
                       )}
                       {headers[7].is_show && (
-                        <TableCell align="center">Username</TableCell>
-                        //</TableRow>{/* <Select
-                        //   className={
-                        //     row.availability === 'AVAILABLE'
-                        //       ? 'active-select td-select'
-                        //       : 'inactive-select td-select'
-                        //   }
-                        //   value={row.availability}
-                        //   displayEmpty
-                        //   IconComponent={ExpandMoreOutlinedIcon}
-                        // >
-                        //   <MenuItem value={'AVAILABLE'}>Available</MenuItem>
-                        //   <MenuItem value={'NOTAVAILABLE'}>
-                        //     Not available
-                        //   </MenuItem>
-                        // </Select> */}
+                         <TableCell align="center">Username</TableCell>
+                          //</TableRow>{/* <Select
+                          //   className={
+                          //     row.availability === 'AVAILABLE'
+                          //       ? 'active-select td-select'
+                          //       : 'inactive-select td-select'
+                          //   }
+                          //   value={row.availability}
+                          //   displayEmpty
+                          //   IconComponent={ExpandMoreOutlinedIcon}
+                          // >
+                          //   <MenuItem value={'AVAILABLE'}>Available</MenuItem>
+                          //   <MenuItem value={'NOTAVAILABLE'}>
+                          //     Not available
+                          //   </MenuItem>
+                          // </Select> */}
                         // </TableCell>
                       )}
                     </TableRow>
@@ -346,11 +334,10 @@ export default function Runs() {
           </TableContainer>
           <TablePagination
             currentPage={currentPage}
-            perPage={queryStrings.perPage}
+            totalPages={totalPages}
             handlePageChange={handlePageChange}
-            currentPageNumber={queryStrings.page}
-            totalRecords={runsData?.length}
-            page={pageInfo}
+            currentPageData={Data}
+            Rows={Rows}
           />
         </Box>
         <Box>
