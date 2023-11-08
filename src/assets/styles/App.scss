@@ -2244,44 +2244,33 @@ input#mobile_number {
 .filter-dropdown .MuiPaper-root {
   width: 285px;
 }
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-  font: inherit;
-  letter-spacing: inherit;
-  color: currentColor;
-  padding: 4px 0 5px;
-  border: 0;
-  box-sizing: content-box;
-  background: none;
-  height: 1.4375em;
-  margin: 0;
-  -webkit-tap-highlight-color: transparent;
-  display: block;
-  min-width: 0;
-  width: 100%;
-  -webkit-animation-name: mui-auto-fill-cancel;
-  animation-name: mui-auto-fill-cancel;
-  -webkit-animation-duration: 10ms;
-  animation-duration: 10ms;
-  padding: 7.5px 14px !important;
-}
-.css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input {
-  font: inherit;
-  letter-spacing: inherit;
-  color: currentColor;
-  padding: 4px 0 5px;
-  border: 0;
-  box-sizing: content-box;
-  background: none;
-  height: 1.4375em;
-  margin: 0;
-  -webkit-tap-highlight-color: transparent;
-  display: block;
-  min-width: 0;
-  width: 100%;
-  -webkit-animation-name: mui-auto-fill-cancel;
-  animation-name: mui-auto-fill-cancel;
-  -webkit-animation-duration: 10ms;
-  animation-duration: 10ms;
-  padding-top: 1px;
-  padding: 7.5px 14px !important;
+.file-wrapper {
+	cursor: pointer;
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	input {
+		-moz-opacity: 0.01;
+		cursor: pointer;
+		filter: alpha(opacity=1);
+		font-size: 100px;
+		opacity: 0.01;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+	.button {
+    cursor: pointer;
+    display: inline-block;
+    padding: 4px 20px;
+    border-radius: 50px;
+    color: rgb(24, 24, 24);
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.24px;
+    text-transform: capitalize;
+    background: rgb(255, 198, 11) !important;
+	}
 }

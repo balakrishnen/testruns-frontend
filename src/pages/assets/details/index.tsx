@@ -437,6 +437,7 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Organisation</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
+                            className="placeholder-color"
                             labelId="tselect-popup-label"
                             id="select-popup"
                             value={answers}
@@ -509,6 +510,7 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Status</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
+                            className="placeholder-color"
                             labelId="tselect-popup-label"
                             id="select-popup"
                             value={answers}
@@ -531,6 +533,7 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Availability</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
+                            className="placeholder-color"
                             labelId="tselect-popup-label"
                             id="select-popup"
                             value={answers}
