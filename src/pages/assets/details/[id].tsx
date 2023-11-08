@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PrivateRoute from '../../../components/PrivateRoute'
 import Successpopup from "../../../components/SuccessPopup"
 import { Box, Button, FormControl, Grid, Autocomplete, Checkbox, MenuItem, Select, TextField, Typography } from "@mui/material";
@@ -9,9 +9,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import test from '../../../assets/images/test.svg'
-import { fetchSingleAssetsData, postAssetsData } from "../../../api/assetsAPI";
+import { fetchSingleAssetsData, fetchUpdateAssetsData, postAssetsData } from "../../../api/assetsAPI";
 import { useDispatch, useSelector } from 'react-redux';
-import { useFormik } from 'formik';
+import { useLocation } from '@reach/router';
+import { Formik, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { AvailabilityList, OrganizationList, StatusList } from "../../../utils/data";
 interface TabPanelProps {
@@ -65,23 +66,46 @@ export default function AssetDetails() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  const location: any = useLocation()
+  const assetValue = location.state.props
+  console.log(assetValue);
+  
   const [openSuccess, setSuccessOpen] = React.useState(false);
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const [organizationData, setOrganizationData] = React.useState([]);
-  const [assetsData, setAssetsData] = React.useState<any>({});
-  console.log(assetsData?.assetNumber);
+  // const [assetsData, setAssetsData] = React.useState<any>([]);
+  // console.log(assetsData?.assetNumber);
 
   const dispatch: any = useDispatch();
-  const departments: any = [];
-  const laboratory: any = [];
-  const AssetSliceData = useSelector(
-    (state: any) => state.assets.data?.get_asset,
-  );
-  console.log(AssetSliceData);
+  const departments: any = []
+  // assetValue.departmentId?.map((item: any) => ({
+  //   label: item?.name,
+  //   value: item?.name,
+  //   id: item?._id,
+  // }));
+  const laboratory: any = []
+  // assetValue.laboratoryId?.map((item: any) => ({
+  //   label: item?.name,
+  //   value: item?.name,s
+  //   id: item?._id,
+  // }));
+  // const AssetSliceData = useSelector(
+  //   (state: any) => state.assets.data?.get_asset,
+  // );
+  console.log(departments,laboratory);
   const checkCredentials = (values: any) => {
     return true;
   }
+
+  // React.useEffect(() => {
+  //   if(typeof window !== 'undefined'){
+  //     console.log(window.location.pathname.split("/") )
+  //     const assetId = {_id:window.location.pathname.split("/")[3]}
+  //     console.log(assetId);
+  //     dispatch(fetchSingleAssetsData(assetId));
+  //    }
+  // }, []);
   // const onSubmit = (values: any) => {
   // console.log(values);
 
@@ -101,11 +125,13 @@ export default function AssetDetails() {
 
   // };
   const onSubmit = (values: any) => {
-    debugger
+    // debugger
     console.log("value", value)
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
-      dispatch(postAssetsData(values));
+      console.log(values);
+      
+      // dispatch(fetchUpdateAssetsData(values));
       // setFormPopup(false);
     } else {
       formik.setFieldError('name', 'Invalid first name');
@@ -143,9 +169,9 @@ export default function AssetDetails() {
       })),
     );
   }, [departmentSliceData, labSliceData, organizationData]);
-  React.useEffect(() => {
-    setAssetsData(AssetSliceData);
-  }, [AssetSliceData]);
+  // React.useEffect(() => {
+  //   setAssetsData(AssetSliceData);
+  // }, [AssetSliceData]);
 
   // React.useEffect(() => {
   //   if(typeof window !== 'undefined'){
@@ -154,23 +180,21 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(AssetId));
   //    }
   // }, []);
-  const formik = useFormik({
+    const formik = useFormik({
     initialValues: {
-      name: '',
-      assetId: 'ASSE-1000',
-      laboratoryId: [],
+      name: assetValue.name,
+      assetId: assetValue.assetNumber,
+      laboratoryId: assetValue.laboratoryId,
       organisationId: '',
-      departmentId: [],
-      userId: 'USER_1001',
-      status: '',
-      availability: '',
-      assets_id: 'ASSE-1000',
-      lastUsedDate: new Date(),
+      departmentId:assetValue.departmentId,
+      // userId: 'USER_1001', 
+      status: 'AVAILABILITY',
+      availability: assetValue.availability,
+      // assets_id: assetValue.assets_id,
+      lastUsedDate: assetValue.lastUsedDate,
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: onSubmit
   });
 
   return (
@@ -196,10 +220,11 @@ export default function AssetDetails() {
             <CustomTabPanel value={value} index={0}>
               <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
                 <Grid item xs={12} sm={12} md={4} lg={3} xl={3} sx={{ padding: '0px !important', paddingRight: { xs: '0px !important', md: '30px !important' } }}>
-                  <Box>
+                  <Box>   
                     <Box sx={{ textAlign: 'center' }}>
                       <img src={test} alt="test" className="dynamic-img" />
                     </Box>
+                    
                     <Box className='edit-profile-btn' sx={{ mt: 3, mb: 3, pb: '0px !important' }}>
                       <Button>Upload photo</Button>
                     </Box>
@@ -347,9 +372,12 @@ export default function AssetDetails() {
                               options={
                                 departmentData !== undefined ? departmentData : []
                               }
+                              // value={departments}
                               disableCloseOnSelect
                               getOptionLabel={(option: any) => option.label}
                               renderOption={(props, option, { selected }) => (
+                                // console.log('selected',selected),
+                                
                                 <li {...props}>
                                   <Checkbox
                                     style={{ marginRight: 0 }}
@@ -393,6 +421,7 @@ export default function AssetDetails() {
                           <Autocomplete
                             multiple
                             id="laboratoryId"
+                            value={laboratory}
                             options={labData !== undefined ? labData : []}
                             disableCloseOnSelect
                             getOptionLabel={(option: any) => option.label}
@@ -516,11 +545,11 @@ export default function AssetDetails() {
                 </Grid>
               </Grid>
               <Box className="edit-details">
-                <Button type="submit" variant="contained" className="cancel-btn">Back</Button>
+                <Button variant="contained" className="cancel-btn">Back</Button>
                 <Button type="submit" variant="contained" className="add-btn">Save</Button>
               </Box>
             </CustomTabPanel>
-          </form>
+            </form> 
           <CustomTabPanel value={value} index={1}>
             <Box className="asset-id-name">
               <img src={test} alt="test" className="dynamic-img" />

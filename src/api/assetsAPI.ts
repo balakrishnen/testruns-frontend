@@ -3,7 +3,7 @@ import {
   fetchAssetsSuccess,
   fetchAssetsFailure,
 } from '../features/assetsSlice';
-import { GET_ASSETS, POST_ASSETS, DELETE_ASSETS, GET_SINGLE_ASSETS } from '../graphql/assets/assets.graphql';
+import { GET_ASSETS, POST_ASSETS, DELETE_ASSETS, GET_SINGLE_ASSETS ,UPDATE_ASSETS} from '../graphql/assets/assets.graphql';
 import { client } from '../utils/config';
 
 export const fetchAssetsData = (payload: any) => async (dispatch: any) => {
@@ -48,6 +48,19 @@ export const fetchSingleAssetsData = (payload: any) => async (dispatch: any) => 
   try {
     const response = await client.query({
       query: GET_SINGLE_ASSETS,
+      variables: payload,
+    });
+    dispatch(fetchAssetsSuccess(response.data));
+  } catch (error: any) {
+    dispatch(fetchAssetsFailure(error.message));
+  }
+};
+
+export const fetchUpdateAssetsData = (payload: any) => async (dispatch: any) => {
+  dispatch(fetchAssetsStart());
+  try {
+    const response = await client.query({
+      query: UPDATE_ASSETS,
       variables: payload,
     });
     dispatch(fetchAssetsSuccess(response.data));
