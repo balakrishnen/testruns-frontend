@@ -185,6 +185,7 @@ const Users = () => {
         isTableHeaderVisible={isTableHeaderVisible}
         closeTableHeader={handleCloseTableHeader}
         deleteRecord={handleOpenDeletePopup}
+        module="users"
       />
 
       <Box className="table-outer" sx={{ width: "100%" }}>

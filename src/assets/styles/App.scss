@@ -2274,3 +2274,9 @@ input#mobile_number {
     background: rgb(255, 198, 11) !important;
 	}
 }
+
+#filterDatePicker {
+  .MuiInputBase-input {
+    height: 10px !important;
+  }
+}

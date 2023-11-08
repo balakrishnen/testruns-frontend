@@ -391,6 +391,7 @@ export default function Procedures() {
           isTableHeaderVisible={isTableHeaderVisible}
           closeTableHeader={handleCloseTableHeader}
           deleteRecord={handleOpenDeletePopup}
+          module="procedures"
         />
         <Box className="table-outer" sx={{ width: '100%' }}>
           {/* <Grid container mt={4}>

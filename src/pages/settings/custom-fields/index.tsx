@@ -222,6 +222,7 @@ const CustomFields = () => {
         isTableHeaderVisible={isTableHeaderVisible}
         closeTableHeader={handleCloseTableHeader}
         deleteRecord={handleOpenDeletePopup}
+        module="custom-fields"
       />
 
       <Box className="table-outer" sx={{ width: "100%" }}>

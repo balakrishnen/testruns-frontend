@@ -37,7 +37,7 @@ import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import ListItemText from '@mui/material/ListItemText';
-import { AssetsHeaders } from '../../utils/data';
+import { AssetsHeaders, OrganizationList } from '../../utils/data';
 import { MoreVertOutlined } from '@mui/icons-material';
 import AssignPopup from '../../components/AssignPopup';
 import AddPeoplePopup from '../../components/AddPeoplePopup';
@@ -45,6 +45,8 @@ import DeletePopup from '../../components/DeletePopup';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import Popover from '@mui/material/Popover';
 import filterIcon from '../../assets/images/filter-icon1.svg';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -67,40 +69,55 @@ export default function TableFilters({
   isTableHeaderVisible,
   closeTableHeader,
   deleteRecord,
+  module,
 }: any) {
-  const [personName, setPersonName] = React.useState<any>([]);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const [options, setOptions] = React.useState(columns);
+  const [columnAnchorEl, setColumnAnchorEl] =
+    React.useState<null | HTMLElement>(null);
+  const [filterPopoverEl, setFilterPopoverEl] =
+    React.useState<null | HTMLElement>(null);
+  const columnAnchorOpen = Boolean(columnAnchorEl);
+  const filterAnchorOpen = Boolean(filterPopoverEl);
   const [openAssign, setAssignOpen] = React.useState(false);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [filterStatus, setFilterStatus] = React.useState(null);
+  const [filterAvailability, setFilterAvailability] = React.useState(null);
+  const [filterSearchBy, setFilterSearchBy] = React.useState(null);
+  const [filterSearchValue, setFilterSearchValue] = React.useState(null);
   const [runsOpen, setRunsOpen] = React.useState(false);
+
+  const handleColumnPopoverClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setColumnAnchorEl(event.currentTarget);
+  };
+
+  const handleFilterPopoverClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setFilterPopoverEl(event.currentTarget);
+  };
+
+  const handleColumnPopoverClose = () => {
+    setColumnAnchorEl(null);
+  };
+
+  const handleFilterPopoverClose = () => {
+    setFilterPopoverEl(null);
+  };
+
   const handleAssignClick = () => {
     setRunsOpen(true);
   };
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
 
-  // const handleDeleteIconClick = () => {
-  //   setIsDeletePopupOpen(true);
-  // };
-
-  const handleCloseDeletePopup = () => {
-    setIsDeletePopupOpen(false);
+  const handleClearFilter = () => {
+    setFilterStatus(null);
+    setFilterAvailability(null);
+    setFilterSearchBy(null);
+    setFilterSearchValue(null);
   };
 
-  const [answer, setAnswer] = React.useState('');
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
-
-  const id = open ? 'simple-popover' : undefined;
 
   return (
     <>
@@ -173,10 +190,12 @@ export default function TableFilters({
                 <img src={bin} alt="Delete" className="Image-actions" />
                 Delete
               </Button>
-              <Button className="delete-actions" onClick={handleAssignClick}>
-                <img src={assign} alt="assign" className="Image-actions" />
-                Assign
-              </Button>
+              {module !== 'assets' && (
+                <Button className="delete-actions" onClick={handleAssignClick}>
+                  <img src={assign} alt="assign" className="Image-actions" />
+                  Assign
+                </Button>
+              )}
 
               <AddPeoplePopup
                 open={runsOpen}
@@ -187,14 +206,14 @@ export default function TableFilters({
                 <img src={share} alt="Share" className="Image-actions" />
                 Share
               </Button>
-              <IconButton onClick={handleClick}>
+              <IconButton onClick={handleColumnPopoverClick}>
                 <MoreVertOutlined />
               </IconButton>
               <Menu
                 id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
+                anchorEl={columnAnchorEl}
+                open={columnAnchorOpen}
+                onClose={handleColumnPopoverClose}
                 MenuListProps={{
                   'aria-labelledby': 'basic-button',
                 }}
@@ -214,8 +233,7 @@ export default function TableFilters({
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={6} xl={3}>
           <Box className="filter-search">
-            <FormControl>
-              {/* <Select
+            {/* <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
               multiple
@@ -234,7 +252,7 @@ export default function TableFilters({
                 </MenuItem>
               ))}
             </Select> */}
-            </FormControl>
+
             <TextField
               margin="normal"
               required
@@ -256,9 +274,9 @@ export default function TableFilters({
             />
             <Box sx={{ position: 'relative' }}>
               <Button
-                aria-describedby={id}
+                // aria-describedby={id}
                 variant="contained"
-                onClick={handleClick}
+                onClick={handleFilterPopoverClick}
                 style={{
                   boxShadow: 'none',
                   backgroundColor: '#fff',
@@ -275,10 +293,9 @@ export default function TableFilters({
               </Button>
               <Popover
                 className="filter-dropdown"
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
+                open={filterAnchorOpen}
+                anchorEl={filterPopoverEl}
+                onClose={handleFilterPopoverClose}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'left',
@@ -294,116 +311,108 @@ export default function TableFilters({
                       padding: '1rem',
                     }}
                   >
-                    <Typography>Filters</Typography>
+                    <Typography fontWeight={600} variant="body1">
+                      Filters
+                    </Typography>
                     <CloseIcon />
                   </Box>
-                  <Box sx={{ padding: '1rem' }}>
-                    <Box>
-                      <Typography>Sort by</Typography>
-                      <FormControl
-                        style={{ width: '100%', marginTop: '0.5rem' }}
+                  <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
+                    <Box sx={{ my: 1 }}>
+                      <Typography variant="body2" paddingY={1}>
+                        Status
+                      </Typography>
+
+                      <Select
+                        labelId="table-select-label"
+                        id="table-select"
+                        value={filterStatus}
+                        displayEmpty
+                        fullWidth
                         size="small"
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        onChange={(event: any) =>
+                          setFilterStatus(event.target.value)
+                        }
+                        renderValue={
+                          filterStatus !== null
+                            ? undefined
+                            : () => <Placeholder>Status</Placeholder>
+                        }
                       >
-                        <Select
-                          labelId="table-select-label"
-                          id="table-select"
-                          value={answer}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswer(event.target.value)}
-                          renderValue={
-                            answer !== ''
-                              ? undefined
-                              : () => <Placeholder>Sort by</Placeholder>
-                          }
-                        >
-                          <MenuItem value={'1'}>Ascending</MenuItem>
-                          <MenuItem value={'2'}>Descending</MenuItem>
-                        </Select>
-                      </FormControl>
+                        <MenuItem value={'1'}>Active</MenuItem>
+                        <MenuItem value={'2'}>Inactive</MenuItem>
+                      </Select>
                     </Box>
-                    <Box sx={{ my: 1.5 }}>
-                      <Typography>Status</Typography>
-                      <FormControl
-                        style={{ width: '100%', marginTop: '0.5rem' }}
+                    <Box sx={{ my: 1 }}>
+                      <Typography variant="body2" paddingY={1}>
+                        Availability
+                      </Typography>
+
+                      <Select
+                        labelId="table-select-label"
+                        id="table-select"
+                        value={filterAvailability}
+                        displayEmpty
+                        fullWidth
                         size="small"
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        onChange={(event: any) =>
+                          setFilterAvailability(event.target.value)
+                        }
+                        renderValue={
+                          filterAvailability !== null
+                            ? undefined
+                            : () => <Placeholder>Availability</Placeholder>
+                        }
                       >
-                        <Select
-                          labelId="table-select-label"
-                          id="table-select"
-                          value={answer}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswer(event.target.value)}
-                          renderValue={
-                            answer !== ''
-                              ? undefined
-                              : () => <Placeholder>Status</Placeholder>
-                          }
-                        >
-                          <MenuItem value={'1'}>Active</MenuItem>
-                          <MenuItem value={'2'}>Inactive</MenuItem>
-                        </Select>
-                      </FormControl>
+                        <MenuItem value={'1'}>Availability</MenuItem>
+                        <MenuItem value={'2'}>Not Availability</MenuItem>
+                      </Select>
                     </Box>
-                    <Box sx={{ my: 1.5 }}>
-                      <Typography>Availability</Typography>
-                      <FormControl
-                        style={{ width: '100%', marginTop: '0.5rem' }}
+                    <Box sx={{ my: 1 }}>
+                      <Typography variant="body2" paddingY={1}>
+                        Search by
+                      </Typography>
+
+                      <Select
+                        labelId="table-select-label"
+                        id="table-select"
+                        value={filterSearchBy}
                         size="small"
+                        fullWidth
+                        displayEmpty
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        onChange={(event: any) => {
+                          setFilterSearchValue(null);
+                          setFilterSearchBy(event.target?.value);
+                        }}
+                        renderValue={
+                          filterSearchBy !== null
+                            ? undefined
+                            : () => <Placeholder>Search by</Placeholder>
+                        }
                       >
-                        <Select
-                          labelId="table-select-label"
-                          id="table-select"
-                          value={answer}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswer(event.target.value)}
-                          renderValue={
-                            answer !== ''
-                              ? undefined
-                              : () => <Placeholder>Availability</Placeholder>
-                          }
-                        >
-                          <MenuItem value={'1'}>Availability</MenuItem>
-                          <MenuItem value={'2'}>Not Availability</MenuItem>
-                        </Select>
-                      </FormControl>
+                        <MenuItem value={'1'}>ID</MenuItem>
+                        <MenuItem value={'2'}>Name</MenuItem>
+                        <MenuItem value={'3'}>Department</MenuItem>
+                        <MenuItem value={'4'}>Lab</MenuItem>
+                        <MenuItem value={'5'}>Purchased on</MenuItem>
+                        <MenuItem value={'6'}>Last used</MenuItem>
+                      </Select>
                     </Box>
-                    <Box sx={{ my: 1.5 }}>
-                      <Typography>Search by</Typography>
-                      <FormControl
-                        style={{ width: '100%', marginTop: '0.5rem' }}
-                        size="small"
-                      >
-                        <Select
-                          labelId="table-select-label"
-                          id="table-select"
-                          value={answer}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => setAnswer(event.target.value)}
-                          renderValue={
-                            answer !== ''
-                              ? undefined
-                              : () => <Placeholder>Search by</Placeholder>
-                          }
-                        >
-                          <MenuItem value={'1'}>ID</MenuItem>
-                          <MenuItem value={'2'}>Name</MenuItem>
-                          <MenuItem value={'3'}>Department</MenuItem>
-                          <MenuItem value={'4'}>Lab</MenuItem>
-                          <MenuItem value={'5'}>Purchased on</MenuItem>
-                          <MenuItem value={'6'}>Last used</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                    <Box sx={{ my: 1.5 }}>
-                      <Typography>Search</Typography>
-                      <FormControl
-                        style={{ width: '100%', marginTop: '0.5rem' }}
-                        size="small"
-                      >
+                    <Box sx={{ my: 1 }}>
+                      {filterSearchBy !== null && (
+                        <Typography variant="body2" paddingY={1}>
+                          {filterSearchBy === '2'
+                            ? 'Search'
+                            : filterSearchBy === '5' || filterSearchBy === '6'
+                            ? 'Date'
+                            : 'Select'}
+                        </Typography>
+                      )}
+
+                      {filterSearchBy === null ? null : filterSearchBy ===
+                        '2' ? (
                         <TextField
                           margin="normal"
                           required
@@ -414,8 +423,48 @@ export default function TableFilters({
                           InputLabelProps={{ shrink: false }}
                           placeholder="Search"
                           size="small"
+                          value={filterSearchValue}
+                          onChange={(event: any) =>
+                            setFilterSearchValue(event.target.value)
+                          }
                         />
-                      </FormControl>
+                      ) : filterSearchBy === '5' || filterSearchBy === '6' ? (
+                        <Box id="filterDatePicker">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              format="DD/MM/YYYY"
+                              value={filterSearchValue}
+                              onChange={(event) =>
+                                setFilterSearchValue(event.$d)
+                              }
+                            />
+                          </LocalizationProvider>
+                        </Box>
+                      ) : (
+                        <Select
+                          value={filterSearchValue}
+                          labelId="table-select-label2"
+                          id="table-select2"
+                          size="small"
+                          fullWidth
+                          displayEmpty
+                          IconComponent={ExpandMoreOutlinedIcon}
+                          onChange={(event: any) =>
+                            setFilterSearchValue(event.target?.value)
+                          }
+                          renderValue={
+                            filterSearchValue !== null
+                              ? undefined
+                              : () => <Placeholder>Select</Placeholder>
+                          }
+                        >
+                          {OrganizationList.map((item, index) => (
+                            <MenuItem key={index} value={item.id}>
+                              {item.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
                     </Box>
                   </Box>
                   <Box
@@ -433,6 +482,7 @@ export default function TableFilters({
                         color: '#181818',
                         textTransform: 'capitalize',
                       }}
+                      onClick={handleClearFilter}
                     >
                       Clear
                     </Button>

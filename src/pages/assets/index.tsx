@@ -114,6 +114,7 @@ export default function Assets() {
     page['totalPages'] = assetsSliceData?.pageInfo.totalPages;
     page['hasNextPage'] = assetsSliceData?.pageInfo.hasNextPage;
     page['hasPreviousPage'] = assetsSliceData?.pageInfo.hasPreviousPage;
+    page['totalCount'] = assetsSliceData?.pageInfo.totalCount;
     setAssetsData(assetsSliceData?.Assets);
     setPageInfo(page);
   }, [assetsSliceData]);
@@ -122,10 +123,10 @@ export default function Assets() {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
     payload['page'] = page_no;
-    payload['perPage'] = 5;
     page['currentPage'] = page_no;
     setPageInfo(page);
     setQueryString(payload);
+    setCurrentPage(page_no)
   };
 
   const filters = () => {
@@ -271,6 +272,7 @@ export default function Assets() {
           isTableHeaderVisible={isTableHeaderVisible}
           closeTableHeader={handleCloseTableHeader}
           deleteRecord={handleOpenDeletePopup}
+          module="assets"
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>

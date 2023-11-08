@@ -190,6 +190,7 @@ export default function Runs() {
           isTableHeaderVisible={isTableHeaderVisible}
           closeTableHeader={handleCloseTableHeader}
           deleteRecord={handleOpenDeletePopup}
+          module="runs"
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
