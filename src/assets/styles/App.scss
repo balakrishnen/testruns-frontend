@@ -836,9 +836,10 @@ button.Delete-btn {
   background-repeat: no-repeat;
   color: transparent !important;
   opacity: 1 !important;
+  transform: rotate(0deg) !important;
 }
-.MuiTableSortLabel-iconDirectionAsc {
-  transform: none !important;
+.MuiTableSortLabel-iconDirectionDesc {
+  transform: rotate(180deg) !important;
 }
 .main-padding {
   padding: 24px;
@@ -1211,6 +1212,7 @@ tbody td .td-select {
     background-repeat: no-repeat;
     width: 19px;
     height: 19px;
+    top: 3px !important;
 
     path {
       display: none;

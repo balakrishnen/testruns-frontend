@@ -106,7 +106,9 @@ export default function Assets() {
 
   React.useEffect(() => {
     dispatch(fetchAssetsData(queryStrings));
-  }, [pageInfo]);
+    // setAssetsData(assetsData);
+  }, [pageInfo, queryStrings]);
+
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
@@ -247,6 +249,14 @@ export default function Assets() {
   const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
   };
+
+  const handleTableSorting = (_event: any, _data: any) => {
+    const payload: any = { ...queryStrings };
+    payload['sortBy'] = "assetNumber";
+    payload['sortOrder'] = "asc";
+    setQueryString(payload)
+  }
+
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -295,6 +305,7 @@ export default function Assets() {
                 rowCount={0}
                 columns={headers}
                 filters={filters}
+                handleTableSorting={handleTableSorting}
               />
 
               <TableBody>
@@ -475,7 +486,7 @@ export default function Assets() {
                           <TableCell>
                             <Select
                               className={
-                                row.status === true
+                                row.isActive === true
                                   ? 'active-select td-select'
                                   : 'inactive-select td-select'
                               }

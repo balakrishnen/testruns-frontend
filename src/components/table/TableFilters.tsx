@@ -81,6 +81,7 @@ export default function TableFilters({
   const [filterStatus, setFilterStatus] = React.useState(null);
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterSearchBy, setFilterSearchBy] = React.useState(null);
+  const [filterFieldName, setFilterFieldName] = React.useState("");
   const [filterSearchValue, setFilterSearchValue] = React.useState(null);
   const [runsOpen, setRunsOpen] = React.useState(false);
 
@@ -288,7 +289,7 @@ export default function TableFilters({
                 <img
                   src={filterIcon}
                   alt="no_image"
-                  style={{ width: '25px', height: '25px', opacity: 0.9 }}
+                  style={{ width: '25px', height: '25px', opacity: 0.9, cursor: 'pointer' }}
                 />
               </Button>
               <Popover
@@ -314,7 +315,7 @@ export default function TableFilters({
                     <Typography fontWeight={600} variant="body1">
                       Filters
                     </Typography>
-                    <CloseIcon />
+                    <CloseIcon sx={{cursor: 'pointer'}} onClick={handleFilterPopoverClose} />
                   </Box>
                   <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
                     <Box sx={{ my: 1 }}>
@@ -382,9 +383,10 @@ export default function TableFilters({
                         fullWidth
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
-                        onChange={(event: any) => {
+                        onChange={(event: any, data: any) => {
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
+                          setFilterFieldName(data.props.children)
                         }}
                         renderValue={
                           filterSearchBy !== null
@@ -407,7 +409,7 @@ export default function TableFilters({
                             ? 'Search'
                             : filterSearchBy === '5' || filterSearchBy === '6'
                             ? 'Date'
-                            : 'Select'}
+                            : `Select ${filterFieldName}`}
                         </Typography>
                       )}
 

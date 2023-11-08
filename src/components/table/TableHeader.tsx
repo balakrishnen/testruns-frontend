@@ -1,83 +1,39 @@
-import React from "react";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import { visuallyHidden } from "@mui/utils";
-import {
-  Box,
-  Button,
-  FormControl,
-  InputAdornment,
-  MenuItem,
-  Pagination,
-  Select,
-  TextField,Grid,
-  Typography,
-  InputLabel,
-} from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import "../../assets/styles/App.scss";
-import { Filter } from "@mui/icons-material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import search from "../../assets/images/search.svg";
-import Autocomplete from "@mui/material/Autocomplete";
-import { ProceduresRowData } from "../../modals/Procedures.modal";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import { visuallyHidden } from '@mui/utils';
+import { Box } from '@mui/material';
+import '../../assets/styles/App.scss';
+import { ProceduresRowData } from '../../modals/Procedures.modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDepartmentData } from "../../api/departmentAPI";
-import { fetchLabData } from "../../api/labAPI";
-import { log } from "console";
-import { fetchAssetsData } from '../../api/assetsAPI';
-import Checkbox from '@mui/material/Checkbox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { fetchDepartmentData } from '../../api/departmentAPI';
+import { fetchLabData } from '../../api/labAPI';
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-type Order = 'asc' | 'desc';
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof ProceduresRowData) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  columns: []
-  filters: (answer : React.MouseEvent<unknown>) => void;
-}
 export default function TableHeader(props: any) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, columns, filters } =
-    props;
+  const {
+    onSelectAllClick,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
+    onRequestSort,
+    columns,
+    filters,
+    handleTableSorting
+  } = props;
   const createSortHandler =
-    (property: keyof ProceduresRowData) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof ProceduresRowData) =>
+    (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
-  const [answer, setAnswer] = React.useState<any>([]);
-  const [filterProps,setFilterProps]=React.useState<any>({})
-  {
-    console.log("headCell", answer);
-  }
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
 
-
-  const Placeholder = ({ children }: any) => {
-    return <div style={{ fontSize: "12px" }}>{children}</div>;
-  };
   const dispatch: any = useDispatch();
-
-  // React.useEffect(() => {
-  // //  if(Object.keys(answer).length !== 0){
-  // //   console.log('answer',answer);
-  //   filters()
-  // //  }
-  //   // filters(answer)
-  // },[answer])
 
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
@@ -85,51 +41,47 @@ export default function TableHeader(props: any) {
   const labSliceData = useSelector(
     (state: any) => state.lab.data?.get_all_labs,
   );
-  React.useEffect(() => {
-    setDepartmentData(departmentSliceData?.map((item:any) => ({
-      label: item.name,
-      value: item._id
-    })))
-    setLabData(labSliceData?.map((item:any) => ({
-      label: item.name,
-      value: item._id
-    })))
-  }, [departmentSliceData,labSliceData])
-
-  console.log(departmentData);
-
-console.log(labData);
 
   React.useEffect(() => {
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
   }, []);
-  const departments: any = [];
+
+  React.useEffect(() => {
+    setDepartmentData(
+      departmentSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item._id,
+      })),
+    );
+    setLabData(
+      labSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item._id,
+      })),
+    );
+  }, [departmentSliceData, labSliceData]);
+
   return (
     <TableHead>
       <TableRow>
-
-        {columns.map((headCell: any) => (
+        {columns.map((headCell: any, index: number) => (
           <>
-            {headCell.is_show && (<TableCell
-              key={headCell.id}
-              align={headCell.numeric ? 'right' : 'left'}
-              padding={headCell.disablePadding ? 'none' : 'normal'}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={createSortHandler(headCell.id)}
+            {headCell.is_show && (
+              <TableCell
+                key={index}
+                align={headCell.numeric ? 'right' : 'left'}
+                padding={headCell.disablePadding ? 'none' : 'normal'}
+                id="tableFilter"
+                sortDirection={headCell.sort}
               >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-              {/* <TableRow sx={{ width: "100%", display: "block" }}>
+                <TableSortLabel
+                  direction={headCell.sort}
+                  onClick={(event) => handleTableSorting(event, headCell)}
+                >
+                  {headCell.label}
+                </TableSortLabel>
+                {/* <TableRow sx={{ width: "100%", display: "block" }}>
                 <TableCell
                   padding="none"
                   sx={{ border: "0px", width: "100%", display: "block" }}
@@ -260,7 +212,9 @@ console.log(labData);
                   </Box>
                 </TableCell>
               </TableRow> */}
-            </TableCell>)}    </>
+              </TableCell>
+            )}{' '}
+          </>
         ))}
       </TableRow>
     </TableHead>

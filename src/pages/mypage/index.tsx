@@ -342,11 +342,11 @@ export default function MyPage() {
                         style={{
                           borderRadius: '20px',
                           color: 'white',
-                          width: '124px',
+                          width: '110px',
                           padding: '9px 0px',
                           alignItems: "center",
                           textAlign: 'center',
-                          height: '23px',
+                          height: '24px',
                           display: 'flex',
                           justifyContent: 'center',
                           fontSize: '12px',
