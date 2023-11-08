@@ -16,6 +16,7 @@
       0px 0px 5px 0px rgba(0, 0, 0, 0.14),
       0px 0px 0px 0px rgba(0, 0, 0, 0.12);
     // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0rem;
 
     button[aria-label='open drawer'] {
       margin-right: 15px !important;
@@ -103,7 +104,7 @@
 
 .app-drawer {
   ul {
-    padding-top: 1rem !important;
+    padding-top: 40px !important;
 
     li {
       border-bottom: 1px solid #f3f3f3;
@@ -127,14 +128,6 @@
   }
 }
 
-.css-2bvmu6-MuiDrawer-docked .MuiDrawer-paper {
-  box-shadow: 3px 4px 4px 0px rgba(0, 0, 0, 0.1) !important;
-}
-
-.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
-  box-shadow: 3px 4px 4px 0px rgba(0, 0, 0, 0.1) !important;
-}
-
 .app-drawer {
   .app-drawer-list-item {
     background: transparent;
@@ -146,7 +139,7 @@
     background: #fff4d0;
     border-radius: 0px 10px 10px 0px;
 
-    .css-10hburv-MuiTypography-root {
+    .MuiListItemText-primary {
       color: $black;
       font-weight: 500;
     }
@@ -158,6 +151,7 @@
     display: flex;
     justify-content: space-between;
     padding-top: 4rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 3px 4px 4px 0px;
   }
 }
 
@@ -168,7 +162,7 @@
   }
 }
 
-.MuiDrawer-root.MuiDrawer-docked.app-drawer.css-n3gslk-MuiDrawer-docked {
+.MuiDrawer-root.MuiDrawer-docked.app-drawer.closemenu {
   .app-drawer-list-item-active {
     border-radius: 0px;
   }
@@ -1365,6 +1359,7 @@ tbody td .td-select {
 .filter-search {
   display: flex;
   align-items: center;
+  margin-bottom: 8px;
 }
 
 // accordion end
@@ -1929,6 +1924,9 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   line-height: normal;
   letter-spacing: 0.24px;
   position: relative;
+  @media (min-width:1200px) and (max-width:1440px){
+    font-size: 12px;
+  }
 }
 
 .react-calendar__tile--active {
@@ -1958,6 +1956,9 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   font-weight: 500;
   line-height: normal;
   letter-spacing: 0.24px;
+  @media (min-width:1200px) and (max-width:1440px){
+    font-size: 12px;
+  }
 }
 
 .react-calendar__month-view__weekdays__weekday abbr {
