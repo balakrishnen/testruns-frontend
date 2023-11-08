@@ -95,7 +95,7 @@ mutation Delete_asset($_id: [String]!) {
 }
 `;
 export const GET_SINGLE_ASSETS = gql`
-query Get_asset($_id: String!,) {
+query Get_asset($_id: String!) {
     get_asset(_id: $_id) {
         _id
         name
@@ -112,4 +112,40 @@ query Get_asset($_id: String!,) {
         updatedAt
     }
 }
+`;
+
+export const UPDATE_ASSETS = gql`
+mutation Update_asset(
+        $_id: String!
+        $name: String!
+        $organisationId: String!
+        $perchasedDate: String!
+        $lastUsedDate: String!
+        $availability: Boolean!
+        $expiryDate: String!) {
+     update_asset(
+        _id: $_id
+        name: $name
+        organisationId: $organisationId
+        perchasedDate: $perchasedDate
+        lastUsedDate: $lastUsedDate
+        availability: $availability
+        expiryDate: $expiryDate
+    ) {
+        _id
+        name
+        assetNumber
+        organisationId
+        perchasedDate
+        lastUsedDate
+        status
+        availability
+        expiryDate
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+
 `;

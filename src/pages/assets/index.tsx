@@ -46,7 +46,7 @@ import { AssetsRowData } from '../../modals/assets.modal';
 import TableFilters from '../../components/table/TableFilters';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
-import { deleteAssetsData, fetchAssetsData } from '../../api/assetsAPI';
+import { deleteAssetsData, fetchAssetsData ,fetchUpdateAssetsData} from '../../api/assetsAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import { Value } from 'sass';
@@ -133,6 +133,21 @@ export default function Assets() {
   };
 
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
+
+  const handleOnChange=(e:any, row:any)=>{
+    console.log('change',row);
+    const assetsChange={
+      _id: row._id ,
+      name: row.name ,
+      organisationId: row.organisationId, 
+      perchasedDate: row.perchasedDate ,
+      lastUsedDate: row.organisationId ,
+      availability: e.target.value ,
+    }
+    console.log(assetsChange);
+    dispatch(fetchUpdateAssetsData(assetsChange))
+
+  }
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -308,7 +323,7 @@ export default function Assets() {
                         onClick={(e: any) => {
                           // e.target.tagName !== 'INPUT' &&
                           //   e.target.tagName !== 'LI' &&
-                          navigate(`/assets/details/${row._id}`);
+                          navigate(`/assets/details/${row._id}`, { state: { props: row } })
                         }}
                       >
                         {headers[0].is_show && (
@@ -479,7 +494,7 @@ export default function Assets() {
                               }
                               value={true}
                               displayEmpty
-                              onChange={(e) => handleChange(e, row.id)}
+                              onChange={(e) => handleOnChange(e, row)}
                               onClick={(e: any) => clickHandler(e)}
                               IconComponent={ExpandMoreOutlinedIcon}
                             >
@@ -500,7 +515,7 @@ export default function Assets() {
                               }
                               value={row.availability}
                               displayEmpty
-                              onChange={(e) => handleChange(e, row.id)}
+                              onChange={(e) => handleOnChange(e, row)}
                               IconComponent={ExpandMoreOutlinedIcon}
                               onClick={(e: any) => clickHandler(e)}
                             >
