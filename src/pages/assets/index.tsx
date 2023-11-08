@@ -51,7 +51,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import { Value } from 'sass';
 import { bool } from 'yup';
-import moment from 'moment'
+import moment from 'moment';
 
 const rows: AssetsRowData[] = AssetsRows;
 
@@ -67,7 +67,7 @@ export default function Assets() {
   const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
-  const deleteSuccessPopupRef:any = React.useRef(null);
+  const deleteSuccessPopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
   // const totalPages = Math.ceil(assetsData.length / itemsPerPage);
@@ -76,9 +76,9 @@ export default function Assets() {
   // const Data = assetsData.slice(startIndex, endIndex);
   const dispatch: any = useDispatch();
   const [assetsData, setAssetsData] = React.useState<any>([]);
-  const [rowId,setRowId]=React.useState<any>([])
+  const [rowId, setRowId] = React.useState<any>([]);
   console.log(rowId);
-  
+
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -126,9 +126,9 @@ export default function Assets() {
     setQueryString(payload);
   };
 
-  const filters=()=>{ 
+  const filters = () => {
     dispatch(fetchAssetsData(queryStrings));
-  }
+  };
 
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
 
@@ -219,31 +219,31 @@ export default function Assets() {
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
-  const asset:any=[]
+  const asset: any = [];
 
-  const assetVal: any={_id:rowId}
+  const assetVal: any = { _id: rowId };
   console.log(asset);
-  
+
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
       // deletePopupRef.current.open(false);
       dispatch(deleteAssetsData(assetVal));
       deleteSuccessPopupRef.current.open(true);
       setTimeout(() => {
-      deleteSuccessPopupRef.current.open(false);
-    }, 3000);
+        deleteSuccessPopupRef.current.open(false);
+      }, 3000);
     }
     deletePopupRef.current.open(false);
   };
-console.log(assetsData);
+  console.log(assetsData);
 
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'Assest');
   };
 
-    const clickHandler=(e:MouseEvent)=>{
-      e.stopPropagation();
-    }
+  const clickHandler = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -290,126 +290,209 @@ console.log(assetsData);
                 orderBy={''}
                 rowCount={0}
                 columns={headers}
-                filters={
-                 filters
-                }
+                filters={filters}
               />
 
               <TableBody>
                 {assetsData?.map((row: any, index: number) => {
                   return (
-                  ( row.isDeleted!==true && <TableRow
-                      hover
-                      tabIndex={-1}
-                      key={index}
-                      // selected={isItemSelected}
-                      sx={{ cursor: 'pointer' }}
-                      onClick={(e: any) => {
-                        // e.target.tagName !== 'INPUT' &&
-                        //   e.target.tagName !== 'LI' &&
+                    row.isDeleted !== true && (
+                      <TableRow
+                        hover
+                        tabIndex={-1}
+                        key={index}
+                        // selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
+                        onClick={(e: any) => {
+                          // e.target.tagName !== 'INPUT' &&
+                          //   e.target.tagName !== 'LI' &&
                           navigate(`/assets/details/${row._id}`);
-                      }}
-                    >
-                      {headers[0].is_show && (
-                        <TableCell scope="row">
-                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box sx={{ mt: 0, mr: 1 }}>
-                              <Checkbox
-                                color="primary"
-                                checked={row.is_checked}
-                                onClick={(e:any)=>clickHandler(e)}
-                                onChange={(event) =>{setRowId([...rowId,row._id]),
-                                  handleChange(event, row._id)}
-                                }
-                              />
-                            </Box>
-
+                        }}
+                      >
+                        {headers[0].is_show && (
+                          <TableCell scope="row">
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Box>
-                                <img src={image_holder} alt="no_image" />
+                              <Box sx={{ mt: 0, mr: 1 }}>
+                                <Checkbox
+                                  color="primary"
+                                  checked={row.is_checked}
+                                  onClick={(e: any) => clickHandler(e)}
+                                  onChange={(event) => {
+                                    setRowId([...rowId, row._id]),
+                                      handleChange(event, row._id);
+                                  }}
+                                />
                               </Box>
-                              <Box sx={{ ml: 2 }}>
-                                <Box>{row.assetNumber}</Box>
+
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                <Box>
+                                  <img src={image_holder} alt="no_image" />
+                                </Box>
+                                <Box sx={{ ml: 2 }}>
+                                  <Box>{row.assetNumber}</Box>
+                                </Box>
                               </Box>
                             </Box>
-                          </Box>
-                        </TableCell>
-                      )}
-                      {headers[1].is_show && (
-                        <TableCell>
-                          <Box>{row.name}</Box>
-                        </TableCell>
-                      )}
-                      {headers[2].is_show && (
-                        <TableCell>
-                          {row.departmentId[0] === null
-                            ? <><Chip key={index} label={'Data science'} sx={{ m: 0.5 }} /><span>+1 more...</span></>
-                            : row.departmentId.map((item: any) => (
+                          </TableCell>
+                        )}
+                        {headers[1].is_show && (
+                          <TableCell>
+                            <Box>{row.name}</Box>
+                          </TableCell>
+                        )}
+                        {headers[2].is_show && (
+                          <TableCell>
+                            {row.departmentId[0] === null ? (
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                {DepartmentList[index] ? (
+                                  <>
+                                    <Chip
+                                      key={index}
+                                      label={DepartmentList[index].name}
+                                      sx={{
+                                        m: 0.5,
+                                        fontWeight: 500,
+                                        padding: '0px 3px',
+                                      }}
+                                    />
+                                    {index > 0 && (
+                                      <span
+                                        style={{
+                                          fontWeight: 500,
+                                          color: 'grey',
+                                          fontSize: '12px',
+                                        }}
+                                      >
+                                        +{index} More
+                                      </span>
+                                    )}
+                                  </>
+                                ) : (
+                                  '-'
+                                )}
+                              </Box>
+                            ) : (
+                              row.departmentId.map((item: any) => (
                                 <Box key={item.id}>{item.name}</Box>
-                              ))}
-                        </TableCell>
-                      )}
-                      {headers[3].is_show && (
-                        <TableCell>
-                          {row.laboratoryId[0] === null
-                            ?  <><Chip key={index} label={'Data mining'} sx={{ m: 0.5 }} /><span>+1 more...</span></>
-                            : row.laboratoryId.map((item: any) => (
+                              ))
+                            )}
+                          </TableCell>
+                        )}
+                        {headers[3].is_show && (
+                          <TableCell>
+                            {row.laboratoryId[0] === null ? (
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                {LaboratoryList[index] ? (
+                                  <>
+                                    <Chip
+                                      key={index}
+                                      label={LaboratoryList[index].name}
+                                      sx={{
+                                        m: 0.5,
+                                        fontWeight: 500,
+                                        padding: '0px 3px',
+                                      }}
+                                    />
+                                    {index > 0 && (
+                                      <span
+                                        style={{
+                                          fontWeight: 500,
+                                          color: 'grey',
+                                          fontSize: '12px',
+                                        }}
+                                      >
+                                        +{index} More
+                                      </span>
+                                    )}
+                                  </>
+                                ) : (
+                                  '-'
+                                )}
+                              </Box>
+                            ) : (
+                              row.laboratoryId.map((item: any) => (
                                 <Box key={item.id}>{item.name}</Box>
-                              ))}
-                        </TableCell>
-                      )}
-                      {console.log(moment(row.perchasedDate).local().format('MM/DD/YYYY'))
-                      }
-                      {headers[4].is_show && (
-                        <TableCell>
-                          {row.perchasedDate === null ? '-' : moment(row.perchasedDate).isValid()? moment(row.perchasedDate).local().format('MM/DD/YYYY'):moment().format('MM/DD/YYYY') }
-                        </TableCell>
-                      )}
-                      {headers[5].is_show && (
-                        <TableCell>
-                          {row.lastUsedDate === null ? '-' :  moment(row.lastUsedDate).isValid()? moment(row.lastUsedDate).local().format('MM/DD/YYYY'):moment().format('MM/DD/YYYY')}
-                        </TableCell>
-                      )}
-                      {headers[6].is_show && (
-                        <TableCell>
-                          <Select
-                            className={
-                              row.status === true
-                                ? 'active-select td-select'
-                                : 'inactive-select td-select'
-                            }
-                            value={true}
-                            displayEmpty
-                            onChange={(e) => handleChange(e, row.id)}
-                            onClick={(e:any)=>clickHandler(e)}
-                            IconComponent={ExpandMoreOutlinedIcon}
-                          >
-                            <MenuItem value={true as any}>Fully Working</MenuItem>
-                            <MenuItem value={false as any}>Issues</MenuItem>
-                          </Select>
-                        </TableCell>
-                      )}
-                      {headers[7].is_show && (
-                        <TableCell>
-                          <Select
-                            className={
-                              row.availability === true
-                                ? 'active-select td-select'
-                                : 'inactive-select td-select'
-                            }
-                            value={row.availability}
-                            displayEmpty
-                            onChange={(e) => handleChange(e, row.id)}
-                            IconComponent={ExpandMoreOutlinedIcon}
-                            onClick={(e:any)=>clickHandler(e)}
-                          >
-                            <MenuItem value={true as any}>Available</MenuItem>
-                            <MenuItem value={false as any}>Not available</MenuItem>
-                          </Select>
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  )
+                              ))
+                            )}
+                          </TableCell>
+                        )}
+                        {console.log(
+                          moment(row.perchasedDate)
+                            .local()
+                            .format('MM/DD/YYYY'),
+                        )}
+                        {headers[4].is_show && (
+                          <TableCell>
+                            {row.perchasedDate === null
+                              ? '-'
+                              : moment(row.perchasedDate).isValid()
+                              ? moment(row.perchasedDate)
+                                  .local()
+                                  .format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
+                          </TableCell>
+                        )}
+                        {headers[5].is_show && (
+                          <TableCell>
+                            {row.lastUsedDate === null
+                              ? '-'
+                              : moment(row.lastUsedDate).isValid()
+                              ? moment(row.lastUsedDate)
+                                  .local()
+                                  .format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
+                          </TableCell>
+                        )}
+                        {headers[6].is_show && (
+                          <TableCell>
+                            <Select
+                              className={
+                                row.status === true
+                                  ? 'active-select td-select'
+                                  : 'inactive-select td-select'
+                              }
+                              value={true}
+                              displayEmpty
+                              onChange={(e) => handleChange(e, row.id)}
+                              onClick={(e: any) => clickHandler(e)}
+                              IconComponent={ExpandMoreOutlinedIcon}
+                            >
+                              <MenuItem value={true as any}>
+                                Fully Working
+                              </MenuItem>
+                              <MenuItem value={false as any}>Issues</MenuItem>
+                            </Select>
+                          </TableCell>
+                        )}
+                        {headers[7].is_show && (
+                          <TableCell>
+                            <Select
+                              className={
+                                row.availability === true
+                                  ? 'active-select td-select'
+                                  : 'inactive-select td-select'
+                              }
+                              value={row.availability}
+                              displayEmpty
+                              onChange={(e) => handleChange(e, row.id)}
+                              IconComponent={ExpandMoreOutlinedIcon}
+                              onClick={(e: any) => clickHandler(e)}
+                            >
+                              <MenuItem value={true as any}>Available</MenuItem>
+                              <MenuItem value={false as any}>
+                                Not available
+                              </MenuItem>
+                            </Select>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    )
                   );
                 })}
               </TableBody>
@@ -434,10 +517,10 @@ console.log(assetsData);
           />
           <Box>
             <DeletePopup
-            rowId={rowId}
+              rowId={rowId}
               ref={deletePopupRef}
               closeDeletePopup={() =>
-                deletePopupRef.current.open(false, 'Assests',rowId)
+                deletePopupRef.current.open(false, 'Assests', rowId)
               }
               deleteConfirmation={handleDeleteConfirmation}
             />
@@ -447,7 +530,7 @@ console.log(assetsData);
             confirmationDone={handleConfirmationDone}
           />
           <SuccessPopup ref={successPopupRef} />
-          <DeleteSuccessPopup ref={deleteSuccessPopupRef}/>
+          <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
         </Box>
       </Box>
     </PrivateRoute>

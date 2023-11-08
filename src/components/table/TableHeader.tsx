@@ -129,7 +129,7 @@ console.log(labData);
                   </Box>
                 ) : null}
               </TableSortLabel>
-              <TableRow sx={{ width: "100%", display: "block" }}>
+              {/* <TableRow sx={{ width: "100%", display: "block" }}>
                 <TableCell
                   padding="none"
                   sx={{ border: "0px", width: "100%", display: "block" }}
@@ -146,7 +146,6 @@ console.log(labData);
                               id="table-select"
                               value={answer[filter.id] || ""}
                               displayEmpty
-                              // className="table-search"
                               name={filter.id}
                               IconComponent={ExpandMoreOutlinedIcon}
                               onChange={(event) => {
@@ -210,12 +209,7 @@ console.log(labData);
                           </FormControl>
                         );
                       } else if (filter.type === "autocomplete") {
-                        // console.log(assetsData!==undefined && assetsData.map((item:any)=>item.name));
-                        // console.log(filter.options);
-                        
-                        
                         return (
-                          // <Grid item xs={12} sm={12} md={12} lg={12} className="multi-selection">
                            <Box key={index}>
                             <Autocomplete
                             multiple
@@ -241,7 +235,6 @@ console.log(labData);
                               </li>
                             )}
                             renderInput={(params) => <TextField {...params} />}
-                            // fullWidth
                             placeholder="Department"
                             size="small"
                             onChange={(e, f) => {
@@ -252,7 +245,6 @@ console.log(labData);
                             
                           />
                           </Box> 
-                          // </Grid>
                         );
                       } else if (filter.type === "date") {
                         return (
@@ -267,7 +259,7 @@ console.log(labData);
                     })}
                   </Box>
                 </TableCell>
-              </TableRow>
+              </TableRow> */}
             </TableCell>)}    </>
         ))}
       </TableRow>

@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 @import 'react-calendar/dist/Calendar.css';
 /* Import TinyMCE styles in your CSS file */
@@ -11,10 +11,13 @@
 
 .app-bar-block {
   header {
-    box-shadow: 0px 0px 0px 0px rgb(46 46 46 / 20%), 0px 0px 5px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+    box-shadow:
+      0px 0px 0px 0px rgb(46 46 46 / 20%),
+      0px 0px 5px 0px rgba(0, 0, 0, 0.14),
+      0px 0px 0px 0px rgba(0, 0, 0, 0.12);
     // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
-    button[aria-label="open drawer"] {
+    button[aria-label='open drawer'] {
       margin-right: 15px !important;
     }
   }
@@ -85,12 +88,12 @@
 .MuiDrawer-docked.app-drawer {
   box-shadow: none;
 
-  @media (max-width:899px) {
+  @media (max-width: 899px) {
     display: none;
   }
 }
 
-@media (max-width:899px) {
+@media (max-width: 899px) {
   .MuiDrawer-docked.app-drawer.openmenu {
     display: block;
     position: fixed;
@@ -103,7 +106,7 @@
     padding-top: 1rem !important;
 
     li {
-      border-bottom: 1px solid #F3F3F3;
+      border-bottom: 1px solid #f3f3f3;
     }
   }
 }
@@ -175,10 +178,10 @@
   }
 }
 
-// common style start 
+// common style start
 html body {
   margin: 0px;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
@@ -260,9 +263,9 @@ button.close-actions {
   height: 33px;
   padding: 6px 12px 6px 9px;
   border-radius: 50px;
-  background: rgba(255, 185, 185, 0.50) !important;
+  background: rgba(255, 185, 185, 0.5) !important;
   box-shadow: none;
-  color: #E2445C;
+  color: #e2445c;
   font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.24px;
@@ -290,7 +293,6 @@ button.delete-actions {
 }
 
 .search-action {
-
   // margin-top: 16px;
   label.MuiFormControlLabel-root {
     color: $black-shade-2;
@@ -307,7 +309,7 @@ button.delete-actions {
     margin-right: 1.5rem !important;
     margin-bottom: 8px !important;
 
-    @media (max-width:599px) {
+    @media (max-width: 599px) {
       margin-right: 0.3rem !important;
     }
   }
@@ -318,17 +320,17 @@ button.delete-actions {
   justify-content: center;
   align-items: center;
 
-  @media(max-width:1400px) {
+  @media (max-width: 1400px) {
     padding: 3.5rem 0rem;
     height: 100% !important;
   }
 
-  @media(max-height:767px) {
+  @media (max-height: 767px) {
     padding: 3.5rem 0rem;
     height: 100% !important;
   }
 
-  @media(max-width:899px) {
+  @media (max-width: 899px) {
     display: block;
 
     .login-center {
@@ -340,12 +342,12 @@ button.delete-actions {
 .main-center-inner {
   width: 70% !important;
 
-  @media (min-width:1401px) and (max-width:1599px) {
+  @media (min-width: 1401px) and (max-width: 1599px) {
     width: 80% !important;
     margin: auto;
   }
 
-  @media(max-width:1400px) {
+  @media (max-width: 1400px) {
     width: 90% !important;
     margin: auto;
   }
@@ -373,7 +375,7 @@ button.delete-actions {
 .sign-right {
   padding: 2rem 3.125rem;
 
-  @media (min-width:900px) and (max-width:1199px) {
+  @media (min-width: 900px) and (max-width: 1199px) {
     padding: 2rem 2rem;
   }
 }
@@ -381,7 +383,7 @@ button.delete-actions {
 .sign-left {
   border-radius: 10px 0px 0px 10px;
 
-  @media(max-width:899px) {
+  @media (max-width: 899px) {
     border-radius: 10px 10px 0px 0px;
   }
 }
@@ -389,7 +391,7 @@ button.delete-actions {
 .sign-right {
   border-radius: 0px 10px 10px 0px;
 
-  @media(max-width:899px) {
+  @media (max-width: 899px) {
     border-radius: 0px 0px 10px 10px;
     min-height: initial !important;
   }
@@ -437,7 +439,7 @@ button.delete-actions {
     }
 
     .MuiButtonBase-root.MuiCheckbox-root.Mui-checked {
-      color: #FFC60B !important;
+      color: #ffc60b !important;
     }
   }
 
@@ -618,22 +620,22 @@ p.reg-text {
   color: $light-brown;
   padding-bottom: 4rem;
 
-  @media (max-width:767px) {
+  @media (max-width: 767px) {
     padding-top: 2rem;
   }
 
   h5 {
     font-weight: 600;
 
-    @media (min-width:900px) and (max-width:1024px) {
+    @media (min-width: 900px) and (max-width: 1024px) {
       font-size: 20px;
     }
 
-    @media (max-width:767px) {
+    @media (max-width: 767px) {
       font-size: 20px;
     }
 
-    @media (max-width:576px) {
+    @media (max-width: 576px) {
       font-size: 16px;
     }
   }
@@ -642,15 +644,15 @@ p.reg-text {
     font-weight: 500;
     letter-spacing: -0.68px;
 
-    @media (min-width:900px) and (max-width:1024px) {
+    @media (min-width: 900px) and (max-width: 1024px) {
       font-size: 25px;
     }
 
-    @media (max-width:767px) {
+    @media (max-width: 767px) {
       font-size: 25px;
     }
 
-    @media (max-width:576px) {
+    @media (max-width: 576px) {
       font-size: 18px;
     }
   }
@@ -659,15 +661,15 @@ p.reg-text {
     font-weight: 500;
     letter-spacing: -1.92px;
 
-    @media (min-width:900px) and (max-width:1024px) {
+    @media (min-width: 900px) and (max-width: 1024px) {
       font-size: 80px;
     }
 
-    @media (max-width:767px) {
+    @media (max-width: 767px) {
       font-size: 80px;
     }
 
-    @media (max-width:576px) {
+    @media (max-width: 576px) {
       font-size: 50px;
     }
   }
@@ -678,7 +680,7 @@ p.reg-text {
 }
 
 .error-field-checkbox {
-  color: #E2445C;
+  color: #e2445c;
   // position:absolute;
   // padding-top:10px;
   top: 0px;
@@ -695,18 +697,18 @@ p.reg-text {
 }
 
 .error-field {
-  color: #E2445C;
+  color: #e2445c;
   position: absolute;
   top: 0px;
   right: 0px;
   font-size: $font-small !important;
 
-  @media (min-width:900px) and (max-width:1000px) {
+  @media (min-width: 900px) and (max-width: 1000px) {
     position: relative;
     top: -17px;
   }
 
-  @media(max-width:500px) {
+  @media (max-width: 500px) {
     position: relative;
     top: -17px;
   }
@@ -717,18 +719,18 @@ p.reg-text {
 }
 
 .valid-field {
-  color: #32E46F;
+  color: #32e46f;
   position: absolute;
   top: 0px;
   right: 0px;
   font-size: $font-small !important;
 
-  @media (min-width:900px) and (max-width:1000px) {
+  @media (min-width: 900px) and (max-width: 1000px) {
     position: relative;
     top: -17px;
   }
 
-  @media(max-width:500px) {
+  @media (max-width: 500px) {
     position: relative;
     top: -17px;
   }
@@ -767,7 +769,7 @@ p.reg-text {
     text-transform: capitalize;
   }
 
-  @media(max-width:450px) {
+  @media (max-width: 450px) {
     display: block;
 
     button {
@@ -779,8 +781,8 @@ p.reg-text {
 .search-field-inner {
   .MuiInputBase-root {
     display: flex;
-    width: auto;
-    height: 44px;
+    width: 320px;
+    height: 40px;
     padding: 10px 15px 10px 0px;
     justify-content: center;
     border-radius: 10px;
@@ -792,7 +794,7 @@ p.reg-text {
       display: none;
     }
 
-    @media (max-width:500px) {
+    @media (max-width: 500px) {
       width: auto;
     }
   }
@@ -823,8 +825,8 @@ button.add-btn {
 }
 
 button.Delete-btn {
-  background: #FFB9B9 !important;
-  color: #E2445C;
+  background: #ffb9b9 !important;
+  color: #e2445c;
 }
 
 .MuiTableSortLabel-iconDirectionDesc,
@@ -834,9 +836,8 @@ button.Delete-btn {
   background-repeat: no-repeat;
   color: transparent !important;
   opacity: 1 !important;
-  
 }
-.MuiTableSortLabel-iconDirectionAsc{
+.MuiTableSortLabel-iconDirectionAsc {
   transform: none !important;
 }
 .main-padding {
@@ -863,15 +864,14 @@ fieldset.MuiOutlinedInput-notchedOutline {
   border-color: #d32f2f !important;
 }
 
-@media (max-width:899px) {
-
+@media (max-width: 899px) {
   .sign-right,
   .sign-left {
     padding: 2rem;
   }
 }
 
-@media (min-width:900px) and (max-width:1199px) {
+@media (min-width: 900px) and (max-width: 1199px) {
   .sign-left {
     .country-term-section {
       display: block;
@@ -884,7 +884,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   }
 }
 
-@media (max-width:767px) {
+@media (max-width: 767px) {
   .sign-left {
     .welcome-to {
       font-size: 20px;
@@ -900,7 +900,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   }
 }
 
-@media (max-width:599px) {
+@media (max-width: 599px) {
   .app-bar-block {
     header {
       .MuiToolbar-root.MuiToolbar-gutters {
@@ -912,7 +912,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   }
 }
 
-@media (max-width:600px) {
+@media (max-width: 600px) {
   .sign-left {
     .country-term-section {
       display: block;
@@ -925,7 +925,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   }
 }
 
-@media (max-width:372px) {
+@media (max-width: 372px) {
   .sign-left {
     .sign-via-btn {
       button {
@@ -936,20 +936,20 @@ fieldset.MuiOutlinedInput-notchedOutline {
   }
 }
 
-// common style end 
+// common style end
 
-// table common style start 
+// table common style start
 .table-outer {
   border-radius: 10px;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
   background: $white;
   // margin-top: 1.5rem;
   margin-right: -90rem;
 
   thead {
-    background: #FFF4D0;
+    background: #fff4d0;
     padding: 10px;
-
+    height: 65px;
     th {
       &:first-child {
         border-radius: 10px 0px 0px 0px;
@@ -967,7 +967,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
 
       .MuiInputBase-root {
         border-radius: 5px;
-        border: 1px solid #9F9F9F;
+        border: 1px solid #9f9f9f;
         background: $white;
         // height: 30px;
         padding: 0px 14px 0px !important;
@@ -997,7 +997,6 @@ fieldset.MuiOutlinedInput-notchedOutline {
           letter-spacing: 0.24px;
         }
       }
-
     }
 
     span,
@@ -1006,11 +1005,10 @@ fieldset.MuiOutlinedInput-notchedOutline {
       font-weight: 500;
       line-height: normal;
       letter-spacing: 0.24px;
-      margin-bottom: 0.8rem;
+      // margin-bottom: 0.8rem;
       white-space: nowrap;
       text-align: left;
       width: 160px;
-
       &:first-child {
         text-align: left !important;
       }
@@ -1028,7 +1026,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
     text-align: left;
     padding: 10px 16px 10px;
     // line-height: 0.43;
-    border-bottom: 1px solid #F3F3F3;
+    border-bottom: 1px solid #f3f3f3;
   }
 }
 
@@ -1042,9 +1040,9 @@ fieldset.MuiOutlinedInput-notchedOutline {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  border-top: 1px solid #F3F3F3;
+  border-top: 1px solid #f3f3f3;
 
-  @media (max-width:767px) {
+  @media (max-width: 767px) {
     display: block;
 
     p {
@@ -1065,7 +1063,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   }
 
   .MuiPaginationItem-previousNext {
-    background: #F3F3F3;
+    background: #f3f3f3;
 
     svg {
       color: #000;
@@ -1075,13 +1073,13 @@ fieldset.MuiOutlinedInput-notchedOutline {
   button.MuiButtonBase-root.MuiPaginationItem-root,
   .MuiPaginationItem-ellipsis {
     border-radius: 8px;
-    border: 2px solid #F3F3F3;
+    border: 2px solid #f3f3f3;
     color: $black-shade-3;
     font-weight: 600;
   }
 
   button.MuiButtonBase-root.MuiPaginationItem-root.Mui-selected {
-    background: #FFF4D0;
+    background: #fff4d0;
     color: $black-shade-1;
     border: 0px;
   }
@@ -1091,9 +1089,9 @@ fieldset.MuiOutlinedInput-notchedOutline {
   }
 }
 
-// table common style end 
+// table common style end
 
-// popup start 
+// popup start
 .title-popup {
   display: flex;
   justify-content: space-between;
@@ -1152,20 +1150,19 @@ p.cancel-unsave {
 }
 
 .cancel-unsave {
-  color: #E2445C;
+  color: #e2445c;
 }
 
 .added-success {
-  color: #00BF70;
+  color: #00bf70;
 }
 
-// popup end 
+// popup end
 
-
-// tab start 
+// tab start
 .tabs-common {
   button {
-    background: #FFF4D0;
+    background: #fff4d0;
     display: flex;
     padding: 8px 4px;
     justify-content: center;
@@ -1179,13 +1176,13 @@ p.cancel-unsave {
     text-transform: capitalize;
     max-width: 500px;
 
-    @media (min-width:1200px) and (max-width:1440px) {
+    @media (min-width: 1200px) and (max-width: 1440px) {
       max-width: 400px;
     }
   }
 
   button.Mui-selected {
-    background: #FFC60B;
+    background: #ffc60b;
   }
 
   span.MuiTabs-indicator {
@@ -1193,12 +1190,12 @@ p.cancel-unsave {
   }
 }
 
-// tab end 
+// tab end
 
-// asset details start 
+// asset details start
 tbody td .td-select {
   width: 150px;
-  color: #FFF;
+  color: #fff;
   text-align: center;
   font-size: 12px;
   font-weight: 500;
@@ -1239,11 +1236,11 @@ tbody td .td-select {
 }
 
 .inactive-select.td-select .MuiSelect-select {
-  background: #E2445C;
+  background: #e2445c;
 }
 
 .active-select.td-select .MuiSelect-select {
-  background: #00BF70;
+  background: #00bf70;
 }
 
 .asset-detail-title {
@@ -1260,7 +1257,7 @@ tbody td .td-select {
 .dynamic-img {
   width: 100%;
 
-  @media (min-width:500px) and (max-width:899px) {
+  @media (min-width: 500px) and (max-width: 899px) {
     width: 300px;
     margin: auto;
   }
@@ -1270,10 +1267,10 @@ tbody td .td-select {
   display: flex;
   justify-content: space-between;
   margin-top: 24px;
-  border-top: 3px solid #F3F3F3;
+  border-top: 3px solid #f3f3f3;
   padding-top: 1rem;
 
-  @media(max-width:350px) {
+  @media (max-width: 350px) {
     display: block;
 
     button.cancel-btn,
@@ -1286,7 +1283,7 @@ tbody td .td-select {
 
 .asset-id-name {
   border-radius: 10px;
-  background: #F3F3F3;
+  background: #f3f3f3;
   display: flex;
   padding: 10px 20px;
   align-items: center;
@@ -1305,7 +1302,7 @@ tbody td .td-select {
 .asset-name {
   p {
     &:first-child {
-      color: #9F9F9F;
+      color: #9f9f9f;
       font-size: 14px;
       font-weight: 500;
       line-height: normal;
@@ -1323,9 +1320,9 @@ tbody td .td-select {
   }
 }
 
-// asset details end 
+// asset details end
 
-// accordion start 
+// accordion start
 .accordion-section {
   padding-left: 15px;
 
@@ -1333,7 +1330,7 @@ tbody td .td-select {
     box-shadow: none;
 
     &::before {
-      background-color: #F3F3F3;
+      background-color: #f3f3f3;
       height: 2px;
       opacity: 1 !important;
     }
@@ -1367,13 +1364,13 @@ tbody td .td-select {
   align-items: center;
 }
 
-// accordion end 
+// accordion end
 
 // asset details end
 
-// runz start 
+// runz start
 p.id-detail {
-  color: #9F9F9F;
+  color: #9f9f9f;
   font-size: 14px;
   font-weight: 500;
   line-height: normal;
@@ -1421,7 +1418,7 @@ p.id-detail-title {
 
 .runz-page {
   .title-main {
-    @media(max-width:450px) {
+    @media (max-width: 450px) {
       display: block;
 
       button {
@@ -1433,7 +1430,7 @@ p.id-detail-title {
 
 button.avatar-add {
   border-radius: 6px;
-  background: #FFF4D0 !important;
+  background: #fff4d0 !important;
   box-shadow: none !important;
   font-size: 16px;
   text-transform: capitalize;
@@ -1465,15 +1462,15 @@ p.follow-people {
 
 .follow-list {
   border-radius: 20px;
-  border: 1px solid #9F9F9F;
-  background: #FFF;
+  border: 1px solid #9f9f9f;
+  background: #fff;
   padding: 30px 30px 20px 30px;
   margin-top: 1.5rem;
 
   span {
     padding: 5px 10px;
     border-radius: 40px;
-    background: #FFF4D0;
+    background: #fff4d0;
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
     display: inline-block;
@@ -1520,8 +1517,8 @@ p.follow-people {
 
   .main-runzdetails {
     .edit-details {
-      background: #FFF;
-      box-shadow: -3px 0px 16px 0px rgba(0, 0, 0, 0.10);
+      background: #fff;
+      box-shadow: -3px 0px 16px 0px rgba(0, 0, 0, 0.1);
       border: 0px;
       margin-top: 0px;
       position: absolute;
@@ -1530,7 +1527,7 @@ p.follow-people {
     }
   }
 
-  @media (min-width:1200px) {
+  @media (min-width: 1200px) {
     .runz-height {
       height: calc(100vh - 177px);
     }
@@ -1559,14 +1556,14 @@ p.follow-people {
     background-repeat: no-repeat;
     background-position: left 1% center;
 
-    @media (max-width:1199px) {
+    @media (max-width: 1199px) {
       background-image: none;
     }
   }
 
   .add-chart {
     border-radius: 4px;
-    background: #FFF4D0;
+    background: #fff4d0;
     box-shadow: none;
     color: #181818;
     text-align: center;
@@ -1634,7 +1631,7 @@ p.follow-people {
     z-index: 9;
   }
 
-  @media (min-width:1200px) {
+  @media (min-width: 1200px) {
     p.id-detail {
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -1642,15 +1639,14 @@ p.follow-people {
     }
   }
 
-  @media (max-width:1199px) {
+  @media (max-width: 1199px) {
     .runz-height.leftside-runz {
       height: calc(100vh - 425px);
     }
   }
 }
 
-@media (max-width:1199px) {
-
+@media (max-width: 1199px) {
   li button.edit-btn,
   li .more-info .MuiInputBase-root {
     font-size: 18px;
@@ -1662,7 +1658,7 @@ p.follow-people {
     height: 21px;
   }
 
-  .main-runzdetails div[data-type="SplitPane"] {
+  .main-runzdetails div[data-type='SplitPane'] {
     display: block;
   }
 
@@ -1672,9 +1668,8 @@ p.follow-people {
   }
 }
 
-@media (max-width:599px) {
+@media (max-width: 599px) {
   .popup-section {
-
     button.cancel-btn,
     button.add-btn,
     button.Delete-btn {
@@ -1684,13 +1679,13 @@ p.follow-people {
   }
 }
 
-// runz end 
-// my page start 
+// runz end
+// my page start
 .view-all {
   width: 96px;
 
   .MuiInputBase-root {
-    color: #9F9F9F;
+    color: #9f9f9f;
     font-size: 14px;
     font-weight: 500;
     line-height: normal;
@@ -1716,11 +1711,11 @@ p.follow-people {
   }
 }
 
-// my page end 
+// my page end
 
-// notifications start 
+// notifications start
 .notification-title {
-  background: #FFF4D0;
+  background: #fff4d0;
   padding: 10px 20px;
   border-radius: 10px 10px 0px 0px;
 
@@ -1749,7 +1744,7 @@ p.follow-people {
 }
 
 .notifications:hover {
-  background: #FFF4D0;
+  background: #fff4d0;
 }
 
 .image-container {
@@ -1758,7 +1753,7 @@ p.follow-people {
 }
 
 .text-container {
-  margin-left: 1em
+  margin-left: 1em;
 }
 
 .heading {
@@ -1779,7 +1774,7 @@ p.follow-people {
 }
 
 .content {
-  color: #9F9F9F;
+  color: #9f9f9f;
 }
 
 .time {
@@ -1789,7 +1784,7 @@ p.follow-people {
 }
 
 .read-notification {
-  background: #F3F3F3;
+  background: #f3f3f3;
   border-bottom: 2px solid #ebebeb;
 }
 
@@ -1800,7 +1795,7 @@ p.follow-people {
   position: relative;
 
   .notifications {
-    @media (max-width:1199px) {
+    @media (max-width: 1199px) {
       display: block;
 
       .time {
@@ -1831,8 +1826,8 @@ p.follow-people {
 .notification-header {
   .notification-title {
     border-radius: 0px;
-    background: #FFF;
-    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+    background: #fff;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0px;
     display: flex;
@@ -1853,7 +1848,7 @@ p.follow-people {
       align-items: center;
     }
 
-    @media(max-width:450px) {
+    @media (max-width: 450px) {
       display: block;
 
       p.mark-read {
@@ -1864,12 +1859,12 @@ p.follow-people {
   }
 }
 
-// notifications end 
+// notifications end
 
-// calender start 
+// calender start
 .calender-rightside {
   border-radius: 10px;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
   padding-bottom: 1rem;
 }
 
@@ -1889,7 +1884,7 @@ button.react-calendar__navigation__arrow.react-calendar__navigation__next2-butto
 }
 
 .react-calendar__navigation {
-  background: #FFF4D0;
+  background: #fff4d0;
   border-radius: 10px 10px 0px 0px;
 }
 
@@ -1924,7 +1919,7 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 }
 
 .react-calendar__tile {
-  color: #9F9F9F;
+  color: #9f9f9f;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -1975,13 +1970,13 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 .react-calendar__month-view__weekdays__weekday::before {
   background-image: url('../images/lines.svg');
   width: 1.5px;
-  content: " ";
+  content: ' ';
   position: absolute;
   right: 0;
   top: 50%;
   height: 20px;
   background-size: contain;
-  transform: translateY(-50%)
+  transform: translateY(-50%);
 }
 
 .react-calendar__tile--active abbr,
@@ -1997,25 +1992,25 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 }
 
 .react-calendar__tile--active abbr {
-  background: #FFEAA5;
+  background: #ffeaa5;
   color: #181818;
 }
 
 .react-calendar__tile--now abbr {
-  background: #FFEAA5;
+  background: #ffeaa5;
   color: #181818;
 }
 
 hr.hr-calender {
   border-radius: 2px;
-  border-color: #FFF4D0;
+  border-color: #fff4d0;
   border-width: 2px;
   background: transparent;
   margin: 1rem;
 }
 
 .no-remainder {
-  color: #9F9F9F;
+  color: #9f9f9f;
   font-size: 16px;
   font-weight: 500;
   line-height: normal;
@@ -2035,17 +2030,16 @@ hr.hr-calender {
   padding: 0px;
 }
 
-input[type="color" i]::-webkit-color-swatch-wrapper {
+input[type='color' i]::-webkit-color-swatch-wrapper {
   padding: 0px;
 }
 
-input[type="color" i]::-webkit-color-swatch {
+input[type='color' i]::-webkit-color-swatch {
   border: 0px;
   border-radius: 4px;
 }
 
-@media (max-width:450px) {
-
+@media (max-width: 450px) {
   .react-calendar__tile,
   .react-calendar__month-view__weekdays__weekday {
     font-size: 10px;
@@ -2074,7 +2068,7 @@ input[type="color" i]::-webkit-color-swatch {
   }
 }
 
-// calender end 
+// calender end
 .mypage-page {
   .table-outer {
     thead {
@@ -2091,7 +2085,7 @@ input[type="color" i]::-webkit-color-swatch {
 
   .mypage-table {
     td {
-      color: #9F9F9F;
+      color: #9f9f9f;
       font-size: 14px;
       font-weight: 500;
       line-height: normal;
@@ -2154,21 +2148,21 @@ input[type="color" i]::-webkit-color-swatch {
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
 .selected-date {
-  border-bottom: 2px solid #FFD700; /* Yellow underline color */
+  border-bottom: 2px solid #ffd700; /* Yellow underline color */
 }
 .mypagescreen_selected__\+hXYS {
-  border-bottom: 4px solid var(--color-primary-shade-1)!important;
+  border-bottom: 4px solid var(--color-primary-shade-1) !important;
 }
 .assign-create .id-detail:last-child {
   color: $black-shade-2;
 }
-ul.MuiList-root[aria-labelledby="Status-popup-label"] {
+ul.MuiList-root[aria-labelledby='Status-popup-label'] {
   padding: 0px;
 }
-.list-completed{
-  fieldset{
+.list-completed {
+  fieldset {
     display: none;
-  } 
+  }
   #Status-info {
     width: 80px;
     border-radius: 20px;
@@ -2178,14 +2172,14 @@ ul.MuiList-root[aria-labelledby="Status-popup-label"] {
     color: #fff;
     font-size: 13px;
     font-weight: 500;
-    background: #00BF70;
+    background: #00bf70;
   }
-  svg{
-    top:6px;
+  svg {
+    top: 6px;
   }
 }
 .placeholder-color .MuiSelect-select div {
-  color: #9F9F9F;
+  color: #9f9f9f;
 }
 input#mobile_number {
   background-image: url('../images/mobile-line.svg');
@@ -2194,12 +2188,13 @@ input#mobile_number {
   background-position: left;
   padding-left: 15px;
 }
-@media (min-width:1200px){
+@media (min-width: 1200px) {
   .assign-create .MuiGrid-grid-xl-3.MuiGrid-grid-lg-4 {
     max-width: 20%;
   }
 }
-.multi-selection .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot {
+.multi-selection
+  .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot {
   height: 100%;
   padding-top: 5px !important;
   padding-bottom: 5px !important;
@@ -2210,8 +2205,8 @@ input#mobile_number {
   padding-left: 7px !important;
 }
 .table-outer {
-  thead{
-    th{
+  thead {
+    th {
       .MuiInputBase-root {
         height: 30px;
       }
@@ -2226,7 +2221,7 @@ input#mobile_number {
   width: 100px;
   margin-bottom: 0px !important;
 }
-.notification-email{
+.notification-email {
   span.MuiSwitch-root {
     margin-left: 10px;
   }
@@ -2236,7 +2231,10 @@ input#mobile_number {
   color: rgba(0, 0, 0, 0.87);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px 2px 1px -1px,
+    rgba(0, 0, 0, 0.14) 0px 1px 1px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
   width: 285px;
   position: absolute;
   right: 0px;
@@ -2263,7 +2261,7 @@ input#mobile_number {
   animation-name: mui-auto-fill-cancel;
   -webkit-animation-duration: 10ms;
   animation-duration: 10ms;
-  padding: 7.5px 14px !important; ;
+  padding: 7.5px 14px !important;
 }
 .css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input {
   font: inherit;
@@ -2284,4 +2282,5 @@ input#mobile_number {
   -webkit-animation-duration: 10ms;
   animation-duration: 10ms;
   padding-top: 1px;
-  padding: 7.5px 14px !important;}
+  padding: 7.5px 14px !important;
+}
