@@ -197,25 +197,10 @@ const Addnewpopup = React.forwardRef(
                       className="edit-profile-btn"
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
-                      {/* <Button>Upload photo</Button> */}
-                      <TextField
-                        margin="none"
-                        type="file"
-                        fullWidth
-                        id="assets_image"
-                        name="assets_image"
-                        autoComplete="assets_image"
-                        InputLabelProps={{ shrink: false }}
-                        // placeholder="First name"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        // value={formik.values.assets_image}
-                        size="small"
-                        // error={
-                        //   formik.touched.assets_image &&
-                        //   Boolean(formik.errors.assets_image)
-                        // }
-                      />
+                      <span className="file-wrapper">
+                        <input type="file" name="photo" id="photo" />
+                        <span className="button">Upload photo</span> 
+                      </span>                      
                       {/* {formik.touched.assets_image &&
                         formik.errors.assets_image && (
                           <Typography className="error-field">
@@ -249,7 +234,7 @@ const Addnewpopup = React.forwardRef(
                         </Typography>
                       )} */}
                     </Box>
-                    <Box>
+                    {/* <Box>
                       <Typography className="recent-use">
                         Recently used
                       </Typography>
@@ -297,7 +282,7 @@ const Addnewpopup = React.forwardRef(
                           </TimelineContent>
                         </TimelineItem>
                       </Timeline>
-                    </Box>
+                    </Box> */}
                   </Box>
                 </Grid>
                 <Grid
@@ -401,6 +386,7 @@ const Addnewpopup = React.forwardRef(
                             Organisation
                           </label>
                           <Select
+                            className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={
@@ -549,6 +535,7 @@ const Addnewpopup = React.forwardRef(
                           <label style={{ display: 'block' }}>Status</label>
 
                           <Select
+                            className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={
@@ -604,6 +591,7 @@ const Addnewpopup = React.forwardRef(
                           </label>
 
                           <Select
+                            className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={

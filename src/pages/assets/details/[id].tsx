@@ -293,6 +293,7 @@ export default function AssetDetails() {
                           <label style={{ display: 'block' }}>Organisation</label>
                           <FormControl sx={{ width: '100%' }}>
                             <Select
+                              className="placeholder-color"
                               displayEmpty
                               IconComponent={ExpandMoreOutlinedIcon}
                               renderValue={
@@ -334,7 +335,7 @@ export default function AssetDetails() {
                         </Box>
                       </Grid>
                     </Grid>
-                    <Grid container spacing={2} className='asset-popup'>
+                    <Grid container spacing={2} className='asset-popup multi-selection'>
                       <Grid item xs={12} sm={12} md={12} lg={12}
                       >
                         <Box style={{ position: 'relative' }}>
@@ -385,7 +386,7 @@ export default function AssetDetails() {
                         </Box>
                       </Grid>
                     </Grid>
-                    <Grid container spacing={2} className='asset-popup'>
+                    <Grid container spacing={2} className='asset-popup multi-selection'>
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>Laboratory/ies</label>
@@ -429,6 +430,7 @@ export default function AssetDetails() {
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>Status</label>
                           <Select
+                            className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={
@@ -468,6 +470,7 @@ export default function AssetDetails() {
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>Availability</label>
                           <Select
+                            className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={

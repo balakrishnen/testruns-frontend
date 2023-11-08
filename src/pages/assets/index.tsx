@@ -356,8 +356,7 @@ export default function Assets() {
                                       key={index}
                                       label={DepartmentList[index].name}
                                       sx={{
-                                        m: 0.5,
-                                        fontWeight: 500,
+                                        m: 0.5,                                        
                                         padding: '0px 3px',
                                       }}
                                       onClick={(_event) => {
@@ -374,8 +373,9 @@ export default function Assets() {
                                       <span
                                         style={{
                                           fontWeight: 500,
-                                          color: 'grey',
+                                          color: '#9F9F9F',
                                           fontSize: '12px',
+                                          whiteSpace: 'nowrap'
                                         }}
                                       >
                                         +{index} More
@@ -405,8 +405,7 @@ export default function Assets() {
                                       key={index}
                                       label={LaboratoryList[index].name}
                                       sx={{
-                                        m: 0.5,
-                                        fontWeight: 500,
+                                        m: 0.5,                                        
                                         padding: '0px 3px',
                                       }}
                                       onClick={(_event) => {
@@ -423,8 +422,9 @@ export default function Assets() {
                                       <span
                                         style={{
                                           fontWeight: 500,
-                                          color: 'grey',
+                                          color: '#9F9F9F',
                                           fontSize: '12px',
+                                          whiteSpace: 'nowrap'
                                         }}
                                       >
                                         +{index} More

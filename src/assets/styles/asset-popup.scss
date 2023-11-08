@@ -21,7 +21,7 @@
         padding: 4.5px 0px;
         width: 100%;
         margin-top: 10px;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
         fieldset {
             display: none;
         }
@@ -67,20 +67,13 @@
         line-height: normal;
         letter-spacing: 0.35px;
     }
-    .MuiTextField-root {
-        margin-top: 10px;
-    }
     .MuiInputBase-root {
-        padding: 4.5px 0px;
-        border-radius: 10px;
-        border: 1px solid #9F9F9F;
         // height: 45px;
         background: #F3F3F3;
         color: $black-shade-3;
-        font-size: 16px;
-        font-weight: 400;
-        line-height: normal;
-        letter-spacing: 0.24px;
+        input{
+            padding: 8.5px 14px;
+        }        
         fieldset{
           display: none;
         }
