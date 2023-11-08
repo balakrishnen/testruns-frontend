@@ -52,6 +52,7 @@ import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import { Value } from 'sass';
 import { bool } from 'yup';
 import moment from 'moment';
+import TablePopup from '../../components/table/TablePopup';
 
 const rows: AssetsRowData[] = AssetsRows;
 
@@ -67,6 +68,7 @@ export default function Assets() {
   const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
+  const tablePopupRef: any = React.useRef(null);
   const deleteSuccessPopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
@@ -358,6 +360,15 @@ export default function Assets() {
                                         fontWeight: 500,
                                         padding: '0px 3px',
                                       }}
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'departments',
+                                          DepartmentList
+                                        );
+                                      }}
                                     />
                                     {index > 0 && (
                                       <span
@@ -397,6 +408,15 @@ export default function Assets() {
                                         m: 0.5,
                                         fontWeight: 500,
                                         padding: '0px 3px',
+                                      }}
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'lab',
+                                          LaboratoryList
+                                        );
                                       }}
                                     />
                                     {index > 0 && (
@@ -531,6 +551,7 @@ export default function Assets() {
           />
           <SuccessPopup ref={successPopupRef} />
           <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
+          <TablePopup ref={tablePopupRef} />
         </Box>
       </Box>
     </PrivateRoute>
