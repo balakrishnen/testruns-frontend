@@ -9,7 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import test from '../../../assets/images/test.svg'
-import { fetchSingleAssetsData, postAssetsData } from "../../../api/assetsAPI";
+import { fetchSingleAssetsData, fetchUpdateAssetsData, postAssetsData } from "../../../api/assetsAPI";
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from '@reach/router';
 import { Formik, useFormik } from 'formik';
@@ -125,11 +125,13 @@ export default function AssetDetails() {
 
   // };
   const onSubmit = (values: any) => {
-    debugger
+    // debugger
     console.log("value", value)
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
-      dispatch(postAssetsData(values));
+      console.log(values);
+      
+      // dispatch(fetchUpdateAssetsData(values));
       // setFormPopup(false);
     } else {
       formik.setFieldError('name', 'Invalid first name');
@@ -185,16 +187,14 @@ export default function AssetDetails() {
       laboratoryId: assetValue.laboratoryId,
       organisationId: '',
       departmentId:assetValue.departmentId,
-      userId: 'USER_1001',
-      status: true,
+      // userId: 'USER_1001', 
+      status: 'AVAILABILITY',
       availability: assetValue.availability,
-      assets_id: assetValue.assets_id,
+      // assets_id: assetValue.assets_id,
       lastUsedDate: assetValue.lastUsedDate,
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: onSubmit
   });
 
   return (
@@ -545,7 +545,7 @@ export default function AssetDetails() {
                 </Grid>
               </Grid>
               <Box className="edit-details">
-                <Button type="submit" variant="contained" className="cancel-btn">Back</Button>
+                <Button variant="contained" className="cancel-btn">Back</Button>
                 <Button type="submit" variant="contained" className="add-btn">Save</Button>
               </Box>
             </CustomTabPanel>

@@ -122,7 +122,11 @@ mutation Update_asset(
         $perchasedDate: String!
         $lastUsedDate: String!
         $availability: Boolean!
-        $expiryDate: String!) {
+        $expiryDate: String!
+        $departmentId: String!
+        $laboratoryId: String!
+        $status: String!
+        ) {
      update_asset(
         _id: $_id
         name: $name
@@ -131,6 +135,9 @@ mutation Update_asset(
         lastUsedDate: $lastUsedDate
         availability: $availability
         expiryDate: $expiryDate
+        departmentId: $departmentId
+        laboratoryId: $laboratoryId
+        status:$status
     ) {
         _id
         name

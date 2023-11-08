@@ -135,7 +135,9 @@ export default function Assets() {
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
 
   const handleOnChange=(e:any, row:any)=>{
-    console.log('change',row);
+    console.log(row);
+    
+    console.log('change',row.departmentId, row.laboratoryId);
     const assetsChange={
       _id: row._id ,
       name: row.name ,
@@ -143,6 +145,10 @@ export default function Assets() {
       perchasedDate: row.perchasedDate ,
       lastUsedDate: row.organisationId ,
       availability: e.target.value ,
+      expiryDate:"",
+      departmentId: row.departmentId,
+      laboratoryId: row.laboratoryId,
+      status: "AVAILABLE"
     }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange))
