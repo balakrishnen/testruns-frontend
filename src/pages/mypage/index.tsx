@@ -331,7 +331,7 @@ export default function MyPage() {
                     </TableCell>
                     <TableCell>{(row.extraData)}</TableCell>
                     <TableCell>{(row.departmentId)}</TableCell>
-                    <TableCell>{(row.laboratoryId)}</TableCell>
+                    <TableCell style={{whiteSpace:'nowrap'}}>{(row.laboratoryId)}</TableCell>
                     <TableCell>{(row.createdAt)}</TableCell>
 
                     <TableCell component="th" scope="row">
@@ -385,7 +385,7 @@ export default function MyPage() {
           </Box>
         </Box>
         <Grid container spacing={2} sx={{ width: '100%', marginLeft: '0rem', marginTop: '1rem' }}>
-          <Grid item xs={12} sm={12} md={12} lg={8} xl={8} sx={{ paddingLeft: '0px !important' }}>
+          <Grid item xs={12} sm={12} md={12} lg={8} xl={8} sx={{ paddingLeft: '0px !important' , paddingRight:{xs:'0px',lg:'16px'} , paddingBottom:{xs:'16px',lg:'0px'}}}>
 
             <Box className="notification-mypage">
                <Box className="notification-title"><Typography>Notifications</Typography></Box>

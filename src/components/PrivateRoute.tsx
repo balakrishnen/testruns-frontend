@@ -17,7 +17,7 @@ if (typeof window !== 'undefined') {
   isLoggedIn = sessionStorage.getItem('isLoggedIn');
 }
   const [width, setWidth] = React.useState(95);
-  const [classn, setClassn] = React.useState<any>('');
+  const [classn, setClassn] = React.useState<any>('closemenu');
   const [editProfile, setEditProfile] = React.useState(false);
   const [notificationList, setNotificationList] = React.useState(false);
   const [theme, setTheme] = React.useState(lightTheme);
@@ -77,7 +77,7 @@ if (typeof window !== 'undefined') {
           sx={{
             width: '100%',
             position: 'relative',
-            top: '65px',
+            top: '80px',
           }}
           className={`${width === 290 ? 'wide-class' : 'narrow-class'}`}
         >

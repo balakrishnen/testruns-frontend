@@ -332,8 +332,7 @@ const RunsForm = React.forwardRef(
                     xs={12}
                     sm={12}
                     md={12}
-                    lg={12}
-                    sx={{ paddingRight: { sm: '1rem !important' } }}
+                    lg={12}                    
                   >
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Test objective</label>
