@@ -51,7 +51,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
   },
   {
     id: 'name',
-    label: 'Assets Name',
+    label: 'Assets name',
     filters: [
       {
         id: 'search',
@@ -587,7 +587,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
   },
   {
     id: 'name',
-    label: 'Procedure Name',
+    label: 'Procedure name',
     filters: [
       {
         id: 'search',
@@ -862,11 +862,11 @@ export const RunsHeaders: readonly RunsHead[] = [
         type: 'autocomplete',
         label: 'Runs ID',
         options: [
-          { value: 'RUNS1001', label: 'RUNS1001' },
-          { value: 'RUNS1002', label: 'RUNS1002' },
-          { value: 'RUNS1003', label: 'RUNS1003' },
-          { value: 'RUNS1004', label: 'RUNS1004' },
-          { value: 'RUNS1005', label: 'RUNS1005' },
+          { value: 'RUNS1001', label: 'RUNS-1001' },
+          { value: 'RUNS1002', label: 'RUNS-1002' },
+          { value: 'RUNS1003', label: 'RUNS-1003' },
+          { value: 'RUNS1004', label: 'RUNS-1004' },
+          { value: 'RUNS1005', label: 'RUNS-1005' },
         ],
       },
     ],
@@ -875,7 +875,7 @@ export const RunsHeaders: readonly RunsHead[] = [
   },
   {
     id: 'objective',
-    label: 'Runs Name',
+    label: 'Runs name',
     filters: [
       {
         id: 'search',
@@ -925,7 +925,7 @@ export const RunsHeaders: readonly RunsHead[] = [
 
   {
     id: 'createdAt',
-    label: 'Created On',
+    label: 'Created on',
     filters: [
       {
         id: 'date',
@@ -939,7 +939,7 @@ export const RunsHeaders: readonly RunsHead[] = [
   },
   {
     id: 'dueDate',
-    label: 'Due Date',
+    label: 'Due date',
     filters: [
       {
         id: 'date',
@@ -960,9 +960,10 @@ export const RunsHeaders: readonly RunsHead[] = [
         type: 'autocomplete',
         label: '-Select status-',
         options: [
-          { value: '1', label: 'New Task' },
-          { value: '2', label: 'Completed' },
-          { value: '3', label: 'Not Started' },
+          { value: '1', label: 'Created' },
+          { value: '2', label: 'Started' },
+          { value: '3', label: 'Stopped' },
+          { value: '4', label: 'Completed' },
         ],
       },
     ],
@@ -971,7 +972,7 @@ export const RunsHeaders: readonly RunsHead[] = [
   },
   {
     id: 'extraDate',
-    label: 'Assigned By',
+    label: 'Assigned by',
     filters: [
       {
         id: 'status',
@@ -993,7 +994,7 @@ export const RunsRows = [
     is_checked: false,
     id: '1',
     objective: 'Stored Procedure',
-    runNumber: 'RUNS1001',
+    runNumber: 'RUNS-1001',
     availability: 'AVAILABLE',
     departmentId: 'DEPT-1001',
     laboratoryId: 'LAB-1002',
@@ -1008,7 +1009,7 @@ export const RunsRows = [
     is_checked: false,
     id: '2',
     objective: 'Data Collection',
-    runNumber: 'RUNS1002',
+    runNumber: 'RUNS-1002',
     availability: 'AVAILABLE',
     departmentId: 'DEPT-1002',
     laboratoryId: 'LAB-1001',
@@ -1023,7 +1024,7 @@ export const RunsRows = [
     is_checked: false,
     id: '3',
     objective: 'Algorithms',
-    runNumber: 'RUNS1003',
+    runNumber: 'RUNS-1003',
     availability: 'AVAILABLE',
     departmentId: 'DEPT-1003',
     laboratoryId: 'LAB-1003',
@@ -1038,7 +1039,7 @@ export const RunsRows = [
     is_checked: false,
     id: '4',
     objective: 'Pattern recognition',
-    runNumber: 'RUNS1004',
+    runNumber: 'RUNS-1004',
     availability: 'AVAILABLE',
     departmentId: 'DEPT-1002',
     laboratoryId: 'LAB-1001',
@@ -1053,7 +1054,7 @@ export const RunsRows = [
     is_checked: false,
     id: '5',
     objective: 'Hypothesis',
-    runNumber: 'RUNS1005',
+    runNumber: 'RUNS-1005',
     availability: 'AVAILABLE',
     departmentId: 'DEPT-1001',
     laboratoryId: 'LAB-1004',

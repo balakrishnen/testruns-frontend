@@ -37,6 +37,10 @@ import { navigate } from 'gatsby';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
 import RunsForm from './RunsForm';
+import runCreated from '../../assets/images/run-created.svg';
+import runStarted from '../../assets/images/run-started.svg';
+import runStopped from '../../assets/images/run-stopped.svg';
+import runCompleted from '../../assets/images/run-completed.svg';
 
 // table start
 
@@ -155,9 +159,9 @@ export default function Runs() {
     deletePopupRef.current.open(true, 'Runs');
   };
 
-  const clickHandler=(e:MouseEvent)=>{
+  const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
-  }
+  };
   return (
     <PrivateRoute>
       <Box className="main-padding runz-page">
@@ -225,13 +229,11 @@ export default function Runs() {
                       key={index}
                       // selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
-                      onClick={(e: any) =>{
-                      //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && 
-                        navigate(`/runs/details/${row.runNumber}`)
+                      onClick={(e: any) => {
+                        //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" &&
+                        navigate(`/runs/details/${row.runNumber}`);
                         // console.log(e.target.tagName)
-                        
-                        }
-                      }
+                      }}
                     >
                       {headers[0].is_show && (
                         <TableCell scope="row">
@@ -240,30 +242,50 @@ export default function Runs() {
                               <Checkbox
                                 color="primary"
                                 checked={row.is_checked}
-                                onClick={(e:any)=>clickHandler(e)}
+                                onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) =>
                                   handleChange(event, row.id)
                                 }
                               />
                             </Box>
-                            <Box 
+
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Box style={{background: '#f5f1f1', width: '50px', height: '46px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                <img
+                                  src={
+                                    index + 1 === 1
+                                      ? runCreated
+                                      : index + 1 === 2
+                                      ? runStarted
+                                      : index + 1 === 3
+                                      ? runStopped
+                                      : runCompleted
+                                  }
+                                  alt="no_image"
+                                  style={{ width: '35px', height: '35px' }}
+                                />
+                              </Box>
+                              <Box sx={{ ml: 2 }}>
+                                <Box>{row.runNumber}</Box>
+                              </Box>
+                            </Box>
+
+                            {/* <Box
                               onClick={() =>
                                 navigate(`/runs/details/${row.runNumber}`)
                               }
                             >
+                              <img
+                                src={index + 1 === 1 ? runCreated : index + 1 === 2 ? runStarted : index + 1 === 3 ? runStopped : runCompleted}
+                                alt="no_image"
+                                style={{ width: '35px', height: '35px' }}
+                              />
                               {row.runNumber}
-                            </Box>
-                            {/* <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <Box>
-                              <img src={image_holder} alt="no_image" />
-                            </Box>
-                            <Box sx={{ ml: 2 }}>
-                              <Box>{row.assetNumber}</Box>
-                            </Box>
-                          </Box> */}
+                            </Box> */}
                           </Box>
                         </TableCell>
                       )}
+
                       {headers[1].is_show && (
                         <TableCell>{row.objective}</TableCell>
                       )}
@@ -282,42 +304,42 @@ export default function Runs() {
                       {headers[6].is_show && (
                         <TableCell>
                           <Select
-                          name="select"
+                            name="select"
                             className={
                               row.isActive === 1
                                 ? 'active-select td-select'
                                 : 'inactive-select td-select'
                             }
-                            value={row.isActive}
-                            displayEmpty 
-                            onClick={(e:any)=>clickHandler(e)}
-                            onChange={(e)=>handleChange(e, row.id)}
+                            value={index < 4 ? index + 1 : 4}
+                            displayEmpty
+                            onClick={(e: any) => clickHandler(e)}
+                            onChange={(e) => handleChange(e, row.id)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={1}>New Task</MenuItem>
-                            <MenuItem value={2}>Completed</MenuItem>
-                            <MenuItem value={3}>Not Started</MenuItem>
-
+                            <MenuItem value={1}>&nbsp;Created</MenuItem>
+                            <MenuItem value={2}>Started</MenuItem>
+                            <MenuItem value={3}>Stopped</MenuItem>
+                            <MenuItem value={4}>Completed</MenuItem>
                           </Select>
                         </TableCell>
                       )}
                       {headers[7].is_show && (
-                         <TableCell align="center">Username</TableCell>
-                          //</TableRow>{/* <Select
-                          //   className={
-                          //     row.availability === 'AVAILABLE'
-                          //       ? 'active-select td-select'
-                          //       : 'inactive-select td-select'
-                          //   }
-                          //   value={row.availability}
-                          //   displayEmpty
-                          //   IconComponent={ExpandMoreOutlinedIcon}
-                          // >
-                          //   <MenuItem value={'AVAILABLE'}>Available</MenuItem>
-                          //   <MenuItem value={'NOTAVAILABLE'}>
-                          //     Not available
-                          //   </MenuItem>
-                          // </Select> */}
+                        <TableCell align="center">Username</TableCell>
+                        //</TableRow>{/* <Select
+                        //   className={
+                        //     row.availability === 'AVAILABLE'
+                        //       ? 'active-select td-select'
+                        //       : 'inactive-select td-select'
+                        //   }
+                        //   value={row.availability}
+                        //   displayEmpty
+                        //   IconComponent={ExpandMoreOutlinedIcon}
+                        // >
+                        //   <MenuItem value={'AVAILABLE'}>Available</MenuItem>
+                        //   <MenuItem value={'NOTAVAILABLE'}>
+                        //     Not available
+                        //   </MenuItem>
+                        // </Select> */}
                         // </TableCell>
                       )}
                     </TableRow>
@@ -348,7 +370,6 @@ export default function Runs() {
             openConfirmationPopup={handleOpenConfirmationPopup}
             type="create"
           />
-        
         </Box>
       </Box>
     </PrivateRoute>

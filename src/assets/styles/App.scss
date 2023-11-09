@@ -255,7 +255,7 @@ span.MuiTouchRipple-root {
 
 button.close-actions {
   height: 33px;
-  padding: 6px 12px 6px 9px;
+  padding: 20px 10px;
   border-radius: 50px;
   background: rgba(255, 185, 185, 0.5) !important;
   box-shadow: none;
@@ -301,7 +301,8 @@ button.delete-actions {
   button,
   label {
     margin-right: 1.5rem !important;
-    margin-bottom: 8px !important;
+    // margin-bottom: 8px !important;
+    margin-bottom: 0px !important;
 
     @media (max-width: 599px) {
       margin-right: 0.3rem !important;
