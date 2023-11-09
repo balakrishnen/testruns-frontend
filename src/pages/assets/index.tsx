@@ -141,21 +141,18 @@ export default function Assets() {
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
 
   const handleOnChange = (e: any, row: any) => {
-    console.log(row);
+    console.log(e.target.value);
 
     console.log('change', row.departmentId, row.laboratoryId);
-    const assetsChange = {
+    var assetsChange :any= {
       _id: row._id,
-      name: row.name,
-      organisationId: row.organisationId,
-      perchasedDate: row.perchasedDate,
-      lastUsedDate: row.organisationId,
-      availability: e.target.value,
-      expiryDate: '',
-      departmentId: row.departmentId,
-      laboratoryId: row.laboratoryId,
-      status: 'AVAILABLE',
     };
+    if(e.target.name=='status'){
+      assetsChange['status']=e.target.value
+    }
+    if(e.target.name=='availability'){
+      assetsChange['availability']=e.target.value
+    }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
   };
@@ -517,42 +514,46 @@ export default function Assets() {
                         {headers[6].is_show && (
                           <TableCell>
                             <Select
+                            name='status'
                               className={
                                 row.isActive === true
                                   ? 'active-select td-select'
                                   : 'inactive-select td-select'
                               }
-                              value={true}
+                              value={row.status}
                               displayEmpty
                               onChange={(e) => handleOnChange(e, row)}
                               onClick={(e: any) => clickHandler(e)}
                               IconComponent={ExpandMoreOutlinedIcon}
                             >
-                              <MenuItem value={true as any}>
-                                Fully Working
+                            <MenuItem value={"Active"}>
+                               Active
                               </MenuItem>
-                              <MenuItem value={false as any}>Issues</MenuItem>
+                              <MenuItem value={"Inactive"}>In-Active</MenuItem>
                             </Select>
                           </TableCell>
                         )}
                         {headers[7].is_show && (
                           <TableCell>
                             <Select
+                            name='availability'
                               className={
                                true === true
                                   ? 'active-select td-select'
                                   : 'inactive-select td-select'
                               }
-                              value={true}
+                              value={row.availability?row.availability:'Not_Available'}
                               displayEmpty
                               onChange={(e) => handleOnChange(e, row)}
                               IconComponent={ExpandMoreOutlinedIcon}
                               onClick={(e: any) => clickHandler(e)}
                             >
-                              <MenuItem value={true as any}>Available</MenuItem>
-                              <MenuItem value={false as any}>
-                                Not available
+                              <MenuItem value={'Available'}>Available</MenuItem>
+                              <MenuItem value={'In_Use'}>
+                                In Use
                               </MenuItem>
+                              <MenuItem value={'Not_Available'}>Not Available</MenuItem>
+
                             </Select>
                           </TableCell>
                         )}

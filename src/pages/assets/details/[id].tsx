@@ -141,7 +141,12 @@ export default function AssetDetails() {
     console.log("value", value)
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
-      console.log('final',values);
+      console.log('final',departments);
+      var deptArray:any=[]
+      departments.map((item:any)=>(deptArray.push(item?.id)))
+      var labArray:any=[]
+      laboratory.map((item:any)=>(labArray.push(item?.id)))
+
       let assetValues={
         _id: assetValue._id,
         name: values.name,
@@ -150,11 +155,11 @@ export default function AssetDetails() {
         lastUsedDate: values.lastUsedDate,
         availability: values.availability,
         expiryDate: assetValue.expiryDate,
-        departmentId: departments,
-        laboratoryId: laboratory,
+        departmentId: deptArray,
+        laboratoryId: labArray,
         status: values.status,
       }
-      console.log(assetValues);
+      console.log('labArray',deptArray);
       
       dispatch(fetchUpdateAssetsData(assetValues));
       // setFormPopup(false);
@@ -213,7 +218,7 @@ export default function AssetDetails() {
       organisationId: '',
       departmentId: assetValue.departmentId,
       // userId: 'USER_1001', 
-      status: 'AVAILABILITY',
+      status: assetValue.status,
       availability: assetValue.availability,
       // assets_id: assetValue.assets_id,
       lastUsedDate: assetValue.lastUsedDate,
@@ -541,11 +546,15 @@ export default function AssetDetails() {
                               Boolean(formik.errors.status)
                             }
                           >
-                            {StatusList.map((item: any) => (
+                            <MenuItem value={"Active"}>
+                               Active
+                              </MenuItem>
+                              <MenuItem value={"Inactive"}>In-Active</MenuItem>
+                            {/* {StatusList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
                               </MenuItem>
-                            ))}
+                            ))} */}
                           </Select>
                           {formik.touched.status && formik.errors.status && (
                             <Typography className="error-field">
@@ -585,11 +594,16 @@ export default function AssetDetails() {
                               Boolean(formik.errors.availability)
                             }
                           >
-                            {AvailabilityList.map((item: any) => (
+                            <MenuItem value={'Available'}>Available</MenuItem>
+                              <MenuItem value={'In_Use'}>
+                                In Use
+                              </MenuItem>
+                              <MenuItem value={'Not_Available'}>Not Available</MenuItem>
+                            {/* {AvailabilityList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
                               </MenuItem>
-                            ))}
+                            ))} */}
                           </Select>
                           {formik.touched.availability &&
                             formik.errors.availability && (

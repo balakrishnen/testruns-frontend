@@ -56,15 +56,14 @@ export const fetchSingleAssetsData = (payload: any) => async (dispatch: any) => 
   }
 };
 
-export const fetchUpdateAssetsData = (payload: any) => async (dispatch: any) => {
-  dispatch(fetchAssetsStart());
+export const fetchUpdateAssetsData = (payload: any) => async () => {
   try {
-    const response = await client.query({
-      query: UPDATE_ASSETS,
+    const response = await client.mutate({
+      mutation: UPDATE_ASSETS,
       variables: payload,
     });
-    dispatch(fetchAssetsSuccess(response.data));
+    console.log(response);
   } catch (error: any) {
-    dispatch(fetchAssetsFailure(error.message));
+    console.log(error);
   }
 };

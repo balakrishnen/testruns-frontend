@@ -91,7 +91,22 @@ const Addnewpopup = React.forwardRef(
     const onSubmit = (values: any) => {
       const isMatch = checkCredentials(values.name);
       if (isMatch) {
-        dispatch(postAssetsData(values));
+        var deptArray:any=[]
+        departments.map((item:any)=>(deptArray.push(item?.id)))
+        var labArray:any=[]
+        laboratory.map((item:any)=>(labArray.push(item?.id)))
+        let assetValues={
+        name: values.name,
+        organisationId: values.organisationId,
+        perchasedDate: values.perchasedDate,
+        lastUsedDate: values.lastUsedDate,
+        availability: values.availability,
+        expiryDate: values.expiryDate,
+        departmentId: deptArray,
+        laboratoryId: labArray,
+        status: values.status,
+        }
+        dispatch(postAssetsData(assetValues));
         submitFormPopup()
 
       } else {
@@ -584,11 +599,15 @@ const Addnewpopup = React.forwardRef(
                               Boolean(formik.errors.status)
                             }
                           >
-                            {StatusList.map((item: any) => (
+                             <MenuItem value={"Active"}>
+                               Active
+                              </MenuItem>
+                              <MenuItem value={"Inactive"}>In-Active</MenuItem>
+                            {/* {StatusList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
                               </MenuItem>
-                            ))}
+                            ))} */}
                           </Select>
                           {formik.touched.status && formik.errors.status && (
                             <Typography className="error-field">
@@ -644,11 +663,16 @@ const Addnewpopup = React.forwardRef(
                               Boolean(formik.errors.availability)
                             }
                           >
-                            {AvailabilityList.map((item) => (
+                             <MenuItem value={'Available'}>Available</MenuItem>
+                              <MenuItem value={'In_Use'}>
+                                In Use
+                              </MenuItem>
+                              <MenuItem value={'Not_Available'}>Not Available</MenuItem>
+                            {/* {AvailabilityList.map((item) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
                               </MenuItem>
-                            ))}
+                            ))} */}
                           </Select>
                           {formik.touched.availability &&
                             formik.errors.availability && (

@@ -1,5 +1,17 @@
 import { gql } from '@apollo/client';
 
+
+gql`
+ enum AssetStatus {
+      Active
+      Inactive
+    }
+  enum AssetAvailability {
+      Available 
+      In_Use 
+      Not_Available
+    } `
+
 export const GET_ASSETS = gql`
  query Get_all_assets($page: Int!, $perPage: Int!) {
     get_all_assets(page: $page, perPage: $perPage) {
@@ -47,24 +59,20 @@ export const GET_ASSETS = gql`
 export const POST_ASSETS = gql`
   mutation Create_asset(
     $name: String!
-    $assetNumber: String!
-    $departmentId: String!
-    $laboratoryId: String!
+    $departmentId: [String]!
+    $laboratoryId: [String]!
     $organisationId: String!
-    $userId: String!
     $perchasedDate: String!
     $lastUsedDate: String!
-    $status: String!
-    $availability: Boolean!
+    $status: AssetStatus!
+    $availability: AssetAvailability!
     $expiryDate: String!
   ) {
     create_asset(
       name: $name
-      assetNumber: $assetNumber
       departmentId: $departmentId
       laboratoryId: $laboratoryId
       organisationId: $organisationId
-      userId: $userId
       perchasedDate: $perchasedDate
       lastUsedDate: $lastUsedDate
       status: $status
@@ -73,10 +81,8 @@ export const POST_ASSETS = gql`
     ) {
       _id
       name
-      assetNumber
       departmentId
       laboratoryId
-      userId
       perchasedDate
       lastUsedDate
       status
@@ -114,17 +120,18 @@ query Get_asset($_id: String!) {
 `;
 
 export const UPDATE_ASSETS = gql`
+
 mutation Update_asset(
         $_id: String!
-        $name: String!
-        $organisationId: String!
-        $perchasedDate: String!
-        $lastUsedDate: String!
-        $availability: Boolean!
-        $expiryDate: String!
-        $departmentId: String!
-        $laboratoryId: String!
-        $status: String!
+        $name: String
+        $organisationId: String
+        $perchasedDate: String
+        $lastUsedDate: String
+        $availability: AssetAvailability
+        $expiryDate: String
+        $departmentId: [String]
+        $laboratoryId: [String]
+        $status: AssetStatus
         ) {
      update_asset(
         _id: $_id
