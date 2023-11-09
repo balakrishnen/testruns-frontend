@@ -9,6 +9,8 @@ import AppNotificationDrawer from './layout/notification-drawer';
 // import AppProfileDrawer from "./layout/profile-drawer";
 // import AppNotificationDrawer from "./layout/notification-drawer";
 import { Helmet } from "react-helmet";
+import favicon from '../assets/images/common/favicon.svg'; // Adjust the path accordingly
+
 
 const PrivateRoute = ({ children }: any) => {
   let isLoggedIn = null;
@@ -52,6 +54,7 @@ if (typeof window !== 'undefined') {
     <ThemeProvider theme={theme}>
       <Helmet>
         <title>Test Runs</title>
+        <link rel="icon" href={favicon} type="image/x-icon" />
       </Helmet>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />

@@ -250,7 +250,7 @@ export default function Runs() {
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Box style={{background: '#f5f1f1', width: '50px', height: '46px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                              <Box style={{ width: '45px', height: '41px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                 <img
                                   src={
                                     index + 1 === 1
@@ -265,7 +265,7 @@ export default function Runs() {
                                   style={{ width: '35px', height: '35px' }}
                                 />
                               </Box>
-                              <Box sx={{ ml: 2 }}>
+                              <Box sx={{ ml: 1 }}>
                                 <Box>{row.runNumber}</Box>
                               </Box>
                             </Box>
