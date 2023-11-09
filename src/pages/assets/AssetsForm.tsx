@@ -74,8 +74,10 @@ const Addnewpopup = React.forwardRef(
     const successPopupRef: any = React.useRef(null);
     const confirmationPopupRef: any = React.useRef(null);
     const dispatch: any = useDispatch();
-    const departments: any = [];
-    const laboratory: any = [];
+    // const departments: any = [];
+    // const laboratory: any = [];
+    const [departments, setDepartments] = React.useState([])
+    const [laboratory, setLaboratory] = React.useState([])
     React.useImperativeHandle(ref, () => ({
       open(state: any) {
         setFormPopup(state);
@@ -459,40 +461,34 @@ const Addnewpopup = React.forwardRef(
                           </label>
 
                           <Autocomplete
-                            multiple
-                            id="departmentId"
-                            options={
-                              departmentData !== undefined ? departmentData : []
-                            }
-                            disableCloseOnSelect
-                            getOptionLabel={(option: any) => option.label}
-                            renderOption={(props, option, { selected }) => (
-                              <li {...props}>
-                                <Checkbox
-                                  style={{ marginRight: 0 }}
-                                  checked={selected}
-                                />
-                                {option.label}
-                              </li>
-                            )}
-                            renderInput={(params) => <TextField {...params} />}
-                            fullWidth
-                            placeholder="Department"
-                            size="medium"
-                            onChange={(e, f) => {
-                              f.forEach((element) =>
-                                departments.push(element.id),
-                              );
-                              formik.setFieldValue('departmentId', departments);
-                            }}
-                            // onChange={formik.handleChange}
-                            // onBlur={formik.handleBlur}
-                            // value={formik.values.department}
-                            // error={
-                            //   formik.touched.department &&
-                            //   Boolean(formik.errors.department)
-                            // }
-                          />
+                              multiple
+                              id="departmentId"
+                              disableCloseOnSelect
+                              value={departments}
+                              options={
+                                departmentData !== undefined ? departmentData : []
+                              }
+                              getOptionLabel={(option: any) => option.label}
+                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
+                              renderInput={params => (
+                                <TextField {...params} />)}
+                              fullWidth
+                              placeholder="Department"
+                              size="medium"
+                              renderOption={(props, option: any, { selected }) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) => setDepartments(selectedOptions)}
+                            />
                           {formik.touched.departmentId &&
                             formik.errors.departmentId && (
                               <Typography className="error-field">
@@ -514,31 +510,35 @@ const Addnewpopup = React.forwardRef(
                           </label>
 
                           <Autocomplete
-                            multiple
-                            id="laboratoryId"
-                            options={labData !== undefined ? labData : []}
-                            disableCloseOnSelect
-                            getOptionLabel={(option: any) => option.label}
-                            renderOption={(props, option, { selected }) => (
-                              <li {...props}>
-                                <Checkbox
-                                  style={{ marginRight: 0 }}
-                                  checked={selected}
-                                />
-                                {option.label}
-                              </li>
-                            )}
-                            renderInput={(params) => <TextField {...params} />}
-                            fullWidth
-                            placeholder="Laboratory"
-                            size="medium"
-                            onChange={(e, f) => {
-                              f.forEach((element) =>
-                                laboratory.push(element.id),
-                              );
-                              formik.setFieldValue('laboratoryId', laboratory);
-                            }}
-                          />
+                              multiple
+                              id="departmentId"
+                             
+                              options={
+                                labData !== undefined ? labData : []
+                              }
+                              getOptionLabel={(option: any) => option.label}
+                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
+                              disableCloseOnSelect
+                              value={laboratory}
+                              renderInput={params => (
+                                <TextField {...params} />)}
+                              fullWidth
+                              placeholder="Laboratory"
+                              size="medium"
+                              renderOption={(props, option: any, { selected }) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) => setLaboratory(selectedOptions)}
+                            />
                           {formik.touched.laboratoryId &&
                             formik.errors.laboratoryId && (
                               <Typography className="error-field">
