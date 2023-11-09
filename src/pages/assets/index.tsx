@@ -422,7 +422,7 @@ export default function Assets() {
                                   </>
                                 ) : (
                                   '-'
-                                )}s
+                                )}
                               </Box>
                             ) : 
                             '-'

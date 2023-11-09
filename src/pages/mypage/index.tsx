@@ -318,7 +318,7 @@ export default function MyPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.slice(0, viewAll ? rows.length : rowsPerPage).map((row) => (
+                {rows.slice(0, viewAll ? rows.length : rowsPerPage).map((row, index) => (
                   <TableRow
                     key={row.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -357,7 +357,7 @@ export default function MyPage() {
                               : '#00bf70',
                         }}
                       >
-                        {row.status === 1 ? 'New Task' : row.status === 2 ? 'Not Started' : 'Completed'}
+                        {index + 1 === 1 ? 'Created' : index + 1 === 2 ? 'Started' : index + 1 === 3 ? 'Stopped' : 'Completed'}
                       </Box>
                     </TableCell>
 

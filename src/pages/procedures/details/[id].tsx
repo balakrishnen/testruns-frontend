@@ -29,7 +29,7 @@ export default function ProcedureDetails() {
   );
   console.log(procedureSliceData)
   const location: any = useLocation()
-  const procedureValue = location.state.props
+  const procedureValue = location.state?.props
   console.log(procedureValue);;
   // console.log('log',window.location)
   const handleCloseFormPopup = (state: any) => {
