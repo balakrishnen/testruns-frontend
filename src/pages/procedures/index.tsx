@@ -440,7 +440,9 @@ export default function Procedures() {
                       onClick={(e:any) =>
                         // (e.target.name==undefined && 
                           navigate(
-                           `/procedures/details/${row._id}`
+                           `/procedures/details/${row._id}`, {
+                            state: { props: row },
+                          }
                          )
                        }
                     >

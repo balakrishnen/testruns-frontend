@@ -15,6 +15,7 @@ import { fetchSingleProcedureData } from '../../../api/procedureAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import ProcedureForm from '../ProcedureForm';
 import SuccessPopup from '../../../components/SuccessPopup';
+import { useLocation } from '@reach/router';
 
 export default function ProcedureDetails() {
   const editorRef: any = React.useRef(null);
@@ -26,7 +27,10 @@ export default function ProcedureDetails() {
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_procedure,
   );
-  console.log(procedureSliceData);
+  console.log(procedureSliceData)
+  const location: any = useLocation()
+  const procedureValue = location.state.props
+  console.log(procedureValue);;
   // console.log('log',window.location)
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
@@ -205,7 +209,7 @@ export default function ProcedureDetails() {
           </Box>
         </Box>
         <ProcedureForm
-          // formData={procedureData}
+          formData={procedureValue}
           type={'edit'}
           ref={formPopupRef}
           closeFormPopup={handleCloseFormPopup}

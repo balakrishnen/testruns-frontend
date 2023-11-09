@@ -422,13 +422,17 @@ export default function Assets() {
                                   </>
                                 ) : (
                                   '-'
-                                )}
+                                )}s
                               </Box>
-                            ) : (
-                              row.departmentId.map((item: any) => (
-                                <Box key={item.id}>{item.name}</Box>
-                              ))
-                            )}
+                            ) : 
+                            '-'
+                            // (
+                            //   row.departmentId.map((item: any) => 
+                            //   (
+                            //     <Box key={item?._id}>{item?.name}</Box>
+                            //   ))
+                            // )
+                            }
                           </TableCell>
                         )}
                         {headers[3].is_show && (
@@ -473,11 +477,14 @@ export default function Assets() {
                                   '-'
                                 )}
                               </Box>
-                            ) : (
-                              row.laboratoryId.map((item: any) => (
-                                <Box key={item.id}>{item.name}</Box>
-                              ))
-                            )}
+                            ) : 
+                            '-'
+                            // (
+                            //   row.laboratoryId.map((item: any) => (
+                            //     <Box key={item.id}>{item.name}</Box>
+                            //   ))
+                            // )
+                            }
                           </TableCell>
                         )}
                         {console.log(

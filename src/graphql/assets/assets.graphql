@@ -3,10 +3,20 @@ import { gql } from '@apollo/client';
 export const GET_ASSETS = gql`
  query Get_all_assets($page: Int!, $perPage: Int!) {
     get_all_assets(page: $page, perPage: $perPage) {
-     Assets {
+        pageInfo {
+            currentPage
+            totalPages
+            hasNextPage
+            hasPreviousPage
+        }
+        Assets {
             _id
             name
-            status
+            assetNumber
+            organisationId
+            perchasedDate
+            lastUsedDate
+            expiryDate
             isActive
             isDeleted
             createdAt
@@ -14,7 +24,6 @@ export const GET_ASSETS = gql`
             departmentId {
                 _id
                 name
-                userId
                 isActive
                 isDeleted
                 createdAt
@@ -30,13 +39,7 @@ export const GET_ASSETS = gql`
                 createdAt
                 updatedAt
             }
-        }
-        pageInfo {
-            currentPage
-            totalPages
-            totalCount
-            hasNextPage
-            hasPreviousPage
+            status
         }
     }
   }

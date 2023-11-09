@@ -38,7 +38,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const ProcedureForm = React.forwardRef(
-  ({ open, close, closeFormPopup, type }: any, ref) => {
+  ({ open, close, closeFormPopup, type ,formData}: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     // console.log(formData);
@@ -93,15 +93,23 @@ const ProcedureForm = React.forwardRef(
     //   setFormValues(formData)
     // },[])
 
+
     const initialValues = {
-      name: '',
+      name: formData?.name,
       createdBy: new Date(),
-      departmentId: '',
-      laboratoryId: '',
-      organisationId: 'ASSE-1000',
+      departmentId: formData?.departmentId,
+      laboratoryId: formData?.laboratoryId,
+      organisationId: formData?.organisationId,
     };
+    console.log(initialValues);
     const formik = useFormik({
-      initialValues,
+      initialValues:{
+        name: formData?.name,
+        createdBy: new Date(),
+        departmentId: formData?.departmentId,
+        laboratoryId: formData?.laboratoryId,
+        organisationId: formData?.organisationId,
+      },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
     });

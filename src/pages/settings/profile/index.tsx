@@ -840,7 +840,7 @@ console.log(DepartmentList);
         </Box>
       </Box>
       <Box className="edit-details">
-        <Button type="submit" variant="contained" className="cancel-btn">
+        <Button type="submit" variant="contained" className="cancel-btn" style={{visibility:'hidden'}}>
           Back
         </Button>
         <Button type="submit" onClick={()=>{expanded=='panel2'
