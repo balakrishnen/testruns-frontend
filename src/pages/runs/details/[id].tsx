@@ -22,6 +22,8 @@ import KeyboardArrowDownIcon from '../../../assets/images/chevrondown-thin.svg';
 
 import { LineChart, Line, XAxis, CartesianGrid, Tooltip } from 'recharts';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
+import RunsForm from '../RunsForm';
+import SuccessPopup from '../../../components/SuccessPopup';
 
 const data = [
   { name: 'Jul', plot1: 2684, plot2: 2400, plot3: 1544, amt: 2400 },
@@ -69,7 +71,8 @@ export default function RunsDetails() {
   const [openDlg2Dialog, setDialog2Open] = React.useState(false);
   const [answers, setAnswers] = React.useState('');
   const [moreInfo, setMoreInfo] = React.useState(false);
-
+  const runsPopupRef: any = React.useRef(null);
+  const successPopupRef: any = React.useRef(null);
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -92,9 +95,18 @@ export default function RunsDetails() {
   //     console.log(editorRef.current.getContent());
   //   }
   // };
+
+  const handleSubmitFormPopup = () => {
+    runsPopupRef.current.open(false);
+    successPopupRef.current.open(true, 'Runs');
+    setTimeout(() => {
+      successPopupRef.current.open(false, 'Runs');
+    }, 3000);
+  };
+
   return (
     <PrivateRoute>
-      <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} />
+      {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
       <Box className="runzdetails-page">
         <Box className="top-section">
           <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
@@ -148,7 +160,8 @@ export default function RunsDetails() {
                     variant="contained"
                     className="edit-btn"
                     onClick={() => {
-                      setDialog2Open(true);
+                      // setDialog2Open(true);
+                      runsPopupRef.current.open(true);
                     }}
                   >
                     <img src={edit} alt="edit" style={{ marginRight: '8px' }} />
@@ -232,7 +245,8 @@ export default function RunsDetails() {
                         variant="contained"
                         className="edit-btn"
                         onClick={() => {
-                          setDialog2Open(true);
+                          // setDialog2Open(true);
+                          runsPopupRef.current.open(true);
                         }}
                       >
                         <img
@@ -783,6 +797,12 @@ export default function RunsDetails() {
           </SplitPane>
         </Box>
       </Box>
+      <SuccessPopup ref={successPopupRef} type="edit" />
+      <RunsForm
+        ref={runsPopupRef}
+        type="edit"
+        submitFormPopup={handleSubmitFormPopup}
+      />
     </PrivateRoute>
   );
 }

@@ -34,6 +34,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from '../../../api/departmentAPI';
 import { fetchRoleData } from '../../../api/roleApi';
 import { fetchLabData } from '../../../api/labAPI';
+import SuccessPopup from '../../../components/SuccessPopup';
+import Confirmationpopup from '../../../components/ConfirmationPopup';
 
 // const departmentList = [
 //   { id: 1, name: 'Computer Science' },
@@ -86,7 +88,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const UserForm = React.forwardRef(
-  ({ closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
+  ({ closeFormPopup, openConfirmationPopup }: any, ref) => {
     const departments: any = [];
     const laboratory: any = [];
     const [formPopup, setFormPopup] = React.useState(false);
@@ -94,14 +96,18 @@ const UserForm = React.forwardRef(
     const [roleData, setRoleData] = React.useState([]);
     const [labData, setLabData] = React.useState([]);
     const dispatch: any = useDispatch();
+    const [type, setType] = React.useState(null);
+    const successPopupRef: any = React.useRef();
+    const confirmationPopupRef: any = React.useRef();
 
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
 
     React.useImperativeHandle(ref, () => ({
-      open(state: any) {
+      open(state: any, type: any) {
         setFormPopup(state);
+        setType(type);
       },
     }));
 
@@ -113,8 +119,26 @@ const UserForm = React.forwardRef(
       const isMatch = checkCredentials(values.first_name);
       if (isMatch) {
         dispatch(postUserData(values));
+        submitFormPopup();
       } else {
         formik.setFieldError('first_name', 'Invalid first name');
+      }
+    };
+
+    const submitFormPopup = () => {
+      setFormPopup(false);
+      successPopupRef.current.open(true, 'User');
+      setTimeout(() => {
+        successPopupRef.current.open(false, 'User');
+      }, 3000);
+    };
+
+    const handleConfirmationState = (state: any) => {
+      if (state === 0) {
+        confirmationPopupRef.current.open(false);
+      } else {
+        confirmationPopupRef.current.open(false);
+        setFormPopup(false);
       }
     };
 
@@ -146,19 +170,25 @@ const UserForm = React.forwardRef(
       (state: any) => state.role.data?.get_all_roles,
     );
     React.useEffect(() => {
-      setDepartmentData(departmentSliceData?.map((item: any) => ({
-        label: item.name,
-        value: item._id
-      })))
-      setLabData(labSliceData?.map((item: any) => ({
-        label: item.name,
-        value: item._id
-      })))
-      setRoleData(roleSliceData?.map((item: any) => ({
-        label: item.name,
-        value: item._id
-      })))
-    }, [departmentSliceData, labSliceData, roleSliceData])
+      setDepartmentData(
+        departmentSliceData?.map((item: any) => ({
+          label: item.name,
+          value: item._id,
+        })),
+      );
+      setLabData(
+        labSliceData?.map((item: any) => ({
+          label: item.name,
+          value: item._id,
+        })),
+      );
+      setRoleData(
+        roleSliceData?.map((item: any) => ({
+          label: item.name,
+          value: item._id,
+        })),
+      );
+    }, [departmentSliceData, labSliceData, roleSliceData]);
 
     console.log(departmentData);
 
@@ -185,7 +215,7 @@ const UserForm = React.forwardRef(
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">
               <Box className="title-popup">
-                <Typography>Create new user</Typography>
+                <Typography>{type} user</Typography>
                 <CloseIcon onClick={() => closeFormPopup(false)} />
               </Box>
               <Box>
@@ -371,8 +401,8 @@ const UserForm = React.forwardRef(
                           formik.values.organization !== ''
                             ? undefined
                             : () => (
-                              <Placeholder>Select Organization</Placeholder>
-                            )
+                                <Placeholder>Select Organization</Placeholder>
+                              )
                         }
                         margin="none"
                         fullWidth
@@ -429,8 +459,8 @@ const UserForm = React.forwardRef(
                           formik.values.institution !== ''
                             ? undefined
                             : () => (
-                              <Placeholder>Select Institution</Placeholder>
-                            )
+                                <Placeholder>Select Institution</Placeholder>
+                              )
                         }
                         margin="none"
                         fullWidth
@@ -463,14 +493,27 @@ const UserForm = React.forwardRef(
                     </Box>
                   </Grid>
                 </Grid>
-                <Grid container spacing={2} className="asset-popup multi-selection">
-                  <Grid item xs={12} sm={6} md={6} lg={6} sx={{ paddingRight: { sm: '1rem !important' } }}>
+                <Grid
+                  container
+                  spacing={2}
+                  className="asset-popup multi-selection"
+                >
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    sx={{ paddingRight: { sm: '1rem !important' } }}
+                  >
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Department/s</label>
                       <Autocomplete
                         multiple
                         id="department"
-                        options={departmentData !== undefined ? departmentData : []}
+                        options={
+                          departmentData !== undefined ? departmentData : []
+                        }
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
                         renderOption={(props, option, { selected }) => (
@@ -490,13 +533,13 @@ const UserForm = React.forwardRef(
                           f.forEach((element) => departments.push(element.id));
                           formik.setFieldValue('department', departments);
                         }}
-                      // onChange={formik.handleChange}
-                      // onBlur={formik.handleBlur}
-                      // value={formik.values.department}
-                      // error={
-                      //   formik.touched.department &&
-                      //   Boolean(formik.errors.department)
-                      // }
+                        // onChange={formik.handleChange}
+                        // onBlur={formik.handleBlur}
+                        // value={formik.values.department}
+                        // error={
+                        //   formik.touched.department &&
+                        //   Boolean(formik.errors.department)
+                        // }
                       />
                       {formik.touched.department &&
                         formik.errors.department && (
@@ -506,7 +549,12 @@ const UserForm = React.forwardRef(
                         )}
                     </Box>
                   </Grid>
-                  <Grid item xs={12} sm={6} md={6} lg={6}
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={6}
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
@@ -637,11 +685,12 @@ const UserForm = React.forwardRef(
                           formik.touched.role && Boolean(formik.errors.role)
                         }
                       >
-                        {roleData && roleData.map((item: any) => (
-                          <MenuItem key={item.value} value={item.value}>
-                            {item.label}
-                          </MenuItem>
-                        ))}
+                        {roleData &&
+                          roleData.map((item: any) => (
+                            <MenuItem key={item.value} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          ))}
                       </Select>
 
                       {formik.touched.role && formik.errors.role && (
@@ -710,10 +759,9 @@ const UserForm = React.forwardRef(
                 }}
               >
                 <Button
-                  type="submit"
                   variant="contained"
                   onClick={() => {
-                    openConfirmationPopup(true);
+                    confirmationPopupRef.current.open(true);
                   }}
                   className="cancel-btn"
                 >
@@ -725,12 +773,19 @@ const UserForm = React.forwardRef(
                   // onClick={submitFormPopup}
                   className="add-btn"
                 >
-                  Create
+                  {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
             </Box>
           </form>
         </Dialog>
+
+        <SuccessPopup ref={successPopupRef} type={type} />
+        <Confirmationpopup
+          ref={confirmationPopupRef}
+          confirmationState={handleConfirmationState}
+          type={type}
+        />
       </div>
     );
   },

@@ -44,8 +44,6 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-type Order = 'asc' | 'desc';
-
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key,
@@ -365,6 +363,16 @@ export default function Procedures() {
   const clickHandler=(e:MouseEvent)=>{
     e.stopPropagation();
   }
+
+  const handleConfirmationState = (state: number) => {
+    if(state === 0) {
+      confirmationPopupRef.current.open(false)
+    } else {
+      confirmationPopupRef.current.open(false);
+    }
+  }
+
+
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -502,11 +510,10 @@ export default function Procedures() {
           />
         </Box>
         <ProcedureForm
-          formType={'create'}
+          type='create'
           ref={formPopupRef}
           closeFormPopup={handleCloseFormPopup}
           submitFormPopup={handleSubmitFormPopup}
-          openConfirmationPopup={handleOpenConfirmationPopup}
         />
         <Box>
           <DeletePopup
@@ -518,11 +525,8 @@ export default function Procedures() {
             deleteConfirmation={handleDeleteConfirmation}
           />
         </Box>
-        <Confirmationpopup
-          ref={confirmationPopupRef}
-          confirmationDone={handleConfirmationDone}
-        />
-        <SuccessPopup ref={successPopupRef} />
+       
+       
         <DeleteSuccessPopup ref={deleteSuccessPopupRef}/>
       </Box>
     </PrivateRoute>

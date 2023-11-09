@@ -43,6 +43,8 @@ import { postAssetsData } from '../../api/assetsAPI';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
 import { fetchOrganizationData } from '../../api/organizationAPI';
+import SuccessPopup from '../../components/SuccessPopup';
+import Confirmationpopup from '../../components/ConfirmationPopup';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -60,7 +62,7 @@ const validationSchema = Yup.object().shape({
 
 const Addnewpopup = React.forwardRef(
   (
-    { closeFormPopup, openConfirmationPopup, submitFormPopup, fetchData }: any,
+    { closeFormPopup, openConfirmationPopup, fetchData, type }: any,
     ref,
   ) => {
     const [answers, setAnswers] = React.useState('');
@@ -69,7 +71,8 @@ const Addnewpopup = React.forwardRef(
     const [departmentData, setDepartmentData] = React.useState([]);
     const [labData, setLabData] = React.useState([]);
     const [organizationData, setOrganizationData] = React.useState([]);
-
+    const successPopupRef: any = React.useRef(null);
+    const confirmationPopupRef: any = React.useRef(null);
     const dispatch: any = useDispatch();
     const departments: any = [];
     const laboratory: any = [];
@@ -87,13 +90,22 @@ const Addnewpopup = React.forwardRef(
       const isMatch = checkCredentials(values.name);
       if (isMatch) {
         dispatch(postAssetsData(values));
-        setFormPopup(false);
+        submitFormPopup()
+
       } else {
         formik.setFieldError('name', 'Invalid first name');
       }
     };
 
-    const Placeholder = ({ children }: any) => { 
+    const submitFormPopup = () => {
+      setFormPopup(false);
+      successPopupRef.current.open(true, 'Asset');
+      setTimeout(() => {
+        successPopupRef.current.open(false, 'Asset');
+      }, 3000);
+    };
+
+    const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
 
@@ -153,6 +165,15 @@ const Addnewpopup = React.forwardRef(
       dispatch(fetchOrganizationData());
     }, []);
 
+    const handleConfirmationState = (state: any) => {
+      if (state === 0) {
+        confirmationPopupRef.current.open(false);
+      } else {
+        confirmationPopupRef.current.open(false);
+        setFormPopup(false);
+      }
+    };
+
     return (
       <div>
         <Dialog
@@ -168,7 +189,7 @@ const Addnewpopup = React.forwardRef(
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">
               <Box className="title-popup">
-                <Typography>Add new asset</Typography>
+                <Typography>{type} asset</Typography>
                 <CloseIcon onClick={() => closeFormPopup(false)} />
               </Box>
               <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
@@ -196,8 +217,8 @@ const Addnewpopup = React.forwardRef(
                     >
                       <span className="file-wrapper">
                         <input type="file" name="photo" id="photo" />
-                        <span className="button">Upload photo</span> 
-                      </span>                      
+                        <span className="button">Upload photo</span>
+                      </span>
                       {/* {formik.touched.assets_image &&
                         formik.errors.assets_image && (
                           <Typography className="error-field">
@@ -426,7 +447,11 @@ const Addnewpopup = React.forwardRef(
                         </Box>
                       </Grid>
                     </Grid>
-                    <Grid container spacing={2} className="asset-popup multi-selection">
+                    <Grid
+                      container
+                      spacing={2}
+                      className="asset-popup multi-selection"
+                    >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box>
                           <label style={{ display: 'block' }}>
@@ -477,7 +502,11 @@ const Addnewpopup = React.forwardRef(
                         </Box>
                       </Grid>
                     </Grid>
-                    <Grid container spacing={2} className="asset-popup multi-selection">
+                    <Grid
+                      container
+                      spacing={2}
+                      className="asset-popup multi-selection"
+                    >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box>
                           <label style={{ display: 'block' }}>
@@ -555,7 +584,7 @@ const Addnewpopup = React.forwardRef(
                               Boolean(formik.errors.status)
                             }
                           >
-                            {StatusList.map((item:any) => (
+                            {StatusList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
                               </MenuItem>
@@ -641,10 +670,10 @@ const Addnewpopup = React.forwardRef(
                 }}
               >
                 <Button
-                  type="submit"
+                 
                   variant="contained"
                   onClick={() => {
-                    openConfirmationPopup(true);
+                    confirmationPopupRef.current.open(true);
                   }}
                   className="cancel-btn"
                 >
@@ -656,12 +685,19 @@ const Addnewpopup = React.forwardRef(
                   // onClick={submitFormPopup}
                   className="add-btn"
                 >
-                  Add
+                  {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
             </Box>
           </form>
         </Dialog>
+
+        <SuccessPopup ref={successPopupRef} type={type} />
+        <Confirmationpopup
+          ref={confirmationPopupRef}
+          confirmationState={handleConfirmationState}
+          type={type}
+        />
       </div>
     );
   },

@@ -1,39 +1,36 @@
-import React from "react";
+import React from 'react';
 import {
   Box,
   Button,
   Checkbox,
-
   MenuItem,
   Select,
-
   Typography,
-} from "@mui/material";
-import Table from "@mui/material/Table";
-import TablePagination from "../../../components/table/TablePagination";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import { withSettingsLayout } from "../../../components/settings";
-import TableHeader from "../../../components/table/TableHeader";
-import { UserHeaders, UserRows } from "../../../utils/data";
-import { UserRowData } from "../../../modals/user.modal";
-import TableFilters from "../../../components/table/TableFilters";
-import DeletePopup from "../../../components/DeletePopup";
-import UserForm from "./UserForm";
-import Confirmationpopup from "../../../components/ConfirmationPopup";
-import SuccessPopup from "../../../components/SuccessPopup";
+} from '@mui/material';
+import Table from '@mui/material/Table';
+import TablePagination from '../../../components/table/TablePagination';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import { withSettingsLayout } from '../../../components/settings';
+import TableHeader from '../../../components/table/TableHeader';
+import { UserHeaders, UserRows } from '../../../utils/data';
+import { UserRowData } from '../../../modals/user.modal';
+import TableFilters from '../../../components/table/TableFilters';
+import DeletePopup from '../../../components/DeletePopup';
+import UserForm from './UserForm';
+import Confirmationpopup from '../../../components/ConfirmationPopup';
+import SuccessPopup from '../../../components/SuccessPopup';
 
 import {
   handleCheckboxChange,
   handleDeCheckboxChange,
   handledAllSelected,
-} from "../../../utils/common-services";
+} from '../../../utils/common-services';
 // table start
-
 
 const users: UserRowData[] = UserRows;
 
@@ -46,13 +43,12 @@ const Users = () => {
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
   const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
-  const handleRequestSort = () => { };
+  const handleRequestSort = () => {};
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const deletePopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
-
   const itemsPerPage = 5;
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -63,7 +59,7 @@ const Users = () => {
   const handlePageChange = (even: any, page: number) => {
     setCurrentPage(page);
   };
-  const [visibleRow, setVisibleRow] = React.useState<any>(Data)
+  const [visibleRow, setVisibleRow] = React.useState<any>(Data);
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -72,7 +68,7 @@ const Users = () => {
       setIsDeselectAllChecked,
       setIsselectAllChecked,
       setTableHeaderVisible,
-      setVisibleRow
+      setVisibleRow,
     )(event, id);
   };
 
@@ -83,7 +79,7 @@ const Users = () => {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setVisibleRow
+    setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
@@ -91,9 +87,8 @@ const Users = () => {
     setSelectedRows,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
-    setVisibleRow
+    setVisibleRow,
   );
-
 
   const handleMenuCheckboxChange = (e: any, index: any) => {
     setHeaders((prevColumns: any) => {
@@ -105,8 +100,6 @@ const Users = () => {
       });
     });
   };
-
-
 
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
@@ -125,9 +118,9 @@ const Users = () => {
 
   const handleSubmitFormPopup = () => {
     formPopupRef.current.open(false);
-    successPopupRef.current.open(true, "User");
+    successPopupRef.current.open(true, 'User');
     setTimeout(() => {
-      successPopupRef.current.open(false, "User");
+      successPopupRef.current.open(false, 'User');
     }, 3000);
   };
 
@@ -150,29 +143,34 @@ const Users = () => {
   };
 
   const handleOpenDeletePopup = () => {
-    deletePopupRef.current.open(true, "User");
+    deletePopupRef.current.open(true, 'User');
   };
   // table end
   return (
-    <Box className="user-setting-page"  style={{ padding: "24px" , paddingTop:"15px"}}>
+    <Box
+      className="user-setting-page"
+      style={{ padding: '24px', paddingTop: '15px' }}
+    >
       <Box
         className="title-main"
-        sx={{ borderBottom: "1px solid #F3F3F3", paddingBottom: "8px" }}
+        sx={{ borderBottom: '1px solid #F3F3F3', paddingBottom: '8px' }}
       >
         <Box>
           <Typography>User settings</Typography>
           <Typography className="sub-text">
-            Add edit and delete users.
+            Create, edit and delete users.
           </Typography>
         </Box>
         <Button
-        style={{marginBottom:"8px" , marginTop:"16px"}}
+          style={{ marginBottom: '8px', marginTop: '16px' }}
           type="submit"
           variant="contained"
-          onClick={() => formPopupRef.current.open(true)}
+          onClick={() => {
+            formPopupRef.current.open(true, 'create');
+          }}
         >
           <AddIcon sx={{ mr: 1 }} />
-          Add User
+          Create User
         </Button>
       </Box>
       <TableFilters
@@ -188,19 +186,19 @@ const Users = () => {
         module="users"
       />
 
-      <Box className="table-outer" sx={{ width: "100%" }}>
+      <Box className="table-outer" sx={{ width: '100%' }}>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <TableHeader
               numSelected={0}
               onRequestSort={handleRequestSort}
               onSelectAllClick={function (
-                event: React.ChangeEvent<HTMLInputElement>
+                event: React.ChangeEvent<HTMLInputElement>,
               ): void {
-                throw new Error("Function not implemented.");
+                throw new Error('Function not implemented.');
               }}
-              order={"asc"}
-              orderBy={""}
+              order={'asc'}
+              orderBy={''}
               rowCount={0}
               columns={headers}
             />
@@ -214,11 +212,14 @@ const Users = () => {
                     tabIndex={-1}
                     key={index}
                     // selected={isItemSelected}
-                    sx={{ cursor: "pointer" }}
+                    sx={{ cursor: 'pointer' }}
+                    onClick={(e: any) =>
+                      formPopupRef.current.open(true, 'edit')
+                    }
                   >
                     {headers[0].is_show && (
                       <TableCell scope="row">
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Box sx={{ mt: 0, mr: 1 }}>
                             <Checkbox
                               // checked={row.is_checked}
@@ -229,7 +230,7 @@ const Users = () => {
                             />
                           </Box>
 
-                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box sx={{ ml: 2 }}>
                               <Box>{row.id}</Box>
                             </Box>
@@ -258,9 +259,9 @@ const Users = () => {
                       <TableCell>
                         <Select
                           className={
-                            row.status === "1"
-                              ? "active-select td-select"
-                              : "inactive-select td-select"
+                            row.status === '1'
+                              ? 'active-select td-select'
+                              : 'inactive-select td-select'
                           }
                           value={row.status}
                           displayEmpty
@@ -286,22 +287,19 @@ const Users = () => {
         />
       </Box>
       <Box>
-        <UserForm ref={formPopupRef}
+        <UserForm
+          ref={formPopupRef}
           closeFormPopup={handleCloseFormPopup}
           submitFormPopup={handleSubmitFormPopup}
-          openConfirmationPopup={handleOpenConfirmationPopup} />
+        />
       </Box>
       <Box>
-        <DeletePopup ref={deletePopupRef}
-          closeDeletePopup={() => deletePopupRef.current.open(false, "User")}
-          deleteConfirmation={handleDeleteConfirmation} />
+        <DeletePopup
+          ref={deletePopupRef}
+          closeDeletePopup={() => deletePopupRef.current.open(false, 'User')}
+          deleteConfirmation={handleDeleteConfirmation}
+        />
       </Box>
-      <Confirmationpopup
-        ref={confirmationPopupRef}
-        confirmationDone={handleConfirmationDone}
-      />
-      <SuccessPopup ref={successPopupRef} />
-
     </Box>
   );
 };

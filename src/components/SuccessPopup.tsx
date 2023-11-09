@@ -1,10 +1,11 @@
+/* eslint-disable react/display-name */
 import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import { Box, Button, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import stop from "../assets/images/Cancel.svg";
 
-const SuccessPopup = React.forwardRef(({ close }: any, ref) => {
+const SuccessPopup = React.forwardRef(({ close, type }: any, ref) => {
   const [successPopup, setSuccessPopup] = React.useState(false);
   const [popupText, setPopupText] = React.useState("");
 
@@ -30,7 +31,7 @@ const SuccessPopup = React.forwardRef(({ close }: any, ref) => {
       <Box className="popup-section" sx={{ background: "#C6FFD9" }}>
         <Box sx={{ textAlign: "center" }}>
           <Typography className="added-success">
-            {popupText} added successfully.
+            {popupText} {type === "edit" ? "updated" : "created"} successfully.
           </Typography>
         </Box>
       </Box>

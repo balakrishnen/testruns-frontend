@@ -31,6 +31,8 @@ import {
 } from '../../utils/data';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
+import Confirmationpopup from '../../components/ConfirmationPopup';
+import SuccessPopup from '../../components/SuccessPopup';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().notRequired(),
@@ -43,14 +45,15 @@ const validationSchema = Yup.object().shape({
 });
 
 const RunsForm = React.forwardRef(
-  ({ closeFormPopup, openConfirmationPopup, submitFormPopup }: any, ref) => {
+  ({ openConfirmationPopup, type }: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     const [answers, setAnswers] = React.useState('');
     const [departmentData, setDepartmentData] = React.useState([]);
     const [labData, setLabData] = React.useState([]);
     const dispatch: any = useDispatch();
-
+    const confirmationPopupRef: any = React.useRef();
+    const successPopupRef: any = React.useRef();
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
@@ -128,6 +131,23 @@ const RunsForm = React.forwardRef(
     //     closeFormPopup(false)
     //   };
 
+    const handleConfirmationState = (state: number) => {
+      if (state === 0) {
+        confirmationPopupRef.current.open(false);
+      } else {
+        confirmationPopupRef.current.open(false);
+        setRunsCreate(false);
+      }
+    };
+
+    const submitFormPopup = () => {
+      setRunsCreate(false);
+      successPopupRef.current.open(true, 'Run');
+      setTimeout(() => {
+        successPopupRef.current.open(false, 'Run');
+      }, 3000);
+    };
+
     return (
       <div>
         {/* <Confirmationpopup
@@ -141,7 +161,6 @@ const RunsForm = React.forwardRef(
         <Dialog
           open={runCreate}
           keepMounted
-          onClose={() => closeFormPopup(false)}
           aria-labelledby="add-new-asset-title"
           aria-describedby="add-new-asset"
           fullWidth
@@ -151,8 +170,8 @@ const RunsForm = React.forwardRef(
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">
               <Box className="title-popup">
-                <Typography>Create Run</Typography>
-                <CloseIcon onClick={() => closeFormPopup(false)} />
+                <Typography>{type} Run</Typography>
+                <CloseIcon onClick={() => setRunsCreate(false)} />
               </Box>
               <Box>
                 <Grid container className="asset-popup" spacing={0}>
@@ -327,13 +346,7 @@ const RunsForm = React.forwardRef(
                         )}
                     </Box>
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={12}                    
-                  >
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Test objective</label>
                       <TextField
@@ -440,25 +453,28 @@ const RunsForm = React.forwardRef(
                 }}
               >
                 <Button
-                  type="submit"
                   variant="contained"
                   onClick={() => {
-                    openConfirmationPopup(true);
+                    confirmationPopupRef.current.open(true);
                   }}
                   className="cancel-btn"
                 >
                   Cancel
                 </Button>
                 <Button type="submit" variant="contained" className="add-btn">
-                  Create
+                  {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
             </Box>
           </form>
         </Dialog>
-        <Box>
-          <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} />
-        </Box>
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} />
+        <Confirmationpopup
+          ref={confirmationPopupRef}
+          confirmationState={handleConfirmationState}
+          type={type}
+        />
+        <SuccessPopup ref={successPopupRef} type={type} />
       </div>
     );
   },
