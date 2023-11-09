@@ -147,13 +147,10 @@ const Addnewpopup = React.forwardRef(
       );
     }, [departmentSliceData, labSliceData, organizationData]);
 
-    console.log(departmentData);
-
-    console.log(formik);
-
-    React.useEffect(() => {
+   React.useEffect(() => {
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
+      dispatch(fetchOrganizationData());
     }, []);
 
     return (

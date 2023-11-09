@@ -53,7 +53,7 @@ const validationSchema = Yup.object().shape({
   laboratoryId: Yup.array().notRequired(),
   organisationId: Yup.string().notRequired(),
   departmentId: Yup.array().notRequired(),
-  status: Yup.boolean().notRequired(),
+  status: Yup.string().notRequired(),
   availability: Yup.string().notRequired(),
   lastUsedDate: Yup.string().notRequired(),
 });
@@ -69,31 +69,43 @@ export default function AssetDetails() {
   const location: any = useLocation()
   const assetValue = location.state.props
   console.log(assetValue);
-  
+
   const [openSuccess, setSuccessOpen] = React.useState(false);
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const [organizationData, setOrganizationData] = React.useState([]);
+  const [departments, setDepartments] = React.useState(assetValue.departmentId?.map((item: any) => ({
+    label: item?.name,
+    value: item?.name,
+    id: item?._id,
+  })));
+  const [laboratory, setLaboratory] = React.useState(assetValue.laboratoryId?.map((item: any) => ({
+    label: item?.name,
+    value: item?.name,
+    id: item?._id,
+  })))
   // const [assetsData, setAssetsData] = React.useState<any>([]);
   // console.log(assetsData?.assetNumber);
 
   const dispatch: any = useDispatch();
-  const departments: any = []
+  // const departments: any = 
+  // // []
   // assetValue.departmentId?.map((item: any) => ({
   //   label: item?.name,
   //   value: item?.name,
   //   id: item?._id,
   // }));
-  const laboratory: any = []
+  // const laboratory: any = 
+  // // []
   // assetValue.laboratoryId?.map((item: any) => ({
   //   label: item?.name,
-  //   value: item?.name,s
+  //   value: item?.name,
   //   id: item?._id,
   // }));
   // const AssetSliceData = useSelector(
   //   (state: any) => state.assets.data?.get_asset,
   // );
-  console.log(departments,laboratory);
+  // console.log(departments,laboratory);
   const checkCredentials = (values: any) => {
     return true;
   }
@@ -129,9 +141,22 @@ export default function AssetDetails() {
     console.log("value", value)
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
-      console.log(values);
+      console.log('final',values);
+      let assetValues={
+        _id: assetValue._id,
+        name: values.name,
+        organisationId: assetValue.organisationId,
+        perchasedDate: assetValue.perchasedDate,
+        lastUsedDate: values.lastUsedDate,
+        availability: values.availability,
+        expiryDate: assetValue.expiryDate,
+        departmentId: departments,
+        laboratoryId: laboratory,
+        status: values.status,
+      }
+      console.log(assetValues);
       
-      // dispatch(fetchUpdateAssetsData(values));
+      dispatch(fetchUpdateAssetsData(assetValues));
       // setFormPopup(false);
     } else {
       formik.setFieldError('name', 'Invalid first name');
@@ -180,13 +205,13 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(AssetId));
   //    }
   // }, []);
-    const formik = useFormik({
+  const formik = useFormik({
     initialValues: {
       name: assetValue.name,
       assetId: assetValue.assetNumber,
       laboratoryId: assetValue.laboratoryId,
       organisationId: '',
-      departmentId:assetValue.departmentId,
+      departmentId: assetValue.departmentId,
       // userId: 'USER_1001', 
       status: 'AVAILABILITY',
       availability: assetValue.availability,
@@ -197,6 +222,8 @@ export default function AssetDetails() {
     onSubmit: onSubmit
   });
 
+  // console.log("datas",departments,laboratory);
+  
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -220,11 +247,11 @@ export default function AssetDetails() {
             <CustomTabPanel value={value} index={0}>
               <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
                 <Grid item xs={12} sm={12} md={4} lg={3} xl={3} sx={{ padding: '0px !important', paddingRight: { xs: '0px !important', md: '30px !important' } }}>
-                  <Box>   
+                  <Box>
                     <Box sx={{ textAlign: 'center' }}>
                       <img src={test} alt="test" className="dynamic-img" />
                     </Box>
-                    
+
                     <Box className='edit-profile-btn' sx={{ mt: 3, mb: 3, pb: '0px !important' }}>
                       <Button>Upload photo</Button>
                     </Box>
@@ -369,6 +396,35 @@ export default function AssetDetails() {
                             <Autocomplete
                               multiple
                               id="departmentId"
+                              disableCloseOnSelect
+                              value={departments}
+                              options={
+                                departmentData !== undefined ? departmentData : []
+                              }
+                              getOptionLabel={(option: any) => option.label}
+                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
+                              renderInput={params => (
+                                <TextField {...params} />)}
+                              fullWidth
+                              placeholder="Department"
+                              size="medium"
+                              renderOption={(props, option: any, { selected }) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) => setDepartments(selectedOptions)}
+                            />
+                            {/* <Autocomplete
+                              multiple
+                              id="departmentId"
                               options={
                                 departmentData !== undefined ? departmentData : []
                               }
@@ -397,8 +453,8 @@ export default function AssetDetails() {
                                 );
                                 formik.setFieldValue('departmentId', departments);
                               }}
-                            />
-                            {formik.touched.departmentId &&
+                            />*/}
+                            {formik.touched.departmentId && 
                               formik.errors.departmentId && (
                                 <Typography style={{
                                   color: "#E2445C",
@@ -419,32 +475,35 @@ export default function AssetDetails() {
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>Laboratory/ies</label>
                           <Autocomplete
-                            multiple
-                            id="laboratoryId"
-                            value={laboratory}
-                            options={labData !== undefined ? labData : []}
-                            disableCloseOnSelect
-                            getOptionLabel={(option: any) => option.label}
-                            renderOption={(props, option, { selected }) => (
-                              <li {...props}>
-                                <Checkbox
-                                  style={{ marginRight: 0 }}
-                                  checked={selected}
-                                />
-                                {option.label}
-                              </li>
-                            )}
-                            renderInput={(params) => <TextField {...params} />}
-                            fullWidth
-                            placeholder="Laboratory"
-                            size="medium"
-                            onChange={(e, f) => {
-                              f.forEach((element) =>
-                                laboratory.push(element.id),
-                              );
-                              formik.setFieldValue('laboratoryId', laboratory);
-                            }}
-                          />
+                              multiple
+                              id="departmentId"
+                             
+                              options={
+                                labData !== undefined ? labData : []
+                              }
+                              getOptionLabel={(option: any) => option.label}
+                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
+                              disableCloseOnSelect
+                              value={laboratory}
+                              renderInput={params => (
+                                <TextField {...params} />)}
+                              fullWidth
+                              placeholder="Laboratory"
+                              size="medium"
+                              renderOption={(props, option: any, { selected }) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) => setLaboratory(selectedOptions)}
+                            />
                           {formik.touched.laboratoryId &&
                             formik.errors.laboratoryId && (
                               <Typography className="error-field">
@@ -549,7 +608,7 @@ export default function AssetDetails() {
                 <Button type="submit" variant="contained" className="add-btn">Save</Button>
               </Box>
             </CustomTabPanel>
-            </form> 
+          </form>
           <CustomTabPanel value={value} index={1}>
             <Box className="asset-id-name">
               <img src={test} alt="test" className="dynamic-img" />

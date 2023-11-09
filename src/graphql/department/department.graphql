@@ -3,10 +3,11 @@ import { gql } from '@apollo/client';
 export const GET_DEPARTMENT = gql`
   query Get_all_departments {
     get_all_departments {
-        _id
+         _id
         name
         departmentNumber
-        userId
+        organisationID
+        status
         isActive
         isDeleted
         createdAt

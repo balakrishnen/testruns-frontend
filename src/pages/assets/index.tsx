@@ -528,11 +528,11 @@ export default function Assets() {
                           <TableCell>
                             <Select
                               className={
-                                row.availability === true
+                               true === true
                                   ? 'active-select td-select'
                                   : 'inactive-select td-select'
                               }
-                              value={row.availability}
+                              value={true}
                               displayEmpty
                               onChange={(e) => handleOnChange(e, row)}
                               IconComponent={ExpandMoreOutlinedIcon}
