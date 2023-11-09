@@ -20,6 +20,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import test from '../../../assets/images/test.svg';
+import HistoryTable from "../history";
 import {
   fetchSingleAssetsData,
   fetchUpdateAssetsData,
@@ -164,26 +165,26 @@ export default function AssetDetails() {
     console.log('value', value);
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
-      console.log('final',departments);
-      var deptArray:any=[]
-      departments.map((item:any)=>(deptArray.push(item?.id)))
-      var labArray:any=[]
-      laboratory.map((item:any)=>(labArray.push(item?.id)))
+      console.log('final', departments);
+      var deptArray: any = []
+      departments.map((item: any) => (deptArray.push(item?.id)))
+      var labArray: any = []
+      laboratory.map((item: any) => (labArray.push(item?.id)))
 
-      let assetValues={
+      let assetValues = {
         _id: assetValue._id,
         name: values.name,
         organisationId: assetValue?.organisationId,
         perchasedDate: assetValue?.perchasedDate,
         lastUsedDate: values.lastUsedDate,
         availability: values.availability,
-        expiryDate: assetValue.expiryDate,
+        expiryDate: assetValue?.expiryDate,
         departmentId: deptArray,
         laboratoryId: labArray,
         status: values.status,
       }
-      console.log('labArray',deptArray);
-      
+      console.log('labArray', deptArray);
+
       dispatch(fetchUpdateAssetsData(assetValues));
       // setFormPopup(false);
     } else {
@@ -239,12 +240,12 @@ export default function AssetDetails() {
       assetId: assetValue?.assetNumber,
       laboratoryId: assetValue?.laboratoryId,
       organisationId: '',
-      departmentId: assetValue.departmentId,
+      departmentId: assetValue?.departmentId,
       // userId: 'USER_1001', 
-      status: assetValue.status,
-      availability: assetValue.availability,
+      status: assetValue?.status,
+      availability: assetValue?.availability,
       // assets_id: assetValue.assets_id,
-      lastUsedDate: assetValue.lastUsedDate,
+      lastUsedDate: assetValue?.lastUsedDate,
     },
     validationSchema: validationSchema,
     onSubmit: onSubmit,
@@ -442,10 +443,10 @@ export default function AssetDetails() {
                                 formik.values.organisationId !== ''
                                   ? undefined
                                   : () => (
-                                      <Placeholder>
-                                        Select Organization
-                                      </Placeholder>
-                                    )
+                                    <Placeholder>
+                                      Select Organization
+                                    </Placeholder>
+                                  )
                               }
                               margin="none"
                               fullWidth
@@ -666,9 +667,9 @@ export default function AssetDetails() {
                             }
                           >
                             <MenuItem value={"Active"}>
-                               Active
-                              </MenuItem>
-                              <MenuItem value={"Inactive"}>In-Active</MenuItem>
+                              Active
+                            </MenuItem>
+                            <MenuItem value={"Inactive"}>In-Active</MenuItem>
                             {/* {StatusList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
@@ -708,10 +709,10 @@ export default function AssetDetails() {
                               formik.values.availability !== ''
                                 ? undefined
                                 : () => (
-                                    <Placeholder>
-                                      Select Availability
-                                    </Placeholder>
-                                  )
+                                  <Placeholder>
+                                    Select Availability
+                                  </Placeholder>
+                                )
                             }
                             margin="none"
                             fullWidth
@@ -729,10 +730,10 @@ export default function AssetDetails() {
                             }
                           >
                             <MenuItem value={'Available'}>Available</MenuItem>
-                              <MenuItem value={'In_Use'}>
-                                In Use
-                              </MenuItem>
-                              <MenuItem value={'Not_Available'}>Not Available</MenuItem>
+                            <MenuItem value={'In_Use'}>
+                              In Use
+                            </MenuItem>
+                            <MenuItem value={'Not_Available'}>Not Available</MenuItem>
                             {/* {AvailabilityList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
@@ -768,6 +769,9 @@ export default function AssetDetails() {
                 <Typography>Asset ID</Typography>
                 <Typography>Asset name</Typography>
               </Box>
+            </Box>
+            <Box>
+              <HistoryTable />
             </Box>
           </CustomTabPanel>
         </Box>

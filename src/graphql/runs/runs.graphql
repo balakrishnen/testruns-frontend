@@ -1,0 +1,42 @@
+
+ import { gql } from '@apollo/client';
+
+export const GET_RUNS = gql`
+ query Get_all_runs {
+    get_all_runs(page: 1, perPage: 5) {
+        Runs {
+            _id
+            objective
+            runNumber
+            procedureId
+            userId
+            dueDate
+            status
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+            departmentId {
+                _id
+                name
+                userId
+                isActive
+                isDeleted
+                createdAt
+                updatedAt
+            }
+            laboratoryId {
+                _id
+                name
+                userId
+                departmentId
+                isActive
+                isDeleted
+                createdAt
+                updatedAt
+            }
+        }
+    }
+}
+
+`; 
