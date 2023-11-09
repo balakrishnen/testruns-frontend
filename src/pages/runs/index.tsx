@@ -122,20 +122,13 @@ export default function Runs() {
     formPopupRef.current.open(state);
   };
 
-  const handleConfirmationDone = (state: any) => {
-    if (state === 1) {
-      formPopupRef.current.open(false);
-    }
-    confirmationPopupRef.current.open(false);
-  };
-
-  const handleSubmitFormPopup = () => {
-    formPopupRef.current.open(false);
-    successPopupRef.current.open(true, 'Runs');
-    setTimeout(() => {
-      successPopupRef.current.open(false, 'Runs');
-    }, 3000);
-  };
+  // const handleSubmitFormPopup = () => {
+  //   formPopupRef.current.open(false);
+  //   successPopupRef.current.open(true, 'Run');
+  //   setTimeout(() => {
+  //     successPopupRef.current.open(false, 'Run');
+  //   }, 3000);
+  // };
 
   const handleOpenConfirmationPopup = (state: any) => {
     confirmationPopupRef.current.open(state);
@@ -352,14 +345,10 @@ export default function Runs() {
           <RunsForm
             ref={formPopupRef}
             closeFormPopup={handleCloseFormPopup}
-            submitFormPopup={handleSubmitFormPopup}
             openConfirmationPopup={handleOpenConfirmationPopup}
+            type="create"
           />
-          <Confirmationpopup
-            ref={confirmationPopupRef}
-            confirmationDone={handleConfirmationDone}
-          />
-          <SuccessPopup ref={successPopupRef} />
+        
         </Box>
       </Box>
     </PrivateRoute>

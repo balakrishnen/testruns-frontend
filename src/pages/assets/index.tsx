@@ -46,7 +46,11 @@ import { AssetsRowData } from '../../modals/assets.modal';
 import TableFilters from '../../components/table/TableFilters';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
-import { deleteAssetsData, fetchAssetsData ,fetchUpdateAssetsData} from '../../api/assetsAPI';
+import {
+  deleteAssetsData,
+  fetchAssetsData,
+  fetchUpdateAssetsData,
+} from '../../api/assetsAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import { Value } from 'sass';
@@ -109,7 +113,6 @@ export default function Assets() {
     // setAssetsData(assetsData);
   }, [pageInfo, queryStrings]);
 
-
   React.useEffect(() => {
     const page: any = { ...pageInfo };
     page['currentPage'] = assetsSliceData?.pageInfo.currentPage;
@@ -128,7 +131,7 @@ export default function Assets() {
     page['currentPage'] = page_no;
     setPageInfo(page);
     setQueryString(payload);
-    setCurrentPage(page_no)
+    setCurrentPage(page_no);
   };
 
   const filters = () => {
@@ -137,26 +140,25 @@ export default function Assets() {
 
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
 
-  const handleOnChange=(e:any, row:any)=>{
+  const handleOnChange = (e: any, row: any) => {
     console.log(row);
-    
-    console.log('change',row.departmentId, row.laboratoryId);
-    const assetsChange={
-      _id: row._id ,
-      name: row.name ,
-      organisationId: row.organisationId, 
-      perchasedDate: row.perchasedDate ,
-      lastUsedDate: row.organisationId ,
-      availability: e.target.value ,
-      expiryDate:"",
+
+    console.log('change', row.departmentId, row.laboratoryId);
+    const assetsChange = {
+      _id: row._id,
+      name: row.name,
+      organisationId: row.organisationId,
+      perchasedDate: row.perchasedDate,
+      lastUsedDate: row.organisationId,
+      availability: e.target.value,
+      expiryDate: '',
       departmentId: row.departmentId,
       laboratoryId: row.laboratoryId,
-      status: "AVAILABLE"
-    }
+      status: 'AVAILABLE',
+    };
     console.log(assetsChange);
-    dispatch(fetchUpdateAssetsData(assetsChange))
-
-  }
+    dispatch(fetchUpdateAssetsData(assetsChange));
+  };
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -273,10 +275,10 @@ export default function Assets() {
 
   const handleTableSorting = (_event: any, _data: any) => {
     const payload: any = { ...queryStrings };
-    payload['sortBy'] = "assetNumber";
-    payload['sortOrder'] = "asc";
-    setQueryString(payload)
-  }
+    payload['sortBy'] = 'assetNumber';
+    payload['sortOrder'] = 'asc';
+    setQueryString(payload);
+  };
 
   return (
     <PrivateRoute>
@@ -289,7 +291,7 @@ export default function Assets() {
             onClick={() => formPopupRef.current.open(true)}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create Assets
+            Create Asset
           </Button>
         </Box>
 
@@ -342,7 +344,9 @@ export default function Assets() {
                         onClick={(e: any) => {
                           // e.target.tagName !== 'INPUT' &&
                           //   e.target.tagName !== 'LI' &&
-                          navigate(`/assets/details/${row._id}`, { state: { props: row } })
+                          navigate(`/assets/details/${row._id}`, {
+                            state: { props: row },
+                          });
                         }}
                       >
                         {headers[0].is_show && (
@@ -390,7 +394,7 @@ export default function Assets() {
                                       key={index}
                                       label={DepartmentList[index].name}
                                       sx={{
-                                        m: 0.5,                                        
+                                        m: 0.5,
                                         padding: '0px 3px',
                                       }}
                                       onClick={(_event) => {
@@ -399,7 +403,7 @@ export default function Assets() {
                                         tablePopupRef.current.open(
                                           true,
                                           'departments',
-                                          DepartmentList
+                                          DepartmentList,
                                         );
                                       }}
                                     />
@@ -409,7 +413,7 @@ export default function Assets() {
                                           fontWeight: 500,
                                           color: '#9F9F9F',
                                           fontSize: '12px',
-                                          whiteSpace: 'nowrap'
+                                          whiteSpace: 'nowrap',
                                         }}
                                       >
                                         +{index} More
@@ -439,7 +443,7 @@ export default function Assets() {
                                       key={index}
                                       label={LaboratoryList[index].name}
                                       sx={{
-                                        m: 0.5,                                        
+                                        m: 0.5,
                                         padding: '0px 3px',
                                       }}
                                       onClick={(_event) => {
@@ -448,7 +452,7 @@ export default function Assets() {
                                         tablePopupRef.current.open(
                                           true,
                                           'lab',
-                                          LaboratoryList
+                                          LaboratoryList,
                                         );
                                       }}
                                     />
@@ -458,7 +462,7 @@ export default function Assets() {
                                           fontWeight: 500,
                                           color: '#9F9F9F',
                                           fontSize: '12px',
-                                          whiteSpace: 'nowrap'
+                                          whiteSpace: 'nowrap',
                                         }}
                                       >
                                         +{index} More
@@ -567,7 +571,8 @@ export default function Assets() {
             ref={formPopupRef}
             closeFormPopup={handleCloseFormPopup}
             submitFormPopup={handleSubmitFormPopup}
-            openConfirmationPopup={handleOpenConfirmationPopup}
+            // openConfirmationPopup={handleOpenConfirmationPopup}
+            type="create"
           />
           <Box>
             <DeletePopup
@@ -579,11 +584,7 @@ export default function Assets() {
               deleteConfirmation={handleDeleteConfirmation}
             />
           </Box>
-          <Confirmationpopup
-            ref={confirmationPopupRef}
-            confirmationDone={handleConfirmationDone}
-          />
-          <SuccessPopup ref={successPopupRef} />
+
           <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
           <TablePopup ref={tablePopupRef} />
         </Box>
