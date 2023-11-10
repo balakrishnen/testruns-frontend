@@ -1225,7 +1225,8 @@ tbody td .td-select {
 }
 
 .inactive-select.td-select .MuiSelect-select,
-.active-select.td-select .MuiSelect-select {
+.active-select.td-select .MuiSelect-select,
+.inuse-select.td-select .MuiSelect-select  {
   width: 124px;
   border-radius: 20px;
   height: 26px;
@@ -1241,7 +1242,9 @@ tbody td .td-select {
 .active-select.td-select .MuiSelect-select {
   background: #00bf70;
 }
-
+.inuse-select.td-select .MuiSelect-select {
+  background:#ffc832
+}
 .asset-detail-title {
   p {
     &:first-child {

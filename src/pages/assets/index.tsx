@@ -501,7 +501,7 @@ export default function Assets() {
                             <Select
                               name='status'
                               className={
-                                row.isActive === true
+                                row.isActive === 'Active'
                                   ? 'active-select td-select'
                                   : 'inactive-select td-select'
                               }
@@ -523,9 +523,10 @@ export default function Assets() {
                             <Select
                               name='availability'
                               className={
-                                true === true
-                                  ? 'active-select td-select'
+                                row.availability === 'Available'
+                                  ? 'active-select td-select':row.availability === 'In_Use'?'inuse-select td-select'
                                   : 'inactive-select td-select'
+                                  
                               }
                               value={row.availability ? row.availability : 'Not_Available'}
                               displayEmpty
