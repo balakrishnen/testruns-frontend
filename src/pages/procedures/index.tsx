@@ -1,6 +1,6 @@
 import React from 'react';
 import PrivateRoute from '../../components/PrivateRoute';
-import { Box, Button, Checkbox, Typography } from '@mui/material';
+import { Box, Button, Checkbox, Typography,Chip } from '@mui/material';
 import Table from '@mui/material/Table';
 import TablePagination from '../../components/table/TablePagination';
 import TableBody from '@mui/material/TableBody';
@@ -32,6 +32,7 @@ import { navigate } from 'gatsby';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProcedureData,deleteProcedureData } from '../../api/procedureAPI';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
+import moment from 'moment';
 const rows: ProceduresRowData[] = ProcedureRows;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -90,6 +91,7 @@ export default function Procedures() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   // const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
+  const tablePopupRef: any = React.useRef(null);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -372,7 +374,10 @@ export default function Procedures() {
     }
   }
 
-
+  const createdAtTimestamp = '1699599706383';
+  const localTime = moment(createdAtTimestamp).format('YYYY-MM-DD HH:mm:ss');
+  
+  console.log(localTime);
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -477,24 +482,100 @@ export default function Procedures() {
                         </TableCell>
                       )}
                       {headers[2].is_show && (
-                        <TableCell> {(row.departmentId[0]?.id==undefined || row.departmentId[0] === null)
-                          ? '-'
-                          : row.departmentId.length==0 && row.departmentId.map((item: any) => (
-                              <Box key={item.id}>{item.name}</Box>
-                            ))}</TableCell>
+                         <TableCell>
+                         {row.departmentId[0] !== null ?
+                           (
+                             <Box
+                               sx={{ display: 'flex', alignItems: 'center' }}
+                             >
+                               <>
+                                 <Chip
+                                   key={index}
+                                   label={row.departmentId[0].name}
+                                   sx={{
+                                     m: 0.5,
+                                     padding: '0px 3px',
+                                   }}
+                                 />
+                                 {row.departmentId.length > 1 && (
+                                   <span
+                                     style={{
+                                       fontWeight: 500,
+                                       color: '#9F9F9F',
+                                       fontSize: '12px',
+                                       whiteSpace: 'nowrap',
+                                     }}
+                                     onClick={(_event) => {
+                                       _event.preventDefault();
+                                       _event.stopPropagation();
+                                       tablePopupRef.current.open(
+                                         true,
+                                         'departments',
+                                         row.departmentId,
+                                       );
+                                     }}
+                                   >
+                                     +{row.departmentId.length - 1} More
+                                   </span>
+                                 )}
+                               </>
+                             </Box>
+                           ) :
+                           '-'
+                         }
+                       </TableCell>
                       )}
                       {headers[3].is_show && (
-                        <TableCell> {(row.laboratoryId[0]?.id==undefined || row.laboratoryId[0] === null)
-                          ? '-'
-                          : row.departmentId.map((item: any) => (
-                              <Box key={item.id}>{item.name}</Box>
-                            ))}</TableCell>
+                       <TableCell>
+                       {row.laboratoryId[0] !== null ?
+                         (
+                           <Box
+                             sx={{ display: 'flex', alignItems: 'center' }}
+                           >
+                             <>
+                               <Chip
+                                 key={index}
+                                 label={row.laboratoryId[0].name}
+                                 sx={{
+                                   m: 0.5,
+                                   padding: '0px 3px',
+                                 }}
+
+                               />
+                               {row.laboratoryId.length > 1 && (
+                                 <span
+                                   style={{
+                                     fontWeight: 500,
+                                     color: '#9F9F9F',
+                                     fontSize: '12px',
+                                     whiteSpace: 'nowrap',
+                                   }}
+                                   onClick={(_event) => {
+                                     _event.preventDefault();
+                                     _event.stopPropagation();
+                                     tablePopupRef.current.open(
+                                       true,
+                                       'lab',
+                                       row.laboratoryId,
+                                     );
+                                   }}
+                                 >
+                                   +{row.laboratoryId.length - 1} More
+                                 </span>
+                               )}
+                             </>
+                           </Box>
+
+                         ) :
+                         <span style={{textAlign:"center"}}>-</span>
+                       }
+                     </TableCell>
                       )}
                       {headers[4].is_show && (
-                        <TableCell>{row.updatedAt}</TableCell>
+                        <TableCell>{moment(parseInt(row.createdAt)).format('MM/DD/YYYY')}</TableCell>
                       )}
                       {headers[5].is_show && (
-                        <TableCell>{row.createdAt}</TableCell>
+                        <TableCell>{moment(parseInt(row.createdAt)).format('MM/DD/YYYY')}</TableCell>
                       )}
                     </TableRow>
                   );

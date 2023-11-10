@@ -144,14 +144,14 @@ export default function Assets() {
     console.log(e.target.value);
 
     console.log('change', row.departmentId, row.laboratoryId);
-    var assetsChange :any= {
+    var assetsChange: any = {
       _id: row._id,
     };
-    if(e.target.name=='status'){
-      assetsChange['status']=e.target.value
+    if (e.target.name == 'status') {
+      assetsChange['status'] = e.target.value
     }
-    if(e.target.name=='availability'){
-      assetsChange['availability']=e.target.value
+    if (e.target.name == 'availability') {
+      assetsChange['availability'] = e.target.value
     }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
@@ -185,7 +185,7 @@ export default function Assets() {
     setIsselectAllChecked,
     setVisibleRow,
   );
-  const handleRequestSort = () => {};
+  const handleRequestSort = () => { };
 
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
@@ -310,7 +310,7 @@ export default function Assets() {
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-              // size={dense ? "small" : "medium"}
+            // size={dense ? "small" : "medium"}
             >
               <TableHeader
                 numSelected={0}
@@ -381,30 +381,21 @@ export default function Assets() {
                         )}
                         {headers[2].is_show && (
                           <TableCell>
-                            {row.departmentId[0] === null ? (
-                              <Box
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                              >
-                                {DepartmentList[index] ? (
+                            {row.departmentId[0] !== null ?
+                              (
+                                <Box
+                                  sx={{ display: 'flex', alignItems: 'center' }}
+                                >
                                   <>
                                     <Chip
                                       key={index}
-                                      label={DepartmentList[index].name}
+                                      label={row.departmentId[0].name}
                                       sx={{
                                         m: 0.5,
                                         padding: '0px 3px',
                                       }}
-                                      onClick={(_event) => {
-                                        _event.preventDefault();
-                                        _event.stopPropagation();
-                                        tablePopupRef.current.open(
-                                          true,
-                                          'departments',
-                                          DepartmentList,
-                                        );
-                                      }}
                                     />
-                                    {index > 0 && (
+                                    {row.departmentId.length > 1 && (
                                       <span
                                         style={{
                                           fontWeight: 500,
@@ -412,52 +403,44 @@ export default function Assets() {
                                           fontSize: '12px',
                                           whiteSpace: 'nowrap',
                                         }}
+                                        onClick={(_event) => {
+                                          _event.preventDefault();
+                                          _event.stopPropagation();
+                                          tablePopupRef.current.open(
+                                            true,
+                                            'departments',
+                                            row.departmentId,
+                                          );
+                                        }}
                                       >
-                                        +{index} More
+                                        +{row.departmentId.length - 1} More
                                       </span>
                                     )}
                                   </>
-                                ) : (
-                                  '-'
-                                )}
-                              </Box>
-                            ) : 
-                            '-'
-                            // (
-                            //   row.departmentId.map((item: any) => 
-                            //   (
-                            //     <Box key={item?._id}>{item?.name}</Box>
-                            //   ))
-                            // )
+                                </Box>
+                              ) :
+                              '-'
                             }
                           </TableCell>
                         )}
                         {headers[3].is_show && (
                           <TableCell>
-                            {row.laboratoryId[0] === null ? (
-                              <Box
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                              >
-                                {LaboratoryList[index] ? (
+                            {row.laboratoryId[0] !== null ?
+                              (
+                                <Box
+                                  sx={{ display: 'flex', alignItems: 'center' }}
+                                >
                                   <>
                                     <Chip
                                       key={index}
-                                      label={LaboratoryList[index].name}
+                                      label={row.laboratoryId[0].name}
                                       sx={{
                                         m: 0.5,
                                         padding: '0px 3px',
                                       }}
-                                      onClick={(_event) => {
-                                        _event.preventDefault();
-                                        _event.stopPropagation();
-                                        tablePopupRef.current.open(
-                                          true,
-                                          'lab',
-                                          LaboratoryList,
-                                        );
-                                      }}
+
                                     />
-                                    {index > 0 && (
+                                    {row.laboratoryId.length > 1 && (
                                       <span
                                         style={{
                                           fontWeight: 500,
@@ -465,22 +448,24 @@ export default function Assets() {
                                           fontSize: '12px',
                                           whiteSpace: 'nowrap',
                                         }}
+                                        onClick={(_event) => {
+                                          _event.preventDefault();
+                                          _event.stopPropagation();
+                                          tablePopupRef.current.open(
+                                            true,
+                                            'lab',
+                                            row.laboratoryId,
+                                          );
+                                        }}
                                       >
-                                        +{index} More
+                                        +{row.laboratoryId.length - 1} More
                                       </span>
                                     )}
                                   </>
-                                ) : (
-                                  '-'
-                                )}
-                              </Box>
-                            ) : 
-                            '-'
-                            // (
-                            //   row.laboratoryId.map((item: any) => (
-                            //     <Box key={item.id}>{item.name}</Box>
-                            //   ))
-                            // )
+                                </Box>
+
+                              ) :
+                              <span style={{textAlign:"center"}}>-</span>
                             }
                           </TableCell>
                         )}
@@ -494,10 +479,10 @@ export default function Assets() {
                             {row.perchasedDate === null
                               ? '-'
                               : moment(row.perchasedDate).isValid()
-                              ? moment(row.perchasedDate)
+                                ? moment(row.perchasedDate)
                                   .local()
                                   .format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                                : moment().format('MM/DD/YYYY')}
                           </TableCell>
                         )}
                         {headers[5].is_show && (
@@ -505,16 +490,16 @@ export default function Assets() {
                             {row.lastUsedDate === null
                               ? '-'
                               : moment(row.lastUsedDate).isValid()
-                              ? moment(row.lastUsedDate)
+                                ? moment(row.lastUsedDate)
                                   .local()
                                   .format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                                : moment().format('MM/DD/YYYY')}
                           </TableCell>
                         )}
                         {headers[6].is_show && (
                           <TableCell>
                             <Select
-                            name='status'
+                              name='status'
                               className={
                                 row.isActive === true
                                   ? 'active-select td-select'
@@ -526,8 +511,8 @@ export default function Assets() {
                               onClick={(e: any) => clickHandler(e)}
                               IconComponent={ExpandMoreOutlinedIcon}
                             >
-                            <MenuItem value={"Active"}>
-                               Active
+                              <MenuItem value={"Active"}>
+                                Active
                               </MenuItem>
                               <MenuItem value={"Inactive"}>In-Active</MenuItem>
                             </Select>
@@ -536,13 +521,13 @@ export default function Assets() {
                         {headers[7].is_show && (
                           <TableCell>
                             <Select
-                            name='availability'
+                              name='availability'
                               className={
-                               true === true
+                                true === true
                                   ? 'active-select td-select'
                                   : 'inactive-select td-select'
                               }
-                              value={row.availability?row.availability:'Not_Available'}
+                              value={row.availability ? row.availability : 'Not_Available'}
                               displayEmpty
                               onChange={(e) => handleOnChange(e, row)}
                               IconComponent={ExpandMoreOutlinedIcon}
