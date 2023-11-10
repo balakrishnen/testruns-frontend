@@ -18,6 +18,7 @@ export const GET_ASSETS = gql`
         pageInfo {
             currentPage
             totalPages
+            totalCount
             hasNextPage
             hasPreviousPage
         }
@@ -28,11 +29,13 @@ export const GET_ASSETS = gql`
             organisationId
             perchasedDate
             lastUsedDate
+            status
             expiryDate
             isActive
             isDeleted
             createdAt
             updatedAt
+            availability
             departmentId {
                 _id
                 name
@@ -51,7 +54,6 @@ export const GET_ASSETS = gql`
                 createdAt
                 updatedAt
             }
-            status
         }
     }
   }

@@ -49,7 +49,9 @@ query Get_all_procedures($page: Int!, $perPage: Int!) {
             departmentId {
                 _id
                 name
-                userId
+                departmentNumber
+                organisationID
+                status
                 isActive
                 isDeleted
                 createdAt
@@ -91,6 +93,38 @@ query Get_procedure($_id: String!) {
         name
         procedureNumber
         procedureDetials
+        assectId
+        userId
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;
+export const UPDATE_PROCEDURE = gql`
+mutation Update_procedure(
+    $_id: String!
+        $name: String
+        $departmentId: [String]
+        $laboratoryId: [String]
+        $organisationId: String
+        $createdBy: String
+) {
+    update_procedure(
+        _id: $_id
+        name: $name
+        departmentId: $departmentId
+        laboratoryId: $laboratoryId
+        organisationId: $organisationId
+        createdBy: $createdBy
+    ) {
+        _id
+        name
+        procedureNumber
+        procedureDetials
+        departmentId
+        laboratoryId
         assectId
         userId
         isActive
