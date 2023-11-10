@@ -20,7 +20,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import test from '../../../assets/images/test.svg';
-import HistoryTable from "../history";
+import HistoryTable from "../details/history";
 import {
   fetchSingleAssetsData,
   fetchUpdateAssetsData,
@@ -771,7 +771,7 @@ export default function AssetDetails() {
               </Box>
             </Box>
             <Box>
-              <HistoryTable />
+              <HistoryTable/>
             </Box>
           </CustomTabPanel>
         </Box>
