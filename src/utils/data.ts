@@ -1090,7 +1090,7 @@ export const HistoryHeaders: readonly HistoryHead[] = [
   },
   {
     id: 'name',
-    label: 'Procedure Title',
+    label: 'Test objective',
     filters: [
       {
         id: 'search',
