@@ -630,7 +630,7 @@ export default function RunsDetails() {
                 <Tab label="Remarks" {...a11yProps(3)} />
               </Tabs>
             </Box>
-            <Box>
+            <Box sx={{paddingBottom:'6rem'}}>
               <CustomTabPanel value={value} index={0}>
                 <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
