@@ -334,7 +334,7 @@ export default function Assets() {
               <TableBody>
                 {assetsData?.map((row: any, index: number) => {
                   return (
-                    row.isDeleted !== true && (
+                    row?.isDeleted !== true && (
                       <TableRow
                         hover
                         tabIndex={-1}

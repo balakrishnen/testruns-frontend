@@ -100,7 +100,7 @@ export default function HistoryTable() {
       });
 
     React.useEffect(() => {
-        console.log("runSliceData before dispatch:", RunsSliceData);
+        // console.log("runSliceData before dispatch:", RunsSliceData);
         dispatch(fetchRunsData(queryStrings));
     }, [pageInfo, queryStrings]);
 
@@ -126,7 +126,7 @@ export default function HistoryTable() {
       };
     
 
-    console.log("runSliceData after dispatch:", RunsSliceData);
+    // console.log("runSliceData after dispatch:", RunsSliceData);
     return (
 
         <Box className="runz-page" sx={{ padding: '24px 0px' }}>
@@ -151,14 +151,14 @@ export default function HistoryTable() {
                             rowCount={0}
                             columns={headers}
                             filters={() => {
-                                console.log('runz');
+                                // console.log('runz');
                             }}
                         />
 
                         <TableBody>
                             {runzData?.map((row: any, index: number) => {
 
-                                console.log('row', row.laboratoryId)
+                                // console.log('row', row.laboratoryId)
                                 return (
                                     <TableRow
                                         hover
