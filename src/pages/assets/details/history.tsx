@@ -8,7 +8,7 @@ import {
     Button,
     Checkbox,
     MenuItem,
-    Select,
+    Select,Chip,
     Typography,
 } from '@mui/material';
 import Table from '@mui/material/Table';
@@ -41,6 +41,7 @@ import DeletePopup from '../../../components/DeletePopup';
 import { navigate } from 'gatsby';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
 import SuccessPopup from '../../../components/SuccessPopup';
+import TablePopup from '../../../components/table/TablePopup';
 // import RunsForm from './RunsForm';
 
 // table start
@@ -61,6 +62,7 @@ export default function HistoryTable() {
     // const [deletePopup, setDeletePopup] = React.useState(false);
     const deletePopupRef: any = React.useRef(null);
     const [currentPage, setCurrentPage] = React.useState(1);
+    const tablePopupRef: any = React.useRef(null);
 
     const itemsPerPage = 5;
     const totalPages = Math.ceil(Rows.length / itemsPerPage);
@@ -69,30 +71,60 @@ export default function HistoryTable() {
 
     const Data = Rows.slice(startIndex, endIndex);
 
-    const handlePageChange = (even: any, page: number) => {
-        setCurrentPage(page);
-    };
-    const [visibleRow, setVisibleRow] = React.useState<any>(Data);
-
-
-
-
+    // const handlePageChange = (even: any, page: number) => {
+    //     setCurrentPage(page);
+    // };
+    const [runzData, setRunzData] = React.useState<any>([]);
 
     const RunsSliceData = useSelector(
-        (state: any) => state.runs.data?.get_all_runs.Runs,
+        (state: any) => state.runs.data?.get_all_runs,
     );
     const dispatch: any = useDispatch();
+    React.useEffect(() => {
+        setRunzData(runzData);
+      }, [runzData]);
 
-    const [queryStrings, setQueryString] = React.useState({
+    const [pageInfo, setPageInfo] = React.useState({
+        currentPage: 1,
+        totalPages: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      });
+      const [queryStrings, setQueryString] = React.useState({
         page: 1,
         perPage: 5,
-      
+        searchBy: null,
+        search: null,
+        sortBy: null,
+        sortOrder: null,
       });
 
     React.useEffect(() => {
         console.log("runSliceData before dispatch:", RunsSliceData);
         dispatch(fetchRunsData(queryStrings));
-    }, []);
+    }, [pageInfo, queryStrings]);
+
+      React.useEffect(() => {
+        const page: any = { ...pageInfo };
+        page['currentPage'] = RunsSliceData?.pageInfo.currentPage;
+        page['totalPages'] = RunsSliceData?.pageInfo.totalPages;
+        page['hasNextPage'] = RunsSliceData?.pageInfo.hasNextPage;
+        page['hasPreviousPage'] = RunsSliceData?.pageInfo.hasPreviousPage;
+        page['totalCount'] = RunsSliceData?.pageInfo.totalCount;
+        setRunzData(RunsSliceData?.Runs);
+        setPageInfo(page);
+      }, [RunsSliceData]);
+    
+      const handlePageChange = (even: any, page_no: number) => {
+        const payload: any = { ...queryStrings };
+        const page: any = { ...pageInfo };
+        payload['page'] = page_no;
+        page['currentPage'] = page_no;
+        setPageInfo(page);
+        setQueryString(payload);
+        setCurrentPage(page_no);
+      };
+    
 
     console.log("runSliceData after dispatch:", RunsSliceData);
     return (
@@ -124,7 +156,7 @@ export default function HistoryTable() {
                         />
 
                         <TableBody>
-                            {RunsSliceData?.map((row: any, index: number) => {
+                            {runzData?.map((row: any, index: number) => {
 
                                 console.log('row', row.laboratoryId)
                                 return (
@@ -136,13 +168,13 @@ export default function HistoryTable() {
                                         key={index}
                                         // selected={isItemSelected}
                                         sx={{ cursor: 'pointer' }}
-                                        onClick={(e: any) => {
-                                            //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && 
-                                            navigate(`/runs/details/${row.runNumber}`)
-                                            // console.log(e.target.tagName)
+                                        // onClick={(e: any) => {
+                                        //     //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && 
+                                        //     navigate(`/runs/details/${row.runNumber}`)
+                                        //     // console.log(e.target.tagName)
 
-                                        }
-                                        }
+                                        // }
+                                        // }
                                     >
                                         {headers[0].is_show && (
                                             <TableCell scope="row">
@@ -174,26 +206,95 @@ export default function HistoryTable() {
                                             
                                         )}
                                         {headers[2].is_show && (
-                                            <TableCell>
-                                                {JSON.stringify(typeof row.departmentId)}
-                                                {row.departmentId === null
-                                                    ? row.departmentId.map(
-                                                        (dep: any) =>
-                                                            dep && dep.name && <Box key={dep._id}>{dep.name}</Box>
-                                                    )
-                                                    : '-'}
-                                            </TableCell>
+                                             <TableCell>
+                                             {row.departmentId[0] !== null ?
+                                               (
+                                                 <Box
+                                                   sx={{ display: 'flex', alignItems: 'center' }}
+                                                 >
+                                                   <>
+                                                     <Chip
+                                                       key={index}
+                                                       label={row.departmentId[0].name}
+                                                       sx={{
+                                                         m: 0.5,
+                                                         padding: '0px 3px',
+                                                       }}
+                                                     />
+                                                     {row.departmentId.length > 1 && (
+                                                       <span
+                                                         style={{
+                                                           fontWeight: 500,
+                                                           color: '#9F9F9F',
+                                                           fontSize: '12px',
+                                                           whiteSpace: 'nowrap',
+                                                         }}
+                                                         onClick={(_event) => {
+                                                           _event.preventDefault();
+                                                           _event.stopPropagation();
+                                                           tablePopupRef.current.open(
+                                                             true,
+                                                             'departments',
+                                                             row.departmentId,
+                                                           );
+                                                         }}
+                                                       >
+                                                         +{row.departmentId.length - 1} More
+                                                       </span>
+                                                     )}
+                                                   </>
+                                                 </Box>
+                                               ) :
+                                               '-'
+                                             }
+                                           </TableCell>
                                         )}
 
                                         {headers[3].is_show && (
-                                            <TableCell>
-                                                {row.laboratoryId.length > 0
-                                                    ? row.laboratoryId.map(
-                                                        (lab: any) =>
-                                                            lab && lab.name && <Box key={lab._id}>{lab.name}</Box>
-                                                    )
-                                                    : '-'}
-                                            </TableCell>
+                                           <TableCell>
+                                           {row.laboratoryId[0] !== null ?
+                                             (
+                                               <Box
+                                                 sx={{ display: 'flex', alignItems: 'center' }}
+                                               >
+                                                 <>
+                                                   <Chip
+                                                     key={index}
+                                                     label={row.laboratoryId[0].name}
+                                                     sx={{
+                                                       m: 0.5,
+                                                       padding: '0px 3px',
+                                                     }}
+               
+                                                   />
+                                                   {row.laboratoryId.length > 1 && (
+                                                     <span
+                                                       style={{
+                                                         fontWeight: 500,
+                                                         color: '#9F9F9F',
+                                                         fontSize: '12px',
+                                                         whiteSpace: 'nowrap',
+                                                       }}
+                                                       onClick={(_event) => {
+                                                         _event.preventDefault();
+                                                         _event.stopPropagation();
+                                                         tablePopupRef.current.open(
+                                                           true,
+                                                           'lab',
+                                                           row.laboratoryId,
+                                                         );
+                                                       }}
+                                                     >
+                                                       +{row.laboratoryId.length - 1} More
+                                                     </span>
+                                                   )}
+                                                 </>
+                                               </Box>
+               
+                                             ) :
+                                             <span style={{textAlign:"center"}}>-</span>
+                                           }
+                                         </TableCell>
                                         )}
                                         {headers[4].is_show && (
                         <TableCell align="center">{row.dueDate}</TableCell>
@@ -211,11 +312,11 @@ export default function HistoryTable() {
                                                 <Select
                                                     name="select"
                                                     className={
-                                                        row.status === 1
+                                                        row.status == 1
                                                             ? 'active-select td-select'
                                                             : 'inactive-select td-select'
                                                     }
-                                                    value={row.status}
+                                                    value={1}
                                                     displayEmpty
 
 
@@ -236,13 +337,15 @@ export default function HistoryTable() {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    handlePageChange={handlePageChange}
-                    currentPageData={Data}
-                    Rows={Rows}
-                />
+            currentPage={currentPage}
+            perPage={queryStrings.perPage}
+            handlePageChange={handlePageChange}
+            currentPageNumber={queryStrings.page}
+            totalRecords={runzData.length}
+            page={pageInfo}
+          />
             </Box>
+            <TablePopup ref={tablePopupRef} />
 
         </Box>
 

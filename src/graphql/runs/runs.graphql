@@ -4,7 +4,7 @@
 export const GET_RUNS = gql`
  query Get_all_runs($page: Int!, $perPage: Int!) {
     get_all_runs(page: $page, perPage: $perPage){
-        Runs {
+         Runs {
             _id
             objective
             runNumber
@@ -19,7 +19,9 @@ export const GET_RUNS = gql`
             departmentId {
                 _id
                 name
-                userId
+                departmentNumber
+                organisationID
+                status
                 isActive
                 isDeleted
                 createdAt
@@ -35,12 +37,12 @@ export const GET_RUNS = gql`
                 createdAt
                 updatedAt
             }
-            pageInfo {
+        }
+        pageInfo {
             currentPage
             totalPages
             hasNextPage
             hasPreviousPage
-        }
         }
     }
 }
