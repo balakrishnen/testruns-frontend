@@ -8,12 +8,12 @@ export const handleCheckboxChange = (
   setTableHeaderVisible: React.Dispatch<React.SetStateAction<boolean>>,
   setVisibleRow: React.Dispatch<React.SetStateAction<any[]>>
 ) => (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
-  // const checked = event.target.checked;
+  const checked = event.target.checked;
   const updatedRows = Rows.map((row) => {
-    if (row._id == id) {
-      return { ...row, is_checked: true };
+    if (row._id === id) {
+      return { ...row, is_checked: checked };
     }
-    return { ...row, is_checked: false };
+    return row;
   });
 
   setSelectedRows(updatedRows);

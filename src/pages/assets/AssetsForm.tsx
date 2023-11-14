@@ -79,6 +79,7 @@ const Addnewpopup = React.forwardRef(
     // const departments: any = [];
     // const laboratory: any = [];
     const [departments, setDepartments] = React.useState([])
+    const [organization, setOrganization] = React.useState([])
     const [laboratory, setLaboratory] = React.useState([])
     React.useImperativeHandle(ref, () => ({
       open(state: any) {
@@ -428,40 +429,35 @@ const Addnewpopup = React.forwardRef(
                           <label style={{ display: 'block' }}>
                             Organisation
                           </label>
-                          <Select
-                            className="placeholder-color"
-                            displayEmpty
-                            IconComponent={ExpandMoreOutlinedIcon}
-                            renderValue={
-                              formik.values.organisationId !== ''
-                                ? undefined
-                                : () => (
-                                    <Placeholder>
-                                      Select Organization
-                                    </Placeholder>
-                                  )
-                            }
-                            margin="none"
-                            fullWidth
-                            id="organisationId"
-                            name="organisationId"
-                            autoComplete="organisationId"
-                            placeholder="Organization"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.organisationId}
-                            size="small"
-                            error={
-                              formik.touched.organisationId &&
-                              Boolean(formik.errors.organisationId)
-                            }
-                          >
-                            {OrganizationList.map((item, index) => (
-                              <MenuItem key={index} value={item.id}>
-                                {item.name}
-                              </MenuItem>
-                            ))}
-                          </Select>
+                          <Autocomplete
+                              multiple
+                              id="departmentId"
+                              disableCloseOnSelect
+                              value={organization}
+                              options={
+                                organizationData !== undefined ? organizationData : []
+                              }
+                              getOptionLabel={(option: any) => option.label}
+                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
+                              renderInput={params => (
+                                <TextField {...params} />)}
+                              fullWidth
+                              placeholder="Department"
+                              size="medium"
+                              renderOption={(props, option: any, { selected }) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) => setOrganization(selectedOptions)}
+                            />
 
                           {formik.touched.organisationId &&
                             formik.errors.organisationId && (
