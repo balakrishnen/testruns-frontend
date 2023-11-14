@@ -83,11 +83,15 @@ export default function HistoryTable() {
     );
     const dispatch: any = useDispatch();
 
-
+    const [queryStrings, setQueryString] = React.useState({
+        page: 1,
+        perPage: 5,
+      
+      });
 
     React.useEffect(() => {
         console.log("runSliceData before dispatch:", RunsSliceData);
-        dispatch(fetchRunsData());
+        dispatch(fetchRunsData(queryStrings));
     }, []);
 
     console.log("runSliceData after dispatch:", RunsSliceData);

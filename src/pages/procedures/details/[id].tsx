@@ -20,6 +20,7 @@ import SuccessPopup from '../../../components/SuccessPopup';
 import { useLocation } from '@reach/router';
 import * as Yup from 'yup';
 import { Formik, useFormik } from 'formik';
+import { navigate } from 'gatsby';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -433,7 +434,7 @@ export default function ProcedureDetails() {
             </Grid> */}
           </Box>
           <Box className="edit-details" sx={{ p: 2 }}>
-            <Button variant="contained" className="cancel-btn">
+            <Button variant="contained" className="cancel-btn" onClick={()=>navigate('/procedures')}>
               Back
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>

@@ -800,8 +800,8 @@ export default function AssetDetails() {
             <Box className="asset-id-name">
               <img src={test} alt="test" className="dynamic-img" />
               <Box className="asset-name">
-                <Typography>Asset ID</Typography>
-                <Typography>Asset name</Typography>
+                <Typography>{assetValue?.assetNumber}</Typography>
+                <Typography>{assetValue?.name}</Typography>
               </Box>
             </Box>
             <Box>

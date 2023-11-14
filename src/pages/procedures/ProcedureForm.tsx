@@ -28,6 +28,8 @@ import { fetchUpdateProcedureData, postProcedureData } from '../../api/procedure
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
 import { fetchUpdateAssetsData } from '../../api/assetsAPI';
+import dayjs from 'dayjs';
+import moment from 'moment';
 // import Confirmationpopup from "../../components/ConfirmationPopup";
 // import Successpopup from "../../components/SuccessPopup";
 const validationSchema = Yup.object().shape({
@@ -197,6 +199,7 @@ const ProcedureForm = React.forwardRef(
       }, 3000);
     };
 console.log(type);
+const createdOn=dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/DD/YYYY'))
 
     return (
       <div>
@@ -254,7 +257,7 @@ console.log(type);
                         InputLabelProps={{ shrink: false }}
                         placeholder="ID023659ADN"
                         className="bg-gray-input"
-                        value={formData?._id}
+                        value={formData?.procedureNumber}
                         disabled
                         size="small"
                         // error={
@@ -287,7 +290,7 @@ console.log(type);
                     <Box className="bg-gray-input">
                       <label style={{ display: 'block' }}>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" />
+                        <DatePicker format="DD/MM/YYYY" value={createdOn} disabled />
                       </LocalizationProvider>
                     </Box>
                   </Grid>

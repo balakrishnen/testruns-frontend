@@ -2,8 +2,8 @@
  import { gql } from '@apollo/client';
 
 export const GET_RUNS = gql`
- query Get_all_runs {
-    get_all_runs(page: 1, perPage: 5) {
+ query Get_all_runs($page: Int!, $perPage: Int!) {
+    get_all_runs(page: $page, perPage: $perPage){
         Runs {
             _id
             objective
@@ -35,6 +35,12 @@ export const GET_RUNS = gql`
                 createdAt
                 updatedAt
             }
+            pageInfo {
+            currentPage
+            totalPages
+            hasNextPage
+            hasPreviousPage
+        }
         }
     }
 }

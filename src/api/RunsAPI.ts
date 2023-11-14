@@ -6,11 +6,12 @@ import {
 import { GET_RUNS } from '../graphql/runs/runs.graphql';
 import { client } from '../utils/config';
 
-export const fetchRunsData = () => async (dispatch: any) => {
+export const fetchRunsData = (payload: any) => async (dispatch: any) => {
     dispatch(fetchRunsStart());
     try {
         const response = await client.query({
-            query: GET_RUNS
+            query: GET_RUNS,
+            variables: payload,
         });
         console.log("reponse.data",response.data)
         dispatch(fetchRunsSuccess(response.data));
