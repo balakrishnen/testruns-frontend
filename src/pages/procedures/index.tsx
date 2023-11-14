@@ -280,7 +280,7 @@ export default function Procedures() {
     handleCheckboxChange(
       procedureData,
       setProcedureData,
-      setSelectedRows,
+      // setSelectedRows,
       setIsDeselectAllChecked,
       setIsselectAllChecked,
       setTableHeaderVisible,
@@ -292,17 +292,17 @@ export default function Procedures() {
     isDeselectAllChecked,
     procedureData,
     setProcedureData,
-    setSelectedRows,
+    // setSelectedRows,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setVisibleRow,
+    // setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
     procedureData,
     setProcedureData,
-    setSelectedRows,
+    // setSelectedRows,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
@@ -457,7 +457,7 @@ export default function Procedures() {
                             <Box sx={{ mt: 0, mr: 1 }}>
                               <Checkbox
                                 color="primary"
-                                checked={row.is_checked}
+                                checked={row.is_checked==true?true:false}
                                 onClick={(e:any)=>clickHandler(e)}
                                 onChange={(event) =>{
                                   // Procedure.push(row._id)
