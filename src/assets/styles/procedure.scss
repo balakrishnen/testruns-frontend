@@ -55,8 +55,8 @@ $width1: 200px;
     }    
     .main-proceduredetails{
         padding: 13rem 1.5rem;
-        height:100vh;
-        overflow-y:scroll;     
+        // height:100vh;
+        // overflow-y:scroll;     
         @media (max-width:899px){
             padding-top: 15px;
         }   
@@ -69,10 +69,10 @@ $width1: 200px;
         }
     }
 }
-main.wide-class .proceduredetails-page .top-section , main.wide-class .proceduredetails-page .edit-details{
+main.wide-class .proceduredetails-page .top-section , main.wide-class .proceduredetails-page .edit-details , main.wide-class .runzdetails-page .edit-details{
     width: calc(100% - 290px);
 }
-main.narrow-class .proceduredetails-page .top-section , main.narrow-class .proceduredetails-page .edit-details{
+main.narrow-class .proceduredetails-page .top-section , main.narrow-class .proceduredetails-page .edit-details , main.narrow-class .runzdetails-page .edit-details{
     width: calc(100% - 95px);
 }
 button.edit-btn {

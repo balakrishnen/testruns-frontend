@@ -174,14 +174,14 @@ function AppHeader(props: any) {
               </Typography>
               <img src={account} alt="help_icon" className="app-bar-images" />
             </IconButton>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="dark icon"
               color="inherit"
               onClick={changeTheme}
             >
               <img src={dark} alt="help_icon" className="app-bar-images" />
-            </IconButton>
+            </IconButton> */}
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
