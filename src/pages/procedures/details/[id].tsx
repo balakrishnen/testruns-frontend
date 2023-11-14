@@ -1,8 +1,10 @@
 import React from 'react';
 import PrivateRoute from '../../../components/PrivateRoute';
 import {
+  Autocomplete,
   Box,
   Button,
+  Checkbox,
   Divider,
   Grid,
   TextField,
@@ -16,21 +18,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProcedureForm from '../ProcedureForm';
 import SuccessPopup from '../../../components/SuccessPopup';
 import { useLocation } from '@reach/router';
+import * as Yup from 'yup';
+import { Formik, useFormik } from 'formik';
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().notRequired(),
+  assets: Yup.array().notRequired(),
+  procedure: Yup.string().notRequired()
+});
 
 export default function ProcedureDetails() {
   const editorRef: any = React.useRef(null);
   const dispatch: any = useDispatch();
   const [procedureData, setprocedureData] = React.useState<any>({});
+  const [assetsList, setAssetsList] = React.useState([]);
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
+
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_procedure,
   );
-  console.log(procedureSliceData)
-  const location: any = useLocation()
-  const procedureValue = location.state?.props
-  console.log(procedureValue);;
+  console.log(procedureSliceData);
+  const location: any = useLocation();
+  const procedureValue = location.state?.props;
+  console.log(procedureValue);
   // console.log('log',window.location)
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
@@ -63,6 +75,31 @@ export default function ProcedureDetails() {
       dispatch(fetchSingleProcedureData(procedureId));
     }
   }, []);
+
+  const checkCredentials = (values: any) => {
+    return true;
+  };
+
+  const onSubmit = (values: any) => {
+    // debugger
+    const isMatch = checkCredentials(values.name);
+    if (isMatch) {
+      // dispatch(fetchUpdateAssetsData(values));
+      // setFormPopup(false);
+    } else {
+      formik.setFieldError('name', 'Invalid first name');
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      assets: [],
+      procedure: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: onSubmit,
+  });
 
   // const log = () => {
   //   if (editorRef.current) {
@@ -144,70 +181,167 @@ export default function ProcedureDetails() {
           </Box>
           <Divider sx={{ borderColor: '#FFEAA5', borderBottomWidth: '5px' }} />
         </Box>
-        <Box className="main-proceduredetails">
-          <Grid container spacing={2} className="asset-popup">
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Box>
-                <label style={{ color: '#181818' }}>Procedure name</label>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="name"
-                  name="name"
-                  autoComplete="name"
-                  autoFocus
-                  InputLabelProps={{ shrink: false }}
-                  placeholder="bubble sort 2"
-                />
-              </Box>
+        <form onSubmit={formik.handleSubmit}>
+          <Box className="main-proceduredetails">
+            <Grid container spacing={2} className="asset-popup">
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Box style={{ position: 'relative' }}>
+                  <label>Procedure name</label>
+                  <TextField
+                    margin="none"
+                    fullWidth
+                    id="name"
+                    name="name"
+                    autoComplete="name"
+                    InputLabelProps={{ shrink: false }}
+                    placeholder="Procedure name"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.name}
+                    size="small"
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                  />
+                  {formik.touched.name && formik.errors.name && (
+                    <Typography className="error-field">
+                      {formik.errors.name}
+                    </Typography>
+                  )}
+                </Box>
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Box style={{ position: 'relative' }}>
+                  <label>Assets name</label>
+                  <Autocomplete
+                    multiple
+                    id="departmentId"
+                    disableCloseOnSelect
+                    value={formik.values.assets}
+                    options={assetsList !== undefined ? assetsList : []}
+                    getOptionLabel={(option: any) => option.label}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      value.id == option.id
+                    }
+                    renderInput={(params) => <TextField {...params} />}
+                    fullWidth
+                    placeholder="Department"
+                    size="medium"
+                    renderOption={(props, option: any, { selected }) => (
+                      <React.Fragment>
+                        <li {...props}>
+                          <Checkbox
+                            style={{ marginRight: 0 }}
+                            checked={selected}
+                          />
+                          {option.value}
+                        </li>
+                      </React.Fragment>
+                    )}
+                    onChange={(_, selectedOptions: any) =>
+                      setAssetsList(selectedOptions)
+                    }
+                  />
+                  {formik.touched.assets && formik.errors.assets && (
+                    <Typography className="error-field">
+                      {formik.errors.assets}
+                    </Typography>
+                  )}
+                </Box>
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Box style={{ position: 'relative' }}>
+                  <label>Full procedure</label>
+                  <Box sx={{ mt: 1.5 }}>
+                    <Editor
+                      apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
+                      onInit={(evt, editor) => (editorRef.current = editor)}
+                      init={{
+                        height: 400,
+                        menubar: false,
+                        plugins: [
+                          'advlist autolink lists link image charmap print preview anchor',
+                          'searchreplace visualblocks code fullscreen',
+                          'insertdatetime media table paste code help wordcount',
+                        ],
+                        toolbar:
+                          'undo redo | formatselect | ' +
+                          'bold italic backcolor | alignleft aligncenter ' +
+                          'alignright alignjustify | bullist numlist outdent indent | ' +
+                          'removeformat | help',
+                        content_style:
+                          'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                      }}
+                    />
+                  </Box>
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={2} className="asset-popup">
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Box>
-                <label style={{ color: '#181818' }}>Full procedures</label>
-                <Box sx={{ mt: 2 }}>
-                  <Editor
-                    apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
-                    onInit={(evt, editor) => (editorRef.current = editor)}
-                    init={{
-                      height: 400,
-                      menubar: false,
-                      plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount',
-                      ],
-                      toolbar:
-                        'undo redo | formatselect | ' +
-                        'bold italic backcolor | alignleft aligncenter ' +
-                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'removeformat | help',
-                      content_style:
-                        'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                    }}
+
+            {/* <Grid container spacing={2} className="asset-popup">
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Box>
+                  <label style={{ color: '#181818' }}>Procedure name</label>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="name"
+                    name="name"
+                    autoComplete="name"
+                    autoFocus
+                    InputLabelProps={{ shrink: false }}
+                    placeholder="bubble sort 2"
                   />
                 </Box>
-              </Box>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
-        <Box className="edit-details" sx={{ p: 2 }}>
-          <Button type="submit" variant="contained" className="cancel-btn">
-            Back
-          </Button>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <img
-              src={printer}
-              alt="printer"
-              style={{ marginRight: '1rem', cursor: 'pointer' }}
-            />
-            <Button type="submit" variant="contained" className="add-btn">
-              Save
-            </Button>
+            <Grid container spacing={2} className="asset-popup">
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Box>
+                  <label style={{ color: '#181818' }}>Full procedures</label>
+                  <Box sx={{ mt: 2 }}>
+                    <Editor
+                      apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
+                      onInit={(evt, editor) => (editorRef.current = editor)}
+                      init={{
+                        height: 400,
+                        menubar: false,
+                        plugins: [
+                          'advlist autolink lists link image charmap print preview anchor',
+                          'searchreplace visualblocks code fullscreen',
+                          'insertdatetime media table paste code help wordcount',
+                        ],
+                        toolbar:
+                          'undo redo | formatselect | ' +
+                          'bold italic backcolor | alignleft aligncenter ' +
+                          'alignright alignjustify | bullist numlist outdent indent | ' +
+                          'removeformat | help',
+                        content_style:
+                          'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                      }}
+                    />
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid> */}
           </Box>
-        </Box>
+          <Box className="edit-details" sx={{ p: 2 }}>
+            <Button variant="contained" className="cancel-btn">
+              Back
+            </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                src={printer}
+                alt="printer"
+                style={{ marginRight: '1rem', cursor: 'pointer' }}
+              />
+              <Button type="submit" variant="contained" className="add-btn">
+                Save
+              </Button>
+            </Box>
+          </Box>
+        </form>
         <ProcedureForm
           formData={procedureValue}
           type={'edit'}
@@ -216,7 +350,7 @@ export default function ProcedureDetails() {
           submitFormPopup={handleSubmitFormPopup}
           openConfirmationPopup={handleOpenConfirmationPopup}
         />
-        
+
         <SuccessPopup ref={successPopupRef} />
       </Box>
     </PrivateRoute>
