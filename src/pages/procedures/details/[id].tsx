@@ -27,6 +27,111 @@ const validationSchema = Yup.object().shape({
   procedure: Yup.string().notRequired()
 });
 
+const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
+<p>&nbsp;</p>
+<h4>AIM:</h4>
+<p><span style="font-weight: 400;">To determine the amount of iron in the given solution colorimetrically using thiocyanate as a complexing agent.</span></p>
+<p>&nbsp;</p>
+<h4>APPARATUS REQUIRED:</h4>
+<ul>
+<li>Spectrophotometer</li>
+<li>Glass cuvettes</li>
+<li>Pipettes</li>
+<li>Reagents</li>
+</ul>
+<p>&nbsp;</p>
+<h4>PRINCIPLE:</h4>
+<p><span style="font-weight: 400;">Iron when complexed with thiocyanate gives intense red color. The intensity of the color depends upon the concentration of iron in the solution. A calibration curve is obtained by plotting optical density versus conc. the amount of iron in the unknown sample is determined from the plot using an observed optical density.</span><strong>&nbsp;</strong></p>
+<p>&nbsp;</p>
+<h4>PROCEDURE:</h4>
+<p><span style="font-weight: 400;">Different aliquots of the standard iron solution(0.5,1,1.5,2,..3ml) were taken in 100ml of the standard flask. 5 ml potassium thiocyanate solution was added followed by 2 ml of 4 n nitric acids to each of the ions solution samples made up to&nbsp; Mark.&nbsp; The mixture in the standard flask was shaken well and a portion of the color of the solution was taken into the cell. The optical density was measured at 490 NM against a blank solution that contained all reagents except metal ions.</span></p>
+<p>&nbsp;</p>
+<h4 data-table="1">TABULAR COLUMN:</h4>
+<table style="border-collapse: collapse; width: 100%;" border="1">
+<thead>
+<tr>
+<td style="width: 31.8857%; text-align: center;" scope="col"><strong>SI.NO</strong></td>
+<td style="width: 31.8857%; text-align: center;" scope="col"><strong data-column="1">The concentration of the iron solution in PPM</strong></td>
+<td style="width: 31.9859%; text-align: center;" scope="col"><strong data-column="2">Optical density</strong></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="width: 31.8857%; text-align: center;">1.</td>
+<td style="width: 31.8857%; text-align: center;" data-column="1">&nbsp;<input id="graph1x11" name="value_KTCw3Dg" type="text" />&nbsp;</td>
+<td style="width: 31.9859%; text-align: center;" data-column="2"><input id="graph1y11" name="value_zxIBOyC" type="text" />&nbsp;</td>
+</tr>
+<tr>
+<td style="width: 31.8857%; text-align: center;">2.</td>
+<td style="width: 31.8857%; text-align: center;" data-column="1">&nbsp;<input id="graph1x12" name="value_ewAAtzE" type="text" />&nbsp;</td>
+<td style="width: 31.9859%; text-align: center;" data-column="2">&nbsp;<input id="graph1y12" name="value_RJZC369" type="text" />&nbsp;</td>
+</tr>
+<tr>
+<td style="width: 31.8857%; text-align: center;">3.</td>
+<td style="width: 31.8857%; text-align: center;" data-column="1">&nbsp;<input id="graph1x13" name="value_JITYu6K" type="text" />&nbsp;</td>
+<td style="width: 31.9859%; text-align: center;" data-column="2">&nbsp;<input id="graph1y13" name="value_WVTb49E" type="text" />&nbsp;</td>
+</tr>
+<tr>
+<td style="width: 31.8857%; text-align: center;">4.</td>
+<td style="width: 31.8857%; text-align: center;" data-column="1">&nbsp;<input id="graph1x14" name="value_ie3a1YZ" type="text" />&nbsp;</td>
+<td style="width: 31.9859%; text-align: center;" data-column="2">&nbsp;<input id="graph1y14" name="value_Tilkciq" type="text" />&nbsp;</td>
+</tr>
+<tr>
+<td style="width: 31.8857%; text-align: center;">5.</td>
+<td style="width: 31.8857%; text-align: center;" data-column="1">&nbsp;<input id="graph1x15" name="value_VZfimCs" type="text" />&nbsp;</td>
+<td style="width: 31.9859%; text-align: center;" data-column="2">&nbsp;<input id="graph1y15" name="value_3Th_fIu" type="text" />&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p>Unknown=<strong>&nbsp;<input id="value_8uNUKWm" name="value_8uNUKWm" type="text" />&nbsp;</strong></p>
+<p>&nbsp;</p>
+<h4>MODEL GRAPH:</h4>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" title="Testrunz - Recreation of Schematic diagram (13).png" src="blob:https://test-runz.netlify.app/4f99dc48-3fe3-40cf-99c4-2a706a378e8b" alt="" width="708" height="398" /></p>
+<p>&nbsp;</p>
+<p><strong>PRECAUTION:</strong></p>
+<div class="group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50 bg-gray-50 dark:bg-[#444654]">
+<div class="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto">
+<div class="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
+<div class="flex flex-grow flex-col gap-3">
+<div class="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
+<div class="markdown prose w-full break-words dark:prose-invert light">
+<ol>
+<li>
+<p>Safety precautions: Always wear appropriate personal protective equipment (PPE), such as gloves and safety glasses, when handling chemicals.</p>
+</li>
+<li>
+<p>Contamination: Ensure that all glassware is clean and free from any contamination. This can be achieved by rinsing with distilled water and drying with a lint-free cloth.</p>
+</li>
+<li>
+<p>Calibration: Ensure that the spectrophotometer is properly calibrated. This can be achieved by using a standard solution with a known concentration of iron.</p>
+</li>
+<li>
+<p>Standardization: It is important to use a standard solution with a known concentration of iron to ensure accurate results.</p>
+</li>
+<li>
+<p>Blank: Always prepare a blank solution to correct for any background absorbance.</p>
+</li>
+<li>
+<p>Timely measurement: It is important to measure the absorbance of the sample immediately after adding the reagents, as the color of the iron complex may fade over time.</p>
+</li>
+<li>
+<p>Temperature: Keep the temperature of the sample and reagents constant throughout the analysis, as the temperature can affect the formation of the iron complex.</p>
+</li>
+<li>
+<p>Recording the wavelength: Record the wavelength used to measure the absorbance, as this information will be needed for future reference.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="flex justify-between">
+<div class="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">&nbsp;</div>
+</div>
+</div>
+</div>
+</div>`;
+
 export default function ProcedureDetails() {
   const editorRef: any = React.useRef(null);
   const dispatch: any = useDispatch();
@@ -256,6 +361,7 @@ export default function ProcedureDetails() {
                     <Editor
                       apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                       onInit={(evt, editor) => (editorRef.current = editor)}
+                      value={editorData}
                       init={{
                         height: 400,
                         menubar: false,
