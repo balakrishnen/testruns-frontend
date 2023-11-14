@@ -90,6 +90,10 @@ const Users = () => {
     setVisibleRow,
   );
 
+  const handleTableSorting = () => {
+    
+  }
+
   const handleMenuCheckboxChange = (e: any, index: any) => {
     setHeaders((prevColumns: any) => {
       return prevColumns.map((column: any, i: any) => {
@@ -201,6 +205,7 @@ const Users = () => {
               orderBy={''}
               rowCount={0}
               columns={headers}
+              handleTableSorting={handleTableSorting}
             />
             <TableBody>
               {Data.map((row, index) => {

@@ -97,7 +97,7 @@ export default function Assets() {
     searchBy: null,
     search: null,
     sortBy: null,
-    sortOrder: null,
+    sortOrder: "desc",
   });
 
   const assetsSliceData = useSelector(
@@ -148,10 +148,10 @@ export default function Assets() {
       _id: row._id,
     };
     if (e.target.name == 'status') {
-      assetsChange['status'] = e.target.value
+      assetsChange['status'] = e.target.value;
     }
     if (e.target.name == 'availability') {
-      assetsChange['availability'] = e.target.value
+      assetsChange['availability'] = e.target.value;
     }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
@@ -177,8 +177,7 @@ export default function Assets() {
     setTableHeaderVisible,
     // setVisibleRow,
   );
-  const handledAllchange = 
-  handledAllSelected(
+  const handledAllchange = handledAllSelected(
     isselectAllChecked,
     assetsData,
     setAssetsData,
@@ -186,7 +185,7 @@ export default function Assets() {
     setIsselectAllChecked,
     setVisibleRow,
   );
-  const handleRequestSort = () => { };
+  const handleRequestSort = () => {};
 
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
@@ -270,10 +269,14 @@ export default function Assets() {
     e.stopPropagation();
   };
 
-  const handleTableSorting = (_event: any, _data: any) => {
+  const handleTableSorting = (_event: any, _data: any, _index: any) => {
     const payload: any = { ...queryStrings };
-    payload['sortBy'] = 'assetNumber';
-    payload['sortOrder'] = 'asc';
+    const headersList: any = [...headers];
+    payload['sortBy'] = headersList[_index].id;
+    payload['sortOrder'] = headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    headersList[_index].sort =
+      headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    setHeaders(headersList);
     setQueryString(payload);
   };
 
@@ -310,7 +313,7 @@ export default function Assets() {
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-            // size={dense ? "small" : "medium"}
+              // size={dense ? "small" : "medium"}
             >
               <TableHeader
                 numSelected={0}
@@ -352,7 +355,9 @@ export default function Assets() {
                               <Box sx={{ mt: 0, mr: 1 }}>
                                 <Checkbox
                                   color="primary"
-                                  checked={row.is_checked==true?true:false}
+                                  checked={
+                                    row.is_checked == true ? true : false
+                                  }
                                   onClick={(e: any) => clickHandler(e)}
                                   onChange={(event) => {
                                     setRowId([...rowId, row._id]),
@@ -381,108 +386,100 @@ export default function Assets() {
                         )}
                         {headers[2].is_show && (
                           <TableCell>
-                            {row.departmentId[0] !== null ?
-                              (
-                                <Box
-                                  sx={{ display: 'flex', alignItems: 'center' }}
-                                >
-                                  <>
-                                    <Chip
-                                      key={index}
-                                      label={row.departmentId[0].name}
-                                      sx={{
-                                        m: 0.5,
-                                        padding: '0px 3px',
+                            {row.departmentId[0] !== null ? (
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                <>
+                                  <Chip
+                                    key={index}
+                                    label={row.departmentId[0].name}
+                                    sx={{
+                                      m: 0.5,
+                                      padding: '0px 3px',
+                                    }}
+                                  />
+                                  {row.departmentId.length > 1 && (
+                                    <span
+                                      style={{
+                                        fontWeight: 500,
+                                        color: '#9F9F9F',
+                                        fontSize: '12px',
+                                        whiteSpace: 'nowrap',
                                       }}
-                                    />
-                                    {row.departmentId.length > 1 && (
-                                      <span
-                                        style={{
-                                          fontWeight: 500,
-                                          color: '#9F9F9F',
-                                          fontSize: '12px',
-                                          whiteSpace: 'nowrap',
-                                        }}
-                                        onClick={(_event) => {
-                                          _event.preventDefault();
-                                          _event.stopPropagation();
-                                          tablePopupRef.current.open(
-                                            true,
-                                            'departments',
-                                            row.departmentId,
-                                          );
-                                        }}
-                                      >
-                                        +{row.departmentId.length - 1} More
-                                      </span>
-                                    )}
-                                  </>
-                                </Box>
-                              ) :
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'departments',
+                                          row.departmentId,
+                                        );
+                                      }}
+                                    >
+                                      +{row.departmentId.length - 1} More
+                                    </span>
+                                  )}
+                                </>
+                              </Box>
+                            ) : (
                               '-'
-                            }
+                            )}
                           </TableCell>
                         )}
                         {headers[3].is_show && (
                           <TableCell>
-                            {row.laboratoryId[0] !== null ?
-                              (
-                                <Box
-                                  sx={{ display: 'flex', alignItems: 'center' }}
-                                >
-                                  <>
-                                    <Chip
-                                      key={index}
-                                      label={row.laboratoryId[0].name}
-                                      sx={{
-                                        m: 0.5,
-                                        padding: '0px 3px',
+                            {row.laboratoryId[0] !== null ? (
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                <>
+                                  <Chip
+                                    key={index}
+                                    label={row.laboratoryId[0].name}
+                                    sx={{
+                                      m: 0.5,
+                                      padding: '0px 3px',
+                                    }}
+                                  />
+                                  {row.laboratoryId.length > 1 && (
+                                    <span
+                                      style={{
+                                        fontWeight: 500,
+                                        color: '#9F9F9F',
+                                        fontSize: '12px',
+                                        whiteSpace: 'nowrap',
                                       }}
-
-                                    />
-                                    {row.laboratoryId.length > 1 && (
-                                      <span
-                                        style={{
-                                          fontWeight: 500,
-                                          color: '#9F9F9F',
-                                          fontSize: '12px',
-                                          whiteSpace: 'nowrap',
-                                        }}
-                                        onClick={(_event) => {
-                                          _event.preventDefault();
-                                          _event.stopPropagation();
-                                          tablePopupRef.current.open(
-                                            true,
-                                            'lab',
-                                            row.laboratoryId,
-                                          );
-                                        }}
-                                      >
-                                        +{row.laboratoryId.length - 1} More
-                                      </span>
-                                    )}
-                                  </>
-                                </Box>
-
-                              ) :
-                              <span style={{textAlign:"center"}}>-</span>
-                            }
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'lab',
+                                          row.laboratoryId,
+                                        );
+                                      }}
+                                    >
+                                      +{row.laboratoryId.length - 1} More
+                                    </span>
+                                  )}
+                                </>
+                              </Box>
+                            ) : (
+                              <span style={{ textAlign: 'center' }}>-</span>
+                            )}
                           </TableCell>
                         )}
-                        {console.log(
-                          moment(row.perchasedDate)
-                            .local()
-                            .format('MM/DD/YYYY'),
-                        )}
+                       
                         {headers[4].is_show && (
                           <TableCell>
                             {row.perchasedDate === null
                               ? '-'
                               : moment(row.perchasedDate).isValid()
-                                ? moment(row.perchasedDate)
+                              ? moment(row.perchasedDate)
                                   .local()
                                   .format('MM/DD/YYYY')
-                                : moment().format('MM/DD/YYYY')}
+                              : moment().format('MM/DD/YYYY')}
                           </TableCell>
                         )}
                         {headers[5].is_show && (
@@ -490,16 +487,16 @@ export default function Assets() {
                             {row.lastUsedDate === null
                               ? '-'
                               : moment(row.lastUsedDate).isValid()
-                                ? moment(row.lastUsedDate)
+                              ? moment(row.lastUsedDate)
                                   .local()
                                   .format('MM/DD/YYYY')
-                                : moment().format('MM/DD/YYYY')}
+                              : moment().format('MM/DD/YYYY')}
                           </TableCell>
                         )}
                         {headers[6].is_show && (
                           <TableCell>
                             <Select
-                              name='status'
+                              name="status"
                               className={
                                 row.status == 'Active'
                                   ? 'active-select td-select'
@@ -511,35 +508,37 @@ export default function Assets() {
                               onClick={(e: any) => clickHandler(e)}
                               IconComponent={ExpandMoreOutlinedIcon}
                             >
-                              <MenuItem value={"Active"}>
-                                Active
-                              </MenuItem>
-                              <MenuItem value={"Inactive"}>In-Active</MenuItem>
+                              <MenuItem value={'Active'}>Active</MenuItem>
+                              <MenuItem value={'Inactive'}>In-Active</MenuItem>
                             </Select>
                           </TableCell>
                         )}
                         {headers[7].is_show && (
                           <TableCell>
                             <Select
-                              name='availability'
+                              name="availability"
                               className={
                                 row.availability === 'Available'
-                                  ? 'active-select td-select':row.availability === 'In_Use'?'inuse-select td-select'
+                                  ? 'active-select td-select'
+                                  : row.availability === 'In_Use'
+                                  ? 'inuse-select td-select'
                                   : 'inactive-select td-select'
-                                  
                               }
-                              value={row.availability ? row.availability : 'Not_Available'}
+                              value={
+                                row.availability
+                                  ? row.availability
+                                  : 'Not_Available'
+                              }
                               displayEmpty
                               onChange={(e) => handleOnChange(e, row)}
                               IconComponent={ExpandMoreOutlinedIcon}
                               onClick={(e: any) => clickHandler(e)}
                             >
                               <MenuItem value={'Available'}>Available</MenuItem>
-                              <MenuItem value={'In_Use'}>
-                                In Use
+                              <MenuItem value={'In_Use'}>In Use</MenuItem>
+                              <MenuItem value={'Not_Available'}>
+                                Not Available
                               </MenuItem>
-                              <MenuItem value={'Not_Available'}>Not Available</MenuItem>
-
                             </Select>
                           </TableCell>
                         )}

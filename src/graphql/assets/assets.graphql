@@ -13,8 +13,8 @@ gql`
     } `
 
 export const GET_ASSETS = gql`
- query Get_all_assets($page: Int!, $perPage: Int!) {
-    get_all_assets(page: $page, perPage: $perPage) {
+ query Get_all_assets($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
+    get_all_assets(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search) {
         pageInfo {
             currentPage
             totalPages

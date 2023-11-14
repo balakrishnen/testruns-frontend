@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   MenuItem,
   Select,
   Typography,
@@ -41,6 +42,11 @@ import runCreated from '../../assets/images/run-created.svg';
 import runStarted from '../../assets/images/run-started.svg';
 import runStopped from '../../assets/images/run-stopped.svg';
 import runCompleted from '../../assets/images/run-completed.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRunsData } from '../../api/RunsAPI';
+import moment from 'moment';
+import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
+import TablePopup from '../../components/table/TablePopup';
 
 // table start
 
@@ -59,16 +65,65 @@ export default function Runs() {
   // const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
+  const tablePopupRef: any = React.useRef(null);
+  const deleteSuccessPopupRef: any = React.useRef(null);
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+  const [runsData, setRunsData] = React.useState<any>([]);
+  const dispatch: any = useDispatch();
+
+  const [pageInfo, setPageInfo] = React.useState({
+    currentPage: 1,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
+  const [queryStrings, setQueryString] = React.useState({
+    page: 1,
+    perPage: 5,
+    searchBy: null,
+    search: null,
+    sortBy: null,
+    sortOrder: 'desc',
+  });
+
+  const runsSliceData = useSelector(
+    (state: any) => state.runs.data?.get_all_runs,
+  );
 
   const Data = Rows.slice(startIndex, endIndex);
 
-  const handlePageChange = (even: any, page: number) => {
-    setCurrentPage(page);
+  React.useEffect(() => {
+    setRunsData(runsData);
+  }, [runsData]);
+
+  React.useEffect(() => {
+    dispatch(fetchRunsData(queryStrings));
+    // setRunsData(runsData);
+  }, [pageInfo, queryStrings]);
+
+  React.useEffect(() => {
+    const page: any = { ...pageInfo };
+    page['currentPage'] = runsSliceData?.pageInfo.currentPage;
+    page['totalPages'] = runsSliceData?.pageInfo.totalPages;
+    page['hasNextPage'] = runsSliceData?.pageInfo.hasNextPage;
+    page['hasPreviousPage'] = runsSliceData?.pageInfo.hasPreviousPage;
+    page['totalCount'] = runsSliceData?.pageInfo.totalCount;
+    setRunsData(runsSliceData?.Runs);
+    setPageInfo(page);
+  }, [runsSliceData]);
+
+  const handlePageChange = (even: any, page_no: number) => {
+    const payload: any = { ...queryStrings };
+    const page: any = { ...pageInfo };
+    payload['page'] = page_no;
+    page['currentPage'] = page_no;
+    setPageInfo(page);
+    setQueryString(payload);
+    setCurrentPage(page_no);
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data);
   const handleChange = (event: any, id: any) => {
@@ -140,7 +195,7 @@ export default function Runs() {
 
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
-    const updatedRows = Rows.map((row: any) => ({
+    const updatedRows = runsData.map((row: any) => ({
       ...row,
       is_checked: false,
     }));
@@ -150,7 +205,12 @@ export default function Runs() {
   };
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
-      deletePopupRef.current.open(false);
+      // deletePopupRef.current.open(false);
+      // dispatch(deleteAssetsData(assetVal));
+      deleteSuccessPopupRef.current.open(true);
+      setTimeout(() => {
+        deleteSuccessPopupRef.current.open(false);
+      }, 3000);
     }
     deletePopupRef.current.open(false);
   };
@@ -162,6 +222,22 @@ export default function Runs() {
   const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
   };
+
+  const filters = () => {
+    dispatch(fetchRunsData(queryStrings));
+  };
+
+  const handleTableSorting = (_event: any, _data: any, _index: any) => {
+    const payload: any = { ...queryStrings };
+    const headersList: any = [...headers];
+    payload['sortBy'] = headersList[_index].id;
+    payload['sortOrder'] = headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    headersList[_index].sort =
+      headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    setHeaders(headersList);
+    setQueryString(payload);
+  };
+
   return (
     <PrivateRoute>
       <Box className="main-padding runz-page">
@@ -179,11 +255,11 @@ export default function Runs() {
         </Box>
         <TableFilters
           columns={headers}
+          handleMenuCheckboxChange={handleMenuCheckboxChange}
           handleDeCheckboxChange={handleDeChange}
           handledAllSelected={handledAllchange}
           isDeselectAllChecked={isDeselectAllChecked}
           isselectAllChecked={isselectAllChecked}
-          handleMenuCheckboxChange={handleMenuCheckboxChange}
           isTableHeaderVisible={isTableHeaderVisible}
           closeTableHeader={handleCloseTableHeader}
           deleteRecord={handleOpenDeletePopup}
@@ -209,13 +285,12 @@ export default function Runs() {
                 orderBy={''}
                 rowCount={0}
                 columns={headers}
-                filters={() => {
-                  console.log('runz');
-                }}
+                filters={filters}
+                handleTableSorting={handleTableSorting}
               />
 
               <TableBody>
-                {Data.map((row: any, index: number) => {
+                {runsData?.map((row: any, index: number) => {
                   // const isItemSelected = isSelected(row.name);
                   // const isItemSelected = isSelected(row.name);
                   // const labelId = `enhanced-table-checkbox-${index}`;
@@ -250,7 +325,15 @@ export default function Runs() {
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Box style={{ width: '45px', height: '41px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                              <Box
+                                style={{
+                                  width: '45px',
+                                  height: '41px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                }}
+                              >
                                 <img
                                   src={
                                     index + 1 === 1
@@ -290,16 +373,104 @@ export default function Runs() {
                         <TableCell>{row.objective}</TableCell>
                       )}
                       {headers[2].is_show && (
-                        <TableCell>{getDepartment(row.departmentId)}</TableCell>
+                        <TableCell>
+                          {row.departmentId[0] !== null ? (
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <>
+                                <Chip
+                                  key={index}
+                                  label={row.departmentId[0].name}
+                                  sx={{
+                                    m: 0.5,
+                                    padding: '0px 3px',
+                                  }}
+                                />
+                                {row.departmentId.length > 1 && (
+                                  <span
+                                    style={{
+                                      fontWeight: 500,
+                                      color: '#9F9F9F',
+                                      fontSize: '12px',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                    onClick={(_event) => {
+                                      _event.preventDefault();
+                                      _event.stopPropagation();
+                                      tablePopupRef.current.open(
+                                        true,
+                                        'departments',
+                                        row.departmentId,
+                                      );
+                                    }}
+                                  >
+                                    +{row.departmentId.length - 1} More
+                                  </span>
+                                )}
+                              </>
+                            </Box>
+                          ) : (
+                            '-'
+                          )}
+                        </TableCell>
                       )}
                       {headers[3].is_show && (
-                        <TableCell>{getLaboratory(row.laboratoryId)}</TableCell>
+                        <TableCell>
+                          {row.laboratoryId[0] !== null ? (
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <>
+                                <Chip
+                                  key={index}
+                                  label={row.laboratoryId[0].name}
+                                  sx={{
+                                    m: 0.5,
+                                    padding: '0px 3px',
+                                  }}
+                                />
+                                {row.laboratoryId.length > 1 && (
+                                  <span
+                                    style={{
+                                      fontWeight: 500,
+                                      color: '#9F9F9F',
+                                      fontSize: '12px',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                    onClick={(_event) => {
+                                      _event.preventDefault();
+                                      _event.stopPropagation();
+                                      tablePopupRef.current.open(
+                                        true,
+                                        'lab',
+                                        row.laboratoryId,
+                                      );
+                                    }}
+                                  >
+                                    +{row.laboratoryId.length - 1} More
+                                  </span>
+                                )}
+                              </>
+                            </Box>
+                          ) : (
+                            <span style={{ textAlign: 'center' }}>-</span>
+                          )}
+                        </TableCell>
                       )}
                       {headers[4].is_show && (
-                        <TableCell align="center">{row.createdAt}</TableCell>
+                        <TableCell>
+                          {row.createdAt === null
+                            ? '-'
+                            : moment(row.createdAt).isValid()
+                            ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                            : moment().format('MM/DD/YYYY')}
+                        </TableCell>
                       )}
                       {headers[5].is_show && (
-                        <TableCell align="center">{row.dueDate}</TableCell>
+                        <TableCell>
+                          {row.dueDate === null
+                            ? '-'
+                            : moment(row.dueDate).isValid()
+                            ? moment(row.dueDate).local().format('MM/DD/YYYY')
+                            : moment().format('MM/DD/YYYY')}
+                        </TableCell>
                       )}
                       {headers[6].is_show && (
                         <TableCell>
@@ -350,10 +521,11 @@ export default function Runs() {
           </TableContainer>
           <TablePagination
             currentPage={currentPage}
-            totalPages={totalPages}
+            perPage={queryStrings.perPage}
             handlePageChange={handlePageChange}
-            currentPageData={Data}
-            Rows={Rows}
+            currentPageNumber={queryStrings.page}
+            totalRecords={runsData?.length}
+            page={pageInfo}
           />
         </Box>
         <Box>
@@ -371,6 +543,8 @@ export default function Runs() {
             type="create"
           />
         </Box>
+        <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
+        <TablePopup ref={tablePopupRef} />
       </Box>
     </PrivateRoute>
   );

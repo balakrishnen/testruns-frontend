@@ -30,10 +30,12 @@ if (typeof window !== 'undefined') {
   };
 
   const toggleProfileDrawer = () => {
+    setNotificationList(false)
     setEditProfile(!editProfile);
   };
 
   const toggleNotificationDrawer = () => {
+    setEditProfile(false)
     setNotificationList(!notificationList);
   };
 

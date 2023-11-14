@@ -77,7 +77,7 @@ export default function TableHeader(props: any) {
               >
                 <TableSortLabel
                   direction={headCell.sort}
-                  onClick={(event) => handleTableSorting(event, headCell)}
+                  onClick={(event) => handleTableSorting(event, headCell, index)}
                 >
                   {headCell.label}
                 </TableSortLabel>

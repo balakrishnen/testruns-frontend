@@ -1,6 +1,6 @@
 import React from 'react';
 import PrivateRoute from '../../components/PrivateRoute';
-import { Box, Button, Checkbox, Typography,Chip } from '@mui/material';
+import { Box, Button, Checkbox, Typography, Chip } from '@mui/material';
 import Table from '@mui/material/Table';
 import TablePagination from '../../components/table/TablePagination';
 import TableBody from '@mui/material/TableBody';
@@ -30,7 +30,10 @@ import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
 import { navigate } from 'gatsby';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProcedureData,deleteProcedureData } from '../../api/procedureAPI';
+import {
+  fetchProcedureData,
+  deleteProcedureData,
+} from '../../api/procedureAPI';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import moment from 'moment';
 const rows: ProceduresRowData[] = ProcedureRows;
@@ -110,7 +113,7 @@ export default function Procedures() {
     }
     setSelected([]);
   };
- 
+
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -120,20 +123,20 @@ export default function Procedures() {
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 5,
-    searchBy: null,
-    search: null,
-    sortBy: null,
-    sortOrder: null,
+    // searchBy: null,
+    // search: null,
+    // sortBy: null,
+    // sortOrder: 'desc',
   });
 
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_all_procedures,
   );
-  console.log('procedureSliceData',procedureSliceData);
-  
+  console.log('procedureSliceData', procedureSliceData);
+
   const dispatch: any = useDispatch();
   const [procedureData, setProcedureData] = React.useState<any>([]);
-  const [rowId,setRowId]=React.useState<any>([])
+  const [rowId, setRowId] = React.useState<any>([]);
   React.useEffect(() => {
     setProcedureData(procedureData);
   }, [procedureData]);
@@ -208,7 +211,7 @@ export default function Procedures() {
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
-  const deleteSuccessPopupRef:any = React.useRef(null);
+  const deleteSuccessPopupRef: any = React.useRef(null);
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
   };
@@ -343,16 +346,16 @@ export default function Procedures() {
   const searchString = 'B';
   const foundItem = getObjectBySearchString(searchString);
   console.log(visibleRow);
-  const Procedure:any=[]
+  const Procedure: any = [];
   console.log(rowId);
-  const ProcedureVal:any={_id:rowId}
+  const ProcedureVal: any = { _id: rowId };
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
       dispatch(deleteProcedureData(ProcedureVal));
       deleteSuccessPopupRef.current.open(true);
       setTimeout(() => {
-      deleteSuccessPopupRef.current.open(false);
-    }, 3000);
+        deleteSuccessPopupRef.current.open(false);
+      }, 3000);
       // deletePopupRef.current.open(false);
     }
     deletePopupRef.current.open(false);
@@ -362,38 +365,50 @@ export default function Procedures() {
     deletePopupRef.current.open(true, 'procedures');
   };
 
-  const clickHandler=(e:MouseEvent)=>{
+  const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
-  }
+  };
 
   const handleConfirmationState = (state: number) => {
-    if(state === 0) {
-      confirmationPopupRef.current.open(false)
+    if (state === 0) {
+      confirmationPopupRef.current.open(false);
     } else {
       confirmationPopupRef.current.open(false);
     }
-  }
+  };
 
   const createdAtTimestamp = '1699599706383';
   const localTime = moment(createdAtTimestamp).format('YYYY-MM-DD HH:mm:ss');
-  
+
   console.log(localTime);
+
+  const handleTableSorting = (_event: any, _data: any, _index: any) => {
+    const payload: any = { ...queryStrings };
+    const headersList: any = [...headers];
+    payload['sortBy'] = headersList[_index].id;
+    payload['sortOrder'] = headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    headersList[_index].sort =
+      headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    setHeaders(headersList);
+    setQueryString(payload);
+  };
+
   return (
     <PrivateRoute>
       <Box className="main-padding">
         <Box className="title-main">
           <Typography>Procedures</Typography>
           <Button
-          variant="contained"
-          onClick={() => {
-            formPopupRef.current.open(true);
-          }}
-        >
-          <AddIcon sx={{ mr: 1 }} />
-          Create Procedure
-        </Button>
+            variant="contained"
+            onClick={() => {
+              formPopupRef.current.open(true);
+            }}
+          >
+            <AddIcon sx={{ mr: 1 }} />
+            Create Procedure
+          </Button>
         </Box>
-        
+
         <TableFilters
           columns={headers}
           handleMenuCheckboxChange={handleMenuCheckboxChange}
@@ -427,6 +442,7 @@ export default function Procedures() {
                 rowCount={rows.length}
                 columns={headers}
                 filters={filters}
+                handleTableSorting={handleTableSorting}
               />
               <TableBody>
                 {procedureData?.map((row: any, index: number) => {
@@ -434,150 +450,158 @@ export default function Procedures() {
                   // const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    row.isDeleted!==true &&  <TableRow
-                      hover
-                      // onClick={(event) => handleClick(event, row.name, index)}
-                      // aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={index}
-                      // selected={isItemSelected}
-                      sx={{ cursor: "pointer" }}
-                      onClick={(e:any) =>
-                        // (e.target.name==undefined && 
-                          navigate(
-                           `/procedures/details/${row._id}`, {
+                    row.isDeleted !== true && (
+                      <TableRow
+                        hover
+                        // onClick={(event) => handleClick(event, row.name, index)}
+                        // aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={index}
+                        // selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
+                        onClick={(e: any) =>
+                          // (e.target.name==undefined &&
+                          navigate(`/procedures/details/${row._id}`, {
                             state: { props: row },
-                          }
-                         )
-                       }
-                    >
-                      {headers[0].is_show && (
-                        <TableCell scope="row">
-                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box sx={{ mt: 0, mr: 1 }}>
-                              <Checkbox
-                                color="primary"
-                                checked={row.is_checked==true?true:false}
-                                onClick={(e:any)=>clickHandler(e)}
-                                onChange={(event) =>{
-                                  // Procedure.push(row._id)
-                                setRowId([...rowId,row._id]),
-                                  handleChange(event, row._id)}
-                                }
-                              />
-                            </Box>
+                          })
+                        }
+                      >
+                        {headers[0].is_show && (
+                          <TableCell scope="row">
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Box>
-                                <Box>{row.procedureNumber}</Box>
+                              <Box sx={{ mt: 0, mr: 1 }}>
+                                <Checkbox
+                                  color="primary"
+                                  checked={
+                                    row.is_checked == true ? true : false
+                                  }
+                                  onClick={(e: any) => clickHandler(e)}
+                                  onChange={(event) => {
+                                    // Procedure.push(row._id)
+                                    setRowId([...rowId, row._id]),
+                                      handleChange(event, row._id);
+                                  }}
+                                />
+                              </Box>
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                <Box>
+                                  <Box>{row.procedureNumber}</Box>
+                                </Box>
                               </Box>
                             </Box>
-                          </Box>
-                        </TableCell>
-                      )}
-  
-                      {console.log('procedureData',row.departmentId.length)}
-                      {headers[1].is_show && (
-                        <TableCell>
-                          <Box>{row.name}</Box>
-                        </TableCell>
-                      )}
-                      {headers[2].is_show && (
-                         <TableCell>
-                         {row.departmentId[0] !== null ?
-                           (
-                             <Box
-                               sx={{ display: 'flex', alignItems: 'center' }}
-                             >
-                               <>
-                                 <Chip
-                                   key={index}
-                                   label={row.departmentId[0].name}
-                                   sx={{
-                                     m: 0.5,
-                                     padding: '0px 3px',
-                                   }}
-                                 />
-                                 {row.departmentId.length > 1 && (
-                                   <span
-                                     style={{
-                                       fontWeight: 500,
-                                       color: '#9F9F9F',
-                                       fontSize: '12px',
-                                       whiteSpace: 'nowrap',
-                                     }}
-                                     onClick={(_event) => {
-                                       _event.preventDefault();
-                                       _event.stopPropagation();
-                                       tablePopupRef.current.open(
-                                         true,
-                                         'departments',
-                                         row.departmentId,
-                                       );
-                                     }}
-                                   >
-                                     +{row.departmentId.length - 1} More
-                                   </span>
-                                 )}
-                               </>
-                             </Box>
-                           ) :
-                           '-'
-                         }
-                       </TableCell>
-                      )}
-                      {headers[3].is_show && (
-                       <TableCell>
-                       {row.laboratoryId[0] !== null ?
-                         (
-                           <Box
-                             sx={{ display: 'flex', alignItems: 'center' }}
-                           >
-                             <>
-                               <Chip
-                                 key={index}
-                                 label={row.laboratoryId[0].name}
-                                 sx={{
-                                   m: 0.5,
-                                   padding: '0px 3px',
-                                 }}
+                          </TableCell>
+                        )}
 
-                               />
-                               {row.laboratoryId.length > 1 && (
-                                 <span
-                                   style={{
-                                     fontWeight: 500,
-                                     color: '#9F9F9F',
-                                     fontSize: '12px',
-                                     whiteSpace: 'nowrap',
-                                   }}
-                                   onClick={(_event) => {
-                                     _event.preventDefault();
-                                     _event.stopPropagation();
-                                     tablePopupRef.current.open(
-                                       true,
-                                       'lab',
-                                       row.laboratoryId,
-                                     );
-                                   }}
-                                 >
-                                   +{row.laboratoryId.length - 1} More
-                                 </span>
-                               )}
-                             </>
-                           </Box>
-
-                         ) :
-                         <span style={{textAlign:"center"}}>-</span>
-                       }
-                     </TableCell>
-                      )}
-                      {headers[4].is_show && (
-                        <TableCell>{moment(parseInt(row.createdAt)).format('MM/DD/YYYY')}</TableCell>
-                      )}
-                      {headers[5].is_show && (
-                        <TableCell>{moment(parseInt(row.createdAt)).format('MM/DD/YYYY')}</TableCell>
-                      )}
-                    </TableRow>
+                        {console.log('procedureData', row.departmentId.length)}
+                        {headers[1].is_show && (
+                          <TableCell>
+                            <Box>{row.name}</Box>
+                          </TableCell>
+                        )}
+                        {headers[2].is_show && (
+                          <TableCell>
+                            {row.departmentId[0] !== null ? (
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                <>
+                                  <Chip
+                                    key={index}
+                                    label={row.departmentId[0].name}
+                                    sx={{
+                                      m: 0.5,
+                                      padding: '0px 3px',
+                                    }}
+                                  />
+                                  {row.departmentId.length > 1 && (
+                                    <span
+                                      style={{
+                                        fontWeight: 500,
+                                        color: '#9F9F9F',
+                                        fontSize: '12px',
+                                        whiteSpace: 'nowrap',
+                                      }}
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'departments',
+                                          row.departmentId,
+                                        );
+                                      }}
+                                    >
+                                      +{row.departmentId.length - 1} More
+                                    </span>
+                                  )}
+                                </>
+                              </Box>
+                            ) : (
+                              '-'
+                            )}
+                          </TableCell>
+                        )}
+                        {headers[3].is_show && (
+                          <TableCell>
+                            {row.laboratoryId[0] !== null ? (
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                <>
+                                  <Chip
+                                    key={index}
+                                    label={row.laboratoryId[0].name}
+                                    sx={{
+                                      m: 0.5,
+                                      padding: '0px 3px',
+                                    }}
+                                  />
+                                  {row.laboratoryId.length > 1 && (
+                                    <span
+                                      style={{
+                                        fontWeight: 500,
+                                        color: '#9F9F9F',
+                                        fontSize: '12px',
+                                        whiteSpace: 'nowrap',
+                                      }}
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'lab',
+                                          row.laboratoryId,
+                                        );
+                                      }}
+                                    >
+                                      +{row.laboratoryId.length - 1} More
+                                    </span>
+                                  )}
+                                </>
+                              </Box>
+                            ) : (
+                              <span style={{ textAlign: 'center' }}>-</span>
+                            )}
+                          </TableCell>
+                        )}
+                        {headers[4].is_show && (
+                          <TableCell>
+                            {moment(parseInt(row.createdAt)).format(
+                              'MM/DD/YYYY',
+                            )}
+                          </TableCell>
+                        )}
+                        {headers[5].is_show && (
+                          <TableCell>
+                            {moment(parseInt(row.createdAt)).format(
+                              'MM/DD/YYYY',
+                            )}
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    )
                   );
                 })}
               </TableBody>
@@ -593,7 +617,7 @@ export default function Procedures() {
           />
         </Box>
         <ProcedureForm
-          type='create'
+          type="create"
           ref={formPopupRef}
           closeFormPopup={handleCloseFormPopup}
           submitFormPopup={handleSubmitFormPopup}
@@ -603,14 +627,13 @@ export default function Procedures() {
             rowId={rowId}
             ref={deletePopupRef}
             closeDeletePopup={() =>
-              deletePopupRef.current.open(false, 'procedures',rowId)
+              deletePopupRef.current.open(false, 'procedures', rowId)
             }
             deleteConfirmation={handleDeleteConfirmation}
           />
         </Box>
-       
-       
-        <DeleteSuccessPopup ref={deleteSuccessPopupRef}/>
+
+        <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
       </Box>
     </PrivateRoute>
   );
