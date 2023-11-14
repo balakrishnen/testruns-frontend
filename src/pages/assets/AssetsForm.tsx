@@ -14,6 +14,7 @@ import {
   Autocomplete,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
@@ -45,6 +46,7 @@ import { fetchLabData } from '../../api/labAPI';
 import { fetchOrganizationData } from '../../api/organizationAPI';
 import SuccessPopup from '../../components/SuccessPopup';
 import Confirmationpopup from '../../components/ConfirmationPopup';
+import moment from 'moment';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -106,6 +108,8 @@ const Addnewpopup = React.forwardRef(
         laboratoryId: labArray,
         status: values.status,
         }
+        console.log(assetValues);
+        
         dispatch(postAssetsData(assetValues));
         submitFormPopup()
 
@@ -125,12 +129,13 @@ const Addnewpopup = React.forwardRef(
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
+    const today=moment().format('YYYY-MM-DD')
 
     const formik = useFormik({
       initialValues: {
         name: '',
-        perchasedDate: new Date(),
-        expiryDate: new Date(),
+        perchasedDate:dayjs(today),
+        expiryDate: dayjs(today),
         departmentId: [],
         laboratoryId: [],
         organisationId: '',
@@ -190,7 +195,10 @@ const Addnewpopup = React.forwardRef(
         setFormPopup(false);
       }
     };
-
+    const handleDateChanges = (selectedDate:any,name:any) => {
+      const formattedDate = moment(selectedDate.$d).format('YYYY-MM-DD');
+      formik.handleChange(name)(formattedDate);
+    };
     return (
       <div>
         <Dialog
@@ -376,7 +384,7 @@ const Addnewpopup = React.forwardRef(
                         <Box>
                           <label>Purchase date</label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="DD/MM/YYYY" />
+                            <DatePicker format="DD/MM/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'perchasedDate')} value={formik.values.perchasedDate}/>
                           </LocalizationProvider>
                           {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
@@ -403,7 +411,7 @@ const Addnewpopup = React.forwardRef(
                         <Box>
                           <label>Guaranty/warranty/expiry date</label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="DD/MM/YYYY" />
+                         <DatePicker format="DD/MM/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'expiryDate')} value={formik.values.expiryDate}/>
                           </LocalizationProvider>
                           {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (

@@ -13,12 +13,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import dayjs from 'dayjs';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import moment from 'moment';
 import test from '../../../assets/images/test.svg';
 import HistoryTable from "../details/history";
 import {
@@ -35,6 +37,8 @@ import {
   OrganizationList,
   StatusList,
 } from '../../../utils/data';
+import { navigate } from 'gatsby';
+import SuccessPopup from '../../../components/SuccessPopup';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -86,9 +90,15 @@ export default function AssetDetails() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  const today=moment().format('YYYY-MM-DD')
+
   const location: any = useLocation();
   const assetValue = location.state?.props;
-  console.log(assetValue);
+  // const getFunction = location.state?.func;
+
+  // console.log(assetValue);
+  const successPopupRef: any = React.useRef(null);
+  const [formPopup, setFormPopup] = React.useState(false);
 
   const [openSuccess, setSuccessOpen] = React.useState(false);
   const [departmentData, setDepartmentData] = React.useState([]);
@@ -175,22 +185,37 @@ export default function AssetDetails() {
         _id: assetValue._id,
         name: values.name,
         organisationId: assetValue?.organisationId,
-        perchasedDate: assetValue?.perchasedDate,
+        perchasedDate: values?.perchasedDate,
         lastUsedDate: values.lastUsedDate,
         availability: values.availability,
-        expiryDate: assetValue?.expiryDate,
+        expiryDate: values?.expiryDate,
         departmentId: deptArray,
         laboratoryId: labArray,
         status: values.status,
       }
-      console.log('labArray', deptArray);
+      // console.log('labArray', assetValues);
 
       dispatch(fetchUpdateAssetsData(assetValues));
-      // setFormPopup(false);
+
+      submitFormPopup();
     } else {
       formik.setFieldError('name', 'Invalid first name');
     }
   };
+  const handleDateChanges = (selectedDate:any,name:any) => {
+    const formattedDate = moment(selectedDate.$d).format('YYYY-MM-DD');
+    formik.handleChange(name)(formattedDate);
+  };
+  const submitFormPopup = () => {
+    setFormPopup(false);
+    successPopupRef.current.open(true, 'Asset');
+    setTimeout(() => {
+      successPopupRef.current.open(false, 'Asset');
+      // getFunction
+      navigate('/assets')
+    }, 3000);
+  };
+
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
   );
@@ -234,6 +259,10 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(AssetId));
   //    }
   // }, []);
+  const purchaseDate=moment(assetValue?.perchasedDate).local().format('YYYY-MM-DD')
+  const expireDate=moment(assetValue?.expiryDate).local().format('YYYY-MM-DD')
+// console.log(purchaseDate);
+
   const formik = useFormik({
     initialValues: {
       name: assetValue?.name,
@@ -246,12 +275,16 @@ export default function AssetDetails() {
       availability: assetValue?.availability,
       // assets_id: assetValue.assets_id,
       lastUsedDate: assetValue?.lastUsedDate,
+      perchasedDate:dayjs(purchaseDate),
+      expiryDate: dayjs(expireDate)
+      // perchasedDate:dayjs(today),
+      // expiryDate: dayjs(today)
     },
     validationSchema: validationSchema,
     onSubmit: onSubmit,
   });
 
-  // console.log("datas",departments,laboratory);
+  // console.log("datas",assetValue);
 
   return (
     <PrivateRoute>
@@ -371,6 +404,7 @@ export default function AssetDetails() {
                             autoComplete="assetId"
                             inputProps={{ maxLength: 50 }}
                             autoFocus
+                            disabled
                             InputLabelProps={{ shrink: false }}
                             placeholder="Asset Id"
                             error={
@@ -402,7 +436,7 @@ export default function AssetDetails() {
                         <Box>
                           <label>Purchase date</label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="DD/MM/YYYY" />
+                            <DatePicker format="MM/DD/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'perchasedDate')} value={formik.values.perchasedDate}/>
                           </LocalizationProvider>
                         </Box>
                       </Grid>
@@ -423,7 +457,7 @@ export default function AssetDetails() {
                         <Box>
                           <label>Guaranty/warranty/expiry date</label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="DD/MM/YYYY" />
+                            <DatePicker format="MM/DD/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'expiryDate')} value={formik.values.expiryDate}/>
                           </LocalizationProvider>
                         </Box>
                       </Grid>
@@ -753,7 +787,7 @@ export default function AssetDetails() {
                 </Grid>
               </Grid>
               <Box className="edit-details">
-                <Button variant="contained" className="cancel-btn">
+                <Button variant="contained" className="cancel-btn" onClick={()=>navigate('/assets')}>
                   Back
                 </Button>
                 <Button type="submit" variant="contained" className="add-btn">
@@ -774,6 +808,7 @@ export default function AssetDetails() {
               <HistoryTable/>
             </Box>
           </CustomTabPanel>
+          <SuccessPopup ref={successPopupRef} type={'edit'} />
         </Box>
       </Box>
     </PrivateRoute>

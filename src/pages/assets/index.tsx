@@ -501,7 +501,7 @@ export default function Assets() {
                             <Select
                               name='status'
                               className={
-                                row.isActive === 'Active'
+                                row.status == 'Active'
                                   ? 'active-select td-select'
                                   : 'inactive-select td-select'
                               }

@@ -46,7 +46,7 @@ export default function AppProfileDrawer({
     })))
   }, [departmentSliceData, labSliceData])
 
-  console.log(departmentData);
+  // console.log(departmentData);
 
   // console.log(DepartmentList);
 
