@@ -341,7 +341,7 @@ export default function HistoryTable() {
             perPage={queryStrings.perPage}
             handlePageChange={handlePageChange}
             currentPageNumber={queryStrings.page}
-            totalRecords={runzData.length}
+            totalRecords={runzData?.length}
             page={pageInfo}
           />
             </Box>

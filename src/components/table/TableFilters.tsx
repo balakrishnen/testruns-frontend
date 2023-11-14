@@ -84,7 +84,6 @@ export default function TableFilters({
   const [filterFieldName, setFilterFieldName] = React.useState("");
   const [filterSearchValue, setFilterSearchValue] = React.useState(null);
   const [runsOpen, setRunsOpen] = React.useState(false);
-
   const handleColumnPopoverClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -144,7 +143,6 @@ export default function TableFilters({
               <FormControlLabel
                 control={
                   <Checkbox
-                    value="remember"
                     color="primary"
                     sx={{
                       color: '#9F9F9F',
@@ -155,7 +153,8 @@ export default function TableFilters({
                     checked={isselectAllChecked}
                     checkedIcon={<CheckCircleOutlineOutlinedIcon />}
                     icon={<HighlightOffOutlinedIcon />}
-                    onChange={(event) => handledAllSelected(event, true)}
+                    onChange={(event) => {handledAllSelected(isselectAllChecked)
+                    }}
                   />
                 }
                 label="Select all"

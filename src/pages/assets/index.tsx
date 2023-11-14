@@ -175,9 +175,10 @@ export default function Assets() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setVisibleRow,
+    // setVisibleRow,
   );
-  const handledAllchange = handledAllSelected(
+  const handledAllchange = 
+  handledAllSelected(
     isselectAllChecked,
     assetsData,
     setAssetsData,
@@ -247,7 +248,6 @@ export default function Assets() {
   const asset: any = [];
 
   const assetVal: any = { _id: rowId };
-  console.log(asset);
 
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
@@ -352,7 +352,7 @@ export default function Assets() {
                               <Box sx={{ mt: 0, mr: 1 }}>
                                 <Checkbox
                                   color="primary"
-                                  checked={row.is_checked}
+                                  checked={row.is_checked==true?true:false}
                                   onClick={(e: any) => clickHandler(e)}
                                   onChange={(event) => {
                                     setRowId([...rowId, row._id]),
