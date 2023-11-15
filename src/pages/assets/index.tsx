@@ -263,6 +263,7 @@ const reload=()=>{
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
       reload()
+      setTableHeaderVisible(false);
     }
     deletePopupRef.current.open(false);
   };

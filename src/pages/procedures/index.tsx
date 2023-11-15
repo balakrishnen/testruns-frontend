@@ -357,6 +357,7 @@ export default function Procedures() {
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
       reload()
+      setTableHeaderVisible(false);
       // deletePopupRef.current.open(false);
     }
     deletePopupRef.current.open(false);

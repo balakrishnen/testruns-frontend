@@ -98,10 +98,11 @@ const Addnewpopup = React.forwardRef(
         var labArray:any=[]
         laboratory.map((item:any)=>(labArray.push(item?.id)))
         var org = organization
+        console.log(organization);
         
         let assetValues={
         name: values.name,
-        organisationId: org[0]?.id,
+        organisationId: org?.id,
         perchasedDate: values.perchasedDate,
         lastUsedDate: values.lastUsedDate,
         availability: values.availability,
@@ -147,7 +148,7 @@ const clearForm=()=>{
         expiryDate: '',
         departmentId: [],
         laboratoryId: [],
-        organisationId: '',
+        organisationId: '', 
         status: '',
         // assets_image: '',
         availability: '',
@@ -190,7 +191,7 @@ const clearForm=()=>{
           id: item._id,
         })),
       );
-    }, [departmentSliceData, labSliceData]);
+    }, [departmentSliceData, labSliceData,organizationSliceData]);
 
    React.useEffect(() => {
       dispatch(fetchDepartmentData());
@@ -440,10 +441,10 @@ const clearForm=()=>{
                             Organisation
                           </label>
                           <Autocomplete
-                              multiple
-                              id="departmentId"
+                              // multiple
+                              id="organizationId"
                               disableCloseOnSelect
-                              value={organization}
+                              // value={organization}
                               options={
                                 organizationData !== undefined ? organizationData : []
                               }
@@ -492,7 +493,7 @@ const clearForm=()=>{
 
                           <Autocomplete
                               multiple
-                              id="organisationId"
+                              id="departmentId"
                               disableCloseOnSelect
                               value={departments}
                               options={

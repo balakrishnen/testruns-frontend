@@ -104,6 +104,8 @@ export default function AssetDetails() {
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const [organizationData, setOrganizationData] = React.useState([]);
+  const [organization, setOrganization] = React.useState([{ label:'',
+    value: '',id:assetValue?.organisationId}])
   const [departments, setDepartments] = React.useState(
     assetValue?.departmentId?.map((item: any) => ({
       label: item?.name,
@@ -180,11 +182,11 @@ export default function AssetDetails() {
       departments.map((item: any) => (deptArray.push(item?.id)))
       var labArray: any = []
       laboratory.map((item: any) => (labArray.push(item?.id)))
-
+      var org = organization
       let assetValues = {
         _id: assetValue._id,
         name: values.name,
-        organisationId: assetValue?.organisationId,
+        organisationId: org[0]?.id,
         perchasedDate: values?.perchasedDate,
         lastUsedDate: values.lastUsedDate,
         availability: values.availability,
@@ -203,6 +205,9 @@ export default function AssetDetails() {
       formik.setFieldError('name', 'Invalid first name');
     }
   };
+  console.log(departments);
+  console.log(organization);
+  
   const handleDateChanges = (selectedDate:any,name:any) => {
     const formattedDate = moment(selectedDate.$d).format('YYYY-MM-DD');
     formik.handleChange(name)(formattedDate);
@@ -248,7 +253,7 @@ export default function AssetDetails() {
         id: item._id,
       })),
     );
-  }, [departmentSliceData, labSliceData, organizationData]);
+  }, [departmentSliceData, labSliceData, organizationSliceData]);
   // React.useEffect(() => {
   //   setAssetsData(AssetSliceData);
   // }, [AssetSliceData]);
@@ -269,7 +274,7 @@ export default function AssetDetails() {
       name: assetValue?.name,
       assetId: assetValue?.assetNumber,
       laboratoryId: assetValue?.laboratoryId,
-      organisationId: '',
+      organisationId: assetValue?.organisationId,
       departmentId: assetValue?.departmentId,
       // userId: 'USER_1001', 
       status: assetValue?.status,
@@ -469,48 +474,42 @@ export default function AssetDetails() {
                           <label style={{ display: 'block' }}>
                             Organisation
                           </label>
-                          <FormControl sx={{ width: '100%' }}>
-                            <Select
-                              className="placeholder-color"
-                              displayEmpty
-                              IconComponent={ExpandMoreOutlinedIcon}
-                              renderValue={
-                                formik.values.organisationId !== ''
-                                  ? undefined
-                                  : () => (
-                                    <Placeholder>
-                                      Select Organization
-                                    </Placeholder>
-                                  )
+                          <Autocomplete
+                              // multiple
+                              id="organization"
+                              disableCloseOnSelect
+                              // value={organization}
+                              options={
+                                organizationData !== undefined ? organizationData : []
                               }
-                              margin="none"
+                              getOptionLabel={(option: any) => option.label}
+                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
+                              renderInput={params => (
+                                <TextField {...params} />)}
                               fullWidth
-                              id="organisationId"
-                              name="organisationId"
-                              autoComplete="organisationId"
-                              placeholder="Organization"
-                              onChange={formik.handleChange}
-                              onBlur={formik.handleBlur}
-                              value={formik.values.organisationId}
-                              size="small"
-                              error={
-                                formik.touched.organisationId &&
-                                Boolean(formik.errors.organisationId)
-                              }
-                            >
-                              {OrganizationList.map((item, index) => (
-                                <MenuItem key={index} value={item.id}>
-                                  {item.name}
-                                </MenuItem>
-                              ))}
-                            </Select>
+                             
+                              placeholder="Department"
+                              size="medium"
+                              renderOption={(props, option: any, { selected }) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) => setOrganization(selectedOptions)}
+                            />
                             {formik.touched.organisationId &&
                               formik.errors.organisationId && (
                                 <Typography className="error-field">
                                   {formik.errors.organisationId}
                                 </Typography>
                               )}
-                          </FormControl>
                         </Box>
                       </Grid>
                     </Grid>
