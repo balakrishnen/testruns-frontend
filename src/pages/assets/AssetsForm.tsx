@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
   Checkbox,
-  Autocomplete,
+  Autocomplete,InputAdornment
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -98,9 +98,11 @@ const Addnewpopup = React.forwardRef(
         departments.map((item:any)=>(deptArray.push(item?.id)))
         var labArray:any=[]
         laboratory.map((item:any)=>(labArray.push(item?.id)))
+        var org = organization
+        
         let assetValues={
         name: values.name,
-        organisationId: values.organisationId,
+        organisationId: org[0]?.id,
         perchasedDate: values.perchasedDate,
         lastUsedDate: values.lastUsedDate,
         availability: values.availability,
@@ -113,12 +115,17 @@ const Addnewpopup = React.forwardRef(
         
         dispatch(postAssetsData(assetValues));
         submitFormPopup()
-
+        clearForm()
       } else {
         formik.setFieldError('name', 'Invalid first name');
       }
     };
-
+const clearForm=()=>{
+  formik.resetForm()
+        setDepartments([])
+        setLaboratory([])
+        setOrganization([])
+}
     const submitFormPopup = () => {
       setFormPopup(false);
       successPopupRef.current.open(true, 'Asset');
@@ -136,7 +143,7 @@ const Addnewpopup = React.forwardRef(
       initialValues: {
         name: '',
         perchasedDate:dayjs(today),
-        expiryDate: dayjs(today),
+        expiryDate: '',
         departmentId: [],
         laboratoryId: [],
         organisationId: '',
@@ -216,7 +223,7 @@ const Addnewpopup = React.forwardRef(
             <Box className="popup-section">
               <Box className="title-popup">
                 <Typography>{type} asset</Typography>
-                <CloseIcon onClick={() => closeFormPopup(false)} />
+                <CloseIcon onClick={() => {closeFormPopup(false);clearForm()}} />
               </Box>
               <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
                 <Grid
@@ -442,6 +449,7 @@ const Addnewpopup = React.forwardRef(
                               renderInput={params => (
                                 <TextField {...params} />)}
                               fullWidth
+                             
                               placeholder="Department"
                               size="medium"
                               renderOption={(props, option: any, { selected }) => (
@@ -481,7 +489,7 @@ const Addnewpopup = React.forwardRef(
 
                           <Autocomplete
                               multiple
-                              id="departmentId"
+                              id="organisationId"
                               disableCloseOnSelect
                               value={departments}
                               options={
@@ -508,10 +516,10 @@ const Addnewpopup = React.forwardRef(
                               )}
                               onChange={(_, selectedOptions: any) => setDepartments(selectedOptions)}
                             />
-                          {formik.touched.departmentId &&
-                            formik.errors.departmentId && (
+                          {formik.touched.organisationId &&
+                            formik.errors.organisationId && (
                               <Typography className="error-field">
-                                {formik.errors.departmentId}
+                                {formik.errors.organisationId}
                               </Typography>
                             )}
                         </Box>
@@ -531,7 +539,6 @@ const Addnewpopup = React.forwardRef(
                           <Autocomplete
                               multiple
                               id="departmentId"
-                             
                               options={
                                 labData !== undefined ? labData : []
                               }
@@ -701,7 +708,7 @@ const Addnewpopup = React.forwardRef(
                  
                   variant="contained"
                   onClick={() => {
-                    confirmationPopupRef.current.open(true);
+                    confirmationPopupRef.current.open(true,clearForm());
                   }}
                   className="cancel-btn"
                 >

@@ -5,7 +5,7 @@ import { Box, Button, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import stop from '../assets/images/Cancel.svg';
 
-const Confirmationpopup = React.forwardRef(({ confirmationState }: any, ref) => {
+const Confirmationpopup = React.forwardRef(({ confirmationState ,clearForm}: any, ref) => {
   const [confirmationPopup, setConfirmationPopup] = React.useState(false);
   React.useImperativeHandle(ref, () => ({
     open(state: any) {
@@ -51,7 +51,7 @@ const Confirmationpopup = React.forwardRef(({ confirmationState }: any, ref) => 
             </Button>
             <Button
               type="submit"
-              onClick={() => confirmationState(1)}
+              onClick={() => {confirmationState(1),clearForm}}
               variant="contained"
               className="add-btn"
             >
