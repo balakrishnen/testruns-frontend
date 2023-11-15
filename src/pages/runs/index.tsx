@@ -43,7 +43,7 @@ import runStarted from '../../assets/images/run-started.svg';
 import runStopped from '../../assets/images/run-stopped.svg';
 import runCompleted from '../../assets/images/run-completed.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRunsData } from '../../api/RunsAPI';
+import { fetchRunsData, fetchUpdateRunsData } from '../../api/RunsAPI';
 import moment from 'moment';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import TablePopup from '../../components/table/TablePopup';
@@ -126,10 +126,24 @@ export default function Runs() {
     setCurrentPage(page_no);
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data);
+  const handleOnChange = (e: any, row: any) => {
+    console.log(e.target.value);
+
+    console.log('change', row.departmentId, row.laboratoryId);
+    var runsChange: any = {
+      _id: row._id,
+    };
+    if (e.target.name == 'status') {
+      runsChange['status'] = e.target.value;
+    }
+    console.log(runsChange);
+    dispatch(fetchUpdateRunsData(runsChange));
+    reload()
+  };
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
-      Rows,
-      setSelectedRows,
+      runsData,
+      setRunsData,
       setIsDeselectAllChecked,
       setIsselectAllChecked,
       setTableHeaderVisible,
@@ -138,17 +152,17 @@ export default function Runs() {
   };
   const handleDeChange = handleDeCheckboxChange(
     isDeselectAllChecked,
-    Rows,
-    setSelectedRows,
+    runsData,
+    setRunsData,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setVisibleRow,
+    // setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
-    Rows,
-    setSelectedRows,
+    runsData,
+    setRunsData,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
@@ -211,6 +225,7 @@ export default function Runs() {
       setTimeout(() => {
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
+      reload()
     }
     deletePopupRef.current.open(false);
   };
@@ -226,7 +241,12 @@ export default function Runs() {
   const filters = () => {
     dispatch(fetchRunsData(queryStrings));
   };
-
+  const reload=()=>{
+    const payload:any={page: 1,
+      perPage: 5,
+      sortOrder: "desc"}
+      dispatch(fetchRunsData(payload));
+  }
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
     const payload: any = { ...queryStrings };
     const headersList: any = [...headers];
@@ -306,7 +326,9 @@ export default function Runs() {
                       sx={{ cursor: 'pointer' }}
                       onClick={(e: any) => {
                         //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" &&
-                        navigate(`/runs/details/${row.runNumber}`);
+                        navigate(`/runs/details/${row._id}`, {
+                          state: { props: row },
+                        })
                         // console.log(e.target.tagName)
                       }}
                     >
@@ -316,10 +338,10 @@ export default function Runs() {
                             <Box sx={{ mt: 0, mr: 1 }}>
                               <Checkbox
                                 color="primary"
-                                checked={row.is_checked}
+                                checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) =>
-                                  handleChange(event, row.id)
+                                  handleChange(event, row._id)
                                 }
                               />
                             </Box>
@@ -475,22 +497,26 @@ export default function Runs() {
                       {headers[6].is_show && (
                         <TableCell>
                           <Select
-                            name="select"
+                            name="status"
                             className={
-                              row.isActive === 1
-                                ? 'active-select td-select'
-                                : 'inactive-select td-select'
+                              row.status === 'Created'
+                                ? 'active-select td-select':row.status === 'Started'?'inuse-select td-select':
+                                 'inactive-select td-select'
                             }
-                            value={index < 4 ? index + 1 : 4}
+                            value={
+                              row.status
+                                ? row.status
+                                : 'Stopped'
+                            }
                             displayEmpty
                             onClick={(e: any) => clickHandler(e)}
-                            onChange={(e) => handleChange(e, row.id)}
+                            onChange={(e) => handleOnChange(e, row)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={1}>&nbsp;Created</MenuItem>
-                            <MenuItem value={2}>Started</MenuItem>
-                            <MenuItem value={3}>Stopped</MenuItem>
-                            <MenuItem value={4}>Completed</MenuItem>
+                            <MenuItem value={"Created"}>&nbsp;Created</MenuItem>
+                            <MenuItem value={"Started"}>Started</MenuItem>
+                            <MenuItem value={"Stopped"}>Stopped</MenuItem>
+                            <MenuItem value={"Completed"}>Completed</MenuItem>
                           </Select>
                         </TableCell>
                       )}
@@ -541,6 +567,7 @@ export default function Runs() {
             closeFormPopup={handleCloseFormPopup}
             openConfirmationPopup={handleOpenConfirmationPopup}
             type="create"
+            reload={reload}
           />
         </Box>
         <DeleteSuccessPopup ref={deleteSuccessPopupRef} />

@@ -24,6 +24,7 @@ import { LineChart, Line, XAxis, CartesianGrid, Tooltip } from 'recharts';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import RunsForm from '../RunsForm';
 import SuccessPopup from '../../../components/SuccessPopup';
+import { useLocation } from '@reach/router';
 
 const data = [
   { name: 'Jul', plot1: 2684, plot2: 2400, plot3: 1544, amt: 2400 },
@@ -181,6 +182,9 @@ export default function RunsDetails() {
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
+  const location: any = useLocation();
+  const runzValue = location.state?.props;
+  console.log(runzValue);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -904,6 +908,7 @@ export default function RunsDetails() {
       </Box>
       <SuccessPopup ref={successPopupRef} type="edit" />
       <RunsForm
+       formData={runzValue}
         ref={runsPopupRef}
         type="edit"
         submitFormPopup={handleSubmitFormPopup}

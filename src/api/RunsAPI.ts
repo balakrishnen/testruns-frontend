@@ -12,6 +12,7 @@ export const fetchRunsData = (payload: any) => async (dispatch: any) => {
         const response = await client.query({
             query: GET_RUNS,
             variables: payload,
+            fetchPolicy: 'network-only',
         });
         console.log("reponse.data",response.data)
         dispatch(fetchRunsSuccess(response.data));

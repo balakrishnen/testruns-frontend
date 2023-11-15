@@ -31,7 +31,7 @@ import {
 } from '../../utils/data';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 
-import { postRunsData } from '../../api/RunsAPI';
+import { fetchUpdateRunsData, postRunsData } from '../../api/RunsAPI';
 import { fetchLabData } from '../../api/labAPI';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
@@ -47,13 +47,25 @@ const validationSchema = Yup.object().shape({
 });
 
 const RunsForm = React.forwardRef(
-  ({ openConfirmationPopup, type }: any, ref) => {
+  ({ openConfirmationPopup, type,formData ,reload}: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     const [answers, setAnswers] = React.useState('');
     const [departmentData, setDepartmentData] = React.useState([]);
-    const [laboratory, setLaboratory] = React.useState([]);
-    const [departments, setDepartments] = React.useState([]);
+    const [departments, setDepartments] = React.useState(
+      formData?.departmentId?.map((item: any) => ({
+        label: item?.name,
+        value: item?.name,
+        id: item?._id,
+      })),
+    );
+    const [laboratory, setLaboratory] = React.useState(
+      formData?.laboratoryId?.map((item: any) => ({
+        label: item?.name,
+        value: item?.name,
+        id: item?._id,
+      })),
+    );
     const [labData, setLabData] = React.useState([]);
     const dispatch: any = useDispatch();
     const confirmationPopupRef: any = React.useRef();
@@ -81,7 +93,7 @@ const RunsForm = React.forwardRef(
         departments.map((item: any) => (deptArray.push(item?.id)))
         var labArray: any = []
         laboratory.map((item: any) => (labArray.push(item?.id)))
-        let runsValues = {
+        let runsValues:any = {
           objective: values.objective,
           procedureId: values.procedureId,
           departmentId: deptArray,
@@ -98,11 +110,22 @@ const RunsForm = React.forwardRef(
           // objective:values.objective,
           // dueDate:values.dueDate,
           // assignedTo:values.assignedTo,
-        }
+        };
         // console.log(assetValues);
-
-        dispatch(postRunsData(runsValues));
-        submitFormPopup()
+        if(type=='edit'){
+          runsValues['_id']=formData._id
+        }
+        if(type=='edit'){
+          dispatch(fetchUpdateRunsData(runsValues))
+          submitFormPopup();
+          reload()
+        }
+        else{
+          dispatch(postRunsData(runsValues));
+          submitFormPopup()
+          reload()
+        }
+       
         // console.log("depart",departments)
         // console.log("lab",laboratory)
       } else {
@@ -112,11 +135,11 @@ const RunsForm = React.forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        organisationId: '',
-        procedureId: '',
-        departmentId: [],
-        laboratoryId: [],
-        objective: '',
+        departmentId: formData?formData.departmentId:"",
+        laboratoryId: formData?formData.laboratoryId:"",
+        organisationId: "ASSET NAME",
+        procedureId: formData?formData.procedureId:'',
+        objective: formData?formData.objective:'',
         dueDate: new Date(),
         assignedBy: "username",
         assignedTo: 'toy',
@@ -225,7 +248,6 @@ const RunsForm = React.forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         name="organisationId"
-                        autoComplete="name"
                         autoFocus
                         InputLabelProps={{ shrink: false }}
                         placeholder="ID023659ADN"

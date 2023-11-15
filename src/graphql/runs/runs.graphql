@@ -123,37 +123,31 @@ query Get_run($_id: String!) {
 export const UPDATE_RUNS = gql`
 
 mutation Update_run(
-    $_id: String!
-    $objective: String!
-    $departmentId: [String]!
-    $laboratoryId: [String]!
-    $runNumber: String!
-    $userId: String!
-    $dueDate: String!
-    $status: RunStatus!
-    $isActive: Boolean!
-    $isDeleted: Boolean!
-    $createdAt: String
-    $updatedAt: String
+     $_id: String!
+     $organisationId: String
+     $procedureId: String
+    $objective: String
+    $departmentId: [String]
+    $laboratoryId: [String]
+    $dueDate: String
+    $status: RunStatus
+    $assignedTo: String
+    $assignedBy: String
         ) {
      update_run(
     _id: $_id
-    objective: $objective
-    departmentId: $departmentId
-    laboratoryId: $laboratoryId
-    runNumber: $runNumber
-    userId: $userId
-    dueDate: $dueDate
-    status: $status
-    isActive: $isActive
-    isDelete: $isDeleted
-    createdA: $createdAt
-    updatedAt: $updatedAt
+        objective: $objective
+        organisationId: $organisationId
+        procedureId: $procedureId
+        departmentId: $departmentId
+        laboratoryId: $laboratoryId
+        status: $status
+        assignedTo: $assignedTo
+        assignedBy: $assignedBy
+        dueDate: $dueDate
     ) {
-        _id
+          _id
         objective
-        departmentId
-        laboratoryId
         runNumber
         procedureId
         userId
