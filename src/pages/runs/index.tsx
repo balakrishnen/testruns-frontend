@@ -17,6 +17,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
+
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import search from '../../../assets/images/search.svg';
@@ -43,7 +44,7 @@ import runStarted from '../../assets/images/run-started.svg';
 import runStopped from '../../assets/images/run-stopped.svg';
 import runCompleted from '../../assets/images/run-completed.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRunsData, fetchUpdateRunsData } from '../../api/RunsAPI';
+import { fetchRunsData, fetchUpdateRunsData, deleteRunsData } from '../../api/RunsAPI';
 import moment from 'moment';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import TablePopup from '../../components/table/TablePopup';
@@ -168,7 +169,7 @@ export default function Runs() {
     setVisibleRow,
   );
 
-  const handleRequestSort = () => {};
+  const handleRequestSort = () => { };
 
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
@@ -217,18 +218,18 @@ export default function Runs() {
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
-  const handleDeleteConfirmation = (state: any) => {
-    if (state === 1) {
-      // deletePopupRef.current.open(false);
-      // dispatch(deleteAssetsData(assetVal));
-      deleteSuccessPopupRef.current.open(true);
-      setTimeout(() => {
-        deleteSuccessPopupRef.current.open(false);
-      }, 3000);
-      reload()
-    }
-    deletePopupRef.current.open(false);
-  };
+  // const handleDeleteConfirmation = (state: any) => {
+  //   if (state === 1) {
+  //     // deletePopupRef.current.open(false);
+  //     // dispatch(deleteAssetsData(assetVal));
+  //     deleteSuccessPopupRef.current.open(true);
+  //     setTimeout(() => {
+  //       deleteSuccessPopupRef.current.open(false);
+  //     }, 3000);
+  //     reload()
+  //   }
+  //   deletePopupRef.current.open(false);
+  // };
 
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'Runs');
@@ -241,11 +242,13 @@ export default function Runs() {
   const filters = () => {
     dispatch(fetchRunsData(queryStrings));
   };
-  const reload=()=>{
-    const payload:any={page: 1,
+  const reload = () => {
+    const payload: any = {
+      page: 1,
       perPage: 5,
-      sortOrder: "desc"}
-      dispatch(fetchRunsData(payload));
+      sortOrder: "desc"
+    }
+    dispatch(fetchRunsData(payload));
   }
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
     const payload: any = { ...queryStrings };
@@ -258,6 +261,20 @@ export default function Runs() {
     setQueryString(payload);
   };
 
+  const [rowId, setRowId] = React.useState<any>([]);
+  const runVal: any = { _id: rowId };
+  const handleDeleteConfirmation = (state: any) => {
+    if (state === 1) {
+      // deletePopupRef.current.open(false);
+      dispatch(deleteRunsData(runVal));
+      deleteSuccessPopupRef.current.open(true);
+      setTimeout(() => {
+        deleteSuccessPopupRef.current.open(false);
+      }, 3000);
+      reload()
+    }
+    deletePopupRef.current.open(false);
+  };
   return (
     <PrivateRoute>
       <Box className="main-padding runz-page">
@@ -291,7 +308,7 @@ export default function Runs() {
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-              // size={dense ? "small" : "medium"}
+            // size={dense ? "small" : "medium"}
             >
               <TableHeader
                 numSelected={0}
@@ -340,9 +357,10 @@ export default function Runs() {
                                 color="primary"
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
-                                onChange={(event) =>
-                                  handleChange(event, row._id)
-                                }
+                                onChange={(event) => {
+                                  setRowId([...rowId, row._id]),
+                                    handleChange(event, row._id)
+                                }}
                               />
                             </Box>
 
@@ -361,10 +379,10 @@ export default function Runs() {
                                     index + 1 === 1
                                       ? runCreated
                                       : index + 1 === 2
-                                      ? runStarted
-                                      : index + 1 === 3
-                                      ? runStopped
-                                      : runCompleted
+                                        ? runStarted
+                                        : index + 1 === 3
+                                          ? runStopped
+                                          : runCompleted
                                   }
                                   alt="no_image"
                                   style={{ width: '35px', height: '35px' }}
@@ -481,8 +499,8 @@ export default function Runs() {
                           {row.createdAt === null
                             ? '-'
                             : moment(row.createdAt).isValid()
-                            ? moment(row.createdAt).local().format('MM/DD/YYYY')
-                            : moment().format('MM/DD/YYYY')}
+                              ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
                         </TableCell>
                       )}
                       {headers[5].is_show && (
@@ -490,8 +508,8 @@ export default function Runs() {
                           {row.dueDate === null
                             ? '-'
                             : moment(row.dueDate).isValid()
-                            ? moment(row.dueDate).local().format('MM/DD/YYYY')
-                            : moment().format('MM/DD/YYYY')}
+                              ? moment(row.dueDate).local().format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
                         </TableCell>
                       )}
                       {headers[6].is_show && (
@@ -500,8 +518,8 @@ export default function Runs() {
                             name="status"
                             className={
                               row.status === 'Created'
-                                ? 'active-select td-select':row.status === 'Started'?'inuse-select td-select':
-                                 'inactive-select td-select'
+                                ? 'active-select td-select' : row.status === 'Started' ? 'inuse-select td-select' :
+                                  'inactive-select td-select'
                             }
                             value={
                               row.status
@@ -556,8 +574,9 @@ export default function Runs() {
         </Box>
         <Box>
           <DeletePopup
+            rowId={rowId}
             ref={deletePopupRef}
-            closeDeletePopup={() => deletePopupRef.current.open(false, 'Runs')}
+            closeDeletePopup={() => deletePopupRef.current.open(false, 'Runs', rowId)}
             deleteConfirmation={handleDeleteConfirmation}
           />
         </Box>

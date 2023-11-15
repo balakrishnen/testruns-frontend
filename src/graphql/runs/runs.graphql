@@ -94,13 +94,14 @@ export const POST_RUNS = gql`
     }
   }
   `; 
-  export const DELETE_RUNS = gql`
+   export const DELETE_RUNS = gql`
 mutation Delete_run($_id: [String]!) {
-  delete_(_id: $_id) {
+  delete_run(_id: $_id) {
       data
     }
 }
 `;
+
 export const GET_SINGLE_RUNS = gql`
 query Get_run($_id: String!) {
     get_run(_id: $_id) {
