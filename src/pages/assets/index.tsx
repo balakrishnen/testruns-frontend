@@ -160,6 +160,7 @@ const reload=()=>{
     }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
+    reload()
   };
 
   const handleChange = (event: any, id: any) => {
