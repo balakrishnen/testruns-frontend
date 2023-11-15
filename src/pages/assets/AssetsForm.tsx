@@ -40,7 +40,7 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAssetsData, postAssetsData } from '../../api/assetsAPI';
+import { postAssetsData } from '../../api/assetsAPI';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
 import { fetchOrganizationData } from '../../api/organizationAPI';

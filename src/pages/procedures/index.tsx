@@ -356,6 +356,7 @@ export default function Procedures() {
       setTimeout(() => {
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
+      reload()
       // deletePopupRef.current.open(false);
     }
     deletePopupRef.current.open(false);

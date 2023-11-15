@@ -261,6 +261,7 @@ const reload=()=>{
       setTimeout(() => {
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
+      reload()
     }
     deletePopupRef.current.open(false);
   };
