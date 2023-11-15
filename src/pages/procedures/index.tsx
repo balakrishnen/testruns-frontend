@@ -392,7 +392,12 @@ export default function Procedures() {
     setHeaders(headersList);
     setQueryString(payload);
   };
-
+  const reload=()=>{
+    const payload:any={page: 1,
+      perPage: 5,
+      sortOrder: "desc"}
+      dispatch(fetchProcedureData(payload));
+  }
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -621,6 +626,7 @@ export default function Procedures() {
           ref={formPopupRef}
           closeFormPopup={handleCloseFormPopup}
           submitFormPopup={handleSubmitFormPopup}
+          reload={reload}
         />
         <Box>
           <DeletePopup

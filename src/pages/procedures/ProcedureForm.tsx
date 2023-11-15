@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const ProcedureForm = React.forwardRef(
-  ({ open, close, closeFormPopup, type ,formData}: any, ref) => {
+  ({ open, close, closeFormPopup, type ,formData,reload}: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     console.log(formData);
@@ -109,10 +109,12 @@ const ProcedureForm = React.forwardRef(
         if(type=='edit'){
           dispatch(fetchUpdateProcedureData(procedures))
           submitFormPopup();
+          reload()
         }
         else{
           dispatch(postProcedureData(procedures));
           submitFormPopup();
+          reload()
         }
       }
     };

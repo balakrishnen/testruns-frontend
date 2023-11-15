@@ -12,6 +12,7 @@ export const fetchAssetsData = (payload: any) => async (dispatch: any) => {
     const response = await client.query({
       query: GET_ASSETS,
       variables: payload,
+      fetchPolicy: 'network-only',
     });
     dispatch(fetchAssetsSuccess(response.data));
   } catch (error: any) {

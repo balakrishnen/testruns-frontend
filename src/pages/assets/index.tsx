@@ -133,10 +133,15 @@ export default function Assets() {
     setQueryString(payload);
     setCurrentPage(page_no);
   };
-
-  const filters = () => {
-    dispatch(fetchAssetsData(queryStrings));
-  };
+const reload=()=>{
+  const payload:any={page: 1,
+    perPage: 5,
+    sortOrder: "desc"}
+    dispatch(fetchAssetsData(payload));
+}
+  // const filters = () => {
+  //   dispatch(fetchAssetsData(queryStrings));
+  // };
 
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
 
@@ -288,7 +293,7 @@ export default function Assets() {
           <Button
             type="submit"
             variant="contained"
-            onClick={() => formPopupRef.current.open(true)}
+            onClick={() => {formPopupRef.current.open(true)}}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create Asset
@@ -327,7 +332,7 @@ export default function Assets() {
                 orderBy={''}
                 rowCount={0}
                 columns={headers}
-                filters={filters}
+                // filters={filters}
                 handleTableSorting={handleTableSorting}
               />
 
@@ -345,7 +350,7 @@ export default function Assets() {
                           // e.target.tagName !== 'INPUT' &&
                           //   e.target.tagName !== 'LI' &&
                           navigate(`/assets/details/${row._id}`, {
-                            state: { props: row },
+                            state: { props: row ,func:reload()},
                           });
                         }}
                       >
@@ -566,6 +571,7 @@ export default function Assets() {
             submitFormPopup={handleSubmitFormPopup}
             // openConfirmationPopup={handleOpenConfirmationPopup}
             type="create"
+            reload={reload}
           />
           <Box>
             <DeletePopup

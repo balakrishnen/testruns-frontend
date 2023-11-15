@@ -20,6 +20,7 @@ export const fetchProcedureData = (payload: any) => async (dispatch: any) => {
     const response = await client.query({
       query: GET_PROCEDURE,
       variables: payload,
+      fetchPolicy: 'network-only',
     });
     dispatch(fetchProcedureSuccess(response.data));
   } catch (error: any) {

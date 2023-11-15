@@ -94,7 +94,7 @@ export default function AssetDetails() {
 
   const location: any = useLocation();
   const assetValue = location.state?.props;
-  // const getFunction = location.state?.func;
+  const getFunction = location.state?.func;
 
   // console.log(assetValue);
   const successPopupRef: any = React.useRef(null);
@@ -198,6 +198,7 @@ export default function AssetDetails() {
       dispatch(fetchUpdateAssetsData(assetValues));
 
       submitFormPopup();
+      getFunction
     } else {
       formik.setFieldError('name', 'Invalid first name');
     }

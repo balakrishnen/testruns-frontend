@@ -40,7 +40,7 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { postAssetsData } from '../../api/assetsAPI';
+import { fetchAssetsData, postAssetsData } from '../../api/assetsAPI';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
 import { fetchOrganizationData } from '../../api/organizationAPI';
@@ -64,7 +64,7 @@ const validationSchema = Yup.object().shape({
 
 const Addnewpopup = React.forwardRef(
   (
-    { closeFormPopup, openConfirmationPopup, fetchData, type }: any,
+    { closeFormPopup, reload, openConfirmationPopup, fetchData, type }: any,
     ref,
   ) => {
     const [answers, setAnswers] = React.useState('');
@@ -90,7 +90,6 @@ const Addnewpopup = React.forwardRef(
     const checkCredentials = (name: any) => {
       return true;
     };
-
     const onSubmit = (values: any) => {
       const isMatch = checkCredentials(values.name);
       if (isMatch) {
@@ -116,6 +115,8 @@ const Addnewpopup = React.forwardRef(
         dispatch(postAssetsData(assetValues));
         submitFormPopup()
         clearForm()
+        reload()
+        // dispatch(fetchAssetsData(queryStrings));
       } else {
         formik.setFieldError('name', 'Invalid first name');
       }
@@ -165,6 +166,8 @@ const clearForm=()=>{
     const organizationSliceData = useSelector(
       (state: any) => state.organization.data?.get_all_organisations,
     );
+    console.log(organizationData);
+    
     React.useEffect(() => {
       setDepartmentData(
         departmentSliceData?.map((item: any) => ({
@@ -187,7 +190,7 @@ const clearForm=()=>{
           id: item._id,
         })),
       );
-    }, [departmentSliceData, labSliceData, organizationData]);
+    }, [departmentSliceData, labSliceData]);
 
    React.useEffect(() => {
       dispatch(fetchDepartmentData());
