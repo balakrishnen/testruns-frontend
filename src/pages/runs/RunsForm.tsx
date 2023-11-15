@@ -30,6 +30,8 @@ import {
   OrganizationList,
 } from '../../utils/data';
 import { fetchDepartmentData } from '../../api/departmentAPI';
+
+import { postRunsData } from '../../api/RunsAPI';
 import { fetchLabData } from '../../api/labAPI';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
@@ -37,8 +39,8 @@ import SuccessPopup from '../../components/SuccessPopup';
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().notRequired(),
   createdAt: Yup.string().notRequired(),
-  departmentId: Yup.string().notRequired(),
-  laboratoryId: Yup.string().notRequired(),
+  departmentId: Yup.array().notRequired(),
+  laboratoryId: Yup.array().notRequired(),
   objective: Yup.string().notRequired(),
   dueDate: Yup.string().notRequired(),
   assignedTo: Yup.string().notRequired(),
@@ -50,6 +52,8 @@ const RunsForm = React.forwardRef(
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     const [answers, setAnswers] = React.useState('');
     const [departmentData, setDepartmentData] = React.useState([]);
+    const [laboratory, setLaboratory] = React.useState([]);
+    const [departments, setDepartments] = React.useState([]);
     const [labData, setLabData] = React.useState([]);
     const dispatch: any = useDispatch();
     const confirmationPopupRef: any = React.useRef();
@@ -64,26 +68,59 @@ const RunsForm = React.forwardRef(
         setRunsCreate(state);
       },
     }));
-    const departments: any = [];
-    const laboratory: any = [];
+    // const departments: any = [];
+    // const laboratory: any = [];
     const checkCredentials = (values: any) => {
       return true;
     };
     const onSubmit = (values: any) => {
-      const isMatch = checkCredentials(values);
+      const isMatch = checkCredentials(values.name);
       if (isMatch) {
-        submitFormPopup();
+
+        var deptArray: any = []
+        departments.map((item: any) => (deptArray.push(item?.id)))
+        var labArray: any = []
+        laboratory.map((item: any) => (labArray.push(item?.id)))
+        let runsValues = {
+          objective: values.objective,
+          procedureId: values.procedureId,
+          departmentId: deptArray,
+          laboratoryId: labArray,
+          assignedTo: values.assignedTo,
+          assignedBy: values.assignedBy,
+          dueDate: values.dueDate,
+          status: values.status,
+          organisationId: values.organisationId,
+          // procedureId:values.procedure,
+          // createdAt:values.createdAt ,
+          // departmentId:values.departmentId,
+          // laboratoryId:values.laboratoryId,
+          // objective:values.objective,
+          // dueDate:values.dueDate,
+          // assignedTo:values.assignedTo,
+        }
+        // console.log(assetValues);
+
+        dispatch(postRunsData(runsValues));
+        submitFormPopup()
+        // console.log("depart",departments)
+        // console.log("lab",laboratory)
+      } else {
+        formik.setFieldError('name', 'Invalid first name');
       }
     };
+
     const formik = useFormik({
       initialValues: {
+        organisationId: '',
         procedureId: '',
-        createdAt: '',
-        departmentId: '',
-        laboratoryId: '',
+        departmentId: [],
+        laboratoryId: [],
         objective: '',
-        dueDate: '',
-        assignedTo: '',
+        dueDate: new Date(),
+        assignedBy: "username",
+        assignedTo: 'toy',
+        status: "Created"
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
@@ -100,12 +137,14 @@ const RunsForm = React.forwardRef(
         departmentSliceData?.map((item: any) => ({
           label: item.name,
           value: item.name,
+          id: item._id,
         })),
       );
       setLabData(
         labSliceData?.map((item: any) => ({
           label: item.name,
           value: item.name,
+          id: item._id,
         })),
       );
     }, [departmentSliceData, labSliceData]);
@@ -178,26 +217,27 @@ const RunsForm = React.forwardRef(
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Procedure name</label>
-                      <Autocomplete
-                        id="procedureId"
-                        options={
-                          departmentData !== undefined ? departmentData : []
-                        }
-                        // disableCloseOnSelect
-                        getOptionLabel={(option: any) => option.label}
-                        renderInput={(params) => <TextField {...params} />}
+                      <TextField
+                        margin="normal"
+                        // required
                         fullWidth
-                        placeholder="Department"
-                        size="medium"
-                        // onChange={(e, f) => {
-                        //   f.forEach((element) => departments.push(element.id));
-                        //   formik.setFieldValue('procedureId', departments);
-                        // }}
+                        id="name"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        name="organisationId"
+                        autoComplete="name"
+                        autoFocus
+                        InputLabelProps={{ shrink: false }}
+                        placeholder="ID023659ADN"
+                        className="bg-gray-input"
+                        size="small"
+                        value={formik.values.organisationId}
+                        error={formik.touched.organisationId && Boolean(formik.errors.organisationId)}
                       />
-                      {formik.touched.procedureId &&
-                        formik.errors.procedureId && (
+                      {formik.touched.organisationId &&
+                        formik.errors.organisationId && (
                           <Typography className="error-field">
-                            {formik.errors.procedureId}
+                            {formik.errors.organisationId}
                           </Typography>
                         )}
                     </Box>
@@ -230,7 +270,7 @@ const RunsForm = React.forwardRef(
                           formik.touched.procedureId &&
                           Boolean(formik.errors.procedureId)
                         }
-                        disabled
+                      // disabled
                       />
                     </Box>
                   </Grid>
@@ -245,9 +285,9 @@ const RunsForm = React.forwardRef(
                     <Box>
                       <label>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" disabled />
+                        <DatePicker format="DD/MM/YYYY" />
                       </LocalizationProvider>
-                      {formik.touched.createdAt && formik.errors.createdAt && (
+                      {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">
                           Date required
                         </Typography>
@@ -269,36 +309,43 @@ const RunsForm = React.forwardRef(
                       <Autocomplete
                         multiple
                         id="departmentId"
+
+                        value={departments}
                         options={
                           departmentData !== undefined ? departmentData : []
                         }
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              style={{ marginRight: 0 }}
-                              checked={selected}
-                            />
-                            {option.label}
-                          </li>
+                        isOptionEqualToValue={(option: any, value: any) => value.id == option.id}
+                        renderOption={(props, option: any, { selected }) => (
+                          <React.Fragment>
+                            <li {...props}>
+                              <Checkbox
+                                style={{ marginRight: 0 }}
+                                checked={selected}
+                              />
+                              {option.value}
+                            </li>
+
+                          </React.Fragment>
                         )}
+                        onChange={(_, selectedOptions: any) => setDepartments(selectedOptions)}
                         renderInput={(params) => <TextField {...params} />}
                         fullWidth
                         placeholder="Department"
                         size="medium"
-                        onChange={(e, f) => {
-                          f.forEach((element) => departments.push(element.id));
-                          formik.setFieldValue('departmentId', departments);
-                        }}
-                        disabled
-                        // onChange={formik.handleChange}
-                        // onBlur={formik.handleBlur}
-                        // value={formik.values.department}
-                        // error={
-                        //   formik.touched.department &&
-                        //   Boolean(formik.errors.department)
-                        // }
+                      // onChange={(e, f) => {
+                      //   f.forEach((element) => departments.push(element.id));
+                      //   formik.setFieldValue('departmentId', departments);
+                      // }}
+                      // disabled
+                      // onChange={formik.handleChange}
+                      // onBlur={formik.handleBlur}
+                      // value={formik.values.department}
+                      // error={
+                      //   formik.touched.department &&
+                      //   Boolean(formik.errors.department)
+                      // }
                       />
                       {formik.touched.departmentId &&
                         formik.errors.departmentId && (
@@ -316,27 +363,42 @@ const RunsForm = React.forwardRef(
                       <Autocomplete
                         multiple
                         id="laboratoryId"
+                        value={laboratory}
                         options={labData !== undefined ? labData : []}
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              style={{ marginRight: 0 }}
-                              checked={selected}
-                            />
-                            {option.label}
-                          </li>
-                        )}
+                        // renderOption={(props, option, { selected }) => (
+                        //   <li {...props}>
+                        //     <Checkbox
+                        //       style={{ marginRight: 0 }}
+                        //       checked={selected}
+                        //     />
+                        //     {option.label}
+                        //   </li>
+                        // )}
                         renderInput={(params) => <TextField {...params} />}
                         fullWidth
+
                         placeholder="Laboratory"
                         size="medium"
-                        onChange={(e, f) => {
-                          f.forEach((element) => laboratory.push(element.id));
-                          formik.setFieldValue('laboratoryId', laboratory);
-                        }}
-                        disabled
+                        renderOption={(props, option: any, { selected }) => (
+                          <React.Fragment>
+                            <li {...props}>
+                              <Checkbox
+                                style={{ marginRight: 0 }}
+                                checked={selected}
+                              />
+                              {option.value}
+                            </li>
+
+                          </React.Fragment>
+                        )}
+                        onChange={(_, selectedOptions: any) => setLaboratory(selectedOptions)}
+                      // onChange={(e, f) => {
+                      //   f.forEach((element) => laboratory.push(element.id));
+                      //   formik.setFieldValue('laboratoryId', laboratory);
+                      // }}
+                      // disabled
                       />
                       {formik.touched.laboratoryId &&
                         formik.errors.laboratoryId && (

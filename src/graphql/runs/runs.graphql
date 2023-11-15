@@ -1,6 +1,13 @@
 
  import { gql } from '@apollo/client';
-
+ gql`
+ enum RunStatus {
+      Created
+      Started
+      Stopped
+      Complete
+    }
+`
 export const GET_RUNS = gql`
  query Get_all_runs($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
     get_all_runs(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search){
@@ -48,3 +55,117 @@ export const GET_RUNS = gql`
 }
 
 `; 
+export const POST_RUNS = gql`
+  mutation Create_run(
+        $objective: String!
+        $procedureId: String!
+        $organisationId:String!
+        $departmentId: [String]!
+        $laboratoryId: [String]!
+        $assignedTo: String!
+        $assignedBy: String!
+        $status: RunStatus!
+        $dueDate: String!
+    
+  ) {
+    create_run(
+        objective: $objective
+        procedureId: $procedureId
+        organisationId:$organisationId
+        departmentId: $departmentId
+        laboratoryId: $laboratoryId
+        assignedTo: $assignedTo
+        assignedBy: $assignedBy
+        status: $status
+        dueDate: $dueDate
+    
+    ) {
+       _id
+        runNumber
+        procedureId
+        userId
+        dueDate
+        status
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+      
+    }
+  }
+  `; 
+  export const DELETE_RUNS = gql`
+mutation Delete_run($_id: [String]!) {
+  delete_(_id: $_id) {
+      data
+    }
+}
+`;
+export const GET_SINGLE_RUNS = gql`
+query Get_run($_id: String!) {
+    get_run(_id: $_id) {
+         _id
+        objective
+        departmentId
+        laboratoryId
+        runNumber
+        procedureId
+        userId
+        dueDate
+        status
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;
+export const UPDATE_RUNS = gql`
+
+mutation Update_run(
+    $_id: String!
+    $objective: String!
+    $departmentId: [String]!
+    $laboratoryId: [String]!
+    $runNumber: String!
+    $userId: String!
+    $dueDate: String!
+    $status: RunStatus!
+    $isActive: Boolean!
+    $isDeleted: Boolean!
+    $createdAt: String
+    $updatedAt: String
+        ) {
+     update_run(
+    _id: $_id
+    objective: $objective
+    departmentId: $departmentId
+    laboratoryId: $laboratoryId
+    runNumber: $runNumber
+    userId: $userId
+    dueDate: $dueDate
+    status: $status
+    isActive: $isActive
+    isDelete: $isDeleted
+    createdA: $createdAt
+    updatedAt: $updatedAt
+    ) {
+        _id
+        objective
+        departmentId
+        laboratoryId
+        runNumber
+        procedureId
+        userId
+        dueDate
+        status
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+
+`;
+
+
