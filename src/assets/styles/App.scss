@@ -155,19 +155,19 @@
     // transition: all 0.3s ease-in-out;
     // transform: translate(-200px);
     transition: all 300ms;
-    transition-timing-function:  cubic-bezier(0.4, 0, 0.2, 1);
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
-.MuiDrawer-docked.app-drawer.openmenu .MuiDrawer-paper , .MuiDrawer-docked.app-drawer.closemenu .MuiDrawer-paper{
+.MuiDrawer-docked.app-drawer.openmenu .MuiDrawer-paper,
+.MuiDrawer-docked.app-drawer.closemenu .MuiDrawer-paper {
   // transform: translate(0);
   transition: all 225ms;
-  transition-timing-function:  cubic-bezier(0, 0, 0.2, 1);
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 .app-drawer .app-drawer-list-item span {
   white-space: nowrap;
 }
-
 
 .upgrade-seaction {
   img {
@@ -1240,9 +1240,9 @@ tbody td .td-select {
 
 .inactive-select.td-select .MuiSelect-select,
 .active-select.td-select .MuiSelect-select,
-.inuse-select.td-select .MuiSelect-select ,
+.inuse-select.td-select .MuiSelect-select,
 .create-select.td-select .MuiSelect-select,
-.start-select.td-select .MuiSelect-select{
+.start-select.td-select .MuiSelect-select {
   width: 124px;
   border-radius: 20px;
   height: 26px;
@@ -1265,7 +1265,7 @@ tbody td .td-select {
   background: #00bf70;
 }
 .inuse-select.td-select .MuiSelect-select {
-  background:#ffc832
+  background: #ffc832;
 }
 .asset-detail-title {
   p {
@@ -1670,7 +1670,6 @@ p.follow-people {
       height: calc(100vh - 425px);
     }
   }
-
 }
 
 @media (max-width: 1199px) {
@@ -1781,7 +1780,11 @@ p.follow-people {
 
 .text-container {
   margin-left: 1em;
+  div:first-child {
+    text-transform: capitalize;
+  }
 }
+
 
 .heading {
   margin-bottom: 8px;
@@ -1953,7 +1956,7 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   line-height: normal;
   letter-spacing: 0.24px;
   position: relative;
-  @media (min-width:1200px) and (max-width:1440px){
+  @media (min-width: 1200px) and (max-width: 1440px) {
     font-size: 12px;
   }
 }
@@ -1985,7 +1988,7 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   font-weight: 500;
   line-height: normal;
   letter-spacing: 0.24px;
-  @media (min-width:1200px) and (max-width:1440px){
+  @media (min-width: 1200px) and (max-width: 1440px) {
     font-size: 12px;
   }
 }
@@ -2277,21 +2280,21 @@ input#mobile_number {
   width: 285px;
 }
 .file-wrapper {
-	cursor: pointer;
-	display: inline-block;
-	overflow: hidden;
-	position: relative;
-	input {
-		-moz-opacity: 0.01;
-		cursor: pointer;
-		filter: alpha(opacity=1);
-		font-size: 100px;
-		opacity: 0.01;
-		position: absolute;
-		right: 0;
-		top: 0;
-	}
-	.button {
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  input {
+    -moz-opacity: 0.01;
+    cursor: pointer;
+    filter: alpha(opacity=1);
+    font-size: 100px;
+    opacity: 0.01;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .button {
     cursor: pointer;
     display: inline-block;
     padding: 4px 20px;
@@ -2304,7 +2307,7 @@ input#mobile_number {
     letter-spacing: -0.24px;
     text-transform: capitalize;
     background: rgb(255, 198, 11) !important;
-	}
+  }
 }
 
 #filterDatePicker {

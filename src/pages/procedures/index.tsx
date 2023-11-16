@@ -400,6 +400,14 @@ export default function Procedures() {
     const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
     dispatch(fetchProcedureData(payload));
   };
+
+  const applyFilters = (field: any, value: any) => {
+    const payload: any = { ...queryStrings };
+    payload['searchBy'] = field;
+    payload['search'] = value;
+    setQueryString(payload);
+  };
+
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -427,6 +435,7 @@ export default function Procedures() {
           closeTableHeader={handleCloseTableHeader}
           deleteRecord={handleOpenDeletePopup}
           module="procedures"
+          applyFilters={applyFilters}
         />
         <Box className="table-outer" sx={{ width: '100%' }}>
           {/* <Grid container mt={4}>

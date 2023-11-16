@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   AppBar,
   IconButton,
@@ -7,23 +7,24 @@ import {
   Typography,
   Menu,
   MenuItem,
-  TextField
-} from "@mui/material";
+  TextField,
+  Badge,
+} from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
-import MenuIcon from "@mui/icons-material/Menu";
-import { MoreVertOutlined } from "@mui/icons-material";
-import help from "../../assets/images/help.svg";
-import notification from "../../assets/images/notification.svg";
-import dark from "../../assets/images/Darkmode.svg";
-import account from "../../assets/images/account.svg";
-import "../../assets/styles/App.scss";
-import search from  "../../assets/images/search.svg"
+import MenuIcon from '@mui/icons-material/Menu';
+import { MoreVertOutlined } from '@mui/icons-material';
+import help from '../../assets/images/help.svg';
+import notification from '../../assets/images/notification.svg';
+import dark from '../../assets/images/Darkmode.svg';
+import account from '../../assets/images/account.svg';
+import '../../assets/styles/App.scss';
+import search from '../../assets/images/search.svg';
 
 function AppHeader(props: any) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
+  const mobileMenuId = 'primary-search-account-menu-mobile';
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -37,13 +38,13 @@ function AppHeader(props: any) {
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       id={mobileMenuId}
       open={isMobileMenuOpen}
@@ -101,7 +102,7 @@ function AppHeader(props: any) {
   const changeTheme = () => {
     props.toggleTheme();
   };
-// console.log(window.location.pathname.split("/")[1]);
+  // console.log(window.location.pathname.split("/")[1]);
 
   return (
     <Box className="app-bar-block">
@@ -129,25 +130,31 @@ function AppHeader(props: any) {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 1 }} />
-          <Box className="header-right-side" sx={{ display: { xs: "none", md: "flex" } }}>
-          {typeof window !== 'undefined' &&  window.location.pathname.split("/")[1]=='mypage' && <Box className="search-field">
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="Search"
-                id="Search"
-                InputLabelProps={{ shrink: false }}
-                placeholder="Search"     
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <img src={search} />
-                    </InputAdornment>
-                  ),
-                }}           
-              />
-            </Box>}
+          <Box
+            className="header-right-side"
+            sx={{ display: { xs: 'none', md: 'flex' } }}
+          >
+            {typeof window !== 'undefined' &&
+              window.location.pathname.split('/')[1] == 'mypage' && (
+                <Box className="search-field">
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="Search"
+                    id="Search"
+                    InputLabelProps={{ shrink: false }}
+                    placeholder="Search"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <img src={search} />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Box>
+              )}
             <IconButton size="large" aria-label="help icon" color="inherit">
               <img src={help} alt="help_icon" className="app-bar-images" />
             </IconButton>
@@ -157,19 +164,21 @@ function AppHeader(props: any) {
               color="inherit"
               onClick={openNotificationList}
             >
-              <img
-                src={notification}
-                alt="help_icon"
-                className="app-bar-images"
-              />
-            </IconButton>           
+              <Badge color="secondary" variant={'dot'} invisible={false}>
+                <img
+                  src={notification}
+                  alt="help_icon"
+                  className="app-bar-images"
+                />
+              </Badge>
+            </IconButton>
             <IconButton
               size="large"
               aria-label="account icon"
               color="inherit"
               onClick={openEditProfile}
             >
-               <Typography variant="inherit" className="app-bar-username">
+              <Typography variant="inherit" className="app-bar-username">
                 Hi Admin
               </Typography>
               <img src={account} alt="help_icon" className="app-bar-images" />
@@ -183,7 +192,7 @@ function AppHeader(props: any) {
               <img src={dark} alt="help_icon" className="app-bar-images" />
             </IconButton> */}
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="show more"

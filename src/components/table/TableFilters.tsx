@@ -1,6 +1,7 @@
 import React from 'react';
 import PrivateRoute from '../../components/PrivateRoute';
 import {
+  Badge,
   Box,
   Button,
   Checkbox,
@@ -123,6 +124,7 @@ export default function TableFilters({
     setFilterType(null);
     applyFilters('search', null);
     handleFilterPopoverClose();
+    setFilterKey(null)
   };
 
   const Placeholder = ({ children }: any) => {
@@ -296,16 +298,18 @@ export default function TableFilters({
                 }}
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <img
-                  src={filterIcon}
-                  alt="no_image"
-                  style={{
-                    width: '25px',
-                    height: '25px',
-                    opacity: 0.9,
-                    cursor: 'pointer',
-                  }}
-                />
+                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
+                  <img
+                    src={filterIcon}
+                    alt="no_image"
+                    style={{
+                      width: '25px',
+                      height: '25px',
+                      opacity: 0.9,
+                      cursor: 'pointer',
+                    }}
+                  />
+                </Badge>
               </Button>
               <Popover
                 className="filter-dropdown"
@@ -365,35 +369,39 @@ export default function TableFilters({
                         ))}
                       </Select>
                     </Box>
-                    {module === "assets" && <Box sx={{ my: 1 }}>
-                      <Typography variant="body2" paddingY={1}>
-                        Availability
-                      </Typography>
+                    {module === 'assets' && (
+                      <Box sx={{ my: 1 }}>
+                        <Typography variant="body2" paddingY={1}>
+                          Availability
+                        </Typography>
 
-                      <Select
-                        labelId="table-select-label"
-                        id="table-select"
-                        value={filterAvailability}
-                        displayEmpty
-                        fullWidth
-                        size="small"
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        onChange={(event: any) =>
-                          setFilterAvailability(event.target.value)
-                        }
-                        renderValue={
-                          filterAvailability !== null
-                            ? undefined
-                            : () => <Placeholder>Select Availability</Placeholder>
-                        }
-                      >
-                        {availability.map((element: any) => (
-                          <MenuItem value={element.value} key={element.value}>
-                            {element.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Box>}
+                        <Select
+                          labelId="table-select-label"
+                          id="table-select"
+                          value={filterAvailability}
+                          displayEmpty
+                          fullWidth
+                          size="small"
+                          IconComponent={ExpandMoreOutlinedIcon}
+                          onChange={(event: any) =>
+                            setFilterAvailability(event.target.value)
+                          }
+                          renderValue={
+                            filterAvailability !== null
+                              ? undefined
+                              : () => (
+                                  <Placeholder>Select Availability</Placeholder>
+                                )
+                          }
+                        >
+                          {availability?.map((element: any) => (
+                            <MenuItem value={element.value} key={element.value}>
+                              {element.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Box>
+                    )}
                     <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
                         Search by

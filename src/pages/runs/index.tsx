@@ -284,6 +284,14 @@ export default function Runs() {
     }
     deletePopupRef.current.open(false);
   };
+
+  const applyFilters = (field: any, value: any) => {
+    const payload: any = { ...queryStrings };
+    payload['searchBy'] = field;
+    payload['search'] = value;
+    setQueryString(payload);
+  };
+
   return (
     <PrivateRoute>
       <Box className="main-padding runz-page">
@@ -311,6 +319,7 @@ export default function Runs() {
           deleteRecord={handleOpenDeletePopup}
           module="runs"
           status={runsStatus}
+          applyFilters={applyFilters}
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
