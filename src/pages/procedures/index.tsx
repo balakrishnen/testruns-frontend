@@ -23,6 +23,8 @@ import {
   DepartmentList,
   LaboratoryList,
   ProcedureRows,
+  StatusList,
+  AvailabilityList,
 } from '../../utils/data';
 import { ProceduresRowData } from '../../modals/Procedures.modal';
 import TableHeader from '../../components/table/TableHeader';
@@ -97,13 +99,13 @@ export default function Procedures() {
   const deletePopupRef: any = React.useRef(null);
   const tablePopupRef: any = React.useRef(null);
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof ProceduresRowData,
-  ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+  const handleRequestSort = ()=>{
+    // event: React.MouseEvent<unknown>,
+  //   property: keyof ProceduresRowData,
+  // ) => {
+  //   const isAsc = orderBy === property && order === 'asc';
+  //   setOrder(isAsc ? 'desc' : 'asc');
+  //   setOrderBy(property);
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,10 +126,10 @@ export default function Procedures() {
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 5,
-    // searchBy: null,
-    // search: null,
-    // sortBy: null,
-    // sortOrder: 'desc',
+    searchBy: null,
+    search: null,
+    sortBy: null,
+    sortOrder: 'desc',
   });
 
   const procedureSliceData = useSelector(
@@ -153,6 +155,7 @@ export default function Procedures() {
     page['totalPages'] = procedureSliceData?.pageInfo.totalPages;
     page['hasNextPage'] = procedureSliceData?.pageInfo.hasNextPage;
     page['hasPreviousPage'] = procedureSliceData?.pageInfo.hasPreviousPage;
+    page['totalCount'] = procedureSliceData?.pageInfo.totalCount;
     setProcedureData(procedureSliceData?.Procedures);
     setPageInfo(page);
   }, [procedureSliceData]);
@@ -165,6 +168,7 @@ export default function Procedures() {
     page['currentPage'] = page_no;
     setPageInfo(page);
     setQueryString(payload);
+    setCurrentPage(page_no);
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
@@ -396,6 +400,13 @@ export default function Procedures() {
     setHeaders(headersList);
     setQueryString(payload);
   };
+
+  const applyFilters = (field: any, value: any) => {
+    const payload: any = { ...queryStrings };
+    payload['searchBy'] = field;
+    payload['search'] = value;
+    setQueryString(payload);
+  };
   const reload = () => {
     const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
     dispatch(fetchProcedureData(payload));
@@ -450,15 +461,19 @@ export default function Procedures() {
               // size={dense ? "small" : "medium"}
             >
               <TableHeader
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
-                columns={headers}
-                filters={filters}
-                handleTableSorting={handleTableSorting}
+               numSelected={0}
+               onRequestSort={handleRequestSort}
+               onSelectAllClick={function (
+                 event: React.ChangeEvent<HTMLInputElement>,
+               ): void {
+                 throw new Error('Function not implemented.');
+               }}
+               order={'asc'}
+               orderBy={''}
+               rowCount={0}
+               columns={headers}
+               // filters={filters}
+               handleTableSorting={handleTableSorting}
               />
               <TableBody>
                 {procedureData?.map((row: any, index: number) => {

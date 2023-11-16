@@ -186,7 +186,7 @@ export default function AssetDetails() {
       let assetValues = {
         _id: assetValue._id,
         name: values.name,
-        organisationId: org[0]?.id,
+        organisationId: values?.organisationId,
         perchasedDate: values?.perchasedDate,
         lastUsedDate: values.lastUsedDate,
         availability: values.availability,
@@ -254,9 +254,6 @@ export default function AssetDetails() {
       })),
     );
   }, [departmentSliceData, labSliceData, organizationSliceData]);
-  // React.useEffect(() => {
-  //   setAssetsData(AssetSliceData);
-  // }, [AssetSliceData]);
 
   // React.useEffect(() => {
   //   if(typeof window !== 'undefined'){
@@ -267,7 +264,7 @@ export default function AssetDetails() {
   // }, []);
   const purchaseDate=moment(assetValue?.perchasedDate).local().format('YYYY-MM-DD')
   const expireDate=moment(assetValue?.expiryDate).local().format('YYYY-MM-DD')
-// console.log(purchaseDate);
+console.log(assetValue?.organisationId,);
 
   const formik = useFormik({
     initialValues: {
@@ -474,42 +471,48 @@ export default function AssetDetails() {
                           <label style={{ display: 'block' }}>
                             Organisation
                           </label>
-                          <Autocomplete
-                              // multiple
-                              id="organization"
-                              disableCloseOnSelect
-                              // value={organization}
-                              options={
-                                organizationData !== undefined ? organizationData : []
+                          <FormControl sx={{ width: '100%' }}>
+                            <Select
+                              className="placeholder-color"
+                              displayEmpty
+                              IconComponent={ExpandMoreOutlinedIcon}
+                              renderValue={
+                                formik.values.organisationId !== ''
+                                  ? undefined
+                                  : () => (
+                                    <Placeholder>
+                                      Select Organization
+                                    </Placeholder>
+                                  )
                               }
-                              getOptionLabel={(option: any) => option.label}
-                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
-                              renderInput={params => (
-                                <TextField {...params} />)}
+                              margin="none"
                               fullWidth
-                             
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(props, option: any, { selected }) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option.value}
-                                  </li>
-
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) => setOrganization(selectedOptions)}
-                            />
-                            {formik.touched.organisationId &&
+                              id="organisationId"
+                              name="organisationId"
+                              autoComplete="organisationId"
+                              placeholder="Organization"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.organisationId}
+                              size="small"
+                              error={
+                                formik.touched.organisationId &&
+                                Boolean(formik.errors.organisationId)
+                              }
+                            >
+                              {organizationData?.map((item:any, index) => (
+                                <MenuItem key={index} value={item.id}>
+                                  {item.label}
+                                </MenuItem>
+                               ))}
+                            </Select>
+                             {formik.touched.organisationId &&
                               formik.errors.organisationId && (
                                 <Typography className="error-field">
                                   {formik.errors.organisationId}
                                 </Typography>
                               )}
+                               </FormControl>
                         </Box>
                       </Grid>
                     </Grid>

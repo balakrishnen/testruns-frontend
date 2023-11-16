@@ -71,6 +71,7 @@ query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrde
         pageInfo {
             currentPage
             totalPages
+            totalCount
             hasNextPage
             hasPreviousPage
         }

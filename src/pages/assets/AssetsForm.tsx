@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 /* eslint-disable react/display-name */
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
@@ -96,26 +97,24 @@ const Addnewpopup = React.forwardRef(
     const onSubmit = (values: any) => {
       const isMatch = checkCredentials(values.name);
       if (isMatch) {
-        var deptArray: any = [];
-        departments.map((item: any) => deptArray.push(item?.id));
-        var labArray: any = [];
-        laboratory.map((item: any) => labArray.push(item?.id));
-        var org = organization;
-        console.log(organization);
-
-        let assetValues = {
-          name: values.name,
-          organisationId: org?.id,
-          perchasedDate: values.perchasedDate,
-          lastUsedDate: new Date(),
-          availability: values.availability,
-          expiryDate: values.expiryDate,
-          departmentId: deptArray,
-          laboratoryId: labArray,
-          status: values.status,
-        };
-        console.log(assetValues);
-
+        var deptArray:any=[]
+        departments.map((item:any)=>(deptArray.push(item?.id)))
+        var labArray:any=[]
+        laboratory.map((item:any)=>(labArray.push(item?.id)))
+        
+        let assetValues={
+        name: values.name,
+        organisationId: values.organisationId,
+        perchasedDate: values.perchasedDate,
+        lastUsedDate: values.lastUsedDate,
+        availability: values.availability,
+        expiryDate: values.expiryDate,
+        departmentId: deptArray,
+        laboratoryId: labArray,
+        status: values.status,
+        }
+        console.log(values.organisationId);
+        
         dispatch(postAssetsData(assetValues));
         submitFormPopup();
         clearForm();
@@ -452,45 +451,40 @@ const Addnewpopup = React.forwardRef(
                           <label style={{ display: 'block' }}>
                             Organisation
                           </label>
-                          <Autocomplete
-                            // multiple
-                            id="organizationId"
-                            // disableCloseOnSelect
-                            // value={organization}
-                            options={
-                              organizationData !== undefined
-                                ? organizationData
-                                : []
+                          <Select
+                            className="placeholder-color"
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                            renderValue={
+                              formik.values.organisationId !== ''
+                                ? undefined
+                                : () => (
+                                    <Placeholder>
+                                      Select Organization
+                                    </Placeholder>
+                                  )
                             }
-                            getOptionLabel={(option: any) => option.label}
-                            isOptionEqualToValue={(option: any, value: any) =>
-                              value.id == option.id
-                            }
-                            renderInput={(params) => (
-                              <TextField {...params} placeholder="Organisation" />
-                            )}
+                            margin="none"
                             fullWidth
-                            size="medium"
-                            renderOption={(
-                              props,
-                              option: any,
-                              { selected },
-                            ) => (
-                              <React.Fragment>
-                                <li {...props}>
-                                  {/* <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    /> */}
-                                  {option.value}
-                                </li>
-                              </React.Fragment>
-                            )}
-                            onChange={(_, selectedOptions: any) =>
-                              setOrganization(selectedOptions)
+                            id="organisationId"
+                            name="organisationId"
+                            // autoComplete="organisationId"
+                            placeholder="Organization"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.organisationId}
+                            size="small"
+                            error={
+                              formik.touched.organisationId &&
+                              Boolean(formik.errors.organisationId) 
                             }
-                          />
-
+                          >
+                            {organizationData?.map((item:any, index) => (
+                              <MenuItem key={index} value={item.id}>
+                                {item.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
                           {formik.touched.organisationId &&
                             formik.errors.organisationId && (
                               <Typography className="error-field">

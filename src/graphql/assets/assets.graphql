@@ -164,3 +164,11 @@ mutation Update_asset(
 }
 
 `;
+export const GET_ASSETS_NAMES = gql`
+query Get_all_assets_name {
+    get_all_assets_name {
+        name
+        _id
+    }
+}
+`;
