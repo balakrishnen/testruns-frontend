@@ -1240,7 +1240,9 @@ tbody td .td-select {
 
 .inactive-select.td-select .MuiSelect-select,
 .active-select.td-select .MuiSelect-select,
-.inuse-select.td-select .MuiSelect-select  {
+.inuse-select.td-select .MuiSelect-select ,
+.create-select.td-select .MuiSelect-select,
+.start-select.td-select .MuiSelect-select{
   width: 124px;
   border-radius: 20px;
   height: 26px;
@@ -1249,6 +1251,12 @@ tbody td .td-select {
   align-items: center;
 }
 
+.create-select.td-select .MuiSelect-select {
+  background: #8d8d8d;
+}
+.start-select.td-select .MuiSelect-select {
+  background: #faaa49;
+}
 .inactive-select.td-select .MuiSelect-select {
   background: #e2445c;
 }

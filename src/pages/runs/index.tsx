@@ -272,6 +272,7 @@ export default function Runs() {
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
       reload()
+      setTableHeaderVisible(false);
     }
     deletePopupRef.current.open(false);
   };
@@ -376,13 +377,13 @@ export default function Runs() {
                               >
                                 <img
                                   src={
-                                    index + 1 === 1
+                                    row.status === 'Created'
                                       ? runCreated
-                                      : index + 1 === 2
+                                      : row.status === 'Started'
                                         ? runStarted
-                                        : index + 1 === 3
-                                          ? runStopped
-                                          : runCompleted
+                                        : row.status === 'Complete' 
+                                          ? runCompleted
+                                          : runStopped
                                   }
                                   alt="no_image"
                                   style={{ width: '35px', height: '35px' }}
@@ -518,7 +519,7 @@ export default function Runs() {
                             name="status"
                             className={
                               row.status === 'Created'
-                                ? 'active-select td-select' : row.status === 'Started' ? 'inuse-select td-select' :
+                                ? 'create-select td-select' : row.status === 'Started' ? 'start-select td-select' :  row.status === 'Complete' ?'active-select td-select' :
                                   'inactive-select td-select'
                             }
                             value={
@@ -534,7 +535,7 @@ export default function Runs() {
                             <MenuItem value={"Created"}>&nbsp;Created</MenuItem>
                             <MenuItem value={"Started"}>Started</MenuItem>
                             <MenuItem value={"Stopped"}>Stopped</MenuItem>
-                            <MenuItem value={"Completed"}>Completed</MenuItem>
+                            <MenuItem value={"Complete"}>Complete</MenuItem>
                           </Select>
                         </TableCell>
                       )}
