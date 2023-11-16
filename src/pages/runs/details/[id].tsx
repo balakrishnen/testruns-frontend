@@ -634,13 +634,14 @@ export default function RunsDetails() {
                 <Tab label="Remarks" {...a11yProps(3)} />
               </Tabs>
             </Box>
-            <Box sx={{paddingBottom:'6rem'}}>
+            <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
-                <Editor
+                <div dangerouslySetInnerHTML={{ __html: editorData }} />
+                {/* <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   init={{
-                    height: 800,
+                    height: 1000,
                     menubar: false,
                     plugins: [
                       'advlist autolink lists link image charmap print preview anchor',
@@ -656,7 +657,7 @@ export default function RunsDetails() {
                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                   }}
                   value={editorData}
-                />
+                /> */}
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Editor
@@ -908,7 +909,7 @@ export default function RunsDetails() {
       </Box>
       <SuccessPopup ref={successPopupRef} type="edit" />
       <RunsForm
-       formData={runzValue}
+        formData={runzValue}
         ref={runsPopupRef}
         type="edit"
         submitFormPopup={handleSubmitFormPopup}

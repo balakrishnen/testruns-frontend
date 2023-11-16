@@ -417,7 +417,7 @@ export default function TableFilters({
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
                           //   debugger;
-                          //   setFilterSearchValue(null);
+                            setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
                         }}

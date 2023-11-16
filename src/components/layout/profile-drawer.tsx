@@ -71,8 +71,8 @@ export default function AppProfileDrawer({
       onClose={toggleProfileDrawer}
     >
       <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>
-        <Box className="profile-page">
+      <Box sx={{ overflow: 'auto'  }}>
+        <Box className="profile-page" sx={{py: 2}}>
           <Box className="profile-section1">
             <Box
               sx={{

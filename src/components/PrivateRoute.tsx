@@ -8,16 +8,17 @@ import AppProfileDrawer from './layout/profile-drawer';
 import AppNotificationDrawer from './layout/notification-drawer';
 // import AppProfileDrawer from "./layout/profile-drawer";
 // import AppNotificationDrawer from "./layout/notification-drawer";
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet';
 import favicon from '../assets/images/common/favicon.svg'; // Adjust the path accordingly
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PrivateRoute = ({ children }: any) => {
   let isLoggedIn = null;
 
-if (typeof window !== 'undefined') {
-  isLoggedIn = sessionStorage.getItem('isLoggedIn');
-}
+  if (typeof window !== 'undefined') {
+    isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  }
   const [width, setWidth] = React.useState(95);
   const [classn, setClassn] = React.useState<any>('closemenu');
   const [editProfile, setEditProfile] = React.useState(false);
@@ -30,12 +31,12 @@ if (typeof window !== 'undefined') {
   };
 
   const toggleProfileDrawer = () => {
-    setNotificationList(false)
+    setNotificationList(false);
     setEditProfile(!editProfile);
   };
 
   const toggleNotificationDrawer = () => {
-    setEditProfile(false)
+    setEditProfile(false);
     setNotificationList(!notificationList);
   };
 
@@ -46,8 +47,8 @@ if (typeof window !== 'undefined') {
   };
 
   if (isLoggedIn === 'false') {
-    console.log("false");
-    
+    console.log('false');
+
     navigate('/login');
     return null;
   }
@@ -89,10 +90,17 @@ if (typeof window !== 'undefined') {
           {children}
         </Box>
       </Box>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        closeOnClick={true}
+        pauseOnHover={true}
+        draggable={false}
+        hideProgressBar={true}
+      />
     </ThemeProvider>
   );
-// }
-  
+  // }
 };
 
 export default PrivateRoute;

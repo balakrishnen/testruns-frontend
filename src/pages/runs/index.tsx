@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import PrivateRoute from '../../components/PrivateRoute';
@@ -53,6 +54,7 @@ import {
 import moment from 'moment';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import TablePopup from '../../components/table/TablePopup';
+import { toast } from 'react-toastify';
 
 // table start
 
@@ -146,6 +148,11 @@ export default function Runs() {
     }
     console.log(runsChange);
     dispatch(fetchUpdateRunsData(runsChange));
+    toast('Runs status updated !', {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
     reload();
   };
   const handleChange = (event: any, id: any) => {
@@ -584,7 +591,7 @@ export default function Runs() {
                         </TableCell>
                       )}
                       {headers[7].is_show && (
-                        <TableCell align="center">Username</TableCell>
+                        <TableCell align="center">Super Admin</TableCell>
                         //</TableRow>{/* <Select
                         //   className={
                         //     row.availability === 'AVAILABLE'

@@ -25,7 +25,7 @@ import { navigate } from 'gatsby';
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
   assets: Yup.array().notRequired(),
-  procedure: Yup.string().notRequired()
+  procedure: Yup.string().notRequired(),
 });
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
@@ -138,9 +138,14 @@ export default function ProcedureDetails() {
   const dispatch: any = useDispatch();
   const [procedureData, setprocedureData] = React.useState<any>({});
   const [assetsList, setAssetsList] = React.useState([]);
+  const [assetsData, setAssetsData] = React.useState([]);
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
+
+  const assetsSliceData = useSelector(
+    (state: any) => state.assets.data?.get_all_assets,
+  );
 
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_procedure,
@@ -181,6 +186,10 @@ export default function ProcedureDetails() {
       dispatch(fetchSingleProcedureData(procedureId));
     }
   }, []);
+
+  React.useEffect(() => {
+    setAssetsData(assetsSliceData?.Assets);
+  }, [assetsSliceData]);
 
   const checkCredentials = (values: any) => {
     return true;
@@ -323,12 +332,12 @@ export default function ProcedureDetails() {
                     id="departmentId"
                     disableCloseOnSelect
                     value={formik.values.assets}
-                    options={assetsList !== undefined ? assetsList : []}
-                    getOptionLabel={(option: any) => option.label}
+                    options={assetsData !== undefined ? assetsData : []}
+                    getOptionLabel={(option: any) => option.name}
                     isOptionEqualToValue={(option: any, value: any) =>
-                      value.id == option.id
+                      value._id == option._id
                     }
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => <TextField {...params} placeholder='Assets name' />}
                     fullWidth
                     placeholder="Department"
                     size="medium"
@@ -339,13 +348,14 @@ export default function ProcedureDetails() {
                             style={{ marginRight: 0 }}
                             checked={selected}
                           />
-                          {option.value}
+                          {option.name}
                         </li>
                       </React.Fragment>
                     )}
-                    onChange={(_, selectedOptions: any) =>
-                      setAssetsList(selectedOptions)
-                    }
+                    onChange={(_, selectedOptions: any) => {
+                      setAssetsList(selectedOptions);
+                      formik.setFieldValue('assets', selectedOptions);
+                    }}
                   />
                   {formik.touched.assets && formik.errors.assets && (
                     <Typography className="error-field">
@@ -364,7 +374,7 @@ export default function ProcedureDetails() {
                       onInit={(evt, editor) => (editorRef.current = editor)}
                       value={editorData}
                       init={{
-                        height: 400,
+                        height: 1000,
                         menubar: false,
                         plugins: [
                           'advlist autolink lists link image charmap print preview anchor',
@@ -434,7 +444,11 @@ export default function ProcedureDetails() {
             </Grid> */}
           </Box>
           <Box className="edit-details" sx={{ p: 2 }}>
-            <Button variant="contained" className="cancel-btn" onClick={()=>navigate('/procedures')}>
+            <Button
+              variant="contained"
+              className="cancel-btn"
+              onClick={() => navigate('/procedures')}
+            >
               Back
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>

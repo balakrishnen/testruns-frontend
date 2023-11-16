@@ -11,7 +11,9 @@ import {
   TextField,
   Typography,
   Checkbox,
-  Autocomplete,InputAdornment
+  Autocomplete,
+  InputAdornment,
+  Divider,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -47,6 +49,7 @@ import { fetchOrganizationData } from '../../api/organizationAPI';
 import SuccessPopup from '../../components/SuccessPopup';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import moment from 'moment';
+import test from '../../assets/images/test.svg';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -78,9 +81,9 @@ const Addnewpopup = React.forwardRef(
     const dispatch: any = useDispatch();
     // const departments: any = [];
     // const laboratory: any = [];
-    const [departments, setDepartments] = React.useState([])
-    const [organization, setOrganization] = React.useState([])
-    const [laboratory, setLaboratory] = React.useState([])
+    const [departments, setDepartments] = React.useState([]);
+    const [organization, setOrganization] = React.useState([]);
+    const [laboratory, setLaboratory] = React.useState([]);
     React.useImperativeHandle(ref, () => ({
       open(state: any) {
         setFormPopup(state);
@@ -93,41 +96,41 @@ const Addnewpopup = React.forwardRef(
     const onSubmit = (values: any) => {
       const isMatch = checkCredentials(values.name);
       if (isMatch) {
-        var deptArray:any=[]
-        departments.map((item:any)=>(deptArray.push(item?.id)))
-        var labArray:any=[]
-        laboratory.map((item:any)=>(labArray.push(item?.id)))
-        var org = organization
+        var deptArray: any = [];
+        departments.map((item: any) => deptArray.push(item?.id));
+        var labArray: any = [];
+        laboratory.map((item: any) => labArray.push(item?.id));
+        var org = organization;
         console.log(organization);
-        
-        let assetValues={
-        name: values.name,
-        organisationId: org?.id,
-        perchasedDate: values.perchasedDate,
-        lastUsedDate: values.lastUsedDate,
-        availability: values.availability,
-        expiryDate: values.expiryDate,
-        departmentId: deptArray,
-        laboratoryId: labArray,
-        status: values.status,
-        }
+
+        let assetValues = {
+          name: values.name,
+          organisationId: org?.id,
+          perchasedDate: values.perchasedDate,
+          lastUsedDate: new Date(),
+          availability: values.availability,
+          expiryDate: values.expiryDate,
+          departmentId: deptArray,
+          laboratoryId: labArray,
+          status: values.status,
+        };
         console.log(assetValues);
-        
+
         dispatch(postAssetsData(assetValues));
-        submitFormPopup()
-        clearForm()
-        reload()
+        submitFormPopup();
+        clearForm();
+        reload();
         // dispatch(fetchAssetsData(queryStrings));
       } else {
         formik.setFieldError('name', 'Invalid first name');
       }
     };
-const clearForm=()=>{
-  formik.resetForm()
-        setDepartments([])
-        setLaboratory([])
-        setOrganization([])
-}
+    const clearForm = () => {
+      formik.resetForm();
+      setDepartments([]);
+      setLaboratory([]);
+      setOrganization([]);
+    };
     const submitFormPopup = () => {
       setFormPopup(false);
       successPopupRef.current.open(true, 'Asset');
@@ -139,21 +142,21 @@ const clearForm=()=>{
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
-    const today=moment().format('YYYY-MM-DD')
+    const today = moment().format('YYYY-MM-DD');
 
     const formik = useFormik({
       initialValues: {
         name: '',
-        perchasedDate:dayjs(today),
-        expiryDate: '',
+        perchasedDate: null,
+        expiryDate: null,
         departmentId: [],
         laboratoryId: [],
-        organisationId: '', 
+        organisationId: '',
         status: '',
         // assets_image: '',
         availability: '',
         // assets_id: 'ASSE-1000',
-        lastUsedDate: new Date(),
+        lastUsedDate: null,
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
@@ -168,7 +171,7 @@ const clearForm=()=>{
       (state: any) => state.organization.data?.get_all_organisations,
     );
     console.log(organizationData);
-    
+
     React.useEffect(() => {
       setDepartmentData(
         departmentSliceData?.map((item: any) => ({
@@ -191,9 +194,9 @@ const clearForm=()=>{
           id: item._id,
         })),
       );
-    }, [departmentSliceData, labSliceData,organizationSliceData]);
+    }, [departmentSliceData, labSliceData, organizationSliceData]);
 
-   React.useEffect(() => {
+    React.useEffect(() => {
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
       dispatch(fetchOrganizationData());
@@ -207,7 +210,7 @@ const clearForm=()=>{
         setFormPopup(false);
       }
     };
-    const handleDateChanges = (selectedDate:any,name:any) => {
+    const handleDateChanges = (selectedDate: any, name: any) => {
       const formattedDate = moment(selectedDate.$d).format('YYYY-MM-DD');
       formik.handleChange(name)(formattedDate);
     };
@@ -216,7 +219,7 @@ const clearForm=()=>{
         <Dialog
           open={formPopup}
           keepMounted
-          onClose={() => closeFormPopup(false)}
+          // onClose={() => closeFormPopup(false)}
           aria-labelledby="add-new-asset-title"
           aria-describedby="add-new-asset"
           fullWidth
@@ -227,7 +230,12 @@ const clearForm=()=>{
             <Box className="popup-section">
               <Box className="title-popup">
                 <Typography>{type} asset</Typography>
-                <CloseIcon onClick={() => {closeFormPopup(false);clearForm()}} />
+                <CloseIcon
+                  onClick={() => {
+                    closeFormPopup(false);
+                    clearForm();
+                  }}
+                />
               </Box>
               <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
                 <Grid
@@ -246,7 +254,7 @@ const clearForm=()=>{
                 >
                   <Box>
                     <Box className="asset-upload">
-                      <img src={assetimg} alt="assetimg" />
+                      <img src={test} alt="assetimg" style={{width: '100%', height: '100%'}} />
                     </Box>
                     <Box
                       className="edit-profile-btn"
@@ -263,7 +271,7 @@ const clearForm=()=>{
                           </Typography>
                         )} */}
                     </Box>
-                    <Box className="asset-id">
+                    {/* <Box className="asset-id">
                       <label>Asset Id (autogenerated)</label>
                       <TextField
                         margin="none"
@@ -275,20 +283,12 @@ const clearForm=()=>{
                         placeholder="Assets Id"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        // value={formik.values.assets_id}
                         size="small"
-                        // error={
-                        //   formik.touched.assets_id &&
-                        //   Boolean(formik.errors.assets_id)
-                        // }
+                    
                         disabled
                       />
-                      {/* {formik.touched.assets_id && formik.errors.assets_id && (
-                        <Typography className="error-field">
-                          {formik.errors.assets_id}
-                        </Typography>
-                      )} */}
-                    </Box>
+                     
+                    </Box> */}
                     {/* <Box>
                       <Typography className="recent-use">
                         Recently used
@@ -396,7 +396,13 @@ const clearForm=()=>{
                         <Box>
                           <label>Purchase date</label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="DD/MM/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'perchasedDate')} value={formik.values.perchasedDate}/>
+                            <DatePicker
+                              format="DD/MM/YYYY"
+                              onChange={(selectedDate: any) =>
+                                handleDateChanges(selectedDate, 'perchasedDate')
+                              }
+                              value={formik.values.perchasedDate}
+                            />
                           </LocalizationProvider>
                           {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
@@ -423,7 +429,13 @@ const clearForm=()=>{
                         <Box>
                           <label>Guaranty/warranty/expiry date</label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                         <DatePicker format="DD/MM/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'expiryDate')} value={formik.values.expiryDate}/>
+                            <DatePicker
+                              format="DD/MM/YYYY"
+                              onChange={(selectedDate: any) =>
+                                handleDateChanges(selectedDate, 'expiryDate')
+                              }
+                              value={formik.values.expiryDate}
+                            />
                           </LocalizationProvider>
                           {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (
@@ -441,35 +453,43 @@ const clearForm=()=>{
                             Organisation
                           </label>
                           <Autocomplete
-                              // multiple
-                              id="organizationId"
-                              disableCloseOnSelect
-                              // value={organization}
-                              options={
-                                organizationData !== undefined ? organizationData : []
-                              }
-                              getOptionLabel={(option: any) => option.label}
-                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
-                              renderInput={params => (
-                                <TextField {...params} />)}
-                              fullWidth
-                             
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(props, option: any, { selected }) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    {/* <Checkbox
+                            // multiple
+                            id="organizationId"
+                            // disableCloseOnSelect
+                            // value={organization}
+                            options={
+                              organizationData !== undefined
+                                ? organizationData
+                                : []
+                            }
+                            getOptionLabel={(option: any) => option.label}
+                            isOptionEqualToValue={(option: any, value: any) =>
+                              value.id == option.id
+                            }
+                            renderInput={(params) => (
+                              <TextField {...params} placeholder="Organisation" />
+                            )}
+                            fullWidth
+                            size="medium"
+                            renderOption={(
+                              props,
+                              option: any,
+                              { selected },
+                            ) => (
+                              <React.Fragment>
+                                <li {...props}>
+                                  {/* <Checkbox
                                       style={{ marginRight: 0 }}
                                       checked={selected}
                                     /> */}
-                                    {option.value}
-                                  </li>
-
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) => setOrganization(selectedOptions)}
-                            />
+                                  {option.value}
+                                </li>
+                              </React.Fragment>
+                            )}
+                            onChange={(_, selectedOptions: any) =>
+                              setOrganization(selectedOptions)
+                            }
+                          />
 
                           {formik.touched.organisationId &&
                             formik.errors.organisationId && (
@@ -492,34 +512,42 @@ const clearForm=()=>{
                           </label>
 
                           <Autocomplete
-                              multiple
-                              id="departmentId"
-                              disableCloseOnSelect
-                              value={departments}
-                              options={
-                                departmentData !== undefined ? departmentData : []
-                              }
-                              getOptionLabel={(option: any) => option.label}
-                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
-                              renderInput={params => (
-                                <TextField {...params} />)}
-                              fullWidth
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(props, option: any, { selected }) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option.value}
-                                  </li>
-
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) => setDepartments(selectedOptions)}
-                            />
+                            multiple
+                            id="departmentId"
+                            disableCloseOnSelect
+                            value={departments}
+                            options={
+                              departmentData !== undefined ? departmentData : []
+                            }
+                            getOptionLabel={(option: any) => option.label}
+                            isOptionEqualToValue={(option: any, value: any) =>
+                              value.id == option.id
+                            }
+                            renderInput={(params) => (
+                              <TextField {...params} placeholder="Department" />
+                            )}
+                            fullWidth
+                            placeholder="Department"
+                            size="medium"
+                            renderOption={(
+                              props,
+                              option: any,
+                              { selected },
+                            ) => (
+                              <React.Fragment>
+                                <li {...props}>
+                                  <Checkbox
+                                    style={{ marginRight: 0 }}
+                                    checked={selected}
+                                  />
+                                  {option.value}
+                                </li>
+                              </React.Fragment>
+                            )}
+                            onChange={(_, selectedOptions: any) =>
+                              setDepartments(selectedOptions)
+                            }
+                          />
                           {formik.touched.organisationId &&
                             formik.errors.organisationId && (
                               <Typography className="error-field">
@@ -541,34 +569,40 @@ const clearForm=()=>{
                           </label>
 
                           <Autocomplete
-                              multiple
-                              id="departmentId"
-                              options={
-                                labData !== undefined ? labData : []
-                              }
-                              getOptionLabel={(option: any) => option.label}
-                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
-                              disableCloseOnSelect
-                              value={laboratory}
-                              renderInput={params => (
-                                <TextField {...params} />)}
-                              fullWidth
-                              placeholder="Laboratory"
-                              size="medium"
-                              renderOption={(props, option: any, { selected }) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option.value}
-                                  </li>
-
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) => setLaboratory(selectedOptions)}
-                            />
+                            multiple
+                            id="laboratoryId"
+                            options={labData !== undefined ? labData : []}
+                            getOptionLabel={(option: any) => option.label}
+                            isOptionEqualToValue={(option: any, value: any) =>
+                              value.id == option.id
+                            }
+                            disableCloseOnSelect
+                            value={laboratory}
+                            renderInput={(params) => (
+                              <TextField {...params} placeholder="Laboratory" />
+                            )}
+                            fullWidth
+                            placeholder="Laboratory"
+                            size="medium"
+                            renderOption={(
+                              props,
+                              option: any,
+                              { selected },
+                            ) => (
+                              <React.Fragment>
+                                <li {...props}>
+                                  <Checkbox
+                                    style={{ marginRight: 0 }}
+                                    checked={selected}
+                                  />
+                                  {option.value}
+                                </li>
+                              </React.Fragment>
+                            )}
+                            onChange={(_, selectedOptions: any) =>
+                              setLaboratory(selectedOptions)
+                            }
+                          />
                           {formik.touched.laboratoryId &&
                             formik.errors.laboratoryId && (
                               <Typography className="error-field">
@@ -614,10 +648,8 @@ const clearForm=()=>{
                               Boolean(formik.errors.status)
                             }
                           >
-                             <MenuItem value={"Active"}>
-                               Active
-                              </MenuItem>
-                              <MenuItem value={"Inactive"}>In-Active</MenuItem>
+                            <MenuItem value={'Active'}>Active</MenuItem>
+                            <MenuItem value={'Inactive'}>In-Active</MenuItem>
                             {/* {StatusList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
@@ -678,11 +710,11 @@ const clearForm=()=>{
                               Boolean(formik.errors.availability)
                             }
                           >
-                             <MenuItem value={'Available'}>Available</MenuItem>
-                              <MenuItem value={'In_Use'}>
-                                In Use
-                              </MenuItem>
-                              <MenuItem value={'Not_Available'}>Not Available</MenuItem>
+                            <MenuItem value={'Available'}>Available</MenuItem>
+                            <MenuItem value={'In_Use'}>In Use</MenuItem>
+                            <MenuItem value={'Not_Available'}>
+                              Not Available
+                            </MenuItem>
                             {/* {AvailabilityList.map((item) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
@@ -701,6 +733,7 @@ const clearForm=()=>{
                   </Box>
                 </Grid>
               </Grid>
+              <Divider sx={{py: 1}} />
               <Box
                 sx={{
                   display: { xs: 'block', sm: 'flex' },
@@ -709,10 +742,9 @@ const clearForm=()=>{
                 }}
               >
                 <Button
-                 
                   variant="contained"
                   onClick={() => {
-                    confirmationPopupRef.current.open(true,clearForm());
+                    confirmationPopupRef.current.open(true, clearForm());
                   }}
                   className="cancel-btn"
                 >

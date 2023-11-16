@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
@@ -59,6 +60,8 @@ import { Value } from 'sass';
 import { bool } from 'yup';
 import moment from 'moment';
 import TablePopup from '../../components/table/TablePopup';
+import test from '../../assets/images/test.svg';
+import { toast } from 'react-toastify';
 
 const rows: AssetsRowData[] = AssetsRows;
 const assetsStatus = StatusList;
@@ -162,6 +165,11 @@ export default function Assets() {
     }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
+    toast('Assets status updated !', {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
     reload();
   };
 
@@ -394,7 +402,11 @@ export default function Assets() {
                                 sx={{ display: 'flex', alignItems: 'center' }}
                               >
                                 <Box>
-                                  <img src={image_holder} alt="no_image" />
+                                  <img
+                                    src={test}
+                                    alt="no_image"
+                                    style={{ width: '50px', height: '50px' }}
+                                  />
                                 </Box>
                                 <Box sx={{ ml: 2 }}>
                                   <Box>{row.assetNumber}</Box>
@@ -426,7 +438,7 @@ export default function Assets() {
                                 <>
                                   <Chip
                                     key={index}
-                                    label={row.departmentId[0].name}
+                                    label={row.departmentId[0]?.name}
                                     sx={{
                                       m: 0.5,
                                       padding: '0px 3px',
@@ -478,7 +490,7 @@ export default function Assets() {
                                 <>
                                   <Chip
                                     key={index}
-                                    label={row.laboratoryId[0].name}
+                                    label={row.laboratoryId[0]?.name}
                                     sx={{
                                       m: 0.5,
                                       padding: '0px 3px',
