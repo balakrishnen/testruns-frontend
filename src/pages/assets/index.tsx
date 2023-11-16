@@ -181,6 +181,7 @@ const reload=()=>{
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
+    setRowId,
     // setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
@@ -190,6 +191,7 @@ const reload=()=>{
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
+    setRowId,
   );
   const handleRequestSort = () => {};
 

@@ -74,6 +74,7 @@ export default function Runs() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const [runsData, setRunsData] = React.useState<any>([]);
+  const [rowId, setRowId] = React.useState<any>([]);
   const dispatch: any = useDispatch();
 
   const [pageInfo, setPageInfo] = React.useState({
@@ -158,6 +159,7 @@ export default function Runs() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
+    setRowId
     // setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
@@ -167,6 +169,7 @@ export default function Runs() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
+    setRowId
   );
 
   const handleRequestSort = () => { };
@@ -261,7 +264,6 @@ export default function Runs() {
     setQueryString(payload);
   };
 
-  const [rowId, setRowId] = React.useState<any>([]);
   const runVal: any = { _id: rowId };
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
@@ -519,8 +521,8 @@ export default function Runs() {
                             name="status"
                             className={
                               row.status === 'Created'
-                                ? 'create-select td-select' : row.status === 'Started' ? 'start-select td-select' :  row.status === 'Complete' ?'active-select td-select' :
-                                  'inactive-select td-select'
+                                ? 'create-select td-select' : row.status === 'Started' ? 'start-select td-select' :  row.status === 'Complete' ?' td-select' :
+                                  'in td-select'
                             }
                             value={
                               row.status
@@ -544,8 +546,8 @@ export default function Runs() {
                         //</TableRow>{/* <Select
                         //   className={
                         //     row.availability === 'AVAILABLE'
-                        //       ? 'active-select td-select'
-                        //       : 'inactive-select td-select'
+                        //       ? ' td-select'
+                        //       : 'in td-select'
                         //   }
                         //   value={row.availability}
                         //   displayEmpty

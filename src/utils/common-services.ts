@@ -32,15 +32,20 @@ export const handledAllSelected = (
   setAssetsData: React.Dispatch<React.SetStateAction<any[]>>,
   setIsDeselectAllChecked: React.Dispatch<React.SetStateAction<boolean>>,
   setIsselectAllChecked: React.Dispatch<React.SetStateAction<boolean>>,
-  setVisibleRow: React.Dispatch<React.SetStateAction<any[]>>
+  setVisibleRow: React.Dispatch<React.SetStateAction<any[]>>,
+  setRowId: React.Dispatch<React.SetStateAction<any[]>>
 ) => () => {
   const allChecked = Rows.every((row:any) => row.is_checked)
   // if (!allChecked) {
     const updatedRows = Rows.map((row:any) => ({ ...row, is_checked: true }));
+    const rowsId=[]
+    rowsId.push(Rows.map((row:any) => (row._id)))
+    console.log(rowsId);
     setAssetsData(updatedRows);
     setIsDeselectAllChecked(false);
     setIsselectAllChecked(true);
-    setVisibleRow(updatedRows)
+    setVisibleRow(updatedRows);
+    setRowId(rowsId)
   // }
 };
 
@@ -52,6 +57,7 @@ export const handleDeCheckboxChange = (
   setIsDeselectAllChecked: React.Dispatch<React.SetStateAction<boolean>>,
   setIsselectAllChecked: React.Dispatch<React.SetStateAction<boolean>>,
   setTableHeaderVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  setRowId: React.Dispatch<React.SetStateAction<any[]>>
   // setVisibleRow: React.Dispatch<React.SetStateAction<any[]>>
 ) => () => {
   var updatedRows = assetsData.map((row: any) => ({ ...row, is_checked: false }));
@@ -59,6 +65,7 @@ export const handleDeCheckboxChange = (
   setIsDeselectAllChecked(status);
   setIsselectAllChecked(false);
   setTableHeaderVisible(false);
+  setRowId([])
   // setVisibleRow(updatedRows)
 };
 

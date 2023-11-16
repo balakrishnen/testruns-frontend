@@ -299,6 +299,7 @@ export default function Procedures() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
+    setRowId
     // setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
@@ -309,6 +310,7 @@ export default function Procedures() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
+    setRowId
   );
   const filters = (idVaule: any) => {
     if (Object.keys(idVaule).length !== 0) {
