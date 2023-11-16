@@ -50,6 +50,7 @@ export const fetchSingleAssetsData = (payload: any) => async (dispatch: any) => 
     const response = await client.query({
       query: GET_SINGLE_ASSETS,
       variables: payload,
+      fetchPolicy: 'network-only',
     });
     dispatch(fetchAssetsSuccess(response.data));
   } catch (error: any) {

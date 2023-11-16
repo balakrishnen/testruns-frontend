@@ -97,12 +97,10 @@ const Addnewpopup = React.forwardRef(
         departments.map((item:any)=>(deptArray.push(item?.id)))
         var labArray:any=[]
         laboratory.map((item:any)=>(labArray.push(item?.id)))
-        var org = organization
-        console.log(organization);
         
         let assetValues={
         name: values.name,
-        organisationId: org?.id,
+        organisationId: values.organisationId,
         perchasedDate: values.perchasedDate,
         lastUsedDate: values.lastUsedDate,
         availability: values.availability,
@@ -111,7 +109,7 @@ const Addnewpopup = React.forwardRef(
         laboratoryId: labArray,
         status: values.status,
         }
-        console.log(assetValues);
+        console.log(values.organisationId);
         
         dispatch(postAssetsData(assetValues));
         submitFormPopup()
@@ -440,37 +438,40 @@ const clearForm=()=>{
                           <label style={{ display: 'block' }}>
                             Organisation
                           </label>
-                          <Autocomplete
-                              // multiple
-                              id="organizationId"
-                              disableCloseOnSelect
-                              // value={organization}
-                              options={
-                                organizationData !== undefined ? organizationData : []
-                              }
-                              getOptionLabel={(option: any) => option.label}
-                              isOptionEqualToValue={(option:any, value:any) => value.id == option.id}
-                              renderInput={params => (
-                                <TextField {...params} />)}
-                              fullWidth
-                             
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(props, option: any, { selected }) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    {/* <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    /> */}
-                                    {option.value}
-                                  </li>
-
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) => setOrganization(selectedOptions)}
-                            />
-
+                          <Select
+                            className="placeholder-color"
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                            renderValue={
+                              formik.values.organisationId !== ''
+                                ? undefined
+                                : () => (
+                                    <Placeholder>
+                                      Select Organization
+                                    </Placeholder>
+                                  )
+                            }
+                            margin="none"
+                            fullWidth
+                            id="organisationId"
+                            name="organisationId"
+                            // autoComplete="organisationId"
+                            placeholder="Organization"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.organisationId}
+                            size="small"
+                            error={
+                              formik.touched.organisationId &&
+                              Boolean(formik.errors.organisationId) 
+                            }
+                          >
+                            {organizationData?.map((item:any, index) => (
+                              <MenuItem key={index} value={item.id}>
+                                {item.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
                           {formik.touched.organisationId &&
                             formik.errors.organisationId && (
                               <Typography className="error-field">
