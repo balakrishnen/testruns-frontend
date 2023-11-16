@@ -39,6 +39,7 @@ import {
 } from '../../../utils/data';
 import { navigate } from 'gatsby';
 import SuccessPopup from '../../../components/SuccessPopup';
+import { toast } from 'react-toastify';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -198,7 +199,7 @@ export default function AssetDetails() {
       // console.log('labArray', assetValues);
 
       dispatch(fetchUpdateAssetsData(assetValues));
-
+    
       submitFormPopup();
       getFunction
     } else {
@@ -214,12 +215,17 @@ export default function AssetDetails() {
   };
   const submitFormPopup = () => {
     setFormPopup(false);
-    successPopupRef.current.open(true, 'Asset');
+    // successPopupRef.current.open(true, 'Asset');
+    toast(`Assets updated !`, {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
     setTimeout(() => {
-      successPopupRef.current.open(false, 'Asset');
+      // successPopupRef.current.open(false, 'Asset');
       // getFunction
       navigate('/assets')
-    }, 3000);
+    }, 2000);
   };
 
   const departmentSliceData = useSelector(

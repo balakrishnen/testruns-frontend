@@ -23,6 +23,7 @@ import { Formik, useFormik } from 'formik';
 import { navigate } from 'gatsby';
 import moment from 'moment';
 import { fetchAssetsName } from '../../../api/assetsAPI';
+import dayjs from 'dayjs';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -253,7 +254,7 @@ export default function ProcedureDetails() {
                     science&ensp;/&ensp;Lab-Data structure
                   </Typography>
                   <Typography className="id-detail-title">
-                    Bubble sort
+                  {procedureValue?.name}
                   </Typography>
                 </Box>
               </Grid>
@@ -307,11 +308,7 @@ export default function ProcedureDetails() {
                       marginTop: '0.4rem',
                     }}
                   >
-                   {moment(procedureValue.createdAt).isValid()
-                              ? moment(procedureValue.createdAt)
-                                  .local()
-                                  .format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                 {moment(parseInt(procedureValue?.createdAt)).format('MM/DD/YYYY')}
                   </Typography>
                 </Box>
               </Grid>

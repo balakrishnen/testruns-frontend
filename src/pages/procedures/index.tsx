@@ -39,6 +39,7 @@ import {
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import moment from 'moment';
 import TablePopup from '../../components/table/TablePopup';
+import { toast } from 'react-toastify';
 const rows: ProceduresRowData[] = ProcedureRows;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -359,11 +360,17 @@ export default function Procedures() {
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
       dispatch(deleteProcedureData(ProcedureVal));
-      deleteSuccessPopupRef.current.open(true);
-      setTimeout(() => {
-        deleteSuccessPopupRef.current.open(false);
-      }, 3000);
+      toast(`Procedure deleted !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // deleteSuccessPopupRef.current.open(true);
+      // setTimeout(() => {
+        // deleteSuccessPopupRef.current.open(false);
+      // }, 3000);
       reload();
+      setTableHeaderVisible(false);
       // deletePopupRef.current.open(false);
     }
     deletePopupRef.current.open(false);

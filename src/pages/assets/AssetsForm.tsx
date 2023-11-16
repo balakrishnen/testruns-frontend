@@ -51,6 +51,7 @@ import SuccessPopup from '../../components/SuccessPopup';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import moment from 'moment';
 import test from '../../assets/images/test.svg';
+import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -116,6 +117,7 @@ const Addnewpopup = React.forwardRef(
         console.log(values.organisationId);
         
         dispatch(postAssetsData(assetValues));
+       
         submitFormPopup();
         clearForm();
         reload();
@@ -132,10 +134,14 @@ const Addnewpopup = React.forwardRef(
     };
     const submitFormPopup = () => {
       setFormPopup(false);
-      successPopupRef.current.open(true, 'Asset');
-      setTimeout(() => {
-        successPopupRef.current.open(false, 'Asset');
-      }, 3000);
+      toast(`Assets created !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // setTimeout(() => {
+      //   successPopupRef.current.open(false, 'Asset');
+      // }, 3000);
     };
 
     const Placeholder = ({ children }: any) => {
@@ -207,6 +213,7 @@ const Addnewpopup = React.forwardRef(
       } else {
         confirmationPopupRef.current.open(false);
         setFormPopup(false);
+        clearForm()
       }
     };
     const handleDateChanges = (selectedDate: any, name: any) => {
@@ -738,7 +745,7 @@ const Addnewpopup = React.forwardRef(
                 <Button
                   variant="contained"
                   onClick={() => {
-                    confirmationPopupRef.current.open(true, clearForm());
+                    confirmationPopupRef.current.open(true);
                   }}
                   className="cancel-btn"
                 >

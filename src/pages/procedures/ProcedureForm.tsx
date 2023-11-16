@@ -30,6 +30,7 @@ import SuccessPopup from '../../components/SuccessPopup';
 import { fetchUpdateAssetsData } from '../../api/assetsAPI';
 import dayjs from 'dayjs';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 // import Confirmationpopup from "../../components/ConfirmationPopup";
 // import Successpopup from "../../components/SuccessPopup";
 const validationSchema = Yup.object().shape({
@@ -96,9 +97,11 @@ const ProcedureForm = React.forwardRef(
         departmentId: deptArray,
         laboratoryId: labArray,
         createdBy: values.createdBy,
+        procedureDetials:'procedure'
       };
       if(type=='create'){
         procedures['organisationId']=values.organisationId
+        procedures['procedureDetials']=values.procedureDetials
       }
       else{
         procedures['_id']=formData._id
@@ -109,11 +112,13 @@ const ProcedureForm = React.forwardRef(
         if(type=='edit'){
           dispatch(fetchUpdateProcedureData(procedures))
           submitFormPopup();
+          clearForm()
           reload()
         }
         else{
           dispatch(postProcedureData(procedures));
           submitFormPopup();
+          clearForm()
           reload()
         }
       }
@@ -123,6 +128,11 @@ const ProcedureForm = React.forwardRef(
         setFormOpen(state);
       },
     }));
+    const clearForm = () => {
+      formik.resetForm();
+      setDepartments([]);
+      setLaboratory([]);
+    };
     // const[formValues,setFormValues]=React.useState<any>({})
 
     // React.useEffect(()=>{
@@ -145,7 +155,8 @@ const ProcedureForm = React.forwardRef(
         createdBy: new Date(),
         departmentId: formData?formData.departmentId:"",
         laboratoryId: formData?formData.laboratoryId:"",
-        organisationId: formData?formData.organisationId:"",
+        organisationId: formData?formData.organisationId:"655376d2659b7b0012108a33",
+        procedureDetials:'procedure'
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
@@ -190,18 +201,24 @@ const ProcedureForm = React.forwardRef(
       } else {
         confirmationPopupRef.current.open(false);
         setFormOpen(false);
+        clearForm()
       }
     };
 
     const submitFormPopup = () => {
       setFormOpen(false);
-      successPopupRef.current.open(true, 'Procedure');
-      setTimeout(() => {
-        successPopupRef.current.open(false, 'Procedure');
-      }, 3000);
+      toast(`Procedure ${type=='edit'?'updated':'created'} !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // successPopupRef.current.open(true, 'Procedure');
+      // setTimeout(() => {
+      //   successPopupRef.current.open(false, 'Procedure');
+      // }, 3000);
     };
 console.log(type);
-const createdOn=dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/DD/YYYY'))
+const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/DD/YYYY')):dayjs(moment().format('MM/DD/YYYY'))
 
     return (
       <div>
@@ -225,7 +242,7 @@ const createdOn=dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/D
             <Box className="popup-section">
               <Box className="title-popup">
                 <Typography>{type} Procedure</Typography>
-                <CloseIcon onClick={() => closeFormPopup(false)} />
+                <CloseIcon onClick={() => {closeFormPopup(false); clearForm()}} />
               </Box>
 
               <Box>
@@ -254,10 +271,10 @@ const createdOn=dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/D
                         fullWidth
                         id="name"
                         name="organisationId"
-                        autoComplete="name"
+                        // autoComplete="name"
                         autoFocus
                         InputLabelProps={{ shrink: false }}
-                        placeholder="ID023659ADN"
+                        // placeholder="ID023659ADN"
                         className="bg-gray-input"
                         value={formData?.procedureNumber}
                         disabled
@@ -468,7 +485,7 @@ const createdOn=dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/D
                         fullWidth
                         id="name"
                         name="name"
-                        autoComplete="name"
+                        // autoComplete="name"
                         autoFocus
                         InputLabelProps={{ shrink: false }}
                         placeholder="The simple pendulum"

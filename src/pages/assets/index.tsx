@@ -165,7 +165,7 @@ export default function Assets() {
     }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
-    toast('Assets status updated !', {
+    toast(`Assets ${e.target.name == 'availability'?'availability':'status'} updated !`, {
       style: {
         background: '#00bf70', color: '#fff'
       }
@@ -270,10 +270,15 @@ export default function Assets() {
     if (state === 1) {
       // deletePopupRef.current.open(false);
       dispatch(deleteAssetsData(assetVal));
-      deleteSuccessPopupRef.current.open(true);
-      setTimeout(() => {
-        deleteSuccessPopupRef.current.open(false);
-      }, 3000);
+      toast(`Assets deleted !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // deleteSuccessPopupRef.current.open(true);
+      // setTimeout(() => {
+      //   deleteSuccessPopupRef.current.open(false);
+      // }, 3000);
       reload();
       setTableHeaderVisible(false);
     }
