@@ -521,8 +521,8 @@ export default function Runs() {
                             name="status"
                             className={
                               row.status === 'Created'
-                                ? 'create-select td-select' : row.status === 'Started' ? 'start-select td-select' :  row.status === 'Complete' ?' td-select' :
-                                  'in td-select'
+                                ? 'create-select td-select' : row.status === 'Started' ? 'start-select td-select' :  row.status === 'Complete' ?'active-select td-select' :
+                                  'inactive-select td-select'
                             }
                             value={
                               row.status
