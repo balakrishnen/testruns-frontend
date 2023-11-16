@@ -35,6 +35,8 @@ import { fetchUpdateRunsData, postRunsData } from '../../api/RunsAPI';
 import { fetchLabData } from '../../api/labAPI';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
+import dayjs from 'dayjs';
+import moment from 'moment';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().notRequired(),
@@ -132,7 +134,10 @@ const RunsForm = React.forwardRef(
         formik.setFieldError('name', 'Invalid first name');
       }
     };
-
+    // const createdDate=(type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/DD/YYYY')):moment().format('YYYY-MM-DD'))
+ const dateDue=(type=='edit'?dayjs(formData.dueDate):"");
+ console.log(dateDue);
+ 
     const formik = useFormik({
       initialValues: {
         departmentId: formData?formData.departmentId:"",
@@ -140,7 +145,7 @@ const RunsForm = React.forwardRef(
         organisationId: "ASSET NAME",
         procedureId: formData?formData.procedureId:'',
         objective: formData?formData.objective:'',
-        dueDate: new Date(),
+        dueDate: dateDue,
         assignedBy: "username",
         assignedTo: 'toy',
         status: "Created"
@@ -192,7 +197,10 @@ const RunsForm = React.forwardRef(
     //     setDialog2Open(false);
     //     closeFormPopup(false)
     //   };
-
+    const handleDateChanges = (selectedDate:any,name:any) => {
+      const formattedDate = moment(selectedDate.$d).format('YYYY-MM-DD');
+      formik.handleChange(name)(formattedDate);
+    }
     const handleConfirmationState = (state: number) => {
       if (state === 0) {
         confirmationPopupRef.current.open(false);
@@ -281,7 +289,7 @@ const RunsForm = React.forwardRef(
                         fullWidth
                         id="procedureId"
                         name="procedureId"
-                        autoComplete="procedureId"
+                        // autoComplete="procedureId"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Procedure Id"
                         onChange={formik.handleChange}
@@ -307,7 +315,7 @@ const RunsForm = React.forwardRef(
                     <Box>
                       <label>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" />
+                        <DatePicker format="MM/DD/YYYY" />
                       </LocalizationProvider>
                       {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">
@@ -438,7 +446,7 @@ const RunsForm = React.forwardRef(
                         fullWidth
                         id="objective"
                         name="objective"
-                        autoComplete="objective"
+                        // autoComplete="objective"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Test objective"
                         onChange={formik.handleChange}
@@ -464,7 +472,7 @@ const RunsForm = React.forwardRef(
                     <Box>
                       <label>Due date</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" />
+                        <DatePicker format="MM/DD/YYYY"  onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'dueDate')} value={formik.values.dueDate}/>
                       </LocalizationProvider>
                       {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">

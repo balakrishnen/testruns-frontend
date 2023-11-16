@@ -36,6 +36,7 @@ import {
 } from '../../api/procedureAPI';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import moment from 'moment';
+import TablePopup from '../../components/table/TablePopup';
 const rows: ProceduresRowData[] = ProcedureRows;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -522,6 +523,15 @@ export default function Procedures() {
                                       m: 0.5,
                                       padding: '0px 3px',
                                     }}
+                                    onClick={(_event) => {
+                                      _event.preventDefault();
+                                      _event.stopPropagation();
+                                      tablePopupRef.current.open(
+                                        true,
+                                        'departments',
+                                        row.departmentId,
+                                      );
+                                    }}
                                   />
                                   {row.departmentId.length > 1 && (
                                     <span
@@ -564,6 +574,15 @@ export default function Procedures() {
                                     sx={{
                                       m: 0.5,
                                       padding: '0px 3px',
+                                    }}
+                                    onClick={(_event) => {
+                                      _event.preventDefault();
+                                      _event.stopPropagation();
+                                      tablePopupRef.current.open(
+                                        true,
+                                        'lab',
+                                        row.laboratoryId,
+                                      );
                                     }}
                                   />
                                   {row.laboratoryId.length > 1 && (
@@ -641,7 +660,7 @@ export default function Procedures() {
             deleteConfirmation={handleDeleteConfirmation}
           />
         </Box>
-
+        <TablePopup ref={tablePopupRef} />
         <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
       </Box>
     </PrivateRoute>

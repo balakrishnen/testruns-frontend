@@ -408,6 +408,15 @@ const reload=()=>{
                                       m: 0.5,
                                       padding: '0px 3px',
                                     }}
+                                    onClick={(_event) => {
+                                      _event.preventDefault();
+                                      _event.stopPropagation();
+                                      tablePopupRef.current.open(
+                                        true,
+                                        'departments',
+                                        row.departmentId,
+                                      );
+                                    }}
                                   />
                                   {row.departmentId.length > 1 && (
                                     <span
@@ -450,6 +459,15 @@ const reload=()=>{
                                     sx={{
                                       m: 0.5,
                                       padding: '0px 3px',
+                                    }}
+                                    onClick={(_event) => {
+                                      _event.preventDefault();
+                                      _event.stopPropagation();
+                                      tablePopupRef.current.open(
+                                        true,
+                                        'lab',
+                                        row.laboratoryId,
+                                      );
                                     }}
                                   />
                                   {row.laboratoryId.length > 1 && (
