@@ -408,7 +408,10 @@ export default function Procedures() {
     payload['search'] = value;
     setQueryString(payload);
   };
-
+  const reload = () => {
+    const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
+    dispatch(fetchProcedureData(payload));
+  };
   return (
     <PrivateRoute>
       <Box className="main-padding">
