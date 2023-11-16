@@ -70,6 +70,9 @@ export default function TableFilters({
   closeTableHeader,
   deleteRecord,
   module,
+  applyFilters,
+  status,
+  availability,
 }: any) {
   const [columnAnchorEl, setColumnAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -81,8 +84,11 @@ export default function TableFilters({
   const [filterStatus, setFilterStatus] = React.useState(null);
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterSearchBy, setFilterSearchBy] = React.useState(null);
-  const [filterFieldName, setFilterFieldName] = React.useState("");
+  const [filterFieldName, setFilterFieldName] = React.useState('');
   const [filterSearchValue, setFilterSearchValue] = React.useState(null);
+  const [filterType, setFilterType] = React.useState(null);
+  const [filterOptions, setFilterOptions] = React.useState([]);
+  const [filterKey, setFilterKey] = React.useState(null);
   const [runsOpen, setRunsOpen] = React.useState(false);
   const handleColumnPopoverClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -113,6 +119,10 @@ export default function TableFilters({
     setFilterAvailability(null);
     setFilterSearchBy(null);
     setFilterSearchValue(null);
+    setFilterOptions([]);
+    setFilterType(null);
+    applyFilters('search', null);
+    handleFilterPopoverClose();
   };
 
   const Placeholder = ({ children }: any) => {
@@ -153,7 +163,8 @@ export default function TableFilters({
                     checked={isselectAllChecked}
                     checkedIcon={<CheckCircleOutlineOutlinedIcon />}
                     icon={<HighlightOffOutlinedIcon />}
-                    onChange={(event) => {handledAllSelected(isselectAllChecked)
+                    onChange={(event) => {
+                      handledAllSelected(isselectAllChecked);
                     }}
                   />
                 }
@@ -288,7 +299,12 @@ export default function TableFilters({
                 <img
                   src={filterIcon}
                   alt="no_image"
-                  style={{ width: '25px', height: '25px', opacity: 0.9, cursor: 'pointer' }}
+                  style={{
+                    width: '25px',
+                    height: '25px',
+                    opacity: 0.9,
+                    cursor: 'pointer',
+                  }}
                 />
               </Button>
               <Popover
@@ -314,7 +330,10 @@ export default function TableFilters({
                     <Typography fontWeight={600} variant="body1">
                       Filters
                     </Typography>
-                    <CloseIcon sx={{cursor: 'pointer'}} onClick={handleFilterPopoverClose} />
+                    <CloseIcon
+                      sx={{ cursor: 'pointer' }}
+                      onClick={handleFilterPopoverClose}
+                    />
                   </Box>
                   <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
                     <Box sx={{ my: 1 }}>
@@ -336,14 +355,17 @@ export default function TableFilters({
                         renderValue={
                           filterStatus !== null
                             ? undefined
-                            : () => <Placeholder>Status</Placeholder>
+                            : () => <Placeholder>Select Status</Placeholder>
                         }
                       >
-                        <MenuItem value={'1'}>Active</MenuItem>
-                        <MenuItem value={'2'}>Inactive</MenuItem>
+                        {status?.map((element: any) => (
+                          <MenuItem value={element.value} key={element.value}>
+                            {element.name}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </Box>
-                    <Box sx={{ my: 1 }}>
+                    {module === "assets" && <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
                         Availability
                       </Typography>
@@ -362,13 +384,16 @@ export default function TableFilters({
                         renderValue={
                           filterAvailability !== null
                             ? undefined
-                            : () => <Placeholder>Availability</Placeholder>
+                            : () => <Placeholder>Select Availability</Placeholder>
                         }
                       >
-                        <MenuItem value={'1'}>Availability</MenuItem>
-                        <MenuItem value={'2'}>Not Availability</MenuItem>
+                        {availability.map((element: any) => (
+                          <MenuItem value={element.value} key={element.value}>
+                            {element.name}
+                          </MenuItem>
+                        ))}
                       </Select>
-                    </Box>
+                    </Box>}
                     <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
                         Search by
@@ -383,9 +408,10 @@ export default function TableFilters({
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
-                          setFilterSearchValue(null);
+                          //   debugger;
+                          //   setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
-                          setFilterFieldName(data.props.children)
+                          setFilterFieldName(data.props.children);
                         }}
                         renderValue={
                           filterSearchBy !== null
@@ -393,27 +419,33 @@ export default function TableFilters({
                             : () => <Placeholder>Search by</Placeholder>
                         }
                       >
-                        <MenuItem value={'1'}>ID</MenuItem>
-                        <MenuItem value={'2'}>Name</MenuItem>
-                        <MenuItem value={'3'}>Department</MenuItem>
-                        <MenuItem value={'4'}>Lab</MenuItem>
-                        <MenuItem value={'5'}>Purchased on</MenuItem>
-                        <MenuItem value={'6'}>Last used</MenuItem>
+                        {columns.map((element: any) => (
+                          <MenuItem
+                            value={element.id}
+                            key={element.id}
+                            onClick={() => {
+                              setFilterType(element.type);
+                              setFilterOptions(element.filters[0]?.options);
+                              setFilterKey(element.id);
+                            }}
+                          >
+                            {element.label}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </Box>
                     <Box sx={{ my: 1 }}>
-                      {filterSearchBy !== null && (
+                      {filterType !== null && (
                         <Typography variant="body2" paddingY={1}>
-                          {filterSearchBy === '2'
+                          {filterType === 'text'
                             ? 'Search'
-                            : filterSearchBy === '5' || filterSearchBy === '6'
-                            ? 'Date'
+                            : filterType === 'date'
+                            ? `Date ${filterFieldName}`
                             : `Select ${filterFieldName}`}
                         </Typography>
                       )}
 
-                      {filterSearchBy === null ? null : filterSearchBy ===
-                        '2' ? (
+                      {filterType === null ? null : filterType === 'text' ? (
                         <TextField
                           margin="normal"
                           required
@@ -429,7 +461,7 @@ export default function TableFilters({
                             setFilterSearchValue(event.target.value)
                           }
                         />
-                      ) : filterSearchBy === '5' || filterSearchBy === '6' ? (
+                      ) : filterType === 'date' ? (
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
@@ -459,9 +491,9 @@ export default function TableFilters({
                               : () => <Placeholder>Select</Placeholder>
                           }
                         >
-                          {OrganizationList.map((item, index) => (
-                            <MenuItem key={index} value={item.id}>
-                              {item.name}
+                          {filterOptions.map((element, index) => (
+                            <MenuItem key={index} value={element.value}>
+                              {element.label}
                             </MenuItem>
                           ))}
                         </Select>
@@ -493,6 +525,10 @@ export default function TableFilters({
                         background: '#FFC60B',
                         color: '#181818',
                         textTransform: 'capitalize',
+                      }}
+                      onClick={() => {
+                        handleFilterPopoverClose();
+                        applyFilters(filterKey, filterSearchValue);
                       }}
                     >
                       Show results

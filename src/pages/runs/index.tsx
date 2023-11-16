@@ -26,6 +26,7 @@ import {
   LaboratoryList,
   RunsHeaders,
   RunsRows,
+  RunsStatusList,
 } from '../../utils/data';
 import TableHeader from '../../components/table/TableHeader';
 import { RunsRowData } from '../../modals/runs.modal';
@@ -44,7 +45,11 @@ import runStarted from '../../assets/images/run-started.svg';
 import runStopped from '../../assets/images/run-stopped.svg';
 import runCompleted from '../../assets/images/run-completed.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRunsData, fetchUpdateRunsData, deleteRunsData } from '../../api/RunsAPI';
+import {
+  fetchRunsData,
+  fetchUpdateRunsData,
+  deleteRunsData,
+} from '../../api/RunsAPI';
 import moment from 'moment';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import TablePopup from '../../components/table/TablePopup';
@@ -52,6 +57,7 @@ import TablePopup from '../../components/table/TablePopup';
 // table start
 
 const rows: RunsRowData[] = RunsRows;
+const runsStatus = RunsStatusList;
 
 export default function Runs() {
   const [runsOpen, setRunsOpen] = React.useState(false);
@@ -140,7 +146,7 @@ export default function Runs() {
     }
     console.log(runsChange);
     dispatch(fetchUpdateRunsData(runsChange));
-    reload()
+    reload();
   };
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -159,7 +165,7 @@ export default function Runs() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setRowId
+    setRowId,
     // setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
@@ -169,10 +175,10 @@ export default function Runs() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
-    setRowId
+    setRowId,
   );
 
-  const handleRequestSort = () => { };
+  const handleRequestSort = () => {};
 
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
@@ -249,10 +255,10 @@ export default function Runs() {
     const payload: any = {
       page: 1,
       perPage: 5,
-      sortOrder: "desc"
-    }
+      sortOrder: 'desc',
+    };
     dispatch(fetchRunsData(payload));
-  }
+  };
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
     const payload: any = { ...queryStrings };
     const headersList: any = [...headers];
@@ -273,7 +279,7 @@ export default function Runs() {
       setTimeout(() => {
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
-      reload()
+      reload();
       setTableHeaderVisible(false);
     }
     deletePopupRef.current.open(false);
@@ -304,6 +310,7 @@ export default function Runs() {
           closeTableHeader={handleCloseTableHeader}
           deleteRecord={handleOpenDeletePopup}
           module="runs"
+          status={runsStatus}
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
@@ -311,7 +318,7 @@ export default function Runs() {
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-            // size={dense ? "small" : "medium"}
+              // size={dense ? "small" : "medium"}
             >
               <TableHeader
                 numSelected={0}
@@ -348,7 +355,7 @@ export default function Runs() {
                         //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" &&
                         navigate(`/runs/details/${row._id}`, {
                           state: { props: row },
-                        })
+                        });
                         // console.log(e.target.tagName)
                       }}
                     >
@@ -362,7 +369,7 @@ export default function Runs() {
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
                                   setRowId([...rowId, row._id]),
-                                    handleChange(event, row._id)
+                                    handleChange(event, row._id);
                                 }}
                               />
                             </Box>
@@ -382,10 +389,10 @@ export default function Runs() {
                                     row.status === 'Created'
                                       ? runCreated
                                       : row.status === 'Started'
-                                        ? runStarted
-                                        : row.status === 'Complete' 
-                                          ? runCompleted
-                                          : runStopped
+                                      ? runStarted
+                                      : row.status === 'Complete'
+                                      ? runCompleted
+                                      : runStopped
                                   }
                                   alt="no_image"
                                   style={{ width: '35px', height: '35px' }}
@@ -418,7 +425,18 @@ export default function Runs() {
                       {headers[2].is_show && (
                         <TableCell>
                           {row.departmentId[0] !== null ? (
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Box
+                              onClick={(_event) => {
+                                _event.preventDefault();
+                                _event.stopPropagation();
+                                tablePopupRef.current?.open(
+                                  true,
+                                  'departments',
+                                  row.departmentId,
+                                );
+                              }}
+                              sx={{ display: 'flex', alignItems: 'center' }}
+                            >
                               <>
                                 <Chip
                                   key={index}
@@ -436,15 +454,6 @@ export default function Runs() {
                                       fontSize: '12px',
                                       whiteSpace: 'nowrap',
                                     }}
-                                    onClick={(_event) => {
-                                      _event.preventDefault();
-                                      _event.stopPropagation();
-                                      tablePopupRef.current.open(
-                                        true,
-                                        'departments',
-                                        row.departmentId,
-                                      );
-                                    }}
                                   >
                                     +{row.departmentId.length - 1} More
                                   </span>
@@ -459,7 +468,18 @@ export default function Runs() {
                       {headers[3].is_show && (
                         <TableCell>
                           {row.laboratoryId[0] !== null ? (
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Box
+                              onClick={(_event) => {
+                                _event.preventDefault();
+                                _event.stopPropagation();
+                                tablePopupRef.current?.open(
+                                  true,
+                                  'lab',
+                                  row.laboratoryId,
+                                );
+                              }}
+                              sx={{ display: 'flex', alignItems: 'center' }}
+                            >
                               <>
                                 <Chip
                                   key={index}
@@ -477,15 +497,6 @@ export default function Runs() {
                                       fontSize: '12px',
                                       whiteSpace: 'nowrap',
                                     }}
-                                    onClick={(_event) => {
-                                      _event.preventDefault();
-                                      _event.stopPropagation();
-                                      tablePopupRef.current.open(
-                                        true,
-                                        'lab',
-                                        row.laboratoryId,
-                                      );
-                                    }}
                                   >
                                     +{row.laboratoryId.length - 1} More
                                   </span>
@@ -502,8 +513,8 @@ export default function Runs() {
                           {row.createdAt === null
                             ? '-'
                             : moment(row.createdAt).isValid()
-                              ? moment(row.createdAt).local().format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                            ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                            : moment().format('MM/DD/YYYY')}
                         </TableCell>
                       )}
                       {headers[5].is_show && (
@@ -511,8 +522,8 @@ export default function Runs() {
                           {row.dueDate === null
                             ? '-'
                             : moment(row.dueDate).isValid()
-                              ? moment(row.dueDate).local().format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                            ? moment(row.dueDate).local().format('MM/DD/YYYY')
+                            : moment().format('MM/DD/YYYY')}
                         </TableCell>
                       )}
                       {headers[6].is_show && (
@@ -521,23 +532,27 @@ export default function Runs() {
                             name="status"
                             className={
                               row.status === 'Created'
-                                ? 'create-select td-select' : row.status === 'Started' ? 'start-select td-select' :  row.status === 'Complete' ?'active-select td-select' :
-                                  'inactive-select td-select'
+                                ? 'create-select td-select'
+                                : row.status === 'Started'
+                                ? 'start-select td-select'
+                                : row.status === 'Complete'
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
                             }
-                            value={
-                              row.status
-                                ? row.status
-                                : 'Stopped'
-                            }
+                            value={row.status ? row.status : 'Stopped'}
                             displayEmpty
                             onClick={(e: any) => clickHandler(e)}
                             onChange={(e) => handleOnChange(e, row)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={"Created"}>&nbsp;Created</MenuItem>
-                            <MenuItem value={"Started"}>Started</MenuItem>
-                            <MenuItem value={"Stopped"}>Stopped</MenuItem>
-                            <MenuItem value={"Complete"}>Complete</MenuItem>
+                            {runsStatus.map((element: any) => (
+                              <MenuItem
+                                value={element.value}
+                                key={element.value}
+                              >
+                                {element.name}
+                              </MenuItem>
+                            ))}
                           </Select>
                         </TableCell>
                       )}
@@ -579,7 +594,9 @@ export default function Runs() {
           <DeletePopup
             rowId={rowId}
             ref={deletePopupRef}
-            closeDeletePopup={() => deletePopupRef.current.open(false, 'Runs', rowId)}
+            closeDeletePopup={() =>
+              deletePopupRef.current.open(false, 'Runs', rowId)
+            }
             deleteConfirmation={handleDeleteConfirmation}
           />
         </Box>

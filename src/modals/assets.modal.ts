@@ -1,4 +1,4 @@
-import { Filters, SelectOptions } from ".";
+import { Filters } from ".";
 
 export interface AssetsRowData {
   is_checked:boolean;
@@ -45,4 +45,5 @@ export interface AssetsHead {
   filters: Filters[];
   sort: string;
   is_show: boolean;
+  type: string;
 }

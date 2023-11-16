@@ -41,6 +41,8 @@ import {
   DepartmentList,
   LaboratoryList,
   AssetsRows,
+  StatusList,
+  AvailabilityList,
 } from '../../utils/data';
 import { AssetsRowData } from '../../modals/assets.modal';
 import TableFilters from '../../components/table/TableFilters';
@@ -59,6 +61,8 @@ import moment from 'moment';
 import TablePopup from '../../components/table/TablePopup';
 
 const rows: AssetsRowData[] = AssetsRows;
+const assetsStatus = StatusList;
+const assetsAvailability = AvailabilityList;
 
 export default function Assets() {
   const [openDlg1Dialog, setDialog1Open] = React.useState(false);
@@ -97,7 +101,7 @@ export default function Assets() {
     searchBy: null,
     search: null,
     sortBy: null,
-    sortOrder: "desc",
+    sortOrder: 'desc',
   });
 
   const assetsSliceData = useSelector(
@@ -133,12 +137,10 @@ export default function Assets() {
     setQueryString(payload);
     setCurrentPage(page_no);
   };
-const reload=()=>{
-  const payload:any={page: 1,
-    perPage: 5,
-    sortOrder: "desc"}
+  const reload = () => {
+    const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
     dispatch(fetchAssetsData(payload));
-}
+  };
   // const filters = () => {
   //   dispatch(fetchAssetsData(queryStrings));
   // };
@@ -160,7 +162,7 @@ const reload=()=>{
     }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
-    reload()
+    reload();
   };
 
   const handleChange = (event: any, id: any) => {
@@ -264,7 +266,7 @@ const reload=()=>{
       setTimeout(() => {
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
-      reload()
+      reload();
       setTableHeaderVisible(false);
     }
     deletePopupRef.current.open(false);
@@ -290,6 +292,13 @@ const reload=()=>{
     setQueryString(payload);
   };
 
+  const applyFilters = (field: any, value: any) => {
+    const payload: any = { ...queryStrings };
+    payload['searchBy'] = field;
+    payload['search'] = value;
+    setQueryString(payload);
+  };
+
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -298,7 +307,9 @@ const reload=()=>{
           <Button
             type="submit"
             variant="contained"
-            onClick={() => {formPopupRef.current.open(true)}}
+            onClick={() => {
+              formPopupRef.current.open(true);
+            }}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create Asset
@@ -316,6 +327,9 @@ const reload=()=>{
           closeTableHeader={handleCloseTableHeader}
           deleteRecord={handleOpenDeletePopup}
           module="assets"
+          applyFilters={applyFilters}
+          status={assetsStatus}
+          availability={assetsAvailability}
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
@@ -355,7 +369,7 @@ const reload=()=>{
                           // e.target.tagName !== 'INPUT' &&
                           //   e.target.tagName !== 'LI' &&
                           navigate(`/assets/details/${row._id}`, {
-                            state: { props: row ,func:reload()},
+                            state: { props: row, func: reload() },
                           });
                         }}
                       >
@@ -398,6 +412,15 @@ const reload=()=>{
                           <TableCell>
                             {row.departmentId[0] !== null ? (
                               <Box
+                                onClick={(_event) => {
+                                  _event.preventDefault();
+                                  _event.stopPropagation();
+                                  tablePopupRef.current?.open(
+                                    true,
+                                    'departments',
+                                    row.departmentId,
+                                  );
+                                }}
                                 sx={{ display: 'flex', alignItems: 'center' }}
                               >
                                 <>
@@ -417,15 +440,6 @@ const reload=()=>{
                                         fontSize: '12px',
                                         whiteSpace: 'nowrap',
                                       }}
-                                      onClick={(_event) => {
-                                        _event.preventDefault();
-                                        _event.stopPropagation();
-                                        tablePopupRef.current.open(
-                                          true,
-                                          'departments',
-                                          row.departmentId,
-                                        );
-                                      }}
                                     >
                                       +{row.departmentId.length - 1} More
                                     </span>
@@ -441,6 +455,15 @@ const reload=()=>{
                           <TableCell>
                             {row.laboratoryId[0] !== null ? (
                               <Box
+                                onClick={(_event) => {
+                                  _event.preventDefault();
+                                  _event.stopPropagation();
+                                  tablePopupRef.current?.open(
+                                    true,
+                                    'lab',
+                                    row.laboratoryId,
+                                  );
+                                }}
                                 sx={{ display: 'flex', alignItems: 'center' }}
                               >
                                 <>
@@ -460,15 +483,6 @@ const reload=()=>{
                                         fontSize: '12px',
                                         whiteSpace: 'nowrap',
                                       }}
-                                      onClick={(_event) => {
-                                        _event.preventDefault();
-                                        _event.stopPropagation();
-                                        tablePopupRef.current.open(
-                                          true,
-                                          'lab',
-                                          row.laboratoryId,
-                                        );
-                                      }}
                                     >
                                       +{row.laboratoryId.length - 1} More
                                     </span>
@@ -480,7 +494,7 @@ const reload=()=>{
                             )}
                           </TableCell>
                         )}
-                       
+
                         {headers[4].is_show && (
                           <TableCell>
                             {row.perchasedDate === null
@@ -518,8 +532,14 @@ const reload=()=>{
                               onClick={(e: any) => clickHandler(e)}
                               IconComponent={ExpandMoreOutlinedIcon}
                             >
-                              <MenuItem value={'Active'}>Active</MenuItem>
-                              <MenuItem value={'Inactive'}>In-Active</MenuItem>
+                              {assetsStatus.map((element) => (
+                                <MenuItem
+                                  value={element.value}
+                                  key={element.value}
+                                >
+                                  {element.name}
+                                </MenuItem>
+                              ))}
                             </Select>
                           </TableCell>
                         )}
@@ -544,11 +564,14 @@ const reload=()=>{
                               IconComponent={ExpandMoreOutlinedIcon}
                               onClick={(e: any) => clickHandler(e)}
                             >
-                              <MenuItem value={'Available'}>Available</MenuItem>
-                              <MenuItem value={'In_Use'}>In Use</MenuItem>
-                              <MenuItem value={'Not_Available'}>
-                                Not Available
-                              </MenuItem>
+                              {assetsAvailability.map((element) => (
+                                <MenuItem
+                                  value={element.value}
+                                  key={element.value}
+                                >
+                                  {element.name}
+                                </MenuItem>
+                              ))}
                             </Select>
                           </TableCell>
                         )}

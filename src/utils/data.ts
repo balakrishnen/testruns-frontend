@@ -8,13 +8,21 @@ import { RunsHead } from '../modals/runs.modal';
 import { ProceduresHead } from '../modals/Procedures.modal';
 
 export const StatusList = [
-  { id: 1, name: 'Active', state: 'Active' },
-  { id: 2, name: 'In-Active', state: 'InActive' },
+  { id: 1, name: 'Active', value: 'Active' },
+  { id: 2, name: 'In Active', value: 'Inactive' },
 ];
 
 export const AvailabilityList = [
-  { id: 1, name: 'Available', state: true },
-  { id: 2, name: 'Not available', state: false },
+  { id: 1, name: 'Available', value: 'Available' },
+  { id: 2, name: 'In Use', value: 'In_Use' },
+  { id: 3, name: 'Not Available', value: 'Not_Available' },
+];
+
+export const RunsStatusList = [
+  { id: 1, name: 'Created', value: 'Created' },
+  { id: 2, name: 'Started', value: 'Started' },
+  { id: 3, name: 'Stopped', value: 'Stopped' },
+  { id: 3, name: 'Completed', value: 'Complete' },
 ];
 
 export const RoleList = [
@@ -49,6 +57,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'name',
@@ -63,6 +72,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'text',
   },
   {
     id: 'departmentId',
@@ -80,6 +90,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'laboratoryId',
@@ -98,6 +109,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'purchasedDate',
@@ -112,6 +124,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'date',
   },
   {
     id: 'updatedAt',
@@ -126,6 +139,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'date',
   },
   {
     id: 'status',
@@ -144,6 +158,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'availability',
@@ -161,6 +176,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
 ];
 export const AssetsRows = [
@@ -274,6 +290,7 @@ export const UserHeaders: readonly UserHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'firstName',
@@ -288,6 +305,7 @@ export const UserHeaders: readonly UserHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'text',
   },
   {
     id: 'providerDetails',
@@ -305,6 +323,7 @@ export const UserHeaders: readonly UserHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'extraData',
@@ -323,6 +342,7 @@ export const UserHeaders: readonly UserHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'organisationId',
@@ -337,6 +357,7 @@ export const UserHeaders: readonly UserHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'date',
   },
   {
     id: 'roleId',
@@ -351,6 +372,7 @@ export const UserHeaders: readonly UserHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'text',
   },
   {
     id: 'status',
@@ -368,6 +390,7 @@ export const UserHeaders: readonly UserHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
 ];
 export const UserRows = [
@@ -585,6 +608,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'name',
@@ -599,6 +623,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'text',
   },
   {
     id: 'departmentId',
@@ -617,6 +642,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'laboratoryID',
@@ -635,6 +661,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'updatedAt',
@@ -649,6 +676,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'date',
   },
 
   {
@@ -667,6 +695,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
 ];
 export const ProcedureRows = [
@@ -873,6 +902,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'objective',
@@ -887,6 +917,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'text',
   },
   {
     id: 'departmentId',
@@ -904,6 +935,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'laboratoryId',
@@ -922,6 +954,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
 
   {
@@ -937,6 +970,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'date',
   },
   {
     id: 'dueDate',
@@ -951,6 +985,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'date',
   },
   {
     id: 'isActive',
@@ -970,6 +1005,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
   {
     id: 'extraDate',
@@ -988,6 +1024,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     ],
     sort: 'asc',
     is_show: true,
+    type: 'select',
   },
 ];
 export const RunsRows = [

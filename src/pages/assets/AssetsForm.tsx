@@ -459,10 +459,10 @@ const clearForm=()=>{
                               renderOption={(props, option: any, { selected }) => (
                                 <React.Fragment>
                                   <li {...props}>
-                                    <Checkbox
+                                    {/* <Checkbox
                                       style={{ marginRight: 0 }}
                                       checked={selected}
-                                    />
+                                    /> */}
                                     {option.value}
                                   </li>
 

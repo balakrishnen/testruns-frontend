@@ -44,4 +44,5 @@ export interface UserHead {
   filters: Filters[];
   sort: string;
   is_show: boolean;
+  type: string;
 }

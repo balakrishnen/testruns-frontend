@@ -36,6 +36,7 @@ import {
 } from '../../api/procedureAPI';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import moment from 'moment';
+import TablePopup from '../../components/table/TablePopup';
 const rows: ProceduresRowData[] = ProcedureRows;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -299,7 +300,7 @@ export default function Procedures() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
-    setRowId
+    setRowId,
     // setVisibleRow,
   );
   const handledAllchange = handledAllSelected(
@@ -310,7 +311,7 @@ export default function Procedures() {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
-    setRowId
+    setRowId,
   );
   const filters = (idVaule: any) => {
     if (Object.keys(idVaule).length !== 0) {
@@ -358,7 +359,7 @@ export default function Procedures() {
       setTimeout(() => {
         deleteSuccessPopupRef.current.open(false);
       }, 3000);
-      reload()
+      reload();
       // deletePopupRef.current.open(false);
     }
     deletePopupRef.current.open(false);
@@ -395,12 +396,10 @@ export default function Procedures() {
     setHeaders(headersList);
     setQueryString(payload);
   };
-  const reload=()=>{
-    const payload:any={page: 1,
-      perPage: 5,
-      sortOrder: "desc"}
-      dispatch(fetchProcedureData(payload));
-  }
+  const reload = () => {
+    const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
+    dispatch(fetchProcedureData(payload));
+  };
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -513,6 +512,15 @@ export default function Procedures() {
                             {row.departmentId[0] !== null ? (
                               <Box
                                 sx={{ display: 'flex', alignItems: 'center' }}
+                                onClick={(_event) => {
+                                  _event.preventDefault();
+                                  _event.stopPropagation();
+                                  tablePopupRef.current?.open(
+                                    true,
+                                    'departments',
+                                    row.departmentId,
+                                  );
+                                }}
                               >
                                 <>
                                   <Chip
@@ -531,15 +539,6 @@ export default function Procedures() {
                                         fontSize: '12px',
                                         whiteSpace: 'nowrap',
                                       }}
-                                      onClick={(_event) => {
-                                        _event.preventDefault();
-                                        _event.stopPropagation();
-                                        tablePopupRef.current.open(
-                                          true,
-                                          'departments',
-                                          row.departmentId,
-                                        );
-                                      }}
                                     >
                                       +{row.departmentId.length - 1} More
                                     </span>
@@ -556,6 +555,15 @@ export default function Procedures() {
                             {row.laboratoryId[0] !== null ? (
                               <Box
                                 sx={{ display: 'flex', alignItems: 'center' }}
+                                onClick={(_event) => {
+                                  _event.preventDefault();
+                                  _event.stopPropagation();
+                                  tablePopupRef.current?.open(
+                                    true,
+                                    'lab',
+                                    row.laboratoryId,
+                                  );
+                                }}
                               >
                                 <>
                                   <Chip
@@ -573,15 +581,6 @@ export default function Procedures() {
                                         color: '#9F9F9F',
                                         fontSize: '12px',
                                         whiteSpace: 'nowrap',
-                                      }}
-                                      onClick={(_event) => {
-                                        _event.preventDefault();
-                                        _event.stopPropagation();
-                                        tablePopupRef.current.open(
-                                          true,
-                                          'lab',
-                                          row.laboratoryId,
-                                        );
                                       }}
                                     >
                                       +{row.laboratoryId.length - 1} More
@@ -643,6 +642,7 @@ export default function Procedures() {
         </Box>
 
         <DeleteSuccessPopup ref={deleteSuccessPopupRef} />
+        <TablePopup ref={tablePopupRef} />
       </Box>
     </PrivateRoute>
   );

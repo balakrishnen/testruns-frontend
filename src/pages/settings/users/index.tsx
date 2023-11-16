@@ -17,7 +17,7 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import { withSettingsLayout } from '../../../components/settings';
 import TableHeader from '../../../components/table/TableHeader';
-import { UserHeaders, UserRows } from '../../../utils/data';
+import { StatusList, UserHeaders, UserRows } from '../../../utils/data';
 import { UserRowData } from '../../../modals/user.modal';
 import TableFilters from '../../../components/table/TableFilters';
 import DeletePopup from '../../../components/DeletePopup';
@@ -33,6 +33,7 @@ import {
 // table start
 
 const users: UserRowData[] = UserRows;
+const userStatus = StatusList;
 
 // table end
 const Users = () => {
@@ -90,9 +91,7 @@ const Users = () => {
     setVisibleRow,
   );
 
-  const handleTableSorting = () => {
-    
-  }
+  const handleTableSorting = () => {};
 
   const handleMenuCheckboxChange = (e: any, index: any) => {
     setHeaders((prevColumns: any) => {
@@ -149,6 +148,14 @@ const Users = () => {
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'User');
   };
+
+  const applyFilters = (field: any, value: any) => {
+    // const payload: any = { ...queryStrings };
+    // payload['searchBy'] = field;
+    // payload['search'] = value;
+    // setQueryString(payload);
+  };
+
   // table end
   return (
     <Box
@@ -188,6 +195,8 @@ const Users = () => {
         closeTableHeader={handleCloseTableHeader}
         deleteRecord={handleOpenDeletePopup}
         module="users"
+        applyFilters={applyFilters}
+        status={userStatus}
       />
 
       <Box className="table-outer" sx={{ width: '100%' }}>
@@ -264,16 +273,19 @@ const Users = () => {
                       <TableCell>
                         <Select
                           className={
-                            row.status === '1'
+                            row.status !== 'Active'
                               ? 'active-select td-select'
                               : 'inactive-select td-select'
                           }
-                          value={row.status}
+                          value={"Active"}
                           displayEmpty
                           IconComponent={ExpandMoreOutlinedIcon}
                         >
-                          <MenuItem value={1}>Active</MenuItem>
-                          <MenuItem value={2}>In-Active</MenuItem>
+                          {userStatus.map((element) => (
+                            <MenuItem value={element.value} key={element.value}>
+                              {element.name}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </TableCell>
                     )}

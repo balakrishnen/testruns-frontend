@@ -40,4 +40,5 @@ export interface ProceduresHead {
   filters: Filters[];
   sort: string;
   is_show: boolean;
+  type: string;
 }
