@@ -93,11 +93,10 @@ export default function AssetDetails() {
   const today=moment().format('YYYY-MM-DD')
 
   const location: any = useLocation();
-  // const assetValue = location.state?.props;
+  const assetValue = location.state?.props;
   const getFunction = location.state?.func;
 
   // console.log(assetValue);
-  const [assetValue,setAssetValue]=React.useState<any>({})
   const successPopupRef: any = React.useRef(null);
   const [formPopup, setFormPopup] = React.useState(false);
 
@@ -139,23 +138,15 @@ export default function AssetDetails() {
   //   value: item?.name,
   //   id: item?._id,
   // }));
-
+  // const AssetSliceData = useSelector(
+  //   (state: any) => state.assets.data?.get_asset,
+  // );
+  // console.log(departments,laboratory);
   const checkCredentials = (values: any) => {
     return true;
   };
 
-  const AssetSliceData = useSelector(
-    (state: any) => state.assets.data?.get_asset,
-  );
   // React.useEffect(() => {
-  //   console.log(1);
-    
-  //   setAssetValue(assetValue);
-  // }, [assetValue]);
-
-  // React.useEffect(() => {
-  //   console.log(2);
-
   //   if(typeof window !== 'undefined'){
   //     console.log(window.location.pathname.split("/") )
   //     const assetId = {_id:window.location.pathname.split("/")[3]}
@@ -163,17 +154,6 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(assetId));
   //    }
   // }, []);
-
-  React.useEffect(() => {
-    console.log(3);
-
-    setAssetValue(AssetSliceData);
-  }, [AssetSliceData]);
-
-  console.log('AssetSliceData',AssetSliceData);
- 
-
-  
   // const onSubmit = (values: any) => {
   // console.log(values);
 
@@ -307,7 +287,7 @@ console.log(assetValue?.organisationId,);
     onSubmit: onSubmit,
   });
 
-  console.log("datas",assetValue);
+  // console.log("datas",assetValue);
 
   return (
     <PrivateRoute>

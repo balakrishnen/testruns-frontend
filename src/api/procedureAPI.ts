@@ -22,6 +22,9 @@ export const fetchProcedureData = (payload: any) => async (dispatch: any) => {
       variables: payload,
       fetchPolicy: 'network-only',
     });
+    console.log('response',response);
+    console.log('response',response);
+
     dispatch(fetchProcedureSuccess(response.data));
   } catch (error: any) {
     dispatch(fetchProcedureFailure(error.message));
@@ -46,6 +49,7 @@ export const fetchSingleProcedureData = (payload: any) => async (dispatch: any) 
     const response = await client.query({
       query: GET_SINGLE_PROCEDURE,
       variables: payload,
+      fetchPolicy: 'network-only',
     });
     dispatch(fetchProcedureSuccess(response.data));
   } catch (error: any) {

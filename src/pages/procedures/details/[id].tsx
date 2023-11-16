@@ -21,6 +21,8 @@ import { useLocation } from '@reach/router';
 import * as Yup from 'yup';
 import { Formik, useFormik } from 'formik';
 import { navigate } from 'gatsby';
+import moment from 'moment';
+import { fetchAssetsName } from '../../../api/assetsAPI';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -141,7 +143,10 @@ export default function ProcedureDetails() {
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
-
+  const [assetsData, setAssetsData] = React.useState<any>([]);
+  const [assetName, setAssetName] = React.useState([])
+  console.log('assetName',assetName);
+  
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_procedure,
   );
@@ -181,7 +186,29 @@ export default function ProcedureDetails() {
       dispatch(fetchSingleProcedureData(procedureId));
     }
   }, []);
+  const assetsSliceData = useSelector(
+    (state: any) => state.assets.data?.get_all_assets_name,
+  );
 
+  // React.useEffect(() => {
+  //   setAssetsData(assetsData);
+  // }, [assetsData]);
+
+  React.useEffect(() => {
+    dispatch(fetchAssetsName());
+    // setAssetsData(assetsData);
+  }, []);
+  React.useEffect(() => {
+    setAssetsData(
+      assetsSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+      id: item._id,
+      })))
+  }, [assetsSliceData]);
+
+  console.log('assetsData',assetsData);
+  
   const checkCredentials = (values: any) => {
     return true;
   };
@@ -199,8 +226,8 @@ export default function ProcedureDetails() {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      assets: [],
+      name: procedureValue.name,
+      assets: '',
       procedure: '',
     },
     validationSchema: validationSchema,
@@ -221,7 +248,7 @@ export default function ProcedureDetails() {
               <Grid item xs={12} sm={12} md={9} lg={9}>
                 <Box>
                   <Typography className="id-detail">
-                    ID023659ADN&ensp;/&ensp;Dept-Computer
+                  {procedureValue?.procedureNumber}&ensp;/&ensp;Dept-Computer
                     science&ensp;/&ensp;Lab-Data structure
                   </Typography>
                   <Typography className="id-detail-title">
@@ -264,7 +291,7 @@ export default function ProcedureDetails() {
                       marginTop: '0.4rem',
                     }}
                   >
-                    Teacher A
+                    Super Admin
                   </Typography>
                 </Box>
               </Grid>
@@ -279,7 +306,11 @@ export default function ProcedureDetails() {
                       marginTop: '0.4rem',
                     }}
                   >
-                    28/05/2023 (Wed)
+                   {moment(procedureValue.createdAt).isValid()
+                              ? moment(procedureValue.createdAt)
+                                  .local()
+                                  .format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
                   </Typography>
                 </Box>
               </Grid>
@@ -322,8 +353,8 @@ export default function ProcedureDetails() {
                     multiple
                     id="departmentId"
                     disableCloseOnSelect
-                    value={formik.values.assets}
-                    options={assetsList !== undefined ? assetsList : []}
+                    value={assetName}
+                    options={assetsData !== undefined ? assetsData : []}
                     getOptionLabel={(option: any) => option.label}
                     isOptionEqualToValue={(option: any, value: any) =>
                       value.id == option.id
@@ -344,7 +375,7 @@ export default function ProcedureDetails() {
                       </React.Fragment>
                     )}
                     onChange={(_, selectedOptions: any) =>
-                      setAssetsList(selectedOptions)
+                      setAssetName(selectedOptions)
                     }
                   />
                   {formik.touched.assets && formik.errors.assets && (
