@@ -401,16 +401,6 @@ export default function Procedures() {
     setQueryString(payload);
   };
 
-  const applyFilters = (field: any, value: any) => {
-    const payload: any = { ...queryStrings };
-    payload['searchBy'] = field;
-    payload['search'] = value;
-    setQueryString(payload);
-  };
-  const reload = () => {
-    const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
-    dispatch(fetchProcedureData(payload));
-  };
 
   const applyFilters = (field: any, value: any) => {
     const payload: any = { ...queryStrings };
