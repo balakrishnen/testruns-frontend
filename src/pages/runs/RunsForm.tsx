@@ -153,7 +153,7 @@ const RunsForm = React.forwardRef(
     };
     const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
 
-    const dateDue = (type == 'edit' ? dayjs(formData.dueDate) : "");
+    const dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : "");
     console.log(dateDue);
 
     const formik = useFormik({

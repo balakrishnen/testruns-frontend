@@ -2,7 +2,17 @@ import React from 'react';
 import PrivateRoute from '../../../components/PrivateRoute';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Button, Divider, FormControl, Grid, Select } from '@mui/material';
+import {
+  Button,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+} from '@mui/material';
 import edit from '../../../assets/images/edit.svg';
 import shareimg from '../../../assets/images/Share-black.svg';
 import shareimgarrow from '../../../assets/images/share-arrow-black.svg';
@@ -19,21 +29,27 @@ import SplitPane from 'react-split-pane';
 import { Editor } from '@tinymce/tinymce-react';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '../../../assets/images/chevrondown-thin.svg';
+import RemoveIcon from '@mui/icons-material/Remove';
 
-import { LineChart, Line, XAxis, CartesianGrid, Tooltip } from 'recharts';
-import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  YAxis,
+} from 'recharts';
+import {
+  AddOutlined,
+  CloseOutlined,
+  Delete,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+} from '@mui/icons-material';
 import RunsForm from '../RunsForm';
 import SuccessPopup from '../../../components/SuccessPopup';
 import { useLocation } from '@reach/router';
-
-const data = [
-  { name: 'Jul', plot1: 2684, plot2: 2400, plot3: 1544, amt: 2400 },
-  { name: 'Aug', plot1: 3000, plot2: 1398, plot3: 2844, amt: 2210 },
-  { name: 'Sep', plot1: 1544, plot2: 1754, plot3: 1472, amt: 2290 },
-  { name: 'Oct', plot1: 4654, plot2: 4575, plot3: 3574, amt: 2355 },
-  { name: 'Nov', plot1: 3613, plot2: 4564, plot3: 1475, amt: 4323 },
-  { name: 'Dec', plot1: 1581, plot2: 2544, plot3: 2965, amt: 3547 },
-];
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -173,14 +189,111 @@ function a11yProps(index: number) {
   };
 }
 
+// {
+//   name: 600,
+//   plot1: 81,
+//   plot2: 44,
+//   plot3: 25,
+//   plot4: 14,
+//   amt: 47,
+// },
+
 export default function RunsDetails() {
   const [openDlg2Dialog, setDialog2Open] = React.useState(false);
   const [answers, setAnswers] = React.useState('');
   const [moreInfo, setMoreInfo] = React.useState(false);
   const runsPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
+  const [chartTable, setChartTable] = React.useState(null);
+  const [axisList, setAxisList] = React.useState<any>([
+    { name: 'Y1', value: 'Y1' },
+    { name: 'Y2', value: 'Y2' },
+    { name: 'Y3', value: 'Y3' },
+    { name: 'Y4', value: 'Y4' },
+  ]);
+  const [channelsList, setChannelsList] = React.useState<any>([
+    { name: 'Concentration', value: 'Concentration' },
+    { name: 'Density', value: 'Density' },
+    { name: 'Velocity', value: 'Velocity' },
+  ]);
+  const [chartTables, setChartTables] = React.useState<any>([
+    { name: 'Temperature', value: 'Temperature' },
+    { name: 'Kelvin', value: 'Kelvin' },
+    { name: 'Celsius', value: 'Celsius' },
+    { name: 'Fahrenheit', value: 'Fahrenheit' },
+  ]);
+  const [xAxisList, setXAxisList] = React.useState<any>([
+    { name: 'Temperature', value: 'Temperature' },
+    { name: 'Speed', value: 'Speed' },
+    { name: 'Time', value: 'Time' },
+  ]);
+  const [channels, setChannels] = React.useState<any>([
+    {
+      color: '#FF0000',
+      axis: 'Y1',
+      channelName: null,
+      value: 'Y1',
+    },
+    {
+      color: '#00FF00',
+      axis: 'Y2',
+      channelName: null,
+      value: 'Y2',
+    },
+    {
+      color: '#FFFF00',
+      axis: 'Y3',
+      channelName: null,
+      value: 'Y3',
+    },
+    {
+      color: '#0000FF',
+      axis: 'Y4',
+      channelName: null,
+      value: 'Y4',
+    },
+  ]);
+
+  const [charts, setCharts] = React.useState<any>([
+    {
+      tabularColumn: null,
+      axisX: 'Temperature',
+      chartValues: [],
+      channels: [
+        {
+          color: '#e22828',
+          axisY: 'Y1',
+          channelName: null,
+          axisValue: 'Y1',
+          channelValue: null,
+        },
+        {
+          color: '#90239f',
+          axisY: 'Y2',
+          channelName: null,
+          axisValue: 'Y2',
+          channelValue: null,
+        },
+        {
+          color: '#111fdf',
+          axisY: 'Y3',
+          channelName: null,
+          axisValue: 'Y3',
+          channelValue: null,
+        },
+        {
+          color: '#38e907',
+          axisY: 'Y4',
+          channelName: null,
+          axisValue: 'Y4',
+          channelValue: null,
+        },
+      ],
+    },
+  ]);
+
   const Placeholder = ({ children }: any) => {
-    return <div>{children}</div>;
+    return <div style={{ color: 'lightgrey' }}>{children}</div>;
   };
   const location: any = useLocation();
   const runzValue = location.state?.props;
@@ -213,6 +326,128 @@ export default function RunsDetails() {
     }, 3000);
   };
 
+  const handleXAxisChange = (event: any, dataIndex: any) => {
+    const data = [...charts];
+    data[dataIndex].axisX = event.target.value;
+    setCharts(data);
+  };
+
+  const handleYAxisChange = (event: any, dataIndex: any, keyIndex) => {
+    const data = [...charts];
+    const values = { ...data[dataIndex] };
+    values.channels[keyIndex].axisValue = event.target.value;
+    setCharts(data);
+  };
+
+  const handleTabularColumnChange = (event: any, dataIndex: any) => {
+    const data = [...charts];
+    data[dataIndex].tabularColumn = event.target.value;
+    setCharts(data);
+  };
+
+  const handleChannelChange = (event: any, dataIndex: any, keyIndex) => {
+    const data = [...charts];
+    const values = { ...data[dataIndex] };
+    values.channels[keyIndex].channelValue = event.target.value;
+    // if (values.chartValues.length === 0) {
+    //   for (let i = 0; i < axisList.length; i++) {
+    //     debugger;
+    //     values.chartValues[0].name = `Jan1`
+    //     values.chartValues[0] = {
+    //       name: `Jan${1}`,
+    //       [`plot${i+1}`]: Math.floor(Math.random() * 90) + 10,
+    //       amt: Math.floor(Math.random() * 900) + 100,
+    //     };
+    //   }
+    // } else {
+    //   for (let i = 0; i < axisList.length; i++) {
+    //     values.chartValues[keyIndex] = {
+    //       name: `Jan${keyIndex + 1}`,
+    //       [`plot1`]: Math.floor(Math.random() * 90) + 10,
+    //       [`plot2`]: Math.floor(Math.random() * 90) + 10,
+    //       [`plot3`]: Math.floor(Math.random() * 90) + 10,
+    //       [`plot4`]: Math.floor(Math.random() * 90) + 10,
+    //       amt: Math.floor(Math.random() * 900) + 100,
+    //     };
+    //   }
+    // }
+
+    // setCharts((prevItems:any) => [...prevItems, ...data]);
+    setCharts(data);
+  };
+
+  const handleColorPickerChange = (event: any, dataIndex: any, keyIndex) => {
+    const data = [...charts];
+    const values = { ...data[dataIndex] };
+    values.channels[keyIndex].color = event.target.value;
+    setCharts(data);
+  };
+
+  const handleAddChart = () => {
+    const data = [...charts];
+    data.push({
+      tabularColumn: null,
+      axisX: null,
+      chartValues: [],
+      channels: [
+        {
+          color: '#e22828',
+          axisY: 'Y1',
+          channelName: null,
+          axisValue: 'Y1',
+          channelValue: 'Concentration',
+        },
+        {
+          color: '#90239f',
+          axisY: 'Y2',
+          channelName: null,
+          axisValue: 'Y2',
+          channelValue: null,
+        },
+        {
+          color: '#111fdf',
+          axisY: 'Y3',
+          channelName: null,
+          axisValue: 'Y3',
+          channelValue: null,
+        },
+        {
+          color: '#38e907',
+          axisY: 'Y4',
+          channelName: null,
+          axisValue: 'Y4',
+          channelValue: null,
+        },
+      ],
+    });
+    setCharts(data);
+  };
+
+  const handleAddChannel = (dataIndex) => {
+    const data = [...charts];
+    data[dataIndex].channels.push({
+      color: '#000',
+      axisY: 'Y1',
+      channelName: null,
+      axisValue: 'Y1',
+      channelValue: null,
+    });
+    setCharts(data);
+  };
+
+  const handleRemoveChart = (dataIndex) => {
+    const data = [...charts];
+    const spliceData = data.splice(dataIndex, 1);
+    setCharts(data);
+  };
+
+  const handleRemoveChannel = (dataIndex) => {
+    const data = [...charts];
+    const values = { ...data[dataIndex] };
+    const spliceData = values.channels.splice(4, 1);
+    setCharts(data);
+  };
+
   return (
     <PrivateRoute>
       {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
@@ -223,8 +458,7 @@ export default function RunsDetails() {
               <Grid item xs={12} sm={10} md={10} lg={5} xl={6}>
                 <Box>
                   <Typography className="id-detail">
-                    ID023659ADN&ensp;/&ensp;Dept-Computer
-                    science&ensp;/&ensp;Lab-Data structure
+                    RUNS ID - ID023659ADN
                   </Typography>
                   <Typography className="id-detail-title">
                     The simple pendulum
@@ -512,114 +746,6 @@ export default function RunsDetails() {
         </Box>
 
         <Box className="main-runzdetails runz-height">
-          {/* <SplitPane> */}
-          {/* <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={7}
-              xl={7}
-              className="runz-height leftside-runz"
-              sx={{ padding: '24px!important', overflowY: 'auto' }}
-            >
-              <Box>
-                <Box sx={{ fontSize: '14px' }}>
-                  Aim To measure the time period of a simple pendulum. Apparatus
-                  required A wire of unknown resistance (~10Ω), battery
-                  eliminator or an accumulator (0 to 3V) or two dry cells (1.5 V
-                  each), voltmeter (0-5 V), milliammeter (0– 500 mA), rheostat,
-                  plug key, connecting wires and a piece of sand paper.
-                  Principle is directly proportional to the potential difference
-                  across its ends, provided the physical state of the conductor
-                  remains unchanged. If I be the current flowing through the
-                  conductor and V the potential difference across its ends, then
-                  according to Ohm s law V I ∝ and hence V = RI where R is the
-                  constant of proportionality and is termed as the electrical
-                  resistance of the conductor. If V is expressed in volts and I
-                  in amperes, then R is expressed in ohms. The resistance R,
-                  depends upon the material and dimensions of the conductor. For
-                  a wire of uniform cross-section, the resistance depends on the
-                  length l and the area of cross-section A. It also depends on
-                  the temperature of the conductor. At a given temperature the
-                  resistance R = l A ρ where ρ is the specific resistance or
-                  resistivity and is characteristic of the material of wire.
-                  Procedure 1. Clean the ends of the connecting wires with the
-                  help of sand paper in order to remove any insulating coating
-                  on them. 2. Connect various components - resistance, rheostat,
-                  battery, key, voltmeter and ammeter as shown in Fig. E 1.2. 3.
-                  Note whether pointers in milliammeter and voltmeter coincide
-                  with the zero mark on the measuring scale. If it is not so,
-                  adjust the pointer to coincide with the zero mark by adjusting
-                  the screw provided near the base of the needle using a screw
-                  driver. 4. Note the range and least count of the given
-                  voltmeter and milliammeter. 5. Insert the key K and slide the
-                  rheostat contact to one of its extreme ends, so that current
-                  passing through the resistance wire is minimum. 6. Note the
-                  milliammeter and voltmeter readings. 7. Remove the key K and
-                  allow the wire to cool, if heated. Again insert the key. Shift
-                  the rheostat contact slightly to increase the applied voltage.
-                  Note the milliammeter and voltmeter reading. 8. Repeat step 7
-                  for four different settings of the rheostat. Record your
-                  observations in a tabular form. Observations 1. Range of
-                  ammeter = 0 ... mA to ...mA 2. Least count of ammeter = ... mA
-                  3. Range of voltmeter = 0 ... V to ...V 4. Least count of
-                  voltmeter = ...V 5. Least count of metre scale = ... m 6.
-                  Length of the given wire, l = ...m Aim To measure the time
-                  period of a simple pendulum. Apparatus required A wire of
-                  unknown resistance (~10Ω), battery eliminator or an
-                  accumulator (0 to 3V) or two dry cells (1.5 V each), voltmeter
-                  (0-5 V), milliammeter (0– 500 mA), rheostat, plug key,
-                  connecting wires and a piece of sand paper. Principle is
-                  directly proportional to the potential difference across its
-                  ends, provided the physical state of the conductor remains
-                  unchanged. If I be the current flowing through the conductor
-                  and V the potential difference across its ends, then according
-                  to Ohms law V I ∝ and hence V = RI where R is the constant of
-                  proportionality and is termed as the electrical resistance of
-                  the conductor. If V is expressed in volts and I in amperes,
-                  then R is expressed in ohms. The resistance R, depends upon
-                  the material and dimensions of the conductor. For a wire of
-                  uniform cross-section, the resistance depends on the length l
-                  and the area of cross-section A. It also depends on the
-                  temperature of the conductor. At a given temperature the
-                  resistance R = l A ρ where ρ is the specific resistance or
-                  resistivity and is characteristic of the material of wire.
-                  Procedure 1. Clean the ends of the connecting wires with the
-                  help of sand paper in order to remove any insulating coating
-                  on them. 2. Connect various components - resistance, rheostat,
-                  battery, key, voltmeter and ammeter as shown in Fig. E 1.2. 3.
-                  Note whether pointers in milliammeter and voltmeter coincide
-                  with the zero mark on the measuring scale. If it is not so,
-                  adjust the pointer to coincide with the zero mark by adjusting
-                  the screw provided near the base of the needle using a screw
-                  driver. 4. Note the range and least count of the given
-                  voltmeter and milliammeter. 5. Insert the key K and slide the
-                  rheostat contact to one of its extreme ends, so that current
-                  passing through the resistance wire is minimum. 6. Note the
-                  milliammeter and voltmeter readings. 7. Remove the key K and
-                  allow the wire to cool, if heated. Again insert the key. Shift
-                  the rheostat contact slightly to increase the applied voltage.
-                  Note the milliammeter and voltmeter reading. 8. Repeat step 7
-                  for four different settings of the rheostat. Record your
-                  observations in a tabular form. Observations 1. Range of
-                  ammeter = 0 ... mA to ...mA 2. Least count of ammeter = ... mA
-                  3. Range of voltmeter = 0 ... V to ...V 4. Least count of
-                  voltmeter = ...V 5. Least count of metre scale = ... m 6.
-                  Length of the given wire, l = ...m
-                </Box>
-              </Box>
-            </Grid> */}
-          {/* <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={5}
-              xl={5}
-              className="rightside-runz"
-              sx={{ borderLeft: { xs: '0px', lg: '2px solid #9F9F9F;' } }}
-            > */}
           <Box className="runz-height" sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 0 }}>
               <Tabs
@@ -629,37 +755,491 @@ export default function RunsDetails() {
                 className="tabs-common"
               >
                 <Tab label="Procedures" {...a11yProps(0)} />
-                <Tab label="Results" {...a11yProps(1)} />
-                <Tab label="Charts" {...a11yProps(2)} />
+                <Tab label="Charts" {...a11yProps(1)} />
+                <Tab label="Results" {...a11yProps(2)} />
                 <Tab label="Remarks" {...a11yProps(3)} />
               </Tabs>
             </Box>
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
                 <div dangerouslySetInnerHTML={{ __html: editorData }} />
-                {/* <Editor
-                  apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
-                  onInit={(evt, editor) => (editorRef.current = editor)}
-                  init={{
-                    height: 1000,
-                    menubar: false,
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help wordcount',
-                    ],
-                    toolbar:
-                      'undo redo | formatselect | ' +
-                      'bold italic backcolor | alignleft aligncenter ' +
-                      'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'removeformat | help',
-                    content_style:
-                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                  }}
-                  value={editorData}
-                /> */}
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
+                <Box>
+                  <Box sx={{ px: 4, mb: 2 }}>
+                    <FormControl>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        value="Table_Chart"
+                      >
+                        <FormControlLabel
+                          value="Table_Chart"
+                          control={<Radio />}
+                          label="Table Chart"
+                          sx={{
+                            px: 2,
+                          }}
+                        />
+                        <FormControlLabel
+                          value="disabled"
+                          disabled
+                          control={<Radio />}
+                          label="Realtime Chart"
+                          sx={{
+                            px: 2,
+                          }}
+                        />
+                        <FormControlLabel
+                          value="disabled"
+                          disabled
+                          control={<Radio />}
+                          label="Archive Chart"
+                          sx={{
+                            px: 2,
+                          }}
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    {charts.map((chartData, dataIndex) => (
+                      <>
+                        <Grid
+                          container
+                          key={dataIndex}
+                          sx={{ my: dataIndex === 0 ? 0 : 4 }}
+                          spacing={2}
+                        >
+                          <Grid
+                            item
+                            xs={9}
+                            sm={9}
+                            md={9}
+                            lg={9}
+                            xl={9}
+                            // sx={{ pr: 4 }}
+                            style={{ borderRight: '1px solid #e4e5e7' }}
+                          >
+                            <Grid container sx={{ px: 4 }}>
+                              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                                {/* <label
+                              style={{ fontSize: '16px', fontWeight: 500 }}
+                            >
+                              Tabular Column: &nbsp;
+                            </label> */}
+                                <Select
+                                  labelId="view-all-label"
+                                  id="time-sec"
+                                  value={chartData.tabularColumn}
+                                  displayEmpty
+                                  IconComponent={ExpandMoreOutlinedIcon}
+                                  onChange={(event) =>
+                                    handleTabularColumnChange(event, dataIndex)
+                                  }
+                                  renderValue={
+                                    chartData.tabularColumn !== null
+                                      ? undefined
+                                      : () => (
+                                          <Placeholder>
+                                            Select Table
+                                          </Placeholder>
+                                        )
+                                  }
+                                  size="small"
+                                  style={{
+                                    width: '250px',
+                                    borderRadius: '10px',
+                                  }}
+                                >
+                                  {chartTables.map((item, index) => (
+                                    <MenuItem key={index} value={item.value}>
+                                      {item.name}
+                                    </MenuItem>
+                                  ))}
+                                </Select>
+                              </Grid>
+                              <Grid
+                                item
+                                xs={6}
+                                sm={6}
+                                md={6}
+                                lg={6}
+                                xl={6}
+                                textAlign={'end'}
+                              >
+                                <>
+                                  <Button
+                                    variant="contained"
+                                    className="add-chart"
+                                    onClick={handleAddChart}
+                                    sx={{ mr: 2 }}
+                                  >
+                                    <AddIcon /> &nbsp; Add
+                                  </Button>
+                                  {dataIndex >= 1 && (
+                                    <Button
+                                      variant="contained"
+                                      className="add-chart"
+                                      onClick={() =>
+                                        handleRemoveChart(dataIndex)
+                                      }
+                                    >
+                                      <CloseOutlined
+                                        sx={{ fontSize: '18px' }}
+                                      />{' '}
+                                      &nbsp; Remove
+                                    </Button>
+                                  )}
+                                </>
+                              </Grid>
+                            </Grid>
+                            {JSON.stringify(chartData.chartValues)}
+                            <Box sx={{ mt: 4 }}>
+                              <ResponsiveContainer width="100%" height={500}>
+                                <LineChart data={chartData.chartValues}>
+                                  <XAxis
+                                    dataKey="name"
+                                    axisLine={{ fontSize: 12, dy: 4 }}
+                                  />
+                                  <YAxis
+                                    yAxisId="left1"
+                                    orientation="left"
+                                    label={{
+                                      value: 'y1',
+                                      angle: -90,
+                                      position: 'insideBottom',
+                                      fill: '#e22828',
+                                    }}
+                                    tick={{ fontSize: 12 }}
+                                  />
+                                  <YAxis
+                                    yAxisId="left2"
+                                    orientation="left"
+                                    label={{
+                                      value: 'y3',
+                                      angle: -90,
+                                      position: 'insideBottom',
+                                      fill: '#111fdf',
+                                    }}
+                                    tick={{ fontSize: 12 }}
+                                  />
+                                  <YAxis
+                                    yAxisId="right1"
+                                    orientation="right"
+                                    label={{
+                                      value: 'y2',
+                                      angle: -90,
+                                      position: 'insideBottom',
+                                      fill: '#90239f',
+                                    }}
+                                    tick={{ fontSize: 12 }}
+                                  />
+                                  <YAxis
+                                    yAxisId="right2"
+                                    orientation="right"
+                                    label={{
+                                      value: 'y4',
+                                      angle: -90,
+                                      position: 'insideBottom',
+                                      fill: '#38e907',
+                                    }}
+                                    tick={{ fontSize: 12, dy: '2em' }}
+                                    axisLine={{
+                                      dy: '2em',
+                                    }}
+                                  />
+                                  <Tooltip />
+                                  <CartesianGrid
+                                    stroke="#f5f5f5"
+                                    strokeDasharray="3 3"
+                                    strokeWidth={2}
+                                  />
+                                  <Line
+                                    type="linear"
+                                    dataKey="plot1"
+                                    stroke="#e22828"
+                                    strokeWidth={2}
+                                    yAxisId="left1"
+                                    dot={{ r: 2, fill: '#e22828' }}
+                                  />
+                                  <Line
+                                    type="linear"
+                                    dataKey="plot2"
+                                    stroke="#90239f"
+                                    yAxisId="right1"
+                                    strokeWidth={2}
+                                    dot={{ r: 2, fill: '#90239f' }}
+                                  />
+                                  <Line
+                                    type="linear"
+                                    dataKey="plot3"
+                                    stroke="#111fdf"
+                                    yAxisId="left2"
+                                    strokeWidth={2}
+                                    dot={{ r: 2, fill: '#111fdf' }}
+                                  />
+                                  <Line
+                                    type="linear"
+                                    dataKey="plot4"
+                                    stroke="#38e907"
+                                    yAxisId="right2"
+                                    strokeWidth={2}
+                                    dot={{ r: 2, fill: '#38e907' }}
+                                  />
+                                </LineChart>
+                              </ResponsiveContainer>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  marginTop: '30px',
+                                }}
+                              >
+                                <Box className="color-chart">
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      width: '100%',
+                                    }}
+                                  >
+                                    <Typography className="xy-sec">
+                                      X
+                                    </Typography>
+                                    <Select
+                                      labelId="view-all-label"
+                                      size="small"
+                                      value={chartData.axisX}
+                                      displayEmpty
+                                      IconComponent={ExpandMoreOutlinedIcon}
+                                      onChange={(event) =>
+                                        handleXAxisChange(event, dataIndex)
+                                      }
+                                      renderValue={
+                                        chartData.axisX !== null
+                                          ? undefined
+                                          : () => (
+                                              <Placeholder>Channel</Placeholder>
+                                            )
+                                      }
+                                      style={{ width: '250px' }}
+                                    >
+                                      {xAxisList.map((item, index) => (
+                                        <MenuItem
+                                          key={index}
+                                          value={item.value}
+                                        >
+                                          {item.name}
+                                        </MenuItem>
+                                      ))}
+                                    </Select>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Grid>
+
+                          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                            <Grid container alignItems={'center'}>
+                              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                                <Typography variant="body1" fontWeight={500}>
+                                  Channels
+                                </Typography>
+                              </Grid>
+                              <Grid
+                                item
+                                xs={6}
+                                sm={6}
+                                md={6}
+                                lg={6}
+                                xl={6}
+                                textAlign={'end'}
+                              >
+                                <Button
+                                  variant="contained"
+                                  className="add-chart"
+                                  sx={{ mr: 2 }}
+                                  onClick={() => handleAddChannel(dataIndex)}
+                                >
+                                  <AddIcon />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  className={
+                                    chartData.channels.length < 5
+                                      ? 'remove-chart'
+                                      : 'add-chart'
+                                  }
+                                  onClick={() => handleRemoveChannel(dataIndex)}
+                                  disabled={chartData.channels.length < 5}
+                                >
+                                  <RemoveIcon />
+                                </Button>
+                              </Grid>
+                            </Grid>
+                            <Box sx={{ mt: 2 }}>
+                              {chartData.channels?.map((element, key) => (
+                                <Box key={key}>
+                                  <Grid container>
+                                    <Grid
+                                      item
+                                      xs={6}
+                                      sm={6}
+                                      md={6}
+                                      lg={6}
+                                      xl={6}
+                                    >
+                                      <Box>
+                                        <Box className="color-chart">
+                                          <Box
+                                            sx={{
+                                              display: 'flex',
+                                              alignItems: 'center',
+                                              width: '100%',
+                                            }}
+                                          >
+                                            <Select
+                                              labelId="view-all-label"
+                                              size="small"
+                                              value={element.channelValue}
+                                              displayEmpty
+                                              IconComponent={
+                                                ExpandMoreOutlinedIcon
+                                              }
+                                              onChange={(event) =>
+                                                handleChannelChange(
+                                                  event,
+                                                  dataIndex,
+                                                  key,
+                                                )
+                                              }
+                                              renderValue={
+                                                element.channelValue !== null
+                                                  ? undefined
+                                                  : () => (
+                                                      <Placeholder>
+                                                        Select Channel
+                                                      </Placeholder>
+                                                    )
+                                              }
+                                              style={{ width: '180px' }}
+                                            >
+                                              {channelsList.map(
+                                                (item, index) => (
+                                                  <MenuItem
+                                                    key={index}
+                                                    value={item.value}
+                                                  >
+                                                    {item.name}
+                                                  </MenuItem>
+                                                ),
+                                              )}
+                                            </Select>
+                                          </Box>
+                                          <Box className="color-picker">
+                                            <Box />
+                                          </Box>
+                                        </Box>
+                                      </Box>
+                                    </Grid>
+                                    <Grid
+                                      item
+                                      xs={6}
+                                      sm={6}
+                                      md={6}
+                                      lg={6}
+                                      xl={6}
+                                    >
+                                      <Box>
+                                        <Box className="color-chart">
+                                          <Box
+                                            sx={{
+                                              display: 'flex',
+                                              alignItems: 'center',
+                                              width: '100%',
+                                            }}
+                                          >
+                                            {/* <Typography className="xy-sec">
+                                              {element.axisY}
+                                            </Typography> */}
+                                            <Select
+                                              labelId="view-all-label"
+                                              size="small"
+                                              value={element.axisValue}
+                                              displayEmpty
+                                              IconComponent={
+                                                ExpandMoreOutlinedIcon
+                                              }
+                                              onChange={(event) =>
+                                                handleYAxisChange(
+                                                  event,
+                                                  dataIndex,
+                                                  key,
+                                                )
+                                              }
+                                              renderValue={
+                                                element.axisValue !== null
+                                                  ? undefined
+                                                  : () => (
+                                                      <Placeholder>
+                                                        Axis
+                                                      </Placeholder>
+                                                    )
+                                              }
+                                              fullWidth
+                                            >
+                                              {axisList.map((item, index) => (
+                                                <MenuItem
+                                                  key={index}
+                                                  value={item.value}
+                                                >
+                                                  {item.name}
+                                                </MenuItem>
+                                              ))}
+                                            </Select>
+                                          </Box>
+                                          <Box className="color-picker">
+                                            <input
+                                              type="color"
+                                              className="color-input"
+                                              value={element.color}
+                                              onChange={(event) =>
+                                                handleColorPickerChange(
+                                                  event,
+                                                  dataIndex,
+                                                  key,
+                                                )
+                                              }
+                                            />
+                                          </Box>
+                                        </Box>
+                                      </Box>
+                                      {/* <Box sx={{ textAlign: 'right' }}>
+                                <Button
+                                  type="submit"
+                                  variant="contained"
+                                  className="add-chart"
+                                >
+                                  <AddIcon sx={{ mr: 1 }} />
+                                  Add
+                                </Button>
+                              </Box> */}
+                                    </Grid>
+                                  </Grid>
+                                </Box>
+                              ))}
+                            </Box>
+                          </Grid>
+                        </Grid>
+                        <Divider orientation="horizontal" sx={{ pt: 2 }} />
+                      </>
+                    ))}
+                  </Box>
+                </Box>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={2}>
                 <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}
@@ -681,189 +1261,7 @@ export default function RunsDetails() {
                   }}
                 />
               </CustomTabPanel>
-              <CustomTabPanel value={value} index={2}>
-                <Box>
-                  <Box>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '1rem',
-                      }}
-                    >
-                      <Typography className="chart-title">
-                        Chart no. 1
-                      </Typography>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        className="add-chart"
-                      >
-                        <AddIcon sx={{ mr: 1 }} />
-                        Add
-                      </Button>
-                    </Box>
-                    <Box>
-                      <Grid
-                        container
-                        spacing={2}
-                        style={{
-                          justifyContent: 'space-between',
-                          marginBottom: '2rem',
-                        }}
-                      >
-                        <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-                          <Box className="color-chart">
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                width: '100%',
-                              }}
-                            >
-                              <Typography className="xy-sec">X</Typography>
-                              <FormControl fullWidth size="medium">
-                                <Select
-                                  labelId="view-all-label"
-                                  id="time-sec"
-                                  value={answers}
-                                  displayEmpty
-                                  IconComponent={ExpandMoreOutlinedIcon}
-                                  onChange={(event) =>
-                                    setAnswers(event.target.value)
-                                  }
-                                  renderValue={
-                                    answers !== ''
-                                      ? undefined
-                                      : () => <Placeholder>Time</Placeholder>
-                                  }
-                                >
-                                  <MenuItem value={'1'}>1</MenuItem>
-                                  <MenuItem value={'2'}>2</MenuItem>
-                                  <MenuItem value={'3'}>3</MenuItem>
-                                </Select>
-                              </FormControl>
-                            </Box>
-                            <Box className="color-picker">
-                              <input type="color" className="color-input" />
-                            </Box>
-                          </Box>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-                          <Box>
-                            <Box className="color-chart">
-                              <Box
-                                sx={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  width: '100%',
-                                }}
-                              >
-                                <Typography className="xy-sec">Y1</Typography>
-                                <FormControl fullWidth size="medium">
-                                  <Select
-                                    labelId="view-all-label"
-                                    id="time-sec"
-                                    value={answers}
-                                    displayEmpty
-                                    IconComponent={ExpandMoreOutlinedIcon}
-                                    onChange={(event) =>
-                                      setAnswers(event.target.value)
-                                    }
-                                    renderValue={
-                                      answers !== ''
-                                        ? undefined
-                                        : () => <Placeholder>Time</Placeholder>
-                                    }
-                                  >
-                                    <MenuItem value={'1'}>1</MenuItem>
-                                    <MenuItem value={'2'}>2</MenuItem>
-                                    <MenuItem value={'3'}>3</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </Box>
-                              <Box className="color-picker">
-                                <input type="color" className="color-input" />
-                              </Box>
-                            </Box>
-                            <Box className="color-chart">
-                              <Box
-                                sx={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  width: '100%',
-                                }}
-                              >
-                                <Typography className="xy-sec">Y2</Typography>
-                                <FormControl fullWidth size="medium">
-                                  <Select
-                                    labelId="view-all-label"
-                                    id="time-sec"
-                                    value={answers}
-                                    displayEmpty
-                                    IconComponent={ExpandMoreOutlinedIcon}
-                                    onChange={(event) =>
-                                      setAnswers(event.target.value)
-                                    }
-                                    renderValue={
-                                      answers !== ''
-                                        ? undefined
-                                        : () => <Placeholder>Time</Placeholder>
-                                    }
-                                  >
-                                    <MenuItem value={'1'}>1</MenuItem>
-                                    <MenuItem value={'2'}>2</MenuItem>
-                                    <MenuItem value={'3'}>3</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </Box>
-                              <Box className="color-picker">
-                                <input type="color" className="color-input" />
-                              </Box>
-                            </Box>
-                          </Box>
-                          <Box sx={{ textAlign: 'right' }}>
-                            <Button
-                              type="submit"
-                              variant="contained"
-                              className="add-chart"
-                            >
-                              <AddIcon sx={{ mr: 1 }} />
-                              Add
-                            </Button>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </Box>
-                  <Box>
-                    <LineChart width={750} height={400} data={data}>
-                      <XAxis dataKey="name" />
-                      <Tooltip />
-                      <CartesianGrid stroke="#f5f5f5" strokeDasharray="2 2" />
-                      <Line
-                        type="monotone"
-                        dataKey="plot1"
-                        stroke="#ff7300"
-                        yAxisId={1}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="plot2"
-                        stroke="#387908"
-                        yAxisId={1}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="plot3"
-                        stroke="#7631CD"
-                        yAxisId={1}
-                      />
-                    </LineChart>
-                  </Box>
-                </Box>
-              </CustomTabPanel>
+
               <CustomTabPanel value={value} index={3}>
                 <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
