@@ -228,7 +228,7 @@ export default function ProcedureDetails() {
 
   const formik = useFormik({
     initialValues: {
-      name: procedureValue.name,
+      name: procedureValue?.name,
       assets: '',
       procedure: '',
     },

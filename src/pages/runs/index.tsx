@@ -282,10 +282,15 @@ export default function Runs() {
     if (state === 1) {
       // deletePopupRef.current.open(false);
       dispatch(deleteRunsData(runVal));
-      deleteSuccessPopupRef.current.open(true);
-      setTimeout(() => {
-        deleteSuccessPopupRef.current.open(false);
-      }, 3000);
+      toast(`Runs deleted !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // deleteSuccessPopupRef.current.open(true);
+      // setTimeout(() => {
+      //   deleteSuccessPopupRef.current.open(false);
+      // }, 3000);
       reload();
       setTableHeaderVisible(false);
     }

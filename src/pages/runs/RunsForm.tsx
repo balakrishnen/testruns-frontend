@@ -41,6 +41,7 @@ import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
 import dayjs from 'dayjs';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().notRequired(),
@@ -143,9 +144,8 @@ const RunsForm = React.forwardRef(
           submitFormPopup()
           reload()
         }
-        formik.resetForm();
-        setDepartment([]);
-        setLab([])
+        clearForm()
+        
 
       } else {
         formik.setFieldError('name', 'Invalid first name');
@@ -153,7 +153,7 @@ const RunsForm = React.forwardRef(
     };
     const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
 
-    const dateDue = (type == 'edit' ? dayjs(formData.dueDate) : "");
+    const dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : "");
     console.log(dateDue);
 
     const formik = useFormik({
@@ -215,15 +215,27 @@ const RunsForm = React.forwardRef(
       } else {
         confirmationPopupRef.current.open(false);
         setRunsCreate(false);
+        clearForm()
       }
     };
 
     const submitFormPopup = () => {
       setRunsCreate(false);
-      successPopupRef.current.open(true, 'Run');
-      setTimeout(() => {
-        successPopupRef.current.open(false, 'Run');
-      }, 3000);
+      toast(`Runs ${type=='edit'?'updated':'created'} !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // successPopupRef.current.open(true, 'Run');
+      // setTimeout(() => {
+      //   successPopupRef.current.open(false, 'Run');
+      // }, 3000);
+    };
+    const clearForm = () => {
+      formik.resetForm();
+      setDepartment([]);
+      setLab([]);
+      // setOrganization([]);
     };
     const procedureSliceData = useSelector(
       (state: any) => state.procedure.data?.get_all_procedures,

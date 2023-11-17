@@ -48,6 +48,7 @@ export const GET_RUNS = gql`
         pageInfo {
             currentPage
             totalPages
+            totalCount
             hasNextPage
             hasPreviousPage
         }

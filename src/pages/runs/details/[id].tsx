@@ -223,11 +223,11 @@ export default function RunsDetails() {
               <Grid item xs={12} sm={10} md={10} lg={5} xl={6}>
                 <Box>
                   <Typography className="id-detail">
-                    ID023659ADN&ensp;/&ensp;Dept-Computer
+                    {runzValue?.runNumber}&ensp;/&ensp;Dept-Computer
                     science&ensp;/&ensp;Lab-Data structure
                   </Typography>
                   <Typography className="id-detail-title">
-                    The simple pendulum
+                  {runzValue?.objective}
                   </Typography>
                 </Box>
               </Grid>
