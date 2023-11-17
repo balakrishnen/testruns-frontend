@@ -164,7 +164,7 @@ function AppHeader(props: any) {
               color="inherit"
               onClick={openNotificationList}
             >
-              <Badge color="secondary" variant={'dot'} invisible={false}>
+              <Badge color="secondary" variant={'dot'} invisible={false} className="red-badge">
                 <img
                   src={notification}
                   alt="help_icon"

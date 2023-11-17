@@ -2319,3 +2319,14 @@ input#mobile_number {
 .notification-header {
   padding-top: 15px;
 }
+.red-badge {
+  span.MuiBadge-badge {
+    background-color: #E2445C;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    right: 8px;
+    top: 2px;
+  }
+}
