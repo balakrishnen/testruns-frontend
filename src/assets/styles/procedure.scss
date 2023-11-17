@@ -93,3 +93,11 @@ button.edit-btn {
 .menuItem:hover{
     background-color: $black-shade-2;
 }
+@media (max-width:899px){
+    main.wide-class .proceduredetails-page .top-section , main.wide-class .proceduredetails-page .edit-details , main.wide-class .runzdetails-page .edit-details,
+    main.narrow-class .proceduredetails-page .top-section , main.narrow-class .proceduredetails-page .edit-details , main.narrow-class .runzdetails-page .edit-details,
+    main.narrow-class .profile-setting-page .edit-details{
+        width: 100% !important;
+        z-index: 1;
+    }
+}

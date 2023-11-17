@@ -286,6 +286,10 @@ console.log(DepartmentList);
                           xs: "0rem !important",
                           md: "1rem !important",
                         },
+                        paddingBottom: {
+                          xs: "1rem !important",
+                          md: "0rem !important",
+                        },
                       }}
                     >
                       <Box  style={{ position: "relative" }}>
@@ -370,6 +374,10 @@ console.log(DepartmentList);
                         paddingRight: {
                           xs: "0rem !important",
                           md: "1rem !important",
+                        },
+                        paddingBottom: {
+                          xs: "1rem !important",
+                          md: "0rem !important",
                         },
                       }}
                     >
@@ -479,6 +487,7 @@ console.log(DepartmentList);
                           formikProfile.touched.organisation &&
                           Boolean(formikProfile.errors.organisation)
                         }
+                        style={{marginTop:'10px'}}
                       >
                         {OrganizationList.map((item, index) => (
                           <MenuItem key={index} value={item.id}>
