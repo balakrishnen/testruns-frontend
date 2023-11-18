@@ -30,6 +30,10 @@ import { Editor } from '@tinymce/tinymce-react';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '../../../assets/images/chevrondown-thin.svg';
 import RemoveIcon from '@mui/icons-material/Remove';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { toast } from 'react-toastify';
+
 
 import {
   LineChart,
@@ -50,6 +54,10 @@ import {
 import RunsForm from '../RunsForm';
 import SuccessPopup from '../../../components/SuccessPopup';
 import { useLocation } from '@reach/router';
+import moment from 'moment';
+import { RunsStatusList } from '../../../utils/data';
+import { fetchUpdateRunsData } from '../../../api/RunsAPI';
+import { useDispatch } from 'react-redux';
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -205,6 +213,7 @@ export default function RunsDetails() {
   const runsPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
+  const runsStatus=RunsStatusList
   const [axisList, setAxisList] = React.useState<any>([
     { name: 'Y1', value: 'Y1' },
     { name: 'Y2', value: 'Y2' },
@@ -532,7 +541,37 @@ export default function RunsDetails() {
     const spliceData = values.channels.splice(4, 1);
     setCharts(data);
   };
+  const printDocument = () => {
+    const input:any = document.getElementById("divToPrint");
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "JPEG", 0, 0);
+      // pdf.output('dataurlnewwindow');
+      pdf.save("download.pdf");
+    });
+  };
+  const dispatch: any = useDispatch();
 
+  const handleOnChange = (e: any, row: any) => {
+    console.log(e.target.value);
+
+    console.log('change', row.departmentId, row.laboratoryId);
+    var runsChange: any = {
+      _id: row._id,
+    };
+    if (e.target.name == 'status') {
+      runsChange['status'] = e.target.value;
+    }
+    console.log(runsChange);
+    dispatch(fetchUpdateRunsData(runsChange));
+    toast('Runs status updated !', {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
+    // reload();
+  };
   return (
     <PrivateRoute>
       {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
@@ -727,7 +766,7 @@ export default function RunsDetails() {
                       marginTop: '0.4rem',
                     }}
                   >
-                    Testing
+                    {runzValue?.objective}
                   </Typography>
                 </Box>
               </Grid>
@@ -741,7 +780,7 @@ export default function RunsDetails() {
                       marginTop: '0.4rem',
                     }}
                   >
-                    Abinaya
+                    Super Admin
                   </Typography>
                 </Box>
               </Grid>
@@ -769,7 +808,8 @@ export default function RunsDetails() {
                       marginTop: '0.4rem',
                     }}
                   >
-                    28/05/2023 (Wed)
+                 {moment(parseInt(runzValue?.createdAt)).format('MM/DD/YYYY')}
+
                   </Typography>
                 </Box>
               </Grid>
@@ -777,7 +817,8 @@ export default function RunsDetails() {
                 <Box>
                   <Typography className="id-detail">Status</Typography>
                   <FormControl className="Status-info">
-                    <Select
+                    <div >{runzValue?.status}</div>
+                    {/* <Select
                       labelId="Status-popup-label"
                       id="Status-info"
                       value={answers}
@@ -791,38 +832,43 @@ export default function RunsDetails() {
                       }
                       className="list-completed"
                     >
-                      <MenuItem
-                        value={'1'}
-                        style={{
-                          background: '#E2445C',
-                          color: '#fff',
-                          fontSize: '14px',
-                        }}
-                      >
-                        Not Started
-                      </MenuItem>
-                      <MenuItem
-                        value={'2'}
-                        style={{
-                          background: '#00BF70',
-                          color: '#fff',
-                          fontSize: '14px',
-                        }}
-                      >
-                        Completed
-                      </MenuItem>
-                      <MenuItem
-                        value={'3'}
-                        style={{
-                          background: '#F8A83C',
-                          color: '#fff',
-                          fontSize: '14px',
-                        }}
-                      >
-                        Working
-                      </MenuItem>
-                    </Select>
+                      {runsStatus.map((element: any) => (
+                              <MenuItem
+                                value={element.value}
+                                key={element.value}
+                              >
+                                {element.name}
+                              </MenuItem>
+                            ))}
+                    </Select> */}
                   </FormControl>
+                  {/* <FormControl className="Status-info"> */}
+                  {/* <Select
+                            name="status"
+                            className={
+                              runzValue?.status === 'Created'
+                                ? 'create-select td-select'
+                                : runzValue?.status === 'Started'
+                                ? 'start-select td-select'
+                                : runzValue?.status === 'Complete'
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
+                            }
+                            value={runzValue?.status ? runzValue?.status : 'Stopped'}
+                            displayEmpty
+                            onChange={(e) => handleOnChange(e, row)}
+                            IconComponent={ExpandMoreOutlinedIcon}
+                          >
+                            {RunsStatusList.map((element: any) => (
+                              <MenuItem
+                                value={element.value}
+                                key={element.value}
+                              >
+                                {element.name}
+                              </MenuItem>
+                            ))}
+                          </Select> */}
+                  {/* </FormControl> */}
                 </Box>
               </Grid>
             </Grid>
@@ -850,7 +896,7 @@ export default function RunsDetails() {
                 <div dangerouslySetInnerHTML={{ __html: editorData }} />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
-                <Box>
+                <Box id="divToPrint">
                   <Box sx={{ px: 4, mb: 2 }}>
                     <FormControl>
                       <RadioGroup
@@ -1278,6 +1324,7 @@ export default function RunsDetails() {
                     ))}
                   </Box>
                 </Box>
+                
               </CustomTabPanel>
               <CustomTabPanel value={value} index={2}>
                 <Editor
@@ -1330,7 +1377,7 @@ export default function RunsDetails() {
             <Button type="submit" variant="contained" className="cancel-btn">
               Back
             </Button>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={()=>printDocument()}>
               <img
                 src={printer}
                 alt="printer"

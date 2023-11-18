@@ -1,15 +1,153 @@
 import { gql } from '@apollo/client';
 
-export const GET_ROLE = gql`
-  
+gql`
+type ProcedureManagementType {
+  create: Boolean
+  delete: Boolean
+  edit: Boolean
+  view: Boolean
+  assign: Boolean
+  share: Boolean
+}
+
+input ProcedureManagementInput {
+  create: Boolean
+  delete: Boolean
+  edit: Boolean
+  view: Boolean
+  assign: Boolean
+  share: Boolean
+}
+`
+export const GET_ALL_ROLE = gql`
+
 query Get_all_roles {
-    get_all_roles {
+    get_all_roles(page: 1, perPage: 5) {
         _id
         name
         isActive
         isDeleted
         createdAt
         updatedAt
+        procedure_management {
+            create
+            delete
+            edit
+            view
+            assign
+            share
+        }
+        profile_management {
+            editUserName
+            changePassword
+            editDepartment
+            editLab
+            editOrganisation
+            editContact
+        }
+        user_management {
+            create
+            delete
+            edit
+            view
+        }
+        role_management {
+            edit
+        }
+    }
+}
+
+`;
+export const GET_ROLE = gql`
+query Get_role {
+    get_role(_id: "65487c60fe14a40012118efe") {
+        _id
+        name
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+        procedure_management {
+            create
+            delete
+            edit
+            view
+            assign
+            share
+        }
+        profile_management {
+            editUserName
+            changePassword
+            editDepartment
+            editLab
+            editOrganisation
+            editContact
+        }
+        user_management {
+            create
+            delete
+            edit
+            view
+        }
+        role_management {
+            edit
+        }
+    }
+}
+`;
+ 
+
+
+
+export const UPDATE_ROLE = gql`
+
+mutation Update_role(
+     $_id: String!
+        $name: String
+        $procedure_management: [ProcedureManagementType]
+        $profile_management: [ProfileManagementType]
+        $user_management: [UserManagementType]
+        $role_management: [RoleManagementType]
+) {
+    update_role(
+        _id : $_id
+        name : $name
+        procedure_management : $procedure_management
+        profile_management : $profile_management
+        user_management : $user_management
+        role_management : $role_management
+    ) {
+        _id
+        name
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+        procedure_management {
+            create
+            delete
+            edit
+            view
+            assign
+            share
+        }
+        profile_management {
+            editUserName
+            changePassword
+            editDepartment
+            editLab
+            editOrganisation
+            editContact
+        }
+        user_management {
+            create
+            delete
+            edit
+            view
+        }
+        role_management {
+            edit
+        }
     }
 }
 `;

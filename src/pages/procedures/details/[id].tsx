@@ -250,8 +250,7 @@ export default function ProcedureDetails() {
               <Grid item xs={12} sm={12} md={9} lg={9}>
                 <Box>
                   <Typography className="id-detail">
-                  {procedureValue?.procedureNumber}&ensp;/&ensp;Dept-Computer
-                    science&ensp;/&ensp;Lab-Data structure
+                  {procedureValue?.procedureNumber}
                   </Typography>
                   <Typography className="id-detail-title">
                   {procedureValue?.name}

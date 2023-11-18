@@ -8,15 +8,139 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { useDispatch, useSelector } from 'react-redux';
 import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import { fetchSingleRoleData, fetchUpdateRoleData } from "../../../api/roleApi";
 
 const Roles = () => {
-  // const [selectedValue, setSelectedValue] = React.useState('a');
 
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSelectedValue(event.target.value);
-  // };
+  const [roleData, setRoleData] = React.useState({});
+  const dispatch: any = useDispatch();
+
+  const roleSliceData = useSelector(
+    (state: any) => state.role.data?.get_role,
+  );
+  React.useEffect(() => {
+    setFormValues(roleSliceData)
+  }, [roleSliceData]);
+
+  React.useEffect(() => {
+ dispatch(fetchSingleRoleData())
+  }, []);
+  console.log(roleData);
+
+  const initailState={
+    procedure_management:[{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    }],
+    profile_management:[{
+      changePassword : false,
+      editContact    : false,
+      editDepartment : false,
+      editLab   : false,
+      editOrganisation : false,
+      editUserName     : false,
+    }],
+    role_management:[{
+      edit : false
+    }],
+    user_management:[{
+
+      create  : false,
+      delete  : false,
+      edit    : false,
+    }]
+  }
+  const [formValues, setFormValues]=React.useState(initailState)
+  console.log(formValues);
+  
+  const handleChange=(e:any,val:boolean)=>{
+console.log(e.target.name);
+setFormValues((prevValues) => ({
+  ...prevValues,
+  procedure_management: [
+    {
+      ...prevValues.procedure_management[0],
+      [e.target.name]: val,
+    },
+  ],
+}));
+  }
+  const handleChangeUser=(e:any,val:boolean)=>{
+    console.log(e.target.name);
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      user_management: [
+        {
+          ...prevValues.user_management[0],
+          [e.target.name]: val,
+        },
+      ],
+    }));
+      }
+      const handleChangeProfile=(e:any,val:boolean)=>{
+        console.log(e.target.name);
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          profile_management: [
+            {
+              ...prevValues.profile_management[0],
+              [e.target.name]: val,
+            },
+          ],
+        }));
+          }
+          const handleChangeRole=(e:any,val:boolean)=>{
+            console.log(e.target.name);
+            setFormValues((prevValues) => ({
+              ...prevValues,
+              role_management: [
+                {
+                  ...prevValues.role_management[0],
+                  [e.target.name]: val,
+                },
+              ],
+            }));
+          }
+  const handleSave=()=>{
+    console.log('submited');
+    var payload={
+      _id: '65487c60fe14a40012118efe',
+      procedure_management:[{
+        assign : formValues.procedure_management[0].assign,
+        create : formValues.procedure_management[0].create,
+        delete : formValues.procedure_management[0].delete,
+        edit   : formValues.procedure_management[0].edit,
+        share  : formValues.procedure_management[0].share,
+        view   : formValues.procedure_management[0].view,
+      }],
+      profile_management:[{
+        changePassword : formValues.profile_management[0].changePassword,
+        editContact    : formValues.profile_management[0].editContact,
+        editDepartment : formValues.profile_management[0].editDepartment,
+        editLab   : formValues.profile_management[0].editLab,
+        editOrganisation : formValues.profile_management[0].editOrganisation,
+        editUserName     : formValues.profile_management[0].editUserName,
+      }],
+      role_management:[{
+        edit : formValues.role_management[0].edit
+      }],
+      user_management:[{
+  
+        create  : formValues.user_management[0].create,
+        delete  : formValues.user_management[0].delete,
+        edit    : formValues.user_management[0].edit,
+      }]
+    }
+    dispatch(fetchUpdateRoleData(payload))
+    
+  }
   return (
     <Box className="role-setting-page">
       <Box
@@ -95,6 +219,10 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.procedure_management[0].create}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].create)}
+                            name="create"
+                            // checked={true}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -167,6 +295,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.procedure_management[0].delete}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -239,6 +370,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.procedure_management[0].edit}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -311,6 +445,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.procedure_management[0].view}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].view)}
+                            name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -383,6 +520,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.procedure_management[0].assign}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].assign)}
+                            name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -455,6 +595,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.procedure_management[0].share}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].share)}
+                            name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -533,6 +676,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.profile_management[0].editUserName}
+                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editUserName)}
+                            name="editUserName"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -605,6 +751,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.profile_management[0].changePassword}
+                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].changePassword)}
+                            name="changePassword"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -678,6 +827,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.profile_management[0].editOrganisation}
+                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editOrganisation)}
+                            name="editOrganisation"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -750,6 +902,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.profile_management[0].editDepartment}
+                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editDepartment)}
+                            name="editDepartment"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -822,6 +977,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.profile_management[0].editLab}
+                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editLab)}
+                            name="editLab"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -894,6 +1052,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.profile_management[0].editContact}
+                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editContact)}
+                            name="editContact"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -972,6 +1133,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.role_management[0].edit}
+                            onChange={(e)=>handleChangeRole(e,!formValues?.role_management[0].edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1050,6 +1214,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.user_management[0].create}
+                            onChange={(e)=>handleChangeUser(e,!formValues?.user_management[0].create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1122,6 +1289,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.user_management[0].delete}
+                            onChange={(e)=>handleChangeUser(e,!formValues?.user_management[0].delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1194,6 +1364,9 @@ const Roles = () => {
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues?.user_management[0].edit}
+                            onChange={(e)=>handleChangeUser(e,!formValues?.user_management[0].edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1261,7 +1434,7 @@ const Roles = () => {
         <Button type="submit" variant="contained" className="cancel-btn">
           Reset
         </Button>
-        <Button type="submit" variant="contained" className="add-btn">
+        <Button type="submit" variant="contained" className="add-btn" onClick={()=>handleSave()}>
           Save
         </Button>
       </Box>

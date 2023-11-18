@@ -90,12 +90,12 @@ const Login = () => {
   });
 
 
-  if (isLoggedIn === 'true') {
-    console.log("false");
+  // if (isLoggedIn === 'true') {
+  //   console.log("false");
 
-    navigate('/mypage');
-    return null;
-  }
+  //   navigate('/mypage');
+  //   return null;
+  // }
 
   return (
     <>
