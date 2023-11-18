@@ -227,32 +227,6 @@ export default function RunsDetails() {
     { name: 'Speed', value: 'Speed' },
     { name: 'Time', value: 'Time' },
   ]);
-  const [channels, setChannels] = React.useState<any>([
-    {
-      color: '#FF0000',
-      axis: 'Y1',
-      channelName: null,
-      value: 'Y1',
-    },
-    {
-      color: '#00FF00',
-      axis: 'Y2',
-      channelName: null,
-      value: 'Y2',
-    },
-    {
-      color: '#FFFF00',
-      axis: 'Y3',
-      channelName: null,
-      value: 'Y3',
-    },
-    {
-      color: '#0000FF',
-      axis: 'Y4',
-      channelName: null,
-      value: 'Y4',
-    },
-  ]);
 
   const [charts, setCharts] = React.useState<any>([
     {
@@ -266,6 +240,9 @@ export default function RunsDetails() {
           channelName: null,
           axisValue: 'Y1',
           channelValue: null,
+          yAxisId: 'left1',
+          orientation: 'left',
+          dataKey: 'plot1',
         },
         {
           color: '#90239f',
@@ -273,6 +250,9 @@ export default function RunsDetails() {
           channelName: null,
           axisValue: 'Y2',
           channelValue: null,
+          yAxisId: 'left2',
+          orientation: 'left',
+          dataKey: 'plot2',
         },
         {
           color: '#111fdf',
@@ -280,6 +260,9 @@ export default function RunsDetails() {
           channelName: null,
           axisValue: 'Y3',
           channelValue: null,
+          yAxisId: 'right1',
+          orientation: 'right',
+          dataKey: 'plot3',
         },
         {
           color: '#38e907',
@@ -287,8 +270,105 @@ export default function RunsDetails() {
           channelName: null,
           axisValue: 'Y4',
           channelValue: null,
+          yAxisId: 'right2',
+          orientation: 'right',
+          dataKey: 'plot4',
         },
       ],
+    },
+  ]);
+
+  const [chartLines, setChartLines] = React.useState([
+    {
+      dataKey: 'plot1',
+      stroke: '#e22828',
+      yAxisId: 'left1',
+      dot: {
+        r: 1,
+        fill: '#e22828',
+      },
+    },
+    {
+      dataKey: 'plot2',
+      stroke: '#90239f',
+      yAxisId: 'right1',
+      dot: {
+        r: 1,
+        fill: '#90239f',
+      },
+    },
+    {
+      dataKey: 'plot3',
+      stroke: '#111fdf',
+      yAxisId: 'left2',
+      dot: {
+        r: 1,
+        fill: '#111fdf',
+      },
+    },
+    {
+      dataKey: 'plot4',
+      stroke: '#38e907',
+      yAxisId: 'right2',
+      dot: {
+        r: 1,
+        fill: '#38e907',
+      },
+    },
+  ]);
+
+  const [yAxis, setYAxis] = React.useState([
+    {
+      yAxisId: 'left1',
+      orientation: 'left',
+      label: {
+        value: 'Y1',
+        angle: -90,
+        position: 'insideBottom',
+        fill: '#e22828',
+      },
+      tick: {
+        fontSize: 12,
+      },
+    },
+    {
+      yAxisId: 'left2',
+      orientation: 'left',
+      label: {
+        value: 'Y3',
+        angle: -90,
+        position: 'insideBottom',
+        fill: '#111fdf',
+      },
+      tick: {
+        fontSize: 12,
+      },
+    },
+    {
+      yAxisId: 'right1',
+      orientation: 'right',
+      label: {
+        value: 'Y2',
+        angle: -90,
+        position: 'insideBottom',
+        fill: '#90239f',
+      },
+      tick: {
+        fontSize: 12,
+      },
+    },
+    {
+      yAxisId: 'right2',
+      orientation: 'right',
+      label: {
+        value: 'Y4',
+        angle: -90,
+        position: 'insideBottom',
+        fill: '#38e907',
+      },
+      tick: {
+        fontSize: 12,
+      },
     },
   ]);
 
@@ -349,30 +429,23 @@ export default function RunsDetails() {
     const data = [...charts];
     const values = { ...data[dataIndex] };
     values.channels[keyIndex].channelValue = event.target.value;
-    // if (values.chartValues.length === 0) {
-    //   for (let i = 0; i < axisList.length; i++) {
-    //     debugger;
-    //     values.chartValues[0].name = `Jan1`
-    //     values.chartValues[0] = {
-    //       name: `Jan${1}`,
-    //       [`plot${i+1}`]: Math.floor(Math.random() * 90) + 10,
-    //       amt: Math.floor(Math.random() * 900) + 100,
-    //     };
-    //   }
-    // } else {
-    //   for (let i = 0; i < axisList.length; i++) {
-    //     values.chartValues[keyIndex] = {
-    //       name: `Jan${keyIndex + 1}`,
-    //       [`plot1`]: Math.floor(Math.random() * 90) + 10,
-    //       [`plot2`]: Math.floor(Math.random() * 90) + 10,
-    //       [`plot3`]: Math.floor(Math.random() * 90) + 10,
-    //       [`plot4`]: Math.floor(Math.random() * 90) + 10,
-    //       amt: Math.floor(Math.random() * 900) + 100,
-    //     };
-    //   }
-    // }
-
-    // setCharts((prevItems:any) => [...prevItems, ...data]);
+    if (values.chartValues.length < 0) {
+      for (let i = 0; i < 5; i++) {
+        values.chartValues[i] = {
+          name: Math.floor(Math.random() * 900) + 100,
+          [`plot${keyIndex + 1}`]: Math.floor(Math.random() * 90) + 10,
+          amt: Math.floor(Math.random() * 900) + 100,
+        };
+      }
+    } else {
+      for (let i = 0; i < 5; i++) {
+        values.chartValues[i] = {
+          ...values.chartValues[i],
+          name: Math.floor(Math.random() * 900) + 100,
+          [`plot${keyIndex + 1}`]: Math.floor(Math.random() * 90) + 10,
+        };
+      }
+    }
     setCharts(data);
   };
 
@@ -396,6 +469,9 @@ export default function RunsDetails() {
           channelName: null,
           axisValue: 'Y1',
           channelValue: 'Concentration',
+          yAxisId: 'left1',
+          orientation: 'left',
+          dataKey: 'plot1',
         },
         {
           color: '#90239f',
@@ -403,6 +479,9 @@ export default function RunsDetails() {
           channelName: null,
           axisValue: 'Y2',
           channelValue: null,
+          yAxisId: 'left2',
+          orientation: 'left',
+          dataKey: 'plot2',
         },
         {
           color: '#111fdf',
@@ -410,6 +489,9 @@ export default function RunsDetails() {
           channelName: null,
           axisValue: 'Y3',
           channelValue: null,
+          yAxisId: 'right1',
+          orientation: 'right',
+          dataKey: 'plot3',
         },
         {
           color: '#38e907',
@@ -417,6 +499,9 @@ export default function RunsDetails() {
           channelName: null,
           axisValue: 'Y4',
           channelValue: null,
+          yAxisId: 'right2',
+          orientation: 'right',
+          dataKey: 'plot4',
         },
       ],
     });
@@ -895,7 +980,6 @@ export default function RunsDetails() {
                                 </>
                               </Grid>
                             </Grid>
-                            {JSON.stringify(chartData.chartValues)}
                             <Box sx={{ mt: 4 }}>
                               <ResponsiveContainer width="100%" height={500}>
                                 <LineChart data={chartData.chartValues}>
@@ -903,91 +987,47 @@ export default function RunsDetails() {
                                     dataKey="name"
                                     axisLine={{ fontSize: 12, dy: 4 }}
                                   />
-                                  <YAxis
-                                    yAxisId="left1"
-                                    orientation="left"
-                                    label={{
-                                      value: 'y1',
-                                      angle: -90,
-                                      position: 'insideBottom',
-                                      fill: '#e22828',
-                                    }}
-                                    tick={{ fontSize: 12 }}
-                                  />
-                                  <YAxis
-                                    yAxisId="left2"
-                                    orientation="left"
-                                    label={{
-                                      value: 'y3',
-                                      angle: -90,
-                                      position: 'insideBottom',
-                                      fill: '#111fdf',
-                                    }}
-                                    tick={{ fontSize: 12 }}
-                                  />
-                                  <YAxis
-                                    yAxisId="right1"
-                                    orientation="right"
-                                    label={{
-                                      value: 'y2',
-                                      angle: -90,
-                                      position: 'insideBottom',
-                                      fill: '#90239f',
-                                    }}
-                                    tick={{ fontSize: 12 }}
-                                  />
-                                  <YAxis
-                                    yAxisId="right2"
-                                    orientation="right"
-                                    label={{
-                                      value: 'y4',
-                                      angle: -90,
-                                      position: 'insideBottom',
-                                      fill: '#38e907',
-                                    }}
-                                    tick={{ fontSize: 12, dy: '2em' }}
-                                    axisLine={{
-                                      dy: '2em',
-                                    }}
-                                  />
+                                  {chartData.channels.map((axis, axisIndex) => (
+                                    <YAxis
+                                      key={axisIndex}
+                                      yAxisId={axis.yAxisId}
+                                      orientation={axis.orientation}
+                                      label={{
+                                        value: axis.axisValue,
+                                        angle: -90,
+                                        position: 'insideBottom',
+                                        fill: axis.color,
+                                      }}
+                                      tick={{
+                                        fontSize: 12,
+                                      }}
+                                      // yAxisId={axis.yAxisId}
+                                      // orientation={axis.orientation}
+                                      // label={axis.label}
+                                      // tick={axis.tick}
+                                    />
+                                  ))}
+
                                   <Tooltip />
                                   <CartesianGrid
                                     stroke="#f5f5f5"
                                     strokeDasharray="3 3"
                                     strokeWidth={2}
                                   />
-                                  <Line
-                                    type="linear"
-                                    dataKey="plot1"
-                                    stroke="#e22828"
-                                    strokeWidth={2}
-                                    yAxisId="left1"
-                                    dot={{ r: 2, fill: '#e22828' }}
-                                  />
-                                  <Line
-                                    type="linear"
-                                    dataKey="plot2"
-                                    stroke="#90239f"
-                                    yAxisId="right1"
-                                    strokeWidth={2}
-                                    dot={{ r: 2, fill: '#90239f' }}
-                                  />
-                                  <Line
-                                    type="linear"
-                                    dataKey="plot3"
-                                    stroke="#111fdf"
-                                    yAxisId="left2"
-                                    strokeWidth={2}
-                                    dot={{ r: 2, fill: '#111fdf' }}
-                                  />
-                                  <Line
-                                    type="linear"
-                                    dataKey="plot4"
-                                    stroke="#38e907"
-                                    yAxisId="right2"
-                                    strokeWidth={2}
-                                    dot={{ r: 2, fill: '#38e907' }}
-                                  />
+                                  {chartData.channels.map((line, lineIndex) => (
+                                    <Line
+                                      key={lineIndex}
+                                      type="linear"
+                                      dataKey={line.dataKey}
+                                      stroke={line.color}
+                                      strokeWidth={2}
+                                      yAxisId={line.yAxisId}
+                                      dot={{
+                                        r: 1,
+                                        fill: line.color,
+                                      }}
+                                    />
+                                  ))}
                                 </LineChart>
                               </ResponsiveContainer>
                               <Box
