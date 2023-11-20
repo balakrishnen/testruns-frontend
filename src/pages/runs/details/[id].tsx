@@ -543,14 +543,23 @@ export default function RunsDetails() {
   };
   const printDocument = () => {
     const input:any = document.getElementById("divToPrint");
-    html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "JPEG", 0, 0);
-      // pdf.output('dataurlnewwindow');
-      pdf.save("download.pdf");
-    });
-  };
+   // Set the desired PDF size (A4 or A3)
+const pdfWidth = typeof window !== 'undefined' && window.innerWidth ;
+const pdfHeight = typeof window !== 'undefined' && window.innerHeight; 
+
+html2canvas(input, { scale: 2 }).then((canvas) => {
+  const imgData = canvas.toDataURL('image/png');
+
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    format: [pdfWidth, pdfHeight],
+  });
+
+  pdf.addImage(imgData, 'JPEG', 0, 0);
+  pdf.save('chart.pdf');
+  // };
+});
+  }
   const dispatch: any = useDispatch();
 
   const handleOnChange = (e: any, row: any) => {
