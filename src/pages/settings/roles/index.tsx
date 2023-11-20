@@ -158,7 +158,7 @@ setFormValues((prevValues) => ({
             Control the access of actions an user can have.
           </Typography>
         </Box>
-        <Box className="search-field-inner setting-search">
+        {/* <Box className="search-field-inner setting-search">
           <TextField
             margin="normal"
             required
@@ -175,7 +175,7 @@ setFormValues((prevValues) => ({
               ),
             }}
           />
-        </Box>
+        </Box> */}
       </Box>
       <Box
         sx={{

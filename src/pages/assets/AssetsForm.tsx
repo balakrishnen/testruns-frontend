@@ -54,17 +54,17 @@ import test from '../../assets/images/test.svg';
 import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().notRequired(),
-  perchasedDate: Yup.string().notRequired(),
-  expiryDate: Yup.string().notRequired(),
-  departmentId: Yup.array().notRequired(),
-  laboratoryId: Yup.array().notRequired(),
-  organisationId: Yup.string().notRequired(),
-  status: Yup.string().notRequired(),
-  // assets_image: Yup.string().notRequired(),
-  availability: Yup.string().notRequired(),
-  // assets_id: Yup.string().notRequired(),
-  lastUsedDate: Yup.string().notRequired(),
+  name: Yup.string().required(),
+  perchasedDate: Yup.string().required(),
+  expiryDate: Yup.string().required(),
+  departmentId: Yup.array().required(),
+  laboratoryId: Yup.array().required(),
+  organisationId: Yup.string().required(),
+  status: Yup.string().required(),
+  // assets_image: Yup.string().required(),
+  availability: Yup.string().required(),
+  // assets_id: Yup.string().required(),
+  // lastUsedDate: Yup.string().required(),
 });
 
 const Addnewpopup = React.forwardRef(
@@ -361,7 +361,7 @@ const Addnewpopup = React.forwardRef(
                     <Grid container spacing={2} className="asset-popup">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box>
-                          <label>Assets name</label>
+                          <label>Assets name<span style={{ color: "#E2445C" }}>*</span></label>
                           <TextField
                             margin="normal"
                             fullWidth
@@ -374,15 +374,15 @@ const Addnewpopup = React.forwardRef(
                             onBlur={formik.handleBlur}
                             value={formik.values.name}
                             size="small"
-                            error={
-                              formik.touched.name && Boolean(formik.errors.name)
-                            }
+                            // error={
+                            //   formik.touched.name && Boolean(formik.errors.name)
+                            // }
                           />
-                          {formik.touched.name && formik.errors.name && (
+                          {/* {formik.touched.name && formik.errors.name && (
                             <Typography className="error-field">
                               {formik.errors.name}
                             </Typography>
-                          )}
+                          )} */}
                         </Box>
                       </Grid>
                     </Grid>
@@ -400,7 +400,7 @@ const Addnewpopup = React.forwardRef(
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
                         <Box>
-                          <label>Purchase date</label>
+                          <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                               format="DD/MM/YYYY"
@@ -410,12 +410,12 @@ const Addnewpopup = React.forwardRef(
                               value={formik.values.perchasedDate}
                             />
                           </LocalizationProvider>
-                          {formik.touched.perchasedDate &&
+                          {/* {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
                               <Typography className="error-field">
                                 Date required
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                       <Grid
@@ -433,7 +433,7 @@ const Addnewpopup = React.forwardRef(
                         }}
                       >
                         <Box>
-                          <label>Guaranty/warranty/expiry date</label>
+                          <label>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                               format="DD/MM/YYYY"
@@ -443,12 +443,12 @@ const Addnewpopup = React.forwardRef(
                               value={formik.values.expiryDate}
                             />
                           </LocalizationProvider>
-                          {formik.touched.expiryDate &&
+                          {/* {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (
                               <Typography className="error-field">
                                 Date required
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                     </Grid>
@@ -456,7 +456,7 @@ const Addnewpopup = React.forwardRef(
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box>
                           <label style={{ display: 'block' }}>
-                            Organisation
+                            Organisation<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <Select
                             className="placeholder-color"
@@ -481,10 +481,10 @@ const Addnewpopup = React.forwardRef(
                             onBlur={formik.handleBlur}
                             value={formik.values.organisationId}
                             size="small"
-                            error={
-                              formik.touched.organisationId &&
-                              Boolean(formik.errors.organisationId) 
-                            }
+                            // error={
+                            //   formik.touched.organisationId &&
+                            //   Boolean(formik.errors.organisationId) 
+                            // }
                           >
                             {organizationData?.map((item:any, index) => (
                               <MenuItem key={index} value={item.id}>
@@ -492,12 +492,12 @@ const Addnewpopup = React.forwardRef(
                               </MenuItem>
                             ))}
                           </Select>
-                          {formik.touched.organisationId &&
+                          {/* {formik.touched.organisationId &&
                             formik.errors.organisationId && (
                               <Typography className="error-field">
                                 {formik.errors.organisationId}
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                     </Grid>
@@ -509,7 +509,7 @@ const Addnewpopup = React.forwardRef(
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box>
                           <label style={{ display: 'block' }}>
-                            Department/s
+                            Department/s<span style={{ color: "#E2445C" }}>*</span>
                           </label>
 
                           <Autocomplete
@@ -549,12 +549,12 @@ const Addnewpopup = React.forwardRef(
                               setDepartments(selectedOptions)
                             }
                           />
-                          {formik.touched.organisationId &&
+                          {/* {formik.touched.organisationId &&
                             formik.errors.organisationId && (
                               <Typography className="error-field">
                                 {formik.errors.organisationId}
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                     </Grid>
@@ -566,7 +566,7 @@ const Addnewpopup = React.forwardRef(
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box>
                           <label style={{ display: 'block' }}>
-                            Laboratory/ies
+                            Laboratory/ies<span style={{ color: "#E2445C" }}>*</span>
                           </label>
 
                           <Autocomplete
@@ -604,12 +604,12 @@ const Addnewpopup = React.forwardRef(
                               setLaboratory(selectedOptions)
                             }
                           />
-                          {formik.touched.laboratoryId &&
+                          {/* {formik.touched.laboratoryId &&
                             formik.errors.laboratoryId && (
                               <Typography className="error-field">
                                 {formik.errors.laboratoryId}
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                     </Grid>
@@ -623,7 +623,7 @@ const Addnewpopup = React.forwardRef(
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
                         <Box>
-                          <label style={{ display: 'block' }}>Status</label>
+                          <label style={{ display: 'block' }}>Status<span style={{ color: "#E2445C" }}>*</span></label>
 
                           <Select
                             className="placeholder-color"
@@ -644,10 +644,10 @@ const Addnewpopup = React.forwardRef(
                             onBlur={formik.handleBlur}
                             value={formik.values.status}
                             size="small"
-                            error={
-                              formik.touched.status &&
-                              Boolean(formik.errors.status)
-                            }
+                            // error={
+                            //   formik.touched.status &&
+                            //   Boolean(formik.errors.status)
+                            // }
                           >
                             <MenuItem value={'Active'}>Active</MenuItem>
                             <MenuItem value={'Inactive'}>In-Active</MenuItem>
@@ -657,11 +657,11 @@ const Addnewpopup = React.forwardRef(
                               </MenuItem>
                             ))} */}
                           </Select>
-                          {formik.touched.status && formik.errors.status && (
+                          {/* {formik.touched.status && formik.errors.status && (
                             <Typography className="error-field">
                               {formik.errors.status}
                             </Typography>
-                          )}
+                          )} */}
                         </Box>
                       </Grid>
                       <Grid
@@ -680,7 +680,7 @@ const Addnewpopup = React.forwardRef(
                       >
                         <Box>
                           <label style={{ display: 'block' }}>
-                            Availability
+                            Availability<span style={{ color: "#E2445C" }}>*</span>
                           </label>
 
                           <Select
@@ -706,10 +706,10 @@ const Addnewpopup = React.forwardRef(
                             onBlur={formik.handleBlur}
                             value={formik.values.availability}
                             size="small"
-                            error={
-                              formik.touched.availability &&
-                              Boolean(formik.errors.availability)
-                            }
+                            // error={
+                            //   formik.touched.availability &&
+                            //   Boolean(formik.errors.availability)
+                            // }
                           >
                             <MenuItem value={'Available'}>Available</MenuItem>
                             <MenuItem value={'In_Use'}>In Use</MenuItem>
@@ -722,12 +722,12 @@ const Addnewpopup = React.forwardRef(
                               </MenuItem>
                             ))} */}
                           </Select>
-                          {formik.touched.availability &&
+                          {/* {formik.touched.availability &&
                             formik.errors.availability && (
                               <Typography className="error-field">
                                 {formik.errors.availability}
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                     </Grid>

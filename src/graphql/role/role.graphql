@@ -60,7 +60,7 @@ query Get_all_roles {
 `;
 export const GET_ROLE = gql`
 query Get_role {
-    get_role(_id: "65487c60fe14a40012118efe") {
+    get_role(_id: "6548eabeaeb1160012a51125") {
         _id
         name
         isActive

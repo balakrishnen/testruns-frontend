@@ -777,7 +777,13 @@ p.reg-text {
     letter-spacing: 0.3px;
     text-transform: capitalize;
   }
-
+  .filterButton{
+    background-color: white !important;
+  }
+  .buttonFilter{
+    display: flex;
+    align-items: center;
+  }
   @media (max-width: 450px) {
     display: block;
 

@@ -74,13 +74,13 @@ function a11yProps(index: number) {
 }
 const validationSchema = Yup.object().shape({
   name: Yup.string().required(),
-  assetId: Yup.string().notRequired(),
-  laboratoryId: Yup.array().notRequired(),
-  organisationId: Yup.string().notRequired(),
-  departmentId: Yup.array().notRequired(),
-  status: Yup.string().notRequired(),
-  availability: Yup.string().notRequired(),
-  lastUsedDate: Yup.string().notRequired(),
+  assetId: Yup.string().required(),
+  laboratoryId: Yup.array().required(),
+  organisationId: Yup.string().required(),
+  departmentId: Yup.array().required(),
+  status: Yup.string().required(),
+  availability: Yup.string().required(),
+  // lastUsedDate: Yup.string().required(),
 });
 export default function AssetDetails() {
   const [value, setValue] = React.useState(0);
@@ -97,6 +97,7 @@ export default function AssetDetails() {
   const assetValue = location.state?.props;
   const getFunction = location.state?.func;
 
+
   // console.log(assetValue);
   const successPopupRef: any = React.useRef(null);
   const [formPopup, setFormPopup] = React.useState(false);
@@ -105,6 +106,7 @@ export default function AssetDetails() {
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const [organizationData, setOrganizationData] = React.useState([]);
+  // const [assetValue, setAssetValue] = React.useState({})
   const [organization, setOrganization] = React.useState([{ label:'',
     value: '',id:assetValue?.organisationId}])
   const [departments, setDepartments] = React.useState(
@@ -146,6 +148,35 @@ export default function AssetDetails() {
   const checkCredentials = (values: any) => {
     return true;
   };
+  // const assetsSliceData = useSelector(
+  //   (state: any) => state.assets.data?.get_asset,
+  // );
+  // React.useEffect(() => {
+  //   // setAssetValue(assetValue);
+  //   formik.setValues({
+  //     name: assetValue?.name,
+  //     assetId: assetValue?.assetNumber,
+  //     laboratoryId: assetValue?.laboratoryId,
+  //     organisationId: assetValue?.organisationId,
+  //     departmentId: assetValue?.departmentId,
+  //     // userId: 'USER_1001', 
+  //     status: assetValue?.status,
+  //     availability: assetValue?.availability,
+  //     // assets_id: assetValue.assets_id,
+  //     lastUsedDate: assetValue?.lastUsedDate,
+  //     perchasedDate:dayjs(purchaseDate),
+  //     expiryDate: dayjs(expireDate)
+  //   })
+  //   setDepartments(  assetValue?.departmentId?.map((item: any) => ({
+  //     label: item?.name,
+  //     value: item?.name,
+  //     id: item?._id,
+  //   })),)
+  // }, [assetValue]);
+
+  // React.useEffect(() => {
+  //   setAssetValue(assetsSliceData);
+  // }, [assetsSliceData]);
 
   // React.useEffect(() => {
   //   if(typeof window !== 'undefined'){
@@ -155,6 +186,8 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(assetId));
   //    }
   // }, []);
+  // console.log(assetValue?.name,'assetValue');
+  
   // const onSubmit = (values: any) => {
   // console.log(values);
 
@@ -175,7 +208,7 @@ export default function AssetDetails() {
   // };
   const onSubmit = (values: any) => {
     // debugger
-    console.log('value', value);
+    console.log('value', values);
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
       console.log('final', departments);
@@ -184,7 +217,8 @@ export default function AssetDetails() {
       var labArray: any = []
       laboratory.map((item: any) => (labArray.push(item?.id)))
       var org = organization
-      let assetValues = {
+      console.log('labArray', organization);
+      var assetValues = {
         _id: assetValue._id,
         name: values.name,
         organisationId: values?.organisationId,
@@ -196,8 +230,10 @@ export default function AssetDetails() {
         laboratoryId: labArray,
         status: values.status,
       }
-      // console.log('labArray', assetValues);
-
+      console.log(organization,laboratory,departments);
+      
+      console.log('labArray', assetValues);
+   
       dispatch(fetchUpdateAssetsData(assetValues));
     
       submitFormPopup();
@@ -373,7 +409,7 @@ console.log(assetValue?.organisationId,);
                     <Grid container spacing={2} className="asset-popup">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label>Name</label>
+                          <label>Asset Name <span style={{ color: "#E2445C" }}>*</span></label>
                           <TextField
                             margin="none"
                             fullWidth
@@ -386,22 +422,22 @@ console.log(assetValue?.organisationId,);
                             onBlur={formik.handleBlur}
                             value={formik.values.name}
                             size="small"
-                            error={
-                              formik.touched.name && Boolean(formik.errors.name)
-                            }
+                            // error={
+                            //   formik.touched.name && Boolean(formik.errors.name)
+                            // }
                           />
-                          {formik.touched.name && formik.errors.name && (
+                          {/* {formik.touched.name && formik.errors.name && (
                             <Typography className="error-field">
                               {formik.errors.name}
                             </Typography>
-                          )}
+                          )} */}
                         </Box>
                       </Grid>
                     </Grid>
                     <Grid container spacing={2} className="asset-popup">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box className="asset-id">
-                          <label>Asset Id (autogenerated)</label>
+                          <label>Asset Id (autogenerated)<span style={{ color: "#E2445C" }}>*</span></label>
                           <TextField
                             margin="normal"
                             fullWidth
@@ -416,16 +452,16 @@ console.log(assetValue?.organisationId,);
                             disabled
                             InputLabelProps={{ shrink: false }}
                             placeholder="Asset Id"
-                            error={
-                              formik.touched.assetId &&
-                              Boolean(formik.errors.assetId)
-                            }
+                            // error={
+                            //   formik.touched.assetId &&
+                            //   Boolean(formik.errors.assetId)
+                            // }
                           />
-                          {formik.touched.assetId && formik.errors.assetId && (
+                          {/* {formik.touched.assetId && formik.errors.assetId && (
                             <Typography className="error-field">
                               {formik.errors.assetId}
                             </Typography>
-                          )}
+                          )} */}
                         </Box>
                       </Grid>
                     </Grid>
@@ -443,7 +479,7 @@ console.log(assetValue?.organisationId,);
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
                         <Box>
-                          <label>Purchase date</label>
+                          <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker format="MM/DD/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'perchasedDate')} value={formik.values.perchasedDate}/>
                           </LocalizationProvider>
@@ -464,7 +500,7 @@ console.log(assetValue?.organisationId,);
                         }}
                       >
                         <Box>
-                          <label>Guaranty/warranty/expiry date</label>
+                          <label>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker format="MM/DD/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'expiryDate')} value={formik.values.expiryDate}/>
                           </LocalizationProvider>
@@ -475,7 +511,7 @@ console.log(assetValue?.organisationId,);
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Organisation
+                            Organisation<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <FormControl sx={{ width: '100%' }}>
                             <Select
@@ -501,10 +537,10 @@ console.log(assetValue?.organisationId,);
                               onBlur={formik.handleBlur}
                               value={formik.values.organisationId}
                               size="small"
-                              error={
-                                formik.touched.organisationId &&
-                                Boolean(formik.errors.organisationId)
-                              }
+                              // error={
+                              //   formik.touched.organisationId &&
+                              //   Boolean(formik.errors.organisationId)
+                              // }
                             >
                               {organizationData?.map((item:any, index) => (
                                 <MenuItem key={index} value={item.id}>
@@ -512,12 +548,12 @@ console.log(assetValue?.organisationId,);
                                 </MenuItem>
                                ))}
                             </Select>
-                             {formik.touched.organisationId &&
+                             {/* {formik.touched.organisationId &&
                               formik.errors.organisationId && (
                                 <Typography className="error-field">
                                   {formik.errors.organisationId}
                                 </Typography>
-                              )}
+                              )} */}
                                </FormControl>
                         </Box>
                       </Grid>
@@ -530,7 +566,7 @@ console.log(assetValue?.organisationId,);
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Department/s
+                            Department/s<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <FormControl sx={{ width: '100%' }}>
                             <Autocomplete
@@ -604,7 +640,7 @@ console.log(assetValue?.organisationId,);
                                 formik.setFieldValue('departmentId', departments);
                               }}
                             />*/}
-                            {formik.touched.departmentId &&
+                            {/* {formik.touched.departmentId &&
                               formik.errors.departmentId && (
                                 <Typography
                                   style={{
@@ -617,7 +653,7 @@ console.log(assetValue?.organisationId,);
                                 >
                                   {formik.errors.departmentId}
                                 </Typography>
-                              )}
+                              )} */}
                           </FormControl>
                         </Box>
                       </Grid>
@@ -630,7 +666,7 @@ console.log(assetValue?.organisationId,);
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Laboratory/ies
+                            Laboratory/ies<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <Autocomplete
                             multiple
@@ -665,12 +701,12 @@ console.log(assetValue?.organisationId,);
                               setLaboratory(selectedOptions)
                             }
                           />
-                          {formik.touched.laboratoryId &&
+                          {/* {formik.touched.laboratoryId &&
                             formik.errors.laboratoryId && (
                               <Typography className="error-field">
                                 {formik.errors.laboratoryId}
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                     </Grid>
@@ -684,7 +720,7 @@ console.log(assetValue?.organisationId,);
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
                         <Box style={{ position: 'relative' }}>
-                          <label style={{ display: 'block' }}>Status</label>
+                          <label style={{ display: 'block' }}>Status<span style={{ color: "#E2445C" }}>*</span></label>
                           <Select
                             className="placeholder-color"
                             displayEmpty
@@ -704,10 +740,10 @@ console.log(assetValue?.organisationId,);
                             onBlur={formik.handleBlur}
                             value={formik.values.status}
                             size="small"
-                            error={
-                              formik.touched.status &&
-                              Boolean(formik.errors.status)
-                            }
+                            // error={
+                            //   formik.touched.status &&
+                            //   Boolean(formik.errors.status)
+                            // }
                           >
                             <MenuItem value={"Active"}>
                               Active
@@ -719,11 +755,11 @@ console.log(assetValue?.organisationId,);
                               </MenuItem>
                             ))} */}
                           </Select>
-                          {formik.touched.status && formik.errors.status && (
+                          {/* {formik.touched.status && formik.errors.status && (
                             <Typography className="error-field">
                               {formik.errors.status}
                             </Typography>
-                          )}
+                          )} */}
                         </Box>
                       </Grid>
                       <Grid
@@ -742,7 +778,7 @@ console.log(assetValue?.organisationId,);
                       >
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Availability
+                            Availability<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <Select
                             className="placeholder-color"
@@ -767,10 +803,10 @@ console.log(assetValue?.organisationId,);
                             onBlur={formik.handleBlur}
                             value={formik.values.availability}
                             size="small"
-                            error={
-                              formik.touched.availability &&
-                              Boolean(formik.errors.availability)
-                            }
+                            // error={
+                            //   formik.touched.availability &&
+                            //   Boolean(formik.errors.availability)
+                            // }
                           >
                             <MenuItem value={'Available'}>Available</MenuItem>
                             <MenuItem value={'In_Use'}>
@@ -783,12 +819,12 @@ console.log(assetValue?.organisationId,);
                               </MenuItem>
                             ))} */}
                           </Select>
-                          {formik.touched.availability &&
+                          {/* {formik.touched.availability &&
                             formik.errors.availability && (
                               <Typography className="error-field">
                                 {formik.errors.availability}
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                     </Grid>

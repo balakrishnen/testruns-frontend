@@ -244,8 +244,8 @@ export default function TableFilters({
             </Box>
           )}
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={6} xl={3}>
-          <Box className="filter-search">
+        {/* <Grid item xs={12} sm={12} md={12} lg={6} xl={3}>
+          <Box className="filter-search"> */}
             {/* <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
@@ -266,7 +266,7 @@ export default function TableFilters({
               ))}
             </Select> */}
 
-            <TextField
+            {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -284,8 +284,8 @@ export default function TableFilters({
                 ),
               }}
               className="search-field-inner"
-            />
-            <Box sx={{ position: 'relative' }}>
+            /> */}
+            {/* <Box sx={{ position: 'relative' }}>
               <Button
                 // aria-describedby={id}
                 variant="contained"
@@ -296,9 +296,9 @@ export default function TableFilters({
                   padding: '0px',
                   justifyContent: 'center',
                 }}
-              >
+              > */}
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
+                {/* <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
                   <img
                     src={filterIcon}
                     alt="no_image"
@@ -475,7 +475,7 @@ export default function TableFilters({
                             <DatePicker
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
-                              onChange={(event) =>
+                              onChange={(event:any) =>
                                 setFilterSearchValue(event.$d)
                               }
                             />
@@ -544,9 +544,9 @@ export default function TableFilters({
                   </Box>
                 </Box>
               </Popover>
-            </Box>
-          </Box>
-        </Grid>
+            </Box> */}
+          {/* </Box>
+        </Grid> */}
       </Grid>
     </>
   );

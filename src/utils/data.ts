@@ -1126,8 +1126,8 @@ export const HistoryHeaders: readonly HistoryHead[] = [
     is_show: true,
   },
   {
-    id: 'name',
-    label: 'Test objective',
+    id: 'objective',
+    label: 'Runs name',
     filters: [
       {
         id: 'search',

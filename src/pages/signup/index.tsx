@@ -62,6 +62,10 @@ const SignUp = () => {
     event.preventDefault();
   };
 
+  
+// React.useEffect(()=>{
+// formik.isValid=false
+// },[])
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(
       values.fullname,
@@ -73,6 +77,7 @@ const SignUp = () => {
 
     if (isMatch) {
       alert("Signin successful!");
+      navigate('/login')
     } else {
       formik.setFieldError("fullname", "Invalid fullname");
       formik.setFieldError("email", "Invalid email");
@@ -218,11 +223,14 @@ const SignUp = () => {
                 ),
               }}
               name="confirm_password"
+              onPaste={(event) => {
+                event.preventDefault()}}
               id="confirm_password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.confirm_password}
               variant="outlined"
+              style={{userSelect:'none'}}
               error={
                 formik.touched.confirm_password &&
                 Boolean(formik.errors.confirm_password)
@@ -296,7 +304,8 @@ const SignUp = () => {
             type="submit"
             fullWidth
             variant="contained"
-            disableFocusRipple
+            // disableFocusRipple
+            disabled={!formik.isValid}
             sx={{ mt: 3, mb: 2 }}
             className="signup-btn"
           >

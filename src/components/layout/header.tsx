@@ -134,7 +134,7 @@ function AppHeader(props: any) {
             className="header-right-side"
             sx={{ display: { xs: 'none', md: 'flex' } }}
           >
-            {typeof window !== 'undefined' &&
+            {/* {typeof window !== 'undefined' &&
               window.location.pathname.split('/')[1] == 'mypage' && (
                 <Box className="search-field">
                   <TextField
@@ -154,7 +154,7 @@ function AppHeader(props: any) {
                     }}
                   />
                 </Box>
-              )}
+              )} */}
             <IconButton size="large" aria-label="help icon" color="inherit">
               <img src={help} alt="help_icon" className="app-bar-images" />
             </IconButton>

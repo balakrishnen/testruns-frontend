@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import React from 'react';
 import PrivateRoute from '../../../components/PrivateRoute';
 import Typography from '@mui/material/Typography';
@@ -57,6 +58,7 @@ import moment from 'moment';
 import { RunsStatusList } from '../../../utils/data';
 import { fetchUpdateRunsData } from '../../../api/RunsAPI';
 import { useDispatch } from 'react-redux';
+import { navigate } from 'gatsby';
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -561,10 +563,10 @@ export default function RunsDetails() {
 
       pdf.addImage(imgData, 'JPEG', 0, 0);
       pdf.save('chart.pdf');
-      // };
     });
   };
   const dispatch: any = useDispatch();
+  console.log(value, 'value');
 
   const handleOnChange = (e: any, row: any) => {
     console.log(e.target.value);
@@ -831,8 +833,40 @@ export default function RunsDetails() {
               <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
                 <Box>
                   <Typography className="id-detail">Status</Typography>
-                  <FormControl className="Status-info">
-                    <div>{runzValue?.status}</div>
+                  <FormControl
+                    className="Status-info"
+                    style={{ marginTop: '7px' }}
+                  >
+                    <Box
+                      style={{
+                        borderRadius: '20px',
+                        color: 'white',
+                        width: '110px',
+                        padding: '9px 0px',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        height: '24px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        fontSize: '12px',
+                        backgroundColor:
+                          runzValue?.status == 'Created'
+                            ? '#8d8d8d'
+                            : runzValue?.status == 'Started'
+                            ? '#faaa49'
+                            : runzValue?.status == 'Complete'
+                            ? '#00bf70'
+                            : '#e2445c',
+                      }}
+                    >
+                      {runzValue?.status == 'Created'
+                        ? 'Created'
+                        : runzValue?.status == 'Started'
+                        ? 'Started'
+                        : runzValue?.status == 'Complete'
+                        ? 'Completed'
+                        : 'Stopped'}
+                    </Box>
                     {/* <Select
                       labelId="Status-popup-label"
                       id="Status-info"
@@ -1238,7 +1272,7 @@ export default function RunsDetails() {
                                                       </Placeholder>
                                                     )
                                               }
-                                              style={{width: '90%'}}
+                                              style={{ width: '90%' }}
                                               // style={{ width: '220px' }}
                                             >
                                               {channelsList.map(
@@ -1318,6 +1352,10 @@ export default function RunsDetails() {
                                           </Box>
                                           <Box className="color-picker">
                                             <input
+                                              style={{
+                                                backgroundColor: element.color,
+                                                color: element.color,
+                                              }}
                                               type="color"
                                               className="color-input"
                                               value={element.color}
@@ -1403,18 +1441,24 @@ export default function RunsDetails() {
             </Box>
           </Box>
           <Box className="edit-details" sx={{ p: 2 }}>
-            <Button type="submit" variant="contained" className="cancel-btn">
+            <Button
+              onClick={() => navigate('/runs')}
+              variant="contained"
+              className="cancel-btn"
+            >
               Back
             </Button>
             <Box
               sx={{ display: 'flex', alignItems: 'center' }}
               onClick={() => printDocument()}
             >
-              <img
-                src={printer}
-                alt="printer"
-                style={{ marginRight: '1rem', cursor: 'pointer' }}
-              />
+              {value == 1 && (
+                <img
+                  src={printer}
+                  alt="printer"
+                  style={{ marginRight: '1rem', cursor: 'pointer' }}
+                />
+              )}
               <Button type="submit" variant="contained" className="add-btn">
                 Save
               </Button>

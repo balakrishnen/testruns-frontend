@@ -98,6 +98,10 @@ export default function HistoryTable() {
         sortBy: null,
         sortOrder: null,
       });
+      const filters = () => {
+        dispatch(fetchRunsData(queryStrings));
+      };
+  const handleRequestSort = () => {};
 
     React.useEffect(() => {
         // console.log("runSliceData before dispatch:", RunsSliceData);
@@ -125,7 +129,17 @@ export default function HistoryTable() {
         setCurrentPage(page_no);
       };
     
-
+      const handleTableSorting = (_event: any, _data: any, _index: any) => {
+        const payload: any = { ...queryStrings };
+        const headersList: any = [...headers];
+        payload['sortBy'] = headersList[_index].id;
+        payload['sortOrder'] = headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+        headersList[_index].sort =
+          headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+        setHeaders(headersList);
+        setQueryString(payload);
+      };
+    
     // console.log("runSliceData after dispatch:", RunsSliceData);
     return (
 
@@ -140,21 +154,20 @@ export default function HistoryTable() {
                     // size={dense ? "small" : "medium"}
                     >
                         <TableHeader
-                            numSelected={0}
-                            onSelectAllClick={function (
-                                event: React.ChangeEvent<HTMLInputElement>,
-                            ): void {
-                                throw new Error('Function not implemented.');
-                            }}
-                            order={'asc'}
-                            orderBy={''}
-                            rowCount={0}
-                            columns={headers}
-                            filters={() => {
-                                // console.log('runz');
-                            }}
-                        />
-
+                numSelected={0}
+                onRequestSort={handleRequestSort}
+                onSelectAllClick={function (
+                  event: React.ChangeEvent<HTMLInputElement>,
+                ): void {
+                  throw new Error('Function not implemented.');
+                }}
+                order={'asc'}
+                orderBy={''}
+                rowCount={0}
+                columns={headers}
+                filters={filters}
+                handleTableSorting={handleTableSorting}
+              />
                         <TableBody>
                             {runzData?.map((row: any, index: number) => {
 
@@ -309,24 +322,37 @@ export default function HistoryTable() {
                                         )}
                                         {headers[7].is_show && (
                                             <TableCell>
-                                                <Select
-                                                    name="select"
-                                                    className={
-                                                        row.status == 1
-                                                            ? 'active-select td-select'
-                                                            : 'inactive-select td-select'
-                                                    }
-                                                    value={1}
-                                                    displayEmpty
-
-
-                                                    IconComponent={ExpandMoreOutlinedIcon}
-                                                >
-                                                    <MenuItem value={1}>New Task</MenuItem>
-                                                    <MenuItem value={2}>Completed</MenuItem>
-                                                    <MenuItem value={3}>Not Started</MenuItem>
-
-                                                </Select>
+                                               {/* <FormControl className="Status-info" style={{ marginTop: '7px'}}> */}
+                  <Box
+                          style={{
+                            borderRadius: '20px',
+                            color: 'white',
+                            width: '110px',
+                            padding: '9px 0px',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            height: '24px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            fontSize: '12px',
+                            backgroundColor:
+                            row?.status == 'Created'
+                                ? '#8d8d8d'
+                                : row?.status == 'Started'
+                                ? '#faaa49'
+                                : row?.status == 'Complete'
+                                ? '#00bf70'
+                                : '#e2445c',
+                          }}
+                        >
+                          {row?.status == 'Created'
+                            ? 'Created'
+                            : row?.status == 'Started'
+                            ? 'Started'
+                            : row?.status == 'Complete'
+                            ? 'Completed'
+                            : 'Stopped'}
+                        </Box>
                                             </TableCell>
                                         )}
 

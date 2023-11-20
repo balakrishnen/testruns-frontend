@@ -9,6 +9,18 @@ query Get_all_notifications {
         userId
         isActive
         isDeleted
+        #message {
+           # email
+           # notification
+        #}
+        processer {
+            email
+            notification
+        }
+        task {
+            email
+            notification
+        }
     }
 }
 `; 
