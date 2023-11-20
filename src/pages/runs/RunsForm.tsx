@@ -45,11 +45,11 @@ import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().required(),
-  createdAt: Yup.string().required(),
-  departmentId: Yup.array().required(),
-  laboratoryId: Yup.array().required(),
-  objective: Yup.string().required(),
-  dueDate: Yup.string().required(),
+  createdAt: Yup.string().required('Created date is required'),
+  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
+  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  objective: Yup.string().required('Objective is required'),
+  dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().required(),
 });
 
@@ -329,10 +329,10 @@ const RunsForm = React.forwardRef(
                         onBlur={formik.handleBlur}
                         value={formik.values.organisationId}
                         size="small"
-                        // error={
-                        //   formik.touched.organisationId &&
-                        //   Boolean(formik.errors.organisationId)
-                        // }
+                        error={
+                          formik.touched.organisationId &&
+                          Boolean(formik.errors.organisationId)
+                        }
                       >
                         {procedureSliceData?.Procedures.map((item, index) => (
                           <MenuItem key={index} value={item._id}>
@@ -340,12 +340,12 @@ const RunsForm = React.forwardRef(
                           </MenuItem>
                         ))}
                       </Select>
-                      {/* {formik.touched.organisationId &&
+                      {formik.touched.organisationId &&
                         formik.errors.organisationId && (
                           <Typography className="error-field">
                             {formik.errors.organisationId}
                           </Typography>
-                        )} */}
+                        )}
                     </Box>
                   </Grid>
                   <Grid
@@ -372,10 +372,10 @@ const RunsForm = React.forwardRef(
                         onBlur={formik.handleBlur}
                         value={formik.values.procedureId}
                         size="small"
-                        // error={
-                        //   formik.touched.procedureId &&
-                        //   Boolean(formik.errors.procedureId)
-                        // }
+                        error={
+                          formik.touched.procedureId &&
+                          Boolean(formik.errors.procedureId)
+                        }
                         disabled
                       />
                     </Box>
@@ -393,11 +393,11 @@ const RunsForm = React.forwardRef(
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" value={formik.values.createdAt} disabled />
                       </LocalizationProvider>
-                      {/* {formik.touched.createdAt && formik.errors.createdAt && (
+                      {formik.touched.createdAt && formik.errors.createdAt && (
                         <Typography className="error-field">
                           Date required
-                        </Typography> */}
-                      {/* )} */}
+                        </Typography>
+                      )}
                     </Box>
                   </Grid>
 
@@ -442,12 +442,12 @@ const RunsForm = React.forwardRef(
                         disabled
 
                       />
-                      {/* {formik.touched.departmentId &&
+                      {formik.touched.departmentId &&
                         formik.errors.departmentId && (
                           <Typography className="error-field">
                             {formik.errors.departmentId}
                           </Typography>
-                        )} */}
+                        )}
                     </Box>
                   </Grid>
 
@@ -484,12 +484,12 @@ const RunsForm = React.forwardRef(
 
                         disabled
                       />
-                      {/* {formik.touched.laboratoryId &&
+                      {formik.touched.laboratoryId &&
                         formik.errors.laboratoryId && (
                           <Typography className="error-field">
                             {formik.errors.laboratoryId}
                           </Typography>
-                        )} */}
+                        )}
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -507,10 +507,10 @@ const RunsForm = React.forwardRef(
                         onBlur={formik.handleBlur}
                         value={formik.values.objective}
                         size="small"
-                        // error={
-                        //   formik.touched.objective &&
-                        //   Boolean(formik.errors.objective)
-                        // }
+                        error={
+                          formik.touched.objective &&
+                          Boolean(formik.errors.objective)
+                        }
                       />
                     </Box>
                   </Grid>
@@ -528,11 +528,11 @@ const RunsForm = React.forwardRef(
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
                       </LocalizationProvider>
-                      {/* {formik.touched.dueDate && formik.errors.dueDate && (
+                      {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">
                           Date required
                         </Typography>
-                      )} */}
+                      )}
                     </Box>
                   </Grid>
                   <Grid item xs={0} sm={6} md={6} lg={6} />
