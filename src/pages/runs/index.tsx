@@ -12,6 +12,7 @@ import {
   MenuItem,
   Select,
   Typography,
+  Badge,TextField
 } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -54,7 +55,12 @@ import {
 import moment from 'moment';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import TablePopup from '../../components/table/TablePopup';
+import { LocalizationProvider,DatePicker } from '@mui/x-date-pickers';
+import filterIcon from '../../assets/images/filter-icon1.svg';
+import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Popover from '@mui/material/Popover';
 
 // table start
 
@@ -76,6 +82,20 @@ export default function Runs() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const tablePopupRef: any = React.useRef(null);
   const deleteSuccessPopupRef: any = React.useRef(null);
+  const [filterKey, setFilterKey] = React.useState(null);
+  const [columnAnchorEl, setColumnAnchorEl] =
+  React.useState<null | HTMLElement>(null);
+const [filterPopoverEl, setFilterPopoverEl] =
+  React.useState<null | HTMLElement>(null);
+const columnAnchorOpen = Boolean(columnAnchorEl);
+const filterAnchorOpen = Boolean(filterPopoverEl);
+  const [filterStatus, setFilterStatus] = React.useState(null);
+  const [filterSearchBy, setFilterSearchBy] = React.useState(null);
+  const [filterSearchValue, setFilterSearchValue] = React.useState(null);
+  const [filterFieldName, setFilterFieldName] = React.useState('');
+  const [filterType, setFilterType] = React.useState(null);
+  const [filterAvailability, setFilterAvailability] = React.useState(null);
+  const [filterOptions, setFilterOptions] = React.useState([]);
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
@@ -106,6 +126,29 @@ export default function Runs() {
 
   const Data = Rows.slice(startIndex, endIndex);
 
+  const handleFilterPopoverClose = () => {
+    setFilterPopoverEl(null);
+  };
+  const Placeholder = ({ children }: any) => {
+    return <div>{children}</div>;
+  };
+  const handleFilterPopoverClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setFilterPopoverEl(event.currentTarget);
+  };
+
+  const handleClearFilter = () => {
+    setFilterStatus(null);
+    setFilterAvailability(null);
+    setFilterSearchBy(null);
+    setFilterSearchValue(null);
+    setFilterOptions([]);
+    setFilterType(null);
+    applyFilters('search', null);
+    handleFilterPopoverClose();
+    setFilterKey(null)
+  };
   React.useEffect(() => {
     setRunsData(runsData);
   }, [runsData]);
@@ -309,6 +352,7 @@ export default function Runs() {
       <Box className="main-padding runz-page">
         <Box className="title-main">
           <Typography>Runs</Typography>
+          <div className='buttonFilter'>
           <Button
             variant="contained"
             onClick={() => {
@@ -318,6 +362,235 @@ export default function Runs() {
             <AddIcon sx={{ mr: 1 }} />
             Create Run
           </Button>
+          <Box sx={{ position: 'relative' }}>
+              <Button
+                // aria-describedby={id}
+                variant="contained"
+                onClick={handleFilterPopoverClick}
+                style={{
+                  boxShadow: 'none',
+                  backgroundColor: 'white',
+                  padding: '0px',
+                  justifyContent: 'center',
+                }}
+                className='filterButton'
+              >
+                {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
+                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
+                  <img
+                    src={filterIcon}
+                    alt="no_image"
+                    style={{
+                      width: '25px',
+                      height: '25px',
+                      opacity: 0.9,
+                      cursor: 'pointer',
+                    }}
+                  />
+                </Badge>
+              </Button>
+              <Popover
+                className="filter-dropdown"
+                open={filterAnchorOpen}
+                anchorEl={filterPopoverEl}
+                onClose={handleFilterPopoverClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+              >
+                <Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      borderBottom: '1px solid #d0d0d0',
+                      alignContent: 'center',
+                      padding: '1rem',
+                    }}
+                  >
+                    <Typography fontWeight={600} variant="body1">
+                      Filters
+                    </Typography>
+                    <CloseIcon
+                      sx={{ cursor: 'pointer' }}
+                      onClick={handleFilterPopoverClose}
+                    />
+                  </Box>
+                  <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
+                    <Box sx={{ my: 1 }}>
+                      <Typography variant="body2" paddingY={1}>
+                        Status
+                      </Typography>
+
+                      <Select
+                        labelId="table-select-label"
+                        id="table-select"
+                        value={filterStatus}
+                        displayEmpty
+                        fullWidth
+                        size="small"
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        onChange={(event: any) =>
+                          setFilterStatus(event.target.value)
+                        }
+                        renderValue={
+                          filterStatus !== null
+                            ? undefined
+                            : () => <Placeholder>Select Status</Placeholder>
+                        }
+                      >
+                        {runsStatus?.map((element: any) => (
+                          <MenuItem value={element.value} key={element.value}>
+                            {element.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Box>
+                    <Box sx={{ my: 1 }}>
+                      <Typography variant="body2" paddingY={1}>
+                        Search by
+                      </Typography>
+
+                      <Select
+                        labelId="table-select-label"
+                        id="table-select"
+                        value={filterSearchBy}
+                        size="small"
+                        fullWidth
+                        displayEmpty
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        onChange={(event: any, data: any) => {
+                          //   debugger;
+                            setFilterSearchValue(null);
+                          setFilterSearchBy(event.target?.value);
+                          setFilterFieldName(data.props.children);
+                        }}
+                        renderValue={
+                          filterSearchBy !== null
+                            ? undefined
+                            : () => <Placeholder>Search by</Placeholder>
+                        }
+                      >
+                        {headers.map((element: any) => (
+                          <MenuItem
+                            value={element.id}
+                            key={element.id}
+                            onClick={() => {
+                              setFilterType(element.type);
+                              setFilterOptions(element.filters[0]?.options);
+                              setFilterKey(element.id);
+                            }}
+                          >
+                            {element.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Box>
+                    <Box sx={{ my: 1 }}>
+                      {filterType !== null && (
+                        <Typography variant="body2" paddingY={1}>
+                          {filterType === 'text'
+                            ? 'Search'
+                            : filterType === 'date'
+                            ? `Date ${filterFieldName}`
+                            : `Select ${filterFieldName}`}
+                        </Typography>
+                      )}
+
+                      {filterType === null ? null : filterType === 'text' ? (
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          name="Search"
+                          id="Search"
+                          style={{ margin: '0px' }}
+                          InputLabelProps={{ shrink: false }}
+                          placeholder="Search"
+                          size="small"
+                          value={filterSearchValue}
+                          onChange={(event: any) =>
+                            setFilterSearchValue(event.target.value)
+                          }
+                        />
+                      ) : filterType === 'date' ? (
+                        <Box id="filterDatePicker">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              format="DD/MM/YYYY"
+                              value={filterSearchValue}
+                              onChange={(event:any) =>
+                                setFilterSearchValue(event.$d)
+                              }
+                            />
+                          </LocalizationProvider>
+                        </Box>
+                      ) : (
+                        <Select
+                          value={filterSearchValue}
+                          labelId="table-select-label2"
+                          id="table-select2"
+                          size="small"
+                          fullWidth
+                          displayEmpty
+                          IconComponent={ExpandMoreOutlinedIcon}
+                          onChange={(event: any) =>
+                            setFilterSearchValue(event.target?.value)
+                          }
+                          renderValue={
+                            filterSearchValue !== null
+                              ? undefined
+                              : () => <Placeholder>Select</Placeholder>
+                          }
+                        >
+                          {filterOptions.map((element:any, index) => (
+                            <MenuItem key={index} value={element.value}>
+                              {element.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      borderTop: '1px solid #d0d0d0',
+                      alignContent: 'center',
+                      padding: '1rem',
+                    }}
+                  >
+                    <Button
+                      style={{
+                        border: '1px solid #d3d3d3',
+                        color: '#181818',
+                        textTransform: 'capitalize',
+                      }}
+                      onClick={handleClearFilter}
+                    >
+                      Clear
+                    </Button>
+                    <Button
+                      style={{
+                        border: '1px solid #d3d3d3',
+                        background: '#FFC60B',
+                        color: '#181818',
+                        textTransform: 'capitalize',
+                      }}
+                      onClick={() => {
+                        handleFilterPopoverClose();
+                        applyFilters(filterKey, filterSearchValue);
+                      }}
+                    >
+                      Show results
+                    </Button>
+                  </Box>
+                </Box>
+              </Popover>
+            </Box>
+            </div>
         </Box>
         <TableFilters
           columns={headers}

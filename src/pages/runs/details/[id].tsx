@@ -561,6 +561,7 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
 });
   }
   const dispatch: any = useDispatch();
+console.log(value,'value');
 
   const handleOnChange = (e: any, row: any) => {
     console.log(e.target.value);
@@ -825,8 +826,37 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
               <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
                 <Box>
                   <Typography className="id-detail">Status</Typography>
-                  <FormControl className="Status-info">
-                    <div >{runzValue?.status}</div>
+                  <FormControl className="Status-info" style={{ marginTop: '7px'}}>
+                  <Box
+                          style={{
+                            borderRadius: '20px',
+                            color: 'white',
+                            width: '110px',
+                            padding: '9px 0px',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            height: '24px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            fontSize: '12px',
+                            backgroundColor:
+                              runzValue?.status == 'Created'
+                                ? '#8d8d8d'
+                                : runzValue?.status == 'Started'
+                                ? '#faaa49'
+                                : runzValue?.status == 'Complete'
+                                ? '#00bf70'
+                                : '#e2445c',
+                          }}
+                        >
+                          {runzValue?.status == 'Created'
+                            ? 'Created'
+                            : runzValue?.status == 'Started'
+                            ? 'Started'
+                            : runzValue?.status == 'Complete'
+                            ? 'Completed'
+                            : 'Stopped'}
+                        </Box>
                     {/* <Select
                       labelId="Status-popup-label"
                       id="Status-info"
@@ -1387,11 +1417,11 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
               Back
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={()=>printDocument()}>
-              <img
+              {value==1 && <img
                 src={printer}
                 alt="printer"
                 style={{ marginRight: '1rem', cursor: 'pointer' }}
-              />
+              />}
               <Button type="submit" variant="contained" className="add-btn">
                 Save
               </Button>

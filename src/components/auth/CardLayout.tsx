@@ -19,6 +19,7 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
 } from "firebase/auth";
+import { navigate } from "gatsby";
 
 export const CardLayout = ({ children }: any, props: any) => {
   const [answer, setAnswer] = React.useState<any>(10);
@@ -31,22 +32,36 @@ export const CardLayout = ({ children }: any, props: any) => {
     return e;
   }, []);
 
-  const googleSignup = () => {
+  const googleSignup = (varient:string) => {
     const googleProvider = provider("google.com");
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         console.log(result);
+        if(varient=='signup'){
+          navigate('/login')
+        }
+        else{
+          navigate('/mypage')
+          window.sessionStorage.setItem('isLoggedIn', 'true');
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const microsoftSignup = () => {
+  const microsoftSignup = (varient:string) => {
     const microsoftProvider = provider("microsoft.com");
     signInWithPopup(auth, microsoftProvider)
       .then((result) => {
         console.log(result);
+        if(varient=='signup'){
+          navigate('/login')
+        }
+        else{
+          navigate('/mypage')
+          window.sessionStorage.setItem('isLoggedIn', 'true');
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -79,7 +94,99 @@ export const CardLayout = ({ children }: any, props: any) => {
             <Typography className="test-runz">Test Runs</Typography>
           </Box>
           {children.props.uri === "/login" && (
-            <Box className="login-center"></Box>
+            <Box className="login-center">
+               <Typography className="sign-via">Sign In via</Typography>
+               <Box className="sign-via-btn">
+                {/* <LoginSocialGoogle
+                  client_id="32749125067-a5a3fnkg3jutfpnveghsvf2t8cu2ujvt.apps.googleusercontent.com"
+                  onLoginStart={onLoginStart}
+                  redirect_uri="http://localhost:8000"
+                  scope="openid profile email"
+                  discoveryDocs="claims_supported"
+                  access_type="offline"
+                  typeResponse="accessToken"
+                  onResolve={({ provider, data }: IResolveParams) => {
+                    debugger;
+                  }}
+                  onReject={(err) => {
+                    console.log(err);
+                  }}
+                > */}
+                <Button
+                  variant="contained"
+                  style={{
+                    fontWeight: 600,
+                    color: "#181818",
+                    fontSize: "15px",
+                    textTransform: "none",
+                  }}
+                  onClick={() => googleSignup('signin')}
+                >
+                  {" "}
+                  <img src={google} alt="google" />
+                  Sign In with Google
+                </Button>
+                {/* </LoginSocialGoogle> */}
+                {/* <LoginSocialMicrosoft
+                  client_id="911d1fd2-9c9e-4a0e-bd71-90c3ec04f27f"
+                  redirect_uri="http://localhost:8000"
+                  onLoginStart={onLoginStart}
+                  scope="openid profile email"
+                  response_type="code"
+                  tenant="common"
+                  prompt="login"
+                  onResolve={({ provider, data }: IResolveParams) => {
+                    debugger;
+                  }}
+                  onReject={(err: any) => {
+                    console.log(err);
+                  }}
+                > */}
+                <Button
+                  variant="contained"
+                  style={{
+                    fontWeight: 600,
+                    color: "#181818",
+                    fontSize: "15px",
+                    textTransform: "none",
+                  }}
+                  onClick={() => microsoftSignup('signin')}
+                >
+                  {" "}
+                  <img src={microsoft} alt="microsoft" />
+                  Sign In with Microsoft
+                </Button>
+                {/* </LoginSocialMicrosoft> */}
+                {/* <LoginSocialLinkedin
+                  client_id="86j2ru56b16cq6"
+                  client_secret="w33ztd5cu1CAhBgc"
+                  redirect_uri="http://localhost:8000"
+                  onLoginStart={onLoginStart}
+                  scope="openid profile email"
+                  response_type="code"
+                  onResolve={({ provider, data }: IResolveParams) => {
+                    debugger;
+                  }}
+                  onReject={(err: any) => {
+                    console.log(err);
+                  }}
+                > */}
+                {/* <Button
+                    variant="contained"
+                    style={{
+                      fontWeight: 600,
+                      color: "#181818",
+                      fontSize: "15px",
+                      textTransform: 'none'
+                    }}
+                  >
+                    {" "}
+                    <img src={linkedin} alt="linkedin" />
+                    Sign up with Linkedin
+                  </Button> */}
+                {/* </LoginSocialLinkedin> */}
+              </Box>
+            </Box>
           )}
           {children.props.uri === "/signup" && (
             <Box>
@@ -108,7 +215,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => googleSignup()}
+                  onClick={() => googleSignup('signup')}
                 >
                   {" "}
                   <img src={google} alt="google" />
@@ -138,7 +245,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => microsoftSignup()}
+                  onClick={() => microsoftSignup('signup')}
                 >
                   {" "}
                   <img src={microsoft} alt="microsoft" />

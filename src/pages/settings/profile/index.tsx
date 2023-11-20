@@ -221,7 +221,7 @@ console.log(DepartmentList);
             Edit your profile appearance / name / contact info etc.
           </Typography>
         </Box>
-        <Box className="search-field-inner setting-search">
+        {/* <Box className="search-field-inner setting-search">
           <TextField
             margin="normal"
             required
@@ -238,7 +238,7 @@ console.log(DepartmentList);
               ),
             }}
           />
-        </Box>
+        </Box> */}
       </Box>
       <Box
         sx={{

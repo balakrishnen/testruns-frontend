@@ -3,7 +3,7 @@ import { Filters, SelectOptions } from ".";
 export interface HistoryRowData {
   is_checked:boolean;
   id: string;
-  name: string;
+  objective: string;
   assetNumber: string;
   status: number;
   availability: string;
@@ -22,7 +22,7 @@ export interface HistoryRowData {
 interface HeaderId {
   is_checked:boolean;
     id: string;
-    name: string;
+    objective: string;
     assetNumber: string;
     status: number;
     availability: string;

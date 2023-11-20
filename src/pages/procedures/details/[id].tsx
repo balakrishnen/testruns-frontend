@@ -354,7 +354,7 @@ export default function ProcedureDetails() {
                     options={assetsData !== undefined ? assetsData : []}
                     getOptionLabel={(option: any) => option.label}
                     isOptionEqualToValue={(option: any, value: any) =>
-                      value._id == option._id
+                      value.id == option.id
                     }
                     renderInput={(params) => <TextField {...params} placeholder='Assets name' />}
                     fullWidth
@@ -367,7 +367,7 @@ export default function ProcedureDetails() {
                             style={{ marginRight: 0 }}
                             checked={selected}
                           />
-                          {option.name}
+                          {option.label}
                         </li>
                       </React.Fragment>
                     )}
@@ -470,11 +470,11 @@ export default function ProcedureDetails() {
               Back
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <img
+              {/* <img
                 src={printer}
                 alt="printer"
                 style={{ marginRight: '1rem', cursor: 'pointer' }}
-              />
+              /> */}
               <Button type="submit" variant="contained" className="add-btn">
                 Save
               </Button>

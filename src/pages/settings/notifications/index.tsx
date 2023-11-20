@@ -67,7 +67,7 @@ const Notification = () => {
             recommendations.
           </Typography>
         </Box>
-        <Box className="search-field-inner setting-search">
+        {/* <Box className="search-field-inner setting-search">
           <TextField
             margin="normal"
             required
@@ -84,7 +84,7 @@ const Notification = () => {
               ),
             }}
           />
-        </Box>
+        </Box> */}
       </Box>
       <Box className="alerts-text">
         <Typography>Alerts</Typography>

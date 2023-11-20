@@ -97,6 +97,7 @@ export default function AssetDetails() {
   const assetValue = location.state?.props;
   const getFunction = location.state?.func;
 
+
   // console.log(assetValue);
   const successPopupRef: any = React.useRef(null);
   const [formPopup, setFormPopup] = React.useState(false);
@@ -105,6 +106,7 @@ export default function AssetDetails() {
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const [organizationData, setOrganizationData] = React.useState([]);
+  // const [assetValue, setAssetValue] = React.useState({})
   const [organization, setOrganization] = React.useState([{ label:'',
     value: '',id:assetValue?.organisationId}])
   const [departments, setDepartments] = React.useState(
@@ -146,6 +148,35 @@ export default function AssetDetails() {
   const checkCredentials = (values: any) => {
     return true;
   };
+  // const assetsSliceData = useSelector(
+  //   (state: any) => state.assets.data?.get_asset,
+  // );
+  // React.useEffect(() => {
+  //   // setAssetValue(assetValue);
+  //   formik.setValues({
+  //     name: assetValue?.name,
+  //     assetId: assetValue?.assetNumber,
+  //     laboratoryId: assetValue?.laboratoryId,
+  //     organisationId: assetValue?.organisationId,
+  //     departmentId: assetValue?.departmentId,
+  //     // userId: 'USER_1001', 
+  //     status: assetValue?.status,
+  //     availability: assetValue?.availability,
+  //     // assets_id: assetValue.assets_id,
+  //     lastUsedDate: assetValue?.lastUsedDate,
+  //     perchasedDate:dayjs(purchaseDate),
+  //     expiryDate: dayjs(expireDate)
+  //   })
+  //   setDepartments(  assetValue?.departmentId?.map((item: any) => ({
+  //     label: item?.name,
+  //     value: item?.name,
+  //     id: item?._id,
+  //   })),)
+  // }, [assetValue]);
+
+  // React.useEffect(() => {
+  //   setAssetValue(assetsSliceData);
+  // }, [assetsSliceData]);
 
   // React.useEffect(() => {
   //   if(typeof window !== 'undefined'){
@@ -155,6 +186,8 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(assetId));
   //    }
   // }, []);
+  // console.log(assetValue?.name,'assetValue');
+  
   // const onSubmit = (values: any) => {
   // console.log(values);
 
@@ -175,7 +208,7 @@ export default function AssetDetails() {
   // };
   const onSubmit = (values: any) => {
     // debugger
-    console.log('value', value);
+    console.log('value', values);
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
       console.log('final', departments);
@@ -184,7 +217,8 @@ export default function AssetDetails() {
       var labArray: any = []
       laboratory.map((item: any) => (labArray.push(item?.id)))
       var org = organization
-      let assetValues = {
+      console.log('labArray', organization);
+      var assetValues = {
         _id: assetValue._id,
         name: values.name,
         organisationId: values?.organisationId,
@@ -196,7 +230,9 @@ export default function AssetDetails() {
         laboratoryId: labArray,
         status: values.status,
       }
-      // console.log('labArray', assetValues);
+      console.log(organization,laboratory,departments);
+      
+      console.log('labArray', assetValues);
 
       dispatch(fetchUpdateAssetsData(assetValues));
     
