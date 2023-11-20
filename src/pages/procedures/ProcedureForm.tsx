@@ -34,11 +34,11 @@ import { toast } from 'react-toastify';
 // import Confirmationpopup from "../../components/ConfirmationPopup";
 // import Successpopup from "../../components/SuccessPopup";
 const validationSchema = Yup.object().shape({
-  organisationId: Yup.string().notRequired(),
-  createdBy: Yup.string().notRequired(),
-  departmentId: Yup.array().notRequired(),
-  laboratoryId: Yup.array().notRequired(),
-  name: Yup.string().notRequired(),
+  organisationId: Yup.string().required(),
+  createdBy: Yup.string().required(),
+  departmentId: Yup.array().required(),
+  laboratoryId: Yup.array().required(),
+  name: Yup.string().required(),
 });
 
 const ProcedureForm = React.forwardRef(
@@ -328,7 +328,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box>
-                      <label style={{ display: 'block' }}>Department</label>
+                      <label style={{ display: 'block' }}>Department<span style={{ color: "#E2445C" }}>*</span></label>
                       <Autocomplete
                               multiple
                               id="departmentId"
@@ -403,12 +403,12 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                           formik.setFieldValue('departmentId', departments);
                         }}
                       /> */}
-                      {formik.touched.departmentId &&
+                      {/* {formik.touched.departmentId &&
                         formik.errors.departmentId && (
                           <Typography className="error-field">
                             {formik.errors.departmentId}
                           </Typography>
-                        )}
+                        )} */}
                     </Box>
                   </Grid>
                   <Grid
@@ -426,7 +426,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                     }}
                   >
                     <Box>
-                      <label style={{ display: 'block' }}>Laboratory</label>
+                      <label style={{ display: 'block' }}>Laboratory<span style={{ color: "#E2445C" }}>*</span></label>
                       <Autocomplete
                             multiple
                             id="departmentId"
@@ -460,12 +460,12 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                               setLaboratory(selectedOptions)
                             }
                           />
-                      {formik.touched.laboratoryId &&
+                      {/* {formik.touched.laboratoryId &&
                         formik.errors.laboratoryId && (
                           <Typography className="error-field">
                             {formik.errors.laboratoryId}
                           </Typography>
-                        )}
+                        )} */}
                     </Box>
                   </Grid>
                 </Grid>
@@ -490,15 +490,15 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                         InputLabelProps={{ shrink: false }}
                         placeholder="The simple pendulum"
                         value={formik.values.name}
-                        error={
-                          formik.touched.name && Boolean(formik.errors.name)
-                        }
+                        // error={
+                        //   formik.touched.name && Boolean(formik.errors.name)
+                        // }
                       />
-                      {formik.touched.name && formik.errors.name && (
+                      {/* {formik.touched.name && formik.errors.name && (
                         <Typography className="error-field">
                           {formik.errors.name}
                         </Typography>
-                      )}
+                      )} */}
                     </Box>
                   </Grid>
                 </Grid>

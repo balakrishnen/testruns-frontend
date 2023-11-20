@@ -58,6 +58,7 @@ import moment from 'moment';
 import { RunsStatusList } from '../../../utils/data';
 import { fetchUpdateRunsData } from '../../../api/RunsAPI';
 import { useDispatch } from 'react-redux';
+import { navigate } from 'gatsby';
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -1413,7 +1414,7 @@ console.log(value,'value');
             </Box>
           </Box>
           <Box className="edit-details" sx={{ p: 2 }}>
-            <Button type="submit" variant="contained" className="cancel-btn">
+            <Button onClick={()=>navigate('/runs')} variant="contained" className="cancel-btn">
               Back
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={()=>printDocument()}>
