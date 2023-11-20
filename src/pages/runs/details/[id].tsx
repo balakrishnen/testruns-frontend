@@ -557,7 +557,6 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
 
   pdf.addImage(imgData, 'JPEG', 0, 0);
   pdf.save('chart.pdf');
-  // };
 });
   }
   const dispatch: any = useDispatch();
@@ -1327,6 +1326,7 @@ console.log(value,'value');
                                           </Box>
                                           <Box className="color-picker">
                                             <input
+                                            style={{backgroundColor:element.color,color:element.color}}
                                               type="color"
                                               className="color-input"
                                               value={element.color}

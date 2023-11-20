@@ -765,7 +765,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                         )}
                         {headers[2].is_show && (
                           <TableCell>
-                            {row.departmentId[0] !== null ? (
+                            {row.departmentId.length!==0 && row.departmentId[0] !== null ? (
                               <Box
                                 sx={{ display: 'flex', alignItems: 'center' }}
                                 onClick={(_event) => {
@@ -817,7 +817,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                         )}
                         {headers[3].is_show && (
                           <TableCell>
-                            {row.laboratoryId[0] !== null ? (
+                            {row.laboratoryId.length!==0 && row.laboratoryId[0] !== null ? (
                               <Box
                                 sx={{ display: 'flex', alignItems: 'center' }}
                                 onClick={(_event) => {
