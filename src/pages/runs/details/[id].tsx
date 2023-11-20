@@ -30,10 +30,9 @@ import { Editor } from '@tinymce/tinymce-react';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '../../../assets/images/chevrondown-thin.svg';
 import RemoveIcon from '@mui/icons-material/Remove';
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
-
 
 import {
   LineChart,
@@ -213,7 +212,7 @@ export default function RunsDetails() {
   const runsPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
-  const runsStatus=RunsStatusList
+  const runsStatus = RunsStatusList;
   const [axisList, setAxisList] = React.useState<any>([
     { name: 'Y1', value: 'Y1' },
     { name: 'Y2', value: 'Y2' },
@@ -425,6 +424,7 @@ export default function RunsDetails() {
     const data = [...charts];
     const values = { ...data[dataIndex] };
     values.channels[keyIndex].axisValue = event.target.value;
+    values.channels[keyIndex].axisY = event.target.value;
     setCharts(data);
   };
 
@@ -452,6 +452,7 @@ export default function RunsDetails() {
           ...values.chartValues[i],
           name: Math.floor(Math.random() * 900) + 100,
           [`plot${keyIndex + 1}`]: Math.floor(Math.random() * 90) + 10,
+          amt: Math.floor(Math.random() * 900) + 100,
         };
       }
     }
@@ -525,6 +526,9 @@ export default function RunsDetails() {
       channelName: null,
       axisValue: 'Y1',
       channelValue: null,
+      yAxisId: 'left1',
+      orientation: 'left',
+      dataKey: `plot${charts[dataIndex].channels.length + 1}`,
     });
     setCharts(data);
   };
@@ -542,24 +546,24 @@ export default function RunsDetails() {
     setCharts(data);
   };
   const printDocument = () => {
-    const input:any = document.getElementById("divToPrint");
-   // Set the desired PDF size (A4 or A3)
-const pdfWidth = typeof window !== 'undefined' && window.innerWidth ;
-const pdfHeight = typeof window !== 'undefined' && window.innerHeight; 
+    const input: any = document.getElementById('divToPrint');
+    // Set the desired PDF size (A4 or A3)
+    const pdfWidth = typeof window !== 'undefined' && window.innerWidth;
+    const pdfHeight = typeof window !== 'undefined' && window.innerHeight;
 
-html2canvas(input, { scale: 2 }).then((canvas) => {
-  const imgData = canvas.toDataURL('image/png');
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
 
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    format: [pdfWidth, pdfHeight],
-  });
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        format: [pdfWidth, pdfHeight],
+      });
 
-  pdf.addImage(imgData, 'JPEG', 0, 0);
-  pdf.save('chart.pdf');
-  // };
-});
-  }
+      pdf.addImage(imgData, 'JPEG', 0, 0);
+      pdf.save('chart.pdf');
+      // };
+    });
+  };
   const dispatch: any = useDispatch();
 
   const handleOnChange = (e: any, row: any) => {
@@ -576,8 +580,9 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
     dispatch(fetchUpdateRunsData(runsChange));
     toast('Runs status updated !', {
       style: {
-        background: '#00bf70', color: '#fff'
-      }
+        background: '#00bf70',
+        color: '#fff',
+      },
     });
     // reload();
   };
@@ -594,7 +599,7 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                     {runzValue?.runNumber}
                   </Typography>
                   <Typography className="id-detail-title">
-                  {runzValue?.objective}
+                    {runzValue?.objective}
                   </Typography>
                 </Box>
               </Grid>
@@ -817,8 +822,9 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                       marginTop: '0.4rem',
                     }}
                   >
-                 {moment(parseInt(runzValue?.createdAt)).format('MM/DD/YYYY')}
-
+                    {moment(parseInt(runzValue?.createdAt)).format(
+                      'MM/DD/YYYY',
+                    )}
                   </Typography>
                 </Box>
               </Grid>
@@ -826,7 +832,7 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                 <Box>
                   <Typography className="id-detail">Status</Typography>
                   <FormControl className="Status-info">
-                    <div >{runzValue?.status}</div>
+                    <div>{runzValue?.status}</div>
                     {/* <Select
                       labelId="Status-popup-label"
                       id="Status-info"
@@ -1037,7 +1043,12 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                             </Grid>
                             <Box sx={{ mt: 4 }}>
                               <ResponsiveContainer width="100%" height={500}>
-                                <LineChart data={chartData.chartValues}>
+                                <LineChart
+                                  data={
+                                    chartData.chartValues[0]?.name &&
+                                    chartData.chartValues
+                                  }
+                                >
                                   <XAxis
                                     dataKey="name"
                                     axisLine={{ fontSize: 12, dy: 4 }}
@@ -1136,20 +1147,28 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                             </Box>
                           </Grid>
 
-                          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                          <Grid
+                            item
+                            xs={3}
+                            sm={3}
+                            md={3}
+                            lg={3}
+                            xl={3}
+                            style={{ overflowY: 'scroll', height: '700px' }}
+                          >
                             <Grid container alignItems={'center'}>
-                              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                              <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                                 <Typography variant="body1" fontWeight={500}>
                                   Channels
                                 </Typography>
                               </Grid>
                               <Grid
                                 item
-                                xs={6}
-                                sm={6}
-                                md={6}
-                                lg={6}
-                                xl={6}
+                                xs={8}
+                                sm={8}
+                                md={8}
+                                lg={8}
+                                xl={8}
                                 textAlign={'end'}
                               >
                                 <Button
@@ -1180,11 +1199,11 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                                   <Grid container>
                                     <Grid
                                       item
-                                      xs={6}
-                                      sm={6}
-                                      md={6}
-                                      lg={6}
-                                      xl={6}
+                                      xs={8}
+                                      sm={8}
+                                      md={8}
+                                      lg={8}
+                                      xl={8}
                                     >
                                       <Box>
                                         <Box className="color-chart">
@@ -1219,7 +1238,8 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                                                       </Placeholder>
                                                     )
                                               }
-                                              style={{ width: '180px' }}
+                                              style={{width: '90%'}}
+                                              // style={{ width: '220px' }}
                                             >
                                               {channelsList.map(
                                                 (item, index) => (
@@ -1241,11 +1261,11 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                                     </Grid>
                                     <Grid
                                       item
-                                      xs={6}
-                                      sm={6}
-                                      md={6}
-                                      lg={6}
-                                      xl={6}
+                                      xs={4}
+                                      sm={4}
+                                      md={4}
+                                      lg={4}
+                                      xl={4}
                                     >
                                       <Box>
                                         <Box className="color-chart">
@@ -1283,6 +1303,7 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                                                       </Placeholder>
                                                     )
                                               }
+                                              // style={{ width: '100px' }}
                                               fullWidth
                                             >
                                               {axisList.map((item, index) => (
@@ -1333,7 +1354,6 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
                     ))}
                   </Box>
                 </Box>
-                
               </CustomTabPanel>
               <CustomTabPanel value={value} index={2}>
                 <Editor
@@ -1386,7 +1406,10 @@ html2canvas(input, { scale: 2 }).then((canvas) => {
             <Button type="submit" variant="contained" className="cancel-btn">
               Back
             </Button>
-            <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={()=>printDocument()}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center' }}
+              onClick={() => printDocument()}
+            >
               <img
                 src={printer}
                 alt="printer"
