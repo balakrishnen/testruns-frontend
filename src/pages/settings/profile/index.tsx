@@ -21,6 +21,7 @@ import { fetchDepartmentData } from '../../../api/departmentAPI';
 import { fetchLabData } from '../../../api/labAPI';
 
 import { DepartmentList, LaboratoryList ,OrganizationList} from "../../../utils/data";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   password:Yup.string()
@@ -98,8 +99,16 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      alert("password updated successful!");
-      navigate('/login')
+      toast(`Password Reset successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      setTimeout(()=>{
+        navigate('/login')
+      },2000)
+      // alert("password updated successful!");
+      // navigate('/login')
     } else {
       formik.setFieldError("password", "Invalid password");
        }
@@ -149,7 +158,12 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      alert("User Details updated successful!");
+      toast(`User Details updated successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // alert("User Details updated successful!");
      
   };
 }
@@ -797,6 +811,9 @@ console.log(DepartmentList);
                     <TextField
                       type={initalStatus.confirmpassword ? "text" : "password"}
                       fullWidth
+                      onPaste={(event) => {
+                        event.preventDefault()}}
+                        style={{userSelect:'none'}}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">

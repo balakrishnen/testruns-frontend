@@ -13,6 +13,7 @@ import { navigate } from "gatsby";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
+import { ToastContainer, toast } from "react-toastify";
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -66,8 +67,16 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
     );
 
     if (isMatch) {
-      alert("Reset successful!");
-      navigate('/login')
+      toast(`Password Reset successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      setTimeout(()=>{
+        navigate('/login')
+      },2000)
+      // alert("Reset successful!");
+      // navigate('/login')
     } else {
       formik.setFieldError("email", "Invalid email");
       formik.setFieldError("password", "Invalid password");
@@ -98,6 +107,14 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
   });
   return (
     <>
+    <ToastContainer
+    position="top-right"
+    autoClose={2000}
+    closeOnClick={true}
+    pauseOnHover={true}
+    draggable={false}
+    hideProgressBar={true}
+  />
       <Typography variant="h5" className="title-text">
         Reset Password
       </Typography>
@@ -190,7 +207,10 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
               }}
               name="confirm_password"
               id="confirm_password"
+              onPaste={(event) => {
+                event.preventDefault()}}
               onChange={formik.handleChange}
+              style={{userSelect:'none'}}
               onBlur={formik.handleBlur}
               value={formik.values.confirm_password}
               variant="outlined"

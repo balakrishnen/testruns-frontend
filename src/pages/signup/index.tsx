@@ -15,6 +15,7 @@ import { navigate } from "gatsby";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
+import { ToastContainer, toast } from 'react-toastify';
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -76,8 +77,15 @@ const SignUp = () => {
     );
 
     if (isMatch) {
-      alert("Signin successful!");
-      navigate('/login')
+      // alert("Signin successful!");
+      toast(`Signin successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      setTimeout(()=>{
+        navigate('/login')
+      },1000)
     } else {
       formik.setFieldError("fullname", "Invalid fullname");
       formik.setFieldError("email", "Invalid email");
@@ -114,7 +122,14 @@ const SignUp = () => {
   });
 
   return (
-    <>
+    <><ToastContainer
+    position="top-right"
+    autoClose={2000}
+    closeOnClick={true}
+    pauseOnHover={true}
+    draggable={false}
+    hideProgressBar={true}
+  />
       <Typography variant="h5" className="title-text">
         Sign up for a <span>free</span> Test Runs account
       </Typography>

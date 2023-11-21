@@ -31,6 +31,7 @@ import { navigate } from "gatsby";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
+import { ToastContainer, toast } from "react-toastify";
 
 
 const generateRandomText = () => {
@@ -66,8 +67,16 @@ const ForgotPassword = () => {
     const isMatch = checkCredentials(values.email, values.captcha);
 
     if (isMatch) {
-      alert("An OTP is sent to your registered email-ID");
-      navigate('/otp')
+      toast(`An OTP is sent to your registered email-ID !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      setTimeout(()=>{
+        navigate('/otp')
+      },3000)
+      // alert("An OTP is sent to your registered email-ID");
+      // navigate('/otp')
     } else {
       formik.setFieldError("email", "Invalid email");
       formik.setFieldError("captcha", "Invalid captcha");
@@ -94,7 +103,14 @@ const ForgotPassword = () => {
   });
 
   return (
-    <>
+    <><ToastContainer
+    position="top-right"
+    autoClose={2000}
+    closeOnClick={true}
+    pauseOnHover={true}
+    draggable={false}
+    hideProgressBar={true}
+  />
       <Typography variant="h5" className="title-text">
         Forgot Password
       </Typography>
