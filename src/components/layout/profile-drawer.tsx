@@ -104,7 +104,7 @@ export default function AppProfileDrawer({
             >
               <CloseOutlinedIcon
                 sx={{ cursor: 'pointer' }}
-                onClick={toggleProfileDrawer}
+                onClick={()=>{toggleProfileDrawer(), setEdit(true)}}
               />
               <Box
                 sx={{
@@ -159,6 +159,8 @@ export default function AppProfileDrawer({
                     fullWidth
                     id="name"
                     name="name"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     autoComplete="name"
                     InputLabelProps={{ shrink: false }}
                     placeholder="First name"
@@ -185,6 +187,8 @@ export default function AppProfileDrawer({
                     fullWidth
                     id="last"
                     name="last"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     autoComplete="last"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Last name"
@@ -216,6 +220,8 @@ export default function AppProfileDrawer({
                     fullWidth
                     id="Email"
                     name="Email"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     autoComplete="Email"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Email"
@@ -241,6 +247,8 @@ export default function AppProfileDrawer({
                     fullWidth
                     id="mobile"
                     name="mobile"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     InputLabelProps={{ shrink: false }}
                     placeholder="Mobile number"
                     type='number'
@@ -262,6 +270,8 @@ export default function AppProfileDrawer({
                   <Autocomplete
                     // multiple
                     id="Organisation"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     options={organizationData !== undefined ? organizationData : []}
                     disableCloseOnSelect
                     getOptionLabel={(option: any) => option.label}
@@ -292,6 +302,8 @@ export default function AppProfileDrawer({
                   <Autocomplete
                     multiple
                     id="department"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     options={departmentData !== undefined ? departmentData : []}
                     disableCloseOnSelect
                     getOptionLabel={(option: any) => option.label}
@@ -340,6 +352,8 @@ export default function AppProfileDrawer({
                     fullWidth
                     id="Designation"
                     name="Designation"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     autoComplete="Designation"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Designation"
@@ -350,7 +364,6 @@ export default function AppProfileDrawer({
                         </InputAdornment>
                       ),
                     }}
-                    className="Organisation"
                   />
                 </Box>
               </Grid>
@@ -371,6 +384,8 @@ export default function AppProfileDrawer({
                     required
                     fullWidth
                     id="Organisation"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     name="Organisation"
                     autoComplete="Organisation"
                     InputLabelProps={{ shrink: false }}
@@ -382,7 +397,6 @@ export default function AppProfileDrawer({
                         </InputAdornment>
                       ),
                     }}
-                    className="Organisation"
                   />
                 </Box>
               </Grid>

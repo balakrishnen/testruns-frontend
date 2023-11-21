@@ -528,7 +528,7 @@ const Addnewpopup = React.forwardRef(
                               value.id == option.id
                             }
                             renderInput={(params) => (
-                              <TextField {...params} placeholder="Department" />
+                              <TextField {...params} placeholder="Department/s" />
                             )}
                             fullWidth
                             placeholder="Department"
@@ -583,7 +583,7 @@ const Addnewpopup = React.forwardRef(
                             disableCloseOnSelect
                             value={laboratory}
                             renderInput={(params) => (
-                              <TextField {...params} placeholder="Laboratory" />
+                              <TextField {...params} placeholder="Laboratory/ies"/>
                             )}
                             fullWidth
                             placeholder="Laboratory"

@@ -435,7 +435,7 @@ const RunsForm = React.forwardRef(
                           </React.Fragment>
                         )}
                         onChange={(_, selectedOptions: any) => setDepartment(selectedOptions)}
-                        renderInput={(params) => <TextField {...params} value={params.value} />}
+                        renderInput={(params) => <TextField {...params} value={params.value} placeholder="Department/s"  />}
                         fullWidth
                         placeholder="Department"
                         size="medium"
@@ -464,7 +464,7 @@ const RunsForm = React.forwardRef(
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
 
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies" />}
                         fullWidth
 
                         placeholder="Laboratory"

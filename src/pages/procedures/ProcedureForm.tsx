@@ -274,7 +274,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                         // autoComplete="name"
                         autoFocus
                         InputLabelProps={{ shrink: false }}
-                        // placeholder="ID023659ADN"
+                        placeholder="Procedure ID"
                         className="bg-gray-input"
                         value={formData?.procedureNumber}
                         disabled
@@ -350,7 +350,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                                 value.id == option.id
                               }
                               renderInput={(params) => (
-                                <TextField {...params} />
+                                <TextField {...params} placeholder="Department/s"  />
                               )}
                               fullWidth
                               placeholder="Department"
@@ -443,7 +443,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                             }
                             disableCloseOnSelect
                             value={laboratory}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies" />}
                             fullWidth
                             placeholder="Laboratory"
                             size="medium"
