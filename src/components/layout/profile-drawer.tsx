@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import {
   Box, Drawer, Toolbar, Typography, Checkbox,
-  Autocomplete, Button
+  Autocomplete, Button , Select, MenuItem
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -18,6 +18,9 @@ import { navigate } from 'gatsby';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
+import { OrganizationList } from '../../utils/data';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import { fetchOrganizationData } from '../../api/organizationAPI';
 
 
 export default function AppProfileDrawer({
@@ -25,6 +28,8 @@ export default function AppProfileDrawer({
   toggleProfileDrawer,
 }: any) {
   const [departmentData, setDepartmentData] = React.useState([]);
+  const [edit, setEdit]=React.useState(false)
+  const [organizationData, setOrganizationData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const departments: any = [];
   const laboratory: any = [];
@@ -35,6 +40,9 @@ export default function AppProfileDrawer({
   const labSliceData = useSelector(
     (state: any) => state.lab.data?.get_all_labs,
   );
+  const organizationSliceData = useSelector(
+    (state: any) => state.organization.data?.get_all_organisations,
+  );
   React.useEffect(() => {
     setDepartmentData(departmentSliceData?.map((item: any) => ({
       label: item.name,
@@ -44,8 +52,18 @@ export default function AppProfileDrawer({
       label: item.name,
       value: item._id
     })))
-  }, [departmentSliceData, labSliceData])
+    setOrganizationData(
+      organizationSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),
+    );
+  }, [departmentSliceData, labSliceData,organizationSliceData])
 
+  const Placeholder = ({ children }: any) => {
+    return <div>{children}</div>;
+  };
   // console.log(departmentData);
 
   // console.log(DepartmentList);
@@ -53,7 +71,10 @@ export default function AppProfileDrawer({
   React.useEffect(() => {
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
+    dispatch(fetchOrganizationData());
+   setEdit(true)
   }, []);
+
   return (
     <Drawer
       className="profile-head"
@@ -68,7 +89,7 @@ export default function AppProfileDrawer({
         },
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
-      onClose={toggleProfileDrawer}
+      onClose={()=>{toggleProfileDrawer(), setEdit(true)}}
     >
       <Toolbar />
       <Box sx={{ overflow: 'auto'  }}>
@@ -108,7 +129,7 @@ export default function AppProfileDrawer({
             </Box>
           </Box>
           <Box className="edit-profile-btn">
-            <Button>Edit profile</Button>
+            <Button onClick={()=>setEdit(false)}>Edit profile</Button>
           </Box>
           <Box className="profile-section2">
             <Grid container spacing={2} className="profile-inner">
@@ -131,6 +152,9 @@ export default function AppProfileDrawer({
                   </label>
                   <TextField
                     margin="normal"
+                    // disabled
+                    // disabled={edit}
+                    // style={{backgroundColor:"red"}}
                     required
                     fullWidth
                     id="name"
@@ -215,11 +239,18 @@ export default function AppProfileDrawer({
                     margin="normal"
                     required
                     fullWidth
-                    id="last"
-                    name="last"
-                    autoComplete="last"
+                    id="mobile"
+                    name="mobile"
                     InputLabelProps={{ shrink: false }}
-                    placeholder=""
+                    placeholder="Mobile number"
+                    type='number'
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment sx={{ mx: 2 }} position="start">
+                          +91{' '}
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Box>
               </Grid>
@@ -229,29 +260,26 @@ export default function AppProfileDrawer({
                 <Box>
                   <label>Organisation</label>
                   <Autocomplete
-                    multiple
+                    // multiple
                     id="Organisation"
-                    options={[]}
+                    options={organizationData !== undefined ? organizationData : []}
                     disableCloseOnSelect
                     getOptionLabel={(option: any) => option.label}
                     renderOption={(props, option, { selected }) => (
                       <li {...props}>
-                        <Checkbox
-                          style={{ marginRight: 0 }}
-                          checked={selected}
-                        />
+                       
                         {option.label}
                       </li>
                     )}
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => <TextField {...params} placeholder="Organisation" />}
                     fullWidth
                     placeholder="Organisation"
                     size="medium"
-                    onChange={(e, f) => {
-                      f.forEach((element) =>
-                        departments.push(element.id),
-                      );
-                    }}
+                    // onChange={(e, f) => {
+                    //   f.forEach((element) =>
+                    //     departments.push(element.id),
+                    //   );
+                    // }}
 
                   />
                 </Box>
@@ -276,7 +304,7 @@ export default function AppProfileDrawer({
                         {option.label}
                       </li>
                     )}
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => <TextField {...params} placeholder="Department/s" />}
                     fullWidth
                     placeholder="Department"
                     size="medium"

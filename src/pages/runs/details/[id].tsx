@@ -34,6 +34,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
+import AddPeoplePopup from '../../../components/AddPeoplePopup';
 
 import {
   LineChart,
@@ -211,11 +212,18 @@ function a11yProps(index: number) {
 export default function RunsDetails() {
   const [openDlg2Dialog, setDialog2Open] = React.useState(false);
   const [answers, setAnswers] = React.useState('');
+  const [runsOpen, setRunsOpen] = React.useState(false);
   const [moreInfo, setMoreInfo] = React.useState(false);
   const runsPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
   const runsStatus = RunsStatusList;
+  const inputRefs = React.useRef<any>({});
+
+  const handleInputChange = (id:any, column:any) => {
+    const value = inputRefs.current[id]?.[column]?.value;
+    console.log(`Input ${id}, Column ${column}: ${value}`);
+  };
   const [axisList, setAxisList] = React.useState<any>([
     { name: 'Y1', value: 'Y1' },
     { name: 'Y2', value: 'Y2' },
@@ -676,6 +684,9 @@ export default function RunsDetails() {
                     type="submit"
                     variant="contained"
                     className="edit-btn"
+                    onClick={() => {
+                      setRunsOpen(true);
+                  }}
                   >
                     <img
                       src={shareimgarrow}
@@ -688,6 +699,9 @@ export default function RunsDetails() {
                     type="submit"
                     variant="contained"
                     className="edit-btn"
+                    onClick={() => {
+                      setRunsOpen(true);
+                  }}
                   >
                     <img
                       src={shareimg}
@@ -1001,6 +1015,7 @@ export default function RunsDetails() {
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
                 <div dangerouslySetInnerHTML={{ __html: editorData }} />
+                <button onClick={() => handleInputChange('graph1x11', '1')}>Get Value</button>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">
@@ -1535,6 +1550,10 @@ export default function RunsDetails() {
         type="edit"
         submitFormPopup={handleSubmitFormPopup}
       />
+        <AddPeoplePopup
+                    open={runsOpen}
+                    close={() => setRunsOpen(false)}
+                />
     </PrivateRoute>
   );
 }

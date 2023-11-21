@@ -27,6 +27,7 @@ import { navigate } from "gatsby";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
+import { ToastContainer, toast } from "react-toastify";
 
 const regex=/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/
 const validationSchema = Yup.object().shape({
@@ -49,8 +50,16 @@ const OTP = () => {
     const isMatch = checkCredentials(values.otp);
 
     if (isMatch) {
-      alert("OTP successful!");
-      navigate('/reset-password')
+      toast(`OTP submitted successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      setTimeout(()=>{
+        navigate('/reset-password')
+      },2000)
+      // alert("OTP successful!");
+      // navigate('/reset-password')
     } else {
       formik.setFieldError("otp", "Invalid OTP");
     }
@@ -70,6 +79,14 @@ const OTP = () => {
 
   return (
     <>
+     <ToastContainer
+    position="top-right"
+    autoClose={2000}
+    closeOnClick={true}
+    pauseOnHover={true}
+    draggable={false}
+    hideProgressBar={true}
+  />
       <Typography variant="h5" className="title-text">
         Enter OTP
       </Typography>

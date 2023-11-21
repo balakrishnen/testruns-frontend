@@ -21,6 +21,7 @@ import { fetchDepartmentData } from '../../../api/departmentAPI';
 import { fetchLabData } from '../../../api/labAPI';
 
 import { DepartmentList, LaboratoryList ,OrganizationList} from "../../../utils/data";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   password:Yup.string()
@@ -40,7 +41,7 @@ const validationSchema = Yup.object().shape({
     .notRequired(),
     email: Yup.string()
     .notRequired(),
-    mobile:Yup.string()
+    mobile:Yup.number()
     .notRequired(),
     organisation:Yup.string()
     .notRequired(),
@@ -98,8 +99,16 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      alert("password updated successful!");
-      navigate('/login')
+      toast(`Password Reset successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      setTimeout(()=>{
+        navigate('/login')
+      },2000)
+      // alert("password updated successful!");
+      // navigate('/login')
     } else {
       formik.setFieldError("password", "Invalid password");
        }
@@ -149,7 +158,12 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      alert("User Details updated successful!");
+      toast(`User Details updated successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // alert("User Details updated successful!");
      
   };
 }
@@ -301,7 +315,8 @@ console.log(DepartmentList);
                         fullWidth
                         id="firstName"
                         name="firstName"
-                        autoComplete="firstName"
+                        type="text"
+                        // autoComplete="firstName"
                         InputLabelProps={{ shrink: false }}
                         placeholder="First name"
                         onChange={formik.handleChange}
@@ -341,9 +356,10 @@ console.log(DepartmentList);
                         <TextField
                         margin="normal"
                         fullWidth
-                        id="last_name"
+                        id="lastName"
                         name="lastName"
-                        autoComplete="lastName"
+                        type="text"
+                        // autoComplete="lastName"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Last name"
                         onChange={formikProfile.handleChange}
@@ -388,9 +404,9 @@ console.log(DepartmentList);
                         <TextField
                         margin="normal"
                         fullWidth
-                        id="email_id"
-                        name="email_id"
-                        autoComplete="email_id"
+                        id="email"
+                        name="email"
+                        // autoComplete="email_id"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Email"
                         onChange={formikProfile.handleChange}
@@ -429,9 +445,12 @@ console.log(DepartmentList);
                         <TextField
                         margin="none"
                         fullWidth
-                        id="mobile_number"
-                        name="mobile_number"
-                        autoComplete="mobile_number"
+                        id="mobile"
+                        name="mobile"
+                        type="number"
+                        inputProps={{
+                          maxLength: 11,
+                        }}
                         InputLabelProps={{ shrink: false }}
                         placeholder="Mobile number"
                         onChange={formikProfile.handleChange}
@@ -797,6 +816,9 @@ console.log(DepartmentList);
                     <TextField
                       type={initalStatus.confirmpassword ? "text" : "password"}
                       fullWidth
+                      onPaste={(event) => {
+                        event.preventDefault()}}
+                        style={{userSelect:'none'}}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
