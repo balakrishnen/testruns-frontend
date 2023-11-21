@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
     .notRequired(),
     email: Yup.string()
     .notRequired(),
-    mobile:Yup.string()
+    mobile:Yup.number()
     .notRequired(),
     organisation:Yup.string()
     .notRequired(),
@@ -315,7 +315,8 @@ console.log(DepartmentList);
                         fullWidth
                         id="firstName"
                         name="firstName"
-                        autoComplete="firstName"
+                        type="text"
+                        // autoComplete="firstName"
                         InputLabelProps={{ shrink: false }}
                         placeholder="First name"
                         onChange={formik.handleChange}
@@ -355,9 +356,10 @@ console.log(DepartmentList);
                         <TextField
                         margin="normal"
                         fullWidth
-                        id="last_name"
+                        id="lastName"
                         name="lastName"
-                        autoComplete="lastName"
+                        type="text"
+                        // autoComplete="lastName"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Last name"
                         onChange={formikProfile.handleChange}
@@ -402,9 +404,9 @@ console.log(DepartmentList);
                         <TextField
                         margin="normal"
                         fullWidth
-                        id="email_id"
-                        name="email_id"
-                        autoComplete="email_id"
+                        id="email"
+                        name="email"
+                        // autoComplete="email_id"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Email"
                         onChange={formikProfile.handleChange}
@@ -443,9 +445,12 @@ console.log(DepartmentList);
                         <TextField
                         margin="none"
                         fullWidth
-                        id="mobile_number"
-                        name="mobile_number"
-                        autoComplete="mobile_number"
+                        id="mobile"
+                        name="mobile"
+                        type="number"
+                        inputProps={{
+                          maxLength: 11,
+                        }}
                         InputLabelProps={{ shrink: false }}
                         placeholder="Mobile number"
                         onChange={formikProfile.handleChange}

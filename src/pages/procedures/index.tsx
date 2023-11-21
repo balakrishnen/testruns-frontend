@@ -104,7 +104,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
   });
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
-    perPage: 5,
+    perPage: 10,
     searchBy: null,
     search: null,
     sortBy: null,
@@ -418,7 +418,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     setQueryString(payload);
   };
   const reload = () => {
-    const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
+    const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
     dispatch(fetchProcedureData(payload));
   };
   return (
@@ -686,7 +686,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
               <EnhancedTable columns={headers} />
             </Grid>
           </Grid> */}
-          <TableContainer>
+          <TableContainer className='tableHeight'>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"

@@ -217,6 +217,12 @@ export default function RunsDetails() {
   const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
   const runsStatus = RunsStatusList;
+  const inputRefs = React.useRef<any>({});
+
+  const handleInputChange = (id:any, column:any) => {
+    const value = inputRefs.current[id]?.[column]?.value;
+    console.log(`Input ${id}, Column ${column}: ${value}`);
+  };
   const [axisList, setAxisList] = React.useState<any>([
     { name: 'Y1', value: 'Y1' },
     { name: 'Y2', value: 'Y2' },
@@ -951,6 +957,7 @@ export default function RunsDetails() {
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
                 <div dangerouslySetInnerHTML={{ __html: editorData }} />
+                <button onClick={() => handleInputChange('graph1x11', '1')}>Get Value</button>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">

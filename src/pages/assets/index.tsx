@@ -120,7 +120,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
   });
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
-    perPage: 5,
+    perPage: 8,
     searchBy: null,
     search: null,
     sortBy: null,
@@ -183,7 +183,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     setCurrentPage(page_no);
   };
   const reload = () => {
-    const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
+    const payload: any = { page: 1, perPage: 8, sortOrder: 'desc' };
     dispatch(fetchAssetsData(payload));
   };
   // const filters = () => {
@@ -651,7 +651,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
-          <TableContainer>
+          <TableContainer className='tableHeight'>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
