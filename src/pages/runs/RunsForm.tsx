@@ -45,12 +45,13 @@ import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().required(),
-  createdAt: Yup.string().required(),
-  departmentId: Yup.array().required(),
-  laboratoryId: Yup.array().required(),
-  objective: Yup.string().required(),
-  dueDate: Yup.string().required(),
+  createdAt: Yup.string().required('Created date is required'),
+  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
+  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  objective: Yup.string().required('Objective is required'),
+  dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().required(),
+  organisationId:Yup.string().required('Procedure Name is required')
 });
 
 const RunsForm = React.forwardRef(
@@ -293,7 +294,7 @@ const RunsForm = React.forwardRef(
                         fullWidth
                         id="organisationId"
                         name="organisationId"
-                        autoComplete="organisationId"
+                        // autoComplete="organisationId"
                         placeholder="organisationId"
 
                         onChange={(e) => {
@@ -329,10 +330,10 @@ const RunsForm = React.forwardRef(
                         onBlur={formik.handleBlur}
                         value={formik.values.organisationId}
                         size="small"
-                        // error={
-                        //   formik.touched.organisationId &&
-                        //   Boolean(formik.errors.organisationId)
-                        // }
+                        error={
+                          formik.touched.organisationId &&
+                          Boolean(formik.errors.organisationId)
+                        }
                       >
                         {procedureSliceData?.Procedures.map((item, index) => (
                           <MenuItem key={index} value={item._id}>
@@ -340,12 +341,12 @@ const RunsForm = React.forwardRef(
                           </MenuItem>
                         ))}
                       </Select>
-                      {/* {formik.touched.organisationId &&
+                      {formik.touched.organisationId &&
                         formik.errors.organisationId && (
                           <Typography className="error-field">
                             {formik.errors.organisationId}
                           </Typography>
-                        )} */}
+                        )}
                     </Box>
                   </Grid>
                   <Grid
@@ -372,10 +373,10 @@ const RunsForm = React.forwardRef(
                         onBlur={formik.handleBlur}
                         value={formik.values.procedureId}
                         size="small"
-                        // error={
-                        //   formik.touched.procedureId &&
-                        //   Boolean(formik.errors.procedureId)
-                        // }
+                        error={
+                          formik.touched.procedureId &&
+                          Boolean(formik.errors.procedureId)
+                        }
                         disabled
                       />
                     </Box>
@@ -388,16 +389,16 @@ const RunsForm = React.forwardRef(
                     lg={6}
                     className="asset-popup calender-sec"
                   >
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" value={formik.values.createdAt} disabled />
                       </LocalizationProvider>
-                      {/* {formik.touched.createdAt && formik.errors.createdAt && (
+                      {formik.touched.createdAt && formik.errors.createdAt && (
                         <Typography className="error-field">
                           Date required
-                        </Typography> */}
-                      {/* )} */}
+                        </Typography>
+                      )}
                     </Box>
                   </Grid>
 
@@ -409,7 +410,7 @@ const RunsForm = React.forwardRef(
                     lg={6}
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label style={{ display: 'block' }}>Department/s</label>
                       <Autocomplete
                         multiple
@@ -452,7 +453,7 @@ const RunsForm = React.forwardRef(
                   </Grid>
 
                   <Grid item xs={12} sm={6} md={6} lg={6}>
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label style={{ display: 'block' }}>Laboratory/ies</label>
 
                       <Autocomplete
@@ -507,11 +508,17 @@ const RunsForm = React.forwardRef(
                         onBlur={formik.handleBlur}
                         value={formik.values.objective}
                         size="small"
-                        // error={
-                        //   formik.touched.objective &&
-                        //   Boolean(formik.errors.objective)
-                        // }
+                        error={
+                          formik.touched.objective &&
+                          Boolean(formik.errors.objective)
+                        }
                       />
+                       {formik.touched.objective &&
+                        formik.errors.objective && (
+                          <Typography className="error-field">
+                            {formik.errors.objective}
+                          </Typography>
+                        )}
                     </Box>
                   </Grid>
                   <Grid
@@ -523,16 +530,16 @@ const RunsForm = React.forwardRef(
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                     className="asset-popup calender-sec"
                   >
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label>Due date<span style={{ color: "#E2445C" }}>*</span></label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
                       </LocalizationProvider>
-                      {/* {formik.touched.dueDate && formik.errors.dueDate && (
+                      {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">
                           Date required
                         </Typography>
-                      )} */}
+                      )}
                     </Box>
                   </Grid>
                   <Grid item xs={0} sm={6} md={6} lg={6} />
@@ -544,7 +551,7 @@ const RunsForm = React.forwardRef(
                     lg={6}
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label
                         style={{ display: 'block', marginBottom: '0.8rem' }}
                       >
