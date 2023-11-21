@@ -3,10 +3,11 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import assetsReducer from '../features/assetsSlice';
 import userReducer from '../features/userSlice';
 import departmentReducer from '../features/departmentSlice';
-import labReducer from '../features/labSlice'
-import organizationReducer from '../features/organizationSlice'
+import labReducer from '../features/labSlice';
+import organizationReducer from '../features/organizationSlice';
 import notificationReducer from '../features/notificationSlice';
-import runsReducer from '../features/runsSlice'
+import runsReducer from '../features/runsSlice';
+import { chartTableReducer } from '../features/runsSlice';
 import procedureReducer from '../features/procedureSlice';
 import roleReducer from '../features/roleSlice';
 
@@ -20,6 +21,7 @@ const rootStore = combineReducers({
   procedure: procedureReducer,
   role: roleReducer,
   runs: runsReducer,
+  tableChart: chartTableReducer,
 });
 
 const store = configureStore({

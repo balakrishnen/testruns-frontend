@@ -57,9 +57,10 @@ import SuccessPopup from '../../../components/SuccessPopup';
 import { useLocation } from '@reach/router';
 import moment from 'moment';
 import { RunsStatusList } from '../../../utils/data';
-import { fetchUpdateRunsData } from '../../../api/RunsAPI';
+import { fetchTableChartData, fetchUpdateRunsData } from '../../../api/RunsAPI';
 import { useDispatch } from 'react-redux';
 import { navigate } from 'gatsby';
+import { useSelector } from 'react-redux';
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -234,12 +235,7 @@ export default function RunsDetails() {
     { name: 'Density', value: 'Density' },
     { name: 'Velocity', value: 'Velocity' },
   ]);
-  const [chartTables, setChartTables] = React.useState<any>([
-    { name: 'Temperature', value: 'Temperature' },
-    { name: 'Kelvin', value: 'Kelvin' },
-    { name: 'Celsius', value: 'Celsius' },
-    { name: 'Fahrenheit', value: 'Fahrenheit' },
-  ]);
+  const [chartTables, setChartTables] = React.useState<any>([]);
   const [xAxisList, setXAxisList] = React.useState<any>([
     { name: 'Temperature', value: 'Temperature' },
     { name: 'Speed', value: 'Speed' },
@@ -405,6 +401,9 @@ export default function RunsDetails() {
     setAnchorEl(null);
   };
   const [value, setValue] = React.useState(0);
+  const tableChartSlice = useSelector(
+    (state) => state.tableChart.data?.static_chart,
+  );
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -415,6 +414,65 @@ export default function RunsDetails() {
   //     console.log(editorRef.current.getContent());
   //   }
   // };
+
+  const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907'];
+
+  React.useEffect(() => {
+    dispatch(fetchTableChartData('655b261e7e26fb0012425184'));
+  }, []);
+
+  React.useEffect(() => {
+    const daa: any = [];
+    const chartTablesList: any = [];
+
+    tableChartSlice?.forEach((element, index) => {
+      const chartChannelsList: any = [];
+      const channelAxisList: any = [];
+      const channelsList: any = []
+      chartTablesList.push({
+        name: element.heading[0],
+        value: element.heading[0],
+      });
+      for (let i = 0; i < 4; i++) {
+        channelAxisList.push({
+          color: colorsList[i],
+          axisY: `Y${i + 1}`,
+          channelName: null,
+          axisValue: `Y${i + 1}`,
+          channelValue: null,
+          yAxisId:
+            i === 0
+              ? 'left1'
+              : i === 1
+              ? 'left2'
+              : i === 2
+              ? 'right1'
+              : 'right2',
+          orientation: i % 2 === 0 ? 'left' : 'right',
+          dataKey: `plot${i + 1}`,
+        });
+      }
+      tableChartSlice[index].headers.forEach((head) => {
+        chartChannelsList.push({
+          name: head,
+          value: head,
+        });
+      });
+      element.heading.forEach((header) => {
+        daa.push({
+          tabularColumn: null,
+          axisX: '',
+          chartChannelsList: chartChannelsList,
+          chartAxisList: axisList,
+          channels: channelAxisList,
+          chartValues: [],
+        });
+      });
+    });
+    daa.splice(1, daa.length + 1);
+    setChartTables(chartTablesList);
+    setCharts(daa);
+  }, [tableChartSlice]);
 
   const handleSubmitFormPopup = () => {
     runsPopupRef.current.open(false);
@@ -1004,16 +1062,16 @@ export default function RunsDetails() {
                         <Grid
                           container
                           key={dataIndex}
-                          sx={{ my: dataIndex === 0 ? 0 : 4 }}
+                          sx={{ my: 2 }}
                           spacing={2}
                         >
                           <Grid
                             item
-                            xs={9}
-                            sm={9}
-                            md={9}
-                            lg={9}
-                            xl={9}
+                            xs={10}
+                            sm={10}
+                            md={10}
+                            lg={10}
+                            xl={10}
                             // sx={{ pr: 4 }}
                             style={{ borderRight: '1px solid #e4e5e7' }}
                           >
@@ -1198,12 +1256,12 @@ export default function RunsDetails() {
 
                           <Grid
                             item
-                            xs={3}
-                            sm={3}
-                            md={3}
-                            lg={3}
-                            xl={3}
-                            style={{ overflowY: 'scroll', height: '700px' }}
+                            xs={2}
+                            sm={2}
+                            md={2}
+                            lg={2}
+                            xl={2}
+                            style={{ overflowY: 'scroll', height: '650px' }}
                           >
                             <Grid container alignItems={'center'}>
                               <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
@@ -1248,11 +1306,11 @@ export default function RunsDetails() {
                                   <Grid container>
                                     <Grid
                                       item
-                                      xs={8}
-                                      sm={8}
-                                      md={8}
-                                      lg={8}
-                                      xl={8}
+                                      xs={7}
+                                      sm={7}
+                                      md={7}
+                                      lg={7}
+                                      xl={7}
                                     >
                                       <Box>
                                         <Box className="color-chart">
@@ -1283,7 +1341,7 @@ export default function RunsDetails() {
                                                   ? undefined
                                                   : () => (
                                                       <Placeholder>
-                                                        Select Channel
+                                                        Select
                                                       </Placeholder>
                                                     )
                                               }
@@ -1310,11 +1368,11 @@ export default function RunsDetails() {
                                     </Grid>
                                     <Grid
                                       item
-                                      xs={4}
-                                      sm={4}
-                                      md={4}
-                                      lg={4}
-                                      xl={4}
+                                      xs={5}
+                                      sm={5}
+                                      md={5}
+                                      lg={5}
+                                      xl={5}
                                     >
                                       <Box>
                                         <Box className="color-chart">
@@ -1355,14 +1413,16 @@ export default function RunsDetails() {
                                               // style={{ width: '100px' }}
                                               fullWidth
                                             >
-                                              {axisList.map((item, index) => (
-                                                <MenuItem
-                                                  key={index}
-                                                  value={item.value}
-                                                >
-                                                  {item.name}
-                                                </MenuItem>
-                                              ))}
+                                              {chartData.chartAxisList?.map(
+                                                (item, index) => (
+                                                  <MenuItem
+                                                    key={index}
+                                                    value={item.value}
+                                                  >
+                                                    {item.name}
+                                                  </MenuItem>
+                                                ),
+                                              )}
                                             </Select>
                                           </Box>
                                           <Box className="color-picker">
@@ -1402,7 +1462,7 @@ export default function RunsDetails() {
                             </Box>
                           </Grid>
                         </Grid>
-                        <Divider orientation="horizontal" sx={{ pt: 2 }} />
+                        <Divider orientation="horizontal" sx={{ py: 0 }} />
                       </>
                     ))}
                   </Box>
