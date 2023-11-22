@@ -54,7 +54,7 @@
       .MuiInputBase-root {
         padding: 4.5px 0px;
         border-radius: 10px;
-        border: 1px solid #9F9F9F;
+        border: 1px solid $black-shade-3;
         height: 45px;
         // background: #F3F3F3;
         color: $black-shade-3;
@@ -93,7 +93,7 @@
         span {
           padding: 10px 24px;
           border-radius: 6px;
-          background: #FFF4D0;
+          background: $light-yellow-1;
           display: inline-block;
           margin-right: 0.5rem;
           margin-top: 0.5rem;

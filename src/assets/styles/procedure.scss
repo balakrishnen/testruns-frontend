@@ -3,8 +3,8 @@ $width0: 900px;
 $width1: 200px;
 .procedure-table {
     th.MuiTableCell-root {
-        background-color: #FFF4D0;
-        color: #181818;
+        background-color: $light-yellow-1;
+        color: $black-shade-1;
         text-align: center;
         font-size: 16px;
         font-weight: 500;
@@ -80,7 +80,7 @@ button.edit-btn {
     background: transparent !important;
     padding-right: 0px !important;
     text-transform: capitalize;
-    color: #181818;
+    color: $black-shade-1;
     font-size: 20px;
     font-weight: 300;
     line-height: normal;
