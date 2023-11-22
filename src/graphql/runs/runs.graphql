@@ -15,7 +15,6 @@ export const GET_RUNS = gql`
             _id
             objective
             runNumber
-            procedureId
             userId
             dueDate
             status
@@ -44,6 +43,18 @@ export const GET_RUNS = gql`
                 createdAt
                 updatedAt
             }
+            procedureId{
+      _id
+name
+procedureNumber
+procedureDetials
+assectId
+userId
+isActive
+isDeleted
+createdAt
+updatedAt
+    }
         }
         pageInfo {
             currentPage
@@ -168,7 +179,7 @@ mutation Update_run(
 export const GET_CHART_TABLE = gql`
 query Static_chart {
     static_chart(userRunId: "655b261e7e26fb0012425184") {
-        heading
+        tableName
         headers
         rows {
             values

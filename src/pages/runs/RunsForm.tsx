@@ -161,8 +161,8 @@ const RunsForm = React.forwardRef(
       initialValues: {
         departmentId: formData ? formData.departmentId : "",
         laboratoryId: formData ? formData.laboratoryId : "",
-        organisationId: formData ? formData.procedureId : '',
-        procedureId: formData ? formData.procedureId : '',
+        organisationId: formData ? formData.procedureId?.name : '',
+        procedureId: formData ? formData.procedureId?._id : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
         createdAt: createdDate,

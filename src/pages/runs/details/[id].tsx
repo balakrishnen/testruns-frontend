@@ -451,10 +451,6 @@ export default function RunsDetails() {
     }
   }, [tableChartSlice]);
 
-  const displayRows = (data) => {
-    return data;
-  };
-
   const handleSubmitFormPopup = () => {
     runsPopupRef.current.open(false);
     successPopupRef.current.open(true, 'Runs');
@@ -1038,413 +1034,399 @@ export default function RunsDetails() {
                     </FormControl>
                   </Box>
                   <Box>
-                    {displayRows(charts).map(
-                      (chartData: any, dataIndex: any) => (
-                        <>
+                    {charts.map((chartData: any, dataIndex: any) => (
+                      <>
+                        <Grid
+                          container
+                          key={dataIndex}
+                          sx={{ my: 2 }}
+                          spacing={2}
+                        >
                           <Grid
-                            container
-                            key={dataIndex}
-                            sx={{ my: 2 }}
-                            spacing={2}
+                            item
+                            xs={10}
+                            sm={10}
+                            md={10}
+                            lg={10}
+                            xl={10}
+                            // sx={{ pr: 4 }}
+                            style={{ borderRight: '1px solid #e4e5e7' }}
                           >
-                            <Grid
-                              item
-                              xs={10}
-                              sm={10}
-                              md={10}
-                              lg={10}
-                              xl={10}
-                              // sx={{ pr: 4 }}
-                              style={{ borderRight: '1px solid #e4e5e7' }}
-                            >
-                              <Grid container sx={{ px: 4 }}>
-                                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-                                  {/* <label
+                            <Grid container sx={{ px: 4 }}>
+                              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                                {/* <label
                               style={{ fontSize: '16px', fontWeight: 500 }}
                             >
                               Tabular Column: &nbsp;
                             </label> */}
-                                  <Select
-                                    labelId="view-all-label"
-                                    id="time-sec"
-                                    value={chartData.selectedTable}
-                                    displayEmpty
-                                    IconComponent={ExpandMoreOutlinedIcon}
-                                    onChange={(event) =>
-                                      handleTabularColumnChange(
-                                        event,
-                                        dataIndex,
-                                      )
-                                    }
-                                    renderValue={
-                                      chartData.selectedTable !== null
-                                        ? undefined
-                                        : () => (
-                                            <Placeholder>
-                                              Select Table
-                                            </Placeholder>
-                                          )
-                                    }
-                                    size="small"
-                                    style={{
-                                      width: '250px',
-                                      borderRadius: '10px',
-                                    }}
-                                  >
-                                    {chartData.tableList?.map((item, index) => (
-                                      <MenuItem key={index} value={item.value}>
-                                        {item.name}
-                                      </MenuItem>
-                                    ))}
-                                  </Select>
-                                </Grid>
-                                <Grid
-                                  item
-                                  xs={6}
-                                  sm={6}
-                                  md={6}
-                                  lg={6}
-                                  xl={6}
-                                  textAlign={'end'}
-                                >
-                                  <>
-                                    <Button
-                                      variant="contained"
-                                      className="add-chart"
-                                      onClick={handleAddChart}
-                                      sx={{ mr: 2 }}
-                                    >
-                                      <AddIcon /> &nbsp; Add
-                                    </Button>
-                                    {dataIndex >= 1 && (
-                                      <Button
-                                        variant="contained"
-                                        className="add-chart"
-                                        onClick={() =>
-                                          handleRemoveChart(dataIndex)
-                                        }
-                                      >
-                                        <CloseOutlined
-                                          sx={{ fontSize: '18px' }}
-                                        />{' '}
-                                        &nbsp; Remove
-                                      </Button>
-                                    )}
-                                  </>
-                                </Grid>
-                              </Grid>
-                              <Box sx={{ mt: 4 }}>
-                                <ResponsiveContainer width="100%" height={500}>
-                                  <LineChart
-                                    data={
-                                      chartData.activeTableChartValues[0]
-                                        ?.name &&
-                                      chartData.activeTableChartValues
-                                    }
-                                  >
-                                    <XAxis
-                                      dataKey="name"
-                                      axisLine={{ fontSize: 12, dy: 4 }}
-                                    />
-                                    {chartData.tableChartOptionsList?.map(
-                                      (axis, axisIndex) => (
-                                        <YAxis
-                                          key={axisIndex}
-                                          yAxisId={axis.yAxis}
-                                          orientation={axis.orientation}
-                                          label={{
-                                            value: axis.yAxis,
-                                            angle: -90,
-                                            position: 'insideBottom',
-                                            fill: axis.color,
-                                          }}
-                                          tick={{
-                                            fontSize: 12,
-                                          }}
-                                        />
-                                      ),
-                                    )}
-
-                                    <Tooltip />
-                                    <CartesianGrid
-                                      stroke="#f5f5f5"
-                                      strokeDasharray="3 3"
-                                      strokeWidth={2}
-                                    />
-                                    {chartData.tableChartOptionsList?.map(
-                                      (line, lineIndex) => (
-                                        <Line
-                                          key={lineIndex}
-                                          type="linear"
-                                          dataKey={line.dataKey}
-                                          stroke={line.color}
-                                          strokeWidth={2}
-                                          yAxisId={line.yAxis}
-                                          dot={{
-                                            r: 1,
-                                            fill: line.color,
-                                          }}
-                                        />
-                                      ),
-                                    )}
-                                  </LineChart>
-                                </ResponsiveContainer>
-                                <Box
-                                  sx={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    marginTop: '30px',
+                                <Select
+                                  labelId="view-all-label"
+                                  id="time-sec"
+                                  value={chartData.selectedTable}
+                                  displayEmpty
+                                  IconComponent={ExpandMoreOutlinedIcon}
+                                  onChange={(event) =>
+                                    handleTabularColumnChange(event, dataIndex)
+                                  }
+                                  renderValue={
+                                    chartData.selectedTable !== null
+                                      ? undefined
+                                      : () => (
+                                          <Placeholder>
+                                            Select Table
+                                          </Placeholder>
+                                        )
+                                  }
+                                  size="small"
+                                  style={{
+                                    width: '250px',
+                                    borderRadius: '10px',
                                   }}
                                 >
-                                  <Box className="color-chart">
-                                    <Box
-                                      sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        width: '100%',
-                                      }}
-                                    >
-                                      <Typography className="xy-sec">
-                                        X
-                                      </Typography>
-                                      <Select
-                                        labelId="view-all-label"
-                                        size="small"
-                                        value={chartData.xValue}
-                                        displayEmpty
-                                        IconComponent={ExpandMoreOutlinedIcon}
-                                        onChange={(event) =>
-                                          handleXAxisChange(event, dataIndex)
-                                        }
-                                        renderValue={
-                                          chartData.xValue !== null
-                                            ? undefined
-                                            : () => (
-                                                <Placeholder>
-                                                  Channel
-                                                </Placeholder>
-                                              )
-                                        }
-                                        style={{ width: '250px' }}
-                                      >
-                                        {chartData.activeChannelOptions?.map(
-                                          (item, index) => (
-                                            <MenuItem
-                                              key={index}
-                                              value={item.value}
-                                            >
-                                              {item.name}
-                                            </MenuItem>
-                                          ),
-                                        )}
-                                      </Select>
-                                    </Box>
-                                  </Box>
-                                </Box>
-                              </Box>
-                            </Grid>
-
-                            <Grid
-                              item
-                              xs={2}
-                              sm={2}
-                              md={2}
-                              lg={2}
-                              xl={2}
-                              style={{ overflowY: 'scroll', height: '650px' }}
-                            >
-                              <Grid container alignItems={'center'}>
-                                <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                                  <Typography variant="body1" fontWeight={500}>
-                                    Channels
-                                  </Typography>
-                                </Grid>
-                                <Grid
-                                  item
-                                  xs={8}
-                                  sm={8}
-                                  md={8}
-                                  lg={8}
-                                  xl={8}
-                                  textAlign={'end'}
-                                >
+                                  {chartData.tableList?.map((item, index) => (
+                                    <MenuItem key={index} value={item.value}>
+                                      {item.name}
+                                    </MenuItem>
+                                  ))}
+                                </Select>
+                              </Grid>
+                              <Grid
+                                item
+                                xs={6}
+                                sm={6}
+                                md={6}
+                                lg={6}
+                                xl={6}
+                                textAlign={'end'}
+                              >
+                                <>
                                   <Button
                                     variant="contained"
                                     className="add-chart"
+                                    onClick={handleAddChart}
                                     sx={{ mr: 2 }}
-                                    onClick={() => handleAddChannel(dataIndex)}
                                   >
-                                    <AddIcon />
+                                    <AddIcon /> &nbsp; Add
                                   </Button>
-                                  <Button
-                                    variant="contained"
-                                    className={
-                                      chartData.tableChartOptionsList?.length <
-                                      5
-                                        ? 'remove-chart'
-                                        : 'add-chart'
-                                    }
-                                    onClick={() =>
-                                      handleRemoveChannel(dataIndex)
-                                    }
-                                    disabled={
-                                      chartData.tableChartOptionsList?.length <
-                                      5
-                                    }
-                                  >
-                                    <RemoveIcon />
-                                  </Button>
-                                </Grid>
+                                  {dataIndex >= 1 && (
+                                    <Button
+                                      variant="contained"
+                                      className="add-chart"
+                                      onClick={() =>
+                                        handleRemoveChart(dataIndex)
+                                      }
+                                    >
+                                      <CloseOutlined
+                                        sx={{ fontSize: '18px' }}
+                                      />{' '}
+                                      &nbsp; Remove
+                                    </Button>
+                                  )}
+                                </>
                               </Grid>
-                              <Box sx={{ mt: 2 }}>
-                                {chartData.tableChartOptionsList?.map(
-                                  (element, key) => (
-                                    <Box key={key}>
-                                      <Grid container>
-                                        <Grid
-                                          item
-                                          xs={7}
-                                          sm={7}
-                                          md={7}
-                                          lg={7}
-                                          xl={7}
-                                        >
-                                          <Box>
-                                            <Box className="color-chart">
-                                              <Box
-                                                sx={{
-                                                  display: 'flex',
-                                                  alignItems: 'center',
-                                                  width: '100%',
-                                                }}
+                            </Grid>
+                            <Box sx={{ mt: 4 }}>
+                              <ResponsiveContainer width="100%" height={500}>
+                                <LineChart
+                                  data={
+                                    chartData.activeTableChartValues[0]?.name &&
+                                    chartData.activeTableChartValues
+                                  }
+                                >
+                                  <XAxis
+                                    dataKey="name"
+                                    axisLine={{ fontSize: 12, dy: 4 }}
+                                  />
+                                  {chartData.tableChartOptionsList?.map(
+                                    (axis, axisIndex) => (
+                                      <YAxis
+                                        key={axisIndex}
+                                        yAxisId={axis.yAxis}
+                                        orientation={axis.orientation}
+                                        label={{
+                                          value: axis.yAxis,
+                                          angle: -90,
+                                          position: 'insideBottom',
+                                          fill: axis.color,
+                                        }}
+                                        tick={{
+                                          fontSize: 12,
+                                        }}
+                                      />
+                                    ),
+                                  )}
+
+                                  <Tooltip />
+                                  <CartesianGrid
+                                    stroke="#f5f5f5"
+                                    strokeDasharray="3 3"
+                                    strokeWidth={2}
+                                  />
+                                  {chartData.tableChartOptionsList?.map(
+                                    (line, lineIndex) => (
+                                      <Line
+                                        key={lineIndex}
+                                        type="linear"
+                                        dataKey={line.dataKey}
+                                        stroke={line.color}
+                                        strokeWidth={2}
+                                        yAxisId={line.yAxis}
+                                        dot={{
+                                          r: 1,
+                                          fill: line.color,
+                                        }}
+                                      />
+                                    ),
+                                  )}
+                                </LineChart>
+                              </ResponsiveContainer>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  marginTop: '30px',
+                                }}
+                              >
+                                <Box className="color-chart">
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      width: '100%',
+                                    }}
+                                  >
+                                    <Typography className="xy-sec">
+                                      X
+                                    </Typography>
+                                    <Select
+                                      labelId="view-all-label"
+                                      size="small"
+                                      value={chartData.xValue}
+                                      displayEmpty
+                                      IconComponent={ExpandMoreOutlinedIcon}
+                                      onChange={(event) =>
+                                        handleXAxisChange(event, dataIndex)
+                                      }
+                                      renderValue={
+                                        chartData.xValue !== null
+                                          ? undefined
+                                          : () => (
+                                              <Placeholder>Channel</Placeholder>
+                                            )
+                                      }
+                                      style={{ width: '250px' }}
+                                    >
+                                      {chartData.activeChannelOptions?.map(
+                                        (item, index) => (
+                                          <MenuItem
+                                            key={index}
+                                            value={item.value}
+                                          >
+                                            {item.name}
+                                          </MenuItem>
+                                        ),
+                                      )}
+                                    </Select>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Grid>
+
+                          <Grid
+                            item
+                            xs={2}
+                            sm={2}
+                            md={2}
+                            lg={2}
+                            xl={2}
+                            style={{ overflowY: 'scroll', height: '650px' }}
+                          >
+                            <Grid container alignItems={'center'}>
+                              <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                                <Typography variant="body1" fontWeight={500}>
+                                  Channels
+                                </Typography>
+                              </Grid>
+                              <Grid
+                                item
+                                xs={8}
+                                sm={8}
+                                md={8}
+                                lg={8}
+                                xl={8}
+                                textAlign={'end'}
+                              >
+                                <Button
+                                  variant="contained"
+                                  className="add-chart"
+                                  sx={{ mr: 2 }}
+                                  onClick={() => handleAddChannel(dataIndex)}
+                                >
+                                  <AddIcon />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  className={
+                                    chartData.tableChartOptionsList?.length < 5
+                                      ? 'remove-chart'
+                                      : 'add-chart'
+                                  }
+                                  onClick={() => handleRemoveChannel(dataIndex)}
+                                  disabled={
+                                    chartData.tableChartOptionsList?.length < 5
+                                  }
+                                >
+                                  <RemoveIcon />
+                                </Button>
+                              </Grid>
+                            </Grid>
+                            <Box sx={{ mt: 2 }}>
+                              {chartData.tableChartOptionsList?.map(
+                                (element, key) => (
+                                  <Box key={key}>
+                                    <Grid container>
+                                      <Grid
+                                        item
+                                        xs={7}
+                                        sm={7}
+                                        md={7}
+                                        lg={7}
+                                        xl={7}
+                                      >
+                                        <Box>
+                                          <Box className="color-chart">
+                                            <Box
+                                              sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                width: '100%',
+                                              }}
+                                            >
+                                              <Select
+                                                labelId="view-all-label"
+                                                size="small"
+                                                value={element.channelValue}
+                                                displayEmpty
+                                                IconComponent={
+                                                  ExpandMoreOutlinedIcon
+                                                }
+                                                onChange={(event) =>
+                                                  handleChannelChange(
+                                                    event,
+                                                    dataIndex,
+                                                    key,
+                                                  )
+                                                }
+                                                renderValue={
+                                                  element.channelValue !== null
+                                                    ? undefined
+                                                    : () => (
+                                                        <Placeholder>
+                                                          Select
+                                                        </Placeholder>
+                                                      )
+                                                }
+                                                style={{ width: '90%' }}
+                                                // style={{ width: '220px' }}
                                               >
-                                                <Select
-                                                  labelId="view-all-label"
-                                                  size="small"
-                                                  value={element.channelValue}
-                                                  displayEmpty
-                                                  IconComponent={
-                                                    ExpandMoreOutlinedIcon
-                                                  }
-                                                  onChange={(event) =>
-                                                    handleChannelChange(
-                                                      event,
-                                                      dataIndex,
-                                                      key,
-                                                    )
-                                                  }
-                                                  renderValue={
-                                                    element.channelValue !==
-                                                    null
-                                                      ? undefined
-                                                      : () => (
-                                                          <Placeholder>
-                                                            Select
-                                                          </Placeholder>
-                                                        )
-                                                  }
-                                                  style={{ width: '90%' }}
-                                                  // style={{ width: '220px' }}
-                                                >
-                                                  {chartData.activeChannelOptions?.map(
-                                                    (item, index) => (
-                                                      <MenuItem
-                                                        key={index}
-                                                        value={item.name}
-                                                      >
-                                                        {item.name}
-                                                      </MenuItem>
-                                                    ),
-                                                  )}
-                                                </Select>
-                                              </Box>
-                                              <Box className="color-picker">
-                                                <Box />
-                                              </Box>
+                                                {chartData.activeChannelOptions?.map(
+                                                  (item, index) => (
+                                                    <MenuItem
+                                                      key={index}
+                                                      value={item.name}
+                                                    >
+                                                      {item.name}
+                                                    </MenuItem>
+                                                  ),
+                                                )}
+                                              </Select>
+                                            </Box>
+                                            <Box className="color-picker">
+                                              <Box />
                                             </Box>
                                           </Box>
-                                        </Grid>
-                                        <Grid
-                                          item
-                                          xs={5}
-                                          sm={5}
-                                          md={5}
-                                          lg={5}
-                                          xl={5}
-                                        >
-                                          <Box>
-                                            <Box className="color-chart">
-                                              <Box
-                                                sx={{
-                                                  display: 'flex',
-                                                  alignItems: 'center',
-                                                  width: '100%',
-                                                }}
-                                              >
-                                                {/* <Typography className="xy-sec">
+                                        </Box>
+                                      </Grid>
+                                      <Grid
+                                        item
+                                        xs={5}
+                                        sm={5}
+                                        md={5}
+                                        lg={5}
+                                        xl={5}
+                                      >
+                                        <Box>
+                                          <Box className="color-chart">
+                                            <Box
+                                              sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                width: '100%',
+                                              }}
+                                            >
+                                              {/* <Typography className="xy-sec">
                                               {element.axisY}
                                             </Typography> */}
-                                                <Select
-                                                  labelId="view-all-label"
-                                                  size="small"
-                                                  value={element.yValue}
-                                                  displayEmpty
-                                                  IconComponent={
-                                                    ExpandMoreOutlinedIcon
-                                                  }
-                                                  onChange={(event) =>
-                                                    handleYAxisChange(
-                                                      event,
-                                                      dataIndex,
-                                                      key,
-                                                    )
-                                                  }
-                                                  renderValue={
-                                                    element.yValue !== null
-                                                      ? undefined
-                                                      : () => (
-                                                          <Placeholder>
-                                                            Axis
-                                                          </Placeholder>
-                                                        )
-                                                  }
-                                                  // style={{ width: '100px' }}
-                                                  fullWidth
-                                                >
-                                                  {axisList.map(
-                                                    (item, index) => (
-                                                      <MenuItem
-                                                        key={index}
-                                                        value={item.value}
-                                                      >
-                                                        {item.name}
-                                                      </MenuItem>
-                                                    ),
-                                                  )}
-                                                </Select>
-                                              </Box>
-                                              <Box className="color-picker">
-                                                <input
-                                                  style={{
-                                                    backgroundColor:
-                                                      element.color,
-                                                    color: element.color,
-                                                  }}
-                                                  type="color"
-                                                  className="color-input"
-                                                  value={element.color}
-                                                  onChange={(event) =>
-                                                    handleColorPickerChange(
-                                                      event,
-                                                      dataIndex,
-                                                      key,
-                                                    )
-                                                  }
-                                                />
-                                              </Box>
+                                              <Select
+                                                labelId="view-all-label"
+                                                size="small"
+                                                value={element.yValue}
+                                                displayEmpty
+                                                IconComponent={
+                                                  ExpandMoreOutlinedIcon
+                                                }
+                                                onChange={(event) =>
+                                                  handleYAxisChange(
+                                                    event,
+                                                    dataIndex,
+                                                    key,
+                                                  )
+                                                }
+                                                renderValue={
+                                                  element.yValue !== null
+                                                    ? undefined
+                                                    : () => (
+                                                        <Placeholder>
+                                                          Axis
+                                                        </Placeholder>
+                                                      )
+                                                }
+                                                // style={{ width: '100px' }}
+                                                fullWidth
+                                              >
+                                                {axisList.map((item, index) => (
+                                                  <MenuItem
+                                                    key={index}
+                                                    value={item.value}
+                                                  >
+                                                    {item.name}
+                                                  </MenuItem>
+                                                ))}
+                                              </Select>
+                                            </Box>
+                                            <Box className="color-picker">
+                                              <input
+                                                style={{
+                                                  backgroundColor:
+                                                    element.color,
+                                                  color: element.color,
+                                                }}
+                                                type="color"
+                                                className="color-input"
+                                                value={element.color}
+                                                onChange={(event) =>
+                                                  handleColorPickerChange(
+                                                    event,
+                                                    dataIndex,
+                                                    key,
+                                                  )
+                                                }
+                                              />
                                             </Box>
                                           </Box>
-                                          {/* <Box sx={{ textAlign: 'right' }}>
+                                        </Box>
+                                        {/* <Box sx={{ textAlign: 'right' }}>
                                 <Button
                                   type="submit"
                                   variant="contained"
@@ -1454,18 +1436,17 @@ export default function RunsDetails() {
                                   Add
                                 </Button>
                               </Box> */}
-                                        </Grid>
                                       </Grid>
-                                    </Box>
-                                  ),
-                                )}
-                              </Box>
-                            </Grid>
+                                    </Grid>
+                                  </Box>
+                                ),
+                              )}
+                            </Box>
                           </Grid>
-                          <Divider orientation="horizontal" sx={{ py: 0 }} />
-                        </>
-                      ),
-                    )}
+                        </Grid>
+                        <Divider orientation="horizontal" sx={{ py: 0 }} />
+                      </>
+                    ))}
                   </Box>
                 </Box>
               </CustomTabPanel>
