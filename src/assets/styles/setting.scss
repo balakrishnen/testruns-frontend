@@ -17,7 +17,7 @@
     .MuiInputBase-root {
         padding: 4.5px 0px;
         border-radius: 10px;
-        border: 1px solid #9F9F9F;
+        border: 1px solid $black-shade-3;
         height: 45px;
         color: $black-shade-3;
         font-size: 16px;
@@ -87,7 +87,7 @@ p.setting-title {
 
     .MuiListItemText-root {
         span {
-            color: #9F9F9F;
+            color: $black-shade-3;
             font-size: 14px;
             font-weight: 500;
             line-height: normal;
@@ -99,7 +99,7 @@ p.setting-title {
     .app-drawer-list-item-active {
         .MuiListItemText-root {
             span {
-                color: #181818;
+                color: $black-shade-1;
             }
         }
     }
@@ -110,7 +110,7 @@ p.setting-title {
 }
 
 .search-field-inner.setting-search .MuiInputBase-root {
-    background: #F3F3F3;
+    background: $light-gray;
     border: 0px;
     width: 100%;
 }
@@ -129,7 +129,7 @@ p.setting-title {
         }
 
         &:last-child {
-            color: #9F9F9F;
+            color: $black-shade-3;
             font-size: 14px;
             font-weight: 400;
             letter-spacing: 0.24px;
@@ -144,7 +144,7 @@ p.setting-title {
 
     p {
         &:first-child {
-            color: #181818;
+            color: $black-shade-1;
             font-weight: 600;
             margin-bottom: 0.5rem;
             font-size: 14px;
@@ -211,7 +211,7 @@ p.setting-title {
 
         .profile-user {
             border-radius: 200px;
-            border: 5px solid #F3F3F3;
+            border: 5px solid $light-gray;
         }
     }
 
@@ -222,7 +222,7 @@ p.setting-title {
     .edit-details {
         position: fixed;
         bottom: 0px;
-        background: #fff;
+        background: $white;
         margin-left: 3px;
         padding: 1rem;
         width: calc(100% - 530px);
@@ -271,7 +271,7 @@ main.narrow-class .profile-setting-page .edit-details {
     .non-mobile-class,
     .mobile-class {
         position: fixed;
-        background: #fff;
+        background: $white;
         z-index: 9;
         overflow-y: auto;
     }
@@ -327,12 +327,12 @@ main.narrow-class .profile-setting-page .edit-details {
 
 .bg-gray-input {
     .MuiInputBase-root {
-        background: #F3F3F3;
+        background: $light-gray;
     }
 }
 
 p.change-you {
-    color: #9F9F9F;
+    color: $black-shade-3;
     font-weight: 600;
     line-height: normal;
     letter-spacing: 0.24px;
@@ -362,7 +362,7 @@ $width1: 200px;
         left: 0;
         width: 100%;
         bottom: 0;
-        background: #fff;
+        background: $white;
         z-index: 2;
     }
 
@@ -391,8 +391,8 @@ p.Access-control {
     margin-right: -30rem;
 
     th.MuiTableCell-root {
-        background-color: #FFF4D0;
-        color: #181818;
+        background-color: $light-yellow-1;
+        color: $black-shade-1;
         text-align: center;
         font-size: 16px;
         font-weight: 500;
@@ -437,7 +437,7 @@ p.Access-control {
         }
 
         .Mui-checked {
-            color: #FFC60B !important;
+            color: $primary-color !important;
         }
     }
 
@@ -451,7 +451,7 @@ p.Access-control {
             line-height: normal;
 
             &:first-child {
-                color: #181818;
+                color: $black-shade-1;
                 font-weight: 600;
             }
 
