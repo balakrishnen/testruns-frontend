@@ -450,7 +450,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                 className='filterButton'
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
+                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false} className="red-badge-filter">
                   <img
                     src={filterIcon}
                     alt="no_image"
