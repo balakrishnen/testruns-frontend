@@ -231,10 +231,12 @@ export default function TableFilters({
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                {columns.map((item: any, index: number) => (
+                {columns.map((item: any, index: number) =>
+                 (
                   <MenuItem key={item.id} value={item.label}>
                     <Checkbox
                       checked={item.is_show ? true : false}
+                      disabled={item.label.includes('ID')?true:false}
                       onChange={(e) => handleMenuCheckboxChange(e, index)}
                     />
                     <ListItemText primary={item.label} />

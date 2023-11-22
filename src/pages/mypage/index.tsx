@@ -362,20 +362,22 @@ export default function MyPage() {
                             justifyContent: 'center',
                             fontSize: '12px',
                             backgroundColor:
-                              row.status === 1
-                                ? '#F8A83C'
-                                : row.status === 2
-                                ? '#E2445C'
-                                : '#00bf70',
-                          }}
-                        >
-                          {index + 1 === 1
-                            ? 'Created'
-                            : index + 1 === 2
-                            ? 'Started'
-                            : index + 1 === 3
-                            ? 'Stopped'
-                            : 'Completed'}
+                          row?.status == 1
+                            ? '#8d8d8d'
+                            : row?.status == 2
+                              ? '#faaa49'
+                              : row?.status == 3
+                                ? '#00bf70'
+                                : '#e2445c',
+                      }}
+                    >
+                      {row?.status == 1
+                        ? 'Created'
+                        : row?.status == 2
+                          ? 'Started'
+                          : row.status == 3
+                            ? 'Completed'
+                            : 'Stopped'}
                         </Box>
                       </TableCell>
                     </TableRow>

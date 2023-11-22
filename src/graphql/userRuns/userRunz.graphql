@@ -1,0 +1,22 @@
+ import { gql } from '@apollo/client';
+
+export const POST_USER_RUNS = gql`
+mutation Create_userRunz(
+    $runId :String!
+    $organisationId :String!
+    $userProcedure :String!
+) {
+    create_userRunz(runId: $runId, organisationId: $organisationId, userProcedure: $userProcedure) {
+        _id
+        runId
+        organisationId
+        userProcedure
+        remarks
+        results
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;

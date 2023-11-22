@@ -158,6 +158,7 @@ export default function AppProfileDrawer({
                     required
                     fullWidth
                     id="name"
+                    inputProps={{ maxLength: 20 }}
                     name="name"
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
@@ -185,6 +186,7 @@ export default function AppProfileDrawer({
                     margin="normal"
                     required
                     fullWidth
+                    inputProps={{ maxLength: 20 }}
                     id="last"
                     name="last"
                     className={edit?"bg-gray-input":""}
@@ -246,8 +248,12 @@ export default function AppProfileDrawer({
                     required
                     fullWidth
                     id="mobile"
+                    onInput={(e:any)=>{ 
+                      e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+                  }}
                     name="mobile"
                     className={edit?"bg-gray-input":""}
+                    inputProps={{ maxLength: 10 }}
                     disabled={edit}
                     InputLabelProps={{ shrink: false }}
                     placeholder="Mobile number"
@@ -350,6 +356,7 @@ export default function AppProfileDrawer({
                     margin="normal"
                     required
                     fullWidth
+                    inputProps={{ maxLength: 20 }}
                     id="Designation"
                     name="Designation"
                     className={edit?"bg-gray-input":""}
@@ -384,6 +391,7 @@ export default function AppProfileDrawer({
                     required
                     fullWidth
                     id="Organisation"
+                    inputProps={{ maxLength: 20 }}
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
                     name="Organisation"

@@ -137,14 +137,14 @@ const RunsForm = React.forwardRef(
         }
         if (type == 'edit') {
           dispatch(fetchUpdateRunsData(runsValues))
-          submitFormPopup();
-          reload()
+          
         }
         else {
           dispatch(postRunsData(runsValues));
-          submitFormPopup()
-          reload()
+          
         }
+        submitFormPopup();
+          reload()
         clearForm()
         
 
@@ -152,16 +152,16 @@ const RunsForm = React.forwardRef(
         formik.setFieldError('name', '');
       }
     };
-    const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
+    const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : null;
 
-    const dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : "");
+    const dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
     console.log(dateDue);
 
     const formik = useFormik({
       initialValues: {
         departmentId: formData ? formData.departmentId : "",
         laboratoryId: formData ? formData.laboratoryId : "",
-        organisationId: formData ? formData.procedureId?.name : '',
+        organisationId: '655376ee659b7b0012108a34',
         procedureId: formData ? formData.procedureId?._id : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
@@ -174,6 +174,8 @@ const RunsForm = React.forwardRef(
       onSubmit: onSubmit,
     });
 
+    console.log(formik.dirty);
+    
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
     );
@@ -227,6 +229,7 @@ const RunsForm = React.forwardRef(
           background: '#00bf70', color: '#fff'
         }
       });
+      clearForm()
       // successPopupRef.current.open(true, 'Run');
       // setTimeout(() => {
       //   successPopupRef.current.open(false, 'Run');
@@ -236,6 +239,7 @@ const RunsForm = React.forwardRef(
       formik.resetForm();
       setDepartment([]);
       setLab([]);
+      formik.dirty=false
       // setOrganization([]);
     };
     const procedureSliceData = useSelector(
@@ -283,7 +287,7 @@ const RunsForm = React.forwardRef(
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
-                          formik.values.organisationId !== ''
+                          formik.values.procedureId !== ''
                             ? undefined
                             : () => (
                               <Placeholder>Select Procedure</Placeholder>
@@ -292,8 +296,8 @@ const RunsForm = React.forwardRef(
 
                         margin="none"
                         fullWidth
-                        id="organisationId"
-                        name="organisationId"
+                        id="procedureId"
+                        name="procedureId"
                         // autoComplete="organisationId"
                         placeholder="organisationId"
 
@@ -328,11 +332,11 @@ const RunsForm = React.forwardRef(
 
                         }}
                         onBlur={formik.handleBlur}
-                        value={formik.values.organisationId}
+                        value={formik.values.procedureId}
                         size="small"
                         error={
-                          formik.touched.organisationId &&
-                          Boolean(formik.errors.organisationId)
+                          formik.touched.procedureId &&
+                          Boolean(formik.errors.procedureId)
                         }
                       >
                         {procedureSliceData?.Procedures.map((item, index) => (
@@ -341,10 +345,10 @@ const RunsForm = React.forwardRef(
                           </MenuItem>
                         ))}
                       </Select>
-                      {formik.touched.organisationId &&
-                        formik.errors.organisationId && (
+                      {formik.touched.procedureId &&
+                        formik.errors.procedureId && (
                           <Typography className="error-field">
-                            {formik.errors.organisationId}
+                            {formik.errors.procedureId}
                           </Typography>
                         )}
                     </Box>
@@ -591,7 +595,7 @@ const RunsForm = React.forwardRef(
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" className="add-btn">
+                <Button type="submit" variant="contained" disabled={type=='edit'?!formik.dirty:false} className="add-btn">
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>

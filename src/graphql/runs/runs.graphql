@@ -119,10 +119,7 @@ query Get_run($_id: String!) {
     get_run(_id: $_id) {
          _id
         objective
-        departmentId
-        laboratoryId
         runNumber
-        procedureId
         userId
         dueDate
         status
@@ -130,6 +127,18 @@ query Get_run($_id: String!) {
         isDeleted
         createdAt
         updatedAt
+        procedureId {
+            _id
+            name
+            procedureNumber
+            procedureDetials
+            assectId
+            userId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
     }
 }
 `;
@@ -158,11 +167,9 @@ mutation Update_run(
         assignedTo: $assignedTo
         assignedBy: $assignedBy
         dueDate: $dueDate
-    ) {
-          _id
+    )   {_id
         objective
         runNumber
-        procedureId
         userId
         dueDate
         status
@@ -170,7 +177,42 @@ mutation Update_run(
         isDeleted
         createdAt
         updatedAt
-    }
+        departmentId {
+            _id
+            name
+            departmentNumber
+            organisationID
+            status
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        laboratoryId {
+            _id
+            name
+            userId
+            departmentId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        procedureId {
+            _id
+            name
+            procedureNumber
+            procedureDetials
+            departmentId
+            laboratoryId
+            assectId
+            userId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+      
+          }  }
 }
 
 `;
