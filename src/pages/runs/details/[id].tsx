@@ -1014,8 +1014,8 @@ export default function RunsDetails() {
             </Box>
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
-                <div dangerouslySetInnerHTML={{ __html: editorData }} />
-                <button onClick={() => handleInputChange('graph1x11', '1')}>Get Value</button>
+                <div dangerouslySetInnerHTML={{ __html: runzValue?.procedureId?.procedureDetials }} />
+                {/* <button onClick={() => handleInputChange('graph1x11', '1')}>Get Value</button> */}
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">

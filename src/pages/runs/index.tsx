@@ -630,6 +630,7 @@ const [dense, setDense] = React.useState(false);
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
               size="medium"
+              stickyHeader
             >
               <TableHeader
                 numSelected={0}

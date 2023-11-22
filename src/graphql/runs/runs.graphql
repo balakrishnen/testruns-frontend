@@ -15,7 +15,6 @@ export const GET_RUNS = gql`
             _id
             objective
             runNumber
-            procedureId
             userId
             dueDate
             status
@@ -44,6 +43,18 @@ export const GET_RUNS = gql`
                 createdAt
                 updatedAt
             }
+            procedureId{
+      _id
+name
+procedureNumber
+procedureDetials
+assectId
+userId
+isActive
+isDeleted
+createdAt
+updatedAt
+    }
         }
         pageInfo {
             currentPage

@@ -5,19 +5,19 @@ query Get_all_notifications {
     get_all_notifications {
         _id
         uid
-        title
+        #title
         userId
         isActive
         isDeleted
-        #message {
-           # email
-           # notification
-        #}
-        processer {
+        createProcedure {
             email
             notification
         }
-        task {
+        runsCommend {
+            email
+            notification
+        }
+        runAssiged {
             email
             notification
         }
