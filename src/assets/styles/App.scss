@@ -17,6 +17,7 @@ input::-webkit-inner-spin-button {
 
 /* Firefox */
 input[type=number] {
+  appearance:textfield;
   -moz-appearance: textfield;
 }
 .app-bar-block {
@@ -2137,6 +2138,7 @@ input[type='color' i]::-webkit-color-swatch {
 .mypage-page {
   .table-outer {
     thead {
+      height: 45px;
       th {
         color: $black-shade-2 !important;
         font-size: 16px;
@@ -2144,6 +2146,7 @@ input[type='color' i]::-webkit-color-swatch {
         line-height: normal;
         letter-spacing: 0.24px;
         width: auto;
+        padding: 0px 16px;
       }
     }
   }
@@ -2348,7 +2351,7 @@ input#mobile_number {
 .notification-header {
   padding-top: 15px;
 }
-.red-badge {
+.red-badge , .red-badge-filter{
   span.MuiBadge-badge {
     background-color: $red;
     width: 10px;
@@ -2357,6 +2360,12 @@ input#mobile_number {
     position: absolute;
     right: 8px;
     top: 2px;
+  }
+}
+.red-badge-filter{
+  span.MuiBadge-badge {
+    right: 2px;
+    top: -1px;
   }
 }
 .MuiTableCell-stickyHeader {

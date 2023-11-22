@@ -315,12 +315,12 @@ export default function MyPage() {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">Current Tasks</TableCell>
+                  <TableCell align="right">Current tasks</TableCell>
                   <TableCell align="right">Department</TableCell>
 
                   <TableCell align="right">Lab</TableCell>
-                  <TableCell align="right">Assigned By</TableCell>
-                  <TableCell align="right">Created On</TableCell>
+                  <TableCell align="right">Assigned by</TableCell>
+                  <TableCell align="right">Created on</TableCell>
 
                   <TableCell align="right">Status</TableCell>
                 </TableRow>
@@ -400,7 +400,7 @@ export default function MyPage() {
                   cursor: 'pointer',
                 }}
               >
-                {viewAll ? 'View Less' : 'View All'}{' '}
+                {viewAll ? 'View less' : 'View all'}{' '}
                 {viewAll ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
               </Typography>
             )}
@@ -490,7 +490,7 @@ export default function MyPage() {
                       cursor: 'pointer',
                     }}
                   >
-                    {viewAlls ? 'View Less' : 'View All'}{' '}
+                    {viewAlls ? 'View less' : 'View all'}{' '}
                     {viewAlls ? (
                       <KeyboardArrowUpIcon />
                     ) : (
