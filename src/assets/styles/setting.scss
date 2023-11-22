@@ -110,7 +110,7 @@ p.setting-title {
 }
 
 .search-field-inner.setting-search .MuiInputBase-root {
-    background: #F3F3F3;
+    background: $light-gray;
     border: 0px;
     width: 100%;
 }
@@ -211,7 +211,7 @@ p.setting-title {
 
         .profile-user {
             border-radius: 200px;
-            border: 5px solid #F3F3F3;
+            border: 5px solid $light-gray;
         }
     }
 
@@ -222,7 +222,7 @@ p.setting-title {
     .edit-details {
         position: fixed;
         bottom: 0px;
-        background: #fff;
+        background: $white;
         margin-left: 3px;
         padding: 1rem;
         width: calc(100% - 530px);
@@ -271,7 +271,7 @@ main.narrow-class .profile-setting-page .edit-details {
     .non-mobile-class,
     .mobile-class {
         position: fixed;
-        background: #fff;
+        background: $white;
         z-index: 9;
         overflow-y: auto;
     }
@@ -327,7 +327,7 @@ main.narrow-class .profile-setting-page .edit-details {
 
 .bg-gray-input {
     .MuiInputBase-root {
-        background: #F3F3F3;
+        background: $light-gray;
     }
 }
 
@@ -362,7 +362,7 @@ $width1: 200px;
         left: 0;
         width: 100%;
         bottom: 0;
-        background: #fff;
+        background: $white;
         z-index: 2;
     }
 
@@ -437,7 +437,7 @@ p.Access-control {
         }
 
         .Mui-checked {
-            color: #FFC60B !important;
+            color: $primary-color !important;
         }
     }
 

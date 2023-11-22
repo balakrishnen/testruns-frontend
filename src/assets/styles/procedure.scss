@@ -44,7 +44,7 @@ $width1: 200px;
     position: relative;
     .top-section , .edit-details{
         position: fixed;
-        background-color: #fff;
+        background-color: $white;
         z-index: 9;
     }
     .top-section{       
@@ -88,7 +88,7 @@ button.edit-btn {
 }
 .menuItem{
     font-size: 12px;
-    border-bottom: 1px solid #F3F3F3;
+    border-bottom: 1px solid $light-gray;
 }
 .menuItem:hover{
     background-color: $black-shade-2;
