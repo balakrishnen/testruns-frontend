@@ -21,7 +21,20 @@ import { fetchLabData } from '../../api/labAPI';
 import { OrganizationList } from '../../utils/data';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { fetchOrganizationData } from '../../api/organizationAPI';
+import { fetchGetUser } from '../../api/userAPI';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+const validationSchema = Yup.object().shape({
+  email: Yup.string().required('Email is required').email('Invalid email').matches(emailRegex, "In-correct email"),
+  firstName: Yup.string().required('firstName is required'),
+  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
+  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  lastName: Yup.string().required('Objective is required'),
+  phoneNumber: Yup.number().required('Phone number is required is required'),
+  organisationId:Yup.string().required('organisationId  is required')
+});
 
 export default function AppProfileDrawer({
   openDrawer,
@@ -30,6 +43,7 @@ export default function AppProfileDrawer({
   const [departmentData, setDepartmentData] = React.useState([]);
   const [edit, setEdit]=React.useState(false)
   const [organizationData, setOrganizationData] = React.useState([]);
+  const [userDetail, setUserDetail] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const departments: any = [];
   const laboratory: any = [];
@@ -42,6 +56,9 @@ export default function AppProfileDrawer({
   );
   const organizationSliceData = useSelector(
     (state: any) => state.organization.data?.get_all_organisations,
+  );
+  const userSliceData = useSelector(
+    (state: any) => state.user.data?.get_user,
   );
   React.useEffect(() => {
     setDepartmentData(departmentSliceData?.map((item: any) => ({
@@ -59,8 +76,12 @@ export default function AppProfileDrawer({
         id: item._id,
       })),
     );
-  }, [departmentSliceData, labSliceData,organizationSliceData])
+    setUserDetail(userSliceData)
 
+  }, [departmentSliceData, labSliceData,organizationSliceData,userSliceData])
+
+  console.log(userDetail);
+  
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -69,11 +90,17 @@ export default function AppProfileDrawer({
   // console.log(DepartmentList);
 
   React.useEffect(() => {
+    let payload={
+      _id:"655f18bcc88024001262b3a5"
+    }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
     dispatch(fetchOrganizationData());
+    dispatch(fetchGetUser(payload))
    setEdit(true)
   }, []);
+
+
 
   return (
     <Drawer

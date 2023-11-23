@@ -42,3 +42,26 @@ export const POST_USER = gql`
     }
   }
 `;
+
+export const GET_USER = gql`
+query Get_user(
+$_id: String!
+) {
+    get_user( _id: $_id) {
+        _id
+        uid
+        firstName
+        lastName
+        departmentId
+        laboratoryId
+        organisationId
+        email
+        role
+        phoneNumber
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+    }
+`;
