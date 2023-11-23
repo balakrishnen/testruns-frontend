@@ -859,7 +859,7 @@ console.log(assetValue?.organisationId,);
                 <Button variant="contained" className="cancel-btn" onClick={()=>navigate('/assets')}>
                   Back
                 </Button>
-                <Button type="submit" variant="contained"  disabled={!formik.isValid} className="add-btn">
+                <Button type="submit" variant="contained"  disabled={!formik.dirty} className="add-btn">
                   Save
                 </Button>
               </Box>

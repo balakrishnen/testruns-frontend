@@ -533,7 +533,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" className="add-btn">
+                <Button type="submit" variant="contained" className="add-btn" disabled={type=='edit'?!formik.dirty:!formik.isValid}>
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
