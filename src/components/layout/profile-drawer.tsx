@@ -364,13 +364,13 @@ export default function AppProfileDrawer({
                     autoComplete="Designation"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Designation"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <img src={document} />
-                        </InputAdornment>
-                      ),
-                    }}
+                    // InputProps={{
+                    //   startAdornment: (
+                    //     <InputAdornment position="start">
+                    //       <img src={document} />
+                    //     </InputAdornment>
+                    //   ),
+                    // }}
                   />
                 </Box>
               </Grid>
@@ -398,22 +398,22 @@ export default function AppProfileDrawer({
                     autoComplete="Organisation"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Requestor ID/Tester ID"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <img src={profile2} />
-                        </InputAdornment>
-                      ),
-                    }}
+                    // InputProps={{
+                    //   startAdornment: (
+                    //     <InputAdornment position="start">
+                    //       <img src={profile2} />
+                    //     </InputAdornment>
+                    //   ),
+                    // }}
                   />
                 </Box>
               </Grid>
             </Grid>
-            <Box  >
+            {/* <Box  >
               <Box style={{ height: "150px" }}>
 
-              </Box>
-            </Box>
+              </Box> */}
+            {/* </Box> */}
             {/* <Box>
               <label>Labs assigned</label>
               <Box className="lab-list">
@@ -426,6 +426,14 @@ export default function AppProfileDrawer({
               </Box>
             </Box> */}
           </Box>
+          <Box className="edit-details-profile">
+        <Button type="submit" variant="contained" onClick={()=>{toggleProfileDrawer(), setEdit(true)}} className="cancel-btn" >
+          Cancel
+        </Button>
+        <Button type="submit" variant="contained" className="add-btn">
+          Save
+        </Button>
+      </Box>
         </Box>
       </Box>
     </Drawer>

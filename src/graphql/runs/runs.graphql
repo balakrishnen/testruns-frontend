@@ -93,8 +93,8 @@ export const POST_RUNS = gql`
     
     ) {
        _id
+        objective
         runNumber
-        procedureId
         userId
         dueDate
         status
@@ -102,6 +102,41 @@ export const POST_RUNS = gql`
         isDeleted
         createdAt
         updatedAt
+        departmentId {
+            _id
+            name
+            departmentNumber
+            organisationID
+            status
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        laboratoryId {
+            _id
+            name
+            userId
+            departmentId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        procedureId {
+            _id
+            name
+            procedureNumber
+            procedureDetials
+            departmentId
+            laboratoryId
+            assectId
+            userId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
       
     }
   }

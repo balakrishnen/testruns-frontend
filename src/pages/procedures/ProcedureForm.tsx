@@ -56,18 +56,18 @@ const ProcedureForm = React.forwardRef(
     const confirmationPopupRef: any = React.useRef();
     const successPopupRef: any = React.useRef();
     const [departments, setDepartments] = React.useState(
-      formData?.departmentId?.map((item: any) => ({
+      formData!==undefined?formData?.departmentId?.map((item: any) => ({
         label: item?.name,
         value: item?.name,
         id: item?._id,
-      })),
+      })):[]
     );
     const [laboratory, setLaboratory] = React.useState(
-      formData?.laboratoryId?.map((item: any) => ({
+      formData!==undefined? formData?.laboratoryId?.map((item: any) => ({
         label: item?.name,
         value: item?.name,
         id: item?._id,
-      })),
+      })):[]
     );
     // const handleAddButtonClick = () => {
     //     setSuccessOpen(true);
@@ -84,7 +84,7 @@ const ProcedureForm = React.forwardRef(
       return true;
     };
     const onSubmit = (values: any) => {
-      console.log(values);
+      console.log("values",values);
 
       const isMatch = checkCredentials(values.name);
       var deptArray:any=[]
@@ -130,8 +130,11 @@ const ProcedureForm = React.forwardRef(
     }));
     const clearForm = () => {
       formik.resetForm();
-      setDepartments([]);
-      setLaboratory([]);
+      if (type=='create') {
+        setDepartments([]);
+        setLaboratory([]);
+      }
+      formik.dirty=false
     };
     // const[formValues,setFormValues]=React.useState<any>({})
 
@@ -201,7 +204,7 @@ const ProcedureForm = React.forwardRef(
       } else {
         confirmationPopupRef.current.open(false);
         setFormOpen(false);
-        clearForm()
+       clearForm()
       }
     };
 
@@ -279,17 +282,17 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                         value={formData?.procedureNumber}
                         disabled
                         size="small"
-                        error={
-                          formik.touched.organisationId &&
-                          Boolean(formik.errors.organisationId)
-                        }
+                        // error={
+                        //   formik.touched.procedureNumber &&
+                        //   Boolean(formik.errors.procedureNumber)
+                        // }
                       />
-                      {formik.touched.organisationId &&
-                        formik.errors.organisationId && (
+                      {/* {formik.touched.procedureNumber &&
+                        formik.errors.procedureNumber && (
                           <Typography className="error-field">
-                            {formik.errors.organisationId}
+                            {formik.errors.procedureNumber}
                           </Typography>
-                        )}
+                        )} */}
                     </Box>
                   </Grid>
                   <Grid
@@ -525,7 +528,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" className="add-btn"  disabled={!formik.isValid}>
+                <Button type="submit" variant="contained" className="add-btn" >
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
