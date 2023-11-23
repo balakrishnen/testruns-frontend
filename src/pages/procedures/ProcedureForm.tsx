@@ -37,7 +37,7 @@ const validationSchema = Yup.object().shape({
   createdBy: Yup.string().required(),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
   laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
-  organisationId: Yup.string().required('Organisation is required'),
+  organisationId: Yup.string().notRequired(),
   name: Yup.string().required(),
 });
 
@@ -81,6 +81,10 @@ const ProcedureForm = React.forwardRef(
     //     closeFormPopup();
     //   };
     const checkCredentials = (values: any) => {
+      console.log(values);
+      console.log(formik.errors);
+      
+      
       return true;
     };
     const onSubmit = (values: any) => {
@@ -165,6 +169,7 @@ const ProcedureForm = React.forwardRef(
       onSubmit: onSubmit,
     });
     // console.log(formValues);
+    console.log(formik.errors);
 
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -528,7 +533,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" className="add-btn" >
+                <Button type="submit" variant="contained" className="add-btn">
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>

@@ -15,7 +15,6 @@ export const GET_RUNS = gql`
             _id
             objective
             runNumber
-            userId
             dueDate
             status
             isActive
@@ -36,7 +35,6 @@ export const GET_RUNS = gql`
             laboratoryId {
                 _id
                 name
-                userId
                 departmentId
                 isActive
                 isDeleted
@@ -49,7 +47,6 @@ name
 procedureNumber
 procedureDetials
 assectId
-userId
 isActive
 isDeleted
 createdAt
@@ -95,7 +92,6 @@ export const POST_RUNS = gql`
        _id
         objective
         runNumber
-        userId
         dueDate
         status
         isActive
@@ -116,7 +112,6 @@ export const POST_RUNS = gql`
         laboratoryId {
             _id
             name
-            userId
             departmentId
             isActive
             isDeleted
@@ -131,7 +126,6 @@ export const POST_RUNS = gql`
             departmentId
             laboratoryId
             assectId
-            userId
             isActive
             isDeleted
             createdAt
@@ -205,7 +199,6 @@ mutation Update_run(
     )   {_id
         objective
         runNumber
-        userId
         dueDate
         status
         isActive
@@ -226,7 +219,6 @@ mutation Update_run(
         laboratoryId {
             _id
             name
-            userId
             departmentId
             isActive
             isDeleted
@@ -241,7 +233,6 @@ mutation Update_run(
             departmentId
             laboratoryId
             assectId
-            userId
             isActive
             isDeleted
             createdAt
