@@ -136,7 +136,7 @@ const UserForm = React.forwardRef(
           role: values.role,
           status: values.status,
         }
-        debugger
+        // debugger
         if (type == 'edit') {
           values['_id'] = rowValue._id
           dispatch(fetchUpdateUserData(values))

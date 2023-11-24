@@ -35,6 +35,7 @@ import {
   handleDeCheckboxChange,
   handledAllSelected,
 } from '../../../utils/common-services';
+import moment from 'moment';
 // table start
 
 const users: UserRowData[] = UserRows;
@@ -221,6 +222,14 @@ const Users = () => {
   const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
   };
+  const roleSliceData = useSelector(
+    (state: any) => state.role.data?.get_all_roles,
+  );
+  const organizationSliceData = useSelector(
+    (state: any) => state.organization.data?.get_all_organisations,
+  );
+  console.log(roleSliceData?.find(obj => obj._id == "6548eabeaeb1160012a51125"))
+  
   // table end
   return (
     <Box
@@ -300,17 +309,17 @@ const Users = () => {
                       <TableCell scope="row">
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Box sx={{ mt: 0, mr: 1 }}>
-                            <Checkbox
-                              // checked={row.is_checked}
-                              color="info"
-                              disableRipple
-                              onClick={(e: any) => clickHandler(e)}
-                              checked={row.is_checked}
-                              onChange={(event) => {
-                                setRowId([...rowId, row._id]),
-                                  handleChange(event, row.id)
-                              }}
-                            />
+                          <Checkbox
+                                  color="primary"
+                                  checked={
+                                    row.is_checked == true ? true : false
+                                  }
+                                  onClick={(e: any) => clickHandler(e)}
+                                  onChange={(event) => {
+                                    (row.is_checked==true && setRowId([...rowId, row._id])),
+                                      handleChange(event, row._id);
+                                  }}
+                                />
                           </Box>
 
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -324,21 +333,26 @@ const Users = () => {
                     {headers[1].is_show && (
                       <TableCell align="center">{row.firstName} {row.lastName}</TableCell>
                     )}
-                    {headers[2].is_show && (
+                    {/* {headers[2].is_show && (
                       <TableCell align="center">
-                        {row.providerDetails}
+                        {row.providerDetails==null?"-":row.providerDetails}
                       </TableCell>
+                    )} */}
+                    {headers[2].is_show && (
+                      
+                      <TableCell align="center">{organizationSliceData?.find(obj => obj._id == row.organisationId)?.name}</TableCell>
                     )}
                     {headers[3].is_show && (
-                      <TableCell align="center">{row.organisationId}</TableCell>
+                      <TableCell align="center">
+                      {moment(parseInt(row.createdAt)).format(
+                        'MM/DD/YYYY',
+                      )}
+                    </TableCell>
                     )}
                     {headers[4].is_show && (
-                      <TableCell align="center">{row.createdAt}</TableCell>
+                      <TableCell align="center">{roleSliceData?.find(obj => obj._id == row.role)?.name}</TableCell>
                     )}
                     {headers[5].is_show && (
-                      <TableCell align="center">{row.role}</TableCell>
-                    )}
-                    {headers[6].is_show && (
                       <TableCell>
                         <Select
                           className={

@@ -325,25 +325,25 @@ export const UserHeaders: readonly UserHead[] = [
     is_show: true,
     type: 'select',
   },
-  {
-    id: 'extraData',
-    label: 'Category',
-    filters: [
-      {
-        id: 'category',
-        type: 'autocomplete',
-        label: 'Category',
-        options: [
-          { value: 'Data mining', label: 'Data mining' },
-          { value: 'Data warehouse', label: 'Data warehouse' },
-          { value: 'OOPS', label: 'OOPS' },
-        ],
-      },
-    ],
-    sort: 'asc',
-    is_show: true,
-    type: 'select',
-  },
+  // {
+  //   id: 'extraData',
+  //   label: 'Category',
+  //   filters: [
+  //     {
+  //       id: 'category',
+  //       type: 'autocomplete',
+  //       label: 'Category',
+  //       options: [
+  //         { value: 'Data mining', label: 'Data mining' },
+  //         { value: 'Data warehouse', label: 'Data warehouse' },
+  //         { value: 'OOPS', label: 'OOPS' },
+  //       ],
+  //     },
+  //   ],
+  //   sort: 'asc',
+  //   is_show: true,
+  //   type: 'select',
+  // },
   {
     id: 'organisationId',
     label: 'Added on',
