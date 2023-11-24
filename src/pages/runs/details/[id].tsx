@@ -401,10 +401,10 @@ export default function RunsDetails() {
               i === 0
                 ? 'left1'
                 : i === 1
-                ? 'right1'
-                : i === 2
-                ? 'left2'
-                : 'right2',
+                  ? 'right1'
+                  : i === 2
+                    ? 'left2'
+                    : 'right2',
             orientation: i % 2 === 0 ? 'left' : 'right',
             dataKey: `plot${[i + 1]}`,
             channelValue: null,
@@ -901,19 +901,19 @@ export default function RunsDetails() {
                           runzValue?.status == 'Created'
                             ? '#8d8d8d'
                             : runzValue?.status == 'Started'
-                            ? '#faaa49'
-                            : runzValue?.status == 'Complete'
-                            ? '#00bf70'
-                            : '#e2445c',
+                              ? '#faaa49'
+                              : runzValue?.status == 'Complete'
+                                ? '#00bf70'
+                                : '#e2445c',
                       }}
                     >
                       {runzValue?.status == 'Created'
                         ? 'Created'
                         : runzValue?.status == 'Started'
-                        ? 'Started'
-                        : runzValue?.status == 'Complete'
-                        ? 'Completed'
-                        : 'Stopped'}
+                          ? 'Started'
+                          : runzValue?.status == 'Complete'
+                            ? 'Completed'
+                            : 'Stopped'}
                     </Box>
                     {/* <Select
                       labelId="Status-popup-label"
@@ -1072,10 +1072,10 @@ export default function RunsDetails() {
                                     chartData.selectedTable !== null
                                       ? undefined
                                       : () => (
-                                          <Placeholder>
-                                            Select Table
-                                          </Placeholder>
-                                        )
+                                        <Placeholder>
+                                          Select Table
+                                        </Placeholder>
+                                      )
                                   }
                                   size="small"
                                   style={{
@@ -1211,8 +1211,8 @@ export default function RunsDetails() {
                                         chartData.xValue !== null
                                           ? undefined
                                           : () => (
-                                              <Placeholder>Channel</Placeholder>
-                                            )
+                                            <Placeholder>Channel</Placeholder>
+                                          )
                                       }
                                       style={{ width: '250px' }}
                                     >
@@ -1322,13 +1322,13 @@ export default function RunsDetails() {
                                                   element.channelValue !== null
                                                     ? undefined
                                                     : () => (
-                                                        <Placeholder>
-                                                          Select
-                                                        </Placeholder>
-                                                      )
+                                                      <Placeholder>
+                                                        Select
+                                                      </Placeholder>
+                                                    )
                                                 }
                                                 style={{ width: '90%' }}
-                                                // style={{ width: '220px' }}
+                                              // style={{ width: '220px' }}
                                               >
                                                 {chartData.activeChannelOptions?.map(
                                                   (item, index) => (
@@ -1387,10 +1387,10 @@ export default function RunsDetails() {
                                                   element.yValue !== null
                                                     ? undefined
                                                     : () => (
-                                                        <Placeholder>
-                                                          Axis
-                                                        </Placeholder>
-                                                      )
+                                                      <Placeholder>
+                                                        Axis
+                                                      </Placeholder>
+                                                    )
                                                 }
                                                 // style={{ width: '100px' }}
                                                 fullWidth
@@ -1461,15 +1461,41 @@ export default function RunsDetails() {
                     plugins: [
                       'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                       'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                      'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount','image', 'insertdatetime' , 'template','insertinput'
+                      'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'image', 'insertdatetime', 'template', 'insertinput customInsertButton customAlertButton'
                     ],
                     toolbar: 'undo redo | blocks formatselect | ' +
-                    'bold italic | alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'help |image code table insertdatetime template insertinput',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                }}
-/>
+                      'bold italic | alignleft aligncenter ' +
+                      'alignright alignjustify | bullist numlist outdent indent | ' +
+                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                      image_advtab: true,
+                      image_title: true,
+                      automatic_uploads: true,
+                      file_picker_types: "image",
+                      setup: function (editor) {
+  
+                        editor.ui.registry.addButton("customInsertButton", {
+                          icon: "edit-block",
+                          tooltip: "Insert Input Element",
+                          onAction: function (_) {
+                            // const value = nanoid(7);
+                            editor.insertContent(
+                              `&nbsp;<input type='text' >&nbsp;`
+                            );
+                          },
+                        });
+                        editor.ui.registry.addButton("customAlertButton", {
+                          icon: "temporary-placeholder", // Use the built-in alert icon
+                          // tooltip: 'Custom Alert',
+                          onAction: function (_) {
+                            const userInput = window.prompt('Enter data key attribute', );
+                            console.log(userInput);
+                          },
+                        });
+                      },
+                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+
+                  }}
+                />
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={3}>
@@ -1477,20 +1503,45 @@ export default function RunsDetails() {
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   init={{
-                    height: 400,
+                    height: 500,
                     menubar: false,
+                    selector: "textarea",
                     plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help wordcount',
+                      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                      'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'image', 'insertdatetime', 'template', 'insertinput', 'customInsertButton','customAlertButton'
                     ],
-                    toolbar:
-                      'undo redo | formatselect | ' +
-                      'bold italic backcolor | alignleft aligncenter ' +
+                    toolbar: 'undo redo | blocks formatselect | ' +
+                      'bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'removeformat | help',
-                    content_style:
-                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                    image_advtab: true,
+                    image_title: true,
+                    automatic_uploads: true,
+                    file_picker_types: "image",
+                    setup: function (editor) {
+
+                      editor.ui.registry.addButton("customInsertButton", {
+                        icon: "edit-block",
+                        tooltip: "Insert Input Element",
+                        onAction: function (_) {
+                          // const value = nanoid(7);
+                          editor.insertContent(
+                            `&nbsp;<input type='text' >&nbsp;`
+                          );
+                        },
+                      });
+                      editor.ui.registry.addButton("customAlertButton", {
+                        icon: "temporary-placeholder", // Use the built-in alert icon
+                        // tooltip: 'Custom Alert',
+                        onAction: function (_) {
+                          const userInput = window.prompt('Enter data key attribute', );
+                          console.log(userInput);
+                        },
+                      });
+                    },
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+
                   }}
                 />
               </CustomTabPanel>
