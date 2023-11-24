@@ -61,14 +61,15 @@ const Login = () => {
     if (isMatch) {
       if (typeof window !== 'undefined') {
         window.sessionStorage.setItem('isLoggedIn', 'true');
-        toast(`Login successful !`, {
-          style: {
-            background: '#00bf70', color: '#fff'
-          }
-        });
-        setTimeout(()=>{
+       
+        // setTimeout(()=>{
           navigate('/mypage')
-        },1000)
+          toast(`Login successful !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+        // },1000)
       }
     } else {
       if (values.email !== validUser.email) {

@@ -1,38 +1,19 @@
 import { gql } from '@apollo/client';
 
- export const POST_USER = gql`
-  mutation Create_user(
-        $uid: String!
-        $firstName: String!
-        $organisationId: String!
-        $lastName: String!
-        $email: String!
-        $role: String!
-        $phoneNumber: String!
-        $departmentId: [String]
-        $laboratoryId: [String]
-        $instituteId: String
-  ) {
-    create_user(
-        uid:$uid
-        firstName:$firstName
-        organisationId:$organisationId
-        lastName:$lastName
-        email:$email
-        role:$role
-        phoneNumber:$phoneNumber
-        departmentId:$departmentId
-        laboratoryId:$laboratoryId
-        instituteId:$instituteId
-    ) {
-        message
-        identitys {
+export const GET_USER = gql`
+query Get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
+    get_all_users(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search) {
+        pageInfo {
+            currentPage
+            totalPages
+            totalCount
+            hasNextPage
+            hasPreviousPage
+        }
+        Identity {
             _id
-            uid
             firstName
             lastName
-            departmentId
-            laboratoryId
             organisationId
             email
             role
@@ -41,18 +22,88 @@ import { gql } from '@apollo/client';
             isDeleted
             createdAt
             updatedAt
+            
+            
         }
+        pageInfo {
+            currentPage
+            totalPages
+            totalCount
+            hasNextPage
+            hasPreviousPage
+        }
+    }
+}
+`; 
+export const POST_USER = gql`
+mutation Create_user(
+       $firstName:String!
+       $lastName:String!
+       $departmentId:[String]
+       $laboratoryId:[String]
+       $organisationId:String!
+       $email:String!
+       $role:String!
+       $phoneNumber:String!
+    
+) {
+    create_user(
+        firstName:$firstName
+        lastName:$lastName
+        departmentId:$departmentId
+        laboratoryId:$laboratoryId
+        organisationId:$organisationId
+        email:$email
+        role:$role
+        phoneNumber:$phoneNumber
+        
+    ) {
+        _id
+        firstName
+        lastName        
+        organisationId
+        email
+        role
+        phoneNumber
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
     }
 }
 `;
 
-export const GET_USER = gql`
-query Get_user(
-$_id: String!
-) {
-    get_user( _id: $_id) {
+export const DELETE_USER = gql`
+mutation Delete_user($_id: [String]!) {
+    delete_user(_id: $_id) {
+        data
+    }
+}
+`;
+export const UPDATE_USER = gql`
+mutation  update_user(
+       $_id:String!
+       $firstName:String
+       $lastName:String
+       $departmentId:[String]
+       $laboratoryId:[String]
+       $organisationId:String
+       $email:String
+       $role:String
+       $phoneNumber:String
+    ) {
+    update_user(
+        _id:$_id
+        firstName:$firstName
+        lastName:$lastName
+        departmentId:$departmentId
+        laboratoryId:$laboratoryId
+        organisationId:$organisationId
+        email:$email
+        role:$role
+        phoneNumber:$phoneNumber
+    ) {
         _id
-        uid
         firstName
         lastName
         departmentId
@@ -66,5 +117,24 @@ $_id: String!
         createdAt
         updatedAt
     }
+}
+`;
+export const GET_SINGLE_USER = gql`
+query Get_user($_id: String!) {
+    get_user(_id: $_id) {
+        _id
+        firstName
+        lastName
+        departmentId
+        laboratoryId
+        organisationId
+        email
+        role
+        phoneNumber
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
     }
+}
 `;

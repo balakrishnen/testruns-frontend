@@ -16,6 +16,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
 import { ToastContainer, toast } from 'react-toastify';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase.config";
+import { postUserData } from "../../api/userAPI";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -63,10 +68,13 @@ const SignUp = () => {
     event.preventDefault();
   };
 
-  
+  const dispatch: any = useDispatch();
 // React.useEffect(()=>{
 // formik.isValid=false
 // },[])
+const userSliceData = useSelector(
+  (state: any) => state.user.data?.create_user,
+);
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(
       values.fullname,
@@ -77,15 +85,37 @@ const SignUp = () => {
     );
 
     if (isMatch) {
-      // alert("Signin successful!");
-      toast(`Signin successful !`, {
-        style: {
-          background: '#00bf70', color: '#fff'
+      try {
+         createUserWithEmailAndPassword(auth, values.email, values.password).then((res)=>{
+          console.log(res.user.uid);
+          let payload={
+            firstName: values.fullname,
+            lastName: "",
+            email: values.email,
+            uid:res.user.uid,
+            organisationId:"655376d2659b7b0012108a33",
+            role:"Tester",
+            phoneNumber:'9876543210',
+            departmentId: [],
+            laboratoryId: [],
+            instituteId: "",
+          }
+          dispatch(postUserData(payload))
+          toast(`Signup successful !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+          setTimeout(()=>{
+            navigate('/login')
+          },1000)
+         });
+        } catch (err){
+          console.error(err);
         }
-      });
-      setTimeout(()=>{
-        navigate('/login')
-      },1000)
+    
+      // alert("Signin successful!");
+     
     } else {
       formik.setFieldError("fullname", "Invalid fullname");
       formik.setFieldError("email", "Invalid email");
