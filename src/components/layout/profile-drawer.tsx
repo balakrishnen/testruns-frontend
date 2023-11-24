@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import {
   Box, Drawer, Toolbar, Typography, Checkbox,
-  Autocomplete, Button
+  Autocomplete, Button , Select, MenuItem
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -18,13 +18,32 @@ import { navigate } from 'gatsby';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
+import { OrganizationList } from '../../utils/data';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import { fetchOrganizationData } from '../../api/organizationAPI';
+import { fetchGetUser } from '../../api/userAPI';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+const validationSchema = Yup.object().shape({
+  email: Yup.string().required('Email is required').email('Invalid email').matches(emailRegex, "In-correct email"),
+  firstName: Yup.string().required('firstName is required'),
+  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
+  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  lastName: Yup.string().required('Objective is required'),
+  phoneNumber: Yup.number().required('Phone number is required is required'),
+  organisationId:Yup.string().required('organisationId  is required')
+});
 
 export default function AppProfileDrawer({
   openDrawer,
   toggleProfileDrawer,
 }: any) {
   const [departmentData, setDepartmentData] = React.useState([]);
+  const [edit, setEdit]=React.useState(false)
+  const [organizationData, setOrganizationData] = React.useState([]);
+  const [userDetail, setUserDetail] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const departments: any = [];
   const laboratory: any = [];
@@ -35,6 +54,12 @@ export default function AppProfileDrawer({
   const labSliceData = useSelector(
     (state: any) => state.lab.data?.get_all_labs,
   );
+  const organizationSliceData = useSelector(
+    (state: any) => state.organization.data?.get_all_organisations,
+  );
+  const userSliceData = useSelector(
+    (state: any) => state.user.data?.get_user,
+  );
   React.useEffect(() => {
     setDepartmentData(departmentSliceData?.map((item: any) => ({
       label: item.name,
@@ -44,16 +69,39 @@ export default function AppProfileDrawer({
       label: item.name,
       value: item._id
     })))
-  }, [departmentSliceData, labSliceData])
+    setOrganizationData(
+      organizationSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),
+    );
+    setUserDetail(userSliceData)
 
+  }, [departmentSliceData, labSliceData,organizationSliceData,userSliceData])
+
+  console.log(userDetail);
+  
+  const Placeholder = ({ children }: any) => {
+    return <div>{children}</div>;
+  };
   // console.log(departmentData);
 
   // console.log(DepartmentList);
 
   React.useEffect(() => {
+    let payload={
+      _id:"655f18bcc88024001262b3a5"
+    }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
+    dispatch(fetchOrganizationData());
+    dispatch(fetchGetUser(payload))
+   setEdit(true)
   }, []);
+
+
+
   return (
     <Drawer
       className="profile-head"
@@ -68,7 +116,7 @@ export default function AppProfileDrawer({
         },
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
-      onClose={toggleProfileDrawer}
+      onClose={()=>{toggleProfileDrawer(), setEdit(true)}}
     >
       <Toolbar />
       <Box sx={{ overflow: 'auto'  }}>
@@ -83,7 +131,7 @@ export default function AppProfileDrawer({
             >
               <CloseOutlinedIcon
                 sx={{ cursor: 'pointer' }}
-                onClick={toggleProfileDrawer}
+                onClick={()=>{toggleProfileDrawer(), setEdit(true)}}
               />
               <Box
                 sx={{
@@ -108,7 +156,7 @@ export default function AppProfileDrawer({
             </Box>
           </Box>
           <Box className="edit-profile-btn">
-            <Button>Edit profile</Button>
+            <Button onClick={()=>setEdit(false)}>Edit profile</Button>
           </Box>
           <Box className="profile-section2">
             <Grid container spacing={2} className="profile-inner">
@@ -131,11 +179,17 @@ export default function AppProfileDrawer({
                   </label>
                   <TextField
                     margin="normal"
+                    // disabled
+                    // disabled={edit}
+                    // style={{backgroundColor:"red"}}
                     required
                     fullWidth
                     id="name"
+                    inputProps={{ maxLength: 20 }}
                     name="name"
-                    autoComplete="name"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="First name"
                   />
@@ -159,9 +213,12 @@ export default function AppProfileDrawer({
                     margin="normal"
                     required
                     fullWidth
+                    inputProps={{ maxLength: 20 }}
                     id="last"
                     name="last"
-                    autoComplete="last"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Last name"
                   />
@@ -192,7 +249,9 @@ export default function AppProfileDrawer({
                     fullWidth
                     id="Email"
                     name="Email"
-                    autoComplete="Email"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Email"
                     inputProps={{ maxLength: 50 }}
@@ -215,11 +274,24 @@ export default function AppProfileDrawer({
                     margin="normal"
                     required
                     fullWidth
-                    id="last"
-                    name="last"
-                    autoComplete="last"
+                    id="mobile"
+                    onInput={(e:any)=>{ 
+                      e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+                  }}
+                    name="mobile"
+                    className={edit?"bg-gray-input":""}
+                    inputProps={{ maxLength: 10 }}
+                    disabled={edit}
                     InputLabelProps={{ shrink: false }}
-                    placeholder=""
+                    placeholder="Mobile number"
+                    type='number'
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment sx={{ mx: 2 }} position="start">
+                          +91{' '}
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Box>
               </Grid>
@@ -229,29 +301,28 @@ export default function AppProfileDrawer({
                 <Box>
                   <label>Organisation</label>
                   <Autocomplete
-                    multiple
+                    // multiple
                     id="Organisation"
-                    options={[]}
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
+                    options={organizationData !== undefined ? organizationData : []}
                     disableCloseOnSelect
                     getOptionLabel={(option: any) => option.label}
                     renderOption={(props, option, { selected }) => (
                       <li {...props}>
-                        <Checkbox
-                          style={{ marginRight: 0 }}
-                          checked={selected}
-                        />
+                       
                         {option.label}
                       </li>
                     )}
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => <TextField {...params} placeholder="Organisation" />}
                     fullWidth
                     placeholder="Organisation"
                     size="medium"
-                    onChange={(e, f) => {
-                      f.forEach((element) =>
-                        departments.push(element.id),
-                      );
-                    }}
+                    // onChange={(e, f) => {
+                    //   f.forEach((element) =>
+                    //     departments.push(element.id),
+                    //   );
+                    // }}
 
                   />
                 </Box>
@@ -264,6 +335,8 @@ export default function AppProfileDrawer({
                   <Autocomplete
                     multiple
                     id="department"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     options={departmentData !== undefined ? departmentData : []}
                     disableCloseOnSelect
                     getOptionLabel={(option: any) => option.label}
@@ -276,7 +349,7 @@ export default function AppProfileDrawer({
                         {option.label}
                       </li>
                     )}
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => <TextField {...params} placeholder="Department/s" />}
                     fullWidth
                     placeholder="Department"
                     size="medium"
@@ -310,19 +383,21 @@ export default function AppProfileDrawer({
                     margin="normal"
                     required
                     fullWidth
+                    inputProps={{ maxLength: 20 }}
                     id="Designation"
                     name="Designation"
-                    autoComplete="Designation"
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Designation"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <img src={document} />
-                        </InputAdornment>
-                      ),
-                    }}
-                    className="Organisation"
+                    // InputProps={{
+                    //   startAdornment: (
+                    //     <InputAdornment position="start">
+                    //       <img src={document} />
+                    //     </InputAdornment>
+                    //   ),
+                    // }}
                   />
                 </Box>
               </Grid>
@@ -343,27 +418,29 @@ export default function AppProfileDrawer({
                     required
                     fullWidth
                     id="Organisation"
+                    inputProps={{ maxLength: 20 }}
+                    className={edit?"bg-gray-input":""}
+                    disabled={edit}
                     name="Organisation"
-                    autoComplete="Organisation"
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Requestor ID/Tester ID"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <img src={profile2} />
-                        </InputAdornment>
-                      ),
-                    }}
-                    className="Organisation"
+                    // InputProps={{
+                    //   startAdornment: (
+                    //     <InputAdornment position="start">
+                    //       <img src={profile2} />
+                    //     </InputAdornment>
+                    //   ),
+                    // }}
                   />
                 </Box>
               </Grid>
             </Grid>
-            <Box  >
+            {/* <Box  >
               <Box style={{ height: "150px" }}>
 
-              </Box>
-            </Box>
+              </Box> */}
+            {/* </Box> */}
             {/* <Box>
               <label>Labs assigned</label>
               <Box className="lab-list">
@@ -376,6 +453,14 @@ export default function AppProfileDrawer({
               </Box>
             </Box> */}
           </Box>
+          <Box className="edit-details-profile">
+        <Button type="submit" variant="contained" onClick={()=>{toggleProfileDrawer(), setEdit(true)}} className="cancel-btn" >
+          Cancel
+        </Button>
+        <Button type="submit" variant="contained" className="add-btn">
+          Save
+        </Button>
+      </Box>
         </Box>
       </Box>
     </Drawer>

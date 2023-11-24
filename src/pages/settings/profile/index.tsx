@@ -21,6 +21,7 @@ import { fetchDepartmentData } from '../../../api/departmentAPI';
 import { fetchLabData } from '../../../api/labAPI';
 
 import { DepartmentList, LaboratoryList ,OrganizationList} from "../../../utils/data";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   password:Yup.string()
@@ -40,7 +41,7 @@ const validationSchema = Yup.object().shape({
     .notRequired(),
     email: Yup.string()
     .notRequired(),
-    mobile:Yup.string()
+    mobile:Yup.number()
     .notRequired(),
     organisation:Yup.string()
     .notRequired(),
@@ -98,8 +99,16 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      alert("password updated successful!");
-      navigate('/login')
+      toast(`Password Reset successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      setTimeout(()=>{
+        navigate('/login')
+      },2000)
+      // alert("password updated successful!");
+      // navigate('/login')
     } else {
       formik.setFieldError("password", "Invalid password");
        }
@@ -149,7 +158,12 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      alert("User Details updated successful!");
+      toast(`User Details updated successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // alert("User Details updated successful!");
      
   };
 }
@@ -301,7 +315,8 @@ console.log(DepartmentList);
                         fullWidth
                         id="firstName"
                         name="firstName"
-                        autoComplete="firstName"
+                        type="text"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="First name"
                         onChange={formik.handleChange}
@@ -341,9 +356,10 @@ console.log(DepartmentList);
                         <TextField
                         margin="normal"
                         fullWidth
-                        id="last_name"
+                        id="lastName"
                         name="lastName"
-                        autoComplete="lastName"
+                        type="text"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Last name"
                         onChange={formikProfile.handleChange}
@@ -388,9 +404,9 @@ console.log(DepartmentList);
                         <TextField
                         margin="normal"
                         fullWidth
-                        id="email_id"
-                        name="email_id"
-                        autoComplete="email_id"
+                        id="email"
+                        name="email"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Email"
                         onChange={formikProfile.handleChange}
@@ -429,9 +445,12 @@ console.log(DepartmentList);
                         <TextField
                         margin="none"
                         fullWidth
-                        id="mobile_number"
-                        name="mobile_number"
-                        autoComplete="mobile_number"
+                        id="mobile"
+                        name="mobile"
+                        type="number"
+                        inputProps={{
+                          maxLength: 11,
+                        }}
                         InputLabelProps={{ shrink: false }}
                         placeholder="Mobile number"
                         onChange={formikProfile.handleChange}
@@ -477,7 +496,7 @@ console.log(DepartmentList);
                         fullWidth
                         id="organization"
                         name="organisation"
-                        autoComplete="organization"
+                        autoComplete="off"
                         placeholder="Organization"
                         onChange={formikProfile.handleChange}
                         onBlur={formikProfile.handleBlur}
@@ -524,7 +543,7 @@ console.log(DepartmentList);
                             {option.label}
                           </li>
                         )}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} placeholder="Department/s" />}
                         fullWidth
                         placeholder="Department"
                         size="medium"
@@ -568,7 +587,7 @@ console.log(DepartmentList);
                             {option.label}
                           </li>
                         )}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} placeholder="Lab/s assigned" />}
                         fullWidth
                         placeholder="Laboratory"
                         size="medium"
@@ -608,19 +627,19 @@ console.log(DepartmentList);
                           fullWidth
                           id="Designation"
                           name="designation"
-                          autoComplete="Designation"
+                          autoComplete="off"
                           // autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Designation"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <img src={document} />
-                              </InputAdornment>
-                            ),
-                          }}
+                          // InputProps={{
+                          //   startAdornment: (
+                          //     <InputAdornment position="start">
+                          //       <img src={document} />
+                          //     </InputAdornment>
+                          //   ),
+                          // }}
                           className="Organisation"
-                          sx={{ background: "#F3F3F3" }}
+                          // sx={{ background: "#F3F3F3" }}
                           onChange={formikProfile.handleChange}
                           onBlur={formikProfile.handleBlur}
                           value={formikProfile.values.designation}
@@ -662,19 +681,19 @@ console.log(DepartmentList);
                           fullWidth
                           id="Organisation"
                           name="reqstId"
-                          autoComplete="Organisation"
+                          autoComplete="off"
                           // autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Requestor ID/Tester ID"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <img src={profile2} />
-                              </InputAdornment>
-                            ),
-                          }}
+                          // InputProps={{
+                          //   startAdornment: (
+                          //     <InputAdornment position="start">
+                          //       <img src={profile2} />
+                          //     </InputAdornment>
+                          //   ),
+                          // }}
                           className="Organisation"
-                          sx={{ background: "#F3F3F3" }}
+                          // sx={{ background: "#F3F3F3" }}
                           onChange={formikProfile.handleChange}
                           onBlur={formikProfile.handleBlur}
                           value={formikProfile.values.reqstId}
@@ -797,6 +816,9 @@ console.log(DepartmentList);
                     <TextField
                       type={initalStatus.confirmpassword ? "text" : "password"}
                       fullWidth
+                      onPaste={(event) => {
+                        event.preventDefault()}}
+                        style={{userSelect:'none'}}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">

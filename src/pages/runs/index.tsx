@@ -89,6 +89,7 @@ const [filterPopoverEl, setFilterPopoverEl] =
   React.useState<null | HTMLElement>(null);
 const columnAnchorOpen = Boolean(columnAnchorEl);
 const filterAnchorOpen = Boolean(filterPopoverEl);
+const [dense, setDense] = React.useState(false);  
   const [filterStatus, setFilterStatus] = React.useState(null);
   const [filterSearchBy, setFilterSearchBy] = React.useState(null);
   const [filterSearchValue, setFilterSearchValue] = React.useState(null);
@@ -113,7 +114,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
   });
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
-    perPage: 5,
+    perPage: 10,
     searchBy: null,
     search: null,
     sortBy: null,
@@ -155,6 +156,8 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
 
   React.useEffect(() => {
     dispatch(fetchRunsData(queryStrings));
+    setTableHeaderVisible(false)
+    setRowId([])
     // setRunsData(runsData);
   }, [pageInfo, queryStrings]);
 
@@ -304,7 +307,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
   const reload = () => {
     const payload: any = {
       page: 1,
-      perPage: 5,
+      perPage: 10,
       sortOrder: 'desc',
     };
     dispatch(fetchRunsData(payload));
@@ -347,6 +350,22 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     setQueryString(payload);
   };
 
+  // const handleChangePage = (event: unknown, newPage: number) => {
+  //   setPage(newPage);
+  // };
+
+  // const handleChangeRowsPerPage = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
+
+  // page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows =
+  0 > 0 ? Math.max(0, (1 + 0) * 5 - 12) : 0;
+  console.log(emptyRows);
+  
   return (
     <PrivateRoute>
       <Box className="main-padding runz-page">
@@ -376,7 +395,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                 className='filterButton'
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
+                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false} className="red-badge-filter">
                   <img
                     src={filterIcon}
                     alt="no_image"
@@ -608,11 +627,12 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
-          <TableContainer>
+          <TableContainer className='tableHeight'>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-              // size={dense ? "small" : "medium"}
+              size="medium"
+              stickyHeader
             >
               <TableHeader
                 numSelected={0}
@@ -662,7 +682,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                                  setRowId([...rowId, row._id]),
+                  (row.is_checked==true && setRowId([...rowId, row._id])),
                                     handleChange(event, row._id);
                                 }}
                               />
@@ -888,7 +908,8 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                         // </TableCell>
                       )}
                     </TableRow>
-                  );
+                  )
+                 
                 })}
               </TableBody>
             </Table>

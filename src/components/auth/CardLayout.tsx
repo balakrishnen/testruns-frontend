@@ -20,6 +20,7 @@ import {
   OAuthProvider,
 } from "firebase/auth";
 import { navigate } from "gatsby";
+import { toast } from "react-toastify";
 
 export const CardLayout = ({ children }: any, props: any) => {
   const [answer, setAnswer] = React.useState<any>(10);
@@ -38,10 +39,24 @@ export const CardLayout = ({ children }: any, props: any) => {
       .then((result) => {
         console.log(result);
         if(varient=='signup'){
-          navigate('/login')
+          toast(`Google Signin successful !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+          setTimeout(()=>{
+            navigate('/login')
+          },1000)
         }
         else{
-          navigate('/mypage')
+          toast(`Google Login successful !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+          setTimeout(()=>{
+            navigate('/mypage')
+          },1000)
           window.sessionStorage.setItem('isLoggedIn', 'true');
         }
       })
@@ -56,10 +71,24 @@ export const CardLayout = ({ children }: any, props: any) => {
       .then((result) => {
         console.log(result);
         if(varient=='signup'){
-          navigate('/login')
+          toast(`Microsoft Signin successful !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+          setTimeout(()=>{
+            navigate('/login')
+          },1000)
         }
         else{
-          navigate('/mypage')
+          toast(`Microsoft Login successful !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+          setTimeout(()=>{
+            navigate('/mypage')
+          },1000)
           window.sessionStorage.setItem('isLoggedIn', 'true');
         }
       })
@@ -93,7 +122,7 @@ export const CardLayout = ({ children }: any, props: any) => {
             <Typography className="welcome-to">Welcome to</Typography>
             <Typography className="test-runz">Test Runs</Typography>
           </Box>
-          {children.props.uri === "/login" && (
+          {(children.props.uri === "/login" || children.props.uri === "/" ) &&(
             <Box className="login-center">
                <Typography className="sign-via">Sign In via</Typography>
                <Box className="sign-via-btn">

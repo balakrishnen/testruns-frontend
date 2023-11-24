@@ -328,7 +328,7 @@ export default function ProcedureDetails() {
                     name="name"
                     autoComplete="name"
                     InputLabelProps={{ shrink: false }}
-                    placeholder="Procedure name"
+                    placeholder="off"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -392,21 +392,45 @@ export default function ProcedureDetails() {
                       onInit={(evt, editor) => (editorRef.current = editor)}
                       value={editorData}
                       init={{
-                        height: 1000,
-                        menubar: false,
+                        height: 500,
+                        menubar: true,
+                        selector: "textarea",
                         plugins: [
-                          'advlist autolink lists link image charmap print preview anchor',
-                          'searchreplace visualblocks code fullscreen',
-                          'insertdatetime media table paste code help wordcount',
+                          'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount','image', 'insertdatetime' , 'template','insertinput customInsertButton customAlertButton' 
                         ],
-                        toolbar:
-                          'undo redo | formatselect | ' +
-                          'bold italic backcolor | alignleft aligncenter ' +
-                          'alignright alignjustify | bullist numlist outdent indent | ' +
-                          'removeformat | help',
-                        content_style:
-                          'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                      }}
+                        toolbar: 'undo redo | blocks formatselect | ' +
+                        'bold italic | alignleft aligncenter ' +
+                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                        'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                        image_advtab: true,
+                    image_title: true,
+                    automatic_uploads: true,
+                    file_picker_types: "image",
+                    setup: function (editor) {
+
+                      editor.ui.registry.addButton("customInsertButton", {
+                        icon: "edit-block",
+                        tooltip: "Insert Input Element",
+                        onAction: function (_) {
+                          // const value = nanoid(7);
+                          editor.insertContent(
+                            `&nbsp;<input type='text' >&nbsp;`
+                          );
+                        },
+                      });
+                      editor.ui.registry.addButton("customAlertButton", {
+                        icon: "temporary-placeholder", // Use the built-in alert icon
+                        // tooltip: 'Custom Alert',
+                        onAction: function (_) {
+                          const userInput = window.prompt('Enter data key attribute', );
+                          console.log(userInput);
+                        },
+                      });
+                    },
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                    }}
                     />
                   </Box>
                 </Box>
@@ -441,7 +465,7 @@ export default function ProcedureDetails() {
                       onInit={(evt, editor) => (editorRef.current = editor)}
                       init={{
                         height: 400,
-                        menubar: false,
+                        menubar: true,
                         plugins: [
                           'advlist autolink lists link image charmap print preview anchor',
                           'searchreplace visualblocks code fullscreen',

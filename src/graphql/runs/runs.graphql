@@ -15,8 +15,6 @@ export const GET_RUNS = gql`
             _id
             objective
             runNumber
-            procedureId
-            userId
             dueDate
             status
             isActive
@@ -37,13 +35,23 @@ export const GET_RUNS = gql`
             laboratoryId {
                 _id
                 name
-                userId
                 departmentId
                 isActive
                 isDeleted
                 createdAt
                 updatedAt
             }
+            procedureId{
+      _id
+name
+procedureNumber
+procedureDetials
+assectId
+isActive
+isDeleted
+createdAt
+updatedAt
+    }
         }
         pageInfo {
             currentPage
@@ -82,15 +90,47 @@ export const POST_RUNS = gql`
     
     ) {
        _id
+        objective
         runNumber
-        procedureId
-        userId
         dueDate
         status
         isActive
         isDeleted
         createdAt
         updatedAt
+        departmentId {
+            _id
+            name
+            departmentNumber
+            organisationID
+            status
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        laboratoryId {
+            _id
+            name
+            departmentId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        procedureId {
+            _id
+            name
+            procedureNumber
+            procedureDetials
+            departmentId
+            laboratoryId
+            assectId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
       
     }
   }
@@ -108,10 +148,7 @@ query Get_run($_id: String!) {
     get_run(_id: $_id) {
          _id
         objective
-        departmentId
-        laboratoryId
         runNumber
-        procedureId
         userId
         dueDate
         status
@@ -119,6 +156,18 @@ query Get_run($_id: String!) {
         isDeleted
         createdAt
         updatedAt
+        procedureId {
+            _id
+            name
+            procedureNumber
+            procedureDetials
+            assectId
+            userId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
     }
 }
 `;
@@ -147,21 +196,61 @@ mutation Update_run(
         assignedTo: $assignedTo
         assignedBy: $assignedBy
         dueDate: $dueDate
-    ) {
-          _id
+    )   {_id
         objective
         runNumber
-        procedureId
-        userId
         dueDate
         status
         isActive
         isDeleted
         createdAt
         updatedAt
-    }
+        departmentId {
+            _id
+            name
+            departmentNumber
+            organisationID
+            status
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        laboratoryId {
+            _id
+            name
+            departmentId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        procedureId {
+            _id
+            name
+            procedureNumber
+            procedureDetials
+            departmentId
+            laboratoryId
+            assectId
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+      
+          }  }
 }
 
 `;
 
 
+export const GET_CHART_TABLE = gql`
+query Static_chart {
+    static_chart(userRunId: "655b261e7e26fb0012425184") {
+        tableName
+        headers
+        rows {
+            values
+        }
+    }
+}`;

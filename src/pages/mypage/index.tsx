@@ -315,12 +315,12 @@ export default function MyPage() {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">Current Tasks</TableCell>
+                  <TableCell align="right">Current tasks</TableCell>
                   <TableCell align="right">Department</TableCell>
 
                   <TableCell align="right">Lab</TableCell>
-                  <TableCell align="right">Assigned By</TableCell>
-                  <TableCell align="right">Created On</TableCell>
+                  <TableCell align="right">Assigned by</TableCell>
+                  <TableCell align="right">Created on</TableCell>
 
                   <TableCell align="right">Status</TableCell>
                 </TableRow>
@@ -362,20 +362,22 @@ export default function MyPage() {
                             justifyContent: 'center',
                             fontSize: '12px',
                             backgroundColor:
-                              row.status === 1
-                                ? '#F8A83C'
-                                : row.status === 2
-                                ? '#E2445C'
-                                : '#00bf70',
-                          }}
-                        >
-                          {index + 1 === 1
-                            ? 'Created'
-                            : index + 1 === 2
-                            ? 'Started'
-                            : index + 1 === 3
-                            ? 'Stopped'
-                            : 'Completed'}
+                          row?.status == 1
+                            ? '#8d8d8d'
+                            : row?.status == 2
+                              ? '#faaa49'
+                              : row?.status == 3
+                                ? '#00bf70'
+                                : '#e2445c',
+                      }}
+                    >
+                      {row?.status == 1
+                        ? 'Created'
+                        : row?.status == 2
+                          ? 'Started'
+                          : row.status == 3
+                            ? 'Completed'
+                            : 'Stopped'}
                         </Box>
                       </TableCell>
                     </TableRow>
@@ -400,7 +402,7 @@ export default function MyPage() {
                   cursor: 'pointer',
                 }}
               >
-                {viewAll ? 'View Less' : 'View All'}{' '}
+                {viewAll ? 'View less' : 'View all'}{' '}
                 {viewAll ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
               </Typography>
             )}
@@ -490,7 +492,7 @@ export default function MyPage() {
                       cursor: 'pointer',
                     }}
                   >
-                    {viewAlls ? 'View Less' : 'View All'}{' '}
+                    {viewAlls ? 'View less' : 'View all'}{' '}
                     {viewAlls ? (
                       <KeyboardArrowUpIcon />
                     ) : (

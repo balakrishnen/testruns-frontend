@@ -54,17 +54,17 @@ import test from '../../assets/images/test.svg';
 import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().notRequired(),
-  perchasedDate: Yup.string().notRequired(),
-  expiryDate: Yup.string().notRequired(),
-  departmentId: Yup.array().notRequired(),
-  laboratoryId: Yup.array().notRequired(),
-  organisationId: Yup.string().notRequired(),
-  status: Yup.string().notRequired(),
-  // assets_image: Yup.string().notRequired(),
-  availability: Yup.string().notRequired(),
-  // assets_id: Yup.string().notRequired(),
-  lastUsedDate: Yup.string().notRequired(),
+  name: Yup.string().required('Asset Name is required'),
+  perchasedDate: Yup.string().required('Purchase date is required'),
+  expiryDate: Yup.string().required('Expiry date is required'),
+  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
+  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  organisationId: Yup.string().required('Organisation is required'),
+  status: Yup.string().required('Status is required'),
+  // assets_image: Yup.string().required(),
+  availability: Yup.string().required('Availability is required'),
+  // assets_id: Yup.string().required(),
+  // lastUsedDate: Yup.string().required(),
 });
 
 const Addnewpopup = React.forwardRef(
@@ -220,6 +220,8 @@ const Addnewpopup = React.forwardRef(
       const formattedDate = moment(selectedDate.$d).format('YYYY-MM-DD');
       formik.handleChange(name)(formattedDate);
     };
+    console.log('formvalues',formik.values);
+    
     return (
       <div>
         <Dialog
@@ -360,14 +362,14 @@ const Addnewpopup = React.forwardRef(
                   <Box>
                     <Grid container spacing={2} className="asset-popup">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <Box>
-                          <label>Assets name</label>
+                        <Box style={{ position: 'relative' }}>
+                          <label>Assets name<span style={{ color: "#E2445C" }}>*</span></label>
                           <TextField
                             margin="normal"
                             fullWidth
                             id="name"
                             name="name"
-                            autoComplete="name"
+                            autoComplete="off"
                             InputLabelProps={{ shrink: false }}
                             placeholder="Assets name"
                             onChange={formik.handleChange}
@@ -399,9 +401,9 @@ const Addnewpopup = React.forwardRef(
                         lg={6}
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
-                        <Box>
-                          <label>Purchase date</label>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Box style={{ position: 'relative' }}>
+                          <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}  name='perchasedDate'>
                             <DatePicker
                               format="DD/MM/YYYY"
                               onChange={(selectedDate: any) =>
@@ -413,7 +415,7 @@ const Addnewpopup = React.forwardRef(
                           {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
                               <Typography className="error-field">
-                                Date required
+                                Purchase date required
                               </Typography>
                             )}
                         </Box>
@@ -433,7 +435,7 @@ const Addnewpopup = React.forwardRef(
                         }}
                       >
                         <Box>
-                          <label>Guaranty/warranty/expiry date</label>
+                          <label>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                               format="DD/MM/YYYY"
@@ -443,20 +445,20 @@ const Addnewpopup = React.forwardRef(
                               value={formik.values.expiryDate}
                             />
                           </LocalizationProvider>
-                          {formik.touched.expiryDate &&
+                          {/* {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (
                               <Typography className="error-field">
-                                Date required
+                                required
                               </Typography>
-                            )}
+                            )} */}
                         </Box>
                       </Grid>
                     </Grid>
                     <Grid container spacing={2} className="asset-popup">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <Box>
+                        <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Organisation
+                            Organisation<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <Select
                             className="placeholder-color"
@@ -507,14 +509,15 @@ const Addnewpopup = React.forwardRef(
                       className="asset-popup multi-selection"
                     >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <Box>
+                        <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Department/s
+                            Department/s<span style={{ color: "#E2445C" }}>*</span>
                           </label>
 
                           <Autocomplete
                             multiple
                             id="departmentId"
+                            // name="laboratoryId"
                             disableCloseOnSelect
                             value={departments}
                             options={
@@ -525,7 +528,7 @@ const Addnewpopup = React.forwardRef(
                               value.id == option.id
                             }
                             renderInput={(params) => (
-                              <TextField {...params} placeholder="Department" />
+                              <TextField {...params} placeholder="Department/s" />
                             )}
                             fullWidth
                             placeholder="Department"
@@ -545,14 +548,14 @@ const Addnewpopup = React.forwardRef(
                                 </li>
                               </React.Fragment>
                             )}
-                            onChange={(_, selectedOptions: any) =>
-                              setDepartments(selectedOptions)
+                            onChange={(_, selectedOptions: any) =>{
+                              setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
                             }
                           />
-                          {formik.touched.organisationId &&
-                            formik.errors.organisationId && (
+                          {formik.touched.departmentId &&
+                            formik.errors.departmentId && (
                               <Typography className="error-field">
-                                {formik.errors.organisationId}
+                                {formik.errors.departmentId}
                               </Typography>
                             )}
                         </Box>
@@ -564,9 +567,9 @@ const Addnewpopup = React.forwardRef(
                       className="asset-popup multi-selection"
                     >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <Box>
+                        <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Laboratory/ies
+                            Laboratory/ies<span style={{ color: "#E2445C" }}>*</span>
                           </label>
 
                           <Autocomplete
@@ -580,7 +583,7 @@ const Addnewpopup = React.forwardRef(
                             disableCloseOnSelect
                             value={laboratory}
                             renderInput={(params) => (
-                              <TextField {...params} placeholder="Laboratory" />
+                              <TextField {...params} placeholder="Laboratory/ies"/>
                             )}
                             fullWidth
                             placeholder="Laboratory"
@@ -600,8 +603,8 @@ const Addnewpopup = React.forwardRef(
                                 </li>
                               </React.Fragment>
                             )}
-                            onChange={(_, selectedOptions: any) =>
-                              setLaboratory(selectedOptions)
+                            onChange={(_, selectedOptions: any) =>{
+                              setLaboratory(selectedOptions);formik.setValues({...formik.values,'laboratoryId':selectedOptions})}
                             }
                           />
                           {formik.touched.laboratoryId &&
@@ -622,8 +625,8 @@ const Addnewpopup = React.forwardRef(
                         lg={6}
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
-                        <Box>
-                          <label style={{ display: 'block' }}>Status</label>
+                        <Box style={{position:'relative'}}>
+                          <label style={{ display: 'block' }}>Status<span style={{ color: "#E2445C" }}>*</span></label>
 
                           <Select
                             className="placeholder-color"
@@ -678,9 +681,9 @@ const Addnewpopup = React.forwardRef(
                           },
                         }}
                       >
-                        <Box>
+                        <Box style={{position:'relative'}}>
                           <label style={{ display: 'block' }}>
-                            Availability
+                            Availability<span style={{ color: "#E2445C" }}>*</span>
                           </label>
 
                           <Select
@@ -756,6 +759,7 @@ const Addnewpopup = React.forwardRef(
                   variant="contained"
                   // onClick={submitFormPopup}
                   className="add-btn"
+                  disabled={!formik.isValid}
                 >
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>

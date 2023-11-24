@@ -104,7 +104,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
   });
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
-    perPage: 5,
+    perPage: 10,
     searchBy: null,
     search: null,
     sortBy: null,
@@ -149,6 +149,8 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
 
   React.useEffect(() => {
     dispatch(fetchProcedureData(queryStrings));
+    setTableHeaderVisible(false)
+    setRowId([])
   }, [pageInfo,queryStrings]);
   // console.log('procedureData',procedureData[0].departmentId.length);
 
@@ -418,7 +420,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     setQueryString(payload);
   };
   const reload = () => {
-    const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
+    const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
     dispatch(fetchProcedureData(payload));
   };
   return (
@@ -450,7 +452,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                 className='filterButton'
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
+                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false} className="red-badge-filter">
                   <img
                     src={filterIcon}
                     alt="no_image"
@@ -686,7 +688,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
               <EnhancedTable columns={headers} />
             </Grid>
           </Grid> */}
-          <TableContainer>
+          <TableContainer className='tableHeight'>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
@@ -741,7 +743,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                                   onClick={(e: any) => clickHandler(e)}
                                   onChange={(event) => {
                                     // Procedure.push(row._id)
-                                    setRowId([...rowId, row._id]),
+                                    (row.is_checked==true && setRowId([...rowId, row._id])),
                                       handleChange(event, row._id);
                                   }}
                                 />

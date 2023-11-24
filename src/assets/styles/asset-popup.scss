@@ -16,7 +16,7 @@
   }
   .MuiInputBase-root {
     border-radius: 10px;
-    border: 1px solid #9f9f9f;
+    border: 1px solid $black-shade-3;
     // height: 45px;
     padding: 4.5px 0px;
     width: 100%;
@@ -51,7 +51,7 @@
   }
 }
 .asset-upload {
-  background: #f3f3f3;
+  background: $light-gray;
   display: flex;
   width: auto;
   height: 220px;
@@ -69,10 +69,10 @@
   }
   .MuiInputBase-root {
     // height: 45px;
-    background: #f3f3f3;
+    background: $light-gray;
     color: $black-shade-3;
     border-radius: 10px;
-    border: 1px solid #9f9f9f;
+    border: 1px solid $black-shade-3;
     padding: 4.5px 0px;
     width: 100%;
     margin-top: 10px;
@@ -128,7 +128,7 @@ p.sure-you {
   }
   span.MuiTimelineConnector-root {
     width: 6px;
-    background-color: #f3f3f3;
+    background-color: $light-gray;
   }
   span.MuiTimelineDot-root {
     margin: 0px;
@@ -151,13 +151,13 @@ p.sure-you {
   }
   .timeline-content {
     p {
-      color: #9f9f9f;
+      color: $black-shade-3;
       font-size: 14px;
       font-weight: 500;
       letter-spacing: 0.35px;
       line-height: normal;
       &:first-child {
-        color: #181818;
+        color: $black-shade-1;
         font-size: 16px;
         font-weight: 400;
         letter-spacing: 0.24px;
@@ -168,7 +168,7 @@ p.sure-you {
     text-align: left;
     padding-bottom: 0px;
     button {
-      background: #9f9f9f !important;
+      background: $black-shade-3 !important;
     }
   }
 }

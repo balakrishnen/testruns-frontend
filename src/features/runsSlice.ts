@@ -13,7 +13,7 @@ const runsSlice = createSlice({
       state.loading = true;
     },
     fetchRunsSuccess: (state, action) => {
-        console.log("action.payload",action.payload)
+      console.log('action.payload', action.payload);
       state.loading = false;
       state.data = action.payload;
       state.error = null;
@@ -25,10 +25,38 @@ const runsSlice = createSlice({
   },
 });
 
+const chartTableSlice = createSlice({
+  name: 'tableChart',
+  initialState: {
+    data: null,
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    fetchChartTableStart: (state) => {
+      state.loading = true;
+    },
+    fetchChartTableSuccess: (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+      state.error = null;
+    },
+    fetchChartTableFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+  },
+});
+
+export const { fetchRunsStart, fetchRunsSuccess, fetchRunsFailure } =
+  runsSlice.actions;
+
 export const {
-  fetchRunsStart,
-  fetchRunsSuccess,
-  fetchRunsFailure,
-} = runsSlice.actions;
+  fetchChartTableStart,
+  fetchChartTableSuccess,
+  fetchChartTableFailure,
+} = chartTableSlice.actions;
+
+export const chartTableReducer = chartTableSlice.reducer;
 
 export default runsSlice.reducer;

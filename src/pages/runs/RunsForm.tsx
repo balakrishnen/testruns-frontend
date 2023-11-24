@@ -44,13 +44,14 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
-  procedureId: Yup.string().notRequired(),
-  createdAt: Yup.string().notRequired(),
-  departmentId: Yup.array().notRequired(),
-  laboratoryId: Yup.array().notRequired(),
-  objective: Yup.string().notRequired(),
-  dueDate: Yup.string().notRequired(),
-  assignedTo: Yup.string().notRequired(),
+  procedureId: Yup.string().required(),
+  createdAt: Yup.string().required('Created date is required'),
+  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
+  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  objective: Yup.string().required('Objective is required'),
+  dueDate: Yup.string().required('Due Date is required'),
+  assignedTo: Yup.string().required(),
+  organisationId:Yup.string().required('Procedure Name is required')
 });
 
 const RunsForm = React.forwardRef(
@@ -136,32 +137,32 @@ const RunsForm = React.forwardRef(
         }
         if (type == 'edit') {
           dispatch(fetchUpdateRunsData(runsValues))
-          submitFormPopup();
-          reload()
+          
         }
         else {
           dispatch(postRunsData(runsValues));
-          submitFormPopup()
-          reload()
+          
         }
+        submitFormPopup();
+          reload()
         clearForm()
         
 
       } else {
-        formik.setFieldError('name', 'Invalid first name');
+        formik.setFieldError('name', '');
       }
     };
     const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
 
-    const dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : "");
+    const dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
     console.log(dateDue);
 
     const formik = useFormik({
       initialValues: {
         departmentId: formData ? formData.departmentId : "",
         laboratoryId: formData ? formData.laboratoryId : "",
-        organisationId: formData ? formData.procedureId : '',
-        procedureId: formData ? formData.procedureId : '',
+        organisationId: '655376ee659b7b0012108a34',
+        procedureId: formData ? formData.procedureId?._id : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
         createdAt: createdDate,
@@ -173,6 +174,8 @@ const RunsForm = React.forwardRef(
       onSubmit: onSubmit,
     });
 
+    console.log(formik.dirty);
+    
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
     );
@@ -226,6 +229,7 @@ const RunsForm = React.forwardRef(
           background: '#00bf70', color: '#fff'
         }
       });
+      clearForm()
       // successPopupRef.current.open(true, 'Run');
       // setTimeout(() => {
       //   successPopupRef.current.open(false, 'Run');
@@ -235,6 +239,7 @@ const RunsForm = React.forwardRef(
       formik.resetForm();
       setDepartment([]);
       setLab([]);
+      formik.dirty=false
       // setOrganization([]);
     };
     const procedureSliceData = useSelector(
@@ -276,13 +281,13 @@ const RunsForm = React.forwardRef(
                 <Grid container className="asset-popup" spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Procedure name</label>
+                      <label style={{ display: 'block' }}>Procedure name<span style={{ color: "#E2445C" }}>*</span></label>
                       <Select
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
-                          formik.values.organisationId !== ''
+                          formik.values.procedureId !== ''
                             ? undefined
                             : () => (
                               <Placeholder>Select Procedure</Placeholder>
@@ -291,9 +296,9 @@ const RunsForm = React.forwardRef(
 
                         margin="none"
                         fullWidth
-                        id="organisationId"
-                        name="organisationId"
-                        autoComplete="organisationId"
+                        id="procedureId"
+                        name="procedureId"
+                        // autoComplete="organisationId"
                         placeholder="organisationId"
 
                         onChange={(e) => {
@@ -327,11 +332,11 @@ const RunsForm = React.forwardRef(
 
                         }}
                         onBlur={formik.handleBlur}
-                        value={formik.values.organisationId}
+                        value={formik.values.procedureId}
                         size="small"
                         error={
-                          formik.touched.organisationId &&
-                          Boolean(formik.errors.organisationId)
+                          formik.touched.procedureId &&
+                          Boolean(formik.errors.procedureId)
                         }
                       >
                         {procedureSliceData?.Procedures.map((item, index) => (
@@ -340,10 +345,10 @@ const RunsForm = React.forwardRef(
                           </MenuItem>
                         ))}
                       </Select>
-                      {formik.touched.organisationId &&
-                        formik.errors.organisationId && (
+                      {formik.touched.procedureId &&
+                        formik.errors.procedureId && (
                           <Typography className="error-field">
-                            {formik.errors.organisationId}
+                            {formik.errors.procedureId}
                           </Typography>
                         )}
                     </Box>
@@ -388,7 +393,7 @@ const RunsForm = React.forwardRef(
                     lg={6}
                     className="asset-popup calender-sec"
                   >
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" value={formik.values.createdAt} disabled />
@@ -409,7 +414,7 @@ const RunsForm = React.forwardRef(
                     lg={6}
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label style={{ display: 'block' }}>Department/s</label>
                       <Autocomplete
                         multiple
@@ -434,7 +439,7 @@ const RunsForm = React.forwardRef(
                           </React.Fragment>
                         )}
                         onChange={(_, selectedOptions: any) => setDepartment(selectedOptions)}
-                        renderInput={(params) => <TextField {...params} value={params.value} />}
+                        renderInput={(params) => <TextField {...params} value={params.value} placeholder="Department/s"  />}
                         fullWidth
                         placeholder="Department"
                         size="medium"
@@ -442,17 +447,17 @@ const RunsForm = React.forwardRef(
                         disabled
 
                       />
-                      {formik.touched.departmentId &&
+                      {/* {formik.touched.departmentId &&
                         formik.errors.departmentId && (
                           <Typography className="error-field">
                             {formik.errors.departmentId}
                           </Typography>
-                        )}
+                        )} */}
                     </Box>
                   </Grid>
 
                   <Grid item xs={12} sm={6} md={6} lg={6}>
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label style={{ display: 'block' }}>Laboratory/ies</label>
 
                       <Autocomplete
@@ -463,7 +468,7 @@ const RunsForm = React.forwardRef(
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
 
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies" />}
                         fullWidth
 
                         placeholder="Laboratory"
@@ -484,23 +489,23 @@ const RunsForm = React.forwardRef(
 
                         disabled
                       />
-                      {formik.touched.laboratoryId &&
+                      {/* {formik.touched.laboratoryId &&
                         formik.errors.laboratoryId && (
                           <Typography className="error-field">
                             {formik.errors.laboratoryId}
                           </Typography>
-                        )}
+                        )} */}
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Test objective</label>
+                      <label style={{ display: 'block' }}>Test objective<span style={{ color: "#E2445C" }}>*</span></label>
                       <TextField
                         margin="none"
                         fullWidth
                         id="objective"
                         name="objective"
-                        // autoComplete="objective"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Test objective"
                         onChange={formik.handleChange}
@@ -512,6 +517,12 @@ const RunsForm = React.forwardRef(
                           Boolean(formik.errors.objective)
                         }
                       />
+                       {formik.touched.objective &&
+                        formik.errors.objective && (
+                          <Typography className="error-field">
+                            {formik.errors.objective}
+                          </Typography>
+                        )}
                     </Box>
                   </Grid>
                   <Grid
@@ -523,8 +534,8 @@ const RunsForm = React.forwardRef(
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                     className="asset-popup calender-sec"
                   >
-                    <Box>
-                      <label>Due date</label>
+                    <Box style={{position:'relative'}}>
+                      <label>Due date<span style={{ color: "#E2445C" }}>*</span></label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
                       </LocalizationProvider>
@@ -544,7 +555,7 @@ const RunsForm = React.forwardRef(
                     lg={6}
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
-                    <Box>
+                    <Box style={{position:'relative'}}>
                       <label
                         style={{ display: 'block', marginBottom: '0.8rem' }}
                       >
@@ -584,7 +595,7 @@ const RunsForm = React.forwardRef(
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" className="add-btn">
+                <Button type="submit" variant="contained" disabled={type=='edit'?!formik.dirty:false} className="add-btn">
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>

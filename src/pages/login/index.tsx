@@ -25,6 +25,7 @@ import * as Yup from 'yup';
 import { navigate } from 'gatsby';
 import { withCardLayout } from '../../components/auth';
 import '../../assets/styles/App.scss';
+import { ToastContainer, toast } from 'react-toastify';
 
 const validUser = {
   email: 'admin@testrunz.com',
@@ -60,7 +61,14 @@ const Login = () => {
     if (isMatch) {
       if (typeof window !== 'undefined') {
         window.sessionStorage.setItem('isLoggedIn', 'true');
-        navigate('/mypage');
+        toast(`Login successful !`, {
+          style: {
+            background: '#00bf70', color: '#fff'
+          }
+        });
+        setTimeout(()=>{
+          navigate('/mypage')
+        },1000)
       }
     } else {
       if (values.email !== validUser.email) {
@@ -99,6 +107,14 @@ const Login = () => {
 
   return (
     <>
+    <ToastContainer
+    position="top-right"
+    autoClose={2000}
+    closeOnClick={true}
+    pauseOnHover={true}
+    draggable={false}
+    hideProgressBar={true}
+  />
       <Typography variant="h5" className="title-text">
         Log in to your Test Runs account
       </Typography>

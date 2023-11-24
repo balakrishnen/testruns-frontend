@@ -120,7 +120,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
   });
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
-    perPage: 5,
+    perPage: 10,
     searchBy: null,
     search: null,
     sortBy: null,
@@ -159,6 +159,8 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
 
   React.useEffect(() => {
     dispatch(fetchAssetsData(queryStrings));
+    setTableHeaderVisible(false)
+    setRowId([])
     // setAssetsData(assetsData);
   }, [pageInfo, queryStrings]);
 
@@ -183,7 +185,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     setCurrentPage(page_no);
   };
   const reload = () => {
-    const payload: any = { page: 1, perPage: 5, sortOrder: 'desc' };
+    const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
     dispatch(fetchAssetsData(payload));
   };
   // const filters = () => {
@@ -384,7 +386,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                 className='filterButton'
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
+                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false} className="red-badge-filter">
                   <img
                     src={filterIcon}
                     alt="no_image"
@@ -651,11 +653,12 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
-          <TableContainer>
+          <TableContainer className='tableHeight'>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
               // size={dense ? "small" : "medium"}
+              stickyHeader 
             >
               <TableHeader
                 numSelected={0}
@@ -702,7 +705,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                                   }
                                   onClick={(e: any) => clickHandler(e)}
                                   onChange={(event) => {
-                                    setRowId([...rowId, row._id]),
+                                    (row.is_checked==true && setRowId([...rowId, row._id])),
                                       handleChange(event, row._id);
                                   }}
                                 />
