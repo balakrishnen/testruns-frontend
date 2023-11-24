@@ -1223,7 +1223,7 @@ p.cancel-unsave {
 
 // asset details start
 tbody td .td-select {
-  width: 150px;
+  // width: 150px;
   color: $white;
   text-align: center;
   font-size: 12px;
@@ -1233,7 +1233,7 @@ tbody td .td-select {
   cursor: pointer;
 
   svg {
-    right: 0px;
+    right: 5px;
     background-image: url('../images/chevrondown.svg');
     background-size: cover;
     background-repeat: no-repeat;

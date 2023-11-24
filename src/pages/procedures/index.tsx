@@ -149,6 +149,8 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
 
   React.useEffect(() => {
     dispatch(fetchProcedureData(queryStrings));
+    setTableHeaderVisible(false)
+    setRowId([])
   }, [pageInfo,queryStrings]);
   // console.log('procedureData',procedureData[0].departmentId.length);
 
@@ -741,7 +743,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                                   onClick={(e: any) => clickHandler(e)}
                                   onChange={(event) => {
                                     // Procedure.push(row._id)
-                                    setRowId([...rowId, row._id]),
+                                    (row.is_checked==true && setRowId([...rowId, row._id])),
                                       handleChange(event, row._id);
                                   }}
                                 />

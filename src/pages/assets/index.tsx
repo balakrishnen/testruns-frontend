@@ -159,6 +159,8 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
 
   React.useEffect(() => {
     dispatch(fetchAssetsData(queryStrings));
+    setTableHeaderVisible(false)
+    setRowId([])
     // setAssetsData(assetsData);
   }, [pageInfo, queryStrings]);
 
@@ -703,7 +705,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                                   }
                                   onClick={(e: any) => clickHandler(e)}
                                   onChange={(event) => {
-                                    setRowId([...rowId, row._id]),
+                                    (row.is_checked==true && setRowId([...rowId, row._id])),
                                       handleChange(event, row._id);
                                   }}
                                 />

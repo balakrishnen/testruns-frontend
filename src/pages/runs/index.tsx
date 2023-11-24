@@ -156,6 +156,8 @@ const [dense, setDense] = React.useState(false);
 
   React.useEffect(() => {
     dispatch(fetchRunsData(queryStrings));
+    setTableHeaderVisible(false)
+    setRowId([])
     // setRunsData(runsData);
   }, [pageInfo, queryStrings]);
 
@@ -680,7 +682,7 @@ const [dense, setDense] = React.useState(false);
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                                  setRowId([...rowId, row._id]),
+                  (row.is_checked==true && setRowId([...rowId, row._id])),
                                     handleChange(event, row._id);
                                 }}
                               />
