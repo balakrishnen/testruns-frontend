@@ -393,7 +393,7 @@ export default function ProcedureDetails() {
                       value={editorData}
                       init={{
                         height: 500,
-                        menubar: false,
+                        menubar: true,
                         selector: "textarea",
                         plugins: [
                           'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
@@ -465,7 +465,7 @@ export default function ProcedureDetails() {
                       onInit={(evt, editor) => (editorRef.current = editor)}
                       init={{
                         height: 400,
-                        menubar: false,
+                        menubar: true,
                         plugins: [
                           'advlist autolink lists link image charmap print preview anchor',
                           'searchreplace visualblocks code fullscreen',

@@ -1456,7 +1456,7 @@ export default function RunsDetails() {
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   init={{
                     height: 500,
-                    menubar: false,
+                    menubar: true,
                     selector: "textarea",
                     plugins: [
                       'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
@@ -1504,7 +1504,7 @@ export default function RunsDetails() {
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   init={{
                     height: 500,
-                    menubar: false,
+                    menubar: true,
                     selector: "textarea",
                     plugins: [
                       'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
