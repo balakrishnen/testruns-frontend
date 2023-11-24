@@ -1,46 +1,49 @@
 import { gql } from '@apollo/client';
 
-// export const POST_USER = gql`
-//   mutation Create_procedure(
-//     $name: String!
-//     $procedure_detials: String!
-//     $department_id: String!
-//     $laboratory_id: String!
-//     $assect_id: String!
-//     $user_id: String!
-//     $procedure_number: String!
-//   ) {
-//     create_procedure(
-//       name: $name
-//       procedure_detials: $procedure_detials
-//       department_id: $department_id
-//       laboratory_id: $laboratory_id
-//       assect_id: $assect_id
-//       user_id: $user_id
-//       procedure_number: $procedure_number
-//     ) {
-//       _id
-//       name
-//       procedure_number
-//       procedure_detials
-//       department_id
-//       laboratory_id
-//       assect_id
-//       user_id
-//       is_active
-//       is_deleted
-//       createdAt
-//       updatedAt
-//     }
-//   }
-// `;
-
-export const POST_USER = gql`
-  mutation Create_user($name: String!) {
-    create_user(name: $name) {
-      _id
+ export const POST_USER = gql`
+  mutation Create_user(
+        $uid: String!
+        $firstName: String!
+        $organisationId: String!
+        $lastName: String!
+        $email: String!
+        $role: String!
+        $phoneNumber: String!
+        $departmentId: [String]
+        $laboratoryId: [String]
+        $instituteId: String
+  ) {
+    create_user(
+        uid:$uid
+        firstName:$firstName
+        organisationId:$organisationId
+        lastName:$lastName
+        email:$email
+        role:$role
+        phoneNumber:$phoneNumber
+        departmentId:$departmentId
+        laboratoryId:$laboratoryId
+        instituteId:$instituteId
+    ) {
+        message
+        identitys {
+            _id
+            uid
+            firstName
+            lastName
+            departmentId
+            laboratoryId
+            organisationId
+            email
+            role
+            phoneNumber
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
     }
-  }
+}
 `;
 
 export const GET_USER = gql`
