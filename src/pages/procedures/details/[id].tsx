@@ -24,6 +24,7 @@ import { navigate } from 'gatsby';
 import moment from 'moment';
 import { fetchAssetsName } from '../../../api/assetsAPI';
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().notRequired(),
@@ -148,6 +149,7 @@ export default function ProcedureDetails() {
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [assetName, setAssetName] = React.useState([])
   console.log('assetName',assetName);
+  const [state, setState] = React.useState({ content: "" });
   
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_procedure,
@@ -178,6 +180,21 @@ export default function ProcedureDetails() {
     }
     confirmationPopupRef.current.open(false);
   };
+  const handleChange = (content:any) => {
+    console.log(content);
+    
+    setState({ content });
+  };
+  const handleEditorChange = (e:any) => {
+    console.log( e.target.getContent());
+    // console.log("Content was updated:", e.target.getContent());
+  };
+  const handleSave = (e:any) => {
+   console.log(state);
+   
+    
+    // /moreInfo
+  }
   React.useEffect(() => {
     setprocedureData(procedureSliceData);
   }, [procedureSliceData]);
@@ -390,7 +407,7 @@ export default function ProcedureDetails() {
                     <Editor
                       apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                       onInit={(evt, editor) => (editorRef.current = editor)}
-                      value={editorData}
+                      // value={editorData}
                       init={{
                         height: 500,
                         menubar: true,
@@ -414,9 +431,9 @@ export default function ProcedureDetails() {
                         icon: "edit-block",
                         tooltip: "Insert Input Element",
                         onAction: function (_) {
-                          // const value = nanoid(7);
+                          const value = nanoid(1);
                           editor.insertContent(
-                            `&nbsp;<input type='text' >&nbsp;`
+                            `&nbsp;<input type='text'  value=${value}>&nbsp;`
                           );
                         },
                       });
@@ -431,6 +448,10 @@ export default function ProcedureDetails() {
                     },
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     }}
+                    value={state.content}
+          onChange={handleEditorChange}
+          onEditorChange={handleChange}
+          // onSaveContent={handleSave}
                     />
                   </Box>
                 </Box>
@@ -499,7 +520,7 @@ export default function ProcedureDetails() {
                 alt="printer"
                 style={{ marginRight: '1rem', cursor: 'pointer' }}
               /> */}
-              <Button type="submit" variant="contained" className="add-btn">
+              <Button type="submit" variant="contained" className="add-btn" onClick={handleSave}>
                 Save
               </Button>
             </Box>

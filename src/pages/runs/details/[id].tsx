@@ -217,9 +217,14 @@ export default function RunsDetails() {
   const runsPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
+  const [userProcedure,setuserProcedure]=React.useState(editorData)
   const runsStatus = RunsStatusList;
   const inputRefs = React.useRef<any>({});
 
+  React.useEffect(()=>{
+console.log("userProcedure",userProcedure);
+
+  })
   const handleInputChange = (id: any, column: any) => {
     const value = inputRefs.current[id]?.[column]?.value;
     console.log(`Input ${id}, Column ${column}: ${value}`);
@@ -990,7 +995,7 @@ export default function RunsDetails() {
             </Box>
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
-                <div dangerouslySetInnerHTML={{ __html: editorData }} />
+                <div dangerouslySetInnerHTML={{ __html: userProcedure }} />
                 <button onClick={() => handleInputChange('graph1x11', '1')}>
                   Get Value
                 </button>
