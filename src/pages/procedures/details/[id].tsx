@@ -328,7 +328,7 @@ export default function ProcedureDetails() {
                     name="name"
                     autoComplete="name"
                     InputLabelProps={{ shrink: false }}
-                    placeholder="Procedure name"
+                    placeholder="off"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}

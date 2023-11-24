@@ -316,7 +316,7 @@ console.log(DepartmentList);
                         id="firstName"
                         name="firstName"
                         type="text"
-                        // autoComplete="firstName"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="First name"
                         onChange={formik.handleChange}
@@ -359,7 +359,7 @@ console.log(DepartmentList);
                         id="lastName"
                         name="lastName"
                         type="text"
-                        // autoComplete="lastName"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Last name"
                         onChange={formikProfile.handleChange}
@@ -406,7 +406,7 @@ console.log(DepartmentList);
                         fullWidth
                         id="email"
                         name="email"
-                        // autoComplete="email_id"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Email"
                         onChange={formikProfile.handleChange}
@@ -496,7 +496,7 @@ console.log(DepartmentList);
                         fullWidth
                         id="organization"
                         name="organisation"
-                        autoComplete="organization"
+                        autoComplete="off"
                         placeholder="Organization"
                         onChange={formikProfile.handleChange}
                         onBlur={formikProfile.handleBlur}
@@ -543,7 +543,7 @@ console.log(DepartmentList);
                             {option.label}
                           </li>
                         )}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} placeholder="Department/s" />}
                         fullWidth
                         placeholder="Department"
                         size="medium"
@@ -587,7 +587,7 @@ console.log(DepartmentList);
                             {option.label}
                           </li>
                         )}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} placeholder="Lab/s assigned" />}
                         fullWidth
                         placeholder="Laboratory"
                         size="medium"
@@ -627,19 +627,19 @@ console.log(DepartmentList);
                           fullWidth
                           id="Designation"
                           name="designation"
-                          autoComplete="Designation"
+                          autoComplete="off"
                           // autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Designation"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <img src={document} />
-                              </InputAdornment>
-                            ),
-                          }}
+                          // InputProps={{
+                          //   startAdornment: (
+                          //     <InputAdornment position="start">
+                          //       <img src={document} />
+                          //     </InputAdornment>
+                          //   ),
+                          // }}
                           className="Organisation"
-                          sx={{ background: "#F3F3F3" }}
+                          // sx={{ background: "#F3F3F3" }}
                           onChange={formikProfile.handleChange}
                           onBlur={formikProfile.handleBlur}
                           value={formikProfile.values.designation}
@@ -681,19 +681,19 @@ console.log(DepartmentList);
                           fullWidth
                           id="Organisation"
                           name="reqstId"
-                          autoComplete="Organisation"
+                          autoComplete="off"
                           // autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Requestor ID/Tester ID"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <img src={profile2} />
-                              </InputAdornment>
-                            ),
-                          }}
+                          // InputProps={{
+                          //   startAdornment: (
+                          //     <InputAdornment position="start">
+                          //       <img src={profile2} />
+                          //     </InputAdornment>
+                          //   ),
+                          // }}
                           className="Organisation"
-                          sx={{ background: "#F3F3F3" }}
+                          // sx={{ background: "#F3F3F3" }}
                           onChange={formikProfile.handleChange}
                           onBlur={formikProfile.handleBlur}
                           value={formikProfile.values.reqstId}

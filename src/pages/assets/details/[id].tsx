@@ -422,7 +422,7 @@ console.log(assetValue?.organisationId,);
                             fullWidth
                             id="name"
                             name="name"
-                            autoComplete="name"
+                            autoComplete="off"
                             InputLabelProps={{ shrink: false }}
                             placeholder="Name"
                             onChange={formik.handleChange}

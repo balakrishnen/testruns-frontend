@@ -505,7 +505,7 @@ const RunsForm = React.forwardRef(
                         fullWidth
                         id="objective"
                         name="objective"
-                        // autoComplete="objective"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Test objective"
                         onChange={formik.handleChange}

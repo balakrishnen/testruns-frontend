@@ -499,7 +499,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                         fullWidth
                         id="name"
                         name="name"
-                        // autoComplete="name"
+                        autoComplete="off"
                         autoFocus
                         InputLabelProps={{ shrink: false }}
                         placeholder="The simple pendulum"

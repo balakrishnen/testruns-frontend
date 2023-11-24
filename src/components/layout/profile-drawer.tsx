@@ -189,7 +189,7 @@ export default function AppProfileDrawer({
                     name="name"
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
-                    autoComplete="name"
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="First name"
                   />
@@ -218,7 +218,7 @@ export default function AppProfileDrawer({
                     name="last"
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
-                    autoComplete="last"
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Last name"
                   />
@@ -251,7 +251,7 @@ export default function AppProfileDrawer({
                     name="Email"
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
-                    autoComplete="Email"
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Email"
                     inputProps={{ maxLength: 50 }}
@@ -388,7 +388,7 @@ export default function AppProfileDrawer({
                     name="Designation"
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
-                    autoComplete="Designation"
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Designation"
                     // InputProps={{
@@ -422,7 +422,7 @@ export default function AppProfileDrawer({
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
                     name="Organisation"
-                    autoComplete="Organisation"
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Requestor ID/Tester ID"
                     // InputProps={{

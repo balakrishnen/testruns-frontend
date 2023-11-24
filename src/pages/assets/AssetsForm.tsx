@@ -369,7 +369,7 @@ const Addnewpopup = React.forwardRef(
                             fullWidth
                             id="name"
                             name="name"
-                            autoComplete="name"
+                            autoComplete="off"
                             InputLabelProps={{ shrink: false }}
                             placeholder="Assets name"
                             onChange={formik.handleChange}
