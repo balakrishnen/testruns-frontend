@@ -309,7 +309,7 @@ export const UserHeaders: readonly UserHead[] = [
   },
   {
     id: 'providerDetails',
-    label: 'Department',
+    label: 'Organisation',
     filters: [
       {
         id: 'dept',
