@@ -21,19 +21,27 @@ import { fetchLabData } from '../../api/labAPI';
 import { OrganizationList } from '../../utils/data';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { fetchOrganizationData } from '../../api/organizationAPI';
-import { fetchGetUser } from '../../api/userAPI';
+import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData } from '../../api/userAPI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
+import { fetchRoleData } from '../../api/roleApi';
 
+const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required('Email is required').email('Invalid email').matches(emailRegex, "In-correct email"),
-  firstName: Yup.string().required('firstName is required'),
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Lase name is required"),
+  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
+  phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
+  .min(10, "Enter valid number")
+  .max(10, "too long").required("Mobile number is required"),
+  organisationId: Yup.string().required("Organistation is required"),
+  // institution: Yup.string().required("Institution is required"),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
-  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
-  lastName: Yup.string().required('Objective is required'),
-  phoneNumber: Yup.number().required('Phone number is required is required'),
-  organisationId:Yup.string().required('organisationId  is required')
+  // laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  // user_id: Yup.string().required(),
+  role: Yup.string().required("Role is required"),
 });
 
 export default function AppProfileDrawer({
@@ -45,8 +53,10 @@ export default function AppProfileDrawer({
   const [organizationData, setOrganizationData] = React.useState([]);
   const [userDetail, setUserDetail] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
-  const departments: any = [];
-  const laboratory: any = [];
+  const [departments, setDepartments] = React.useState([])
+  const [laboratory, setLaboratory] = React.useState([])
+  const [roleData, setRoleData] = React.useState([]);
+
   const dispatch: any = useDispatch();
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
@@ -60,10 +70,14 @@ export default function AppProfileDrawer({
   const userSliceData = useSelector(
     (state: any) => state.user.data?.get_user,
   );
+  const roleSliceData = useSelector(
+    (state: any) => state.role.data?.get_all_roles,
+  );
   React.useEffect(() => {
     setDepartmentData(departmentSliceData?.map((item: any) => ({
       label: item.name,
-      value: item._id
+      value: item.name,
+        id: item._id,
     })))
     setLabData(labSliceData?.map((item: any) => ({
       label: item.name,
@@ -76,9 +90,15 @@ export default function AppProfileDrawer({
         id: item._id,
       })),
     );
+    setRoleData(
+      roleSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item._id,
+      })),
+    );
     setUserDetail(userSliceData)
 
-  }, [departmentSliceData, labSliceData,organizationSliceData,userSliceData])
+  }, [departmentSliceData, labSliceData,organizationSliceData,userSliceData,roleSliceData])
 
   console.log(userDetail);
   
@@ -88,7 +108,26 @@ export default function AppProfileDrawer({
   // console.log(departmentData);
 
   // console.log(DepartmentList);
-
+  React.useEffect(()=>{
+    let temp = { '_id': "6561fde22f447d0012e3d8cf"}
+        // if (row?._id) {
+          dispatch(fetchSingleUserData(temp)).then((isSucess) => {
+            if (isSucess.get_user) {
+              formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
+              formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
+              formik.setFieldValue('email', isSucess.get_user.email || '');
+              formik.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
+              formik.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
+              formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
+              // formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
+              formik.setFieldValue('role', isSucess.get_user.role || '');
+            }
+          })
+            .catch((err) => {
+              console.log(err);
+            });
+          // }    
+  },[])
   React.useEffect(() => {
     let payload={
       _id:"655f18bcc88024001262b3a5"
@@ -96,12 +135,74 @@ export default function AppProfileDrawer({
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
     dispatch(fetchOrganizationData());
+    dispatch(fetchRoleData())
     dispatch(fetchGetUser(payload))
    setEdit(true)
   }, []);
+  const checkCredentialsProfile = (
+    firstName: any,
+    ) => {
+        return true
+    };
+  const onSubmitProfile = (values: any) => {
+    const isMatch = checkCredentialsProfile(
+      values.firstName,
+      // values.lastName,
+      // values.email,
+      // values.mobile,
+      // values.organisation,
+      // values.lab,
+      // values.password,
+      // values.designation,
+      // values.reqstId
+    );
 
-
-
+    if (isMatch) {
+      var deptArray: any = []
+      departments?.map((item: any) => (deptArray.push(item?.id)))
+      var labArray: any = []
+      laboratory?.map((item: any) => (labArray.push(item?.id)))
+      let userValues: any = {
+        // uid:"",
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phoneNumber: values.phoneNumber.toString(),
+        organisationId: values.organisationId,
+        // instituteId: values.institution,
+        departmentId: deptArray,
+        laboratoryId: labArray,
+        role: values.role,
+        _id:"6561fde22f447d0012e3d8cf"
+      }
+      // debugger
+      // userValues['_id'] = userData?._id
+      dispatch(fetchUpdateUserData(userValues))
+      toast(`User Details updated successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // alert("User Details updated successful!");
+     
+  };
+}
+  const formik = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName:  '',
+      email:  '',
+      phoneNumber: '',
+      organisationId:  '',
+      // institution:  '',
+      departmentId: [],
+      laboratoryId: [],
+      role : '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: onSubmitProfile,
+  });
+ 
   return (
     <Drawer
       className="profile-head"
@@ -158,6 +259,8 @@ export default function AppProfileDrawer({
           <Box className="edit-profile-btn">
             <Button onClick={()=>setEdit(false)}>Edit profile</Button>
           </Box>
+          <form onSubmit={formik.handleSubmit}  autoComplete="off">
+
           <Box className="profile-section2">
             <Grid container spacing={2} className="profile-inner">
               <Grid
@@ -178,21 +281,30 @@ export default function AppProfileDrawer({
                     First name<span style={{ color: '#E2445C' }}>*</span>
                   </label>
                   <TextField
-                    margin="normal"
-                    // disabled
-                    // disabled={edit}
-                    // style={{backgroundColor:"red"}}
-                    required
-                    fullWidth
-                    id="name"
-                    inputProps={{ maxLength: 20 }}
-                    name="name"
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
+                    margin="none"
+                    fullWidth
+                    id="firstName"
+                    name="firstName"
                     autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="First name"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.firstName}
+                    size="small"
+                    error={
+                      formik.touched.firstName &&
+                      Boolean(formik.errors.firstName)
+                    }
                   />
+                    {formik.touched.firstName &&
+                        formik.errors.firstName && (
+                          <Typography className="error-field">
+                            {formik.errors.firstName}
+                          </Typography>
+                        )}
                 </Box>
               </Grid>
               <Grid
@@ -210,18 +322,31 @@ export default function AppProfileDrawer({
                     Last name<span style={{ color: '#E2445C' }}>*</span>
                   </label>
                   <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    inputProps={{ maxLength: 20 }}
-                    id="last"
-                    name="last"
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
+                    margin="normal"
+                    fullWidth
+                    id="lastName"
+                    name="lastName"
+                    type="text"
                     autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Last name"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.lastName}
+                    size="small"
+                    error={
+                      formik.touched.lastName &&
+                      Boolean(formik.errors.lastName)
+                    }
                   />
+                  {formik.touched.lastName && formik.errors.lastName && (
+                    <Typography className="error-field">
+                      {formik.errors.lastName}
+                    </Typography>
+                  )}
+                  
                 </Box>
               </Grid>
             </Grid>
@@ -244,18 +369,30 @@ export default function AppProfileDrawer({
                     Email<span style={{ color: '#E2445C' }}>*</span>
                   </label>
                   <TextField
+                    className={"bg-gray-input"}
+                    disabled={true}
+                    inputProps={{ maxLength: 50 }}
                     margin="normal"
-                    required
                     fullWidth
-                    id="Email"
-                    name="Email"
-                    className={edit?"bg-gray-input":""}
-                    disabled={edit}
+                    id="email"
+                    name="email"
                     autoComplete="off"
                     InputLabelProps={{ shrink: false }}
                     placeholder="Email"
-                    inputProps={{ maxLength: 50 }}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.email}
+                    size="small"
+                    error={
+                      formik.touched.email &&
+                      Boolean(formik.errors.email)
+                    }
                   />
+                  {formik.touched.email && formik.errors.email && (
+                    <Typography className="error-field">
+                      {formik.errors.email}
+                    </Typography>
+                  )}
                 </Box>
               </Grid>
               <Grid
@@ -271,28 +408,42 @@ export default function AppProfileDrawer({
                 <Box>
                   <label>Mobile</label>
                   <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="mobile"
+                  
                     onInput={(e:any)=>{ 
                       e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
                   }}
-                    name="mobile"
                     className={edit?"bg-gray-input":""}
                     inputProps={{ maxLength: 10 }}
                     disabled={edit}
-                    InputLabelProps={{ shrink: false }}
-                    placeholder="Mobile number"
-                    type='number'
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment sx={{ mx: 2 }} position="start">
-                          +91{' '}
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+                    margin="none"
+                        fullWidth
+                        id="mobile"
+                        name="mobile"
+                        type="number"
+                        InputLabelProps={{ shrink: false }}
+                        placeholder="Mobile number"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.phoneNumber}
+                        size="small"
+                        error={
+                          formik.touched.phoneNumber &&
+                          Boolean(formik.errors.phoneNumber)
+                        }
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment sx={{ mx: 2 }} position="start">
+                              +91{' '}
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                      {formik.touched.phoneNumber &&
+                        formik.errors.phoneNumber && (
+                          <Typography className="error-field">
+                            {formik.errors.phoneNumber}
+                          </Typography>
+                        )}
                 </Box>
               </Grid>
             </Grid>
@@ -300,31 +451,48 @@ export default function AppProfileDrawer({
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Box>
                   <label>Organisation</label>
-                  <Autocomplete
-                    // multiple
-                    id="Organisation"
+                  <Select
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
-                    options={organizationData !== undefined ? organizationData : []}
-                    disableCloseOnSelect
-                    getOptionLabel={(option: any) => option.label}
-                    renderOption={(props, option, { selected }) => (
-                      <li {...props}>
-                       
-                        {option.label}
-                      </li>
-                    )}
-                    renderInput={(params) => <TextField {...params} placeholder="Organisation" />}
-                    fullWidth
-                    placeholder="Organisation"
-                    size="medium"
-                    // onChange={(e, f) => {
-                    //   f.forEach((element) =>
-                    //     departments.push(element.id),
-                    //   );
-                    // }}
-
-                  />
+                    style={{color:"black",backgroundColor:edit?'#f3f3f3':'white'}}
+                        displayEmpty
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        renderValue={
+                          formik.values.organisationId !== ''
+                            ? undefined
+                            : () => (
+                              <Placeholder>
+                                Select Organization
+                              </Placeholder>
+                            )
+                        }
+                        margin="none"
+                        fullWidth
+                        id="organisationId"
+                        name="organisationId"
+                        autoComplete="off"
+                        placeholder="Organization"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.organisationId}
+                        size="small"
+                        error={
+                          formik.touched.organisationId &&
+                          Boolean(formik.errors.organisationId)
+                        }
+                      >
+                        {organizationData?.map((item: any, index) => (
+                          <MenuItem key={index} value={item.id}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {formik.touched.organisationId &&
+                        formik.errors.organisationId && (
+                          <Typography className="error-field">
+                            {formik.errors.organisationId}
+                          </Typography>
+                        )}
                 </Box>
               </Grid>
             </Grid>
@@ -337,28 +505,43 @@ export default function AppProfileDrawer({
                     id="department"
                     className={edit?"bg-gray-input":""}
                     disabled={edit}
-                    options={departmentData !== undefined ? departmentData : []}
                     disableCloseOnSelect
-                    getOptionLabel={(option: any) => option.label}
-                    renderOption={(props, option, { selected }) => (
-                      <li {...props}>
-                        <Checkbox
-                          style={{ marginRight: 0 }}
-                          checked={selected}
-                        />
-                        {option.label}
-                      </li>
-                    )}
-                    renderInput={(params) => <TextField {...params} placeholder="Department/s" />}
-                    fullWidth
-                    placeholder="Department"
-                    size="medium"
-                    onChange={(e, f) => {
-                      f.forEach((element) =>
-                        departments.push(element.id),
-                      );
-                    }}
-
+                    value={formik.values.departmentId}
+                    options={
+                      departmentData !== undefined
+                        ? departmentData
+                        : []
+                    }
+                    getOptionLabel={(option: any) =>option?.label }
+                              isOptionEqualToValue={(option: any, value: any) =>
+                              value?.id == option?.id
+                              }
+                              renderInput={(params) => (
+                                <TextField {...params} placeholder="Department/s"/>
+                              )}
+                              fullWidth
+                              placeholder="Department"
+                              size="medium"
+                              renderOption={(
+                                props,
+                                option: any,
+                                
+                                { selected },
+                                
+                              ) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) =>{
+                                setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
+                              }
                   />
                 </Box>
               </Grid>
@@ -378,27 +561,50 @@ export default function AppProfileDrawer({
                 }}
               >
                 <Box>
-                  <label>Designation</label>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    inputProps={{ maxLength: 20 }}
-                    id="Designation"
-                    name="Designation"
-                    className={edit?"bg-gray-input":""}
-                    disabled={edit}
-                    autoComplete="off"
-                    InputLabelProps={{ shrink: false }}
-                    placeholder="Designation"
-                    // InputProps={{
-                    //   startAdornment: (
-                    //     <InputAdornment position="start">
-                    //       <img src={document} />
-                    //     </InputAdornment>
-                    //   ),
-                    // }}
-                  />
+                  <label>Role</label>
+                  <Select
+                        // MenuProps={{
+                        //   PaperProps: {
+                        //     style: {
+                        //       maxHeight: '150px',
+                        //       overflowY: 'auto',
+                        //     },
+                        //   },
+                        // }}
+                        style={{color:"black",backgroundColor:edit?'#f3f3f3':'white',marginTop:"10px"}}
+                        displayEmpty
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        renderValue={
+                          formik.values.role !== ''
+                            ? undefined
+                            : () => <Placeholder>Select Role</Placeholder>
+                        }
+                        margin="none"
+                        className={edit?"bg-gray-input":""}
+                        disabled={edit}
+                        fullWidth
+                        id="role"
+                        name="role"
+                        autoComplete="off"
+                        placeholder="Role"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.role}
+                        size="small"
+                        error={
+                          formik.touched.role && Boolean(formik.errors.role)
+                        }
+                      >  {roleData &&
+                        roleData.map((item: any) => (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        ))}</Select>
+                  {formik.touched.role && formik.errors.role && (
+                          <Typography className="error-field">
+                            {formik.errors.role}
+                          </Typography>
+                        )}
                 </Box>
               </Grid>
               <Grid
@@ -415,12 +621,12 @@ export default function AppProfileDrawer({
                   <label>Requestor ID/Tester ID</label>
                   <TextField
                     margin="normal"
-                    required
+                    // required
                     fullWidth
                     id="Organisation"
                     inputProps={{ maxLength: 20 }}
-                    className={edit?"bg-gray-input":""}
-                    disabled={edit}
+                    className={"bg-gray-input"}
+                    disabled={true}
                     name="Organisation"
                     autoComplete="off"
                     InputLabelProps={{ shrink: false }}
@@ -461,6 +667,7 @@ export default function AppProfileDrawer({
           Save
         </Button>
       </Box>
+      </form>
         </Box>
       </Box>
     </Drawer>
