@@ -1,5 +1,7 @@
-// store.js
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import thunk from 'redux-thunk';
 import assetsReducer from '../features/assetsSlice';
 import userReducer from '../features/userSlice';
 import departmentReducer from '../features/departmentSlice';
@@ -13,7 +15,12 @@ import roleReducer from '../features/roleSlice';
 import userRunsSlice from '../features/userRunsSlice';
 import fileUploadReducer from '../features/fileUploadSlice';
 
-const rootStore = combineReducers({
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
+const rootReducer = combineReducers({
   assets: assetsReducer,
   user: userReducer,
   department: departmentReducer,
@@ -28,8 +35,13 @@ const rootStore = combineReducers({
   fileUpload: fileUploadReducer,
 });
 
+export const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 const store = configureStore({
-  reducer: rootStore,
+  reducer: persistedReducer,
+  middleware: [thunk],
 });
+
+export const persistor = persistStore(store);
 
 export default store;

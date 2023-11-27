@@ -43,6 +43,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import user from '../../../assets/images/profile/profile.svg';
+import { toast } from 'react-toastify';
 
 const users: UserRowData[] = UserRows;
 const userStatus = StatusList;
@@ -146,8 +147,18 @@ const Users = () => {
       setTableHeaderVisible,
       setVisibleRow,
     )(event, id);
+   
   };
-
+  const handleCheckboxValues = (id:any) => {
+    // Check if the ID is already in the selectedIds
+    if (rowId.includes(id)) {
+      // If it is, remove it
+      setRowId(rowId.filter((rowId:any) => rowId !== id));
+    } else {
+      // If it's not, add it
+      setRowId([...rowId, id]);
+    }
+  };
   const handleDeChange = handleDeCheckboxChange(
     isDeselectAllChecked,
     userData,
@@ -195,7 +206,7 @@ const Users = () => {
       perPage: 10,
       sortOrder: 'desc',
     };
-    dispatch(fetchUserData(queryStrings));
+    dispatch(fetchUserData(payload));
   };
 
   const handleCloseTableHeader = (status: boolean) => {
@@ -233,15 +244,24 @@ const Users = () => {
   const assetVal: any = { _id: rowId };
 
   const handleDeleteConfirmation = (state: any) => {
-    dispatch(deleteUserData(assetVal));
-    reload();
-    setTableHeaderVisible(false);
-    // if (state === 1) {
-    //   deletePopupRef.current.open(false);
-    // }
+    if (state === 1) {
+      // deletePopupRef.current.open(false);
+      dispatch(deleteUserData(assetVal));
+      toast(`Assets deleted !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
+      // deleteSuccessPopupRef.current.open(true);
+      // setTimeout(() => {
+      //   deleteSuccessPopupRef.current.open(false);
+      // }, 3000);
+      reload();
+      setTableHeaderVisible(false);
+    }
     deletePopupRef.current.open(false);
   };
-
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'User');
   };
@@ -290,7 +310,16 @@ const Users = () => {
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
+  const inputValue = "someValue";
 
+  // Assuming dataArray is your array of values
+  const dataArray = ["value1", "value2", "someValue", "value3"];
+  
+  // Use the filter method to create a new array excluding the inputValue
+  const filteredArray = dataArray.filter(value => value !== inputValue);
+  
+  // Now, filteredArray does not contain the inputValue
+  console.log(rowId);
   // table end
   return (
     <Box
@@ -624,9 +653,8 @@ const Users = () => {
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                                  row.is_checked == true &&
-                                    setRowId([...rowId, row._id]),
-                                    handleChange(event, row._id);
+                                  handleCheckboxValues( row._id),
+                                  handleChange(event, row._id);
                                 }}
                               />
                             </Box>

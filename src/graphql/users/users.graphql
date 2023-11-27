@@ -37,6 +37,7 @@ query Get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
 `; 
 export const POST_USER = gql`
 mutation Create_user(
+       $uid: String!
        $firstName:String!
        $lastName:String!
        $departmentId:[String]
@@ -45,9 +46,11 @@ mutation Create_user(
        $email:String!
        $role:String!
        $phoneNumber:String!
+       $instituteId: String !
     
 ) {
     create_user(
+        uid:$uid
         firstName:$firstName
         lastName:$lastName
         departmentId:$departmentId
@@ -56,19 +59,24 @@ mutation Create_user(
         email:$email
         role:$role
         phoneNumber:$phoneNumber
+        instituteId:$instituteId
         
-    ) {
-        _id
-        firstName
-        lastName        
-        organisationId
-        email
-        role
-        phoneNumber
-        isActive
-        isDeleted
-        createdAt
-        updatedAt
+    )  {identitys {
+            _id
+            uid
+            firstName
+            lastName
+            departmentId
+            laboratoryId
+            organisationId
+            email
+            role
+            phoneNumber
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+        }
     }
 }
 `;
@@ -104,6 +112,7 @@ mutation  update_user(
         phoneNumber:$phoneNumber
     ) {
         _id
+        uid
         firstName
         lastName
         departmentId

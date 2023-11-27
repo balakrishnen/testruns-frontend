@@ -17,12 +17,11 @@ import {
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { fetchOrganizationData } from '../../../api/organizationAPI';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CheckBoxOutlineBlank } from '@mui/icons-material';
-import { postUserData, fetchUpdateUserData } from '../../../api/userAPI';
+import { fetchSingleUserData, fetchUpdateUserData, postUserData } from '../../../api/userAPI';
 import {
   DepartmentList,
   InstitutionList,
@@ -37,31 +36,46 @@ import { fetchRoleData } from '../../../api/roleApi';
 import { fetchLabData } from '../../../api/labAPI';
 import SuccessPopup from '../../../components/SuccessPopup';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
-import {
-  fetchSingleUserData
-} from '../../../api/userAPI';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../firebase.config';
+import { toast } from 'react-toastify';
+
+const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().notRequired(),
-  lastName: Yup.string().notRequired(),
-  email: Yup.string().notRequired(),
-  phoneNumber: Yup.string().notRequired(),
-  organisationId: Yup.string().notRequired(),
-  institution: Yup.string().notRequired(),
-  departmentId: Yup.array().notRequired(),
-  laboratoryId: Yup.array().notRequired(),
-  user_id: Yup.string().notRequired(),
-  role: Yup.string().notRequired(),
-  status: Yup.string().notRequired(),
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Lase name is required"),
+  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
+  phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
+  .min(10, "Enter valid number")
+  .max(10, "too long").required("Mobile number is required"),
+  organisationId: Yup.string().required("Organistation is required"),
+  institution: Yup.string().required("Institution is required"),
+  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
+  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  // user_id: Yup.string().required(),
+  role: Yup.string().required("Role is required"),
+  // status: Yup.string().required("Status is required"),
 });
 
 const UserForm = React.forwardRef(
-  ({ closeFormPopup, openConfirmationPopup, reload, rowVal }: any, ref) => {
-    const [departments, setDepartments] = React.useState([]);
-    const [laboratory, setLaboratory] = React.useState([]);
-    const laboratoryId: any = [];
+  ({ closeFormPopup, openConfirmationPopup, reload, rowVal}: any, ref) => {
+    const [departments, setDepartments] = React.useState(
+      rowVal?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj._id == item) ?{
+        label: item?.name,
+        value: item?.name,
+        id: item?._id,
+      }:"")),
+    ));
+    const [laboratory, setLaboratory] = React.useState(
+      rowVal?.laboratoryId?.map((item: any) => ({
+        label: item?.name,
+        value: item?.name,
+        id: item?._id,
+      })),
+    );
     const [formPopup, setFormPopup] = React.useState(false);
-    const [organizationData, setOrganizationData] = React.useState([]);
-    const [rowValue, setRowValue] = React.useState<any>(rowVal);
     const [departmentData, setDepartmentData] = React.useState([]);
     const [roleData, setRoleData] = React.useState([]);
     const [labData, setLabData] = React.useState([]);
@@ -69,28 +83,32 @@ const UserForm = React.forwardRef(
     const [type, setType] = React.useState(null);
     const successPopupRef: any = React.useRef();
     const confirmationPopupRef: any = React.useRef();
-
+    const [organizationData, setOrganizationData] = React.useState([]);
+    const[userData, setUserData]=React.useState({})
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
+    console.log(userData);
 
     React.useImperativeHandle(ref, () => ({
-      open(state: any, type: any, row: any) {
+      open(state: any, type: any,row: any) {
+        setFormPopup(state);
         setType(type);
-        setRowValue(row)
         let temp = { '_id': row?._id }
         if (row?._id) {
           dispatch(fetchSingleUserData(temp)).then((isSucess) => {
             if (isSucess.get_user) {
               console.log(row, 'isSucess', isSucess.get_user)
+              setUserData(isSucess.get_user)
+              setDepartments(  isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))))
               formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
               formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
               formik.setFieldValue('email', isSucess.get_user.email || '');
               formik.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
               formik.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
               formik.setFieldValue('institution', isSucess.get_user.institution || '');
-              formik.setFieldValue('departmentId', isSucess.get_user.departmentId || '');
-              formik.setFieldValue('laboratoryId', isSucess.get_user.laboratoryId || '');
+              formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
+              formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
               formik.setFieldValue('user_id', isSucess.get_user.user_id || '');
               formik.setFieldValue('role', isSucess.get_user.role || '');
               formik.setFieldValue('status', isSucess.get_user.status || '');
@@ -107,59 +125,71 @@ const UserForm = React.forwardRef(
       },
     }));
 
-    const checkCredentials = (firstName: any) => {
+    const checkCredentials = (first_name: any) => {
       return true;
-    };
-
-    const clearForm = () => {
-      formik.resetForm();
-      setDepartments([])
     };
 
     const onSubmit = (values: any) => {
       const isMatch = checkCredentials(values.firstName);
       if (isMatch) {
         var deptArray: any = []
-        departments.map((item: any) => (deptArray.push(item?.id)))
+        departments?.map((item: any) => (deptArray.push(item?.id)))
         var labArray: any = []
-        laboratory.map((item: any) => (labArray.push(item?.id)))
+        laboratory?.map((item: any) => (labArray.push(item?.id)))
         let userValues: any = {
+          // uid:"",
           firstName: values.firstName,
           lastName: values.lastName,
           email: values.email,
-          phoneNumber: values.phoneNumber,
+          phoneNumber: values.phoneNumber.toString(),
           organisationId: values.organisationId,
-          institution: values.institution,
-          departmentId: values.departmentId,
-          laboratoryId: values.laboratoryId,
-          user_id: 'USER_12345678',
+          instituteId: values.institution,
+          departmentId: deptArray,
+          laboratoryId: labArray,
           role: values.role,
-          status: values.status,
         }
         // debugger
+        console.log(userValues);
+        
         if (type == 'edit') {
-          values['_id'] = rowValue._id
-          dispatch(fetchUpdateUserData(values))
+          userValues['_id'] = userData?._id
+          dispatch(fetchUpdateUserData(userValues))
           submitFormPopup();
           reload()
         }
         else {
+          console.log(userValues);
+          try {
+         createUserWithEmailAndPassword(auth, values.email, "Test@123").then((res)=>{
+          userValues['uid'] = res.user.uid,
           dispatch(postUserData(userValues));
           submitFormPopup();
           reload()
+        });
+        }catch (err){
+          console.error(err);
         }
-        clearForm()
+        }
+        // clearForm()
       } else {
         formik.setFieldError('first_name', 'Invalid first name');
       }
     };
-
+    const clearForm = () => {
+      formik.resetForm();
+    };
     const submitFormPopup = () => {
       setFormPopup(false);
-      successPopupRef.current.open(true, 'User');
-      setTimeout(() => {
-        successPopupRef.current.open(false, 'User');
-      }, 3000);
+      toast(`User ${type=='edit'?"updated" : "created"}  !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+      // successPopupRef.current.open(true, 'User');
+      // setTimeout(() => {
+      //   successPopupRef.current.open(false, 'User');
+      // }, 3000);
+      clearForm()
     };
 
     const handleConfirmationState = (state: any) => {
@@ -170,23 +200,25 @@ const UserForm = React.forwardRef(
         setFormPopup(false);
       }
     };
+
     const formik = useFormik({
       initialValues: {
-        firstName: rowValue?.firstName ? rowValue?.firstName : '',
-        lastName: rowValue?.lastName ? rowValue?.lastName : '',
-        email: rowValue?.email ? rowValue?.email : '',
-        phoneNumber: rowValue?.phoneNumber ? rowValue?.phoneNumber : '',
-        organisationId: rowValue?.organisationId ? rowValue?.organisationId : '',
-        institution: rowValue?.institution ? rowValue?.institution : '',
-        departmentId: rowValue?.departmentId ? rowValue?.departmentId : [],
-        laboratoryId: rowValue?.laboratoryId ? rowValue?.laboratoryId : [],
+        firstName: rowVal?.firstName ? rowVal?.firstName : '',
+        lastName: rowVal?.lastName ? rowVal?.lastName : '',
+        email: rowVal?.email ? rowVal?.email : '',
+        phoneNumber: rowVal?.phoneNumber ? rowVal?.phoneNumber : '',
+        organisationId: rowVal?.organisationId ? rowVal?.organisationId : '',
+        institution: rowVal?.instituteId ? rowVal?.instituteId : '',
+        departmentId: rowVal?.departmentId ? rowVal?.departmentId : [],
+        laboratoryId: rowVal?.laboratoryId ? rowVal?.laboratoryId : [],
         user_id: 'USER_12345678',
-        role: rowValue?.role ? rowValue?.role : '',
-        status: rowValue?.status ? rowValue?.status : '',
+        role: rowVal?.role ? rowVal?.role : '',
+        status: rowVal?.status ? rowVal?.status : '',
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
     });
+    console.log(formik.errors);
 
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -233,23 +265,22 @@ const UserForm = React.forwardRef(
 
 
 
+    console.log(departmentData);
+
+    console.log(DepartmentList);
+
     React.useEffect(() => {
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
       dispatch(fetchRoleData());
-      dispatch(fetchOrganizationData());
     }, []);
 
-    console.log(formik.values)
     return (
       <div>
         <Dialog
           open={formPopup}
           keepMounted
-          onClose={() => {
-            closeFormPopup(false)
-            clearForm()
-          }}
+          onClose={() => closeFormPopup(false)}
           aria-labelledby="add-new-asset-title"
           aria-describedby="add-new-asset"
           fullWidth
@@ -260,10 +291,7 @@ const UserForm = React.forwardRef(
             <Box className="popup-section">
               <Box className="title-popup">
                 <Typography>{type} user</Typography>
-                <CloseIcon onClick={() => {
-                  closeFormPopup(false)
-                  clearForm()
-                }} />
+                <CloseIcon onClick={() => closeFormPopup(false)} />
               </Box>
               <Box>
                 <Grid container spacing={2} className="asset-popup">
@@ -282,7 +310,7 @@ const UserForm = React.forwardRef(
                         fullWidth
                         id="firstName"
                         name="firstName"
-                        autoComplete="firstName"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="First name"
                         onChange={formik.handleChange}
@@ -323,7 +351,7 @@ const UserForm = React.forwardRef(
                         fullWidth
                         id="lastName"
                         name="lastName"
-                        autoComplete="lastName"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Last name"
                         onChange={formik.handleChange}
@@ -338,7 +366,7 @@ const UserForm = React.forwardRef(
                       {formik.touched.lastName && formik.errors.lastName && (
                         <Typography className="error-field">
                           {formik.errors.lastName}
-                        </Typography>
+                        </Typography> 
                       )}
                     </Box>
                   </Grid>
@@ -360,7 +388,7 @@ const UserForm = React.forwardRef(
                         fullWidth
                         id="email"
                         name="email"
-                        autoComplete="email"
+                        autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="Email"
                         onChange={formik.handleChange}
@@ -399,8 +427,12 @@ const UserForm = React.forwardRef(
                         margin="none"
                         fullWidth
                         id="phoneNumber"
+                        type='number'
                         name="phoneNumber"
-                        autoComplete="phoneNumber"
+                        autoComplete="off"
+                        onInput={(e:any)=>{ 
+                          e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+                      }}
                         InputLabelProps={{ shrink: false }}
                         placeholder="Mobile number"
                         onChange={formik.handleChange}
@@ -457,7 +489,7 @@ const UserForm = React.forwardRef(
                         fullWidth
                         id="organisationId"
                         name="organisationId"
-                        // autoComplete="organisationId"
+                        autoComplete="off"
                         placeholder="Organization"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -515,7 +547,7 @@ const UserForm = React.forwardRef(
                         fullWidth
                         id="institution"
                         name="institution"
-                        autoComplete="institution"
+                        autoComplete="off"
                         placeholder="Institution"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -527,7 +559,7 @@ const UserForm = React.forwardRef(
                         }
                       >
                         {InstitutionList.map((item) => (
-                          <MenuItem key={item.id} value={item.id}>
+                          <MenuItem key={item.id} value={item.name}>
                             {item.name}
                           </MenuItem>
                         ))}
@@ -557,41 +589,48 @@ const UserForm = React.forwardRef(
                   >
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Department/s</label>
+                      {console.log(formik.values.departmentId)}
                       <Autocomplete
-                        multiple
-                        id="departmentId"
-                        options={
-                          departmentData !== undefined ? departmentData : []
-                        }
-                        disableCloseOnSelect
-                        getOptionLabel={(option: any) => option.label}
-                        isOptionEqualToValue={(option: any, value: any) =>
-                          value.id == option.id
-                        }
-                        renderOption={(
-                          props,
-                          option: any,
-                          { selected }
-                        ) => (
-                          <li {...props}>
-                            <Checkbox
-                              style={{ marginRight: 0 }}
-                              checked={selected}
+                              multiple
+                              id="departmentId"
+                              disableCloseOnSelect
+                              value={formik.values.departmentId}
+                              options={
+                                departmentData !== undefined
+                                  ? departmentData
+                                  : []
+                              }
+                              getOptionLabel={(option: any) =>option.label }
+                              isOptionEqualToValue={(option: any, value: any) =>
+                              value.id == option.id
+                              }
+                              renderInput={(params) => (
+                                <TextField {...params} placeholder="Department/s"/>
+                              )}
+                              fullWidth
+                              placeholder="Department"
+                              size="medium"
+                              renderOption={(
+                                props,
+                                option: any,
+                                
+                                { selected },
+                                
+                              ) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) =>{
+                                setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
+                              }
                             />
-                            {option.label}
-                          </li>
-                        )}
-                        renderInput={(params) => <TextField {...params} />}
-                        fullWidth
-                        placeholder="Department"
-                        size="medium"
-                        onChange={(e, f) => {
-                          let temp: any = []
-                          f.forEach((element) => temp.push(element.id));
-                          setDepartments(temp);
-                          formik.setFieldValue('departmentId', temp);
-                        }}
-                      />
                       {formik.touched.departmentId &&
                         formik.errors.departmentId && (
                           <Typography className="error-field">
@@ -618,29 +657,39 @@ const UserForm = React.forwardRef(
                       <label style={{ display: 'block' }}>Laboratory/ies</label>
 
                       <Autocomplete
-                        multiple
-                        id="laboratoryId"
-                        options={labData !== undefined ? labData : []}
-                        disableCloseOnSelect
-                        getOptionLabel={(option: any) => option.label}
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              style={{ marginRight: 0 }}
-                              checked={selected}
-                            />
-                            {option.label}
-                          </li>
-                        )}
-                        renderInput={(params) => <TextField {...params} />}
-                        fullWidth
-                        placeholder="Laboratory"
-                        size="medium"
-                        onChange={(e, f) => {
-                          f.forEach((element) => laboratoryId.push(element.id));
-                          formik.setFieldValue('laboratoryId', laboratoryId);
-                        }}
-                      />
+                                multiple
+                                id="departmentId"
+                                value={formik.values.laboratoryId}
+                                options={labData !== undefined ? labData : []}
+                                getOptionLabel={(option: any) => option?.label}
+                                isOptionEqualToValue={(option: any, value: any) =>
+                                  value?.id == option?.id
+                                }
+                                disableCloseOnSelect
+                               
+                                renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies"/>}
+                                fullWidth
+                                placeholder="Laboratory"
+                                size="medium"
+                                renderOption={(
+                                  props,
+                                  option: any,
+                                  { selected },
+                                ) => (
+                                  <React.Fragment>
+                                    <li {...props}>
+                                      <Checkbox
+                                        style={{ marginRight: 0 }}
+                                        checked={selected}
+                                      />
+                                      {option.value}
+                                    </li>
+                                  </React.Fragment>
+                                )}
+                                onChange={(_, selectedOptions: any) =>{
+                                  setLaboratory(selectedOptions);formik.setValues({...formik.values,'laboratoryId':selectedOptions}) }
+                                }
+                              />
                       {formik.touched.laboratoryId &&
                         formik.errors.laboratoryId && (
                           <Typography className="error-field">
@@ -651,7 +700,7 @@ const UserForm = React.forwardRef(
                   </Grid>
                 </Grid>
                 <Grid container spacing={2} className="asset-popup">
-                  <Grid
+                  {/* <Grid
                     item
                     xs={12}
                     sm={6}
@@ -687,7 +736,7 @@ const UserForm = React.forwardRef(
                         </Typography>
                       )}
                     </Box>
-                  </Grid>
+                  </Grid> */}
                   <Grid
                     item
                     xs={12}
@@ -700,20 +749,20 @@ const UserForm = React.forwardRef(
                         xs: '0rem !important',
                         sm: '1rem !important',
                       },
+                      paddingRight: { sm: '1rem !important' }
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Select role</label>
-
                       <Select
-                        MenuProps={{
-                          PaperProps: {
-                            style: {
-                              maxHeight: '150px',
-                              overflowY: 'auto',
-                            },
-                          },
-                        }}
+                        // MenuProps={{
+                        //   PaperProps: {
+                        //     style: {
+                        //       maxHeight: '150px',
+                        //       overflowY: 'auto',
+                        //     },
+                        //   },
+                        // }}
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
@@ -726,7 +775,7 @@ const UserForm = React.forwardRef(
                         fullWidth
                         id="role"
                         name="role"
-                        autoComplete="role"
+                        autoComplete="off"
                         placeholder="Role"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -753,7 +802,7 @@ const UserForm = React.forwardRef(
                   </Grid>
                 </Grid>
                 <Grid container spacing={2} className="asset-popup">
-                  <Grid
+                  {/* <Grid
                     item
                     xs={12}
                     sm={6}
@@ -799,7 +848,7 @@ const UserForm = React.forwardRef(
                         </Typography>
                       )}
                     </Box>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Box>
               <Box
@@ -821,6 +870,7 @@ const UserForm = React.forwardRef(
                 <Button
                   type="submit"
                   variant="contained"
+                  disabled={type=='edit'?!formik.dirty:!formik.isValid}
                   // onClick={submitFormPopup}
                   className="add-btn"
                 >

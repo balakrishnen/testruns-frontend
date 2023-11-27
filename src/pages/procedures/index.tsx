@@ -331,6 +331,16 @@ export default function Procedures() {
     setVisibleRow,
     setRowId,
   );
+  const handleCheckboxValues = (id:any) => {
+    // Check if the ID is already in the selectedIds
+    if (rowId.includes(id)) {
+      // If it is, remove it
+      setRowId(rowId.filter((rowId:any) => rowId !== id));
+    } else {
+      // If it's not, add it
+      setRowId([...rowId, id]);
+    }
+  };
   const filters = (idVaule: any) => {
     if (Object.keys(idVaule).length !== 0) {
       const filteredRows = procedureData.filter(function (el: any) {
@@ -768,9 +778,7 @@ export default function Procedures() {
                                     onClick={(e: any) => clickHandler(e)}
                                     onChange={(event) => {
                                       // Procedure.push(row._id)
-                                      row.is_checked == true &&
-                                        setRowId([...rowId, row._id]),
-                                        handleChange(event, row._id);
+                                     handleCheckboxValues( row._id),  handleChange(event, row._id);
                                     }}
                                   />
                                 </Box>
