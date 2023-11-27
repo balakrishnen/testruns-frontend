@@ -127,7 +127,7 @@ export default function AppProfileDrawer({
               console.log(err);
             });
           // }    
-  },[])
+  },[departmentData, labData])
   React.useEffect(() => {
     let payload={
       _id:"655f18bcc88024001262b3a5"

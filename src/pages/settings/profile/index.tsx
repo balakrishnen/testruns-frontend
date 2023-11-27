@@ -169,7 +169,7 @@ const Profile = () => {
         console.log(err);
       });
     // }
-  }, []);
+  }, [departmentData, labData]);
 
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(
