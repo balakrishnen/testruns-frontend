@@ -61,6 +61,8 @@ import { fetchTableChartData, fetchUpdateRunsData } from '../../../api/RunsAPI';
 import { useDispatch } from 'react-redux';
 import { navigate } from 'gatsby';
 import { useSelector } from 'react-redux';
+import TableChart from '../../../components/charts/TableChart';
+import RealtimeChart from '../../../components/charts/RealtimeChart';
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -217,14 +219,14 @@ export default function RunsDetails() {
   const runsPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
-  const [userProcedure,setuserProcedure]=React.useState(editorData)
+  const [userProcedure, setuserProcedure] = React.useState(editorData);
   const runsStatus = RunsStatusList;
   const inputRefs = React.useRef<any>({});
+  const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
 
-  React.useEffect(()=>{
-console.log("userProcedure",userProcedure);
-
-  })
+  React.useEffect(() => {
+    console.log('userProcedure', userProcedure);
+  });
   const handleInputChange = (id: any, column: any) => {
     const value = inputRefs.current[id]?.[column]?.value;
     console.log(`Input ${id}, Column ${column}: ${value}`);
@@ -347,9 +349,6 @@ console.log("userProcedure",userProcedure);
     },
   ]);
 
-  const Placeholder = ({ children }: any) => {
-    return <div style={{ color: 'lightgrey' }}>{children}</div>;
-  };
   const location: any = useLocation();
   const runzValue = location.state?.props;
   console.log(runzValue);
@@ -406,10 +405,10 @@ console.log("userProcedure",userProcedure);
               i === 0
                 ? 'left1'
                 : i === 1
-                  ? 'right1'
-                  : i === 2
-                    ? 'left2'
-                    : 'right2',
+                ? 'right1'
+                : i === 2
+                ? 'left2'
+                : 'right2',
             orientation: i % 2 === 0 ? 'left' : 'right',
             dataKey: `plot${[i + 1]}`,
             channelValue: null,
@@ -578,6 +577,10 @@ console.log("userProcedure",userProcedure);
       orientation: dataIndex % 2 === 0 ? 'left' : 'right',
       xValue: null,
       yValue: `Y1`,
+      tableChartData:
+        charts[dataIndex].tableChartOptionsList.length >= 4
+          ? charts[dataIndex].tableChartOptionsList[0].tableChartData
+          : [],
     });
     setCharts(data);
   };
@@ -635,6 +638,11 @@ console.log("userProcedure",userProcedure);
     });
     // reload();
   };
+
+  const handleChartChange = (event: any) => {
+    setSelectedChart(event.target.value);
+  };
+
   return (
     <PrivateRoute>
       {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
@@ -906,19 +914,19 @@ console.log("userProcedure",userProcedure);
                           runzValue?.status == 'Created'
                             ? '#8d8d8d'
                             : runzValue?.status == 'Started'
-                              ? '#faaa49'
-                              : runzValue?.status == 'Complete'
-                                ? '#00bf70'
-                                : '#e2445c',
+                            ? '#faaa49'
+                            : runzValue?.status == 'Complete'
+                            ? '#00bf70'
+                            : '#e2445c',
                       }}
                     >
                       {runzValue?.status == 'Created'
                         ? 'Created'
                         : runzValue?.status == 'Started'
-                          ? 'Started'
-                          : runzValue?.status == 'Complete'
-                            ? 'Completed'
-                            : 'Stopped'}
+                        ? 'Started'
+                        : runzValue?.status == 'Complete'
+                        ? 'Completed'
+                        : 'Stopped'}
                     </Box>
                     {/* <Select
                       labelId="Status-popup-label"
@@ -1008,7 +1016,8 @@ console.log("userProcedure",userProcedure);
                         row
                         aria-labelledby="demo-row-radio-buttons-group-label"
                         name="row-radio-buttons-group"
-                        value="Table_Chart"
+                        value={selectedChart}
+                        onChange={handleChartChange}
                       >
                         <FormControlLabel
                           value="Table_Chart"
@@ -1019,7 +1028,7 @@ console.log("userProcedure",userProcedure);
                           }}
                         />
                         <FormControlLabel
-                          value="disabled"
+                          value="Realtime_Chart"
                           control={<Radio />}
                           label="Realtime Chart"
                           sx={{
@@ -1027,7 +1036,7 @@ console.log("userProcedure",userProcedure);
                           }}
                         />
                         <FormControlLabel
-                          value="disabled"
+                          value="Archived_Chart"
                           disabled
                           control={<Radio />}
                           label="Archive Chart"
@@ -1038,421 +1047,13 @@ console.log("userProcedure",userProcedure);
                       </RadioGroup>
                     </FormControl>
                   </Box>
-                  <Box>
-                    {charts.map((chartData: any, dataIndex: any) => (
-                      <>
-                        <Grid
-                          container
-                          key={dataIndex}
-                          sx={{ my: 2 }}
-                          spacing={2}
-                        >
-                          <Grid
-                            item
-                            xs={10}
-                            sm={10}
-                            md={10}
-                            lg={10}
-                            xl={10}
-                            // sx={{ pr: 4 }}
-                            style={{ borderRight: '1px solid #e4e5e7' }}
-                          >
-                            <Grid container sx={{ px: 4 }}>
-                              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-                                {/* <label
-                              style={{ fontSize: '16px', fontWeight: 500 }}
-                            >
-                              Tabular Column: &nbsp;
-                            </label> */}
-                                <Select
-                                  labelId="view-all-label"
-                                  id="time-sec"
-                                  value={chartData.selectedTable}
-                                  displayEmpty
-                                  IconComponent={ExpandMoreOutlinedIcon}
-                                  onChange={(event) =>
-                                    handleTabularColumnChange(event, dataIndex)
-                                  }
-                                  renderValue={
-                                    chartData.selectedTable !== null
-                                      ? undefined
-                                      : () => (
-                                        <Placeholder>
-                                          Select Table
-                                        </Placeholder>
-                                      )
-                                  }
-                                  size="small"
-                                  style={{
-                                    width: '250px',
-                                    borderRadius: '10px',
-                                  }}
-                                >
-                                  {chartData.tableList?.map((item, index) => (
-                                    <MenuItem key={index} value={item.value}>
-                                      {item.name}
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </Grid>
-                              <Grid
-                                item
-                                xs={6}
-                                sm={6}
-                                md={6}
-                                lg={6}
-                                xl={6}
-                                textAlign={'end'}
-                              >
-                                <>
-                                  <Button
-                                    variant="contained"
-                                    className="add-chart"
-                                    onClick={handleAddChart}
-                                    sx={{ mr: 2 }}
-                                  >
-                                    <AddIcon /> &nbsp; Add
-                                  </Button>
-                                  {dataIndex >= 1 && (
-                                    <Button
-                                      variant="contained"
-                                      className="add-chart"
-                                      onClick={() =>
-                                        handleRemoveChart(dataIndex)
-                                      }
-                                    >
-                                      <CloseOutlined
-                                        sx={{ fontSize: '18px' }}
-                                      />{' '}
-                                      &nbsp; Remove
-                                    </Button>
-                                  )}
-                                </>
-                              </Grid>
-                            </Grid>
-                            <Box sx={{ mt: 4 }}>
-                              <ResponsiveContainer width="100%" height={500}>
-                                <LineChart
-                                  data={
-                                    chartData.activeTableChartValues[0]?.name &&
-                                    chartData.activeTableChartValues
-                                  }
-                                >
-                                  <XAxis
-                                    dataKey="name"
-                                    axisLine={{ fontSize: 12, dy: 4 }}
-                                  />
-                                  {chartData.tableChartOptionsList?.map(
-                                    (axis, axisIndex) => (
-                                      <YAxis
-                                        key={axisIndex}
-                                        yAxisId={axis.yAxis}
-                                        orientation={axis.orientation}
-                                        label={{
-                                          value: axis.yAxis,
-                                          angle: -90,
-                                          position: 'insideBottom',
-                                          fill: axis.color,
-                                        }}
-                                        tick={{
-                                          fontSize: 12,
-                                        }}
-                                      />
-                                    ),
-                                  )}
-
-                                  <Tooltip />
-                                  <CartesianGrid
-                                    stroke="#f5f5f5"
-                                    strokeDasharray="3 3"
-                                    strokeWidth={2}
-                                  />
-                                  {chartData.tableChartOptionsList?.map(
-                                    (line, lineIndex) => (
-                                      <Line
-                                        key={lineIndex}
-                                        type="linear"
-                                        dataKey={line.dataKey}
-                                        stroke={line.color}
-                                        strokeWidth={2}
-                                        yAxisId={line.yAxis}
-                                        dot={{
-                                          r: 1,
-                                          fill: line.color,
-                                        }}
-                                      />
-                                    ),
-                                  )}
-                                </LineChart>
-                              </ResponsiveContainer>
-                              <Box
-                                sx={{
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  marginTop: '30px',
-                                }}
-                              >
-                                <Box className="color-chart">
-                                  <Box
-                                    sx={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      width: '100%',
-                                    }}
-                                  >
-                                    <Typography className="xy-sec">
-                                      X
-                                    </Typography>
-                                    <Select
-                                      labelId="view-all-label"
-                                      size="small"
-                                      value={chartData.xValue}
-                                      displayEmpty
-                                      IconComponent={ExpandMoreOutlinedIcon}
-                                      onChange={(event) =>
-                                        handleXAxisChange(event, dataIndex)
-                                      }
-                                      renderValue={
-                                        chartData.xValue !== null
-                                          ? undefined
-                                          : () => (
-                                            <Placeholder>Channel</Placeholder>
-                                          )
-                                      }
-                                      style={{ width: '250px' }}
-                                    >
-                                      {chartData.activeChannelOptions?.map(
-                                        (item, index) => (
-                                          <MenuItem
-                                            key={index}
-                                            value={item.value}
-                                          >
-                                            {item.name}
-                                          </MenuItem>
-                                        ),
-                                      )}
-                                    </Select>
-                                  </Box>
-                                </Box>
-                              </Box>
-                            </Box>
-                          </Grid>
-
-                          <Grid
-                            item
-                            xs={2}
-                            sm={2}
-                            md={2}
-                            lg={2}
-                            xl={2}
-                            style={{ overflowY: 'scroll', height: '650px' }}
-                          >
-                            <Grid container alignItems={'center'}>
-                              <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                                <Typography variant="body1" fontWeight={500}>
-                                  Channels
-                                </Typography>
-                              </Grid>
-                              <Grid
-                                item
-                                xs={8}
-                                sm={8}
-                                md={8}
-                                lg={8}
-                                xl={8}
-                                textAlign={'end'}
-                              >
-                                <Button
-                                  variant="contained"
-                                  className="add-chart"
-                                  sx={{ mr: 2 }}
-                                  onClick={() => handleAddChannel(dataIndex)}
-                                >
-                                  <AddIcon />
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className={
-                                    chartData.tableChartOptionsList?.length < 5
-                                      ? 'remove-chart'
-                                      : 'add-chart'
-                                  }
-                                  onClick={() => handleRemoveChannel(dataIndex)}
-                                  disabled={
-                                    chartData.tableChartOptionsList?.length < 5
-                                  }
-                                >
-                                  <RemoveIcon />
-                                </Button>
-                              </Grid>
-                            </Grid>
-                            <Box sx={{ mt: 2 }}>
-                              {chartData.tableChartOptionsList?.map(
-                                (element, key) => (
-                                  <Box key={key}>
-                                    <Grid container>
-                                      <Grid
-                                        item
-                                        xs={7}
-                                        sm={7}
-                                        md={7}
-                                        lg={7}
-                                        xl={7}
-                                      >
-                                        <Box>
-                                          <Box className="color-chart">
-                                            <Box
-                                              sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                width: '100%',
-                                              }}
-                                            >
-                                              <Select
-                                                labelId="view-all-label"
-                                                size="small"
-                                                value={element.channelValue}
-                                                displayEmpty
-                                                IconComponent={
-                                                  ExpandMoreOutlinedIcon
-                                                }
-                                                onChange={(event) =>
-                                                  handleChannelChange(
-                                                    event,
-                                                    dataIndex,
-                                                    key,
-                                                  )
-                                                }
-                                                renderValue={
-                                                  element.channelValue !== null
-                                                    ? undefined
-                                                    : () => (
-                                                      <Placeholder>
-                                                        Select
-                                                      </Placeholder>
-                                                    )
-                                                }
-                                                style={{ width: '90%' }}
-                                              // style={{ width: '220px' }}
-                                              >
-                                                {chartData.activeChannelOptions?.map(
-                                                  (item, index) => (
-                                                    <MenuItem
-                                                      key={index}
-                                                      value={item.name}
-                                                    >
-                                                      {item.name}
-                                                    </MenuItem>
-                                                  ),
-                                                )}
-                                              </Select>
-                                            </Box>
-                                            <Box className="color-picker">
-                                              <Box />
-                                            </Box>
-                                          </Box>
-                                        </Box>
-                                      </Grid>
-                                      <Grid
-                                        item
-                                        xs={5}
-                                        sm={5}
-                                        md={5}
-                                        lg={5}
-                                        xl={5}
-                                      >
-                                        <Box>
-                                          <Box className="color-chart">
-                                            <Box
-                                              sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                width: '100%',
-                                              }}
-                                            >
-                                              {/* <Typography className="xy-sec">
-                                              {element.axisY}
-                                            </Typography> */}
-                                              <Select
-                                                labelId="view-all-label"
-                                                size="small"
-                                                value={element.yValue}
-                                                displayEmpty
-                                                IconComponent={
-                                                  ExpandMoreOutlinedIcon
-                                                }
-                                                onChange={(event) =>
-                                                  handleYAxisChange(
-                                                    event,
-                                                    dataIndex,
-                                                    key,
-                                                  )
-                                                }
-                                                renderValue={
-                                                  element.yValue !== null
-                                                    ? undefined
-                                                    : () => (
-                                                      <Placeholder>
-                                                        Axis
-                                                      </Placeholder>
-                                                    )
-                                                }
-                                                // style={{ width: '100px' }}
-                                                fullWidth
-                                              >
-                                                {axisList.map((item, index) => (
-                                                  <MenuItem
-                                                    key={index}
-                                                    value={item.value}
-                                                  >
-                                                    {item.name}
-                                                  </MenuItem>
-                                                ))}
-                                              </Select>
-                                            </Box>
-                                            <Box className="color-picker">
-                                              <input
-                                                style={{
-                                                  backgroundColor:
-                                                    element.color,
-                                                  color: element.color,
-                                                }}
-                                                type="color"
-                                                className="color-input"
-                                                value={element.color}
-                                                onChange={(event) =>
-                                                  handleColorPickerChange(
-                                                    event,
-                                                    dataIndex,
-                                                    key,
-                                                  )
-                                                }
-                                              />
-                                            </Box>
-                                          </Box>
-                                        </Box>
-                                        {/* <Box sx={{ textAlign: 'right' }}>
-                                <Button
-                                  type="submit"
-                                  variant="contained"
-                                  className="add-chart"
-                                >
-                                  <AddIcon sx={{ mr: 1 }} />
-                                  Add
-                                </Button>
-                              </Box> */}
-                                      </Grid>
-                                    </Grid>
-                                  </Box>
-                                ),
-                              )}
-                            </Box>
-                          </Grid>
-                        </Grid>
-                        <Divider orientation="horizontal" sx={{ py: 0 }} />
-                      </>
-                    ))}
-                  </Box>
+                  {selectedChart === 'Table_Chart' ? (
+                    <TableChart />
+                  ) : selectedChart === 'Realtime_Chart' ? (
+                    <RealtimeChart />
+                  ) : (
+                    <Box>Archived Chart</Box>
+                  )}
                 </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={2}>
@@ -1462,43 +1063,64 @@ console.log("userProcedure",userProcedure);
                   init={{
                     height: 500,
                     menubar: true,
-                    selector: "textarea",
+                    selector: 'textarea',
                     plugins: [
-                      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                      'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'image', 'insertdatetime', 'template', 'insertinput customInsertButton customAlertButton'
+                      'advlist',
+                      'autolink',
+                      'lists',
+                      'link',
+                      'image',
+                      'charmap',
+                      'preview',
+                      'anchor',
+                      'searchreplace',
+                      'visualblocks',
+                      'code',
+                      'fullscreen',
+                      'insertdatetime',
+                      'media',
+                      'table',
+                      'code',
+                      'help',
+                      'wordcount',
+                      'image',
+                      'insertdatetime',
+                      'template',
+                      'insertinput customInsertButton customAlertButton',
                     ],
-                    toolbar: 'undo redo | blocks formatselect | ' +
+                    toolbar:
+                      'undo redo | blocks formatselect | ' +
                       'bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
                       'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
-                      image_advtab: true,
-                      image_title: true,
-                      automatic_uploads: true,
-                      file_picker_types: "image",
-                      setup: function (editor) {
-  
-                        editor.ui.registry.addButton("customInsertButton", {
-                          icon: "edit-block",
-                          tooltip: "Insert Input Element",
-                          onAction: function (_) {
-                            // const value = nanoid(7);
-                            editor.insertContent(
-                              `&nbsp;<input type='text' >&nbsp;`
-                            );
-                          },
-                        });
-                        editor.ui.registry.addButton("customAlertButton", {
-                          icon: "temporary-placeholder", // Use the built-in alert icon
-                          // tooltip: 'Custom Alert',
-                          onAction: function (_) {
-                            const userInput = window.prompt('Enter data key attribute', );
-                            console.log(userInput);
-                          },
-                        });
-                      },
-                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-
+                    image_advtab: true,
+                    image_title: true,
+                    automatic_uploads: true,
+                    file_picker_types: 'image',
+                    setup: function (editor) {
+                      editor.ui.registry.addButton('customInsertButton', {
+                        icon: 'edit-block',
+                        tooltip: 'Insert Input Element',
+                        onAction: function (_) {
+                          // const value = nanoid(7);
+                          editor.insertContent(
+                            `&nbsp;<input type='text' >&nbsp;`,
+                          );
+                        },
+                      });
+                      editor.ui.registry.addButton('customAlertButton', {
+                        icon: 'temporary-placeholder', // Use the built-in alert icon
+                        // tooltip: 'Custom Alert',
+                        onAction: function (_) {
+                          const userInput = window.prompt(
+                            'Enter data key attribute',
+                          );
+                          console.log(userInput);
+                        },
+                      });
+                    },
+                    content_style:
+                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                   }}
                 />
               </CustomTabPanel>
@@ -1510,43 +1132,66 @@ console.log("userProcedure",userProcedure);
                   init={{
                     height: 500,
                     menubar: true,
-                    selector: "textarea",
+                    selector: 'textarea',
                     plugins: [
-                      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                      'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'image', 'insertdatetime', 'template', 'insertinput', 'customInsertButton','customAlertButton'
+                      'advlist',
+                      'autolink',
+                      'lists',
+                      'link',
+                      'image',
+                      'charmap',
+                      'preview',
+                      'anchor',
+                      'searchreplace',
+                      'visualblocks',
+                      'code',
+                      'fullscreen',
+                      'insertdatetime',
+                      'media',
+                      'table',
+                      'code',
+                      'help',
+                      'wordcount',
+                      'image',
+                      'insertdatetime',
+                      'template',
+                      'insertinput',
+                      'customInsertButton',
+                      'customAlertButton',
                     ],
-                    toolbar: 'undo redo | blocks formatselect | ' +
+                    toolbar:
+                      'undo redo | blocks formatselect | ' +
                       'bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
                       'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                     image_advtab: true,
                     image_title: true,
                     automatic_uploads: true,
-                    file_picker_types: "image",
+                    file_picker_types: 'image',
                     setup: function (editor) {
-
-                      editor.ui.registry.addButton("customInsertButton", {
-                        icon: "edit-block",
-                        tooltip: "Insert Input Element",
+                      editor.ui.registry.addButton('customInsertButton', {
+                        icon: 'edit-block',
+                        tooltip: 'Insert Input Element',
                         onAction: function (_) {
                           // const value = nanoid(7);
                           editor.insertContent(
-                            `&nbsp;<input type='text' >&nbsp;`
+                            `&nbsp;<input type='text' >&nbsp;`,
                           );
                         },
                       });
-                      editor.ui.registry.addButton("customAlertButton", {
-                        icon: "temporary-placeholder", // Use the built-in alert icon
+                      editor.ui.registry.addButton('customAlertButton', {
+                        icon: 'temporary-placeholder', // Use the built-in alert icon
                         // tooltip: 'Custom Alert',
                         onAction: function (_) {
-                          const userInput = window.prompt('Enter data key attribute', );
+                          const userInput = window.prompt(
+                            'Enter data key attribute',
+                          );
                           console.log(userInput);
                         },
                       });
                     },
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-
+                    content_style:
+                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                   }}
                 />
               </CustomTabPanel>
