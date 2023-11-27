@@ -22,7 +22,10 @@ import { fetchLabData } from '../../../api/labAPI';
 
 import { DepartmentList, LaboratoryList ,OrganizationList} from "../../../utils/data";
 import { toast } from "react-toastify";
-
+import { fetchRoleData } from "../../../api/roleApi";
+import { fetchSingleUserData, fetchUpdateUserData } from "../../../api/userAPI";
+const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const validationSchema = Yup.object().shape({
   password:Yup.string()
   .required("Password is required"),
@@ -35,24 +38,22 @@ const validationSchema = Yup.object().shape({
     confirmpassword: Yup.string()
     .required("Confirm password is required")
     .oneOf([Yup.ref("newpassword"), ""], "Password mismatch"),
-    firstName: Yup.string()
-    .notRequired(),
-    lastName: Yup.string()
-    .notRequired(),
-    email: Yup.string()
-    .notRequired(),
-    mobile:Yup.number()
-    .notRequired(),
-    organisation:Yup.string()
-    .notRequired(),
-    lab: Yup.array()
-    .notRequired(),
-    department:Yup.array()
-    .notRequired(),
-    designation: Yup.string()
-    .notRequired(),
-    reqstId: Yup.string()
-    .notRequired(),
+  });
+  const validationSchemaProfile = Yup.object().shape({
+    firstName: Yup.string().required("First name is required"),
+
+  lastName: Yup.string().required("Lase name is required"),
+  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
+  phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
+  .min(10, "Enter valid number")
+  .max(10, "too long").required("Mobile number is required"),
+  organisationId: Yup.string().required("Organistation is required"),
+  // institution: Yup.string().required("Institution is required"),
+  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
+  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  // user_id: Yup.string().required(),
+  role: Yup.string().required("Role is required"),
+  // status: Yup.string().required("Status is required"),
 });
 
 const Profile = () => {
@@ -75,8 +76,11 @@ const Profile = () => {
       newpassword: false,
       confirmpassword: false,
     });
-    const departments: any = [];
-    const laboratory: any = [];
+    const [departments, setDepartments] = React.useState([])
+    const [laboratory, setLaboratory] = React.useState([])
+    const [organizationData, setOrganizationData] = React.useState([]);
+    const [roleData, setRoleData] = React.useState([]);
+
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
@@ -91,6 +95,27 @@ const Profile = () => {
     event.preventDefault();
   };
 
+  React.useEffect(()=>{
+    let temp = { '_id': "6561fde22f447d0012e3d8cf"}
+        // if (row?._id) {
+          dispatch(fetchSingleUserData(temp)).then((isSucess) => {
+            if (isSucess.get_user) {
+              formikProfile.setFieldValue('firstName', isSucess.get_user.firstName || '');
+              formikProfile.setFieldValue('lastName', isSucess.get_user.lastName || '');
+              formikProfile.setFieldValue('email', isSucess.get_user.email || '');
+              formikProfile.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
+              formikProfile.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
+              formikProfile.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
+              formikProfile.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
+              formikProfile.setFieldValue('role', isSucess.get_user.role || '');
+            }
+          })
+            .catch((err) => {
+              console.log(err);
+            });
+          // }    
+  },[])
+  
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(
       values.password,
@@ -128,14 +153,14 @@ const Profile = () => {
   };
   const checkCredentialsProfile = (
     firstName: any,
-    lastName: any,
-    email: any,
-    mobile: any,
-    organisation: any,
-    lab: any,
-    department: any,
-    designation: any,
-    reqstId: any,
+    // lastName: any,
+    // email: any,
+    // mobile: any,
+    // organisation: any,
+    // lab: any,
+    // department: any,
+    // designation: any,
+    // reqstId: any,
   ) => {
     // if(newpassword!=="" && confirmpassword!=="" && password!== ""){
       return true
@@ -147,17 +172,37 @@ const Profile = () => {
   const onSubmitProfile = (values: any) => {
     const isMatch = checkCredentialsProfile(
       values.firstName,
-      values.lastName,
-      values.email,
-      values.mobile,
-      values.organisation,
-      values.lab,
-      values.password,
-      values.designation,
-      values.reqstId
+      // values.lastName,
+      // values.email,
+      // values.mobile,
+      // values.organisation,
+      // values.lab,
+      // values.password,
+      // values.designation,
+      // values.reqstId
     );
 
     if (isMatch) {
+      var deptArray: any = []
+      departments?.map((item: any) => (deptArray.push(item?.id)))
+      var labArray: any = []
+      laboratory?.map((item: any) => (labArray.push(item?.id)))
+      let userValues: any = {
+        // uid:"",
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phoneNumber: values.phoneNumber.toString(),
+        organisationId: values.organisationId,
+        // instituteId: values.institution,
+        departmentId: deptArray,
+        laboratoryId: labArray,
+        role: values.role,
+        _id:"6561fde22f447d0012e3d8cf"
+      }
+      // debugger
+      // userValues['_id'] = userData?._id
+      dispatch(fetchUpdateUserData(userValues))
       toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70', color: '#fff'
@@ -179,16 +224,16 @@ const Profile = () => {
   const formikProfile = useFormik({
     initialValues: {
       firstName: '',
-      lastName: '',
-      email: '',
-      mobile: '',
-      organisation: '',
-      lab: '',
-      department: '',
-      designation: '',
-      reqstId: '',
+      lastName:  '',
+      email:  '',
+      phoneNumber: '',
+      organisationId:  '',
+      // institution:  '',
+      departmentId: [],
+      laboratoryId: [],
+      role : '',
     },
-    validationSchema: validationSchema,
+    validationSchema: validationSchemaProfile,
     onSubmit: onSubmitProfile,
   });
 
@@ -198,16 +243,43 @@ const Profile = () => {
   const labSliceData = useSelector(
     (state: any) => state.lab.data?.get_all_labs,
   );
+  const roleSliceData = useSelector(
+    (state: any) => state.role.data?.get_all_roles,
+  );
+  const organizationSliceData = useSelector(
+    (state: any) => state.organization.data?.get_all_organisations,
+  );
+
   React.useEffect(() => {
-    setDepartmentData(departmentSliceData?.map((item:any) => ({
-      label: item.name,
-      value: item._id
-    })))
-    setLabData(labSliceData?.map((item:any) => ({
-      label: item.name,
-      value: item._id
-    })))
-  }, [departmentSliceData,labSliceData])
+    setDepartmentData(
+      departmentSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),
+    );
+    setLabData(
+      labSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),
+    );
+    setRoleData(
+      roleSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item._id,
+      })),
+    );
+    setOrganizationData(
+      organizationSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),
+    );
+  }, [departmentSliceData, labSliceData, roleSliceData, organizationSliceData]);
+
 
   console.log(departmentData);
 
@@ -216,7 +288,9 @@ console.log(DepartmentList);
   React.useEffect(() => {
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
+    dispatch(fetchRoleData());
   }, []);
+  console.log(formikProfile);
 
   return (
     <Box className="profile-setting-page">
@@ -315,12 +389,11 @@ console.log(DepartmentList);
                         fullWidth
                         id="firstName"
                         name="firstName"
-                        type="text"
                         autoComplete="off"
                         InputLabelProps={{ shrink: false }}
                         placeholder="First name"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        onChange={formikProfile.handleChange}
+                        onBlur={formikProfile.handleBlur}
                         value={formikProfile.values.firstName}
                         size="small"
                         error={
@@ -455,11 +528,11 @@ console.log(DepartmentList);
                         placeholder="Mobile number"
                         onChange={formikProfile.handleChange}
                         onBlur={formikProfile.handleBlur}
-                        value={formikProfile.values.mobile}
+                        value={formikProfile.values.phoneNumber}
                         size="small"
                         error={
-                          formikProfile.touched.mobile &&
-                          Boolean(formikProfile.errors.mobile)
+                          formikProfile.touched.phoneNumber &&
+                          Boolean(formikProfile.errors.phoneNumber)
                         }
                         InputProps={{
                           startAdornment: (
@@ -469,10 +542,10 @@ console.log(DepartmentList);
                           ),
                         }}
                       />
-                      {formikProfile.touched.mobile &&
-                        formikProfile.errors.mobile && (
+                      {formikProfile.touched.phoneNumber &&
+                        formikProfile.errors.phoneNumber && (
                           <Typography className="error-field">
-                            {formikProfile.errors.mobile}
+                            {formikProfile.errors.phoneNumber}
                           </Typography>
                         )}
                       </Box>
@@ -482,35 +555,38 @@ console.log(DepartmentList);
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                       <Box style={{ position: "relative" }}>
                         <label>Organisation</label>
-                        <Select                        
+                        <Select
+                        className="placeholder-color"
+                        style={{color:"black"}}
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
-                          formikProfile.values.organisation !== ''
+                          formikProfile.values.organisationId !== ''
                             ? undefined
                             : () => (
-                                <Placeholder>Select Organization</Placeholder>
-                              )
+                              <Placeholder>
+                                Select Organization
+                              </Placeholder>
+                            )
                         }
                         margin="none"
                         fullWidth
-                        id="organization"
-                        name="organisation"
+                        id="organisationId"
+                        name="organisationId"
                         autoComplete="off"
                         placeholder="Organization"
                         onChange={formikProfile.handleChange}
                         onBlur={formikProfile.handleBlur}
-                        value={formikProfile.values.organisation}
+                        value={formikProfile.values.organisationId}
                         size="small"
                         error={
-                          formikProfile.touched.organisation &&
-                          Boolean(formikProfile.errors.organisation)
+                          formikProfile.touched.organisationId &&
+                          Boolean(formikProfile.errors.organisationId)
                         }
-                        style={{marginTop:'10px'}}
                       >
-                        {OrganizationList.map((item, index) => (
+                        {organizationData?.map((item: any, index) => (
                           <MenuItem key={index} value={item.id}>
-                            {item.name}
+                            {item.label}
                           </MenuItem>
                         ))}
                       </Select>
@@ -529,36 +605,46 @@ console.log(DepartmentList);
                       <Box style={{ position: "relative" }}>
                         <label>Department/s</label>
                         <Autocomplete
-                        multiple
-                        id="department"
-                        options={departmentData!==undefined ? departmentData:[]}
-                        disableCloseOnSelect
-                        getOptionLabel={(option:any) => option.label}
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              style={{ marginRight: 0 }}
-                              checked={selected}
+                              multiple
+                              id="departmentId"
+                              disableCloseOnSelect
+                              value={formikProfile.values.departmentId}
+                              options={
+                                departmentData !== undefined
+                                  ? departmentData
+                                  : []
+                              }
+                              getOptionLabel={(option: any) =>option?.label }
+                              isOptionEqualToValue={(option: any, value: any) =>
+                              value?.id == option?.id
+                              }
+                              renderInput={(params) => (
+                                <TextField {...params} placeholder="Department/s"/>
+                              )}
+                              fullWidth
+                              placeholder="Department"
+                              size="medium"
+                              renderOption={(
+                                props,
+                                option: any,
+                                
+                                { selected },
+                                
+                              ) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) =>{
+                                setDepartments(selectedOptions);formikProfile.setValues({...formikProfile.values,'departmentId':selectedOptions})}
+                              }
                             />
-                            {option.label}
-                          </li>
-                        )}
-                        renderInput={(params) => <TextField {...params} placeholder="Department/s" />}
-                        fullWidth
-                        placeholder="Department"
-                        size="medium"
-                        onChange={(e, f) => {
-                          f.forEach((element) => departments.push(element.id));
-                          formikProfile.setFieldValue('department', departments);
-                        }}
-                        // onChange={formik.handleChange}
-                        // onBlur={formik.handleBlur}
-                        // value={formik.values.department}
-                        // error={
-                        //   formik.touched.department &&
-                        //   Boolean(formik.errors.department)
-                        // }
-                      />
                       {formikProfile.touched.department &&
                         formikProfile.errors.department && (
                           <Typography className="error-field">
@@ -573,29 +659,39 @@ console.log(DepartmentList);
                       <Box style={{ position: "relative" }}>
                         <label>Labs assigned</label>
                         <Autocomplete
-                        multiple
-                        id="lab"
-                        options={labData!==undefined ?labData:[]}
-                        disableCloseOnSelect
-                        getOptionLabel={(option:any) => option.label}
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              style={{ marginRight: 0 }}
-                              checked={selected}
-                            />
-                            {option.label}
-                          </li>
-                        )}
-                        renderInput={(params) => <TextField {...params} placeholder="Lab/s assigned" />}
-                        fullWidth
-                        placeholder="Laboratory"
-                        size="medium"
-                        onChange={(e, f) => {
-                          f.forEach((element) => laboratory.push(element.id));
-                          formikProfile.setFieldValue('laboratory', laboratory);
-                        }}
-                      />
+                                multiple
+                                id="departmentId"
+                                value={formikProfile.values.laboratoryId}
+                                options={labData !== undefined ? labData : []}
+                                getOptionLabel={(option: any) => option?.label}
+                                isOptionEqualToValue={(option: any, value: any) =>
+                                  value?.id == option?.id
+                                }
+                                disableCloseOnSelect
+                               
+                                renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies"/>}
+                                fullWidth
+                                placeholder="Laboratory"
+                                size="medium"
+                                renderOption={(
+                                  props,
+                                  option: any,
+                                  { selected },
+                                ) => (
+                                  <React.Fragment>
+                                    <li {...props}>
+                                      <Checkbox
+                                        style={{ marginRight: 0 }}
+                                        checked={selected}
+                                      />
+                                      {option.value}
+                                    </li>
+                                  </React.Fragment>
+                                )}
+                                onChange={(_, selectedOptions: any) =>{
+                                  setLaboratory(selectedOptions);formikProfile.setValues({...formikProfile.values,'laboratoryId':selectedOptions}) }
+                                }
+                              />
                       {formikProfile.touched.lab &&
                         formikProfile.errors.lab && (
                           <Typography className="error-field">
@@ -621,37 +717,48 @@ console.log(DepartmentList);
                     >
                       <Box style={{ position: "relative" }}>
                         <label>Designation</label>
-                        <TextField
-                          margin="normal"
-                          // required
-                          fullWidth
-                          id="Designation"
-                          name="designation"
-                          autoComplete="off"
-                          // autoFocus
-                          InputLabelProps={{ shrink: false }}
-                          placeholder="Designation"
-                          // InputProps={{
-                          //   startAdornment: (
-                          //     <InputAdornment position="start">
-                          //       <img src={document} />
-                          //     </InputAdornment>
-                          //   ),
-                          // }}
-                          className="Organisation"
-                          // sx={{ background: "#F3F3F3" }}
-                          onChange={formikProfile.handleChange}
-                          onBlur={formikProfile.handleBlur}
-                          value={formikProfile.values.designation}
-                          size="small"
-                          error={
-                            formikProfile.touched.designation &&
-                            Boolean(formikProfile.errors.designation)
-                          }
-                        />
-                        {formikProfile.touched.designation && formikProfile.errors.designation && (
+                        <Select
+                        // MenuProps={{
+                        //   PaperProps: {
+                        //     style: {
+                        //       maxHeight: '150px',
+                        //       overflowY: 'auto',
+                        //     },
+                        //   },
+                        // }}
+                        className="placeholder-color"
+                        style={{marginTop:"10px",color:"black"}}
+                        displayEmpty
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        renderValue={
+                          formik.values.role !== ''
+                            ? undefined
+                            : () => <Placeholder>Select Role</Placeholder>
+                        }
+                        margin="none"
+                        fullWidth
+                        id="role"
+                        name="role"
+                        autoComplete="off"
+                        placeholder="Role"
+                        onChange={formikProfile.handleChange}
+                        onBlur={formikProfile.handleBlur}
+                        value={formikProfile.values.role}
+                        size="small"
+                        error={
+                          formikProfile.touched.role && Boolean(formikProfile.errors.role)
+                        }
+                      >
+                        {roleData &&
+                          roleData.map((item: any) => (
+                            <MenuItem key={item.value} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                        {formikProfile.touched.role && formikProfile.errors.role && (
                           <Typography className="error-field">
-                            {formikProfile.errors.designation}
+                            {formikProfile.errors.role}
                           </Typography>
                         )}
                       </Box>
