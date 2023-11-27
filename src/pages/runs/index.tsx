@@ -12,7 +12,8 @@ import {
   MenuItem,
   Select,
   Typography,
-  Badge,TextField
+  Badge,
+  TextField,
 } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -55,12 +56,13 @@ import {
 import moment from 'moment';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
 import TablePopup from '../../components/table/TablePopup';
-import { LocalizationProvider,DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import filterIcon from '../../assets/images/filter-icon1.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
+import TableSkeleton from '../../components/table/TableSkeleton';
 
 // table start
 
@@ -84,12 +86,12 @@ export default function Runs() {
   const deleteSuccessPopupRef: any = React.useRef(null);
   const [filterKey, setFilterKey] = React.useState(null);
   const [columnAnchorEl, setColumnAnchorEl] =
-  React.useState<null | HTMLElement>(null);
-const [filterPopoverEl, setFilterPopoverEl] =
-  React.useState<null | HTMLElement>(null);
-const columnAnchorOpen = Boolean(columnAnchorEl);
-const filterAnchorOpen = Boolean(filterPopoverEl);
-const [dense, setDense] = React.useState(false);  
+    React.useState<null | HTMLElement>(null);
+  const [filterPopoverEl, setFilterPopoverEl] =
+    React.useState<null | HTMLElement>(null);
+  const columnAnchorOpen = Boolean(columnAnchorEl);
+  const filterAnchorOpen = Boolean(filterPopoverEl);
+  const [dense, setDense] = React.useState(false);
   const [filterStatus, setFilterStatus] = React.useState(null);
   const [filterSearchBy, setFilterSearchBy] = React.useState(null);
   const [filterSearchValue, setFilterSearchValue] = React.useState(null);
@@ -97,7 +99,7 @@ const [dense, setDense] = React.useState(false);
   const [filterType, setFilterType] = React.useState(null);
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterOptions, setFilterOptions] = React.useState([]);
-
+  const [loader, setLoader] = React.useState(false);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -148,16 +150,20 @@ const [dense, setDense] = React.useState(false);
     setFilterType(null);
     applyFilters('search', null);
     handleFilterPopoverClose();
-    setFilterKey(null)
+    setFilterKey(null);
   };
   React.useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
     setRunsData(runsData);
   }, [runsData]);
 
   React.useEffect(() => {
+    setLoader(true);
     dispatch(fetchRunsData(queryStrings));
-    setTableHeaderVisible(false)
-    setRowId([])
+    setTableHeaderVisible(false);
+    setRowId([]);
     // setRunsData(runsData);
   }, [pageInfo, queryStrings]);
 
@@ -196,8 +202,9 @@ const [dense, setDense] = React.useState(false);
     dispatch(fetchUpdateRunsData(runsChange));
     toast('Runs status updated !', {
       style: {
-        background: '#00bf70', color: '#fff'
-      }
+        background: '#00bf70',
+        color: '#fff',
+      },
     });
     reload();
   };
@@ -330,8 +337,9 @@ const [dense, setDense] = React.useState(false);
       dispatch(deleteRunsData(runVal));
       toast(`Runs deleted !`, {
         style: {
-          background: '#00bf70', color: '#fff'
-        }
+          background: '#00bf70',
+          color: '#fff',
+        },
       });
       // deleteSuccessPopupRef.current.open(true);
       // setTimeout(() => {
@@ -362,26 +370,25 @@ const [dense, setDense] = React.useState(false);
   // };
 
   // page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-  const emptyRows =
-  0 > 0 ? Math.max(0, (1 + 0) * 5 - 12) : 0;
+  const emptyRows = 0 > 0 ? Math.max(0, (1 + 0) * 5 - 12) : 0;
   console.log(emptyRows);
-  
+
   return (
     <PrivateRoute>
       <Box className="main-padding runz-page">
         <Box className="title-main">
           <Typography>Runs</Typography>
-          <div className='buttonFilter'>
-          <Button
-            variant="contained"
-            onClick={() => {
-              formPopupRef.current.open(true);
-            }}
-          >
-            <AddIcon sx={{ mr: 1 }} />
-            Create Run
-          </Button>
-          <Box sx={{ position: 'relative' }}>
+          <div className="buttonFilter">
+            <Button
+              variant="contained"
+              onClick={() => {
+                formPopupRef.current.open(true);
+              }}
+            >
+              <AddIcon sx={{ mr: 1 }} />
+              Create Run
+            </Button>
+            <Box sx={{ position: 'relative' }}>
               <Button
                 // aria-describedby={id}
                 variant="contained"
@@ -392,10 +399,15 @@ const [dense, setDense] = React.useState(false);
                   padding: '0px',
                   justifyContent: 'center',
                 }}
-                className='filterButton'
+                className="filterButton"
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false} className="red-badge-filter">
+                <Badge
+                  color="secondary"
+                  variant={filterKey === null ? 'standard' : 'dot'}
+                  invisible={false}
+                  className="red-badge-filter"
+                >
                   <img
                     src={filterIcon}
                     alt="no_image"
@@ -481,7 +493,7 @@ const [dense, setDense] = React.useState(false);
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
                           //   debugger;
-                            setFilterSearchValue(null);
+                          setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
                         }}
@@ -539,7 +551,7 @@ const [dense, setDense] = React.useState(false);
                             <DatePicker
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
-                              onChange={(event:any) =>
+                              onChange={(event: any) =>
                                 setFilterSearchValue(event.$d)
                               }
                             />
@@ -563,7 +575,7 @@ const [dense, setDense] = React.useState(false);
                               : () => <Placeholder>Select</Placeholder>
                           }
                         >
-                          {filterOptions.map((element:any, index) => (
+                          {filterOptions.map((element: any, index) => (
                             <MenuItem key={index} value={element.value}>
                               {element.label}
                             </MenuItem>
@@ -609,7 +621,7 @@ const [dense, setDense] = React.useState(false);
                 </Box>
               </Popover>
             </Box>
-            </div>
+          </div>
         </Box>
         <TableFilters
           columns={headers}
@@ -627,7 +639,7 @@ const [dense, setDense] = React.useState(false);
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
-          <TableContainer className='tableHeight'>
+          <TableContainer className="tableHeight">
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
@@ -649,14 +661,17 @@ const [dense, setDense] = React.useState(false);
                 filters={filters}
                 handleTableSorting={handleTableSorting}
               />
-
-              <TableBody>
-                {runsData?.map((row: any, index: number) => {
-                  // const isItemSelected = isSelected(row.name);
-                  // const isItemSelected = isSelected(row.name);
-                  // const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
+              {loader ? (
+                <TableBody>
+                  <TableSkeleton
+                    columns={headers}
+                    image={true}
+                    rows={queryStrings.perPage}
+                  />
+                </TableBody>
+              ) : (
+                <TableBody>
+                  {runsData?.map((row: any, index: number) => (
                     <TableRow
                       hover
                       // onClick={(event) => handleClick(event, row.name)}
@@ -682,7 +697,8 @@ const [dense, setDense] = React.useState(false);
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                  (row.is_checked==true && setRowId([...rowId, row._id])),
+                                  row.is_checked == true &&
+                                    setRowId([...rowId, row._id]),
                                     handleChange(event, row._id);
                                 }}
                               />
@@ -718,17 +734,17 @@ const [dense, setDense] = React.useState(false);
                             </Box>
 
                             {/* <Box
-                              onClick={() =>
-                                navigate(`/runs/details/${row.runNumber}`)
-                              }
-                            >
-                              <img
-                                src={index + 1 === 1 ? runCreated : index + 1 === 2 ? runStarted : index + 1 === 3 ? runStopped : runCompleted}
-                                alt="no_image"
-                                style={{ width: '35px', height: '35px' }}
-                              />
-                              {row.runNumber}
-                            </Box> */}
+                                onClick={() =>
+                                  navigate(`/runs/details/${row.runNumber}`)
+                                }
+                              >
+                                <img
+                                  src={index + 1 === 1 ? runCreated : index + 1 === 2 ? runStarted : index + 1 === 3 ? runStopped : runCompleted}
+                                  alt="no_image"
+                                  style={{ width: '35px', height: '35px' }}
+                                />
+                                {row.runNumber}
+                              </Box> */}
                           </Box>
                         </TableCell>
                       )}
@@ -908,10 +924,9 @@ const [dense, setDense] = React.useState(false);
                         // </TableCell>
                       )}
                     </TableRow>
-                  )
-                 
-                })}
-              </TableBody>
+                  ))}
+                </TableBody>
+              )}
             </Table>
           </TableContainer>
           <TablePagination

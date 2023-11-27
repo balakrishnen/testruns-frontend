@@ -38,7 +38,7 @@ import Addnewpopup from './AssetsForm';
 import { navigate } from 'gatsby';
 import TableHeader from '../../components/table/TableHeader';
 import image_holder from '../../assets/images/image-holder.svg';
-import { LocalizationProvider,DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import {
   AssetsHeaders,
   DepartmentList,
@@ -68,6 +68,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
+import TableSkeleton from '../../components/table/TableSkeleton';
 
 const rows: AssetsRowData[] = AssetsRows;
 const assetsStatus = StatusList;
@@ -89,11 +90,11 @@ export default function Assets() {
   const [filterKey, setFilterKey] = React.useState(null);
   const deleteSuccessPopupRef: any = React.useRef(null);
   const [columnAnchorEl, setColumnAnchorEl] =
-  React.useState<null | HTMLElement>(null);
-const [filterPopoverEl, setFilterPopoverEl] =
-  React.useState<null | HTMLElement>(null);
-const columnAnchorOpen = Boolean(columnAnchorEl);
-const filterAnchorOpen = Boolean(filterPopoverEl);
+    React.useState<null | HTMLElement>(null);
+  const [filterPopoverEl, setFilterPopoverEl] =
+    React.useState<null | HTMLElement>(null);
+  const columnAnchorOpen = Boolean(columnAnchorEl);
+  const filterAnchorOpen = Boolean(filterPopoverEl);
   const [filterStatus, setFilterStatus] = React.useState(null);
   const [filterSearchBy, setFilterSearchBy] = React.useState(null);
   const [filterSearchValue, setFilterSearchValue] = React.useState(null);
@@ -111,7 +112,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [rowId, setRowId] = React.useState<any>([]);
   console.log(rowId);
-
+  const [loader, setLoader] = React.useState(false);
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -151,16 +152,20 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     setFilterType(null);
     applyFilters('search', null);
     handleFilterPopoverClose();
-    setFilterKey(null)
+    setFilterKey(null);
   };
   React.useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
     setAssetsData(assetsData);
   }, [assetsData]);
 
   React.useEffect(() => {
+    setLoader(true);
     dispatch(fetchAssetsData(queryStrings));
-    setTableHeaderVisible(false)
-    setRowId([])
+    setTableHeaderVisible(false);
+    setRowId([]);
     // setAssetsData(assetsData);
   }, [pageInfo, queryStrings]);
 
@@ -173,6 +178,9 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     page['totalCount'] = assetsSliceData?.pageInfo.totalCount;
     setAssetsData(assetsSliceData?.Assets);
     setPageInfo(page);
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
   }, [assetsSliceData]);
 
   const handlePageChange = (even: any, page_no: number) => {
@@ -209,14 +217,20 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     }
     console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
-    toast(`Assets ${e.target.name == 'availability'?'availability':'status'} updated !`, {
-      style: {
-        background: '#00bf70', color: '#fff'
-      }
-    });
+    toast(
+      `Assets ${
+        e.target.name == 'availability' ? 'availability' : 'status'
+      } updated !`,
+      {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      },
+    );
     reload();
   };
-console.log(assetsData);
+  console.log(assetsData);
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -317,8 +331,9 @@ console.log(assetsData);
       dispatch(deleteAssetsData(assetVal));
       toast(`Assets deleted !`, {
         style: {
-          background: '#00bf70', color: '#fff'
-        }
+          background: '#00bf70',
+          color: '#fff',
+        },
       });
       // deleteSuccessPopupRef.current.open(true);
       // setTimeout(() => {
@@ -362,18 +377,18 @@ console.log(assetsData);
       <Box className="main-padding">
         <Box className="title-main">
           <Typography>Assets</Typography>
-          <div className='buttonFilter'>
-          <Button
-            type="submit"
-            variant="contained"
-            onClick={() => {
-              formPopupRef.current.open(true);
-            }}
-          >
-            <AddIcon sx={{ mr: 1 }} />
-            Create Asset
-          </Button>
-          <Box sx={{ position: 'relative' }}>
+          <div className="buttonFilter">
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={() => {
+                formPopupRef.current.open(true);
+              }}
+            >
+              <AddIcon sx={{ mr: 1 }} />
+              Create Asset
+            </Button>
+            <Box sx={{ position: 'relative' }}>
               <Button
                 // aria-describedby={id}
                 variant="contained"
@@ -384,10 +399,15 @@ console.log(assetsData);
                   padding: '0px',
                   justifyContent: 'center',
                 }}
-                className='filterButton'
+                className="filterButton"
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false} className="red-badge-filter">
+                <Badge
+                  color="secondary"
+                  variant={filterKey === null ? 'standard' : 'dot'}
+                  invisible={false}
+                  className="red-badge-filter"
+                >
                   <img
                     src={filterIcon}
                     alt="no_image"
@@ -459,37 +479,37 @@ console.log(assetsData);
                       </Select>
                     </Box>
                     {/* {module === 'assets' && ( */}
-                      <Box sx={{ my: 1 }}>
-                        <Typography variant="body2" paddingY={1}>
-                          Availability
-                        </Typography>
+                    <Box sx={{ my: 1 }}>
+                      <Typography variant="body2" paddingY={1}>
+                        Availability
+                      </Typography>
 
-                        <Select
-                          labelId="table-select-label"
-                          id="table-select"
-                          value={filterAvailability}
-                          displayEmpty
-                          fullWidth
-                          size="small"
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event: any) =>
-                            setFilterAvailability(event.target.value)
-                          }
-                          renderValue={
-                            filterAvailability !== null
-                              ? undefined
-                              : () => (
-                                  <Placeholder>Select Availability</Placeholder>
-                                )
-                          }
-                        >
-                          {assetsAvailability?.map((element: any) => (
-                            <MenuItem value={element.value} key={element.value}>
-                              {element.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Box>
+                      <Select
+                        labelId="table-select-label"
+                        id="table-select"
+                        value={filterAvailability}
+                        displayEmpty
+                        fullWidth
+                        size="small"
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        onChange={(event: any) =>
+                          setFilterAvailability(event.target.value)
+                        }
+                        renderValue={
+                          filterAvailability !== null
+                            ? undefined
+                            : () => (
+                                <Placeholder>Select Availability</Placeholder>
+                              )
+                        }
+                      >
+                        {assetsAvailability?.map((element: any) => (
+                          <MenuItem value={element.value} key={element.value}>
+                            {element.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Box>
                     {/* )} */}
                     <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
@@ -506,7 +526,7 @@ console.log(assetsData);
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
                           //   debugger;
-                            setFilterSearchValue(null);
+                          setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
                         }}
@@ -564,7 +584,7 @@ console.log(assetsData);
                             <DatePicker
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
-                              onChange={(event:any) =>
+                              onChange={(event: any) =>
                                 setFilterSearchValue(event.$d)
                               }
                             />
@@ -588,7 +608,7 @@ console.log(assetsData);
                               : () => <Placeholder>Select</Placeholder>
                           }
                         >
-                          {filterOptions.map((element:any, index) => (
+                          {filterOptions.map((element: any, index) => (
                             <MenuItem key={index} value={element.value}>
                               {element.label}
                             </MenuItem>
@@ -634,7 +654,7 @@ console.log(assetsData);
                 </Box>
               </Popover>
             </Box>
-            </div>
+          </div>
         </Box>
 
         <TableFilters
@@ -654,12 +674,12 @@ console.log(assetsData);
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
-          <TableContainer className='tableHeight'>
+          <TableContainer className="tableHeight">
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
               // size={dense ? "small" : "medium"}
-              stickyHeader 
+              stickyHeader
             >
               <TableHeader
                 numSelected={0}
@@ -677,253 +697,266 @@ console.log(assetsData);
                 handleTableSorting={handleTableSorting}
               />
 
-              <TableBody>
-                {assetsData?.map((row: any, index: number) => {
-                  return (
-                    row?.isDeleted !== true && (
-                      <TableRow
-                        hover
-                        tabIndex={-1}
-                        key={index}
-                        // selected={isItemSelected}
-                        sx={{ cursor: 'pointer' }}
-                        onClick={(e: any) => {
-                          // e.target.tagName !== 'INPUT' &&
-                          //   e.target.tagName !== 'LI' &&
-                          navigate(`/assets/details/${row._id}`, {
-                            state: { props: row, func: reload() },
-                          });
-                        }}
-                      >
-                        {headers[0].is_show && (
-                          <TableCell scope="row">
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Box sx={{ mt: 0, mr: 1 }}>
-                                <Checkbox
-                                  color="primary"
-                                  checked={
-                                    row.is_checked == true ? true : false
-                                  }
-                                  onClick={(e: any) => clickHandler(e)}
-                                  onChange={(event) => {
-                                    (row.is_checked==true && setRowId([...rowId, row._id])),
-                                      handleChange(event, row._id);
+              {loader ? (
+                <TableBody>
+                  <TableSkeleton
+                    columns={headers}
+                    image={true}
+                    rows={queryStrings.perPage}
+                  />
+                </TableBody>
+              ) : (
+                <TableBody>
+                  {assetsData?.map((row: any, index: number) => {
+                    return (
+                      row?.isDeleted !== true && (
+                        <TableRow
+                          hover
+                          tabIndex={-1}
+                          key={index}
+                          // selected={isItemSelected}
+                          sx={{ cursor: 'pointer' }}
+                          onClick={(e: any) => {
+                            // e.target.tagName !== 'INPUT' &&
+                            //   e.target.tagName !== 'LI' &&
+                            navigate(`/assets/details/${row._id}`, {
+                              state: { props: row, func: reload() },
+                            });
+                          }}
+                        >
+                          {headers[0].is_show && (
+                            <TableCell scope="row">
+                              <Box
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                              >
+                                <Box sx={{ mt: 0, mr: 1 }}>
+                                  <Checkbox
+                                    color="primary"
+                                    checked={
+                                      row.is_checked == true ? true : false
+                                    }
+                                    onClick={(e: any) => clickHandler(e)}
+                                    onChange={(event) => {
+                                      row.is_checked == true &&
+                                        setRowId([...rowId, row._id]),
+                                        handleChange(event, row._id);
+                                    }}
+                                  />
+                                </Box>
+
+                                <Box
+                                  sx={{ display: 'flex', alignItems: 'center' }}
+                                >
+                                  <Box>
+                                    <img
+                                      src={test}
+                                      alt="no_image"
+                                      style={{ width: '50px', height: '50px' }}
+                                    />
+                                  </Box>
+                                  <Box sx={{ ml: 2 }}>
+                                    <Box>{row.assetNumber}</Box>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </TableCell>
+                          )}
+                          {headers[1].is_show && (
+                            <TableCell>
+                              <Box>{row.name}</Box>
+                            </TableCell>
+                          )}
+                          {headers[2].is_show && (
+                            <TableCell>
+                              {row.departmentId[0] !== null ? (
+                                <Box
+                                  onClick={(_event) => {
+                                    _event.preventDefault();
+                                    _event.stopPropagation();
+                                    tablePopupRef.current?.open(
+                                      true,
+                                      'departments',
+                                      row.departmentId,
+                                    );
                                   }}
-                                />
-                              </Box>
-
-                              <Box
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                              >
-                                <Box>
-                                  <img
-                                    src={test}
-                                    alt="no_image"
-                                    style={{ width: '50px', height: '50px' }}
-                                  />
-                                </Box>
-                                <Box sx={{ ml: 2 }}>
-                                  <Box>{row.assetNumber}</Box>
-                                </Box>
-                              </Box>
-                            </Box>
-                          </TableCell>
-                        )}
-                        {headers[1].is_show && (
-                          <TableCell>
-                            <Box>{row.name}</Box>
-                          </TableCell>
-                        )}
-                        {headers[2].is_show && (
-                          <TableCell>
-                            {row.departmentId[0] !== null ? (
-                              <Box
-                                onClick={(_event) => {
-                                  _event.preventDefault();
-                                  _event.stopPropagation();
-                                  tablePopupRef.current?.open(
-                                    true,
-                                    'departments',
-                                    row.departmentId,
-                                  );
-                                }}
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                              >
-                                <>
-                                  <Chip
-                                    key={index}
-                                    label={row.departmentId[0]?.name}
-                                    sx={{
-                                      m: 0.5,
-                                      padding: '0px 3px',
-                                    }}
-                                    onClick={(_event) => {
-                                      _event.preventDefault();
-                                      _event.stopPropagation();
-                                      tablePopupRef.current.open(
-                                        true,
-                                        'departments',
-                                        row.departmentId,
-                                      );
-                                    }}
-                                  />
-                                  {row.departmentId.length > 1 && (
-                                    <span
-                                      style={{
-                                        fontWeight: 500,
-                                        color: '#9F9F9F',
-                                        fontSize: '12px',
-                                        whiteSpace: 'nowrap',
-                                      }}
-                                    >
-                                      +{row.departmentId.length - 1} More
-                                    </span>
-                                  )}
-                                </>
-                              </Box>
-                            ) : (
-                              '-'
-                            )}
-                          </TableCell>
-                        )}
-                        {headers[3].is_show && (
-                          <TableCell>
-                            {row.laboratoryId[0] !== null ? (
-                              <Box
-                                onClick={(_event) => {
-                                  _event.preventDefault();
-                                  _event.stopPropagation();
-                                  tablePopupRef.current?.open(
-                                    true,
-                                    'lab',
-                                    row.laboratoryId,
-                                  );
-                                }}
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                              >
-                                <>
-                                  <Chip
-                                    key={index}
-                                    label={row.laboratoryId[0]?.name}
-                                    sx={{
-                                      m: 0.5,
-                                      padding: '0px 3px',
-                                    }}
-                                    onClick={(_event) => {
-                                      _event.preventDefault();
-                                      _event.stopPropagation();
-                                      tablePopupRef.current.open(
-                                        true,
-                                        'lab',
-                                        row.laboratoryId,
-                                      );
-                                    }}
-                                  />
-                                  {row.laboratoryId.length > 1 && (
-                                    <span
-                                      style={{
-                                        fontWeight: 500,
-                                        color: '#9F9F9F',
-                                        fontSize: '12px',
-                                        whiteSpace: 'nowrap',
-                                      }}
-                                    >
-                                      +{row.laboratoryId.length - 1} More
-                                    </span>
-                                  )}
-                                </>
-                              </Box>
-                            ) : (
-                              <span style={{ textAlign: 'center' }}>-</span>
-                            )}
-                          </TableCell>
-                        )}
-
-                        {headers[4].is_show && (
-                          <TableCell>
-                            {row.perchasedDate === null
-                              ? '-'
-                              : moment(row.perchasedDate).isValid()
-                              ? moment(row.perchasedDate)
-                                  .local()
-                                  .format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
-                          </TableCell>
-                        )}
-                        {headers[5].is_show && (
-                          <TableCell>
-                            {row.lastUsedDate === null
-                              ? '-'
-                              : moment(row.lastUsedDate).isValid()
-                              ? moment(row.lastUsedDate)
-                                  .local()
-                                  .format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
-                          </TableCell>
-                        )}
-                        {headers[6].is_show && (
-                          <TableCell>
-                            <Select
-                              name="status"
-                              className={
-                                row.status == 'Active'
-                                  ? 'active-select td-select'
-                                  : 'inactive-select td-select'
-                              }
-                              value={row.status}
-                              displayEmpty
-                              onChange={(e) => handleOnChange(e, row)}
-                              onClick={(e: any) => clickHandler(e)}
-                              IconComponent={ExpandMoreOutlinedIcon}
-                            >
-                              {assetsStatus.map((element) => (
-                                <MenuItem
-                                  value={element.value}
-                                  key={element.value}
+                                  sx={{ display: 'flex', alignItems: 'center' }}
                                 >
-                                  {element.name}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </TableCell>
-                        )}
-                        {headers[7].is_show && (
-                          <TableCell>
-                            <Select
-                              name="availability"
-                              className={
-                                row.availability === 'Available'
-                                  ? 'active-select td-select'
-                                  : row.availability === 'In_Use'
-                                  ? 'inuse-select td-select'
-                                  : 'inactive-select td-select'
-                              }
-                              value={
-                                row.availability
-                                  ? row.availability
-                                  : 'Not_Available'
-                              }
-                              displayEmpty
-                              onChange={(e) => handleOnChange(e, row)}
-                              IconComponent={ExpandMoreOutlinedIcon}
-                              onClick={(e: any) => clickHandler(e)}
-                            >
-                              {assetsAvailability.map((element) => (
-                                <MenuItem
-                                  value={element.value}
-                                  key={element.value}
+                                  <>
+                                    <Chip
+                                      key={index}
+                                      label={row.departmentId[0]?.name}
+                                      sx={{
+                                        m: 0.5,
+                                        padding: '0px 3px',
+                                      }}
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'departments',
+                                          row.departmentId,
+                                        );
+                                      }}
+                                    />
+                                    {row.departmentId.length > 1 && (
+                                      <span
+                                        style={{
+                                          fontWeight: 500,
+                                          color: '#9F9F9F',
+                                          fontSize: '12px',
+                                          whiteSpace: 'nowrap',
+                                        }}
+                                      >
+                                        +{row.departmentId.length - 1} More
+                                      </span>
+                                    )}
+                                  </>
+                                </Box>
+                              ) : (
+                                '-'
+                              )}
+                            </TableCell>
+                          )}
+                          {headers[3].is_show && (
+                            <TableCell>
+                              {row.laboratoryId[0] !== null ? (
+                                <Box
+                                  onClick={(_event) => {
+                                    _event.preventDefault();
+                                    _event.stopPropagation();
+                                    tablePopupRef.current?.open(
+                                      true,
+                                      'lab',
+                                      row.laboratoryId,
+                                    );
+                                  }}
+                                  sx={{ display: 'flex', alignItems: 'center' }}
                                 >
-                                  {element.name}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </TableCell>
-                        )}
-                      </TableRow>
-                    )
-                  );
-                })}
-              </TableBody>
+                                  <>
+                                    <Chip
+                                      key={index}
+                                      label={row.laboratoryId[0]?.name}
+                                      sx={{
+                                        m: 0.5,
+                                        padding: '0px 3px',
+                                      }}
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'lab',
+                                          row.laboratoryId,
+                                        );
+                                      }}
+                                    />
+                                    {row.laboratoryId.length > 1 && (
+                                      <span
+                                        style={{
+                                          fontWeight: 500,
+                                          color: '#9F9F9F',
+                                          fontSize: '12px',
+                                          whiteSpace: 'nowrap',
+                                        }}
+                                      >
+                                        +{row.laboratoryId.length - 1} More
+                                      </span>
+                                    )}
+                                  </>
+                                </Box>
+                              ) : (
+                                <span style={{ textAlign: 'center' }}>-</span>
+                              )}
+                            </TableCell>
+                          )}
+
+                          {headers[4].is_show && (
+                            <TableCell>
+                              {row.perchasedDate === null
+                                ? '-'
+                                : moment(row.perchasedDate).isValid()
+                                ? moment(row.perchasedDate)
+                                    .local()
+                                    .format('MM/DD/YYYY')
+                                : moment().format('MM/DD/YYYY')}
+                            </TableCell>
+                          )}
+                          {headers[5].is_show && (
+                            <TableCell>
+                              {row.lastUsedDate === null
+                                ? '-'
+                                : moment(row.lastUsedDate).isValid()
+                                ? moment(row.lastUsedDate)
+                                    .local()
+                                    .format('MM/DD/YYYY')
+                                : moment().format('MM/DD/YYYY')}
+                            </TableCell>
+                          )}
+                          {headers[6].is_show && (
+                            <TableCell>
+                              <Select
+                                name="status"
+                                className={
+                                  row.status == 'Active'
+                                    ? 'active-select td-select'
+                                    : 'inactive-select td-select'
+                                }
+                                value={row.status}
+                                displayEmpty
+                                onChange={(e) => handleOnChange(e, row)}
+                                onClick={(e: any) => clickHandler(e)}
+                                IconComponent={ExpandMoreOutlinedIcon}
+                              >
+                                {assetsStatus.map((element) => (
+                                  <MenuItem
+                                    value={element.value}
+                                    key={element.value}
+                                  >
+                                    {element.name}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </TableCell>
+                          )}
+                          {headers[7].is_show && (
+                            <TableCell>
+                              <Select
+                                name="availability"
+                                className={
+                                  row.availability === 'Available'
+                                    ? 'active-select td-select'
+                                    : row.availability === 'In_Use'
+                                    ? 'inuse-select td-select'
+                                    : 'inactive-select td-select'
+                                }
+                                value={
+                                  row.availability
+                                    ? row.availability
+                                    : 'Not_Available'
+                                }
+                                displayEmpty
+                                onChange={(e) => handleOnChange(e, row)}
+                                IconComponent={ExpandMoreOutlinedIcon}
+                                onClick={(e: any) => clickHandler(e)}
+                              >
+                                {assetsAvailability.map((element) => (
+                                  <MenuItem
+                                    value={element.value}
+                                    key={element.value}
+                                  >
+                                    {element.name}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      )
+                    );
+                  })}
+                </TableBody>
+              )}
             </Table>
           </TableContainer>
 
