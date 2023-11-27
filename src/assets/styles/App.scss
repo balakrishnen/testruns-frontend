@@ -872,13 +872,15 @@ button.Delete-btn {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 3px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
+  
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: $primary-color;
+  background: #e4e5e7;
+  border-radius: 20px !important;
 }
 
 fieldset.MuiOutlinedInput-notchedOutline {
@@ -973,7 +975,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   margin-right: -90rem;
 
   .tableHeight{
-    height: 630px;
+    height: calc(100vh - 30vh);
   }
   thead {
     background: $light-yellow-1;
