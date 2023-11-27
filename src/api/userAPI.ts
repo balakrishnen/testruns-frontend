@@ -1,5 +1,6 @@
-import { GET_USER, POST_USER, DELETE_USER, UPDATE_USER, GET_SINGLE_USER } from '../graphql/users/users.graphql';
+import { GET_USER, POST_USER, DELETE_USER, UPDATE_USER, GET_SINGLE_USER , LOGIN_USER} from '../graphql/users/users.graphql';
 import { fetchUserFailure, fetchUserStart, fetchUserSuccess } from '../features/userSlice';
+import { fetchLoginUserFailure,fetchLoginUserStart,fetchLoginUserSuccess } from '../features/loginUserSlice';
 import { client } from '../utils/config';
 
 export const fetchUserData = (payload: any) => async (dispatch: any) => {
@@ -75,5 +76,19 @@ export const fetchGetUser = (payload: any) => async (dispatch: any) => {
     dispatch(fetchUserSuccess(response.data));
   } catch (error: any) {
     dispatch(fetchUserFailure(error.message));
+  }
+};
+
+export const fetchLoginUser = (payload: any) => async (dispatch: any) => {
+  dispatch(fetchLoginUserStart());
+  try {
+    const response = await client.mutate({
+      mutation: LOGIN_USER,
+      variables: payload,
+    });
+    console.log(response.data);
+    dispatch(fetchLoginUserSuccess(response.data));
+  } catch (error: any) {
+    dispatch(fetchLoginUserFailure(error.message));
   }
 };

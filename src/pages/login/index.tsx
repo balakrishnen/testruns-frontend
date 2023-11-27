@@ -26,6 +26,13 @@ import { navigate } from 'gatsby';
 import { withCardLayout } from '../../components/auth';
 import '../../assets/styles/App.scss';
 import { ToastContainer, toast } from 'react-toastify';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase.config';
+import { useDispatch } from 'react-redux';
+import { fetchLoginUser } from '../../api/userAPI';
+import { client } from '../../utils/config';
+import {LOGIN_USER} from '../../graphql/users/users.graphql'
+import { useSelector } from 'react-redux';
 
 const validUser = {
   email: 'admin@testrunz.com',
@@ -54,39 +61,73 @@ const Login = () => {
   ) => {
     event.preventDefault();
   };
+const dispatch: any= useDispatch()
+const userSliceData=  useSelector(
+  (state: any) => state.userLogin.data, 
+);
+  console.log(userSliceData);
 
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(values.email, values.password);
 
     if (isMatch) {
       if (typeof window !== 'undefined') {
-        window.sessionStorage.setItem('isLoggedIn', 'true');
-       
-        // setTimeout(()=>{
-          navigate('/mypage')
-          toast(`Login successful !`, {
+        signInWithEmailAndPassword(auth, values.email, values.password)
+        .then((userCredential:any) => {
+          console.log(userCredential.user?.accessToken);
+          let payload={
+            idToken:userCredential.user?.accessToken
+          }
+          
+          dispatch(fetchLoginUser(payload))
+              // console.log(isSucess);
+              console.log(userSliceData);
+              
+              window.sessionStorage.setItem('isLoggedIn', 'true');
+           
+              // setTimeout(()=>{
+                navigate('/mypage')
+                toast(`Login successful !`, {
+                  style: {
+                    background: '#00bf70', color: '#fff'
+                  }
+                });
+            })
+          
+          
+          // Signed in 
+          // const user = userCredential.user;
+          // ...
+        // })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          toast(`Invalid Credentials !`, {
             style: {
-              background: '#00bf70', color: '#fff'
+              background: 'red', color: '#fff'
             }
           });
+        });
+     
         // },1000)
       }
-    } else {
-      if (values.email !== validUser.email) {
-        formik.setFieldError('email', 'Invalid email');
-      }
-      if (values.password !== validUser.password) {
-        formik.setFieldError('password', 'Invalid password');
-      }
-    }
+    } 
+    // else {
+    //   if (values.email !== validUser.email) {
+    //     formik.setFieldError('email', 'Invalid email');
+    //   }
+    //   if (values.password !== validUser.password) {
+    //     formik.setFieldError('password', 'Invalid password');
+    //   }
+    // }
   };
 
   const checkCredentials = (email: any, password: any) => {
-    if (email === validUser.email && password === validUser.password) {
+    // if (email === validUser.email && password === validUser.password) {
       return true;
-    } else {
-      return false;
-    }
+    // } else {
+    //   return false;
+    // }
   };
 
   const formik = useFormik({

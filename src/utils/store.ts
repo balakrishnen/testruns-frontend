@@ -13,6 +13,7 @@ import { chartTableReducer } from '../features/runsSlice';
 import procedureReducer from '../features/procedureSlice';
 import roleReducer from '../features/roleSlice';
 import userRunsSlice from '../features/userRunsSlice';
+import loginUserSlice from "../features/loginUserSlice"
 import fileUploadReducer from '../features/fileUploadSlice';
 
 const persistConfig = {
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   runs: runsReducer,
   tableChart: chartTableReducer,
   userRuns: userRunsSlice,
+  userLogin: loginUserSlice,
   fileUpload: fileUploadReducer,
 });
 
