@@ -1,20 +1,33 @@
-import React from "react";
-import {  Box,Autocomplete, Checkbox,  Button,  Grid, MenuItem, IconButton,Select,  InputAdornment,  InputLabel,  TextField,  Typography,} from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import search from "../../../assets/images/search.svg";
-import camera from "../../../assets/images/profile/camera.svg";
-import profile from "../../../assets/images/profile/profile.svg";
-import organisation from "../../../assets/images/profile/organisation.svg";
-import document from "../../../assets/images/profile/document.svg";
-import profile2 from "../../../assets/images/profile/profile2.svg";
-import { VisibilityOff, Visibility } from "@mui/icons-material";
-import { withSettingsLayout } from "../../../components/settings";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import {navigate} from 'gatsby'
+import React from 'react';
+import {
+  Box,
+  Autocomplete,
+  Checkbox,
+  Button,
+  Grid,
+  MenuItem,
+  IconButton,
+  Select,
+  InputAdornment,
+  InputLabel,
+  TextField,
+  Typography,
+} from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import search from '../../../assets/images/search.svg';
+import camera from '../../../assets/images/profile/camera.svg';
+import profile from '../../../assets/images/profile/profile.svg';
+import organisation from '../../../assets/images/profile/organisation.svg';
+import document from '../../../assets/images/profile/document.svg';
+import profile2 from '../../../assets/images/profile/profile2.svg';
+import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { withSettingsLayout } from '../../../components/settings';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { navigate } from 'gatsby';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from '../../../api/departmentAPI';
@@ -24,17 +37,17 @@ import { DepartmentList, LaboratoryList ,OrganizationList} from "../../../utils/
 import { toast } from "react-toastify";
 import { fetchRoleData } from "../../../api/roleApi";
 import { fetchSingleUserData, fetchUpdateUserData } from "../../../api/userAPI";
-import { auth } from "../../../firebase.config";
+import { fileUploadData } from '../../../api/uploadAPI';
+
 const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const validationSchema = Yup.object().shape({
-  password:Yup.string()
-  .required("Password is required"),
+  password: Yup.string().required('Password is required'),
   newpassword: Yup.string()
-    .required("New Password is required")
+    .required('New Password is required')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "Weak password"
+      'Weak password',
     ),
     confirmpassword: Yup.string()
     .required("Confirm password is required")
@@ -58,10 +71,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const Profile = () => {
-  const [expanded, setExpanded] = React.useState<string | false>("panel1");
+  const [expanded, setExpanded] = React.useState<string | false>('panel1');
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const dispatch: any = useDispatch();
+  const fileUploadField = React.useRef<any>(null);
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
@@ -91,7 +105,7 @@ const Profile = () => {
     setInitalStatus(updatedValidation);
   };
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
@@ -123,35 +137,35 @@ const Profile = () => {
     const isMatch = checkCredentials(
       values.password,
       values.newpassword,
-      values.confirmpassword
+      values.confirmpassword,
     );
 
     if (isMatch) {
       toast(`Password Reset successful !`, {
         style: {
-          background: '#00bf70', color: '#fff'
-        }
+          background: '#00bf70',
+          color: '#fff',
+        },
       });
-      setTimeout(()=>{
-        navigate('/login')
-      },2000)
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
       // alert("password updated successful!");
       // navigate('/login')
     } else {
-      formik.setFieldError("password", "Invalid password");
-       }
+      formik.setFieldError('password', 'Invalid password');
+    }
   };
 
   const checkCredentials = (
     password: any,
     newpassword: any,
-    confirmpassword:any
+    confirmpassword: any,
   ) => {
-    if(newpassword!=="" && confirmpassword!=="" && password!== ""){
-      return true
-    }
-    else{
-    return false;
+    if (newpassword !== '' && confirmpassword !== '' && password !== '') {
+      return true;
+    } else {
+      return false;
     }
   };
   const checkCredentialsProfile = (
@@ -166,7 +180,7 @@ const Profile = () => {
     // reqstId: any,
   ) => {
     // if(newpassword!=="" && confirmpassword!=="" && password!== ""){
-      return true
+    return true;
     // }
     // else{
     // return false;
@@ -208,13 +222,13 @@ const Profile = () => {
       dispatch(fetchUpdateUserData(userValues))
       toast(`User Details updated successful !`, {
         style: {
-          background: '#00bf70', color: '#fff'
-        }
+          background: '#00bf70',
+          color: '#fff',
+        },
       });
       // alert("User Details updated successful!");
-     
+    }
   };
-}
   const formik = useFormik({
     initialValues: {
       password: '',
@@ -286,7 +300,7 @@ const Profile = () => {
 
   console.log(departmentData);
 
-console.log(DepartmentList);
+  console.log(DepartmentList);
 
   React.useEffect(() => {
     dispatch(fetchDepartmentData());
@@ -295,15 +309,28 @@ console.log(DepartmentList);
   }, []);
   console.log(formikProfile);
 
+  const triggerFileUploadField = () => {
+    fileUploadField.current?.click();
+  };
+
+  const handleImageUpload = () => {
+    const selectedFile = fileUploadField.current.files;
+    const payload = {
+      file: selectedFile,
+      // type: 'profile',
+    };
+    dispatch(fileUploadData(payload));
+  };
+
   return (
     <Box className="profile-setting-page">
       <Box
         className="title-main"
         sx={{
-          borderBottom: "1px solid #F3F3F3",
-          padding: "15px 0px",
-          paddingBottom: "8px",
-          margin:"0px 24px"
+          borderBottom: '1px solid #F3F3F3',
+          padding: '15px 0px',
+          paddingBottom: '8px',
+          margin: '0px 24px',
         }}
       >
         <Box>
@@ -333,25 +360,53 @@ console.log(DepartmentList);
       </Box>
       <Box
         sx={{
-          width: "100%",
+          width: '100%',
           m: 0,
-          padding: "24px",
-          display: { xs: "block", lg: "flex" },
+          padding: '24px',
+          display: { xs: 'block', lg: 'flex' },
         }}
       >
-        <Box sx={{ paddingLeft: "0rem !important" }}>
+        <Box sx={{ paddingLeft: '0rem !important' }}>
           <Box className="profile-camera">
-            <img src={profile} alt="profile" className="profile-user" />
-            <img src={camera} alt="camera" className="upload-img" />
+            <div>
+              <img
+                src={profile}
+                alt="profile"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: '5px solid #F3F3F3',
+                  borderRadius: '120px',
+                  padding: '3px',
+                }}
+              />
+            </div>
+            <div
+              style={{
+                position: 'relative',
+                bottom: '60px',
+                left: '155px',
+                cursor: 'pointer',
+              }}
+              onClick={triggerFileUploadField}
+            >
+              <img src={camera} alt="camera" />
+            </div>
           </Box>
+          <input
+            style={{ display: 'none' }}
+            type="file"
+            ref={fileUploadField}
+            onChange={handleImageUpload}
+          />
         </Box>
         <Box
-          sx={{ paddingLeft: { xs: "0px!important", lg: "16px !important" } }}
+          sx={{ paddingLeft: { xs: '0px!important', lg: '16px !important' } }}
         >
           <Box className="accordion-section">
             <Accordion
-              expanded={expanded === "panel1"}
-              onChange={handleChange("panel1")}
+              expanded={expanded === 'panel1'}
+              onChange={handleChange('panel1')}
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -594,10 +649,10 @@ console.log(DepartmentList);
                         ))}
                       </Select>
 
-                      {formikProfile.touched.organisation &&
-                        formikProfile.errors.organisation && (
+                      {formikProfile.touched.organisationId &&
+                        formikProfile.errors.organisationId && (
                           <Typography className="error-field">
-                            {formikProfile.errors.organisation}
+                            {formikProfile.errors.organisationId}
                           </Typography>
                         )}
                       </Box>
@@ -648,10 +703,10 @@ console.log(DepartmentList);
                                 setDepartments(selectedOptions);formikProfile.setValues({...formikProfile.values,'departmentId':selectedOptions})}
                               }
                             />
-                      {formikProfile.touched.department &&
-                        formikProfile.errors.department && (
+                      {formikProfile.touched.departmentId &&
+                        formikProfile.errors.departmentId && (
                           <Typography className="error-field">
-                            {formikProfile.errors.department}
+                            {formikProfile.errors.departmentId}
                           </Typography>
                         )}
                       </Box>
@@ -695,10 +750,10 @@ console.log(DepartmentList);
                                   setLaboratory(selectedOptions);formikProfile.setValues({...formikProfile.values,'laboratoryId':selectedOptions}) }
                                 }
                               />
-                      {formikProfile.touched.lab &&
-                        formikProfile.errors.lab && (
+                      {formikProfile.touched.laboratoryId &&
+                        formikProfile.errors.laboratoryId && (
                           <Typography className="error-field">
-                            {formikProfile.errors.lab}
+                            {formikProfile.errors.laboratoryId}
                           </Typography>
                         )}
                       </Box>
@@ -766,68 +821,15 @@ console.log(DepartmentList);
                         )}
                       </Box>
                     </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={6}
-                      sx={{
-                        paddingLeft: {
-                          xs: "0rem !important",
-                          lg: "1rem !important",
-                        },
-                        paddingTop: {
-                          xs: "1rem !important",
-                          lg: "0rem !important",
-                        },
-                      }}
-                    >
-                      <Box style={{ position: "relative" }}>
-                        <label>Requestor ID/Tester ID</label>
-                        <TextField
-                          margin="normal"
-                          // required
-                          fullWidth
-                          id="Organisation"
-                          name="reqstId"
-                          autoComplete="off"
-                          // autoFocus
-                          InputLabelProps={{ shrink: false }}
-                          placeholder="Requestor ID/Tester ID"
-                          // InputProps={{
-                          //   startAdornment: (
-                          //     <InputAdornment position="start">
-                          //       <img src={profile2} />
-                          //     </InputAdornment>
-                          //   ),
-                          // }}
-                          className="Organisation"
-                          // sx={{ background: "#F3F3F3" }}
-                          onChange={formikProfile.handleChange}
-                          onBlur={formikProfile.handleBlur}
-                          value={formikProfile.values.reqstId}
-                          size="small"
-                          error={
-                            formikProfile.touched.reqstId &&
-                            Boolean(formikProfile.errors.reqstId)
-                          }
-                        />
-                        {formikProfile.touched.reqstId && formikProfile.errors.reqstId && (
-                          <Typography className="error-field">
-                            {formikProfile.errors.reqstId}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Grid>
+                    
                   </Grid>
                 </Box>
                 </form>
               </AccordionDetails>
             </Accordion>
             <Accordion
-              expanded={expanded === "panel2"}
-              onChange={handleChange("panel2")}
+              expanded={expanded === 'panel2'}
+              onChange={handleChange('panel2')}
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -839,141 +841,169 @@ console.log(DepartmentList);
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
-              <form onSubmit={formik.handleSubmit}  autoComplete="off">
-                <Box className="auth-inner">
-                  <Box style={{ position: "relative" }}>
-                    <InputLabel>Enter old password</InputLabel>
-                    <TextField
-                      type={initalStatus.password ? "text" : "password"}
-                      fullWidth
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={(e)=>handleClickShowPassword("password",!initalStatus.password)}
-                              edge="end"
-                              sx={{ mr: 0 }}
-                            >
-                              {!initalStatus.password ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      name="password"
-                      id="password"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.password}
-                      variant="outlined"
-                      error={formik.touched.password && Boolean(formik.errors.password)}
-                      placeholder="Password"
-                    />
+                <form onSubmit={formik.handleSubmit} autoComplete="off">
+                  <Box className="auth-inner">
+                    <Box style={{ position: 'relative' }}>
+                      <InputLabel>Enter old password</InputLabel>
+                      <TextField
+                        type={initalStatus.password ? 'text' : 'password'}
+                        fullWidth
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={(e) =>
+                                  handleClickShowPassword(
+                                    'password',
+                                    !initalStatus.password,
+                                  )
+                                }
+                                edge="end"
+                                sx={{ mr: 0 }}
+                              >
+                                {!initalStatus.password ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                        name="password"
+                        id="password"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.password}
+                        variant="outlined"
+                        error={
+                          formik.touched.password &&
+                          Boolean(formik.errors.password)
+                        }
+                        placeholder="Password"
+                      />
                       {formik.touched.password && formik.errors.password && (
-              <Typography className="error-field">
-                {formik.errors.password}
-              </Typography>
-            )}
+                        <Typography className="error-field">
+                          {formik.errors.password}
+                        </Typography>
+                      )}
+                    </Box>
+                    <Box style={{ position: 'relative' }}>
+                      <InputLabel>Enter new Password</InputLabel>
+                      <TextField
+                        type={initalStatus.newpassword ? 'text' : 'password'}
+                        fullWidth
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={(e) =>
+                                  handleClickShowPassword(
+                                    'newpassword',
+                                    !initalStatus.newpassword,
+                                  )
+                                }
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                                sx={{ mr: 0 }}
+                              >
+                                {!initalStatus.newpassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                        name="newpassword"
+                        id="password"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.newpassword}
+                        variant="outlined"
+                        error={
+                          formik.touched.newpassword &&
+                          Boolean(formik.errors.newpassword)
+                        }
+                        placeholder="New Password"
+                      />
+                      {formik.touched.newpassword &&
+                        formik.errors.newpassword && (
+                          <Typography className="error-field">
+                            {formik.errors.newpassword}
+                          </Typography>
+                        )}
+                      {formik.touched.newpassword &&
+                        !formik.errors.newpassword && (
+                          <Typography className="valid-field">
+                            Strong password
+                          </Typography>
+                        )}
+                    </Box>
+                    <Box style={{ position: 'relative' }}>
+                      <InputLabel>Confirm new password</InputLabel>
+                      <TextField
+                        type={
+                          initalStatus.confirmpassword ? 'text' : 'password'
+                        }
+                        fullWidth
+                        onPaste={(event) => {
+                          event.preventDefault();
+                        }}
+                        style={{ userSelect: 'none' }}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={(e) =>
+                                  handleClickShowPassword(
+                                    'confirmpassword',
+                                    !initalStatus.confirmpassword,
+                                  )
+                                }
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                                sx={{ mr: 0 }}
+                              >
+                                {!initalStatus.confirmpassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                        name="confirmpassword"
+                        id="password"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.confirmpassword}
+                        variant="outlined"
+                        error={
+                          formik.touched.confirmpassword &&
+                          Boolean(formik.errors.confirmpassword)
+                        }
+                        placeholder="Confirm Password"
+                      />
+                      {formik.touched.confirmpassword &&
+                        formik.errors.confirmpassword && (
+                          <Typography className="error-field">
+                            {formik.errors.confirmpassword}
+                          </Typography>
+                        )}
+                      {formik.touched.confirmpassword &&
+                        !formik.errors.confirmpassword && (
+                          <Typography className="valid-field">
+                            Password matched
+                          </Typography>
+                        )}
+                    </Box>
                   </Box>
-                  <Box style={{ position: "relative" }}>
-                    <InputLabel>Enter new Password</InputLabel>
-                    <TextField
-                      type={initalStatus.newpassword ? "text" : "password"}
-                      fullWidth
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={(e)=>handleClickShowPassword("newpassword",!initalStatus.newpassword)}
-                              onMouseDown={handleMouseDownPassword} 
-                              edge="end"
-                              sx={{ mr: 0 }}
-                            >
-                              {!initalStatus.newpassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      name="newpassword"
-                      id="password"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.newpassword}
-                      variant="outlined"
-                      error={formik.touched.newpassword && Boolean(formik.errors.newpassword)}
-                      placeholder="New Password"
-                    />
-                      {formik.touched.newpassword && formik.errors.newpassword && (
-              <Typography className="error-field">
-                {formik.errors.newpassword}
-              </Typography>
-            )}
-            {formik.touched.newpassword && !formik.errors.newpassword && (
-              <Typography className="valid-field">Strong password</Typography>
-            )}
-                  </Box>
-                  <Box style={{ position: "relative" }}>
-                    <InputLabel>Confirm new password</InputLabel>
-                    <TextField
-                      type={initalStatus.confirmpassword ? "text" : "password"}
-                      fullWidth
-                      onPaste={(event) => {
-                        event.preventDefault()}}
-                        style={{userSelect:'none'}}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={(e)=>handleClickShowPassword("confirmpassword",!initalStatus.confirmpassword)}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                              sx={{ mr: 0 }}
-                            >
-                              {!initalStatus.confirmpassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      name="confirmpassword"
-                      id="password"
-                      onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.confirmpassword}
-              variant="outlined"
-              error={
-                formik.touched.confirmpassword &&
-                Boolean(formik.errors.confirmpassword)
-              }
-              placeholder="Confirm Password"
-            />
-            {formik.touched.confirmpassword &&
-              formik.errors.confirmpassword && (
-                <Typography className="error-field">
-                  {formik.errors.confirmpassword}
-                </Typography>
-              )}
-            {formik.touched.confirmpassword &&
-              !formik.errors.confirmpassword && (
-                <Typography className="valid-field">
-                  Password matched
-                </Typography>
-              )}
-                  </Box>
-                </Box>
                 </form>
               </AccordionDetails>
             </Accordion>
@@ -981,11 +1011,24 @@ console.log(DepartmentList);
         </Box>
       </Box>
       <Box className="edit-details">
-        <Button type="submit" variant="contained" className="cancel-btn" style={{visibility:'hidden'}}>
+        <Button
+          type="submit"
+          variant="contained"
+          className="cancel-btn"
+          style={{ visibility: 'hidden' }}
+        >
           Back
         </Button>
-        <Button type="submit" onClick={()=>{expanded=='panel2'
-        ?formik.handleSubmit():formikProfile.handleSubmit()}} variant="contained" className="add-btn">
+        <Button
+          type="submit"
+          onClick={() => {
+            expanded == 'panel2'
+              ? formik.handleSubmit()
+              : formikProfile.handleSubmit();
+          }}
+          variant="contained"
+          className="add-btn"
+        >
           Save
         </Button>
       </Box>

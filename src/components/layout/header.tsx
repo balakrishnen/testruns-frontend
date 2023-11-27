@@ -7,10 +7,8 @@ import {
   Typography,
   Menu,
   MenuItem,
-  TextField,
   Badge,
 } from '@mui/material';
-import InputAdornment from '@mui/material/InputAdornment';
 import MenuIcon from '@mui/icons-material/Menu';
 import { MoreVertOutlined } from '@mui/icons-material';
 import help from '../../assets/images/help.svg';
@@ -18,13 +16,12 @@ import notification from '../../assets/images/notification.svg';
 import dark from '../../assets/images/Darkmode.svg';
 import account from '../../assets/images/account.svg';
 import '../../assets/styles/App.scss';
-import search from '../../assets/images/search.svg';
+
+const mobileMenuId = 'primary-search-account-menu-mobile';
 
 function AppHeader(props: any) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const mobileMenuId = 'primary-search-account-menu-mobile';
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -99,10 +96,9 @@ function AppHeader(props: any) {
     props.toggleNotificationDrawer();
   };
 
-  const changeTheme = () => {
-    props.toggleTheme();
-  };
-  // console.log(window.location.pathname.split("/")[1]);
+  // const changeTheme = () => {
+  //   props.toggleTheme();
+  // };
 
   return (
     <Box className="app-bar-block">
@@ -164,7 +160,12 @@ function AppHeader(props: any) {
               color="inherit"
               onClick={openNotificationList}
             >
-              <Badge color="secondary" variant={'dot'} invisible={false} className="red-badge">
+              <Badge
+                color="secondary"
+                variant={'dot'}
+                invisible={false}
+                className="red-badge"
+              >
                 <img
                   src={notification}
                   alt="help_icon"
@@ -211,4 +212,4 @@ function AppHeader(props: any) {
   );
 }
 
-export default AppHeader;
+export default React.memo(AppHeader);

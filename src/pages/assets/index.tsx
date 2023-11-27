@@ -131,6 +131,15 @@ export default function Assets() {
   const assetsSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets,
   );
+  const labSliceData = useSelector(
+    (state: any) => state.lab.data?.get_all_labs,
+  );
+
+
+  const assetsIdSliceData = useSelector(
+    (state: any) => state.assets.data?.get_all_assets,
+  );
+
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
   };
@@ -263,11 +272,11 @@ export default function Assets() {
     setRowId,
   );
   const handleRequestSort = () => {};
-  const handleCheckboxValues = (id:any) => {
+  const handleCheckboxValues = (id: any) => {
     // Check if the ID is already in the selectedIds
     if (rowId.includes(id)) {
       // If it is, remove it
-      setRowId(rowId.filter((rowId:any) => rowId !== id));
+      setRowId(rowId.filter((rowId: any) => rowId !== id));
     } else {
       // If it's not, add it
       setRowId([...rowId, id]);
@@ -524,7 +533,6 @@ export default function Assets() {
                       <Typography variant="body2" paddingY={1}>
                         Search by
                       </Typography>
-
                       <Select
                         labelId="table-select-label"
                         id="table-select"
@@ -538,6 +546,15 @@ export default function Assets() {
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
+                          if (event.target?.value === 'laboratoryId') {
+                            setFilterOptions(labSliceData);
+                          }
+                          if (event.target?.value === 'departmentId') {
+                            setFilterOptions(departmentSliceData);
+                          }
+                          if (event.target?.value === 'assetNumber') {
+                            setFilterOptions(assetsIdSliceData);
+                          }
                         }}
                         renderValue={
                           filterSearchBy !== null
@@ -551,7 +568,7 @@ export default function Assets() {
                             key={element.id}
                             onClick={() => {
                               setFilterType(element.type);
-                              setFilterOptions(element.filters[0]?.options);
+                              // setFilterOptions(element.filters[0]?.options);
                               setFilterKey(element.id);
                             }}
                           >
@@ -618,8 +635,8 @@ export default function Assets() {
                           }
                         >
                           {filterOptions.map((element: any, index) => (
-                            <MenuItem key={index} value={element.value}>
-                              {element.label}
+                            <MenuItem key={index} value={element._id}>
+                              {element.name}
                             </MenuItem>
                           ))}
                         </Select>
@@ -746,7 +763,7 @@ export default function Assets() {
                                     }
                                     onClick={(e: any) => clickHandler(e)}
                                     onChange={(event) => {
-                                      handleCheckboxValues( row._id),
+                                      handleCheckboxValues(row._id),
                                         handleChange(event, row._id);
                                     }}
                                   />
