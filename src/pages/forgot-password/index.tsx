@@ -76,7 +76,7 @@ const ForgotPassword = () => {
         }
       });
       setTimeout(()=>{
-        navigate('/otp')
+        navigate('/login')
       },3000)
       // alert("An OTP is sent to your registered email-ID");
       // navigate('/otp')

@@ -106,8 +106,10 @@ export default function AppProfileDrawer({
     return <div>{children}</div>;
   };
   // console.log(departmentData);
-
-  // console.log(DepartmentList);
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
+  console.log(loginUserSliceData);
   React.useEffect(()=>{
     let temp = { '_id':loginUserSliceData?.verifyToken._id}
         // if (row?._id) {
@@ -128,9 +130,7 @@ export default function AppProfileDrawer({
             });
           // }    
   },[])
-  const loginUserSliceData=  useSelector(
-    (state: any) => state.userLogin.data, 
-  );
+
   React.useEffect(() => {
     let payload={
       _id:loginUserSliceData?.verifyToken._id
@@ -620,7 +620,7 @@ export default function AppProfileDrawer({
                   paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
                 }}
               >
-                <Box>
+                {/* <Box>
                   <label>Requestor ID/Tester ID</label>
                   <TextField
                     margin="normal"
@@ -642,7 +642,7 @@ export default function AppProfileDrawer({
                     //   ),
                     // }}
                   />
-                </Box>
+                </Box> */}
               </Grid>
             </Grid>
             {/* <Box  >

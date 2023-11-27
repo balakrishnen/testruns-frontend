@@ -615,7 +615,7 @@ const Profile = () => {
                         <label>Organisation</label>
                         <Select
                         className="placeholder-color"
-                        style={{color:"black"}}
+                        style={{color:"black", marginTop:'10px'}}
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
@@ -774,7 +774,7 @@ const Profile = () => {
                       }}
                     >
                       <Box style={{ position: "relative" }}>
-                        <label>Designation</label>
+                        <label>Role</label>
                         <Select
                         // MenuProps={{
                         //   PaperProps: {
