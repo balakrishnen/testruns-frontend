@@ -147,3 +147,24 @@ query Get_user($_id: String!) {
     }
 }
 `;
+export const LOGIN_USER = gql`
+mutation VerifyToken($idToken:String!) {
+    verifyToken(idToken: $idToken) {
+        _id
+        uid
+        firstName
+        lastName
+        departmentId
+        laboratoryId
+        organisationId
+        email
+        imageUrl
+        role
+        phoneNumber
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;

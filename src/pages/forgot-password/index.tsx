@@ -32,6 +32,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
 import { ToastContainer, toast } from "react-toastify";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../../firebase.config";
 
 
 const generateRandomText = () => {
@@ -67,7 +69,8 @@ const ForgotPassword = () => {
     const isMatch = checkCredentials(values.email, values.captcha);
 
     if (isMatch) {
-      toast(`An OTP is sent to your registered email-ID !`, {
+      sendPasswordResetEmail(auth, values.email);
+      toast(`Password reset sent to your registered email-ID !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }

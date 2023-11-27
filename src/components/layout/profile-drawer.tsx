@@ -109,7 +109,7 @@ export default function AppProfileDrawer({
 
   // console.log(DepartmentList);
   React.useEffect(()=>{
-    let temp = { '_id': "6561fde22f447d0012e3d8cf"}
+    let temp = { '_id':loginUserSliceData?.verifyToken._id}
         // if (row?._id) {
           dispatch(fetchSingleUserData(temp)).then((isSucess) => {
             if (isSucess.get_user) {
@@ -128,9 +128,12 @@ export default function AppProfileDrawer({
             });
           // }    
   },[])
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
   React.useEffect(() => {
     let payload={
-      _id:"655f18bcc88024001262b3a5"
+      _id:loginUserSliceData?.verifyToken._id
     }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
@@ -173,7 +176,7 @@ export default function AppProfileDrawer({
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
-        _id:"6561fde22f447d0012e3d8cf"
+        _id:loginUserSliceData?.verifyToken._id
       }
       // debugger
       // userValues['_id'] = userData?._id
@@ -660,7 +663,7 @@ export default function AppProfileDrawer({
             </Box> */}
           </Box>
           <Box className="edit-details-profile">
-        <Button type="submit" variant="contained" onClick={()=>{toggleProfileDrawer(), setEdit(true)}} className="cancel-btn" >
+        <Button variant="contained" onClick={()=>{toggleProfileDrawer(), setEdit(true)}} className="cancel-btn" >
           Cancel
         </Button>
         <Button type="submit" variant="contained" className="add-btn">

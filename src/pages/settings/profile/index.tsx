@@ -24,6 +24,7 @@ import { DepartmentList, LaboratoryList ,OrganizationList} from "../../../utils/
 import { toast } from "react-toastify";
 import { fetchRoleData } from "../../../api/roleApi";
 import { fetchSingleUserData, fetchUpdateUserData } from "../../../api/userAPI";
+import { auth } from "../../../firebase.config";
 const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const validationSchema = Yup.object().shape({
@@ -94,9 +95,11 @@ const Profile = () => {
   ) => {
     event.preventDefault();
   };
-
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
   React.useEffect(()=>{
-    let temp = { '_id': "6561fde22f447d0012e3d8cf"}
+    let temp = { '_id': loginUserSliceData?.verifyToken._id}
         // if (row?._id) {
           dispatch(fetchSingleUserData(temp)).then((isSucess) => {
             if (isSucess.get_user) {
@@ -198,7 +201,7 @@ const Profile = () => {
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
-        _id:"6561fde22f447d0012e3d8cf"
+        _id:loginUserSliceData?.verifyToken._id
       }
       // debugger
       // userValues['_id'] = userData?._id
