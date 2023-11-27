@@ -1,13 +1,16 @@
 import React from 'react';
 import PrivateRoute from '../../components/PrivateRoute';
-import {   Box,
+import {
+  Box,
   Button,
   Checkbox,
   Chip,
   MenuItem,
   Select,
   Typography,
-  Badge,TextField } from '@mui/material';
+  Badge,
+  TextField,
+} from '@mui/material';
 import Table from '@mui/material/Table';
 import TablePagination from '../../components/table/TablePagination';
 import TableBody from '@mui/material/TableBody';
@@ -48,12 +51,13 @@ import moment from 'moment';
 import TablePopup from '../../components/table/TablePopup';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 
-import { LocalizationProvider,DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import filterIcon from '../../assets/images/filter-icon1.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
+import TableSkeleton from '../../components/table/TableSkeleton';
 const rows: ProceduresRowData[] = ProcedureRows;
 
 export default function Procedures() {
@@ -65,11 +69,11 @@ export default function Procedures() {
   const tablePopupRef: any = React.useRef(null);
   const [filterKey, setFilterKey] = React.useState(null);
   const [columnAnchorEl, setColumnAnchorEl] =
-  React.useState<null | HTMLElement>(null);
-const [filterPopoverEl, setFilterPopoverEl] =
-  React.useState<null | HTMLElement>(null);
-const columnAnchorOpen = Boolean(columnAnchorEl);
-const filterAnchorOpen = Boolean(filterPopoverEl);
+    React.useState<null | HTMLElement>(null);
+  const [filterPopoverEl, setFilterPopoverEl] =
+    React.useState<null | HTMLElement>(null);
+  const columnAnchorOpen = Boolean(columnAnchorEl);
+  const filterAnchorOpen = Boolean(filterPopoverEl);
   const [filterStatus, setFilterStatus] = React.useState(null);
   const [filterSearchBy, setFilterSearchBy] = React.useState(null);
   const [filterSearchValue, setFilterSearchValue] = React.useState(null);
@@ -77,14 +81,15 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
   const [filterType, setFilterType] = React.useState(null);
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterOptions, setFilterOptions] = React.useState([]);
+  const [loader, setLoader] = React.useState(false);
 
-  const handleRequestSort = ()=>{
+  const handleRequestSort = () => {
     // event: React.MouseEvent<unknown>,
-  //   property: keyof ProceduresRowData,
-  // ) => {
-  //   const isAsc = orderBy === property && order === 'asc';
-  //   setOrder(isAsc ? 'desc' : 'asc');
-  //   setOrderBy(property);
+    //   property: keyof ProceduresRowData,
+    // ) => {
+    //   const isAsc = orderBy === property && order === 'asc';
+    //   setOrder(isAsc ? 'desc' : 'asc');
+    //   setOrderBy(property);
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,18 +145,22 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     setFilterType(null);
     applyFilters('search', null);
     handleFilterPopoverClose();
-    setFilterKey(null)
+    setFilterKey(null);
   };
 
   React.useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
     setProcedureData(procedureData);
   }, [procedureData]);
 
   React.useEffect(() => {
+    setLoader(true);
     dispatch(fetchProcedureData(queryStrings));
-    setTableHeaderVisible(false)
-    setRowId([])
-  }, [pageInfo,queryStrings]);
+    setTableHeaderVisible(false);
+    setRowId([]);
+  }, [pageInfo, queryStrings]);
   // console.log('procedureData',procedureData[0].departmentId.length);
 
   React.useEffect(() => {
@@ -366,12 +375,13 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
       dispatch(deleteProcedureData(ProcedureVal));
       toast(`Procedure deleted !`, {
         style: {
-          background: '#00bf70', color: '#fff'
-        }
+          background: '#00bf70',
+          color: '#fff',
+        },
       });
       // deleteSuccessPopupRef.current.open(true);
       // setTimeout(() => {
-        // deleteSuccessPopupRef.current.open(false);
+      // deleteSuccessPopupRef.current.open(false);
       // }, 3000);
       reload();
       setTableHeaderVisible(false);
@@ -412,7 +422,6 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     setQueryString(payload);
   };
 
-
   const applyFilters = (field: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = field;
@@ -428,17 +437,17 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
       <Box className="main-padding">
         <Box className="title-main">
           <Typography>Procedures</Typography>
-          <div className='buttonFilter'>
-          <Button
-            variant="contained"
-            onClick={() => {
-              formPopupRef.current.open(true);
-            }}
-          >
-            <AddIcon sx={{ mr: 1 }} />
-            Create Procedure
-          </Button>
-          <Box sx={{ position: 'relative' }}>
+          <div className="buttonFilter">
+            <Button
+              variant="contained"
+              onClick={() => {
+                formPopupRef.current.open(true);
+              }}
+            >
+              <AddIcon sx={{ mr: 1 }} />
+              Create Procedure
+            </Button>
+            <Box sx={{ position: 'relative' }}>
               <Button
                 // aria-describedby={id}
                 variant="contained"
@@ -449,10 +458,15 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                   padding: '0px',
                   justifyContent: 'center',
                 }}
-                className='filterButton'
+                className="filterButton"
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false} className="red-badge-filter">
+                <Badge
+                  color="secondary"
+                  variant={filterKey === null ? 'standard' : 'dot'}
+                  invisible={false}
+                  className="red-badge-filter"
+                >
                   <img
                     src={filterIcon}
                     alt="no_image"
@@ -499,7 +513,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                         Status
                       </Typography> */}
 
-                      {/* <Select
+                    {/* <Select
                         labelId="table-select-label"
                         id="table-select"
                         value={filterStatus}
@@ -538,7 +552,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
                           //   debugger;
-                            setFilterSearchValue(null);
+                          setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
                         }}
@@ -596,7 +610,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                             <DatePicker
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
-                              onChange={(event:any) =>
+                              onChange={(event: any) =>
                                 setFilterSearchValue(event.$d)
                               }
                             />
@@ -620,7 +634,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                               : () => <Placeholder>Select</Placeholder>
                           }
                         >
-                          {filterOptions.map((element:any, index) => (
+                          {filterOptions.map((element: any, index) => (
                             <MenuItem key={index} value={element.value}>
                               {element.label}
                             </MenuItem>
@@ -666,7 +680,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
                 </Box>
               </Popover>
             </Box>
-            </div>
+          </div>
         </Box>
 
         <TableFilters
@@ -688,206 +702,224 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
               <EnhancedTable columns={headers} />
             </Grid>
           </Grid> */}
-          <TableContainer className='tableHeight'>
+          <TableContainer className="tableHeight">
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
               // size={dense ? "small" : "medium"}
             >
               <TableHeader
-               numSelected={0}
-               onRequestSort={handleRequestSort}
-               onSelectAllClick={function (
-                 event: React.ChangeEvent<HTMLInputElement>,
-               ): void {
-                 throw new Error('Function not implemented.');
-               }}
-               order={'asc'}
-               orderBy={''}
-               rowCount={0}
-               columns={headers}
-               // filters={filters}
-               handleTableSorting={handleTableSorting}
+                numSelected={0}
+                onRequestSort={handleRequestSort}
+                onSelectAllClick={function (
+                  event: React.ChangeEvent<HTMLInputElement>,
+                ): void {
+                  throw new Error('Function not implemented.');
+                }}
+                order={'asc'}
+                orderBy={''}
+                rowCount={0}
+                columns={headers}
+                // filters={filters}
+                handleTableSorting={handleTableSorting}
               />
-              <TableBody>
-                {procedureData?.map((row: any, index: number) => {
-                  // const isItemSelected = isSelected(row.name);
-                  // const labelId = `enhanced-table-checkbox-${index}`;
+              {loader ? (
+                <TableBody>
+                  <TableSkeleton
+                    columns={headers}
+                    image={false}
+                    rows={queryStrings.perPage}
+                  />
+                </TableBody>
+              ) : (
+                <TableBody>
+                  {procedureData?.map((row: any, index: number) => {
+                    // const isItemSelected = isSelected(row.name);
+                    // const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    row.isDeleted !== true && (
-                      <TableRow
-                        hover
-                        // onClick={(event) => handleClick(event, row.name, index)}
-                        // aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={index}
-                        // selected={isItemSelected}
-                        sx={{ cursor: 'pointer' }}
-                        onClick={(e: any) =>
-                          // (e.target.name==undefined &&
-                          navigate(`/procedures/details/${row._id}`, {
-                            state: { props: row },
-                          })
-                        }
-                      >
-                        {headers[0].is_show && (
-                          <TableCell scope="row">
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Box sx={{ mt: 0, mr: 1 }}>
-                                <Checkbox
-                                  color="primary"
-                                  checked={
-                                    row.is_checked == true ? true : false
-                                  }
-                                  onClick={(e: any) => clickHandler(e)}
-                                  onChange={(event) => {
-                                    // Procedure.push(row._id)
-                                    (row.is_checked==true && setRowId([...rowId, row._id])),
-                                      handleChange(event, row._id);
-                                  }}
-                                />
-                              </Box>
+                    return (
+                      row.isDeleted !== true && (
+                        <TableRow
+                          hover
+                          // onClick={(event) => handleClick(event, row.name, index)}
+                          // aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={index}
+                          // selected={isItemSelected}
+                          sx={{ cursor: 'pointer' }}
+                          onClick={(e: any) =>
+                            // (e.target.name==undefined &&
+                            navigate(`/procedures/details/${row._id}`, {
+                              state: { props: row },
+                            })
+                          }
+                        >
+                          {headers[0].is_show && (
+                            <TableCell scope="row">
                               <Box
                                 sx={{ display: 'flex', alignItems: 'center' }}
                               >
-                                <Box>
-                                  <Box>{row.procedureNumber}</Box>
+                                <Box sx={{ mt: 0, mr: 1 }}>
+                                  <Checkbox
+                                    color="primary"
+                                    checked={
+                                      row.is_checked == true ? true : false
+                                    }
+                                    onClick={(e: any) => clickHandler(e)}
+                                    onChange={(event) => {
+                                      // Procedure.push(row._id)
+                                      row.is_checked == true &&
+                                        setRowId([...rowId, row._id]),
+                                        handleChange(event, row._id);
+                                    }}
+                                  />
+                                </Box>
+                                <Box
+                                  sx={{ display: 'flex', alignItems: 'center' }}
+                                >
+                                  <Box>
+                                    <Box>{row.procedureNumber}</Box>
+                                  </Box>
                                 </Box>
                               </Box>
-                            </Box>
-                          </TableCell>
-                        )}
+                            </TableCell>
+                          )}
 
-                        {console.log('procedureData', row.departmentId.length)}
-                        {headers[1].is_show && (
-                          <TableCell>
-                            <Box>{row.name}</Box>
-                          </TableCell>
-                        )}
-                        {headers[2].is_show && (
-                          <TableCell>
-                            {row.departmentId.length!==0 && row.departmentId[0] !== null ? (
-                              <Box
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                                onClick={(_event) => {
-                                  _event.preventDefault();
-                                  _event.stopPropagation();
-                                  tablePopupRef.current?.open(
-                                    true,
-                                    'departments',
-                                    row.departmentId,
-                                  );
-                                }}
-                              >
-                                <>
-                                  <Chip
-                                    key={index}
-                                    label={row.departmentId[0].name}
-                                    sx={{
-                                      m: 0.5,
-                                      padding: '0px 3px',
-                                    }}
-                                    onClick={(_event) => {
-                                      _event.preventDefault();
-                                      _event.stopPropagation();
-                                      tablePopupRef.current.open(
-                                        true,
-                                        'departments',
-                                        row.departmentId,
-                                      );
-                                    }}
-                                  />
-                                  {row.departmentId.length > 1 && (
-                                    <span
-                                      style={{
-                                        fontWeight: 500,
-                                        color: '#9F9F9F',
-                                        fontSize: '12px',
-                                        whiteSpace: 'nowrap',
+                          {console.log(
+                            'procedureData',
+                            row.departmentId.length,
+                          )}
+                          {headers[1].is_show && (
+                            <TableCell>
+                              <Box>{row.name}</Box>
+                            </TableCell>
+                          )}
+                          {headers[2].is_show && (
+                            <TableCell>
+                              {row.departmentId.length !== 0 &&
+                              row.departmentId[0] !== null ? (
+                                <Box
+                                  sx={{ display: 'flex', alignItems: 'center' }}
+                                  onClick={(_event) => {
+                                    _event.preventDefault();
+                                    _event.stopPropagation();
+                                    tablePopupRef.current?.open(
+                                      true,
+                                      'departments',
+                                      row.departmentId,
+                                    );
+                                  }}
+                                >
+                                  <>
+                                    <Chip
+                                      key={index}
+                                      label={row.departmentId[0].name}
+                                      sx={{
+                                        m: 0.5,
+                                        padding: '0px 3px',
                                       }}
-                                    >
-                                      +{row.departmentId.length - 1} More
-                                    </span>
-                                  )}
-                                </>
-                              </Box>
-                            ) : (
-                              '-'
-                            )}
-                          </TableCell>
-                        )}
-                        {headers[3].is_show && (
-                          <TableCell>
-                            {row.laboratoryId.length!==0 && row.laboratoryId[0] !== null ? (
-                              <Box
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                                onClick={(_event) => {
-                                  _event.preventDefault();
-                                  _event.stopPropagation();
-                                  tablePopupRef.current?.open(
-                                    true,
-                                    'lab',
-                                    row.laboratoryId,
-                                  );
-                                }}
-                              >
-                                <>
-                                  <Chip
-                                    key={index}
-                                    label={row.laboratoryId[0].name}
-                                    sx={{
-                                      m: 0.5,
-                                      padding: '0px 3px',
-                                    }}
-                                    onClick={(_event) => {
-                                      _event.preventDefault();
-                                      _event.stopPropagation();
-                                      tablePopupRef.current.open(
-                                        true,
-                                        'lab',
-                                        row.laboratoryId,
-                                      );
-                                    }}
-                                  />
-                                  {row.laboratoryId.length > 1 && (
-                                    <span
-                                      style={{
-                                        fontWeight: 500,
-                                        color: '#9F9F9F',
-                                        fontSize: '12px',
-                                        whiteSpace: 'nowrap',
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'departments',
+                                          row.departmentId,
+                                        );
                                       }}
-                                    >
-                                      +{row.laboratoryId.length - 1} More
-                                    </span>
-                                  )}
-                                </>
-                              </Box>
-                            ) : (
-                              <span style={{ textAlign: 'center' }}>-</span>
-                            )}
-                          </TableCell>
-                        )}
-                        {headers[4].is_show && (
-                          <TableCell>
-                            {moment(parseInt(row.createdAt)).format(
-                              'MM/DD/YYYY',
-                            )}
-                          </TableCell>
-                        )}
-                        {headers[5].is_show && (
-                          <TableCell>
-                            {moment(parseInt(row.createdAt)).format(
-                              'MM/DD/YYYY',
-                            )}
-                          </TableCell>
-                        )}
-                      </TableRow>
-                    )
-                  );
-                })}
-              </TableBody>
+                                    />
+                                    {row.departmentId.length > 1 && (
+                                      <span
+                                        style={{
+                                          fontWeight: 500,
+                                          color: '#9F9F9F',
+                                          fontSize: '12px',
+                                          whiteSpace: 'nowrap',
+                                        }}
+                                      >
+                                        +{row.departmentId.length - 1} More
+                                      </span>
+                                    )}
+                                  </>
+                                </Box>
+                              ) : (
+                                '-'
+                              )}
+                            </TableCell>
+                          )}
+                          {headers[3].is_show && (
+                            <TableCell>
+                              {row.laboratoryId.length !== 0 &&
+                              row.laboratoryId[0] !== null ? (
+                                <Box
+                                  sx={{ display: 'flex', alignItems: 'center' }}
+                                  onClick={(_event) => {
+                                    _event.preventDefault();
+                                    _event.stopPropagation();
+                                    tablePopupRef.current?.open(
+                                      true,
+                                      'lab',
+                                      row.laboratoryId,
+                                    );
+                                  }}
+                                >
+                                  <>
+                                    <Chip
+                                      key={index}
+                                      label={row.laboratoryId[0].name}
+                                      sx={{
+                                        m: 0.5,
+                                        padding: '0px 3px',
+                                      }}
+                                      onClick={(_event) => {
+                                        _event.preventDefault();
+                                        _event.stopPropagation();
+                                        tablePopupRef.current.open(
+                                          true,
+                                          'lab',
+                                          row.laboratoryId,
+                                        );
+                                      }}
+                                    />
+                                    {row.laboratoryId.length > 1 && (
+                                      <span
+                                        style={{
+                                          fontWeight: 500,
+                                          color: '#9F9F9F',
+                                          fontSize: '12px',
+                                          whiteSpace: 'nowrap',
+                                        }}
+                                      >
+                                        +{row.laboratoryId.length - 1} More
+                                      </span>
+                                    )}
+                                  </>
+                                </Box>
+                              ) : (
+                                <span style={{ textAlign: 'center' }}>-</span>
+                              )}
+                            </TableCell>
+                          )}
+                          {headers[4].is_show && (
+                            <TableCell>
+                              {moment(parseInt(row.createdAt)).format(
+                                'MM/DD/YYYY',
+                              )}
+                            </TableCell>
+                          )}
+                          {headers[5].is_show && (
+                            <TableCell>
+                              {moment(parseInt(row.createdAt)).format(
+                                'MM/DD/YYYY',
+                              )}
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      )
+                    );
+                  })}
+                </TableBody>
+              )}
             </Table>
           </TableContainer>
           <TablePagination

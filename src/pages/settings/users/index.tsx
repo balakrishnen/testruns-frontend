@@ -1,10 +1,13 @@
 import React from 'react';
 import {
+  Badge,
   Box,
   Button,
   Checkbox,
   MenuItem,
+  Popover,
   Select,
+  TextField,
   Typography,
 } from '@mui/material';
 import Table from '@mui/material/Table';
@@ -24,10 +27,7 @@ import DeletePopup from '../../../components/DeletePopup';
 import UserForm from './UserForm';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
 import SuccessPopup from '../../../components/SuccessPopup';
-import {
-  fetchUserData,
-  deleteUserData
-} from '../../../api/userAPI';
+import { fetchUserData, deleteUserData } from '../../../api/userAPI';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -36,7 +36,13 @@ import {
   handledAllSelected,
 } from '../../../utils/common-services';
 import moment from 'moment';
+import TableSkeleton from '../../../components/table/TableSkeleton';
 // table start
+import filterIcon from '../../../assets/images/filter-icon1.svg';
+import CloseIcon from '@mui/icons-material/Close';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import user from '../../../assets/images/profile/profile.svg';
 
 const users: UserRowData[] = UserRows;
 const userStatus = StatusList;
@@ -51,7 +57,7 @@ const Users = () => {
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
   const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
-  const handleRequestSort = () => { };
+  const handleRequestSort = () => {};
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
@@ -61,9 +67,25 @@ const Users = () => {
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+  const [userData, setUserData] = React.useState<any>([]);
+  const [loader, setLoader] = React.useState(false);
+  const [filterOptions, setFilterOptions] = React.useState([]);
+  const [filterStatus, setFilterStatus] = React.useState(null);
+  const [filterSearchBy, setFilterSearchBy] = React.useState(null);
+  const [filterSearchValue, setFilterSearchValue] = React.useState(null);
+  const [filterFieldName, setFilterFieldName] = React.useState('');
+  const [filterType, setFilterType] = React.useState(null);
+  const [filterAvailability, setFilterAvailability] = React.useState(null);
+  const [filterKey, setFilterKey] = React.useState(null);
+
+  const [columnAnchorEl, setColumnAnchorEl] =
+    React.useState<null | HTMLElement>(null);
+  const [filterPopoverEl, setFilterPopoverEl] =
+    React.useState<null | HTMLElement>(null);
+  const filterAnchorOpen = Boolean(filterPopoverEl);
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
-    perPage: 5,
+    perPage: 10,
     searchBy: null,
     search: null,
     sortBy: null,
@@ -78,6 +100,19 @@ const Users = () => {
   const userSliceData = useSelector(
     (state: any) => state.user.data?.get_all_users,
   );
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
+    setUserData(userData);
+  }, [userData]);
+
+  React.useEffect(() => {
+    setLoader(true);
+    dispatch(fetchUserData(queryStrings));
+  }, [pageInfo, queryStrings]);
+
   React.useEffect(() => {
     const page: any = { ...pageInfo };
     page['currentPage'] = userSliceData?.pageInfo.currentPage;
@@ -85,8 +120,8 @@ const Users = () => {
     page['hasNextPage'] = userSliceData?.pageInfo.hasNextPage;
     page['hasPreviousPage'] = userSliceData?.pageInfo.hasPreviousPage;
     page['totalCount'] = userSliceData?.pageInfo.totalCount;
+    setUserData(userSliceData?.Identity);
     setPageInfo(page);
-    setSelectedRows(userSliceData?.Identity);
   }, [userSliceData]);
   const Data = Rows.slice(startIndex, endIndex);
   const [rowId, setRowId] = React.useState<any>([]);
@@ -104,8 +139,8 @@ const Users = () => {
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
-      Rows,
-      setSelectedRows,
+      userData,
+      setUserData,
       setIsDeselectAllChecked,
       setIsselectAllChecked,
       setTableHeaderVisible,
@@ -115,33 +150,33 @@ const Users = () => {
 
   const handleDeChange = handleDeCheckboxChange(
     isDeselectAllChecked,
-    Rows,
-    setSelectedRows,
+    userData,
+    setUserData,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setTableHeaderVisible,
     setVisibleRow,
-    setRowId,
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
-    Rows,
-    setSelectedRows,
+    userData,
+    setUserData,
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
     setRowId,
   );
 
-  React.useEffect(() => {
-    dispatch(fetchUserData(queryStrings));
-  }, [queryStrings]);
-
-  React.useEffect(() => {
-    setSelectedRows(Rows);
-  }, [Rows]);
-
-  const handleTableSorting = () => { };
+  const handleTableSorting = (_event: any, _data: any, _index: any) => {
+    const payload: any = { ...queryStrings };
+    const headersList: any = [...headers];
+    payload['sortBy'] = headersList[_index].id;
+    payload['sortOrder'] = headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    headersList[_index].sort =
+      headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    setHeaders(headersList);
+    setQueryString(payload);
+  };
 
   const handleMenuCheckboxChange = (e: any, index: any) => {
     setHeaders((prevColumns: any) => {
@@ -157,13 +192,11 @@ const Users = () => {
   const reload = () => {
     const payload: any = {
       page: 1,
-      perPage: 5,
+      perPage: 10,
       sortOrder: 'desc',
     };
-    setQueryString(payload)
     dispatch(fetchUserData(queryStrings));
   };
-
 
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
@@ -200,8 +233,8 @@ const Users = () => {
   const assetVal: any = { _id: rowId };
 
   const handleDeleteConfirmation = (state: any) => {
-    dispatch(deleteUserData(assetVal))
-    reload()
+    dispatch(deleteUserData(assetVal));
+    reload();
     setTableHeaderVisible(false);
     // if (state === 1) {
     //   deletePopupRef.current.open(false);
@@ -214,10 +247,10 @@ const Users = () => {
   };
 
   const applyFilters = (field: any, value: any) => {
-    // const payload: any = { ...queryStrings };
-    // payload['searchBy'] = field;
-    // payload['search'] = value;
-    // setQueryString(payload);
+    const payload: any = { ...queryStrings };
+    payload['searchBy'] = field;
+    payload['search'] = value;
+    setQueryString(payload);
   };
   const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
@@ -228,8 +261,36 @@ const Users = () => {
   const organizationSliceData = useSelector(
     (state: any) => state.organization.data?.get_all_organisations,
   );
-  console.log(roleSliceData?.find(obj => obj._id == "6548eabeaeb1160012a51125"))
-  
+  console.log(
+    roleSliceData?.find((obj) => obj._id == '6548eabeaeb1160012a51125'),
+  );
+
+  const handleFilterPopoverClose = () => {
+    setFilterPopoverEl(null);
+  };
+
+  const handleFilterPopoverClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setFilterPopoverEl(event.currentTarget);
+  };
+
+  const handleClearFilter = () => {
+    setFilterStatus(null);
+    setFilterAvailability(null);
+    setFilterSearchBy(null);
+    setFilterSearchValue(null);
+    setFilterOptions([]);
+    setFilterType(null);
+    applyFilters('search', null);
+    handleFilterPopoverClose();
+    setFilterKey(null);
+  };
+
+  const Placeholder = ({ children }: any) => {
+    return <div>{children}</div>;
+  };
+
   // table end
   return (
     <Box
@@ -246,17 +307,252 @@ const Users = () => {
             Create, edit and delete users.
           </Typography>
         </Box>
-        <Button
-          style={{ marginBottom: '8px', marginTop: '16px' }}
-          type="submit"
-          variant="contained"
-          onClick={() => {
-            formPopupRef.current.open(true, 'create', {});
-          }}
-        >
-          <AddIcon sx={{ mr: 1 }} />
-          Create User
-        </Button>
+        <div className="buttonFilter">
+          <Button
+            style={{ marginBottom: '8px', marginTop: '16px' }}
+            type="submit"
+            variant="contained"
+            onClick={() => {
+              formPopupRef.current.open(true, 'create', {});
+            }}
+          >
+            <AddIcon sx={{ mr: 1 }} />
+            Create User
+          </Button>
+          <Box sx={{ position: 'relative' }}>
+            <Button
+              // aria-describedby={id}
+              variant="contained"
+              onClick={handleFilterPopoverClick}
+              style={{
+                boxShadow: 'none',
+                backgroundColor: 'white',
+                padding: '0px',
+                justifyContent: 'center',
+              }}
+              className="filterButton"
+            >
+              {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
+              <Badge
+                color="secondary"
+                variant={filterKey === null ? 'standard' : 'dot'}
+                invisible={false}
+                className="red-badge-filter"
+              >
+                <img
+                  src={filterIcon}
+                  alt="no_image"
+                  style={{
+                    width: '25px',
+                    height: '25px',
+                    opacity: 0.9,
+                    cursor: 'pointer',
+                  }}
+                />
+              </Badge>
+            </Button>
+            <Popover
+              className="filter-dropdown"
+              open={filterAnchorOpen}
+              anchorEl={filterPopoverEl}
+              onClose={handleFilterPopoverClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            >
+              <Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    borderBottom: '1px solid #d0d0d0',
+                    alignContent: 'center',
+                    padding: '1rem',
+                  }}
+                >
+                  <Typography fontWeight={600} variant="body1">
+                    Filters
+                  </Typography>
+                  <CloseIcon
+                    sx={{ cursor: 'pointer' }}
+                    onClick={handleFilterPopoverClose}
+                  />
+                </Box>
+                <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
+                  <Box sx={{ my: 1 }}>
+                    <Typography variant="body2" paddingY={1}>
+                      Status
+                    </Typography>
+
+                    <Select
+                      labelId="table-select-label"
+                      id="table-select"
+                      value={filterStatus}
+                      displayEmpty
+                      fullWidth
+                      size="small"
+                      IconComponent={ExpandMoreOutlinedIcon}
+                      onChange={(event: any) =>
+                        setFilterStatus(event.target.value)
+                      }
+                      renderValue={
+                        filterStatus !== null
+                          ? undefined
+                          : () => <Placeholder>Select Status</Placeholder>
+                      }
+                    >
+                      {userStatus?.map((element: any) => (
+                        <MenuItem value={element.value} key={element.value}>
+                          {element.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Box>
+                  <Box sx={{ my: 1 }}>
+                    <Typography variant="body2" paddingY={1}>
+                      Search by
+                    </Typography>
+
+                    <Select
+                      labelId="table-select-label"
+                      id="table-select"
+                      value={filterSearchBy}
+                      size="small"
+                      fullWidth
+                      displayEmpty
+                      IconComponent={ExpandMoreOutlinedIcon}
+                      onChange={(event: any, data: any) => {
+                        //   debugger;
+                        setFilterSearchValue(null);
+                        setFilterSearchBy(event.target?.value);
+                        setFilterFieldName(data.props.children);
+                      }}
+                      renderValue={
+                        filterSearchBy !== null
+                          ? undefined
+                          : () => <Placeholder>Search by</Placeholder>
+                      }
+                    >
+                      {headers.map((element: any) => (
+                        <MenuItem
+                          value={element.id}
+                          key={element.id}
+                          onClick={() => {
+                            setFilterType(element.type);
+                            setFilterOptions(element.filters[0]?.options);
+                            setFilterKey(element.id);
+                          }}
+                        >
+                          {element.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Box>
+                  <Box sx={{ my: 1 }}>
+                    {filterType !== null && (
+                      <Typography variant="body2" paddingY={1}>
+                        {filterType === 'text'
+                          ? 'Search'
+                          : filterType === 'date'
+                          ? `Date ${filterFieldName}`
+                          : `Select ${filterFieldName}`}
+                      </Typography>
+                    )}
+
+                    {filterType === null ? null : filterType === 'text' ? (
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="Search"
+                        id="Search"
+                        style={{ margin: '0px' }}
+                        InputLabelProps={{ shrink: false }}
+                        placeholder="Search"
+                        size="small"
+                        value={filterSearchValue}
+                        onChange={(event: any) =>
+                          setFilterSearchValue(event.target.value)
+                        }
+                      />
+                    ) : filterType === 'date' ? (
+                      <Box id="filterDatePicker">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            format="DD/MM/YYYY"
+                            value={filterSearchValue}
+                            onChange={(event: any) =>
+                              setFilterSearchValue(event.$d)
+                            }
+                          />
+                        </LocalizationProvider>
+                      </Box>
+                    ) : (
+                      <Select
+                        value={filterSearchValue}
+                        labelId="table-select-label2"
+                        id="table-select2"
+                        size="small"
+                        fullWidth
+                        displayEmpty
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        onChange={(event: any) =>
+                          setFilterSearchValue(event.target?.value)
+                        }
+                        renderValue={
+                          filterSearchValue !== null
+                            ? undefined
+                            : () => <Placeholder>Select</Placeholder>
+                        }
+                      >
+                        {filterOptions.map((element: any, index) => (
+                          <MenuItem key={index} value={element.value}>
+                            {element.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    borderTop: '1px solid #d0d0d0',
+                    alignContent: 'center',
+                    padding: '1rem',
+                  }}
+                >
+                  <Button
+                    style={{
+                      border: '1px solid #d3d3d3',
+                      color: '#181818',
+                      textTransform: 'capitalize',
+                    }}
+                    onClick={handleClearFilter}
+                  >
+                    Clear
+                  </Button>
+                  <Button
+                    style={{
+                      border: '1px solid #d3d3d3',
+                      background: '#FFC60B',
+                      color: '#181818',
+                      textTransform: 'capitalize',
+                    }}
+                    onClick={() => {
+                      handleFilterPopoverClose();
+                      applyFilters(filterKey, filterSearchValue);
+                    }}
+                  >
+                    Show results
+                  </Button>
+                </Box>
+              </Box>
+            </Popover>
+          </Box>
+        </div>
       </Box>
       <TableFilters
         columns={headers}
@@ -274,8 +570,13 @@ const Users = () => {
       />
 
       <Box className="table-outer" sx={{ width: '100%' }}>
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+        <TableContainer className="userTableHeight">
+          <Table
+            sx={{ minWidth: 750 }}
+            aria-labelledby="tableTitle"
+            size="medium"
+            stickyHeader
+          >
             <TableHeader
               numSelected={0}
               onRequestSort={handleRequestSort}
@@ -290,92 +591,121 @@ const Users = () => {
               columns={headers}
               handleTableSorting={handleTableSorting}
             />
-            <TableBody>
-              {userSliceData?.Identity && userSliceData.Identity.map((row: any, index: number) => {
-                return (
-                  <TableRow
-                    hover
-                    // onClick={(event) => handleClick(event, row.name)}
-                    // aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={index}
-                    // selected={isItemSelected}
-                    sx={{ cursor: 'pointer' }}
-                    onClick={(e: any) =>
-                      formPopupRef.current.open(true, 'edit', row)
-                    }
-                  >
-                    {headers[0].is_show && (
-                      <TableCell scope="row">
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Box sx={{ mt: 0, mr: 1 }}>
-                          <Checkbox
-                                  color="primary"
-                                  checked={
-                                    row.is_checked == true ? true : false
-                                  }
-                                  onClick={(e: any) => clickHandler(e)}
-                                  onChange={(event) => {
-                                    (row.is_checked==true && setRowId([...rowId, row._id])),
-                                      handleChange(event, row._id);
-                                  }}
-                                />
-                          </Box>
-
+            {loader ? (
+              <TableBody>
+                <TableSkeleton
+                  columns={headers}
+                  image={true}
+                  rows={queryStrings.perPage}
+                />
+              </TableBody>
+            ) : (
+              <TableBody>
+                {userData?.map((row: any, index: number) => {
+                  return (
+                    <TableRow
+                      hover
+                      // onClick={(event) => handleClick(event, row.name)}
+                      // aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={index}
+                      // selected={isItemSelected}
+                      sx={{ cursor: 'pointer' }}
+                      onClick={(e: any) =>
+                        formPopupRef.current.open(true, 'edit', row)
+                      }
+                    >
+                      {headers[0].is_show && (
+                        <TableCell scope="row">
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box sx={{ ml: 2 }}>
-                              <Box>{row._id}</Box>
+                            <Box sx={{ mt: 0, mr: 1 }}>
+                              <Checkbox
+                                color="primary"
+                                checked={row.is_checked == true ? true : false}
+                                onClick={(e: any) => clickHandler(e)}
+                                onChange={(event) => {
+                                  row.is_checked == true &&
+                                    setRowId([...rowId, row._id]),
+                                    handleChange(event, row._id);
+                                }}
+                              />
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Box>
+                                <img
+                                  src={user}
+                                  alt="no_image"
+                                  style={{ width: '45px', height: '45px' }}
+                                />
+                              </Box>
+                              <Box sx={{ ml: 1 }}>
+                                <Box sx={{textTransform: 'uppercase'}}>user{row._id.substring(0, 5)}</Box>
+                              </Box>
                             </Box>
                           </Box>
-                        </Box>
-                      </TableCell>
-                    )}
-                    {headers[1].is_show && (
-                      <TableCell align="center">{row.firstName} {row.lastName}</TableCell>
-                    )}
-                    {/* {headers[2].is_show && (
+                        </TableCell>
+                      )}
+                      {headers[1].is_show && (
+                        <TableCell align="center">
+                          {row.firstName} {row.lastName}
+                        </TableCell>
+                      )}
+                      {/* {headers[2].is_show && (
                       <TableCell align="center">
                         {row.providerDetails==null?"-":row.providerDetails}
                       </TableCell>
                     )} */}
-                    {headers[2].is_show && (
-                      
-                      <TableCell align="center">{organizationSliceData?.find(obj => obj._id == row.organisationId)?.name}</TableCell>
-                    )}
-                    {headers[3].is_show && (
-                      <TableCell align="center">
-                      {moment(parseInt(row.createdAt)).format(
-                        'MM/DD/YYYY',
-                      )}
-                    </TableCell>
-                    )}
-                    {headers[4].is_show && (
-                      <TableCell align="center">{roleSliceData?.find(obj => obj._id == row.role)?.name}</TableCell>
-                    )}
-                    {headers[5].is_show && (
-                      <TableCell>
-                        <Select
-                          className={
-                            row.status !== 'Active'
-                              ? 'active-select td-select'
-                              : 'inactive-select td-select'
+                      {headers[2].is_show && (
+                        <TableCell align="center">
+                          {
+                            organizationSliceData?.find(
+                              (obj) => obj._id == row.organisationId,
+                            )?.name
                           }
-                          value={"Active"}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                        >
-                          {userStatus.map((element) => (
-                            <MenuItem value={element.value} key={element.value}>
-                              {element.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+                        </TableCell>
+                      )}
+                      {headers[3].is_show && (
+                        <TableCell align="center">
+                          {moment(parseInt(row.createdAt)).format('MM/DD/YYYY')}
+                        </TableCell>
+                      )}
+                      {headers[4].is_show && (
+                        <TableCell align="center">
+                          {
+                            roleSliceData?.find((obj) => obj._id == row.role)
+                              ?.name
+                          }
+                        </TableCell>
+                      )}
+                      {headers[5].is_show && (
+                        <TableCell>
+                          <Select
+                            className={
+                              row.status !== 'Active'
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
+                            }
+                            value={'Active'}
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                          >
+                            {userStatus.map((element) => (
+                              <MenuItem
+                                value={element.value}
+                                key={element.value}
+                              >
+                                {element.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            )}
           </Table>
         </TableContainer>
         <TablePagination

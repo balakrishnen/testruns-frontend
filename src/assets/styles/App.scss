@@ -977,6 +977,11 @@ fieldset.MuiOutlinedInput-notchedOutline {
   .tableHeight{
     height: calc(100vh - 30vh);
   }
+
+  .userTableHeight {
+    height: calc(100vh - 35vh);
+  }
+
   thead {
     background: $light-yellow-1;
     padding: 10px;

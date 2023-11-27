@@ -99,7 +99,7 @@ export default function Runs() {
   const [filterType, setFilterType] = React.useState(null);
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterOptions, setFilterOptions] = React.useState([]);
-  const [loader, setLoader] = React.useState(true);
+  const [loader, setLoader] = React.useState(false);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -153,10 +153,14 @@ export default function Runs() {
     setFilterKey(null);
   };
   React.useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
     setRunsData(runsData);
   }, [runsData]);
 
   React.useEffect(() => {
+    setLoader(true);
     dispatch(fetchRunsData(queryStrings));
     setTableHeaderVisible(false);
     setRowId([]);
@@ -172,9 +176,6 @@ export default function Runs() {
     page['totalCount'] = runsSliceData?.pageInfo.totalCount;
     setRunsData(runsSliceData?.Runs);
     setPageInfo(page);
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
   }, [runsSliceData]);
 
   const handlePageChange = (even: any, page_no: number) => {
@@ -655,7 +656,7 @@ export default function Runs() {
                 }}
                 order={'asc'}
                 orderBy={''}
-                rowCount={20}
+                rowCount={0}
                 columns={headers}
                 filters={filters}
                 handleTableSorting={handleTableSorting}
