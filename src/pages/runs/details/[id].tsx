@@ -219,10 +219,14 @@ export default function RunsDetails() {
   const runsPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
+  const [userProcedure, setuserProcedure] = React.useState(editorData);
   const runsStatus = RunsStatusList;
   const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
 
+  React.useEffect(() => {
+    console.log('userProcedure', userProcedure);
+  });
   const handleInputChange = (id: any, column: any) => {
     const value = inputRefs.current[id]?.[column]?.value;
     console.log(`Input ${id}, Column ${column}: ${value}`);
@@ -344,7 +348,6 @@ export default function RunsDetails() {
       },
     },
   ]);
-
 
   const location: any = useLocation();
   const runzValue = location.state?.props;
@@ -637,8 +640,8 @@ export default function RunsDetails() {
   };
 
   const handleChartChange = (event: any) => {
-    setSelectedChart(event.target.value)
-  }
+    setSelectedChart(event.target.value);
+  };
 
   return (
     <PrivateRoute>
@@ -1000,7 +1003,7 @@ export default function RunsDetails() {
             </Box>
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
-                <div dangerouslySetInnerHTML={{ __html: editorData }} />
+                <div dangerouslySetInnerHTML={{ __html: userProcedure }} />
                 <button onClick={() => handleInputChange('graph1x11', '1')}>
                   Get Value
                 </button>
@@ -1045,7 +1048,7 @@ export default function RunsDetails() {
                     </FormControl>
                   </Box>
                   {selectedChart === 'Table_Chart' ? (
-                   <TableChart />
+                    <TableChart />
                   ) : selectedChart === 'Realtime_Chart' ? (
                     <RealtimeChart />
                   ) : (
@@ -1059,7 +1062,76 @@ export default function RunsDetails() {
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   init={{
                     height: 500,
-                    menubar: false,
+                    menubar: true,
+                    selector: 'textarea',
+                    plugins: [
+                      'advlist',
+                      'autolink',
+                      'lists',
+                      'link',
+                      'image',
+                      'charmap',
+                      'preview',
+                      'anchor',
+                      'searchreplace',
+                      'visualblocks',
+                      'code',
+                      'fullscreen',
+                      'insertdatetime',
+                      'media',
+                      'table',
+                      'code',
+                      'help',
+                      'wordcount',
+                      'image',
+                      'insertdatetime',
+                      'template',
+                      'insertinput customInsertButton customAlertButton',
+                    ],
+                    toolbar:
+                      'undo redo | blocks formatselect | ' +
+                      'bold italic | alignleft aligncenter ' +
+                      'alignright alignjustify | bullist numlist outdent indent | ' +
+                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                    image_advtab: true,
+                    image_title: true,
+                    automatic_uploads: true,
+                    file_picker_types: 'image',
+                    setup: function (editor) {
+                      editor.ui.registry.addButton('customInsertButton', {
+                        icon: 'edit-block',
+                        tooltip: 'Insert Input Element',
+                        onAction: function (_) {
+                          // const value = nanoid(7);
+                          editor.insertContent(
+                            `&nbsp;<input type='text' >&nbsp;`,
+                          );
+                        },
+                      });
+                      editor.ui.registry.addButton('customAlertButton', {
+                        icon: 'temporary-placeholder', // Use the built-in alert icon
+                        // tooltip: 'Custom Alert',
+                        onAction: function (_) {
+                          const userInput = window.prompt(
+                            'Enter data key attribute',
+                          );
+                          console.log(userInput);
+                        },
+                      });
+                    },
+                    content_style:
+                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  }}
+                />
+              </CustomTabPanel>
+
+              <CustomTabPanel value={value} index={3}>
+                <Editor
+                  apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  init={{
+                    height: 500,
+                    menubar: true,
                     selector: 'textarea',
                     plugins: [
                       'advlist',
@@ -1084,35 +1156,40 @@ export default function RunsDetails() {
                       'insertdatetime',
                       'template',
                       'insertinput',
+                      'customInsertButton',
+                      'customAlertButton',
                     ],
                     toolbar:
                       'undo redo | blocks formatselect | ' +
                       'bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'help |image code table insertdatetime template insertinput',
-                    content_style:
-                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                  }}
-                />
-              </CustomTabPanel>
-
-              <CustomTabPanel value={value} index={3}>
-                <Editor
-                  apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
-                  onInit={(evt, editor) => (editorRef.current = editor)}
-                  init={{
-                    height: 400,
-                    menubar: false,
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help wordcount',
-                    ],
-                    toolbar:
-                      'undo redo | formatselect | ' +
-                      'bold italic backcolor | alignleft aligncenter ' +
-                      'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'removeformat | help',
+                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                    image_advtab: true,
+                    image_title: true,
+                    automatic_uploads: true,
+                    file_picker_types: 'image',
+                    setup: function (editor) {
+                      editor.ui.registry.addButton('customInsertButton', {
+                        icon: 'edit-block',
+                        tooltip: 'Insert Input Element',
+                        onAction: function (_) {
+                          // const value = nanoid(7);
+                          editor.insertContent(
+                            `&nbsp;<input type='text' >&nbsp;`,
+                          );
+                        },
+                      });
+                      editor.ui.registry.addButton('customAlertButton', {
+                        icon: 'temporary-placeholder', // Use the built-in alert icon
+                        // tooltip: 'Custom Alert',
+                        onAction: function (_) {
+                          const userInput = window.prompt(
+                            'Enter data key attribute',
+                          );
+                          console.log(userInput);
+                        },
+                      });
+                    },
                     content_style:
                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                   }}

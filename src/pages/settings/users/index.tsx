@@ -24,12 +24,18 @@ import DeletePopup from '../../../components/DeletePopup';
 import UserForm from './UserForm';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
 import SuccessPopup from '../../../components/SuccessPopup';
+import {
+  fetchUserData,
+  deleteUserData
+} from '../../../api/userAPI';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   handleCheckboxChange,
   handleDeCheckboxChange,
   handledAllSelected,
 } from '../../../utils/common-services';
+import moment from 'moment';
 // table start
 
 const users: UserRowData[] = UserRows;
@@ -37,6 +43,7 @@ const userStatus = StatusList;
 
 // table end
 const Users = () => {
+  const dispatch: any = useDispatch();
   // const [openDlg1Dialog, setDialog1Open] = React.useState(false);
   const [headers, setHeaders] = React.useState(UserHeaders);
   // const [deletePopup, setDeletePopup] = React.useState(false);
@@ -44,7 +51,7 @@ const Users = () => {
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
   const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
-  const handleRequestSort = () => {};
+  const handleRequestSort = () => { };
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
@@ -54,11 +61,44 @@ const Users = () => {
   const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-
+  const [queryStrings, setQueryString] = React.useState({
+    page: 1,
+    perPage: 5,
+    searchBy: null,
+    search: null,
+    sortBy: null,
+    sortOrder: 'desc',
+  });
+  const [pageInfo, setPageInfo] = React.useState({
+    currentPage: 1,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
+  const userSliceData = useSelector(
+    (state: any) => state.user.data?.get_all_users,
+  );
+  React.useEffect(() => {
+    const page: any = { ...pageInfo };
+    page['currentPage'] = userSliceData?.pageInfo.currentPage;
+    page['totalPages'] = userSliceData?.pageInfo.totalPages;
+    page['hasNextPage'] = userSliceData?.pageInfo.hasNextPage;
+    page['hasPreviousPage'] = userSliceData?.pageInfo.hasPreviousPage;
+    page['totalCount'] = userSliceData?.pageInfo.totalCount;
+    setPageInfo(page);
+    setSelectedRows(userSliceData?.Identity);
+  }, [userSliceData]);
   const Data = Rows.slice(startIndex, endIndex);
+  const [rowId, setRowId] = React.useState<any>([]);
 
-  const handlePageChange = (even: any, page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (even: any, page_no: number) => {
+    const payload: any = { ...queryStrings };
+    const page: any = { ...pageInfo };
+    payload['page'] = page_no;
+    page['currentPage'] = page_no;
+    setPageInfo(page);
+    setQueryString(payload);
+    setCurrentPage(page_no);
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data);
 
@@ -81,6 +121,7 @@ const Users = () => {
     setIsselectAllChecked,
     setTableHeaderVisible,
     setVisibleRow,
+    setRowId,
   );
   const handledAllchange = handledAllSelected(
     isselectAllChecked,
@@ -89,9 +130,18 @@ const Users = () => {
     setIsDeselectAllChecked,
     setIsselectAllChecked,
     setVisibleRow,
+    setRowId,
   );
 
-  const handleTableSorting = () => {};
+  React.useEffect(() => {
+    dispatch(fetchUserData(queryStrings));
+  }, [queryStrings]);
+
+  React.useEffect(() => {
+    setSelectedRows(Rows);
+  }, [Rows]);
+
+  const handleTableSorting = () => { };
 
   const handleMenuCheckboxChange = (e: any, index: any) => {
     setHeaders((prevColumns: any) => {
@@ -104,13 +154,23 @@ const Users = () => {
     });
   };
 
+  const reload = () => {
+    const payload: any = {
+      page: 1,
+      perPage: 5,
+      sortOrder: 'desc',
+    };
+    setQueryString(payload)
+    dispatch(fetchUserData(queryStrings));
+  };
+
+
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
     const updatedRows = Rows.map((row: any) => ({
       ...row,
       is_checked: false,
     }));
-
     setSelectedRows(updatedRows);
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
@@ -137,11 +197,15 @@ const Users = () => {
     }
     confirmationPopupRef.current.open(false);
   };
+  const assetVal: any = { _id: rowId };
 
   const handleDeleteConfirmation = (state: any) => {
-    if (state === 1) {
-      deletePopupRef.current.open(false);
-    }
+    dispatch(deleteUserData(assetVal))
+    reload()
+    setTableHeaderVisible(false);
+    // if (state === 1) {
+    //   deletePopupRef.current.open(false);
+    // }
     deletePopupRef.current.open(false);
   };
 
@@ -155,7 +219,17 @@ const Users = () => {
     // payload['search'] = value;
     // setQueryString(payload);
   };
-
+  const clickHandler = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
+  const roleSliceData = useSelector(
+    (state: any) => state.role.data?.get_all_roles,
+  );
+  const organizationSliceData = useSelector(
+    (state: any) => state.organization.data?.get_all_organisations,
+  );
+  console.log(roleSliceData?.find(obj => obj._id == "6548eabeaeb1160012a51125"))
+  
   // table end
   return (
     <Box
@@ -177,7 +251,7 @@ const Users = () => {
           type="submit"
           variant="contained"
           onClick={() => {
-            formPopupRef.current.open(true, 'create');
+            formPopupRef.current.open(true, 'create', {});
           }}
         >
           <AddIcon sx={{ mr: 1 }} />
@@ -217,7 +291,7 @@ const Users = () => {
               handleTableSorting={handleTableSorting}
             />
             <TableBody>
-              {Data.map((row, index) => {
+              {userSliceData?.Identity && userSliceData.Identity.map((row: any, index: number) => {
                 return (
                   <TableRow
                     hover
@@ -228,48 +302,57 @@ const Users = () => {
                     // selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                     onClick={(e: any) =>
-                      formPopupRef.current.open(true, 'edit')
+                      formPopupRef.current.open(true, 'edit', row)
                     }
                   >
                     {headers[0].is_show && (
                       <TableCell scope="row">
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Box sx={{ mt: 0, mr: 1 }}>
-                            <Checkbox
-                              // checked={row.is_checked}
-                              color="info"
-                              disableRipple
-                              checked={row.is_checked}
-                              onChange={(event) => handleChange(event, row.id)}
-                            />
+                          <Checkbox
+                                  color="primary"
+                                  checked={
+                                    row.is_checked == true ? true : false
+                                  }
+                                  onClick={(e: any) => clickHandler(e)}
+                                  onChange={(event) => {
+                                    (row.is_checked==true && setRowId([...rowId, row._id])),
+                                      handleChange(event, row._id);
+                                  }}
+                                />
                           </Box>
 
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box sx={{ ml: 2 }}>
-                              <Box>{row.id}</Box>
+                              <Box>{row._id}</Box>
                             </Box>
                           </Box>
                         </Box>
                       </TableCell>
                     )}
                     {headers[1].is_show && (
-                      <TableCell align="center">{row.firstName}</TableCell>
+                      <TableCell align="center">{row.firstName} {row.lastName}</TableCell>
                     )}
-                    {headers[2].is_show && (
+                    {/* {headers[2].is_show && (
                       <TableCell align="center">
-                        {row.providerDetails}
+                        {row.providerDetails==null?"-":row.providerDetails}
                       </TableCell>
+                    )} */}
+                    {headers[2].is_show && (
+                      
+                      <TableCell align="center">{organizationSliceData?.find(obj => obj._id == row.organisationId)?.name}</TableCell>
                     )}
                     {headers[3].is_show && (
-                      <TableCell align="center">{row.extraData}</TableCell>
+                      <TableCell align="center">
+                      {moment(parseInt(row.createdAt)).format(
+                        'MM/DD/YYYY',
+                      )}
+                    </TableCell>
                     )}
                     {headers[4].is_show && (
-                      <TableCell align="center">{row.organisationId}</TableCell>
+                      <TableCell align="center">{roleSliceData?.find(obj => obj._id == row.role)?.name}</TableCell>
                     )}
                     {headers[5].is_show && (
-                      <TableCell align="center">{row.roleId}</TableCell>
-                    )}
-                    {headers[6].is_show && (
                       <TableCell>
                         <Select
                           className={
@@ -297,24 +380,28 @@ const Users = () => {
         </TableContainer>
         <TablePagination
           currentPage={currentPage}
-          totalPages={totalPages}
+          perPage={queryStrings.perPage}
           handlePageChange={handlePageChange}
-          currentPageData={Data}
-          Rows={Rows}
+          currentPageNumber={queryStrings.page}
+          totalRecords={Rows?.length}
+          page={pageInfo}
         />
       </Box>
       <Box>
         <UserForm
           ref={formPopupRef}
+          reload={reload}
           closeFormPopup={handleCloseFormPopup}
           submitFormPopup={handleSubmitFormPopup}
         />
       </Box>
       <Box>
         <DeletePopup
+          rowId={rowId}
           ref={deletePopupRef}
           closeDeletePopup={() => deletePopupRef.current.open(false, 'User')}
           deleteConfirmation={handleDeleteConfirmation}
+          reload={reload}
         />
       </Box>
     </Box>

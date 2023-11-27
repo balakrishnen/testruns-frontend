@@ -216,6 +216,7 @@ const filterAnchorOpen = Boolean(filterPopoverEl);
     });
     reload();
   };
+console.log(assetsData);
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
