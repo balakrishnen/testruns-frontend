@@ -11,6 +11,7 @@ import { chartTableReducer } from '../features/runsSlice';
 import procedureReducer from '../features/procedureSlice';
 import roleReducer from '../features/roleSlice';
 import userRunsSlice from '../features/userRunsSlice';
+import fileUploadReducer from '../features/fileUploadSlice';
 
 const rootStore = combineReducers({
   assets: assetsReducer,
@@ -23,7 +24,8 @@ const rootStore = combineReducers({
   role: roleReducer,
   runs: runsReducer,
   tableChart: chartTableReducer,
-  userRuns: userRunsSlice
+  userRuns: userRunsSlice,
+  fileUpload: fileUploadReducer,
 });
 
 const store = configureStore({
