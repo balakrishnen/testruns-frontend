@@ -357,7 +357,16 @@ export default function Runs() {
     payload['search'] = value;
     setQueryString(payload);
   };
-
+  const handleCheckboxValues = (id:any) => {
+    // Check if the ID is already in the selectedIds
+    if (rowId.includes(id)) {
+      // If it is, remove it
+      setRowId(rowId.filter((rowId:any) => rowId !== id));
+    } else {
+      // If it's not, add it
+      setRowId([...rowId, id]);
+    }
+  };
   // const handleChangePage = (event: unknown, newPage: number) => {
   //   setPage(newPage);
   // };
@@ -697,8 +706,7 @@ export default function Runs() {
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                                  row.is_checked == true &&
-                                    setRowId([...rowId, row._id]),
+                                  handleCheckboxValues( row._id),
                                     handleChange(event, row._id);
                                 }}
                               />

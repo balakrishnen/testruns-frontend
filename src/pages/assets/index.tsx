@@ -263,7 +263,16 @@ export default function Assets() {
     setRowId,
   );
   const handleRequestSort = () => {};
-
+  const handleCheckboxValues = (id:any) => {
+    // Check if the ID is already in the selectedIds
+    if (rowId.includes(id)) {
+      // If it is, remove it
+      setRowId(rowId.filter((rowId:any) => rowId !== id));
+    } else {
+      // If it's not, add it
+      setRowId([...rowId, id]);
+    }
+  };
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
     return data?.name;
@@ -737,8 +746,7 @@ export default function Assets() {
                                     }
                                     onClick={(e: any) => clickHandler(e)}
                                     onChange={(event) => {
-                                      row.is_checked == true &&
-                                        setRowId([...rowId, row._id]),
+                                      handleCheckboxValues( row._id),
                                         handleChange(event, row._id);
                                     }}
                                   />
