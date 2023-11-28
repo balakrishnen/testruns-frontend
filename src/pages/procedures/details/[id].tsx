@@ -195,9 +195,7 @@ export default function ProcedureDetails() {
     
     // /moreInfo
   }
-  React.useEffect(() => {
-    setprocedureData(procedureSliceData);
-  }, [procedureSliceData]);
+
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       console.log(window.location.pathname.split('/'));
@@ -245,14 +243,17 @@ export default function ProcedureDetails() {
 
   const formik = useFormik({
     initialValues: {
-      name: procedureValue?.name,
+      name: procedureData?.name,
       assets: '',
       procedure: '',
     },
     validationSchema: validationSchema,
     onSubmit: onSubmit,
   });
-
+  React.useEffect(() => {
+    setprocedureData(procedureSliceData);
+    formik.setValues({...formik.values,"name":procedureSliceData?.name})
+  }, [procedureSliceData]);
   // const log = () => {
   //   if (editorRef.current) {
   //     console.log(editorRef.current.getContent());
@@ -267,10 +268,10 @@ export default function ProcedureDetails() {
               <Grid item xs={12} sm={12} md={9} lg={9}>
                 <Box>
                   <Typography className="id-detail">
-                  {procedureValue?.procedureNumber}
+                  {procedureData?.procedureNumber}
                   </Typography>
                   <Typography className="id-detail-title">
-                  {procedureValue?.name}
+                  {procedureData?.name}
                   </Typography>
                 </Box>
               </Grid>
@@ -324,7 +325,7 @@ export default function ProcedureDetails() {
                       marginTop: '0.4rem',
                     }}
                   >
-                 {moment(parseInt(procedureValue?.createdAt)).format('MM/DD/YYYY')}
+                 {moment(parseInt(procedureData?.createdAt)).format('MM/DD/YYYY')}
                   </Typography>
                 </Box>
               </Grid>
@@ -343,9 +344,9 @@ export default function ProcedureDetails() {
                     fullWidth
                     id="name"
                     name="name"
-                    autoComplete="name"
+                    autoComplete="off"
                     InputLabelProps={{ shrink: false }}
-                    placeholder="off"
+                    placeholder="Procedure name"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}

@@ -559,6 +559,7 @@ export default function Procedures() {
                         size="small"
                         fullWidth
                         displayEmpty
+                        autoComplete='off'
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
                           //   debugger;
@@ -609,6 +610,7 @@ export default function Procedures() {
                           InputLabelProps={{ shrink: false }}
                           placeholder="Search"
                           size="small"
+                          autoComplete='off'
                           value={filterSearchValue}
                           onChange={(event: any) =>
                             setFilterSearchValue(event.target.value)

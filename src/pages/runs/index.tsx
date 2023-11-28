@@ -499,6 +499,7 @@ export default function Runs() {
                         size="small"
                         fullWidth
                         displayEmpty
+                        autoComplete='off'
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
                           //   debugger;
@@ -549,6 +550,7 @@ export default function Runs() {
                           InputLabelProps={{ shrink: false }}
                           placeholder="Search"
                           size="small"
+                          autoComplete='off'
                           value={filterSearchValue}
                           onChange={(event: any) =>
                             setFilterSearchValue(event.target.value)
@@ -963,6 +965,7 @@ export default function Runs() {
             openConfirmationPopup={handleOpenConfirmationPopup}
             type="create"
             reload={reload}
+            handleReloadSingleData={""}
           />
         </Box>
         <DeleteSuccessPopup ref={deleteSuccessPopupRef} />

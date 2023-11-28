@@ -450,6 +450,7 @@ const Users = () => {
                       size="small"
                       fullWidth
                       displayEmpty
+                      autoComplete='off'
                       IconComponent={ExpandMoreOutlinedIcon}
                       onChange={(event: any, data: any) => {
                         //   debugger;
@@ -501,6 +502,7 @@ const Users = () => {
                         placeholder="Search"
                         size="small"
                         value={filterSearchValue}
+                        autoComplete='off'
                         onChange={(event: any) =>
                           setFilterSearchValue(event.target.value)
                         }

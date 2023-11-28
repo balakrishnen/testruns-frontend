@@ -57,7 +57,7 @@ import SuccessPopup from '../../../components/SuccessPopup';
 import { useLocation } from '@reach/router';
 import moment from 'moment';
 import { RunsStatusList } from '../../../utils/data';
-import { fetchTableChartData, fetchUpdateRunsData } from '../../../api/RunsAPI';
+import { fetchSingleRunsData, fetchTableChartData, fetchUpdateRunsData } from '../../../api/RunsAPI';
 import { useDispatch } from 'react-redux';
 import { navigate } from 'gatsby';
 import { useSelector } from 'react-redux';
@@ -350,8 +350,33 @@ export default function RunsDetails() {
   ]);
 
   const location: any = useLocation();
-  const runzValue = location.state?.props;
+  // const runzValue = location.state?.props;
+  // console.log(runzValue);
+  const [runzValue, setRunzValue] = React.useState<any>(location.state?.props)
+
+  const procedureSliceData = useSelector(
+    (state: any) => state.runs.data
+  );
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      console.log(window.location.pathname.split('/'));
+      const procedureId = { _id: window.location.pathname.split('/')[3] };
+      dispatch(fetchSingleRunsData(procedureId));
+    }
+  }, []);
+
+  const handleReloadSingleData = () => {
+    console.log(procedureSliceData);
+    // setRunzValue(procedureSliceData.get_run)
+  }
+
+  React.useEffect(() => {
+    setRunzValue(procedureSliceData?.get_run)
+  }, [procedureSliceData]);
+
   console.log(runzValue);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -405,10 +430,10 @@ export default function RunsDetails() {
               i === 0
                 ? 'left1'
                 : i === 1
-                ? 'right1'
-                : i === 2
-                ? 'left2'
-                : 'right2',
+                  ? 'right1'
+                  : i === 2
+                    ? 'left2'
+                    : 'right2',
             orientation: i % 2 === 0 ? 'left' : 'right',
             dataKey: `plot${[i + 1]}`,
             channelValue: null,
@@ -914,19 +939,19 @@ export default function RunsDetails() {
                           runzValue?.status == 'Created'
                             ? '#8d8d8d'
                             : runzValue?.status == 'Started'
-                            ? '#faaa49'
-                            : runzValue?.status == 'Complete'
-                            ? '#00bf70'
-                            : '#e2445c',
+                              ? '#faaa49'
+                              : runzValue?.status == 'Complete'
+                                ? '#00bf70'
+                                : '#e2445c',
                       }}
                     >
                       {runzValue?.status == 'Created'
                         ? 'Created'
                         : runzValue?.status == 'Started'
-                        ? 'Started'
-                        : runzValue?.status == 'Complete'
-                        ? 'Completed'
-                        : 'Stopped'}
+                          ? 'Started'
+                          : runzValue?.status == 'Complete'
+                            ? 'Completed'
+                            : 'Stopped'}
                     </Box>
                     {/* <Select
                       labelId="Status-popup-label"
@@ -1231,6 +1256,7 @@ export default function RunsDetails() {
         ref={runsPopupRef}
         type="edit"
         submitFormPopup={handleSubmitFormPopup}
+        handleReloadSingleData={handleReloadSingleData}
       />
       <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} />
     </PrivateRoute>

@@ -59,6 +59,7 @@ export const fetchSingleRunsData = (payload: any) => async (dispatch: any) => {
     const response = await client.query({
       query: GET_SINGLE_RUNS,
       variables: payload,
+      fetchPolicy: 'network-only',
     });
     dispatch(fetchRunsSuccess(response.data));
   } catch (error: any) {

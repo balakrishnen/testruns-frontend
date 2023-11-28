@@ -42,6 +42,7 @@ import SuccessPopup from '../../components/SuccessPopup';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { navigate } from 'gatsby';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().required("Procedure ID is requied" ),
@@ -55,7 +56,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const RunsForm = React.forwardRef(
-  ({ openConfirmationPopup, type, formData, reload }: any, ref) => {
+  ({ openConfirmationPopup, type, formData, reload,handleReloadSingleData }: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
 
@@ -229,6 +230,9 @@ const RunsForm = React.forwardRef(
           background: '#00bf70', color: '#fff'
         }
       });
+      if(type=='edit'){
+        handleReloadSingleData()
+      }
       clearForm()
       // successPopupRef.current.open(true, 'Run');
       // setTimeout(() => {

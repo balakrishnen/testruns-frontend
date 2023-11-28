@@ -433,6 +433,7 @@ export default function Assets() {
                         id="table-select"
                         value={filterSearchBy}
                         size="small"
+                        autoComplete='off'
                         fullWidth
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
@@ -503,6 +504,7 @@ export default function Assets() {
                           name="Search"
                           id="Search"
                           style={{ margin: '0px' }}
+                          autoComplete='off'
                           InputLabelProps={{ shrink: false }}
                           placeholder="Search"
                           size="small"

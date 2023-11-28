@@ -149,7 +149,6 @@ query Get_run($_id: String!) {
          _id
         objective
         runNumber
-        userId
         dueDate
         status
         isActive

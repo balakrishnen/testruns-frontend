@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
-import { fetchUpdateProcedureData, postProcedureData } from '../../api/procedureAPI';
+import { fetchSingleProcedureData, fetchUpdateProcedureData, postProcedureData } from '../../api/procedureAPI';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
 import { fetchUpdateAssetsData } from '../../api/assetsAPI';
@@ -118,6 +118,10 @@ const ProcedureForm = React.forwardRef(
           submitFormPopup();
           clearForm()
           reload()
+          let payload={
+            _id:formData._id
+          }
+          dispatch(fetchSingleProcedureData(payload));
         }
         else{
           dispatch(postProcedureData(procedures));
