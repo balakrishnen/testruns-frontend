@@ -367,12 +367,18 @@ export default function RunsDetails() {
   }, []);
 
   const handleReloadSingleData = () => {
-    console.log(procedureSliceData);
+    const procedureId = { _id: runzValue?._id };
+    dispatch(fetchSingleRunsData(procedureId));
     // setRunzValue(procedureSliceData.get_run)
   }
-
+React.useEffect(()=>{
+  setRunzValue(runzValue)
+     setuserProcedure(userProcedure)
+},[runzValue,userProcedure])
   React.useEffect(() => {
     setRunzValue(procedureSliceData?.get_run)
+     setuserProcedure(procedureSliceData?.get_run?.procedureId?.procedureDetials)
+
   }, [procedureSliceData]);
 
   console.log(runzValue);
@@ -1029,9 +1035,7 @@ export default function RunsDetails() {
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
                 <div dangerouslySetInnerHTML={{ __html: userProcedure }} />
-                <button onClick={() => handleInputChange('graph1x11', '1')}>
-                  Get Value
-                </button>
+               
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">
@@ -1111,11 +1115,12 @@ export default function RunsDetails() {
                       'image',
                       'insertdatetime',
                       'template',
-                      'insertinput customInsertButton customAlertButton',
+                      'insertinput customInsertButton customAlertButton subscript insert-character superscript',
                     ],
                     toolbar:
                       'undo redo | blocks formatselect | ' +
-                      'bold italic | alignleft aligncenter ' +
+                     
+                      'insert-character subscript superscript bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
                       'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                     image_advtab: true,

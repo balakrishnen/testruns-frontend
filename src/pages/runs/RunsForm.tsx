@@ -138,6 +138,7 @@ const RunsForm = React.forwardRef(
         }
         if (type == 'edit') {
           dispatch(fetchUpdateRunsData(runsValues))
+          handleReloadSingleData()
           
         }
         else {
@@ -230,9 +231,9 @@ const RunsForm = React.forwardRef(
           background: '#00bf70', color: '#fff'
         }
       });
-      if(type=='edit'){
-        handleReloadSingleData()
-      }
+      // if(type=='edit'){
+       
+      // }
       clearForm()
       // successPopupRef.current.open(true, 'Run');
       // setTimeout(() => {
