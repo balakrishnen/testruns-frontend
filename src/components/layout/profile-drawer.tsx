@@ -129,8 +129,7 @@ export default function AppProfileDrawer({
               console.log(err);
             });
           // }    
-  },[])
-
+  },[departmentData, labData])
   React.useEffect(() => {
     let payload={
       _id:loginUserSliceData?.verifyToken._id

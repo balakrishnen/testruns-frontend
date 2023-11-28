@@ -33,13 +33,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from '../../../api/departmentAPI';
 import { fetchLabData } from '../../../api/labAPI';
 
-import { DepartmentList, LaboratoryList ,OrganizationList} from "../../../utils/data";
-import { toast } from "react-toastify";
-import { fetchRoleData } from "../../../api/roleApi";
-import { fetchSingleUserData, fetchUpdateUserData } from "../../../api/userAPI";
+import {
+  DepartmentList,
+  LaboratoryList,
+  OrganizationList,
+} from '../../../utils/data';
+import { toast } from 'react-toastify';
+import { fetchRoleData } from '../../../api/roleApi';
+import { fetchSingleUserData, fetchUpdateUserData } from '../../../api/userAPI';
 import { fileUploadData } from '../../../api/uploadAPI';
 
-const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const validationSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
@@ -49,24 +54,33 @@ const validationSchema = Yup.object().shape({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
       'Weak password',
     ),
-    confirmpassword: Yup.string()
-    .required("Confirm password is required")
-    .oneOf([Yup.ref("newpassword"), ""], "Password mismatch"),
-  });
-  const validationSchemaProfile = Yup.object().shape({
-    firstName: Yup.string().required("First name is required"),
+  confirmpassword: Yup.string()
+    .required('Confirm password is required')
+    .oneOf([Yup.ref('newpassword'), ''], 'Password mismatch'),
+});
+const validationSchemaProfile = Yup.object().shape({
+  firstName: Yup.string().required('First name is required'),
 
-  lastName: Yup.string().required("Lase name is required"),
-  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
-  phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
-  .min(10, "Enter valid number")
-  .max(10, "too long").required("Mobile number is required"),
-  organisationId: Yup.string().required("Organistation is required"),
+  lastName: Yup.string().required('Lase name is required'),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Invalid email')
+    .matches(emailRegex, 'In-correct email'),
+  phoneNumber: Yup.string()
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .min(10, 'Enter valid number')
+    .max(10, 'too long')
+    .required('Mobile number is required'),
+  organisationId: Yup.string().required('Organistation is required'),
   // institution: Yup.string().required("Institution is required"),
-  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
-  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  departmentId: Yup.array()
+    .min(1, 'Please select at least one Department')
+    .required('Department is required'),
+  laboratoryId: Yup.array()
+    .min(1, 'Please select at least one Laboratory')
+    .required('Laboratory is required'),
   // user_id: Yup.string().required(),
-  role: Yup.string().required("Role is required"),
+  role: Yup.string().required('Role is required'),
   // status: Yup.string().required("Status is required"),
 });
 
@@ -80,26 +94,29 @@ const Profile = () => {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
-    interface FormValidation {
-      password: boolean;
-      newpassword: boolean;
-      confirmpassword: boolean;
-    }
-    
-    const [initalStatus,setInitalStatus] = React.useState<FormValidation>({
-      password: false,
-      newpassword: false,
-      confirmpassword: false,
-    });
-    const [departments, setDepartments] = React.useState([])
-    const [laboratory, setLaboratory] = React.useState([])
-    const [organizationData, setOrganizationData] = React.useState([]);
-    const [roleData, setRoleData] = React.useState([]);
+  interface FormValidation {
+    password: boolean;
+    newpassword: boolean;
+    confirmpassword: boolean;
+  }
 
-    const Placeholder = ({ children }: any) => {
-      return <div>{children}</div>;
-    };
-  const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) => {
+  const [initalStatus, setInitalStatus] = React.useState<FormValidation>({
+    password: false,
+    newpassword: false,
+    confirmpassword: false,
+  });
+  const [departments, setDepartments] = React.useState([]);
+  const [laboratory, setLaboratory] = React.useState([]);
+  const [organizationData, setOrganizationData] = React.useState([]);
+  const [roleData, setRoleData] = React.useState([]);
+
+  const Placeholder = ({ children }: any) => {
+    return <div>{children}</div>;
+  };
+  const handleClickShowPassword = (
+    key: keyof FormValidation,
+    newValue: boolean,
+  ) => {
     const updatedValidation = { ...initalStatus };
     updatedValidation[key] = newValue;
     setInitalStatus(updatedValidation);
@@ -109,30 +126,54 @@ const Profile = () => {
   ) => {
     event.preventDefault();
   };
+
   const loginUserSliceData=  useSelector(
     (state: any) => state.userLogin.data, 
   );
   React.useEffect(()=>{
     let temp = { '_id': loginUserSliceData?.verifyToken._id}
-        // if (row?._id) {
-          dispatch(fetchSingleUserData(temp)).then((isSucess) => {
-            if (isSucess.get_user) {
-              formikProfile.setFieldValue('firstName', isSucess.get_user.firstName || '');
-              formikProfile.setFieldValue('lastName', isSucess.get_user.lastName || '');
-              formikProfile.setFieldValue('email', isSucess.get_user.email || '');
-              formikProfile.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
-              formikProfile.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
-              formikProfile.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
-              formikProfile.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
-              formikProfile.setFieldValue('role', isSucess.get_user.role || '');
-            }
-          })
-            .catch((err) => {
-              console.log(err);
-            });
-          // }    
-  },[])
-  
+    // if (row?._id) {
+    dispatch(fetchSingleUserData(temp))
+      .then((isSucess) => {
+        if (isSucess.get_user) {
+          formikProfile.setFieldValue(
+            'firstName',
+            isSucess.get_user.firstName || '',
+          );
+          formikProfile.setFieldValue(
+            'lastName',
+            isSucess.get_user.lastName || '',
+          );
+          formikProfile.setFieldValue('email', isSucess.get_user.email || '');
+          formikProfile.setFieldValue(
+            'phoneNumber',
+            isSucess.get_user.phoneNumber || '',
+          );
+          formikProfile.setFieldValue(
+            'organisationId',
+            isSucess.get_user.organisationId || '',
+          );
+          formikProfile.setFieldValue(
+            'departmentId',
+            isSucess.get_user?.departmentId?.map(
+              (item: any) => departmentData?.find((obj) => obj.id == item),
+            ) || [],
+          );
+          formikProfile.setFieldValue(
+            'laboratoryId',
+            isSucess.get_user?.laboratoryId?.map(
+              (item: any) => labData?.find((obj) => obj.id == item),
+            ) || [],
+          );
+          formikProfile.setFieldValue('role', isSucess.get_user.role || '');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // }
+  }, [departmentData, labData]);
+
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(
       values.password,
@@ -200,10 +241,10 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      var deptArray: any = []
-      departments?.map((item: any) => (deptArray.push(item?.id)))
-      var labArray: any = []
-      laboratory?.map((item: any) => (labArray.push(item?.id)))
+      var deptArray: any = [];
+      departments?.map((item: any) => deptArray.push(item?.id));
+      var labArray: any = [];
+      laboratory?.map((item: any) => labArray.push(item?.id));
       let userValues: any = {
         // uid:"",
         firstName: values.firstName,
@@ -219,7 +260,7 @@ const Profile = () => {
       }
       // debugger
       // userValues['_id'] = userData?._id
-      dispatch(fetchUpdateUserData(userValues))
+      dispatch(fetchUpdateUserData(userValues));
       toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70',
@@ -241,14 +282,14 @@ const Profile = () => {
   const formikProfile = useFormik({
     initialValues: {
       firstName: '',
-      lastName:  '',
-      email:  '',
+      lastName: '',
+      email: '',
       phoneNumber: '',
-      organisationId:  '',
+      organisationId: '',
       // institution:  '',
       departmentId: [],
       laboratoryId: [],
-      role : '',
+      role: '',
     },
     validationSchema: validationSchemaProfile,
     onSubmit: onSubmitProfile,
@@ -297,7 +338,6 @@ const Profile = () => {
     );
   }, [departmentSliceData, labSliceData, roleSliceData, organizationSliceData]);
 
-
   console.log(departmentData);
 
   console.log(DepartmentList);
@@ -314,11 +354,13 @@ const Profile = () => {
   };
 
   const handleImageUpload = () => {
-    const selectedFile = fileUploadField.current.files;
+    const selectedFile = fileUploadField.current.files[0];
+    const formData = new FormData();
+    formData.append('file', selectedFile);
     const payload = {
-      file: selectedFile,
-      // type: 'profile',
-    };
+      file: formData,
+      type: 'profile'
+    }
     dispatch(fileUploadData(payload));
   };
 
@@ -418,412 +460,436 @@ const Profile = () => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
-              <form onSubmit={formikProfile.handleSubmit}  autoComplete="off">
-                <Box className="setting-section2">
-                  <Grid container spacing={2} className="profile-inner">
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={6}
-                      lg={6}
-                      sx={{
-                        paddingRight: {
-                          xs: "0rem !important",
-                          md: "1rem !important",
-                        },
-                        paddingBottom: {
-                          xs: "1rem !important",
-                          md: "0rem !important",
-                        },
-                      }}
-                    >
-                      <Box  style={{ position: "relative" }}>
-                        <label>
-                          First name<span style={{ color: "#E2445C" }}>*</span>
-                        </label>
-                        <TextField
-                        margin="none"
-                        fullWidth
-                        id="firstName"
-                        name="firstName"
-                        autoComplete="off"
-                        InputLabelProps={{ shrink: false }}
-                        placeholder="First name"
-                        onChange={formikProfile.handleChange}
-                        onBlur={formikProfile.handleBlur}
-                        value={formikProfile.values.firstName}
-                        size="small"
-                        error={
-                          formikProfile.touched.firstName &&
-                          Boolean(formikProfile.errors.firstName)
-                        }
-                      />
-                      {formikProfile.touched.firstName &&
-                        formikProfile.errors.firstName && (
-                          <Typography className="error-field">
-                            {formikProfile.errors.firstName}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={6}
-                      lg={6}
-                      sx={{
-                        paddingLeft: {
-                          xs: "0rem !important",
-                          md: "1rem !important",
-                        },
-                      }}
-                    >
-                      <Box  style={{ position: "relative" }}>
-                        <label>
-                          Last name<span style={{ color: "#E2445C" }}>*</span>
-                        </label>
-                        <TextField
-                        margin="normal"
-                        fullWidth
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        autoComplete="off"
-                        InputLabelProps={{ shrink: false }}
-                        placeholder="Last name"
-                        onChange={formikProfile.handleChange}
-                        onBlur={formikProfile.handleBlur}
-                        value={formikProfile.values.lastName}
-                        size="small"
-                        error={
-                          formikProfile.touched.lastName &&
-                          Boolean(formikProfile.errors.lastName)
-                        }
-                      />
-                      {formikProfile.touched.lastName && formikProfile.errors.lastName && (
-                        <Typography className="error-field">
-                          {formikProfile.errors.lastName}
-                        </Typography>
-                      )}
-                      </Box>
-                    </Grid>
-                  </Grid>
-                  <Grid container spacing={2} className="profile-inner">
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={6}
-                      lg={6}
-                      sx={{
-                        paddingRight: {
-                          xs: "0rem !important",
-                          md: "1rem !important",
-                        },
-                        paddingBottom: {
-                          xs: "1rem !important",
-                          md: "0rem !important",
-                        },
-                      }}
-                    >
-                      <Box  style={{ position: "relative" }}>
-                        <label>
-                          Email<span style={{ color: "#E2445C" }}>*</span>
-                        </label>
-                        <TextField
-                        margin="normal"
-                        fullWidth
-                        id="email"
-                        name="email"
-                        autoComplete="off"
-                        InputLabelProps={{ shrink: false }}
-                        placeholder="Email"
-                        onChange={formikProfile.handleChange}
-                        onBlur={formikProfile.handleBlur}
-                        value={formikProfile.values.email}
-                        size="small"
-                        error={
-                          formikProfile.touched.email &&
-                          Boolean(formikProfile.errors.email)
-                        }
-                      />
-                      {formikProfile.touched.email && formikProfile.errors.email && (
-                        <Typography className="error-field">
-                          {formikProfile.errors.email}
-                        </Typography>
-                      )}
-                      </Box>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={6}
-                      lg={6}
-                      sx={{
-                        paddingLeft: {
-                          xs: "0rem !important",
-                          md: "1rem !important",
-                        },
-                      }}
-                    >
-                      <Box  style={{ position: "relative" }}>
-                        <label>
-                          Mobile<span style={{ color: "#E2445C" }}>*</span>
-                        </label>
-                        <TextField
-                        margin="none"
-                        fullWidth
-                        id="mobile"
-                        name="mobile"
-                        type="number"
-                        inputProps={{
-                          maxLength: 11,
+                <form onSubmit={formikProfile.handleSubmit} autoComplete="off">
+                  <Box className="setting-section2">
+                    <Grid container spacing={2} className="profile-inner">
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={6}
+                        lg={6}
+                        sx={{
+                          paddingRight: {
+                            xs: '0rem !important',
+                            md: '1rem !important',
+                          },
+                          paddingBottom: {
+                            xs: '1rem !important',
+                            md: '0rem !important',
+                          },
                         }}
-                        InputLabelProps={{ shrink: false }}
-                        placeholder="Mobile number"
-                        onChange={formikProfile.handleChange}
-                        onBlur={formikProfile.handleBlur}
-                        value={formikProfile.values.phoneNumber}
-                        size="small"
-                        error={
-                          formikProfile.touched.phoneNumber &&
-                          Boolean(formikProfile.errors.phoneNumber)
-                        }
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment sx={{ mx: 2 }} position="start">
-                              +91{' '}
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                      {formikProfile.touched.phoneNumber &&
-                        formikProfile.errors.phoneNumber && (
-                          <Typography className="error-field">
-                            {formikProfile.errors.phoneNumber}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Grid>
-                  </Grid>
-                  <Grid container spacing={2} className="profile-inner">
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Box style={{ position: "relative" }}>
-                        <label>Organisation</label>
-                        <Select
-                        className="placeholder-color"
-                        style={{color:"black", marginTop:'10px'}}
-                        displayEmpty
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        renderValue={
-                          formikProfile.values.organisationId !== ''
-                            ? undefined
-                            : () => (
-                              <Placeholder>
-                                Select Organization
-                              </Placeholder>
-                            )
-                        }
-                        margin="none"
-                        fullWidth
-                        id="organisationId"
-                        name="organisationId"
-                        autoComplete="off"
-                        placeholder="Organization"
-                        onChange={formikProfile.handleChange}
-                        onBlur={formikProfile.handleBlur}
-                        value={formikProfile.values.organisationId}
-                        size="small"
-                        error={
-                          formikProfile.touched.organisationId &&
-                          Boolean(formikProfile.errors.organisationId)
-                        }
                       >
-                        {organizationData?.map((item: any, index) => (
-                          <MenuItem key={index} value={item.id}>
-                            {item.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                        <Box style={{ position: 'relative' }}>
+                          <label>
+                            First name
+                            <span style={{ color: '#E2445C' }}>*</span>
+                          </label>
+                          <TextField
+                            margin="none"
+                            fullWidth
+                            id="firstName"
+                            name="firstName"
+                            autoComplete="off"
+                            InputLabelProps={{ shrink: false }}
+                            placeholder="First name"
+                            onChange={formikProfile.handleChange}
+                            onBlur={formikProfile.handleBlur}
+                            value={formikProfile.values.firstName}
+                            size="small"
+                            error={
+                              formikProfile.touched.firstName &&
+                              Boolean(formikProfile.errors.firstName)
+                            }
+                          />
+                          {formikProfile.touched.firstName &&
+                            formikProfile.errors.firstName && (
+                              <Typography className="error-field">
+                                {formikProfile.errors.firstName}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={6}
+                        lg={6}
+                        sx={{
+                          paddingLeft: {
+                            xs: '0rem !important',
+                            md: '1rem !important',
+                          },
+                        }}
+                      >
+                        <Box style={{ position: 'relative' }}>
+                          <label>
+                            Last name<span style={{ color: '#E2445C' }}>*</span>
+                          </label>
+                          <TextField
+                            margin="normal"
+                            fullWidth
+                            id="lastName"
+                            name="lastName"
+                            type="text"
+                            autoComplete="off"
+                            InputLabelProps={{ shrink: false }}
+                            placeholder="Last name"
+                            onChange={formikProfile.handleChange}
+                            onBlur={formikProfile.handleBlur}
+                            value={formikProfile.values.lastName}
+                            size="small"
+                            error={
+                              formikProfile.touched.lastName &&
+                              Boolean(formikProfile.errors.lastName)
+                            }
+                          />
+                          {formikProfile.touched.lastName &&
+                            formikProfile.errors.lastName && (
+                              <Typography className="error-field">
+                                {formikProfile.errors.lastName}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2} className="profile-inner">
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={6}
+                        lg={6}
+                        sx={{
+                          paddingRight: {
+                            xs: '0rem !important',
+                            md: '1rem !important',
+                          },
+                          paddingBottom: {
+                            xs: '1rem !important',
+                            md: '0rem !important',
+                          },
+                        }}
+                      >
+                        <Box style={{ position: 'relative' }}>
+                          <label>
+                            Email<span style={{ color: '#E2445C' }}>*</span>
+                          </label>
+                          <TextField
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            name="email"
+                            autoComplete="off"
+                            InputLabelProps={{ shrink: false }}
+                            placeholder="Email"
+                            onChange={formikProfile.handleChange}
+                            onBlur={formikProfile.handleBlur}
+                            value={formikProfile.values.email}
+                            size="small"
+                            error={
+                              formikProfile.touched.email &&
+                              Boolean(formikProfile.errors.email)
+                            }
+                          />
+                          {formikProfile.touched.email &&
+                            formikProfile.errors.email && (
+                              <Typography className="error-field">
+                                {formikProfile.errors.email}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={6}
+                        lg={6}
+                        sx={{
+                          paddingLeft: {
+                            xs: '0rem !important',
+                            md: '1rem !important',
+                          },
+                        }}
+                      >
+                        <Box style={{ position: 'relative' }}>
+                          <label>
+                            Mobile<span style={{ color: '#E2445C' }}>*</span>
+                          </label>
+                          <TextField
+                            margin="none"
+                            fullWidth
+                            id="mobile"
+                            name="mobile"
+                            type="number"
+                            inputProps={{
+                              maxLength: 11,
+                            }}
+                            InputLabelProps={{ shrink: false }}
+                            placeholder="Mobile number"
+                            onChange={formikProfile.handleChange}
+                            onBlur={formikProfile.handleBlur}
+                            value={formikProfile.values.phoneNumber}
+                            size="small"
+                            error={
+                              formikProfile.touched.phoneNumber &&
+                              Boolean(formikProfile.errors.phoneNumber)
+                            }
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment sx={{ mx: 2 }} position="start">
+                                  +91{' '}
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                          {formikProfile.touched.phoneNumber &&
+                            formikProfile.errors.phoneNumber && (
+                              <Typography className="error-field">
+                                {formikProfile.errors.phoneNumber}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2} className="profile-inner">
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Box style={{ position: 'relative' }}>
+                          <label>Organisation</label>
+                          <Select
+                            className="placeholder-color"
+                            style={{ color: 'black' }}
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                            renderValue={
+                              formikProfile.values.organisationId !== ''
+                                ? undefined
+                                : () => (
+                                    <Placeholder>
+                                      Select Organization
+                                    </Placeholder>
+                                  )
+                            }
+                            margin="none"
+                            fullWidth
+                            id="organisationId"
+                            name="organisationId"
+                            autoComplete="off"
+                            placeholder="Organization"
+                            onChange={formikProfile.handleChange}
+                            onBlur={formikProfile.handleBlur}
+                            value={formikProfile.values.organisationId}
+                            size="small"
+                            error={
+                              formikProfile.touched.organisationId &&
+                              Boolean(formikProfile.errors.organisationId)
+                            }
+                          >
+                            {organizationData?.map((item: any, index) => (
+                              <MenuItem key={index} value={item.id}>
+                                {item.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
 
-                      {formikProfile.touched.organisationId &&
-                        formikProfile.errors.organisationId && (
-                          <Typography className="error-field">
-                            {formikProfile.errors.organisationId}
-                          </Typography>
-                        )}
-                      </Box>
+                          {formikProfile.touched.organisationId &&
+                            formikProfile.errors.organisationId && (
+                              <Typography className="error-field">
+                                {formikProfile.errors.organisationId}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                  <Grid container spacing={2} className="profile-inner multi-selection">
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Box style={{ position: "relative" }}>
-                        <label>Department/s</label>
-                        <Autocomplete
-                              multiple
-                              id="departmentId"
-                              disableCloseOnSelect
-                              value={formikProfile.values.departmentId}
-                              options={
-                                departmentData !== undefined
-                                  ? departmentData
-                                  : []
-                              }
-                              getOptionLabel={(option: any) =>option?.label }
-                              isOptionEqualToValue={(option: any, value: any) =>
-                              value?.id == option?.id
-                              }
-                              renderInput={(params) => (
-                                <TextField {...params} placeholder="Department/s"/>
-                              )}
-                              fullWidth
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(
-                                props,
-                                option: any,
-                                
-                                { selected },
-                                
-                              ) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option.value}
-                                  </li>
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) =>{
-                                setDepartments(selectedOptions);formikProfile.setValues({...formikProfile.values,'departmentId':selectedOptions})}
-                              }
-                            />
-                      {formikProfile.touched.departmentId &&
-                        formikProfile.errors.departmentId && (
-                          <Typography className="error-field">
-                            {formikProfile.errors.departmentId}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Grid>
-                  </Grid>
-                  <Grid container spacing={2} className="profile-inner multi-selection">
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Box style={{ position: "relative" }}>
-                        <label>Labs assigned</label>
-                        <Autocomplete
-                                multiple
-                                id="departmentId"
-                                value={formikProfile.values.laboratoryId}
-                                options={labData !== undefined ? labData : []}
-                                getOptionLabel={(option: any) => option?.label}
-                                isOptionEqualToValue={(option: any, value: any) =>
-                                  value?.id == option?.id
-                                }
-                                disableCloseOnSelect
-                               
-                                renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies"/>}
-                                fullWidth
-                                placeholder="Laboratory"
-                                size="medium"
-                                renderOption={(
-                                  props,
-                                  option: any,
-                                  { selected },
-                                ) => (
-                                  <React.Fragment>
-                                    <li {...props}>
-                                      <Checkbox
-                                        style={{ marginRight: 0 }}
-                                        checked={selected}
-                                      />
-                                      {option.value}
-                                    </li>
-                                  </React.Fragment>
-                                )}
-                                onChange={(_, selectedOptions: any) =>{
-                                  setLaboratory(selectedOptions);formikProfile.setValues({...formikProfile.values,'laboratoryId':selectedOptions}) }
-                                }
-                              />
-                      {formikProfile.touched.laboratoryId &&
-                        formikProfile.errors.laboratoryId && (
-                          <Typography className="error-field">
-                            {formikProfile.errors.laboratoryId}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Grid>
-                  </Grid>
-                  <Grid container spacing={2} className="profile-inner">
                     <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={6}
-                      sx={{
-                        paddingRight: {
-                          xs: "0rem !important",
-                          lg: "1rem !important",
-                        },
-                      }}
+                      container
+                      spacing={2}
+                      className="profile-inner multi-selection"
                     >
-                      <Box style={{ position: "relative" }}>
-                        <label>Role</label>
-                        <Select
-                        // MenuProps={{
-                        //   PaperProps: {
-                        //     style: {
-                        //       maxHeight: '150px',
-                        //       overflowY: 'auto',
-                        //     },
-                        //   },
-                        // }}
-                        className="placeholder-color"
-                        style={{marginTop:"10px",color:"black"}}
-                        displayEmpty
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        renderValue={
-                          formik.values.role !== ''
-                            ? undefined
-                            : () => <Placeholder>Select Role</Placeholder>
-                        }
-                        margin="none"
-                        fullWidth
-                        id="role"
-                        name="role"
-                        autoComplete="off"
-                        placeholder="Role"
-                        onChange={formikProfile.handleChange}
-                        onBlur={formikProfile.handleBlur}
-                        value={formikProfile.values.role}
-                        size="small"
-                        error={
-                          formikProfile.touched.role && Boolean(formikProfile.errors.role)
-                        }
-                      >
-                        {roleData &&
-                          roleData.map((item: any) => (
-                            <MenuItem key={item.value} value={item.value}>
-                              {item.label}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                        {formikProfile.touched.role && formikProfile.errors.role && (
-                          <Typography className="error-field">
-                            {formikProfile.errors.role}
-                          </Typography>
-                        )}
-                      </Box>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Box style={{ position: 'relative' }}>
+                          <label>Department/s</label>
+                          <Autocomplete
+                            multiple
+                            id="departmentId"
+                            disableCloseOnSelect
+                            value={formikProfile.values.departmentId}
+                            options={
+                              departmentData !== undefined ? departmentData : []
+                            }
+                            getOptionLabel={(option: any) => option?.label}
+                            isOptionEqualToValue={(option: any, value: any) =>
+                              value?.id == option?.id
+                            }
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                placeholder="Department/s"
+                              />
+                            )}
+                            fullWidth
+                            placeholder="Department"
+                            size="medium"
+                            renderOption={(
+                              props,
+                              option: any,
+
+                              { selected },
+                            ) => (
+                              <React.Fragment>
+                                <li {...props}>
+                                  <Checkbox
+                                    style={{ marginRight: 0 }}
+                                    checked={selected}
+                                  />
+                                  {option.value}
+                                </li>
+                              </React.Fragment>
+                            )}
+                            onChange={(_, selectedOptions: any) => {
+                              setDepartments(selectedOptions);
+                              formikProfile.setValues({
+                                ...formikProfile.values,
+                                departmentId: selectedOptions,
+                              });
+                            }}
+                          />
+                          {formikProfile.touched.departmentId &&
+                            formikProfile.errors.departmentId && (
+                              <Typography className="error-field">
+                                {formikProfile.errors.departmentId}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
                     </Grid>
-                    
-                  </Grid>
-                </Box>
+                    <Grid
+                      container
+                      spacing={2}
+                      className="profile-inner multi-selection"
+                    >
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Box style={{ position: 'relative' }}>
+                          <label>Labs assigned</label>
+                          <Autocomplete
+                            multiple
+                            id="departmentId"
+                            value={formikProfile.values.laboratoryId}
+                            options={labData !== undefined ? labData : []}
+                            getOptionLabel={(option: any) => option?.label}
+                            isOptionEqualToValue={(option: any, value: any) =>
+                              value?.id == option?.id
+                            }
+                            disableCloseOnSelect
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                placeholder="Laboratory/ies"
+                              />
+                            )}
+                            fullWidth
+                            placeholder="Laboratory"
+                            size="medium"
+                            renderOption={(
+                              props,
+                              option: any,
+                              { selected },
+                            ) => (
+                              <React.Fragment>
+                                <li {...props}>
+                                  <Checkbox
+                                    style={{ marginRight: 0 }}
+                                    checked={selected}
+                                  />
+                                  {option.value}
+                                </li>
+                              </React.Fragment>
+                            )}
+                            onChange={(_, selectedOptions: any) => {
+                              setLaboratory(selectedOptions);
+                              formikProfile.setValues({
+                                ...formikProfile.values,
+                                laboratoryId: selectedOptions,
+                              });
+                            }}
+                          />
+                          {formikProfile.touched.laboratoryId &&
+                            formikProfile.errors.laboratoryId && (
+                              <Typography className="error-field">
+                                {formikProfile.errors.laboratoryId}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2} className="profile-inner">
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={6}
+                        sx={{
+                          paddingRight: {
+                            xs: '0rem !important',
+                            lg: '1rem !important',
+                          },
+                        }}
+                      >
+                        <Box style={{ position: 'relative' }}>
+                          <label>Designation</label>
+                          <Select
+                            // MenuProps={{
+                            //   PaperProps: {
+                            //     style: {
+                            //       maxHeight: '150px',
+                            //       overflowY: 'auto',
+                            //     },
+                            //   },
+                            // }}
+                            className="placeholder-color"
+                            style={{ marginTop: '10px', color: 'black' }}
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                            renderValue={
+                              formik.values.role !== ''
+                                ? undefined
+                                : () => <Placeholder>Select Role</Placeholder>
+                            }
+                            margin="none"
+                            fullWidth
+                            id="role"
+                            name="role"
+                            autoComplete="off"
+                            placeholder="Role"
+                            onChange={formikProfile.handleChange}
+                            onBlur={formikProfile.handleBlur}
+                            value={formikProfile.values.role}
+                            size="small"
+                            error={
+                              formikProfile.touched.role &&
+                              Boolean(formikProfile.errors.role)
+                            }
+                          >
+                            {roleData &&
+                              roleData.map((item: any) => (
+                                <MenuItem key={item.value} value={item.value}>
+                                  {item.label}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                          {formikProfile.touched.role &&
+                            formikProfile.errors.role && (
+                              <Typography className="error-field">
+                                {formikProfile.errors.role}
+                              </Typography>
+                            )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
                 </form>
               </AccordionDetails>
             </Accordion>
