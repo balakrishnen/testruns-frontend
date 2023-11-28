@@ -127,8 +127,11 @@ const Profile = () => {
     event.preventDefault();
   };
 
-  React.useEffect(() => {
-    let temp = { _id: '6561fde22f447d0012e3d8cf' };
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
+  React.useEffect(()=>{
+    let temp = { '_id': loginUserSliceData?.verifyToken._id}
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp))
       .then((isSucess) => {
@@ -253,8 +256,8 @@ const Profile = () => {
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
-        _id: '6561fde22f447d0012e3d8cf',
-      };
+        _id:loginUserSliceData?.verifyToken._id
+      }
       // debugger
       // userValues['_id'] = userData?._id
       dispatch(fetchUpdateUserData(userValues));

@@ -396,7 +396,7 @@ const RunsForm = React.forwardRef(
                     <Box style={{position:'relative'}}>
                       <label>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="MM/DD/YYYY" value={formik.values.createdAt} disabled />
+                        <DatePicker format="MM/DD/YYYY" value={formik.values.createdAt} disabled disablePast />
                       </LocalizationProvider>
                       {formik.touched.createdAt && formik.errors.createdAt && (
                         <Typography className="error-field">
@@ -537,7 +537,7 @@ const RunsForm = React.forwardRef(
                     <Box style={{position:'relative'}}>
                       <label>Due date<span style={{ color: "#E2445C" }}>*</span></label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="MM/DD/YYYY" onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
+                        <DatePicker format="MM/DD/YYYY" disablePast onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
                       </LocalizationProvider>
                       {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">

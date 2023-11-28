@@ -317,7 +317,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                     <Box className="bg-gray-input" style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" value={createdOn} disabled />
+                        <DatePicker format="DD/MM/YYYY" value={createdOn} disabled  disablePast/>
                       </LocalizationProvider>
                       {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
