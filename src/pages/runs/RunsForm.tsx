@@ -44,11 +44,11 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
-  procedureId: Yup.string().required(),
+  procedureId: Yup.string().required("Procedure ID is requied" ),
   createdAt: Yup.string().required('Created date is required'),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
   laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
-  objective: Yup.string().required('Objective is required'),
+  objective: Yup.string().required('Test Objective is required'),
   dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().required(),
   organisationId:Yup.string().required('Procedure Name is required')
@@ -400,7 +400,7 @@ const RunsForm = React.forwardRef(
                       </LocalizationProvider>
                       {formik.touched.createdAt && formik.errors.createdAt && (
                         <Typography className="error-field">
-                          Date required
+                          Created Date is required
                         </Typography>
                       )}
                     </Box>
@@ -541,7 +541,7 @@ const RunsForm = React.forwardRef(
                       </LocalizationProvider>
                       {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">
-                          Date required
+                        Due Date is required
                         </Typography>
                       )}
                     </Box>

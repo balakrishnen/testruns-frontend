@@ -716,6 +716,7 @@ const Users = () => {
                             }
                             value={'Active'}
                             displayEmpty
+                            onClick={(e: any) => clickHandler(e)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
                             {userStatus.map((element) => (
