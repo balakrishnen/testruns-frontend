@@ -108,8 +108,11 @@ export default function AppProfileDrawer({
   // console.log(departmentData);
 
   // console.log(DepartmentList);
-  React.useEffect(() => {
-    let temp = { '_id': "6561fde22f447d0012e3d8cf" }
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
+  React.useEffect(()=>{
+    let temp = { '_id': loginUserSliceData?.verifyToken._id}
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp)).then((isSucess) => {
       if (isSucess.get_user) {
@@ -130,7 +133,7 @@ export default function AppProfileDrawer({
   }, [departmentData, labData])
   React.useEffect(() => {
     let payload = {
-      _id: "655f18bcc88024001262b3a5"
+      _id:  loginUserSliceData?.verifyToken._id
     }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
@@ -159,9 +162,9 @@ export default function AppProfileDrawer({
 
     if (isMatch) {
       var deptArray: any = []
-      departments?.map((item: any) => (deptArray.push(item?.id)))
+      formik.values.departmentId?.map((item: any) => (deptArray.push(item?.id)))
       var labArray: any = []
-      laboratory?.map((item: any) => (labArray.push(item?.id)))
+      formik.values.laboratoryId?.map((item: any) => (labArray.push(item?.id)))
       let userValues: any = {
         // uid:"",
         firstName: values.firstName,

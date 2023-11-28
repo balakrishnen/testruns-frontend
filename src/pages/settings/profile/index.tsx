@@ -239,12 +239,13 @@ const Profile = () => {
       // values.designation,
       // values.reqstId
     );
+console.log(departments);
 
     if (isMatch) {
       var deptArray: any = [];
-      departments?.map((item: any) => deptArray.push(item?.id));
+      formikProfile.values.departmentId?.map((item: any) => deptArray.push(item?.id));
       var labArray: any = [];
-      laboratory?.map((item: any) => labArray.push(item?.id));
+      formikProfile.values.laboratoryId?.map((item: any) => labArray.push(item?.id));
       let userValues: any = {
         // uid:"",
         firstName: values.firstName,
@@ -294,6 +295,7 @@ const Profile = () => {
     validationSchema: validationSchemaProfile,
     onSubmit: onSubmitProfile,
   });
+  console.log(formikProfile);
 
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
