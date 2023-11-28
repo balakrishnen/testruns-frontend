@@ -412,6 +412,7 @@ const RunsForm = React.forwardRef(
                     sm={6}
                     md={6}
                     lg={6}
+                    className="multi-selection"
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box style={{position:'relative'}}>
@@ -456,7 +457,7 @@ const RunsForm = React.forwardRef(
                     </Box>
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={6} lg={6}>
+                  <Grid item xs={12} sm={6} md={6} lg={6} className="multi-selection">
                     <Box style={{position:'relative'}}>
                       <label style={{ display: 'block' }}>Laboratory/ies</label>
 
