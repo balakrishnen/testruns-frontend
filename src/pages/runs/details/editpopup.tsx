@@ -119,7 +119,7 @@ export default function EditPopup({ open, close }: any) {
                                 <Box className="bg-gray-input">
                                     <label style={{ display: 'block' }}>Created on</label>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker format="DD/MM/YYYY" />
+                                        <DatePicker format="DD/MM/YYYY" disablePast />
                                     </LocalizationProvider>
                                 </Box>
                             </Grid>
@@ -147,7 +147,7 @@ export default function EditPopup({ open, close }: any) {
                                 <Box>
                                     <label style={{ display: 'block' }}>Set due date</label>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker format="DD/MM/YYYY" />
+                                        <DatePicker format="DD/MM/YYYY" disablePast />
                                     </LocalizationProvider>
                                 </Box>
                             </Grid>

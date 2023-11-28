@@ -488,7 +488,7 @@ console.log(assetValue?.organisationId,);
                         <Box style={{ position: 'relative' }}>
                           <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="MM/DD/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'perchasedDate')} value={formik.values.perchasedDate}/>
+                            <DatePicker format="MM/DD/YYYY" disablePast onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'perchasedDate')} value={formik.values.perchasedDate}/>
                           </LocalizationProvider>
                           {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
@@ -515,7 +515,7 @@ console.log(assetValue?.organisationId,);
                         <Box style={{ position: 'relative' }}>
                           <label>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="MM/DD/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'expiryDate')} value={formik.values.expiryDate}/>
+                            <DatePicker format="MM/DD/YYYY" disablePast onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'expiryDate')} value={formik.values.expiryDate}/>
                           </LocalizationProvider>
                            {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (

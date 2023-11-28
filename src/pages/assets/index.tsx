@@ -607,7 +607,7 @@ export default function Assets() {
                       ) : filterType === 'date' ? (
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
+                            <DatePicker disablePast
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
                               onChange={(event: any) =>
