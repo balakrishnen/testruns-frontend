@@ -198,6 +198,7 @@ const UserForm = React.forwardRef(
       } else {
         confirmationPopupRef.current.open(false);
         setFormPopup(false);
+        clearForm()
       }
     };
 
@@ -291,7 +292,7 @@ const UserForm = React.forwardRef(
             <Box className="popup-section">
               <Box className="title-popup">
                 <Typography>{type} user</Typography>
-                <CloseIcon onClick={() => closeFormPopup(false)} />
+                <CloseIcon onClick={() => {closeFormPopup(false) , clearForm()}}/>
               </Box>
               <Box>
                 <Grid container spacing={2} className="asset-popup">
