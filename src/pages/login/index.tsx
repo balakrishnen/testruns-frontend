@@ -189,6 +189,7 @@ const userSliceData=  useSelector(
             <TextField
               type={showPassword ? 'text' : 'password'}
               fullWidth
+              autoComplete="off"
               inputProps={{ maxLength: 24 }}
               InputProps={{
                 endAdornment: (

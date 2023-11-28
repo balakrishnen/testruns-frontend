@@ -371,13 +371,13 @@ export default function RunsDetails() {
     dispatch(fetchSingleRunsData(procedureId));
     // setRunzValue(procedureSliceData.get_run)
   }
-React.useEffect(()=>{
-  setRunzValue(runzValue)
-     setuserProcedure(userProcedure)
-},[runzValue,userProcedure])
+  React.useEffect(() => {
+    setRunzValue(runzValue)
+    setuserProcedure(userProcedure)
+  }, [runzValue, userProcedure])
   React.useEffect(() => {
     setRunzValue(procedureSliceData?.get_run)
-     setuserProcedure(procedureSliceData?.get_run?.procedureId?.procedureDetials)
+    setuserProcedure(procedureSliceData?.get_run?.procedureId?.procedureDetials)
 
   }, [procedureSliceData]);
 
@@ -1035,7 +1035,7 @@ React.useEffect(()=>{
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
                 <div dangerouslySetInnerHTML={{ __html: userProcedure }} />
-               
+
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">
@@ -1115,12 +1115,11 @@ React.useEffect(()=>{
                       'image',
                       'insertdatetime',
                       'template',
-                      'insertinput customInsertButton customAlertButton subscript insert-character superscript',
+                      'insertinput customInsertButton customAlertButton subscript superscript charmap'
                     ],
                     toolbar:
                       'undo redo | blocks formatselect | ' +
-                     
-                      'insert-character subscript superscript bold italic | alignleft aligncenter ' +
+                      'charmap subscript superscript bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
                       'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                     image_advtab: true,
@@ -1187,11 +1186,11 @@ React.useEffect(()=>{
                       'template',
                       'insertinput',
                       'customInsertButton',
-                      'customAlertButton',
+                      'customAlertButton subscript superscript charmap'
                     ],
                     toolbar:
                       'undo redo | blocks formatselect | ' +
-                      'bold italic | alignleft aligncenter ' +
+                      'charmap subscript superscript bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
                       'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                     image_advtab: true,

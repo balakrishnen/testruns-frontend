@@ -437,10 +437,10 @@ React.useEffect(()=>{
                         plugins: [
                           'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount','image', 'insertdatetime' , 'template','insertinput customInsertButton customAlertButton' 
+                          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount','image', 'insertdatetime' , 'template','insertinput customInsertButton customAlertButton charmap subscript superscript ' 
                         ],
                         toolbar: 'undo redo | blocks formatselect | ' +
-                        'bold italic | alignleft aligncenter ' +
+                        'charmap subscript superscript bold italic | alignleft aligncenter ' +
                         'alignright alignjustify | bullist numlist outdent indent | ' +
                         'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                         image_advtab: true,

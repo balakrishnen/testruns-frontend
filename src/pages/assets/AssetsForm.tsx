@@ -404,7 +404,7 @@ const Addnewpopup = React.forwardRef(
                         <Box style={{ position: 'relative' }}>
                           <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}  name='perchasedDate'>
-                            <DatePicker disablePast
+                            <DatePicker 
                               format="DD/MM/YYYY"
                               onChange={(selectedDate: any) =>
                                 handleDateChanges(selectedDate, 'perchasedDate')

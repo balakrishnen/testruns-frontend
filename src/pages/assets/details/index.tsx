@@ -386,7 +386,7 @@ export default function AssetDetails() {
                           fullWidth
                           id="name"
                           name="name"
-                          autoComplete="name"
+                          autoComplete="off"
                           autoFocus
                           InputLabelProps={{ shrink: false }}
                           placeholder="Assets name"
@@ -404,7 +404,7 @@ export default function AssetDetails() {
                           fullWidth
                           id="Email"
                           name="Email"
-                          autoComplete="Email"
+                          autoComplete="off"
                           inputProps={{ maxLength: 50 }}
                           autoFocus
                           InputLabelProps={{ shrink: false }}

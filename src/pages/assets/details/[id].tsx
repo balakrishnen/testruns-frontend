@@ -453,7 +453,7 @@ console.log(assetValue?.organisationId,);
                             value={formik.values.assetId}
                             id="assetId"
                             name="assetId"
-                            autoComplete="assetId"
+                            autoComplete="off"
                             inputProps={{ maxLength: 50 }}
                             autoFocus
                             disabled

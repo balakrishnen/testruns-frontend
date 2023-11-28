@@ -42,6 +42,9 @@ import { toast } from 'react-toastify';
 import { fetchRoleData } from '../../../api/roleApi';
 import { fetchSingleUserData, fetchUpdateUserData } from '../../../api/userAPI';
 import { fileUploadData } from '../../../api/uploadAPI';
+import { updatePassword } from 'firebase/auth';
+import { auth } from '../../../firebase.config';
+import { log } from 'console';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -174,7 +177,7 @@ const Profile = () => {
     // }
   }, [departmentData, labData]);
 
-  const onSubmit = (values: any) => {
+  const onSubmit = async(values: any) => {
     const isMatch = checkCredentials(
       values.password,
       values.newpassword,
@@ -182,15 +185,25 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      toast(`Password Reset successful !`, {
-        style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
-      });
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      await updatePassword(auth.currentUser,  values.newpassword).then((res)=>{
+        toast(`Password Reset successful !`, {
+          style: {
+            background: '#00bf70',
+            color: '#fff',
+          },
+        });
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      })
+      .catch((err)=>{
+        toast(err, {
+          style: {
+            background: '#00bf70',
+            color: '#fff',
+          },});
+      })
+     
       // alert("password updated successful!");
       // navigate('/login')
     } else {

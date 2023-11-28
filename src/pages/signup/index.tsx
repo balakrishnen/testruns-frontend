@@ -210,7 +210,7 @@ const userSliceData = useSelector(
           <Box style={{ position: "relative" }}>
             <InputLabel>Password</InputLabel>
             <TextField
-              autoComplete="new-password"
+              autoComplete="off"
               type={initalStatus.password ? "text" : "password"}
               fullWidth
               inputProps={{ maxLength: 24 }}

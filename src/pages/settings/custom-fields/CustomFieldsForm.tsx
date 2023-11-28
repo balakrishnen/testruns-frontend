@@ -76,7 +76,7 @@ const CustomFieldsForm = React.forwardRef(
                     fullWidth
                     id="name"
                     name="name"
-                    autoComplete="name"
+                    autoComplete="off"
                     autoFocus
                     InputLabelProps={{ shrink: false }}
                     placeholder="Field name"
@@ -134,7 +134,7 @@ const CustomFieldsForm = React.forwardRef(
                     fullWidth
                     id="name"
                     name="name"
-                    autoComplete="name"
+                    autoComplete="off"
                     autoFocus
                     InputLabelProps={{ shrink: false }}
                     placeholder={`Field ${fieldType === "3" ? "options" : "value"
