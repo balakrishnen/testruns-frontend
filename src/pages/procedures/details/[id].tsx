@@ -13,7 +13,7 @@ import {
 import edit from '../../../assets/images/edit.svg';
 import printer from '../../../assets/images/printer.svg';
 import { Editor } from '@tinymce/tinymce-react';
-import { fetchSingleProcedureData } from '../../../api/procedureAPI';
+import { fetchSingleProcedureData, fetchUpdateProcedureData } from '../../../api/procedureAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import ProcedureForm from '../ProcedureForm';
 import SuccessPopup from '../../../components/SuccessPopup';
@@ -25,9 +25,10 @@ import moment from 'moment';
 import { fetchAssetsName } from '../../../api/assetsAPI';
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
+import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().notRequired(),
+  name: Yup.string().required("Procedure Name is required"),
   assets: Yup.array().notRequired(),
   procedure: Yup.string().notRequired(),
 });
@@ -148,17 +149,50 @@ export default function ProcedureDetails() {
   const successPopupRef: any = React.useRef(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [assetName, setAssetName] = React.useState([])
-  console.log('assetName',assetName);
-  const [state, setState] = React.useState({ content: "" });
-  
+  // console.log('assetName',assetName);
+  const [state, setState] = React.useState({ content:"" });
+  // console.log(procedureData?.procedureDetials);
+  const onSubmit = (values: any) => {
+    // debugger
+    const isMatch = checkCredentials(values.name);
+    if (isMatch) {
+      // dispatch(fetchUpdateAssetsData(values));
+      // setFormPopup(false);
+    } else {
+      formik.setFieldError('name', 'Invalid first name');
+    }
+  };
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_procedure,
   );
-  console.log(procedureSliceData);
+  
+  const formik = useFormik({
+    initialValues: {
+      name: procedureData?.name,
+      assets: '',
+      procedure: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: onSubmit,
+  });
+React.useEffect(()=>{
+  setprocedureData(procedureData) 
+  console.log(procedureData);
+  
+},[procedureData])
+
+  React.useEffect(() => {
+    console.log("1");
+    setprocedureData(procedureSliceData);
+    setState({"content":procedureSliceData?.procedureDetials})
+    formik.setValues({...formik.values,"name":procedureSliceData?.name})
+  }, [procedureSliceData]);
+
+  // console.log(procedureSliceData);
   const location: any = useLocation();
   const procedureValue = location.state?.props;
-  console.log(procedureValue);
-  // console.log('log',window.location)
+  // console.log(procedureValue);
+
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
   };
@@ -181,24 +215,35 @@ export default function ProcedureDetails() {
     confirmationPopupRef.current.open(false);
   };
   const handleChange = (content:any) => {
-    console.log(content);
+    // console.log(content);
     
     setState({ content });
   };
-  const handleEditorChange = (e:any) => {
-    console.log( e.target.getContent());
-    // console.log("Content was updated:", e.target.getContent());
-  };
+  // const handleEditorChange = (e:any) => {
+  //   // console.log( e.target.getContent());
+  //   // console.log("Content was updated:", e.target.getContent());
+  // };
   const handleSave = (e:any) => {
-   console.log(state);
-   
-    
+  //  console.log(state);
+   const payload={
+    _id: procedureData._id,
+    name:formik.values.name,
+    procedureDetials: state.content
+   }
+    dispatch(fetchUpdateProcedureData(payload))
+    toast(`Procedure updated !`, {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
+    const procedureId = { _id: procedureData._id,};
+    dispatch(fetchSingleProcedureData(procedureId));
     // /moreInfo
   }
-
+  // console.log(state);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      console.log(window.location.pathname.split('/'));
+      // console.log(window.location.pathname.split('/'));
       const procedureId = { _id: window.location.pathname.split('/')[3] };
       dispatch(fetchSingleProcedureData(procedureId));
     }
@@ -206,7 +251,12 @@ export default function ProcedureDetails() {
   const assetsSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets_name,
   );
-
+  const reloadSingleData=()=>{
+    console.log("1timrd");
+    
+    const procedureId = { _id: procedureData._id,};
+    dispatch(fetchSingleProcedureData(procedureId));
+  }
   // React.useEffect(() => {
   //   setAssetsData(assetsData);
   // }, [assetsData]);
@@ -224,41 +274,12 @@ export default function ProcedureDetails() {
       })))
   }, [assetsSliceData]);
 
-  console.log('assetsData',assetsData);
+  // console.log('assetsData',assetsData);
   
   const checkCredentials = (values: any) => {
     return true;
   };
 
-  const onSubmit = (values: any) => {
-    // debugger
-    const isMatch = checkCredentials(values.name);
-    if (isMatch) {
-      // dispatch(fetchUpdateAssetsData(values));
-      // setFormPopup(false);
-    } else {
-      formik.setFieldError('name', 'Invalid first name');
-    }
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      name: procedureData?.name,
-      assets: '',
-      procedure: '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: onSubmit,
-  });
-  React.useEffect(() => {
-    setprocedureData(procedureSliceData);
-    formik.setValues({...formik.values,"name":procedureSliceData?.name})
-  }, [procedureSliceData]);
-  // const log = () => {
-  //   if (editorRef.current) {
-  //     console.log(editorRef.current.getContent());
-  //   }
-  // };
   return (
     <PrivateRoute>
       <Box className="proceduredetails-page">
@@ -432,9 +453,9 @@ export default function ProcedureDetails() {
                         icon: "edit-block",
                         tooltip: "Insert Input Element",
                         onAction: function (_) {
-                          const value = nanoid(1);
+                          // const value = nanoid(1);
                           editor.insertContent(
-                            `&nbsp;<input type='text'  value=${value}>&nbsp;`
+                            `&nbsp;<input type='text' value="">&nbsp;`
                           );
                         },
                       });
@@ -450,7 +471,7 @@ export default function ProcedureDetails() {
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     }}
                     value={state.content}
-          onChange={handleEditorChange}
+          // onChange={handleEditorChange}
           onEditorChange={handleChange}
           // onSaveContent={handleSave}
                     />
@@ -534,6 +555,7 @@ export default function ProcedureDetails() {
           closeFormPopup={handleCloseFormPopup}
           submitFormPopup={handleSubmitFormPopup}
           openConfirmationPopup={handleOpenConfirmationPopup}
+          reloadSingleData={reloadSingleData}
         />
 
         <SuccessPopup ref={successPopupRef} />

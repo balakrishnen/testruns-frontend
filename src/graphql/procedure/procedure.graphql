@@ -112,6 +112,7 @@ mutation Update_procedure(
         $laboratoryId: [String]
         $organisationId: String
         $createdBy: String
+        $procedureDetials:String
 ) {
     update_procedure(
         _id: $_id
@@ -120,11 +121,13 @@ mutation Update_procedure(
         laboratoryId: $laboratoryId
         organisationId: $organisationId
         createdBy: $createdBy
+        procedureDetials: $procedureDetials
     ) {
-        _id
+         _id
         name
         procedureNumber
         procedureDetials
+        organisationId
         departmentId
         laboratoryId
         assectId

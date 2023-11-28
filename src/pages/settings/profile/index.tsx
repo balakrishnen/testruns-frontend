@@ -66,11 +66,11 @@ const validationSchemaProfile = Yup.object().shape({
     .required('Email is required')
     .email('Invalid email')
     .matches(emailRegex, 'In-correct email'),
-  phoneNumber: Yup.string()
-    .matches(phoneRegExp, 'Phone number is not valid')
-    .min(10, 'Enter valid number')
-    .max(10, 'too long')
-    .required('Mobile number is required'),
+  phoneNumber: Yup.string().notRequired(),
+    // .matches(phoneRegExp, 'Phone number is not valid')
+    // .min(10, 'Enter valid number')
+    // .max(10, 'too long')
+    // .required('Mobile number is required'),
   organisationId: Yup.string().required('Organistation is required'),
   // institution: Yup.string().required("Institution is required"),
   departmentId: Yup.array()

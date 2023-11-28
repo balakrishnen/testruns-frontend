@@ -95,7 +95,7 @@ const userSliceData = useSelector(
             uid:res.user.uid,
             organisationId:"655376d2659b7b0012108a33",
             role:"6564afdbc3bd760012def0f4",
-            phoneNumber:'9876543210',
+            // phoneNumber:'9876543210',
             departmentId: [],
             laboratoryId: [],
             instituteId: "",

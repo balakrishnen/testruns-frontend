@@ -33,9 +33,10 @@ const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Lase name is required"),
   email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
-  phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
-    .min(10, "Enter valid number")
-    .max(10, "too long").required("Mobile number is required"),
+  phoneNumber: Yup.string().notRequired(),
+  // .matches(phoneRegExp, 'Phone number is not valid')
+  //   .min(10, "Enter valid number")
+  //   .max(10, "too long").required("Mobile number is required"),
   organisationId: Yup.string().required("Organistation is required"),
   // institution: Yup.string().required("Institution is required"),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
@@ -429,10 +430,10 @@ export default function AppProfileDrawer({
                       onBlur={formik.handleBlur}
                       value={formik.values.phoneNumber}
                       size="small"
-                      error={
-                        formik.touched.phoneNumber &&
-                        Boolean(formik.errors.phoneNumber)
-                      }
+                      // error={
+                      //   formik.touched.phoneNumber &&
+                      //   Boolean(formik.errors.phoneNumber)
+                      // }
                       InputProps={{
                         startAdornment: (
                           <InputAdornment sx={{ mx: 2 }} position="start">
@@ -441,12 +442,12 @@ export default function AppProfileDrawer({
                         ),
                       }}
                     />
-                    {formik.touched.phoneNumber &&
+                    {/* {formik.touched.phoneNumber &&
                       formik.errors.phoneNumber && (
                         <Typography className="error-field">
                           {formik.errors.phoneNumber}
                         </Typography>
-                      )}
+                      )} */}
                   </Box>
                 </Grid>
               </Grid>
