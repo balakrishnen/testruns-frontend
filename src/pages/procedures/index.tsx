@@ -717,6 +717,7 @@ export default function Procedures() {
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
               // size={dense ? "small" : "medium"}
+              stickyHeader
             >
               <TableHeader
                 numSelected={0}

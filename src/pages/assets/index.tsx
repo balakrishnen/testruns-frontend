@@ -43,7 +43,6 @@ import {
   AssetsHeaders,
   DepartmentList,
   LaboratoryList,
-  AssetsRows,
   StatusList,
   AvailabilityList,
 } from '../../utils/data';
@@ -70,24 +69,21 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 
-const rows: AssetsRowData[] = AssetsRows;
 const assetsStatus = StatusList;
 const assetsAvailability = AvailabilityList;
 
 export default function Assets() {
   const [openDlg1Dialog, setDialog1Open] = React.useState(false);
   const [headers, setHeaders] = React.useState<any>(AssetsHeaders);
-  // const [assetsData, setAssetsData] = React.useState(rows);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
   const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
-  const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const tablePopupRef: any = React.useRef(null);
-  const [filterKey, setFilterKey] = React.useState(null);
+  const [filterKey, setFilterKey] = React.useState<any>(null);
   const deleteSuccessPopupRef: any = React.useRef(null);
   const [columnAnchorEl, setColumnAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -100,18 +96,14 @@ export default function Assets() {
   const [filterSearchValue, setFilterSearchValue] = React.useState(null);
   const [filterFieldName, setFilterFieldName] = React.useState('');
   const [filterType, setFilterType] = React.useState(null);
-  const [filterOptions, setFilterOptions] = React.useState([]);
+  const [filterOptions, setFilterOptions] = React.useState<any>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 5;
-  // const totalPages = Math.ceil(assetsData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  // const Data = assetsData.slice(startIndex, endIndex);
   const dispatch: any = useDispatch();
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [rowId, setRowId] = React.useState<any>([]);
   console.log(rowId);
+  const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
   const [loader, setLoader] = React.useState(false);
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
@@ -127,42 +119,19 @@ export default function Assets() {
     sortBy: null,
     sortOrder: 'desc',
   });
-
   const assetsSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets,
+  );
+  const departmentSliceData = useSelector(
+    (state: any) => state.department.data?.get_all_departments,
   );
   const labSliceData = useSelector(
     (state: any) => state.lab.data?.get_all_labs,
   );
-
-
   const assetsIdSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets,
   );
 
-  const handleFilterPopoverClose = () => {
-    setFilterPopoverEl(null);
-  };
-  const Placeholder = ({ children }: any) => {
-    return <div>{children}</div>;
-  };
-  const handleFilterPopoverClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    setFilterPopoverEl(event.currentTarget);
-  };
-
-  const handleClearFilter = () => {
-    setFilterStatus(null);
-    setFilterAvailability(null);
-    setFilterSearchBy(null);
-    setFilterSearchValue(null);
-    setFilterOptions([]);
-    setFilterType(null);
-    applyFilters('search', null);
-    handleFilterPopoverClose();
-    setFilterKey(null);
-  };
   React.useEffect(() => {
     setTimeout(() => {
       setLoader(false);
@@ -175,7 +144,9 @@ export default function Assets() {
     dispatch(fetchAssetsData(queryStrings));
     setTableHeaderVisible(false);
     setRowId([]);
-    // setAssetsData(assetsData);
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
   }, [pageInfo, queryStrings]);
 
   React.useEffect(() => {
@@ -192,6 +163,28 @@ export default function Assets() {
     }, 1000);
   }, [assetsSliceData]);
 
+  const handleFilterPopoverClose = () => {
+    setFilterPopoverEl(null);
+  };
+
+  const handleFilterPopoverClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setFilterPopoverEl(event.currentTarget);
+  };
+
+  const handleClearFilter = () => {
+    setFilterStatus(null);
+    setFilterAvailability(null);
+    setFilterSearchBy((prevState) => null);
+    setFilterSearchValue((prevState) => null);
+    setFilterOptions([]);
+    setFilterType(null);
+    applyFilters(null, null);
+    handleFilterPopoverClose();
+    setFilterKey(null);
+  };
+
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
@@ -205,11 +198,6 @@ export default function Assets() {
     const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
     dispatch(fetchAssetsData(payload));
   };
-  // const filters = () => {
-  //   dispatch(fetchAssetsData(queryStrings));
-  // };
-
-  const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
 
   const handleOnChange = (e: any, row: any) => {
     console.log(e.target.value);
@@ -224,7 +212,6 @@ export default function Assets() {
     if (e.target.name == 'availability') {
       assetsChange['availability'] = e.target.value;
     }
-    console.log(assetsChange);
     dispatch(fetchUpdateAssetsData(assetsChange));
     toast(
       `Assets ${
@@ -239,7 +226,6 @@ export default function Assets() {
     );
     reload();
   };
-  console.log(assetsData);
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -273,23 +259,11 @@ export default function Assets() {
   );
   const handleRequestSort = () => {};
   const handleCheckboxValues = (id: any) => {
-    // Check if the ID is already in the selectedIds
     if (rowId.includes(id)) {
-      // If it is, remove it
       setRowId(rowId.filter((rowId: any) => rowId !== id));
     } else {
-      // If it's not, add it
       setRowId([...rowId, id]);
     }
-  };
-  const getDepartment = (id: any) => {
-    let data = DepartmentList.find((item) => item.id === id);
-    return data?.name;
-  };
-
-  const getLaboratory = (id: any) => {
-    let data = LaboratoryList.find((item) => item.id === id);
-    return data?.name;
   };
 
   const handleMenuCheckboxChange = (event: any, index: any) => {
@@ -302,8 +276,6 @@ export default function Assets() {
       });
     });
   };
-  const [isAnyCheckboxSelected, setIsAnyCheckboxSelected] =
-    React.useState(false);
 
   const handleCloseFormPopup = (state: any) => {
     formPopupRef.current.open(state);
@@ -317,17 +289,6 @@ export default function Assets() {
     }, 3000);
   };
 
-  const handleOpenConfirmationPopup = (state: any) => {
-    confirmationPopupRef.current.open(state);
-  };
-
-  const handleConfirmationDone = (state: any) => {
-    if (state === 1) {
-      formPopupRef.current.open(false);
-    }
-    confirmationPopupRef.current.open(false);
-  };
-
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
     const updatedRows = assetsData.map((row: any) => ({
@@ -339,13 +300,11 @@ export default function Assets() {
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
-  const asset: any = [];
 
   const assetVal: any = { _id: rowId };
 
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
-      // deletePopupRef.current.open(false);
       dispatch(deleteAssetsData(assetVal));
       toast(`Assets deleted !`, {
         style: {
@@ -353,10 +312,6 @@ export default function Assets() {
           color: '#fff',
         },
       });
-      // deleteSuccessPopupRef.current.open(true);
-      // setTimeout(() => {
-      //   deleteSuccessPopupRef.current.open(false);
-      // }, 3000);
       reload();
       setTableHeaderVisible(false);
     }
@@ -383,11 +338,15 @@ export default function Assets() {
     setQueryString(payload);
   };
 
-  const applyFilters = (field: any, value: any) => {
+  const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
-    payload['searchBy'] = field;
+    payload['searchBy'] = key;
     payload['search'] = value;
     setQueryString(payload);
+  };
+
+  const Placeholder = ({ children }: any) => {
+    return <div>{children}</div>;
   };
 
   return (
@@ -408,7 +367,6 @@ export default function Assets() {
             </Button>
             <Box sx={{ position: 'relative' }}>
               <Button
-                // aria-describedby={id}
                 variant="contained"
                 onClick={handleFilterPopoverClick}
                 style={{
@@ -419,7 +377,6 @@ export default function Assets() {
                 }}
                 className="filterButton"
               >
-                {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
                 <Badge
                   color="secondary"
                   variant={filterKey === null ? 'standard' : 'dot'}
@@ -469,68 +426,6 @@ export default function Assets() {
                   <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
                     <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
-                        Status
-                      </Typography>
-
-                      <Select
-                        labelId="table-select-label"
-                        id="table-select"
-                        value={filterStatus}
-                        displayEmpty
-                        fullWidth
-                        size="small"
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        onChange={(event: any) =>
-                          setFilterStatus(event.target.value)
-                        }
-                        renderValue={
-                          filterStatus !== null
-                            ? undefined
-                            : () => <Placeholder>Select Status</Placeholder>
-                        }
-                      >
-                        {assetsStatus?.map((element: any) => (
-                          <MenuItem value={element.value} key={element.value}>
-                            {element.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Box>
-                    {/* {module === 'assets' && ( */}
-                    <Box sx={{ my: 1 }}>
-                      <Typography variant="body2" paddingY={1}>
-                        Availability
-                      </Typography>
-
-                      <Select
-                        labelId="table-select-label"
-                        id="table-select"
-                        value={filterAvailability}
-                        displayEmpty
-                        fullWidth
-                        size="small"
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        onChange={(event: any) =>
-                          setFilterAvailability(event.target.value)
-                        }
-                        renderValue={
-                          filterAvailability !== null
-                            ? undefined
-                            : () => (
-                                <Placeholder>Select Availability</Placeholder>
-                              )
-                        }
-                      >
-                        {assetsAvailability?.map((element: any) => (
-                          <MenuItem value={element.value} key={element.value}>
-                            {element.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Box>
-                    {/* )} */}
-                    <Box sx={{ my: 1 }}>
-                      <Typography variant="body2" paddingY={1}>
                         Search by
                       </Typography>
                       <Select
@@ -542,7 +437,6 @@ export default function Assets() {
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
-                          //   debugger;
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
@@ -553,7 +447,21 @@ export default function Assets() {
                             setFilterOptions(departmentSliceData);
                           }
                           if (event.target?.value === 'assetNumber') {
-                            setFilterOptions(assetsIdSliceData);
+                            const data: any = [];
+                            assetsIdSliceData.Assets.forEach((element) => {
+                              data.push({
+                                id: element.assetNumber,
+                                name: element.assetNumber,
+                                value: element.assetNumber,
+                              });
+                            });
+                            setFilterOptions(data);
+                          }
+                          if (event.target?.value === 'status') {
+                            setFilterOptions(assetsStatus);
+                          }
+                          if (event.target?.value === 'availability') {
+                            setFilterOptions(AvailabilityList);
                           }
                         }}
                         renderValue={
@@ -568,7 +476,6 @@ export default function Assets() {
                             key={element.id}
                             onClick={() => {
                               setFilterType(element.type);
-                              // setFilterOptions(element.filters[0]?.options);
                               setFilterKey(element.id);
                             }}
                           >
@@ -607,7 +514,8 @@ export default function Assets() {
                       ) : filterType === 'date' ? (
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker disablePast
+                            <DatePicker
+                              disablePast
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
                               onChange={(event: any) =>
@@ -625,9 +533,9 @@ export default function Assets() {
                           fullWidth
                           displayEmpty
                           IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event: any) =>
-                            setFilterSearchValue(event.target?.value)
-                          }
+                          onChange={(event: any) => {
+                            setFilterSearchValue(event.target?.value);
+                          }}
                           renderValue={
                             filterSearchValue !== null
                               ? undefined
@@ -635,7 +543,7 @@ export default function Assets() {
                           }
                         >
                           {filterOptions.map((element: any, index) => (
-                            <MenuItem key={index} value={element._id}>
+                            <MenuItem key={index} value={element.value}>
                               {element.name}
                             </MenuItem>
                           ))}
@@ -704,7 +612,6 @@ export default function Assets() {
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
-              // size={dense ? "small" : "medium"}
               stickyHeader
             >
               <TableHeader
@@ -719,7 +626,6 @@ export default function Assets() {
                 orderBy={''}
                 rowCount={0}
                 columns={headers}
-                // filters={filters}
                 handleTableSorting={handleTableSorting}
               />
 
@@ -740,11 +646,8 @@ export default function Assets() {
                           hover
                           tabIndex={-1}
                           key={index}
-                          // selected={isItemSelected}
                           sx={{ cursor: 'pointer' }}
                           onClick={(e: any) => {
-                            // e.target.tagName !== 'INPUT' &&
-                            //   e.target.tagName !== 'LI' &&
                             navigate(`/assets/details/${row._id}`, {
                               state: { props: row, func: reload() },
                             });
@@ -999,7 +902,6 @@ export default function Assets() {
             ref={formPopupRef}
             closeFormPopup={handleCloseFormPopup}
             submitFormPopup={handleSubmitFormPopup}
-            // openConfirmationPopup={handleOpenConfirmationPopup}
             type="create"
             reload={reload}
           />

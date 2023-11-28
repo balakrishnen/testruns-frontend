@@ -22,7 +22,7 @@ export default function TableHeader(props: any) {
     onRequestSort,
     columns,
     filters,
-    handleTableSorting
+    handleTableSorting,
   } = props;
   const createSortHandler =
     (property: keyof ProceduresRowData) =>
@@ -75,12 +75,19 @@ export default function TableHeader(props: any) {
                 id="tableFilter"
                 sortDirection={headCell.sort}
               >
-                <TableSortLabel
-                  direction={headCell.sort}
-                  onClick={(event) => handleTableSorting(event, headCell, index)}
-                >
-                  {headCell.label}
-                </TableSortLabel>
+                {headCell.id === 'departmentId' ||
+                headCell.id === 'laboratoryId' ? (
+                  <TableSortLabel hideSortIcon>{headCell.label}</TableSortLabel>
+                ) : (
+                  <TableSortLabel
+                    direction={headCell.sort}
+                    onClick={(event) =>
+                      handleTableSorting(event, headCell, index)
+                    }
+                  >
+                    {headCell.label}
+                  </TableSortLabel>
+                )}
                 {/* <TableRow sx={{ width: "100%", display: "block" }}>
                 <TableCell
                   padding="none"

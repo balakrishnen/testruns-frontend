@@ -759,7 +759,7 @@ p.reg-text {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 17px;
+  // margin-bottom: 17px;
 
   p {
     color: $black-shade-2;
@@ -1244,9 +1244,9 @@ tbody td .td-select {
     background-image: url('../images/chevrondown.svg');
     background-size: cover;
     background-repeat: no-repeat;
-    width: 19px;
-    height: 19px;
-    top: 3px !important;
+    width: 17px;
+    height: 17px;
+    top: 4px !important;
 
     path {
       display: none;

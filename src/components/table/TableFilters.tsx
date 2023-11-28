@@ -124,7 +124,7 @@ export default function TableFilters({
     setFilterType(null);
     applyFilters('search', null);
     handleFilterPopoverClose();
-    setFilterKey(null)
+    setFilterKey(null);
   };
 
   const Placeholder = ({ children }: any) => {
@@ -231,12 +231,11 @@ export default function TableFilters({
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                {columns.map((item: any, index: number) =>
-                 (
+                {columns.map((item: any, index: number) => (
                   <MenuItem key={item.id} value={item.label}>
                     <Checkbox
                       checked={item.is_show ? true : false}
-                      disabled={item.label.includes('ID')?true:false}
+                      // disabled={item.label.includes('ID') ? true : false}
                       onChange={(e) => handleMenuCheckboxChange(e, index)}
                     />
                     <ListItemText primary={item.label} />
@@ -248,7 +247,7 @@ export default function TableFilters({
         </Grid>
         {/* <Grid item xs={12} sm={12} md={12} lg={6} xl={3}>
           <Box className="filter-search"> */}
-            {/* <Select
+        {/* <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
               multiple
@@ -268,7 +267,7 @@ export default function TableFilters({
               ))}
             </Select> */}
 
-            {/* <TextField
+        {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -287,7 +286,7 @@ export default function TableFilters({
               }}
               className="search-field-inner"
             /> */}
-            {/* <Box sx={{ position: 'relative' }}>
+        {/* <Box sx={{ position: 'relative' }}>
               <Button
                 // aria-describedby={id}
                 variant="contained"
@@ -299,8 +298,8 @@ export default function TableFilters({
                   justifyContent: 'center',
                 }}
               > */}
-                {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
-                {/* <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
+        {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
+        {/* <Badge color="secondary" variant={filterKey === null ? "standard" : "dot"} invisible={false}>
                   <img
                     src={filterIcon}
                     alt="no_image"
@@ -547,7 +546,7 @@ export default function TableFilters({
                 </Box>
               </Popover>
             </Box> */}
-          {/* </Box>
+        {/* </Box>
         </Grid> */}
       </Grid>
     </>
