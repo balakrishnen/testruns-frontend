@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import PrivateRoute from '../../components/PrivateRoute';
 import {
@@ -119,7 +120,15 @@ export default function Procedures() {
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_all_procedures,
   );
-  console.log('procedureSliceData', procedureSliceData);
+  const departmentSliceData = useSelector(
+    (state: any) => state.department.data?.get_all_departments,
+  );
+  const labSliceData = useSelector(
+    (state: any) => state.lab.data?.get_all_labs,
+  );
+  const proceduresIdSliceData = useSelector(
+    (state: any) => state.procedure.data?.get_all_procedures,
+  );
 
   const dispatch: any = useDispatch();
   const [procedureData, setProcedureData] = React.useState<any>([]);
@@ -139,11 +148,11 @@ export default function Procedures() {
   const handleClearFilter = () => {
     setFilterStatus(null);
     setFilterAvailability(null);
-    setFilterSearchBy(null);
-    setFilterSearchValue(null);
+    setFilterSearchBy((prevState) => null);
+    setFilterSearchValue((prevState) => null);
     setFilterOptions([]);
     setFilterType(null);
-    applyFilters('search', null);
+    applyFilters(null, null);
     handleFilterPopoverClose();
     setFilterKey(null);
   };
@@ -331,11 +340,11 @@ export default function Procedures() {
     setVisibleRow,
     setRowId,
   );
-  const handleCheckboxValues = (id:any) => {
+  const handleCheckboxValues = (id: any) => {
     // Check if the ID is already in the selectedIds
     if (rowId.includes(id)) {
       // If it is, remove it
-      setRowId(rowId.filter((rowId:any) => rowId !== id));
+      setRowId(rowId.filter((rowId: any) => rowId !== id));
     } else {
       // If it's not, add it
       setRowId([...rowId, id]);
@@ -432,9 +441,9 @@ export default function Procedures() {
     setQueryString(payload);
   };
 
-  const applyFilters = (field: any, value: any) => {
+  const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
-    payload['searchBy'] = field;
+    payload['searchBy'] = key;
     payload['search'] = value;
     setQueryString(payload);
   };
@@ -442,6 +451,19 @@ export default function Procedures() {
     const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
     dispatch(fetchProcedureData(payload));
   };
+
+  const getFilterOptions = (data) => {
+    const result: any = [];
+    data.forEach((element) => {
+      result.push({
+        id: element.name,
+        name: element.name,
+        value: element._id,
+      });
+    });
+    return result;
+  };
+
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -518,35 +540,6 @@ export default function Procedures() {
                     />
                   </Box>
                   <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
-                    {/* <Box sx={{ my: 1 }}>
-                      <Typography variant="body2" paddingY={1}>
-                        Status
-                      </Typography> */}
-
-                    {/* <Select
-                        labelId="table-select-label"
-                        id="table-select"
-                        value={filterStatus}
-                        displayEmpty
-                        fullWidth
-                        size="small"
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        onChange={(event: any) =>
-                          setFilterStatus(event.target.value)
-                        }
-                        renderValue={
-                          filterStatus !== null
-                            ? undefined
-                            : () => <Placeholder>Select Status</Placeholder>
-                        }
-                      >
-                        {runsStatus?.map((element: any) => (
-                          <MenuItem value={element.value} key={element.value}>
-                            {element.name}
-                          </MenuItem>
-                        ))}
-                      </Select> */}
-                    {/* </Box> */}
                     <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
                         Search by
@@ -559,13 +552,31 @@ export default function Procedures() {
                         size="small"
                         fullWidth
                         displayEmpty
-                        autoComplete='off'
+                        autoComplete="off"
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
-                          //   debugger;
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
+                          if (event.target?.value === 'laboratoryId') {
+                            setFilterOptions(getFilterOptions(labSliceData));
+                          }
+                          if (event.target?.value === 'departmentId') {
+                            setFilterOptions(
+                              getFilterOptions(departmentSliceData),
+                            );
+                          }
+                          if (event.target?.value === 'procedureNumber') {
+                            const result: any = [];
+                            proceduresIdSliceData.Procedures.forEach((element) => {
+                              result.push({
+                                id: element.procedureNumber,
+                                name: element.procedureNumber,
+                                value: element.procedureNumber,
+                              });
+                            });
+                            setFilterOptions(result);
+                          }
                         }}
                         renderValue={
                           filterSearchBy !== null
@@ -610,7 +621,7 @@ export default function Procedures() {
                           InputLabelProps={{ shrink: false }}
                           placeholder="Search"
                           size="small"
-                          autoComplete='off'
+                          autoComplete="off"
                           value={filterSearchValue}
                           onChange={(event: any) =>
                             setFilterSearchValue(event.target.value)
@@ -619,7 +630,7 @@ export default function Procedures() {
                       ) : filterType === 'date' ? (
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker disablePast
+                            <DatePicker
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
                               onChange={(event: any) =>
@@ -648,7 +659,7 @@ export default function Procedures() {
                         >
                           {filterOptions.map((element: any, index) => (
                             <MenuItem key={index} value={element.value}>
-                              {element.label}
+                              {element.name}
                             </MenuItem>
                           ))}
                         </Select>
@@ -719,8 +730,6 @@ export default function Procedures() {
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
               stickyHeader
-              // size={dense ? "small" : "medium"}
-              stickyHeader
             >
               <TableHeader
                 numSelected={0}
@@ -782,7 +791,8 @@ export default function Procedures() {
                                     onClick={(e: any) => clickHandler(e)}
                                     onChange={(event) => {
                                       // Procedure.push(row._id)
-                                     handleCheckboxValues( row._id),  handleChange(event, row._id);
+                                      handleCheckboxValues(row._id),
+                                        handleChange(event, row._id);
                                     }}
                                   />
                                 </Box>

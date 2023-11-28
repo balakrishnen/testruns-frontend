@@ -67,7 +67,7 @@ import TableSkeleton from '../../components/table/TableSkeleton';
 // table start
 
 const rows: RunsRowData[] = RunsRows;
-const runsStatus = RunsStatusList;
+const runsStatus: any = RunsStatusList;
 
 export default function Runs() {
   const [runsOpen, setRunsOpen] = React.useState(false);
@@ -125,6 +125,17 @@ export default function Runs() {
 
   const runsSliceData = useSelector(
     (state: any) => state.runs.data?.get_all_runs,
+  );
+
+  const departmentSliceData = useSelector(
+    (state: any) => state.department.data?.get_all_departments,
+  );
+  const labSliceData = useSelector(
+    (state: any) => state.lab.data?.get_all_labs,
+  );
+
+  const runsIdSliceData = useSelector(
+    (state: any) => state.runs.data?.get_all_runs_name,
   );
 
   const Data = Rows.slice(startIndex, endIndex);
@@ -357,11 +368,11 @@ export default function Runs() {
     payload['search'] = value;
     setQueryString(payload);
   };
-  const handleCheckboxValues = (id:any) => {
+  const handleCheckboxValues = (id: any) => {
     // Check if the ID is already in the selectedIds
     if (rowId.includes(id)) {
       // If it is, remove it
-      setRowId(rowId.filter((rowId:any) => rowId !== id));
+      setRowId(rowId.filter((rowId: any) => rowId !== id));
     } else {
       // If it's not, add it
       setRowId([...rowId, id]);
@@ -381,6 +392,18 @@ export default function Runs() {
   // page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
   const emptyRows = 0 > 0 ? Math.max(0, (1 + 0) * 5 - 12) : 0;
   console.log(emptyRows);
+
+  const getFilterOptions = (data) => {
+    const result: any = [];
+    data.forEach((element) => {
+      result.push({
+        id: element.name,
+        name: element.name,
+        value: element._id,
+      });
+    });
+    return result;
+  };
 
   return (
     <PrivateRoute>
@@ -458,7 +481,7 @@ export default function Runs() {
                     />
                   </Box>
                   <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
-                    <Box sx={{ my: 1 }}>
+                    {/* <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
                         Status
                       </Typography>
@@ -486,7 +509,7 @@ export default function Runs() {
                           </MenuItem>
                         ))}
                       </Select>
-                    </Box>
+                    </Box> */}
                     <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
                         Search by
@@ -499,13 +522,36 @@ export default function Runs() {
                         size="small"
                         fullWidth
                         displayEmpty
-                        autoComplete='off'
+                        autoComplete="off"
                         IconComponent={ExpandMoreOutlinedIcon}
                         onChange={(event: any, data: any) => {
                           //   debugger;
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
+
+                          if (event.target?.value === 'laboratoryId') {
+                            setFilterOptions(getFilterOptions(labSliceData));
+                          }
+                          if (event.target?.value === 'departmentId') {
+                            setFilterOptions(
+                              getFilterOptions(departmentSliceData),
+                            );
+                          }
+                          if (event.target?.value === 'runNumber') {
+                            const data: any = [];
+                            runsSliceData.Runs.forEach((element) => {
+                              data.push({
+                                id: element.runNumber,
+                                name: element.runNumber,
+                                value: element.runNumber,
+                              });
+                            });
+                            setFilterOptions(data);
+                          }
+                          if (event.target?.value === 'status') {
+                            setFilterOptions(RunsStatusList);
+                          }
                         }}
                         renderValue={
                           filterSearchBy !== null
@@ -550,7 +596,7 @@ export default function Runs() {
                           InputLabelProps={{ shrink: false }}
                           placeholder="Search"
                           size="small"
-                          autoComplete='off'
+                          autoComplete="off"
                           value={filterSearchValue}
                           onChange={(event: any) =>
                             setFilterSearchValue(event.target.value)
@@ -559,7 +605,7 @@ export default function Runs() {
                       ) : filterType === 'date' ? (
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker disablePast
+                            <DatePicker
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
                               onChange={(event: any) =>
@@ -588,7 +634,7 @@ export default function Runs() {
                         >
                           {filterOptions.map((element: any, index) => (
                             <MenuItem key={index} value={element.value}>
-                              {element.label}
+                              {element.name}
                             </MenuItem>
                           ))}
                         </Select>
@@ -708,7 +754,7 @@ export default function Runs() {
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                                  handleCheckboxValues( row._id),
+                                  handleCheckboxValues(row._id),
                                     handleChange(event, row._id);
                                 }}
                               />
@@ -965,7 +1011,7 @@ export default function Runs() {
             openConfirmationPopup={handleOpenConfirmationPopup}
             type="create"
             reload={reload}
-            handleReloadSingleData={""}
+            handleReloadSingleData={''}
           />
         </Box>
         <DeleteSuccessPopup ref={deleteSuccessPopupRef} />

@@ -102,6 +102,18 @@ const Users = () => {
     (state: any) => state.user.data?.get_all_users,
   );
 
+  const Data = Rows.slice(startIndex, endIndex);
+  const [rowId, setRowId] = React.useState<any>([]);
+
+  const [visibleRow, setVisibleRow] = React.useState<any>(Data);
+
+  const roleSliceData = useSelector(
+    (state: any) => state.role.data?.get_all_roles,
+  );
+  const organizationSliceData = useSelector(
+    (state: any) => state.organization.data?.get_all_organisations,
+  );
+
   React.useEffect(() => {
     setTimeout(() => {
       setLoader(false);
@@ -124,8 +136,7 @@ const Users = () => {
     setUserData(userSliceData?.Identity);
     setPageInfo(page);
   }, [userSliceData]);
-  const Data = Rows.slice(startIndex, endIndex);
-  const [rowId, setRowId] = React.useState<any>([]);
+
 
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
@@ -136,7 +147,7 @@ const Users = () => {
     setQueryString(payload);
     setCurrentPage(page_no);
   };
-  const [visibleRow, setVisibleRow] = React.useState<any>(Data);
+
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -275,15 +286,6 @@ const Users = () => {
   const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
   };
-  const roleSliceData = useSelector(
-    (state: any) => state.role.data?.get_all_roles,
-  );
-  const organizationSliceData = useSelector(
-    (state: any) => state.organization.data?.get_all_organisations,
-  );
-  console.log(
-    roleSliceData?.find((obj) => obj._id == '6548eabeaeb1160012a51125'),
-  );
 
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
@@ -320,6 +322,19 @@ const Users = () => {
   
   // Now, filteredArray does not contain the inputValue
   console.log(rowId);
+
+  const getFilterOptions = (data) => {
+    const result: any = [];
+    data.forEach((element) => {
+      result.push({
+        id: element.name,
+        name: element.name,
+        value: element._id,
+      });
+    });
+    return result;
+  };
+
   // table end
   return (
     <Box
@@ -411,35 +426,6 @@ const Users = () => {
                 <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
                   <Box sx={{ my: 1 }}>
                     <Typography variant="body2" paddingY={1}>
-                      Status
-                    </Typography>
-
-                    <Select
-                      labelId="table-select-label"
-                      id="table-select"
-                      value={filterStatus}
-                      displayEmpty
-                      fullWidth
-                      size="small"
-                      IconComponent={ExpandMoreOutlinedIcon}
-                      onChange={(event: any) =>
-                        setFilterStatus(event.target.value)
-                      }
-                      renderValue={
-                        filterStatus !== null
-                          ? undefined
-                          : () => <Placeholder>Select Status</Placeholder>
-                      }
-                    >
-                      {userStatus?.map((element: any) => (
-                        <MenuItem value={element.value} key={element.value}>
-                          {element.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Box>
-                  <Box sx={{ my: 1 }}>
-                    <Typography variant="body2" paddingY={1}>
                       Search by
                     </Typography>
 
@@ -457,6 +443,18 @@ const Users = () => {
                         setFilterSearchValue(null);
                         setFilterSearchBy(event.target?.value);
                         setFilterFieldName(data.props.children);
+                        // if (event.target?.value === 'firstName') {
+                        //   setFilterOptions(getFilterOptions(roleSliceData));
+                        // }
+                        if (event.target?.value === 'role') {
+                          setFilterOptions(getFilterOptions(roleSliceData));
+                        }
+                        if (event.target?.value === 'organisationId') {
+                          setFilterOptions(getFilterOptions(organizationSliceData));
+                        }
+                        if (event.target?.value === 'status') {
+                          setFilterOptions(StatusList);
+                        }
                       }}
                       renderValue={
                         filterSearchBy !== null
@@ -510,7 +508,7 @@ const Users = () => {
                     ) : filterType === 'date' ? (
                       <Box id="filterDatePicker">
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker disablePast
+                          <DatePicker
                             format="DD/MM/YYYY"
                             value={filterSearchValue}
                             onChange={(event: any) =>
@@ -539,7 +537,7 @@ const Users = () => {
                       >
                         {filterOptions.map((element: any, index) => (
                           <MenuItem key={index} value={element.value}>
-                            {element.label}
+                            {element.name}
                           </MenuItem>
                         ))}
                       </Select>
@@ -646,7 +644,7 @@ const Users = () => {
                         formPopupRef.current.open(true, 'edit', row)
                       }
                     >
-                      {headers[0].is_show && (
+                      {/* {headers[0].is_show && (
                         <TableCell scope="row">
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box sx={{ mt: 0, mr: 1 }}>
@@ -675,17 +673,43 @@ const Users = () => {
                             </Box>
                           </Box>
                         </TableCell>
-                      )}
-                      {headers[1].is_show && (
+                      )} */}
+                      {headers[0].is_show && (
                         <TableCell align="center">
-                          {row.firstName} {row.lastName}
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Box sx={{ mt: 0, mr: 1 }}>
+                              <Checkbox
+                                color="primary"
+                                checked={row.is_checked == true ? true : false}
+                                onClick={(e: any) => clickHandler(e)}
+                                onChange={(event) => {
+                                  handleCheckboxValues( row._id),
+                                  handleChange(event, row._id);
+                                }}
+                              />
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Box>
+                                <img
+                                  src={user}
+                                  alt="no_image"
+                                  style={{ width: '45px', height: '45px' }}
+                                />
+                              </Box>
+                              <Box sx={{ ml: 1 }}>
+                                <Box >{row.firstName} {row.lastName}</Box>
+                              </Box>
+                            </Box>
+                          </Box>
+                          
                         </TableCell>
                       )}
-                      {/* {headers[2].is_show && (
+                      {headers[1].is_show && (
                       <TableCell align="center">
-                        {row.providerDetails==null?"-":row.providerDetails}
+                        {row.email}
                       </TableCell>
-                    )} */}
+                    )}
                       {headers[2].is_show && (
                         <TableCell align="center">
                           {

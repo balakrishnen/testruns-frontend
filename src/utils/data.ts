@@ -37,7 +37,7 @@ export const InstitutionList = [
   { id: 3, name: 'Academy 3' },
 ];
 
-export const AssetsHeaders: readonly AssetsHead[] = [
+export const AssetsHeaders: any = [
   {
     id: 'assetNumber',
     label: 'Assets ID',
@@ -127,7 +127,7 @@ export const AssetsHeaders: readonly AssetsHead[] = [
     type: 'date',
   },
   {
-    id: 'updatedAt',
+    id: 'lastUsedDate',
     label: 'Last used',
     filters: [
       {
@@ -272,26 +272,26 @@ export const AssetsRows = [
   },
 ];
 
-export const UserHeaders: readonly UserHead[] = [
-  {
-    id: 'id',
-    label: 'User ID',
-    filters: [
-      {
-        id: 'user_id',
-        type: 'autocomplete',
-        label: 'User ID',
-        options: [
-          { value: 'ID1001', label: 'ID1001' },
-          { value: 'ID1002', label: 'ID1002' },
-          { value: 'ID1003', label: 'ID1003' },
-        ],
-      },
-    ],
-    sort: 'asc',
-    is_show: true,
-    type: 'select',
-  },
+export const UserHeaders: any = [
+  // {
+  //   id: 'id',
+  //   label: 'User ID',
+  //   filters: [
+  //     {
+  //       id: 'user_id',
+  //       type: 'autocomplete',
+  //       label: 'User ID',
+  //       options: [
+  //         { value: 'ID1001', label: 'ID1001' },
+  //         { value: 'ID1002', label: 'ID1002' },
+  //         { value: 'ID1003', label: 'ID1003' },
+  //       ],
+  //     },
+  //   ],
+  //   sort: 'asc',
+  //   is_show: true,
+  //   type: 'select',
+  // },
   {
     id: 'firstName',
     label: 'User Name',
@@ -308,7 +308,22 @@ export const UserHeaders: readonly UserHead[] = [
     type: 'text',
   },
   {
-    id: 'providerDetails',
+    id: 'email',
+    label: 'Email',
+    filters: [
+      {
+        id: 'search',
+        type: 'textfield',
+        label: 'Search',
+        options: [],
+      },
+    ],
+    sort: 'asc',
+    is_show: true,
+    type: 'text',
+  },
+  {
+    id: 'organisationId',
     label: 'Organisation',
     filters: [
       {
@@ -345,7 +360,7 @@ export const UserHeaders: readonly UserHead[] = [
   //   type: 'select',
   // },
   {
-    id: 'organisationId',
+    id: 'createdAt',
     label: 'Added on',
     filters: [
       {
@@ -360,7 +375,7 @@ export const UserHeaders: readonly UserHead[] = [
     type: 'date',
   },
   {
-    id: 'roleId',
+    id: 'role',
     label: 'Role',
     filters: [
       {
@@ -372,7 +387,7 @@ export const UserHeaders: readonly UserHead[] = [
     ],
     sort: 'asc',
     is_show: true,
-    type: 'text',
+    type: 'select',
   },
   {
     id: 'status',
@@ -645,7 +660,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     type: 'select',
   },
   {
-    id: 'laboratoryID',
+    id: 'laboratoryId',
     label: 'Lab',
     filters: [
       {
@@ -664,7 +679,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     type: 'select',
   },
   {
-    id: 'updatedAt',
+    id: 'createdAt',
     label: 'Created on',
     filters: [
       {
@@ -882,7 +897,7 @@ export const LaboratoryList: readonly Laboratory[] = [
   },
 ];
 
-export const RunsHeaders: readonly RunsHead[] = [
+export const RunsHeaders: any = [
   {
     id: 'runNumber',
     label: 'Runs ID',
@@ -988,7 +1003,7 @@ export const RunsHeaders: readonly RunsHead[] = [
     type: 'date',
   },
   {
-    id: 'isActive',
+    id: 'status',
     label: 'Status',
     filters: [
       {
@@ -996,10 +1011,10 @@ export const RunsHeaders: readonly RunsHead[] = [
         type: 'autocomplete',
         label: '-Select status-',
         options: [
-          { value: '1', label: 'Created' },
-          { value: '2', label: 'Started' },
-          { value: '3', label: 'Stopped' },
-          { value: '4', label: 'Completed' },
+          { id: 1, name: 'Created', value: 'Created' },
+          { id: 2, name: 'Started', value: 'Started' },
+          { id: 3, name: 'Stopped', value: 'Stopped' },
+          { id: 3, name: 'Completed', value: 'Complete' },
         ],
       },
     ],

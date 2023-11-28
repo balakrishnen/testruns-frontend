@@ -349,6 +349,18 @@ export default function Assets() {
     return <div>{children}</div>;
   };
 
+  const getFilterOptions = (data) => {
+    const result: any = [];
+    data.forEach((element) => {
+      result.push({
+        id: element.name,
+        name: element.name,
+        value: element._id,
+      });
+    });
+    return result;
+  };
+
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -433,7 +445,7 @@ export default function Assets() {
                         id="table-select"
                         value={filterSearchBy}
                         size="small"
-                        autoComplete='off'
+                        autoComplete="off"
                         fullWidth
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
@@ -442,10 +454,12 @@ export default function Assets() {
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
                           if (event.target?.value === 'laboratoryId') {
-                            setFilterOptions(labSliceData);
+                            setFilterOptions(getFilterOptions(labSliceData));
                           }
                           if (event.target?.value === 'departmentId') {
-                            setFilterOptions(departmentSliceData);
+                            setFilterOptions(
+                              getFilterOptions(departmentSliceData),
+                            );
                           }
                           if (event.target?.value === 'assetNumber') {
                             const data: any = [];
@@ -504,7 +518,7 @@ export default function Assets() {
                           name="Search"
                           id="Search"
                           style={{ margin: '0px' }}
-                          autoComplete='off'
+                          autoComplete="off"
                           InputLabelProps={{ shrink: false }}
                           placeholder="Search"
                           size="small"
@@ -517,7 +531,6 @@ export default function Assets() {
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                              disablePast
                               format="DD/MM/YYYY"
                               value={filterSearchValue}
                               onChange={(event: any) =>

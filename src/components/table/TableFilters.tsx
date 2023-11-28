@@ -136,7 +136,7 @@ export default function TableFilters({
       <AssignPopup open={openAssign} close={() => setAssignOpen(false)} />
       <Grid
         container
-        sx={{ mb: 2 }}
+        sx={{ my: 2 }}
         alignItems="center"
         justifyContent={isTableHeaderVisible ? 'space-between' : 'flex-end'}
       >

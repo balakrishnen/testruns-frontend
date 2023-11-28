@@ -7,9 +7,9 @@ export interface ProceduresRowData {
   procedureNumber: string;
   procedureDetials:string;
   departmentId:string;
-  laboratoryID:string; 
+  laboratoryId:string; 
   assestId:string;
-  userID:string;
+  userId:string;
   extraData: string;
   isActive: number;
   createdAt: string;
@@ -24,9 +24,9 @@ interface HeaderId {
     procedureNumber: string;
     procedureDetials:string;
     departmentId:string;
-    laboratoryID:string; 
+    laboratoryId:string; 
     assestId:string;
-    userID:string;
+    userId:string;
     extraData: string;
     isActive: number;
     createdAt: string;

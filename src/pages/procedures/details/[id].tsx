@@ -433,7 +433,6 @@ React.useEffect(()=>{
                       init={{
                         height: 500,
                         menubar: true,
-                        selector: "textarea",
                         plugins: [
                           'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
