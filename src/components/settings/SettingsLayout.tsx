@@ -110,7 +110,7 @@ export const SettingsLayout = ({ children }: any, props: any) => {
               boxShadow: "3px 4px 4px 0px rgba(0, 0, 0, 0.10)",
             }}
             className={`${
-              show ? "side-hide" : "side-show"
+              show ? "side-hide show-common" : "side-show show-common"
             }`}
             style={{width:"240px"}}
           >
@@ -155,7 +155,10 @@ export const SettingsLayout = ({ children }: any, props: any) => {
               </List>
             </Box>
           </Box>
-          <Box 
+          <Box          
+          className={`${
+            show ? "side-hide-left show-right" : "show-right"
+          }`}
           sx={{ flexGrow: 20 }}
           >
             <ArrowBackIosNewOutlinedIcon

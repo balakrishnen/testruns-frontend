@@ -1241,11 +1241,11 @@ tbody td .td-select {
 
   svg {
     right: 5px;
-    background-image: url('../images/chevrondown.svg');
+    background-image: url('../images/chevrondown-white.svg');
     background-size: cover;
     background-repeat: no-repeat;
-    width: 17px;
-    height: 17px;
+    width: 19px;
+    height: 19px;
     top: 4px !important;
 
     path {
@@ -1267,7 +1267,7 @@ tbody td .td-select {
 .inuse-select.td-select .MuiSelect-select,
 .create-select.td-select .MuiSelect-select,
 .start-select.td-select .MuiSelect-select {
-  width: 124px;
+  width: 140px;
   border-radius: 20px;
   height: 26px;
   display: flex;
@@ -1406,7 +1406,7 @@ tbody td .td-select {
       background-image: url('../images/chevrondown.svg');
       background-size: cover;
       background-repeat: no-repeat;
-      // color: transparent !important;
+      color: transparent !important;
       opacity: 1 !important;
     }
   }
@@ -2382,4 +2382,15 @@ input#mobile_number {
 }
 .MuiTableCell-stickyHeader {
   background: $light-yellow-1 !important;
+}
+.show-common{
+  position: fixed;
+}  
+.show-right{
+  padding-left: 240px;
+}
+@media (max-width:899px){
+  .side-hide-left.show-right {
+    padding-left: 0px;
+  }
 }

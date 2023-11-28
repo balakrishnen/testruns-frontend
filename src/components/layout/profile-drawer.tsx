@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import {
   Box, Drawer, Toolbar, Typography, Checkbox,
-  Autocomplete, Button , Select, MenuItem
+  Autocomplete, Button, Select, MenuItem
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -27,15 +27,15 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { fetchRoleData } from '../../api/roleApi';
 
-const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Lase name is required"),
   email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
   phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
-  .min(10, "Enter valid number")
-  .max(10, "too long").required("Mobile number is required"),
+    .min(10, "Enter valid number")
+    .max(10, "too long").required("Mobile number is required"),
   organisationId: Yup.string().required("Organistation is required"),
   // institution: Yup.string().required("Institution is required"),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
@@ -49,7 +49,7 @@ export default function AppProfileDrawer({
   toggleProfileDrawer,
 }: any) {
   const [departmentData, setDepartmentData] = React.useState([]);
-  const [edit, setEdit]=React.useState(false)
+  const [edit, setEdit] = React.useState(false)
   const [organizationData, setOrganizationData] = React.useState([]);
   const [userDetail, setUserDetail] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
@@ -77,7 +77,7 @@ export default function AppProfileDrawer({
     setDepartmentData(departmentSliceData?.map((item: any) => ({
       label: item.name,
       value: item.name,
-        id: item._id,
+      id: item._id,
     })))
     setLabData(labSliceData?.map((item: any) => ({
       label: item.name,
@@ -98,52 +98,52 @@ export default function AppProfileDrawer({
     );
     setUserDetail(userSliceData)
 
-  }, [departmentSliceData, labSliceData,organizationSliceData,userSliceData,roleSliceData])
+  }, [departmentSliceData, labSliceData, organizationSliceData, userSliceData, roleSliceData])
 
   console.log(userDetail);
-  
+
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
   // console.log(departmentData);
 
   // console.log(DepartmentList);
-  React.useEffect(()=>{
-    let temp = { '_id': "6561fde22f447d0012e3d8cf"}
-        // if (row?._id) {
-          dispatch(fetchSingleUserData(temp)).then((isSucess) => {
-            if (isSucess.get_user) {
-              formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
-              formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
-              formik.setFieldValue('email', isSucess.get_user.email || '');
-              formik.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
-              formik.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
-              formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
-              // formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
-              formik.setFieldValue('role', isSucess.get_user.role || '');
-            }
-          })
-            .catch((err) => {
-              console.log(err);
-            });
-          // }    
-  },[departmentData, labData])
   React.useEffect(() => {
-    let payload={
-      _id:"655f18bcc88024001262b3a5"
+    let temp = { '_id': "6561fde22f447d0012e3d8cf" }
+    // if (row?._id) {
+    dispatch(fetchSingleUserData(temp)).then((isSucess) => {
+      if (isSucess.get_user) {
+        formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
+        formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
+        formik.setFieldValue('email', isSucess.get_user.email || '');
+        formik.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
+        formik.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
+        formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item)))) || []);
+        // formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
+        formik.setFieldValue('role', isSucess.get_user.role || '');
+      }
+    })
+      .catch((err) => {
+        console.log(err);
+      });
+    // }    
+  }, [departmentData, labData])
+  React.useEffect(() => {
+    let payload = {
+      _id: "655f18bcc88024001262b3a5"
     }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
     dispatch(fetchOrganizationData());
     dispatch(fetchRoleData())
     dispatch(fetchGetUser(payload))
-   setEdit(true)
+    setEdit(true)
   }, []);
   const checkCredentialsProfile = (
     firstName: any,
-    ) => {
-        return true
-    };
+  ) => {
+    return true
+  };
   const onSubmitProfile = (values: any) => {
     const isMatch = checkCredentialsProfile(
       values.firstName,
@@ -173,7 +173,7 @@ export default function AppProfileDrawer({
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
-        _id:"6561fde22f447d0012e3d8cf"
+        _id: "6561fde22f447d0012e3d8cf"
       }
       // debugger
       // userValues['_id'] = userData?._id
@@ -184,25 +184,25 @@ export default function AppProfileDrawer({
         }
       });
       // alert("User Details updated successful!");
-     
-  };
-}
+
+    };
+  }
   const formik = useFormik({
     initialValues: {
       firstName: '',
-      lastName:  '',
-      email:  '',
+      lastName: '',
+      email: '',
       phoneNumber: '',
-      organisationId:  '',
+      organisationId: '',
       // institution:  '',
       departmentId: [],
       laboratoryId: [],
-      role : '',
+      role: '',
     },
     validationSchema: validationSchema,
     onSubmit: onSubmitProfile,
   });
- 
+
   return (
     <Drawer
       className="profile-head"
@@ -217,11 +217,11 @@ export default function AppProfileDrawer({
         },
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
-      onClose={()=>{toggleProfileDrawer(), setEdit(true)}}
+      onClose={() => { toggleProfileDrawer(), setEdit(true) }}
     >
       <Toolbar />
-      <Box sx={{ overflow: 'auto'  }}>
-        <Box className="profile-page" sx={{py: 2}}>
+      <Box sx={{ overflow: 'auto' }}>
+        <Box className="profile-page" sx={{ py: 2 }}>
           <Box className="profile-section1">
             <Box
               sx={{
@@ -232,7 +232,7 @@ export default function AppProfileDrawer({
             >
               <CloseOutlinedIcon
                 sx={{ cursor: 'pointer' }}
-                onClick={()=>{toggleProfileDrawer(), setEdit(true)}}
+                onClick={() => { toggleProfileDrawer(), setEdit(true) }}
               />
               <Box
                 sx={{
@@ -257,380 +257,381 @@ export default function AppProfileDrawer({
             </Box>
           </Box>
           <Box className="edit-profile-btn">
-            <Button onClick={()=>setEdit(false)}>Edit profile</Button>
+            <Button onClick={() => setEdit(false)}>Edit profile</Button>
           </Box>
-          <form onSubmit={formik.handleSubmit}  autoComplete="off">
+          <form onSubmit={formik.handleSubmit} autoComplete="off">
 
-          <Box className="profile-section2">
-            <Grid container spacing={2} className="profile-inner">
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                lg={6}
-                sx={{
-                  paddingRight: {
-                    xs: '0rem !important',
-                    sm: '1rem !important',
-                  },
-                }}
-              >
-                <Box>
-                  <label>
-                    First name<span style={{ color: '#E2445C' }}>*</span>
-                  </label>
-                  <TextField
-                    className={edit?"bg-gray-input":""}
-                    disabled={edit}
-                    margin="none"
-                    fullWidth
-                    id="firstName"
-                    name="firstName"
-                    autoComplete="off"
-                    InputLabelProps={{ shrink: false }}
-                    placeholder="First name"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.firstName}
-                    size="small"
-                    error={
-                      formik.touched.firstName &&
-                      Boolean(formik.errors.firstName)
-                    }
-                  />
-                    {formik.touched.firstName &&
-                        formik.errors.firstName && (
-                          <Typography className="error-field">
-                            {formik.errors.firstName}
-                          </Typography>
-                        )}
-                </Box>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                lg={6}
-                sx={{
-                  paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
-                }}
-              >
-                <Box>
-                  <label>
-                    Last name<span style={{ color: '#E2445C' }}>*</span>
-                  </label>
-                  <TextField
-                    className={edit?"bg-gray-input":""}
-                    disabled={edit}
-                    margin="normal"
-                    fullWidth
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    autoComplete="off"
-                    InputLabelProps={{ shrink: false }}
-                    placeholder="Last name"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.lastName}
-                    size="small"
-                    error={
-                      formik.touched.lastName &&
-                      Boolean(formik.errors.lastName)
-                    }
-                  />
-                  {formik.touched.lastName && formik.errors.lastName && (
-                    <Typography className="error-field">
-                      {formik.errors.lastName}
-                    </Typography>
-                  )}
-                  
-                </Box>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} className="profile-inner">
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                lg={6}
-                sx={{
-                  paddingRight: {
-                    xs: '0rem !important',
-                    sm: '1rem !important',
-                  },
-                }}
-              >
-                <Box>
-                  <label>
-                    Email<span style={{ color: '#E2445C' }}>*</span>
-                  </label>
-                  <TextField
-                    className={"bg-gray-input"}
-                    disabled={true}
-                    inputProps={{ maxLength: 50 }}
-                    margin="normal"
-                    fullWidth
-                    id="email"
-                    name="email"
-                    autoComplete="off"
-                    InputLabelProps={{ shrink: false }}
-                    placeholder="Email"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.email}
-                    size="small"
-                    error={
-                      formik.touched.email &&
-                      Boolean(formik.errors.email)
-                    }
-                  />
-                  {formik.touched.email && formik.errors.email && (
-                    <Typography className="error-field">
-                      {formik.errors.email}
-                    </Typography>
-                  )}
-                </Box>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                lg={6}
-                sx={{
-                  paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
-                }}
-              >
-                <Box>
-                  <label>Mobile</label>
-                  <TextField
-                  
-                    onInput={(e:any)=>{ 
-                      e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+            <Box className="profile-section2">
+              <Grid container spacing={2} className="profile-inner">
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    paddingRight: {
+                      xs: '0rem !important',
+                      sm: '1rem !important',
+                    },
                   }}
-                    className={edit?"bg-gray-input":""}
-                    inputProps={{ maxLength: 10 }}
-                    disabled={edit}
-                    margin="none"
-                        fullWidth
-                        id="mobile"
-                        name="mobile"
-                        type="number"
-                        InputLabelProps={{ shrink: false }}
-                        placeholder="Mobile number"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.phoneNumber}
-                        size="small"
-                        error={
-                          formik.touched.phoneNumber &&
-                          Boolean(formik.errors.phoneNumber)
-                        }
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment sx={{ mx: 2 }} position="start">
-                              +91{' '}
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                      {formik.touched.phoneNumber &&
-                        formik.errors.phoneNumber && (
-                          <Typography className="error-field">
-                            {formik.errors.phoneNumber}
-                          </Typography>
-                        )}
-                </Box>
+                >
+                  <Box>
+                    <label>
+                      First name<span style={{ color: '#E2445C' }}>*</span>
+                    </label>
+                    <TextField
+                      className={edit ? "bg-gray-input" : ""}
+                      disabled={edit}
+                      margin="none"
+                      fullWidth
+                      id="firstName"
+                      name="firstName"
+                      autoComplete="off"
+                      InputLabelProps={{ shrink: false }}
+                      placeholder="First name"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.firstName}
+                      size="small"
+                      error={
+                        formik.touched.firstName &&
+                        Boolean(formik.errors.firstName)
+                      }
+                    />
+                    {formik.touched.firstName &&
+                      formik.errors.firstName && (
+                        <Typography className="error-field">
+                          {formik.errors.firstName}
+                        </Typography>
+                      )}
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
+                  }}
+                >
+                  <Box>
+                    <label>
+                      Last name<span style={{ color: '#E2445C' }}>*</span>
+                    </label>
+                    <TextField
+                      className={edit ? "bg-gray-input" : ""}
+                      disabled={edit}
+                      margin="normal"
+                      fullWidth
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      autoComplete="off"
+                      InputLabelProps={{ shrink: false }}
+                      placeholder="Last name"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.lastName}
+                      size="small"
+                      error={
+                        formik.touched.lastName &&
+                        Boolean(formik.errors.lastName)
+                      }
+                    />
+                    {formik.touched.lastName && formik.errors.lastName && (
+                      <Typography className="error-field">
+                        {formik.errors.lastName}
+                      </Typography>
+                    )}
+
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={2} className="profile-inner multi-selection">
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Box>
-                  <label>Organisation</label>
-                  <Select
-                    className={edit?"bg-gray-input":""}
-                    disabled={edit}
-                    style={{color:"black",backgroundColor:edit?'#f3f3f3':'white'}}
-                        displayEmpty
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        renderValue={
-                          formik.values.organisationId !== ''
-                            ? undefined
-                            : () => (
-                              <Placeholder>
-                                Select Organization
-                              </Placeholder>
-                            )
-                        }
-                        margin="none"
-                        fullWidth
-                        id="organisationId"
-                        name="organisationId"
-                        autoComplete="off"
-                        placeholder="Organization"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.organisationId}
-                        size="small"
-                        error={
-                          formik.touched.organisationId &&
-                          Boolean(formik.errors.organisationId)
-                        }
-                      >
-                        {organizationData?.map((item: any, index) => (
-                          <MenuItem key={index} value={item.id}>
-                            {item.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                      {formik.touched.organisationId &&
-                        formik.errors.organisationId && (
-                          <Typography className="error-field">
-                            {formik.errors.organisationId}
-                          </Typography>
-                        )}
-                </Box>
+              <Grid container spacing={2} className="profile-inner">
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    paddingRight: {
+                      xs: '0rem !important',
+                      sm: '1rem !important',
+                    },
+                  }}
+                >
+                  <Box>
+                    <label>
+                      Email<span style={{ color: '#E2445C' }}>*</span>
+                    </label>
+                    <TextField
+                      className={"bg-gray-input"}
+                      disabled={true}
+                      inputProps={{ maxLength: 50 }}
+                      margin="normal"
+                      fullWidth
+                      id="email"
+                      name="email"
+                      autoComplete="off"
+                      InputLabelProps={{ shrink: false }}
+                      placeholder="Email"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.email}
+                      size="small"
+                      error={
+                        formik.touched.email &&
+                        Boolean(formik.errors.email)
+                      }
+                    />
+                    {formik.touched.email && formik.errors.email && (
+                      <Typography className="error-field">
+                        {formik.errors.email}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
+                  }}
+                >
+                  <Box>
+                    <label>Mobile</label>
+                    <TextField
+
+                      onInput={(e: any) => {
+                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10)
+                      }}
+                      className={edit ? "bg-gray-input" : ""}
+                      inputProps={{ maxLength: 10 }}
+                      disabled={edit}
+                      margin="none"
+                      fullWidth
+                      id="mobile"
+                      name="mobile"
+                      type="number"
+                      InputLabelProps={{ shrink: false }}
+                      placeholder="Mobile number"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.phoneNumber}
+                      size="small"
+                      error={
+                        formik.touched.phoneNumber &&
+                        Boolean(formik.errors.phoneNumber)
+                      }
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment sx={{ mx: 2 }} position="start">
+                            +91{' '}
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    {formik.touched.phoneNumber &&
+                      formik.errors.phoneNumber && (
+                        <Typography className="error-field">
+                          {formik.errors.phoneNumber}
+                        </Typography>
+                      )}
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={2} className="profile-inner multi-selection">
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Box>
-                  <label>Department</label>
-                  <Autocomplete
-                    multiple
-                    id="department"
-                    className={edit?"bg-gray-input":""}
-                    disabled={edit}
-                    disableCloseOnSelect
-                    value={formik.values.departmentId}
-                    options={
-                      departmentData !== undefined
-                        ? departmentData
-                        : []
-                    }
-                    getOptionLabel={(option: any) =>option?.label }
-                              isOptionEqualToValue={(option: any, value: any) =>
-                              value?.id == option?.id
-                              }
-                              renderInput={(params) => (
-                                <TextField {...params} placeholder="Department/s"/>
-                              )}
-                              fullWidth
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(
-                                props,
-                                option: any,
-                                
-                                { selected },
-                                
-                              ) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option.value}
-                                  </li>
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) =>{
-                                setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
-                              }
-                  />
-                </Box>
+              <Grid container spacing={2} className="profile-inner multi-selection">
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Box>
+                    <label>Organisation</label>
+                    <Select
+                      className={edit ? "bg-gray-input" : ""}
+                      disabled={edit}
+                      style={{ color: "black", backgroundColor: edit ? '#f3f3f3' : 'white' }}
+                      displayEmpty
+                      IconComponent={ExpandMoreOutlinedIcon}
+                      renderValue={
+                        formik.values.organisationId !== ''
+                          ? undefined
+                          : () => (
+                            <Placeholder>
+                              Select Organization
+                            </Placeholder>
+                          )
+                      }
+                      margin="none"
+                      fullWidth
+                      id="organisationId"
+                      name="organisationId"
+                      autoComplete="off"
+                      placeholder="Organization"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.organisationId}
+                      size="small"
+                      error={
+                        formik.touched.organisationId &&
+                        Boolean(formik.errors.organisationId)
+                      }
+                    >
+                      {organizationData?.map((item: any, index) => (
+                        <MenuItem key={index} value={item.id}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {formik.touched.organisationId &&
+                      formik.errors.organisationId && (
+                        <Typography className="error-field">
+                          {formik.errors.organisationId}
+                        </Typography>
+                      )}
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={2} className="profile-inner">
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                lg={6}
-                sx={{
-                  paddingRight: {
-                    xs: '0rem !important',
-                    sm: '1rem !important',
-                  },
-                }}
-              >
-                <Box>
-                  <label>Role</label>
-                  <Select
-                        // MenuProps={{
-                        //   PaperProps: {
-                        //     style: {
-                        //       maxHeight: '150px',
-                        //       overflowY: 'auto',
-                        //     },
-                        //   },
-                        // }}
-                        style={{color:"black",backgroundColor:edit?'#f3f3f3':'white',marginTop:"10px"}}
-                        displayEmpty
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        renderValue={
-                          formik.values.role !== ''
-                            ? undefined
-                            : () => <Placeholder>Select Role</Placeholder>
-                        }
-                        margin="none"
-                        className={edit?"bg-gray-input":""}
-                        disabled={edit}
-                        fullWidth
-                        id="role"
-                        name="role"
-                        autoComplete="off"
-                        placeholder="Role"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.role}
-                        size="small"
-                        error={
-                          formik.touched.role && Boolean(formik.errors.role)
-                        }
-                      >  {roleData &&
-                        roleData.map((item: any) => (
-                          <MenuItem key={item.value} value={item.value}>
-                            {item.label}
-                          </MenuItem>
-                        ))}</Select>
-                  {formik.touched.role && formik.errors.role && (
-                          <Typography className="error-field">
-                            {formik.errors.role}
-                          </Typography>
-                        )}
-                </Box>
+              <Grid container spacing={2} className="profile-inner multi-selection">
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Box>
+                    <label>Department</label>
+                    <Autocomplete
+                      multiple
+                      id="department"
+                      className={edit ? "bg-gray-input" : ""}
+                      disabled={edit}
+                      disableCloseOnSelect
+                      value={formik.values.departmentId}
+                      options={
+                        departmentData !== undefined
+                          ? departmentData
+                          : []
+                      }
+                      getOptionLabel={(option: any) => option?.label}
+                      isOptionEqualToValue={(option: any, value: any) =>
+                        value?.id == option?.id
+                      }
+                      renderInput={(params) => (
+                        <TextField {...params} placeholder="Department/s" />
+                      )}
+                      fullWidth
+                      placeholder="Department"
+                      size="medium"
+                      renderOption={(
+                        props,
+                        option: any,
+
+                        { selected },
+
+                      ) => (
+                        <React.Fragment>
+                          <li {...props}>
+                            <Checkbox
+                              style={{ marginRight: 0 }}
+                              checked={selected}
+                            />
+                            {option.value}
+                          </li>
+                        </React.Fragment>
+                      )}
+                      onChange={(_, selectedOptions: any) => {
+                        setDepartments(selectedOptions); formik.setValues({ ...formik.values, 'departmentId': selectedOptions })
+                      }
+                      }
+                    />
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                lg={6}
-                sx={{
-                  paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
-                }}
-              >
-                <Box>
-                  <label>Requestor ID/Tester ID</label>
-                  <TextField
-                    margin="normal"
-                    // required
-                    fullWidth
-                    id="Organisation"
-                    inputProps={{ maxLength: 20 }}
-                    className={"bg-gray-input"}
-                    disabled={true}
-                    name="Organisation"
-                    autoComplete="off"
-                    InputLabelProps={{ shrink: false }}
-                    placeholder="Requestor ID/Tester ID"
+              <Grid container spacing={2} className="profile-inner">
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    paddingRight: {
+                      xs: '0rem !important',
+                      sm: '1rem !important',
+                    },
+                  }}
+                >
+                  <Box>
+                    <label>Role</label>
+                    <Select
+                      // MenuProps={{
+                      //   PaperProps: {
+                      //     style: {
+                      //       maxHeight: '150px',
+                      //       overflowY: 'auto',
+                      //     },
+                      //   },
+                      // }}
+                      style={{ color: "black", backgroundColor: edit ? '#f3f3f3' : 'white', marginTop: "10px" }}
+                      displayEmpty
+                      IconComponent={ExpandMoreOutlinedIcon}
+                      renderValue={
+                        formik.values.role !== ''
+                          ? undefined
+                          : () => <Placeholder>Select Role</Placeholder>
+                      }
+                      margin="none"
+                      className={edit ? "bg-gray-input" : ""}
+                      disabled={edit}
+                      fullWidth
+                      id="role"
+                      name="role"
+                      autoComplete="off"
+                      placeholder="Role"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.role}
+                      size="small"
+                      error={
+                        formik.touched.role && Boolean(formik.errors.role)
+                      }
+                    >  {roleData &&
+                      roleData.map((item: any) => (
+                        <MenuItem key={item.value} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      ))}</Select>
+                    {formik.touched.role && formik.errors.role && (
+                      <Typography className="error-field">
+                        {formik.errors.role}
+                      </Typography>
+                    )}
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
+                  }}
+                >
+                  <Box>
+                    <label>Requestor ID/Tester ID</label>
+                    <TextField
+                      margin="normal"
+                      // required
+                      fullWidth
+                      id="Organisation"
+                      inputProps={{ maxLength: 20 }}
+                      className={"bg-gray-input"}
+                      disabled={true}
+                      name="Organisation"
+                      autoComplete="off"
+                      InputLabelProps={{ shrink: false }}
+                      placeholder="Requestor ID/Tester ID"
                     // InputProps={{
                     //   startAdornment: (
                     //     <InputAdornment position="start">
@@ -638,16 +639,16 @@ export default function AppProfileDrawer({
                     //     </InputAdornment>
                     //   ),
                     // }}
-                  />
-                </Box>
+                    />
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
-            {/* <Box  >
+              {/* <Box  >
               <Box style={{ height: "150px" }}>
 
               </Box> */}
-            {/* </Box> */}
-            {/* <Box>
+              {/* </Box> */}
+              {/* <Box>
               <label>Labs assigned</label>
               <Box className="lab-list">
                 <span>Mechanical</span>
@@ -658,16 +659,16 @@ export default function AppProfileDrawer({
                 <span>Botany</span>
               </Box>
             </Box> */}
-          </Box>
-          <Box className="edit-details-profile">
-        <Button type="submit" variant="contained" onClick={()=>{toggleProfileDrawer(), setEdit(true)}} className="cancel-btn" >
-          Cancel
-        </Button>
-        <Button type="submit" variant="contained" className="add-btn">
-          Save
-        </Button>
-      </Box>
-      </form>
+            </Box>
+            <Box className="edit-details-profile" sx={{padding: '15px 32px'}}>
+              <Button type="submit" variant="contained" onClick={() => { toggleProfileDrawer(), setEdit(true) }} className="cancel-btn" >
+                Cancel
+              </Button>
+              <Button type="submit" variant="contained" className="add-btn">
+                Save
+              </Button>
+            </Box>
+          </form>
         </Box>
       </Box>
     </Drawer>
