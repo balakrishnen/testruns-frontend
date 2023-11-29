@@ -15,6 +15,7 @@ import roleReducer from '../features/roleSlice';
 import userRunsSlice from '../features/userRunsSlice';
 import loginUserSlice from "../features/loginUserSlice"
 import fileUploadReducer from '../features/fileUploadSlice';
+import institutionReduced from '../features/institutionSlice'
 
 const persistConfig = {
   key: 'root',
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   userRuns: userRunsSlice,
   userLogin: loginUserSlice,
   fileUpload: fileUploadReducer,
+  institution: institutionReduced,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -84,6 +84,7 @@ const UserForm = React.forwardRef(
     const successPopupRef: any = React.useRef();
     const confirmationPopupRef: any = React.useRef();
     const [organizationData, setOrganizationData] = React.useState([]);
+    const [institutionData, setInstitutionData] = React.useState([]);
     const[userData, setUserData]=React.useState({})
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
@@ -232,6 +233,9 @@ const UserForm = React.forwardRef(
     );
     const organizationSliceData = useSelector(
       (state: any) => state.organization.data?.get_all_organisations,
+    );
+    const institutionSliceData = useSelector(
+      (state: any) => state.institution.data?.get_all_institute,
     );
 
     React.useEffect(() => {

@@ -223,10 +223,12 @@ export default function RunsDetails() {
   const runsStatus = RunsStatusList;
   const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
+  const [state, setState] = React.useState({ content:"" });
 
-  React.useEffect(() => {
-    console.log('userProcedure', userProcedure);
-  });
+  // React.useEffect(() => {
+  //   console.log('userProcedure', userProcedure);
+  //   setState({content:userProcedure})
+  // },[]);
   const handleInputChange = (id: any, column: any) => {
     const value = inputRefs.current[id]?.[column]?.value;
     console.log(`Input ${id}, Column ${column}: ${value}`);
@@ -374,7 +376,8 @@ export default function RunsDetails() {
   React.useEffect(() => {
     setRunzValue(runzValue)
     setuserProcedure(userProcedure)
-  }, [runzValue, userProcedure])
+    setState({content:userProcedure})
+  }, [runzValue, userProcedure,])
   React.useEffect(() => {
     setRunzValue(procedureSliceData?.get_run)
     setuserProcedure(procedureSliceData?.get_run?.procedureId?.procedureDetials)
@@ -554,7 +557,15 @@ export default function RunsDetails() {
 
     setCharts(data);
   };
-
+  const handleChanges = (content:any) => {
+    // console.log(content);
+    
+    setState({ content });
+  };
+  console.log(state);
+  const onSubmit=()=>{
+    console.log(value)
+  }
   const handleColorPickerChange = (event: any, dataIndex: any, keyIndex) => {
     const data = [...charts];
     const values = { ...data[dataIndex] };
@@ -644,6 +655,9 @@ export default function RunsDetails() {
 
       pdf.addImage(imgData, 'JPEG', 0, 0);
       pdf.save('chart.pdf');
+    }).catch((err)=>{
+      console.log(err);
+      
     });
   };
   const dispatch: any = useDispatch();
@@ -1034,8 +1048,78 @@ export default function RunsDetails() {
             </Box>
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
-                <div dangerouslySetInnerHTML={{ __html: userProcedure }} />
-
+                {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
+                <Editor
+                  apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  init={{
+                    height: 500,
+                    menubar: true,
+                    selector: 'textarea',
+                    plugins: [
+                      'advlist',
+                      'autolink',
+                      'lists',
+                      'link',
+                      'image',
+                      'charmap',
+                      'preview',
+                      'anchor',
+                      'searchreplace',
+                      'visualblocks',
+                      'code',
+                      'fullscreen',
+                      'insertdatetime',
+                      'media',
+                      'table',
+                      'code',
+                      'help',
+                      'wordcount',
+                      'image',
+                      'insertdatetime',
+                      'template',
+                      'insertinput',
+                      'customInsertButton',
+                      'customAlertButton subscript superscript charmap'
+                    ],
+                    toolbar:
+                      'undo redo | blocks formatselect | ' +
+                      'charmap subscript superscript bold italic | alignleft aligncenter ' +
+                      'alignright alignjustify | bullist numlist outdent indent | ' +
+                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                    image_advtab: true,
+                    image_title: true,
+                    automatic_uploads: true,
+                    file_picker_types: 'image',
+                    setup: function (editor) {
+                      editor.ui.registry.addButton('customInsertButton', {
+                        icon: 'edit-block',
+                        tooltip: 'Insert Input Element',
+                        onAction: function (_) {
+                          // const value = nanoid(7);
+                          editor.insertContent(
+                            `&nbsp;<input type='text' >&nbsp;`,
+                          );
+                        },
+                      });
+                      editor.ui.registry.addButton('customAlertButton', {
+                        icon: 'temporary-placeholder', // Use the built-in alert icon
+                        // tooltip: 'Custom Alert',
+                        onAction: function (_) {
+                          const userInput = window.prompt(
+                            'Enter data key attribute',
+                          );
+                          console.log(userInput);
+                        },
+                      });
+                    },
+                    content_style:
+                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  }}
+                  value={state.content}
+          // onChange={handleEditorChange}
+          onEditorChange={handleChanges}
+                />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">
@@ -1245,7 +1329,7 @@ export default function RunsDetails() {
                   style={{ marginRight: '1rem', cursor: 'pointer' }}
                 />
               )}
-              <Button type="submit" variant="contained" className="add-btn">
+              <Button type="submit" variant="contained" className="add-btn" onClick={()=>{value == 0 && onSubmit()}}>
                 Save
               </Button>
             </Box>

@@ -215,14 +215,42 @@ React.useEffect(()=>{
     confirmationPopupRef.current.open(false);
   };
   const handleChange = (content:any) => {
-    // console.log(content);
+    console.log(content);
     
     setState({ content });
   };
-  // const handleEditorChange = (e:any) => {
-  //   // console.log( e.target.getContent());
-  //   // console.log("Content was updated:", e.target.getContent());
-  // };
+
+  const handleEditorChange = (e:any) => {
+    console.log( e.target.getContent());
+    console.log("Content was updated:", e.target.getContent());
+  };
+  const [htmlInput, setHtmlInput] = React.useState<any>({});
+
+  const handleHtmlInput = () => {
+    let objects = {};
+    // @ts-ignore
+    let inputEl: any = document
+      ?.getElementById("content")
+      ?.querySelectorAll("input");
+console.log(inputEl);
+
+    inputEl?.forEach((ele: any) => {
+      const { id, value } = ele;
+      let temp = { [id]: value };
+      objects = { ...objects, temp };
+      setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+      // @ts-ignore
+      ele.onChange = (e) => {
+        const { id, value } = e.target;
+        setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+      };
+    });
+    console.log(objects);
+    
+  };
+  console.log(htmlInput);
+  
+
   const handleSave = (e:any) => {
   //  console.log(state);
    const payload={
@@ -230,16 +258,102 @@ React.useEffect(()=>{
     name:formik.values.name,
     procedureDetials: state.content
    }
-    dispatch(fetchUpdateProcedureData(payload))
-    toast(`Procedure updated !`, {
-      style: {
-        background: '#00bf70', color: '#fff'
+   handleHtmlInput();
+
+   const tablesEles: any = document
+   ?.getElementById("content")
+   ?.querySelectorAll("table");
+   let finalTableTitleResult: any;
+   console.log(tablesEles);
+ 
+ if (tablesEles) {
+   const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
+     const headerCells = tablesInstance?.querySelectorAll("[data-column]");
+     const headerNames = Array.from(headerCells).map((header: any) => ({
+       key: header.getAttribute("data-column"),
+       value: header.textContent.trim(),
+     }));
+     const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
+     const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
+       const tableCells = tableDataRow.querySelectorAll("td[data-column]");
+       return Array.from(tableCells).map((cell: any) => {
+         const inputCntext = cell.querySelector("input[type='text']");
+         if (inputCntext) {
+           return {
+             key: cell.getAttribute("data-column"),
+             value: htmlInput[inputCntext.id],
+           };
+         }
+       });
+     });
+     return {
+       headerNames: headerNames,
+       rowData: rowData,
+     };
+   });
+   const mergedDatasets = result.map((dataset) => {
+    const mergedData: any = [];
+    for (let i = 0; i < dataset.rowData.length; i++) {
+      const rowData = dataset.rowData[i];
+      const mergedRow: any = {};
+      for (let j = 0; j < rowData?.length; j++) {
+        const header = dataset.headerNames[j];
+        const value: any = rowData[j];
+        mergedRow[header?.value] = value?.value;
       }
-    });
-    const procedureId = { _id: procedureData._id,};
-    dispatch(fetchSingleProcedureData(procedureId));
-    // /moreInfo
+      mergedData.push(mergedRow);
+    }
+    return mergedData;
+  });
+  let filteredData = mergedDatasets?.filter((sublist) =>
+    sublist?.some((obj: any) => Object?.keys(obj).length > 0)
+  );
+  filteredData = filteredData?.map((sublist) =>
+    sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
+  );
+
+  const results = filteredData?.map((dataset, index) => {
+    const subResult = [];
+    const firstDataItem = dataset[index];
+    for (const key in firstDataItem) {
+      const label = key;
+      const values: any = [];
+      dataset?.forEach((item: any) => {
+        if (item[key]) {
+          values.push(parseInt(item[key]));
+        }
+      });
+      subResult.push({ label, values });
+    }
+    return subResult;
+  });
+
+  const tablesin = document
+    ?.getElementById("content")
+    ?.querySelectorAll("[data-table]");
+  const getTitle: any = [];
+
+  tablesin?.forEach((element, index) => {
+    getTitle.push(element.textContent);
+  });
+
+  finalTableTitleResult = getTitle?.map((list: any, index: any) => {
+    return { label: list, value: list, data: results[index] };
+  });
+  let vals = Object.values(htmlInput);
+  const empty = vals.filter((item) => item === "");
+
   }
+  dispatch(fetchUpdateProcedureData(payload))
+  toast(`Procedure updated !`, {
+    style: {
+      background: '#00bf70', color: '#fff'
+    }
+  });
+  const procedureId = { _id: procedureData._id,};
+  dispatch(fetchSingleProcedureData(procedureId));
+// }
+}
   // console.log(state);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -279,7 +393,10 @@ React.useEffect(()=>{
   const checkCredentials = (values: any) => {
     return true;
   };
+const onChangeValue=(e)=>{
+console.log(e.target.value);
 
+}
   return (
     <PrivateRoute>
       <Box className="proceduredetails-page">
@@ -425,7 +542,7 @@ React.useEffect(()=>{
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Box style={{ position: 'relative' }}>
                   <label>Full procedure</label>
-                  <Box sx={{ mt: 1.5 }}>
+                  <Box sx={{ mt: 1.5 }} id="content">
                     <Editor
                       apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                       onInit={(evt, editor) => (editorRef.current = editor)}
@@ -436,12 +553,12 @@ React.useEffect(()=>{
                         plugins: [
                           'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount','image', 'insertdatetime' , 'template','insertinput customInsertButton customAlertButton charmap subscript superscript ' 
+                          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount','image', 'insertdatetime' , 'template','insertinput customInsertButton charmap subscript superscript customDataAttrButton ' 
                         ],
                         toolbar: 'undo redo | blocks formatselect | ' +
                         'charmap subscript superscript bold italic | alignleft aligncenter ' +
                         'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                        'help |image code table customInsertButton insertdatetime template insertinput customDataAttrButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                         image_advtab: true,
                     image_title: true,
                     automatic_uploads: true,
@@ -452,25 +569,32 @@ React.useEffect(()=>{
                         icon: "edit-block",
                         tooltip: "Insert Input Element",
                         onAction: function (_) {
-                          // const value = nanoid(1);
+                          const value = nanoid(7);
                           editor.insertContent(
-                            `&nbsp;<input type='text' value="">&nbsp;`
+                            `&nbsp;<input type='text' id='value_${value}' name='value_${value} onChange=${onChangeValue}'>&nbsp;`
                           );
                         },
                       });
-                      editor.ui.registry.addButton("customAlertButton", {
-                        icon: "temporary-placeholder", // Use the built-in alert icon
-                        // tooltip: 'Custom Alert',
+                     
+                      editor.ui.registry.addButton("customDataAttrButton", {
+                        icon: "fas fa-cog",
+                        tooltip: "Assign Data Attribute",
                         onAction: function (_) {
-                          const userInput = window.prompt('Enter data key attribute', );
-                          console.log(userInput);
+                          const selectedNode = editor.selection.getNode();
+                          const key = window.prompt("Enter data attribute key:");
+                          if (key) {
+                            const value = window.prompt("Enter data attribute value:");
+                            if (value) {
+                              selectedNode.setAttribute(`data-${key}`, value);
+                            }
+                          }
                         },
                       });
                     },
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     }}
                     value={state.content}
-          // onChange={handleEditorChange}
+          onChange={handleEditorChange}
           onEditorChange={handleChange}
           // onSaveContent={handleSave}
                     />
