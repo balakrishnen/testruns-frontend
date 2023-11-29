@@ -63,6 +63,8 @@ import { navigate } from 'gatsby';
 import { useSelector } from 'react-redux';
 import TableChart from '../../../components/charts/TableChart';
 import RealtimeChart from '../../../components/charts/RealtimeChart';
+import { postUserRunsData } from '../../../api/userRunsAPI';
+import { fetchUpdateProcedureData } from '../../../api/procedureAPI';
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -564,7 +566,17 @@ export default function RunsDetails() {
   };
   console.log(state);
   const onSubmit=()=>{
-    console.log(value)
+    console.log(runzValue,state.content)
+    let payload={
+      _id: runzValue.procedureId._id,
+    procedureDetials: state.content
+    }
+    dispatch(fetchUpdateProcedureData(payload))
+  toast(`Procedure updated !`, {
+    style: {
+      background: '#00bf70', color: '#fff'
+    }
+  });
   }
   const handleColorPickerChange = (event: any, dataIndex: any, keyIndex) => {
     const data = [...charts];
