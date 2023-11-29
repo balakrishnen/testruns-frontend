@@ -7,6 +7,7 @@ mutation Create_procedure(
         $organisationId: String!
         $departmentId: [String]!
         $laboratoryId: [String]!
+        $createdOn: String!
         $createdBy: String!
         $procedureDetials: String!
        
@@ -16,6 +17,7 @@ mutation Create_procedure(
         organisationId: $organisationId
         departmentId: $departmentId
         laboratoryId: $laboratoryId
+        createdOn: $createdOn
         createdBy: $createdBy
         procedureDetials: $procedureDetials
     ) {
@@ -23,15 +25,19 @@ mutation Create_procedure(
         name
         procedureNumber
         procedureDetials
+        organisationId
         assectId
         userId
         isActive
         isDeleted
         createdAt
+        createdOn
         updatedAt
     }
 }
 `;
+
+
 
 export const GET_PROCEDURE = gql`
 query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
@@ -46,6 +52,7 @@ query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrde
             isActive
             isDeleted
             createdAt
+            createdOn
             updatedAt
             departmentId {
                 _id
@@ -100,6 +107,7 @@ query Get_procedure($_id: String!) {
         isActive
         isDeleted
         createdAt
+        createdOn
         updatedAt
     }
 }
@@ -136,6 +144,7 @@ mutation Update_procedure(
         isDeleted
         createdAt
         updatedAt
+        createdOn
     }
 }
 `;

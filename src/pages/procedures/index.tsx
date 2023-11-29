@@ -931,9 +931,8 @@ export default function Procedures() {
                           )}
                           {headers[5].is_show && (
                             <TableCell>
-                              {moment(parseInt(row.createdAt)).format(
-                                'MM/DD/YYYY',
-                              )}
+                              {row.createdOn}
+                               
                             </TableCell>
                           )}
                         </TableRow>

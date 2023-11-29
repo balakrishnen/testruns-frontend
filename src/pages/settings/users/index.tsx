@@ -27,7 +27,7 @@ import DeletePopup from '../../../components/DeletePopup';
 import UserForm from './UserForm';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
 import SuccessPopup from '../../../components/SuccessPopup';
-import { fetchUserData, deleteUserData } from '../../../api/userAPI';
+import { fetchUserData, deleteUserData, fetchUpdateUserData } from '../../../api/userAPI';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -286,7 +286,26 @@ const Users = () => {
   const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
   };
+  const handleOnChange = (e: any, row: any) => {
+    console.log(e.target.value);
 
+    var assetsChange: any = {
+      _id: row._id,
+    };
+      assetsChange['isActive'] = e.target.value;
+    
+    dispatch(fetchUpdateUserData(assetsChange));
+    toast(
+      `Assets status updated !`,
+      {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      },
+    );
+    reload();
+  };
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
   };
@@ -736,23 +755,30 @@ const Users = () => {
                         <TableCell>
                           <Select
                             className={
-                              row.status !== 'Active'
+                              row.isActive !== 'true'
                                 ? 'active-select td-select'
                                 : 'inactive-select td-select'
                             }
-                            value={'Active'}
+                            value={row.isActive}
                             displayEmpty
+                            onChange={(e) => handleOnChange(e, row)}
                             onClick={(e: any) => clickHandler(e)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            {userStatus.map((element) => (
+                          
                               <MenuItem
-                                value={element.value}
-                                key={element.value}
+                                value={true}
+                                key={true}
                               >
-                                {element.name}
+                                Active
                               </MenuItem>
-                            ))}
+                              <MenuItem
+                                value={false}
+                                key={false}
+                              >
+                                In-active
+                              </MenuItem>
+                            
                           </Select>
                         </TableCell>
                       )}

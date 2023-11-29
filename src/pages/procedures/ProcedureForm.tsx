@@ -34,7 +34,8 @@ import { toast } from 'react-toastify';
 // import Confirmationpopup from "../../components/ConfirmationPopup";
 // import Successpopup from "../../components/SuccessPopup";
 const validationSchema = Yup.object().shape({
-  createdBy: Yup.string().required(),
+  createdOn: Yup.string().required(),
+  createdBy: Yup.string().notRequired(),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
   laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
   organisationId: Yup.string().notRequired(),
@@ -106,6 +107,7 @@ const ProcedureForm = React.forwardRef(
       if(type=='create'){
         procedures['organisationId']=values.organisationId
         procedures['procedureDetials']=values.procedureDetials
+        procedures["createdOn"]=values.createdOn
       }
       else{
         procedures['_id']=formData._id
@@ -144,6 +146,11 @@ const ProcedureForm = React.forwardRef(
       }
       formik.dirty=false
     };
+    const userSliceData=  useSelector(
+      (state: any) => state.userLogin.data, 
+    );
+    console.log(userSliceData?.verifyToken?.firstName);
+    
     // const[formValues,setFormValues]=React.useState<any>({})
 
     // React.useEffect(()=>{
@@ -163,6 +170,7 @@ const ProcedureForm = React.forwardRef(
     const formik = useFormik({
       initialValues:{
         name: formData?formData.name:'',
+        createdOn: userSliceData?.verifyToken?.firstName+userSliceData?.verifyToken?.lastName,
         createdBy: new Date(),
         departmentId: formData?formData.departmentId:"",
         laboratoryId: formData?formData.laboratoryId:"",
@@ -173,7 +181,7 @@ const ProcedureForm = React.forwardRef(
       onSubmit: onSubmit,
     });
     // console.log(formValues);
-    console.log(formik.errors);
+    console.log(formik);
 
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -196,7 +204,7 @@ const ProcedureForm = React.forwardRef(
         id: item._id,
         })),
       );
-    }, [departmentSliceData, labSliceData]);
+    }, [departmentSliceData, labSliceData,userSliceData]);
 
     console.log(departmentData);
 

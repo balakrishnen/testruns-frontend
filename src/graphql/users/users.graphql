@@ -98,6 +98,7 @@ mutation  update_user(
        $organisationId:String
        $email:String
        $role:String
+       $isActive:Boolean
        $phoneNumber:String
     ) {
     update_user(
@@ -109,6 +110,7 @@ mutation  update_user(
         organisationId:$organisationId
         email:$email
         role:$role
+        isActive:$isActive
         phoneNumber:$phoneNumber
     ) {
         _id
