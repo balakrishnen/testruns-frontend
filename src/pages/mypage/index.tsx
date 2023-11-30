@@ -480,6 +480,16 @@ export default function MyPage() {
                                   ? 'active-select td-select'
                                   : 'inactive-select td-select'
                           }
+                          style={{
+                            background: row.status === 'Created' ? "#8d8d8d" : row.status === 'Started' ? '#faaa49' : row.status === 'Stopped' ? '#e2445c' : '#00bf70',
+                            padding: "6px",
+                            width: '140px',
+                            borderRadius: '20px',
+                            height: '26px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                          }}
                         >
                           {row?.status}
                         </Box>
