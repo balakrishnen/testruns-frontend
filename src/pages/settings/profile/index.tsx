@@ -131,7 +131,7 @@ const Profile = () => {
   };
 
   const loginUserSliceData=  useSelector(
-    (state: any) => state.userLogin.data.verifyToken, 
+    (state: any) => state.userLogin.data?.verifyToken, 
   );
   React.useEffect(()=>{
     let temp = { '_id': loginUserSliceData?._id}

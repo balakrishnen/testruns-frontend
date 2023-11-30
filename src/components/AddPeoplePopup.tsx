@@ -22,7 +22,7 @@ const AddPeople = ({ open, close }: any) => {
   const dispatch : any =useDispatch()
   const [allUserData, setAlluserData] = React.useState<any>([]);
   const allUser=  useSelector(
-    (state: any) => state.user.data.find_users, 
+    (state: any) => state.user.data?.find_users, 
   );
 console.log(allUserData);
 React.useEffect(()=>{

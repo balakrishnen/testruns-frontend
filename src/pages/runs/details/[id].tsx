@@ -65,6 +65,7 @@ import TableChart from '../../../components/charts/TableChart';
 import RealtimeChart from '../../../components/charts/RealtimeChart';
 import { postUserRunsData } from '../../../api/userRunsAPI';
 import { fetchUpdateProcedureData } from '../../../api/procedureAPI';
+import { nanoid } from 'nanoid';
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -1108,9 +1109,9 @@ export default function RunsDetails() {
                         icon: 'edit-block',
                         tooltip: 'Insert Input Element',
                         onAction: function (_) {
-                          // const value = nanoid(7);
+                          const value = nanoid(7);
                           editor.insertContent(
-                            `&nbsp;<input type='text' >&nbsp;`,
+                            `&nbsp;<input type='text' id='value_${value}' name='value_${value}'>&nbsp;`
                           );
                         },
                       });

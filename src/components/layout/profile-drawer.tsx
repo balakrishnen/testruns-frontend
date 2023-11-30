@@ -110,7 +110,7 @@ export default function AppProfileDrawer({
 
   // console.log(DepartmentList);
   const loginUserSliceData=  useSelector(
-    (state: any) => state.userLogin.data.verifyToken, 
+    (state: any) => state.userLogin?.data?.verifyToken, 
   );
   console.log(loginUserSliceData);
   
