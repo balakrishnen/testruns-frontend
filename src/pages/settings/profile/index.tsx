@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import React from 'react';
 import {
   Box,
@@ -45,6 +46,7 @@ import { fileUploadData } from '../../../api/uploadAPI';
 import { updatePassword } from 'firebase/auth';
 import { auth } from '../../../firebase.config';
 import { log } from 'console';
+import AWS from 'aws-sdk';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -70,10 +72,10 @@ const validationSchemaProfile = Yup.object().shape({
     .email('Invalid email')
     .matches(emailRegex, 'In-correct email'),
   phoneNumber: Yup.string().notRequired(),
-    // .matches(phoneRegExp, 'Phone number is not valid')
-    // .min(10, 'Enter valid number')
-    // .max(10, 'too long')
-    // .required('Mobile number is required'),
+  // .matches(phoneRegExp, 'Phone number is not valid')
+  // .min(10, 'Enter valid number')
+  // .max(10, 'too long')
+  // .required('Mobile number is required'),
   organisationId: Yup.string().required('Organistation is required'),
   // institution: Yup.string().required("Institution is required"),
   departmentId: Yup.array()
@@ -112,7 +114,7 @@ const Profile = () => {
   const [laboratory, setLaboratory] = React.useState([]);
   const [organizationData, setOrganizationData] = React.useState([]);
   const [roleData, setRoleData] = React.useState([]);
-
+  const [uploadedFile, setUploadedFile] = React.useState(null);
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -130,11 +132,11 @@ const Profile = () => {
     event.preventDefault();
   };
 
-  const loginUserSliceData=  useSelector(
-    (state: any) => state.userLogin.data.verifyToken, 
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data.verifyToken,
   );
-  React.useEffect(()=>{
-    let temp = { '_id': loginUserSliceData?._id}
+  React.useEffect(() => {
+    let temp = { _id: loginUserSliceData?._id };
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp))
       .then((isSucess) => {
@@ -177,7 +179,7 @@ const Profile = () => {
     // }
   }, [departmentData, labData]);
 
-  const onSubmit = async(values: any) => {
+  const onSubmit = async (values: any) => {
     const isMatch = checkCredentials(
       values.password,
       values.newpassword,
@@ -185,25 +187,27 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      await updatePassword(auth.currentUser,  values.newpassword).then((res)=>{
-        toast(`Password Reset successful !`, {
-          style: {
-            background: '#00bf70',
-            color: '#fff',
-          },
+      await updatePassword(auth.currentUser, values.newpassword)
+        .then((res) => {
+          toast(`Password Reset successful !`, {
+            style: {
+              background: '#00bf70',
+              color: '#fff',
+            },
+          });
+          setTimeout(() => {
+            navigate('/login');
+          }, 2000);
+        })
+        .catch((err) => {
+          toast(err, {
+            style: {
+              background: '#00bf70',
+              color: '#fff',
+            },
+          });
         });
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      })
-      .catch((err)=>{
-        toast(err, {
-          style: {
-            background: '#00bf70',
-            color: '#fff',
-          },});
-      })
-     
+
       // alert("password updated successful!");
       // navigate('/login')
     } else {
@@ -252,13 +256,17 @@ const Profile = () => {
       // values.designation,
       // values.reqstId
     );
-console.log(departments);
+    console.log(departments);
 
     if (isMatch) {
       var deptArray: any = [];
-      formikProfile.values.departmentId?.map((item: any) => deptArray.push(item?.id));
+      formikProfile.values.departmentId?.map((item: any) =>
+        deptArray.push(item?.id),
+      );
       var labArray: any = [];
-      formikProfile.values.laboratoryId?.map((item: any) => labArray.push(item?.id));
+      formikProfile.values.laboratoryId?.map((item: any) =>
+        labArray.push(item?.id),
+      );
       let userValues: any = {
         // uid:"",
         firstName: values.firstName,
@@ -270,8 +278,8 @@ console.log(departments);
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
-        _id:loginUserSliceData?._id
-      }
+        _id: loginUserSliceData?._id,
+      };
       // debugger
       // userValues['_id'] = userData?._id
       dispatch(fetchUpdateUserData(userValues));
@@ -368,15 +376,50 @@ console.log(departments);
     fileUploadField.current?.click();
   };
 
-  const handleImageUpload = () => {
+  const handleImageUpload = async () => {
     const selectedFile = fileUploadField.current.files[0];
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    const payload = {
-      file: formData,
-      type: 'profile'
-    }
-    dispatch(fileUploadData(payload));
+    // const formData = new FormData();
+    // formData.append('file', selectedFile);
+    // const payload = {
+    //   file: formData,
+    //   type: 'profile'
+    // }
+    // dispatch(fileUploadData(payload));
+
+    const s3 = new AWS.S3({
+      // params: { Bucket: S3_BUCKET, folderName: "profile" },
+      region: 'us-east-1',
+      accessKeyId: 'AKIAUVVYVBYI2GJ3ENMQ',
+      secretAccessKey: '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',
+    });
+    const keyPath = `profile/${Date.now()}`;
+    const params = {
+      Bucket: 'test-run-v2',
+      Key: keyPath,
+      Body: selectedFile,
+      ACL: 'public-read',
+      // ContentType: selectedFile.type
+    };
+
+    const result = s3.upload(params).promise();
+    await result.then((res: any) => {
+      setUploadedFile(res.Location);
+      toast(`Image uploaded successfully !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
+    });
+    await result.catch((err) => {
+      console.error('Failed to upload');
+      toast(`Failed to upload !`, {
+        style: {
+          background: '#e2445c',
+          color: '#fff',
+        },
+      });
+    });
   };
 
   return (
@@ -427,14 +470,14 @@ console.log(departments);
           <Box className="profile-camera">
             <div>
               <img
-                src={profile}
+                src={uploadedFile === null ? profile : uploadedFile}
                 alt="profile"
                 style={{
                   width: '100%',
                   height: '100%',
                   border: '5px solid #F3F3F3',
-                  borderRadius: '120px',
-                  padding: '3px',
+                  borderRadius: '200px',
+                  // padding: '3px',
                 }}
               />
             </div>
