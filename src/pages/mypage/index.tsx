@@ -5,6 +5,7 @@ import {
   Divider,
   FormControl,
   Grid,
+  Chip,
   Select,
   Typography,
 } from '@mui/material';
@@ -24,7 +25,9 @@ import Calendar from 'react-calendar';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
+import moment from 'moment';
 import { fetchNotificationData } from '../../api/notification.API';
+import { fetchMyPageRunsData } from '../../api/myPageAPI'
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import data from '../../assets/images/profile/user.jpg';
@@ -212,6 +215,7 @@ export const mypageRows = [
 ];
 
 import { MypageRowData } from '../../modals/mypage.modal';
+import TablePopup from '../../components/table/TablePopup';
 
 // function createData(
 //   name: string,
@@ -221,13 +225,6 @@ import { MypageRowData } from '../../modals/mypage.modal';
 //   return { name, description, calories };
 // }
 const rows: MypageRowData[] = mypageRows;
-// const rows = [
-//   createData('Dept-physics/Lab-Mechanical/ID05828ADN', 'Thickness of a paper by vernier calliperse', "02/05/2022"),
-//   createData('Dept- Biology/Lab- Botany/ID023659ADN', 'Demonstrate that carbon dioxide is released during the process of respiration.', "02/05/2022"),
-//   createData('Dept- Chemistry/Lab- Chemical kinematics/ID065359ADN', 'Qualitative analysis for Cu, Zn, Fe, Al', "02/05/2022"),
-//   createData('Dept- Biology/Lab- Botany/ID023659ADN', 'Demonstrate that carbon dioxide is released during the process of respiration.', "02/05/2022"),
-//   createData('Dept-physics/Lab-Mechanical/ID05828ADN', 'Demonstrate that carbon dioxide is released during the process of respiration.', "02/05/2022"),
-// ];
 
 type ValuePiece = Date | null;
 
@@ -237,6 +234,47 @@ const customDayStyle = {
 };
 
 export default function MyPage() {
+
+  const dispatch: any = useDispatch();
+
+  const [viewAllNotifications, setViewAllNotifications] = useState(false);
+  const [queryStrings, setQueryString] = React.useState({
+    page: 1,
+    perPage: 10,
+    searchBy: null,
+    search: null,
+    sortBy: null,
+    sortOrder: 'desc',
+  });
+  const [clickedDate, setClickedDate] = useState(null);
+  const [value, onChange] = useState<Value>(new Date());
+  const [viewAll, setViewAll] = useState(false);
+  const [viewAlls, setViewAlls] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [localRowsPerPage, setLocalRowsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [answers, setAnswers] = React.useState('');
+  const [notifications, setNotifications] = useState([
+    // Your notification data goes here
+  ]);
+
+  const tablePopupRef: any = React.useRef(null);
+
+  const NotificationSliceData = useSelector(
+    (state: any) => state.notification.data?.get_all_notifications,
+  );
+
+  const MyPageRunsData = useSelector(
+    (state: any) => state.myPageSlice.data?.get_all_runs,
+  );
+
+
+  React.useEffect(() => {
+    dispatch(fetchNotificationData());
+    dispatch(fetchMyPageRunsData(queryStrings));
+  }, []);
+
+
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: Date = new Date();
     const postedTime: Date = new Date('2023-11-01T12:00:00');
@@ -255,29 +293,15 @@ export default function MyPage() {
     return `${hoursDifference}h ago`;
   };
 
-  const NotificationSliceData = useSelector(
-    (state: any) => state.notification.data?.get_all_notifications,
-  );
-  const dispatch: any = useDispatch();
 
-  React.useEffect(() => {
-    dispatch(fetchNotificationData());
-  }, []);
 
-  const [clickedDate, setClickedDate] = useState(null);
   const handleDateClick = (date: any) => {
     setClickedDate(date);
   };
-  const [answers, setAnswers] = React.useState('');
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
-  const [value, onChange] = useState<Value>(new Date());
-  const [viewAll, setViewAll] = useState(false);
-  const [viewAlls, setViewAlls] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [localRowsPerPage, setLocalRowsPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
+
   const toggleView = () => {
     setViewAll((prev) => !prev);
   };
@@ -295,10 +319,7 @@ export default function MyPage() {
   const lastRowIndex = Math.min(currentPage * rowsPerPage, totalRows);
   const rowIndex = (currentPage - 1) * localRowsPerPage + 1;
   const lastIndex = Math.min(currentPage * localRowsPerPage, totalRows);
-  const [notifications, setNotifications] = useState([
-    // Your notification data goes here
-  ]);
-  const [viewAllNotifications, setViewAllNotifications] = useState(false);
+
 
   const toggleViewNotifications = () => {
     setViewAllNotifications((prev) => !prev);
@@ -326,58 +347,141 @@ export default function MyPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(0, viewAll ? rows.length : rowsPerPage)
-                  .map((row, index) => (
+
+                {MyPageRunsData?.Runs
+                  .slice(0, viewAll ? MyPageRunsData?.Runs.length : rowsPerPage)
+                  .map((row: any, index: any) => (
                     <TableRow
-                      key={row.name}
+                      key={row._id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell scope="row">
                         <Box>
-                          <Box>{row.mypageNumber}</Box>
+                          <Box>{row.runNumber}</Box>
                         </Box>
                       </TableCell>
-                      <TableCell>{row.extraData}</TableCell>
-                      <TableCell>{row.departmentId}</TableCell>
-                      <TableCell style={{ whiteSpace: 'nowrap' }}>
-                        {row.laboratoryId}
+                      <TableCell>{row.objective}</TableCell>
+                      <TableCell>
+                        {row.departmentId[0] !== null ? (
+                          <Box
+                            onClick={(_event) => {
+                              _event.preventDefault();
+                              _event.stopPropagation();
+                              tablePopupRef.current?.open(
+                                true,
+                                'departments',
+                                row.departmentId,
+                              );
+                            }}
+                            sx={{ display: 'flex', alignItems: 'center' }}
+                          >
+                            <>
+                              <Chip
+                                key={index}
+                                label={row.departmentId[0].name}
+                                sx={{
+                                  m: 0.5,
+                                  padding: '0px 3px',
+                                }}
+                                onClick={(_event) => {
+                                  _event.preventDefault();
+                                  _event.stopPropagation();
+                                  tablePopupRef.current.open(
+                                    true,
+                                    'departments',
+                                    row.departmentId,
+                                  );
+                                }}
+                              />
+                              {row.departmentId.length > 1 && (
+                                <span
+                                  style={{
+                                    fontWeight: 500,
+                                    color: '#9F9F9F',
+                                    fontSize: '12px',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  +{row.departmentId.length - 1} More
+                                </span>
+                              )}
+                            </>
+                          </Box>
+                        ) : (
+                          '-'
+                        )}
                       </TableCell>
-                      <TableCell>{row.createdAt}</TableCell>
-
+                      <TableCell style={{ whiteSpace: 'nowrap' }}>
+                        {row.laboratoryId[0] !== null ? (
+                          <Box
+                            onClick={(_event) => {
+                              _event.preventDefault();
+                              _event.stopPropagation();
+                              tablePopupRef.current?.open(
+                                true,
+                                'lab',
+                                row.laboratoryId,
+                              );
+                            }}
+                            sx={{ display: 'flex', alignItems: 'center' }}
+                          >
+                            <>
+                              <Chip
+                                key={index}
+                                label={row.laboratoryId[0].name}
+                                sx={{
+                                  m: 0.5,
+                                  padding: '0px 3px',
+                                }}
+                                onClick={(_event) => {
+                                  _event.preventDefault();
+                                  _event.stopPropagation();
+                                  tablePopupRef.current.open(
+                                    true,
+                                    'lab',
+                                    row.laboratoryId,
+                                  );
+                                }}
+                              />
+                              {row.laboratoryId.length > 1 && (
+                                <span
+                                  style={{
+                                    fontWeight: 500,
+                                    color: '#9F9F9F',
+                                    fontSize: '12px',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  +{row.laboratoryId.length - 1} More
+                                </span>
+                              )}
+                            </>
+                          </Box>
+                        ) : (
+                          <span style={{ textAlign: 'center' }}>-</span>
+                        )}
+                      </TableCell>
+                      <TableCell align="center">Super Admin</TableCell>
                       <TableCell component="th" scope="row">
-                        <Box>{row.name}</Box>
+                        <Box>{row.createdAt === null
+                          ? '-'
+                          : moment(row.createdAt).isValid()
+                            ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                            : moment().format('MM/DD/YYYY')}</Box>
                       </TableCell>
                       <TableCell>
                         <Box
-                          style={{
-                            borderRadius: '20px',
-                            color: 'white',
-                            width: '110px',
-                            padding: '9px 0px',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            height: '24px',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            fontSize: '12px',
-                            backgroundColor:
-                          row?.status == 1
-                            ? '#8d8d8d'
-                            : row?.status == 2
-                              ? '#faaa49'
-                              : row?.status == 3
-                                ? '#00bf70'
-                                : '#e2445c',
-                      }}
-                    >
-                      {row?.status == 1
-                        ? 'Created'
-                        : row?.status == 2
-                          ? 'Started'
-                          : row.status == 3
-                            ? 'Completed'
-                            : 'Stopped'}
+                          className={
+                            row.status === 'Created'
+                              ? 'create-select td-select'
+                              : row.status === 'Started'
+                                ? 'start-select td-select'
+                                : row.status === 'Complete'
+                                  ? 'active-select td-select'
+                                  : 'inactive-select td-select'
+                          }
+                        >
+                          {row?.status}
                         </Box>
                       </TableCell>
                     </TableRow>
@@ -519,7 +623,7 @@ export default function MyPage() {
               <Divider className="hr-calender" />
               <Box>
                 {clickedDate &&
-                clickedDate.toISOString().split('T')[0] === '2023-11-04' ? (
+                  clickedDate.toISOString().split('T')[0] === '2023-11-04' ? (
                   <Box sx={{ textAlign: 'left' }}>
                     <Box className="hover-calender">
                       <Typography
@@ -565,6 +669,7 @@ export default function MyPage() {
           </Grid>
         </Grid>
       </Box>
+      <TablePopup ref={tablePopupRef} />
     </PrivateRoute>
   );
 }
