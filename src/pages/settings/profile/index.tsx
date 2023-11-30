@@ -132,9 +132,11 @@ const Profile = () => {
     event.preventDefault();
   };
 
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data.verifyToken,
+
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data?.verifyToken, 
   );
+  
   React.useEffect(() => {
     let temp = { _id: loginUserSliceData?._id };
     // if (row?._id) {
