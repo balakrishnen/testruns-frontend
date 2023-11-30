@@ -56,6 +56,18 @@ export const fetchSingleProcedureData = (payload: any) => async (dispatch: any) 
     dispatch(fetchProcedureFailure(error.message));
   }
 };
+
+export const fetchProcedure = (payload: any) => async (dispatch: any) => {
+  try {
+    const response = await client.query({
+      query: GET_SINGLE_PROCEDURE,
+      variables: payload,
+      fetchPolicy: 'network-only',
+    }); return response.data
+  } catch (error: any) {
+  }
+};
+
 export const fetchUpdateProcedureData = (payload: any) => async () => {
   try {
     const response = await client.mutate({

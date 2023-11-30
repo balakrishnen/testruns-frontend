@@ -427,7 +427,7 @@ console.log(e.target.value);
                     variant="contained"
                     className="edit-btn"
                     onClick={() => {
-                      formPopupRef.current.open(true);
+                      formPopupRef.current.open(true ,procedureData);
                     }}
                   >
                     <img src={edit} alt="edit" style={{ marginRight: '8px' }} />

@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabData } from '../../api/labAPI';
-import { fetchSingleProcedureData, fetchUpdateProcedureData, postProcedureData } from '../../api/procedureAPI';
+import { fetchProcedure, fetchSingleProcedureData, fetchUpdateProcedureData, postProcedureData } from '../../api/procedureAPI';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
 import { fetchUpdateAssetsData } from '../../api/assetsAPI';
@@ -43,7 +43,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const ProcedureForm = React.forwardRef(
-  ({ open, close, closeFormPopup, type ,formData,reload,reloadSingleData}: any, ref) => {
+  ({ open, close, closeFormPopup, type, formData, reload, reloadSingleData }: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
     console.log(formData);
@@ -57,18 +57,18 @@ const ProcedureForm = React.forwardRef(
     const confirmationPopupRef: any = React.useRef();
     const successPopupRef: any = React.useRef();
     const [departments, setDepartments] = React.useState(
-      formData!==undefined?formData?.departmentId?.map((item: any) => ({
+      formData !== undefined ? formData?.departmentId?.map((item: any) => ({
         label: item?.name,
         value: item?.name,
         id: item?._id,
-      })):[]
+      })) : []
     );
     const [laboratory, setLaboratory] = React.useState(
-      formData!==undefined? formData?.laboratoryId?.map((item: any) => ({
+      formData !== undefined ? formData?.laboratoryId?.map((item: any) => ({
         label: item?.name,
         value: item?.name,
         id: item?._id,
-      })):[]
+      })) : []
     );
     // const handleAddButtonClick = () => {
     //     setSuccessOpen(true);
@@ -84,48 +84,48 @@ const ProcedureForm = React.forwardRef(
     const checkCredentials = (values: any) => {
       console.log(values);
       console.log(formik.errors);
-      
-      
+
+
       return true;
     };
     const onSubmit = (values: any) => {
-      console.log("values",values);
+      console.log("values", values);
 
       const isMatch = checkCredentials(values.name);
-      var deptArray:any=[]
-      departments.map((item:any)=>(deptArray.push(item?.id)))
-      var labArray:any=[]
-      laboratory.map((item:any)=>(labArray.push(item?.id)))
+      var deptArray: any = []
+      departments.map((item: any) => (deptArray.push(item?.id)))
+      var labArray: any = []
+      laboratory.map((item: any) => (labArray.push(item?.id)))
       const procedures: any = {
         name: values.name,
         // organisationId: values.organisationId,
         departmentId: deptArray,
         laboratoryId: labArray,
         createdBy: values.createdBy,
-        procedureDetials:'procedure'
+        procedureDetials: values.procedureDetials
       };
-      if(type=='create'){
-        procedures['organisationId']=values.organisationId
-        procedures['procedureDetials']=values.procedureDetials
-        procedures["createdOn"]=values.createdOn
+      if (type == 'create') {
+        procedures['organisationId'] = values.organisationId
+        procedures['procedureDetials'] = values.procedureDetials
+        procedures["createdOn"] = values.createdOn
       }
-      else{
-        procedures['_id']=formData._id
+      else {
+        procedures['_id'] = formData._id
       }
       console.log(procedures);
-      
+
       if (isMatch) {
-        if(type=='edit'){
+        if (type == 'edit') {
           dispatch(fetchUpdateProcedureData(procedures))
           reloadSingleData()
           submitFormPopup();
           clearForm()
           reload()
           // if(type=='edit'){
-           
+
           // }
         }
-        else{
+        else {
           dispatch(postProcedureData(procedures));
           submitFormPopup();
           clearForm()
@@ -134,31 +134,54 @@ const ProcedureForm = React.forwardRef(
       }
     };
     React.useImperativeHandle(ref, () => ({
-      open(state: any) {
+      open(state: any,row: any) {
         setFormOpen(state);
+         if (row?._id) {
+       
+          let payload={
+            _id:row?._id
+          }
+          dispatch(fetchProcedure(payload)).then((isSucess) => {
+            if (isSucess?.get_procedure) {
+            console.log(isSucess?.get_procedure?.name);
+            formik.setFieldValue('name',isSucess?.get_procedure?.name || row?.name)  
+    //  formik.setFieldValue('departmentId',isSucess?.get_procedure?.departmentId) 
+    //  formik.setFieldValue('laboratoryId',isSucess?.get_procedure?.laboratoryId) 
+     formik.setFieldValue('organisationId',isSucess?.get_procedure?.organisationId || row?.organisationId) 
+     formik.setFieldValue('procedureDetials',isSucess?.get_procedure?.procedureDetials || row?.procedureDetials) 
+            }
+          })
+        }
+       
       },
     }));
     const clearForm = () => {
       formik.resetForm();
-      if (type=='create') {
+      if (type == 'create') {
         setDepartments([]);
         setLaboratory([]);
       }
-      formik.dirty=false
+      formik.dirty = false
     };
-    const userSliceData=  useSelector(
-      (state: any) => state.userLogin.data, 
+    const userSliceData = useSelector(
+      (state: any) => state.userLogin.data,
     );
     console.log(userSliceData?.verifyToken?.firstName);
-    
+
     // const[formValues,setFormValues]=React.useState<any>({})
+    const procedureSliceData = useSelector(
+      (state: any) => state.procedure.data?.get_procedure,
+    );
 
-    // React.useEffect(()=>{
-    //   if(formData?.name)
-    //   setFormValues(formData)
-    // },[])
-
-
+    // React.useEffect(() => {
+    //  console.log(procedureSliceData?.name);
+    //  formik.setFieldValue('name',procedureSliceData?.name)  
+    //  formik.setFieldValue('departmentId',procedureSliceData?.departmentId) 
+    //  formik.setFieldValue('laboratoryId',procedureSliceData?.laboratoryId) 
+    //  formik.setFieldValue('organisationId',procedureSliceData?.organisationId) 
+    //  formik.setFieldValue('procedureDetials',procedureSliceData?.procedureDetials) 
+      
+    // }, [procedureSliceData])
     // const initialValues = {
     //   name: formData?.name,
     //   createdBy: new Date(),
@@ -168,14 +191,14 @@ const ProcedureForm = React.forwardRef(
     // };
     // console.log(initialValues);
     const formik = useFormik({
-      initialValues:{
-        name: formData?formData.name:'',
-        createdOn: userSliceData?.verifyToken?.firstName+userSliceData?.verifyToken?.lastName,
+      initialValues: {
+        name: '',
+        createdOn: userSliceData?.verifyToken?.firstName + userSliceData?.verifyToken?.lastName,
         createdBy: new Date(),
         departmentId: formData?formData.departmentId:"",
         laboratoryId: formData?formData.laboratoryId:"",
         organisationId: formData?formData.organisationId:"655376d2659b7b0012108a33",
-        procedureDetials:'procedure'
+        procedureDetials:''
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
@@ -201,10 +224,10 @@ const ProcedureForm = React.forwardRef(
         labSliceData?.map((item: any) => ({
           label: item.name,
           value: item.name,
-        id: item._id,
+          id: item._id,
         })),
       );
-    }, [departmentSliceData, labSliceData,userSliceData]);
+    }, [departmentSliceData, labSliceData, userSliceData]);
 
     console.log(departmentData);
 
@@ -221,13 +244,13 @@ const ProcedureForm = React.forwardRef(
       } else {
         confirmationPopupRef.current.open(false);
         setFormOpen(false);
-       clearForm()
+        clearForm()
       }
     };
 
     const submitFormPopup = () => {
       setFormOpen(false);
-      toast(`Procedure ${type=='edit'?'updated':'created'} !`, {
+      toast(`Procedure ${type == 'edit' ? 'updated' : 'created'} !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }
@@ -237,8 +260,8 @@ const ProcedureForm = React.forwardRef(
       //   successPopupRef.current.open(false, 'Procedure');
       // }, 3000);
     };
-console.log(type);
-const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/DD/YYYY')):dayjs(moment().format('MM/DD/YYYY'))
+    console.log(type);
+    const createdOn = type == 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).local().format('MM/DD/YYYY')) : dayjs(moment().format('MM/DD/YYYY'))
 
     return (
       <div>
@@ -262,7 +285,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
             <Box className="popup-section">
               <Box className="title-popup">
                 <Typography>{type} Procedure</Typography>
-                <CloseIcon onClick={() => {closeFormPopup(false); clearForm()}} />
+                <CloseIcon onClick={() => { closeFormPopup(false); clearForm() }} />
               </Box>
 
               <Box>
@@ -299,10 +322,10 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                         value={formData?.procedureNumber}
                         disabled
                         size="small"
-                        // error={
-                        //   formik.touched.procedureNumber &&
-                        //   Boolean(formik.errors.procedureNumber)
-                        // }
+                      // error={
+                      //   formik.touched.procedureNumber &&
+                      //   Boolean(formik.errors.procedureNumber)
+                      // }
                       />
                       {/* {formik.touched.procedureNumber &&
                         formik.errors.procedureNumber && (
@@ -329,14 +352,14 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                     <Box className="bg-gray-input" style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" value={createdOn} disabled  disablePast/>
+                        <DatePicker format="DD/MM/YYYY" value={createdOn} disabled disablePast />
                       </LocalizationProvider>
                       {formik.touched.perchasedDate &&
-                            formik.errors.perchasedDate && (
-                              <Typography className="error-field">
-                                Purchase date required
-                              </Typography>
-                            )}
+                        formik.errors.perchasedDate && (
+                          <Typography className="error-field">
+                            Purchase date required
+                          </Typography>
+                        )}
                     </Box>
                   </Grid>
                 </Grid>
@@ -356,44 +379,45 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Department<span style={{ color: "#E2445C" }}>*</span></label>
                       <Autocomplete
-                              multiple
-                              id="departmentId"
-                              disableCloseOnSelect
-                              value={departments}
-                              options={
-                                departmentData !== undefined
-                                  ? departmentData
-                                  : []
-                              }
-                              getOptionLabel={(option: any) => option.label}
-                              isOptionEqualToValue={(option: any, value: any) =>
-                                value.id == option.id
-                              }
-                              renderInput={(params) => (
-                                <TextField {...params} placeholder="Department/s"  />
-                              )}
-                              fullWidth
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(
-                                props,
-                                option: any,
-                                { selected },
-                              ) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option.value}
-                                  </li>
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) =>{
-                                setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
-                              }
-                            />
+                        multiple
+                        id="departmentId"
+                        disableCloseOnSelect
+                        value={departments}
+                        options={
+                          departmentData !== undefined
+                            ? departmentData
+                            : []
+                        }
+                        getOptionLabel={(option: any) => option.label}
+                        isOptionEqualToValue={(option: any, value: any) =>
+                          value.id == option.id
+                        }
+                        renderInput={(params) => (
+                          <TextField {...params} placeholder="Department/s" />
+                        )}
+                        fullWidth
+                        placeholder="Department"
+                        size="medium"
+                        renderOption={(
+                          props,
+                          option: any,
+                          { selected },
+                        ) => (
+                          <React.Fragment>
+                            <li {...props}>
+                              <Checkbox
+                                style={{ marginRight: 0 }}
+                                checked={selected}
+                              />
+                              {option.value}
+                            </li>
+                          </React.Fragment>
+                        )}
+                        onChange={(_, selectedOptions: any) => {
+                          setDepartments(selectedOptions); formik.setValues({ ...formik.values, 'departmentId': selectedOptions })
+                        }
+                        }
+                      />
                       {/* <Autocomplete
                         multiple
                         id="departmentId"
@@ -454,38 +478,39 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Laboratory<span style={{ color: "#E2445C" }}>*</span></label>
                       <Autocomplete
-                            multiple
-                            id="departmentId"
-                            options={labData !== undefined ? labData : []}
-                            getOptionLabel={(option: any) => option.label}
-                            isOptionEqualToValue={(option: any, value: any) =>
-                              value.id == option.id
-                            }
-                            disableCloseOnSelect
-                            value={laboratory}
-                            renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies" />}
-                            fullWidth
-                            placeholder="Laboratory"
-                            size="medium"
-                            renderOption={(
-                              props,
-                              option: any,
-                              { selected },
-                            ) => (
-                              <React.Fragment>
-                                <li {...props}>
-                                  <Checkbox
-                                    style={{ marginRight: 0 }}
-                                    checked={selected}
-                                  />
-                                  {option.value}
-                                </li>
-                              </React.Fragment>
-                            )}
-                            onChange={(_, selectedOptions: any) =>{
-                              setLaboratory(selectedOptions);formik.setValues({...formik.values,'laboratoryId':selectedOptions}) }
-                            }
-                          />
+                        multiple
+                        id="departmentId"
+                        options={labData !== undefined ? labData : []}
+                        getOptionLabel={(option: any) => option.label}
+                        isOptionEqualToValue={(option: any, value: any) =>
+                          value.id == option.id
+                        }
+                        disableCloseOnSelect
+                        value={laboratory}
+                        renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies" />}
+                        fullWidth
+                        placeholder="Laboratory"
+                        size="medium"
+                        renderOption={(
+                          props,
+                          option: any,
+                          { selected },
+                        ) => (
+                          <React.Fragment>
+                            <li {...props}>
+                              <Checkbox
+                                style={{ marginRight: 0 }}
+                                checked={selected}
+                              />
+                              {option.value}
+                            </li>
+                          </React.Fragment>
+                        )}
+                        onChange={(_, selectedOptions: any) => {
+                          setLaboratory(selectedOptions); formik.setValues({ ...formik.values, 'laboratoryId': selectedOptions })
+                        }
+                        }
+                      />
                       {formik.touched.laboratoryId &&
                         formik.errors.laboratoryId && (
                           <Typography className="error-field">
@@ -497,7 +522,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                 </Grid>
                 <Grid container spacing={2} className="asset-popup">
                   <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Box style={{ position: 'relative' }}> 
+                    <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>
                         Procedure name
                         <span style={{ color: '#E2445C' }}>*</span>
@@ -545,7 +570,7 @@ const createdOn=type=='edit'?dayjs(moment(parseInt(formData?.createdAt)).local()
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" className="add-btn" disabled={type=='edit'?!formik.dirty:!formik.isValid}>
+                <Button type="submit" variant="contained" className="add-btn" disabled={type == 'edit' ? !formik.dirty : !formik.isValid}>
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
