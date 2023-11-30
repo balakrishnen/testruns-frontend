@@ -481,7 +481,7 @@ export default function MyPage() {
                                   : 'inactive-select td-select'
                           }
                           style={{
-                            background: row.status === 'Created' ? "#8d8d8d":'#faaa49',
+                            background: row.status === 'Created' ? "#8d8d8d" : row.status === 'Started' ? '#faaa49' : row.status === 'Stopped' ? '#e2445c' : '#00bf70',
                             padding: "6px",
                             width: '140px',
                             borderRadius: '20px',
