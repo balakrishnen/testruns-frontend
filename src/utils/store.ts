@@ -9,6 +9,7 @@ import labReducer from '../features/labSlice';
 import organizationReducer from '../features/organizationSlice';
 import notificationReducer from '../features/notificationSlice';
 import runsReducer from '../features/runsSlice';
+import myPageReducer from '../features/myPageSlice'
 import { chartTableReducer } from '../features/runsSlice';
 import procedureReducer from '../features/procedureSlice';
 import roleReducer from '../features/roleSlice';
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   procedure: procedureReducer,
   role: roleReducer,
   runs: runsReducer,
+  myPageSlice: myPageReducer,
   tableChart: chartTableReducer,
   userRuns: userRunsSlice,
   userLogin: loginUserSlice,

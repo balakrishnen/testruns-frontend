@@ -1,0 +1,66 @@
+
+ import { gql } from '@apollo/client';
+ gql`
+ enum RunStatus {
+      Created
+      Started
+      Stopped
+      Complete
+    }
+`
+export const GET_RUNS = gql`
+ query Get_all_runs($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
+    get_all_runs(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search){
+         Runs {
+            _id
+            objective
+            runNumber
+            dueDate
+            status
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+            departmentId {
+                _id
+                name
+                departmentNumber
+                organisationID
+                status
+                isActive
+                isDeleted
+                createdAt
+                updatedAt
+            }
+            laboratoryId {
+                _id
+                name
+                departmentId
+                isActive
+                isDeleted
+                createdAt
+                updatedAt
+            }
+            procedureId{
+      _id
+name
+procedureNumber
+procedureDetials
+assectId
+isActive
+isDeleted
+createdAt
+updatedAt
+    }
+        }
+        pageInfo {
+            currentPage
+            totalPages
+            totalCount
+            hasNextPage
+            hasPreviousPage
+        }
+    }
+}
+
+`; 
