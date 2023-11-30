@@ -131,10 +131,10 @@ const Profile = () => {
   };
 
   const loginUserSliceData=  useSelector(
-    (state: any) => state.userLogin.data, 
+    (state: any) => state.userLogin.data.verifyToken, 
   );
   React.useEffect(()=>{
-    let temp = { '_id': loginUserSliceData?.verifyToken._id}
+    let temp = { '_id': loginUserSliceData?._id}
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp))
       .then((isSucess) => {
@@ -270,7 +270,7 @@ console.log(departments);
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
-        _id:loginUserSliceData?.verifyToken._id
+        _id:loginUserSliceData?._id
       }
       // debugger
       // userValues['_id'] = userData?._id

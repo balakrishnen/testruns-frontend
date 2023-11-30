@@ -14,8 +14,35 @@ import CloseIcon from '@mui/icons-material/Close';
 import CloseRed from '../assets/images/close-red.svg';
 import search from '../assets/images/search.svg';
 import { CloseOutlined } from '@mui/icons-material';
+import { fetchAllUser } from '../api/userAPI';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const AddPeople = ({ open, close }: any) => {
+  const dispatch : any =useDispatch()
+  const [allUserData, setAlluserData] = React.useState<any>([]);
+  const allUser=  useSelector(
+    (state: any) => state.user.data.find_users, 
+  );
+console.log(allUserData);
+React.useEffect(()=>{
+  setAlluserData(allUserData)
+ },[allUserData])
+
+  React.useEffect(()=>{
+    dispatch(fetchAllUser())
+  },[])
+
+  React.useEffect(()=>{
+   setAlluserData(allUser?.map((item: any) => ({
+    label: item.email,
+    value: item.email,
+    id: item._id,
+  })))          
+  },[allUser])
+
+  console.log(allUserData);
+  
   return (
     <Dialog
       open={open}
@@ -45,8 +72,8 @@ const AddPeople = ({ open, close }: any) => {
             }}
           >
             <Box>
-              {top100Films.splice(1, 10).map((item, index) => (
-                <Chip key={index} label={item.title} sx={{ m: 0.5 }} />
+              {allUserData?.map((item:any, index:any) => (
+                <Chip key={index} label={item.value} sx={{ m: 0.5 }} />
               ))}
             </Box>
 
@@ -55,13 +82,13 @@ const AddPeople = ({ open, close }: any) => {
                 multiple
                 style={{borderRadius: '15px !importnant'}}
                 limitTags={3}
-                options={top100Films}
-                getOptionLabel={(option) => option?.title}
-                defaultValue={[
-                  top100Films[13],
-                  top100Films[12],
-                  top100Films[11],
-                ]}
+                options={allUserData !== undefined ? allUserData: []}
+                getOptionLabel={(option:any) => option?.value}
+                // defaultValue={[
+                //   top100Films[13],
+                //   top100Films[12],
+                //   top100Films[11],
+                // ]}
                 renderInput={(params) => (
                   <TextField  {...params} placeholder="Assignee" />
                 )}

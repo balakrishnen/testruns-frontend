@@ -164,9 +164,8 @@ const ProcedureForm = React.forwardRef(
       formik.dirty = false
     };
     const userSliceData = useSelector(
-      (state: any) => state.userLogin.data,
+      (state: any) => state.userLogin.data.verifyToken,
     );
-    console.log(userSliceData?.verifyToken?.firstName);
 
     // const[formValues,setFormValues]=React.useState<any>({})
     const procedureSliceData = useSelector(
@@ -193,7 +192,7 @@ const ProcedureForm = React.forwardRef(
     const formik = useFormik({
       initialValues: {
         name: '',
-        createdOn: userSliceData?.verifyToken?.firstName + userSliceData?.verifyToken?.lastName,
+        createdOn: userSliceData?.firstName + userSliceData?.lastName,
         createdBy: new Date(),
         departmentId: formData?formData.departmentId:"",
         laboratoryId: formData?formData.laboratoryId:"",

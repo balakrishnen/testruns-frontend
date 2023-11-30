@@ -26,6 +26,7 @@ import { fetchAssetsName } from '../../../api/assetsAPI';
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
+// import ProceduresRichText from './Editor';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Procedure Name is required"),
@@ -171,6 +172,7 @@ export default function ProcedureDetails() {
       name: procedureData?.name,
       assets: '',
       procedure: '',
+      html:''
     },
     validationSchema: validationSchema,
     onSubmit: onSubmit,
@@ -543,6 +545,13 @@ console.log(e.target.value);
                 <Box style={{ position: 'relative' }}>
                   <label>Full procedure</label>
                   <Box sx={{ mt: 1.5 }} id="content">
+                  {/* <ProceduresRichText
+              editorRef={editorRef}
+              value={formik.values.html}
+              onEditorChange={(event: any) =>
+                formik.setFieldValue("html", event)
+              }
+            /> */}
                     <Editor
                       apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                       onInit={(evt, editor) => (editorRef.current = editor)}

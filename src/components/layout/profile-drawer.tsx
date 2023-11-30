@@ -21,7 +21,7 @@ import { fetchLabData } from '../../api/labAPI';
 import { OrganizationList } from '../../utils/data';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { fetchOrganizationData } from '../../api/organizationAPI';
-import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData } from '../../api/userAPI';
+import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData } from '../../api/userAPI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -110,10 +110,12 @@ export default function AppProfileDrawer({
 
   // console.log(DepartmentList);
   const loginUserSliceData=  useSelector(
-    (state: any) => state.userLogin.data, 
+    (state: any) => state.userLogin.data.verifyToken, 
   );
+  console.log(loginUserSliceData);
+  
   React.useEffect(()=>{
-    let temp = { '_id': loginUserSliceData?.verifyToken._id}
+    let temp = { '_id': loginUserSliceData?._id}
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp)).then((isSucess) => {
       if (isSucess.get_user) {
@@ -134,13 +136,13 @@ export default function AppProfileDrawer({
   }, [departmentData, labData])
   React.useEffect(() => {
     let payload = {
-      _id:  loginUserSliceData?.verifyToken._id
+      _id:  loginUserSliceData?._id
     }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
     dispatch(fetchOrganizationData());
     dispatch(fetchRoleData())
-    dispatch(fetchGetUser(payload))
+    dispatch(fetchSingleUserData(payload))
     setEdit(true)
   }, []);
   const checkCredentialsProfile = (

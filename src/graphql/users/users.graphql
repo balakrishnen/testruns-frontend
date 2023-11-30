@@ -170,3 +170,26 @@ mutation VerifyToken($idToken:String!) {
     }
 }
 `;
+
+export const GET_USER_DATA = gql`
+query Find_users {
+    find_users {
+        _id
+        uid
+        firstName
+        lastName
+        departmentId
+        laboratoryId
+        organisationId
+        email
+        instituteId
+        imageUrl
+        role
+        phoneNumber
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;
