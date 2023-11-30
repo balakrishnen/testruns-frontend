@@ -51,7 +51,9 @@ import SuccessPopup from '../../components/SuccessPopup';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import moment from 'moment';
 import test from '../../assets/images/test.svg';
+import preview from '../../assets/images/profile/preview.jpg';
 import { toast } from 'react-toastify';
+import AWS from 'aws-sdk';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Asset Name is required'),
@@ -86,6 +88,9 @@ const Addnewpopup = React.forwardRef(
     const [departments, setDepartments] = React.useState([]);
     const [organization, setOrganization] = React.useState([]);
     const [laboratory, setLaboratory] = React.useState([]);
+    const fileUploadField = React.useRef<any>(null);
+    const [uploadedFile, setUploadedFile] = React.useState(null);
+
     React.useImperativeHandle(ref, () => ({
       open(state: any) {
         setFormPopup(state);
@@ -221,6 +226,56 @@ const Addnewpopup = React.forwardRef(
       formik.handleChange(name)(formattedDate);
     };
     console.log('formvalues',formik.values);
+
+    const handleImageUpload = async () => {
+      const selectedFile = fileUploadField.current.files[0];
+      // const formData = new FormData();
+      // formData.append('file', selectedFile);
+      // const payload = {
+      //   file: formData,
+      //   type: 'profile'
+      // }
+      // dispatch(fileUploadData(payload));
+  
+      const s3 = new AWS.S3({
+        // params: { Bucket: S3_BUCKET, folderName: "profile" },
+        region: 'us-east-1',
+        accessKeyId: 'AKIAUVVYVBYI2GJ3ENMQ',
+        secretAccessKey: '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',
+      });
+      const keyPath = `profile/${Date.now()}`;
+      const params = {
+        Bucket: 'test-run-v2',
+        Key: keyPath,
+        Body: selectedFile,
+        ACL: 'public-read',
+        // ContentType: selectedFile.type
+      };
+  
+      const result = s3.upload(params).promise();
+      await result.then((res: any) => {
+        setUploadedFile(res.Location);
+        toast(`Image uploaded successfully !`, {
+          style: {
+            background: '#00bf70',
+            color: '#fff',
+          },
+        });
+      });
+      await result.catch((err) => {
+        console.error('Failed to upload');
+        toast(`Failed to upload !`, {
+          style: {
+            background: '#e2445c',
+            color: '#fff',
+          },
+        });
+      });
+    };
+
+    const triggerFileUploadField = () => {
+      fileUploadField.current?.click();
+    };
     
     return (
       <div>
@@ -261,16 +316,16 @@ const Addnewpopup = React.forwardRef(
                   }}
                 >
                   <Box>
-                    <Box className="asset-upload">
-                      <img src={test} alt="assetimg" style={{width: '100%', height: '100%'}} />
+                    <Box style={{width: '220px', height: '220px', padding: '10px', background: '#e4e5e7', margin: 'auto'}}>
+                      <img src={uploadedFile === null ? preview : uploadedFile} alt="assetimg" style={{width: '100%', height: '100%'}} />
                     </Box>
                     <Box
                       className="edit-profile-btn"
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
                       <span className="file-wrapper">
-                        <input type="file" name="photo" id="photo" />
-                        <span className="button">Upload photo</span>
+                        <input   ref={fileUploadField} type="file" name="photo" id="photo"   onChange={handleImageUpload} />
+                        <span className="button" onClick={triggerFileUploadField}>Upload photo</span>
                       </span>
                       {/* {formik.touched.assets_image &&
                         formik.errors.assets_image && (
