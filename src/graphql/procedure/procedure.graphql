@@ -42,12 +42,12 @@ mutation Create_procedure(
 export const GET_PROCEDURE = gql`
 query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
     get_all_procedures(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search) {
-        Procedures {
+         Procedures {
             _id
             name
             procedureNumber
             procedureDetials
-            assetId
+            organisationId
             userId
             isActive
             isDeleted
@@ -74,6 +74,10 @@ query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrde
                 isDeleted
                 createdAt
                 updatedAt
+            }
+            assetId {
+                _id
+                name
             }
         }
         pageInfo {
@@ -102,7 +106,7 @@ query Get_procedure($_id: String!) {
         name
         procedureNumber
         procedureDetials
-        assectId
+        organisationId
         userId
         isActive
         isDeleted
