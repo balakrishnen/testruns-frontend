@@ -187,7 +187,6 @@ export default function Procedures() {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
     payload['page'] = page_no;
-    payload['perPage'] = 5;
     page['currentPage'] = page_no;
     setPageInfo(page);
     setQueryString(payload);

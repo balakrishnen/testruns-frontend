@@ -59,8 +59,8 @@ query Get_all_roles {
 
 `;
 export const GET_ROLE = gql`
-query Get_role {
-    get_role(_id: "6548eabeaeb1160012a51125") {
+query Get_role($_id :String!) {
+    get_role(_id: $_id) {
         _id
         name
         isActive

@@ -18,11 +18,12 @@ export const fetchRoleData = () => async (dispatch: any) => {
         dispatch(fetchRoleFailure(error.message));
     }
 };
-export const fetchSingleRoleData = () => async (dispatch: any) => {
+export const fetchSingleRoleData = (payload: any) => async (dispatch: any) => {
     dispatch(fetchRoleStart());
     try {
         const response = await client.query({
-            query: GET_ROLE
+            query: GET_ROLE,
+            variables: payload,
         });
         dispatch(fetchRoleSuccess(response.data));
     } catch (error: any) {

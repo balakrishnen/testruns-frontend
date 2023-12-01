@@ -15,12 +15,30 @@ export const GET_RUNS = gql`
             _id
             objective
             runNumber
+            assignedTo
+            assignedBy
             dueDate
             status
             isActive
             isDeleted
             createdAt
             updatedAt
+            procedureId {
+                _id
+                name
+                procedureNumber
+                procedureDetials
+                organisationId
+                departmentId
+                laboratoryId
+                assetId
+                userId
+                isActive
+                isDeleted
+                createdAt
+                createdOn
+                updatedAt
+            }
             departmentId {
                 _id
                 name
@@ -35,23 +53,13 @@ export const GET_RUNS = gql`
             laboratoryId {
                 _id
                 name
+                userId
                 departmentId
                 isActive
                 isDeleted
                 createdAt
                 updatedAt
             }
-            procedureId{
-      _id
-name
-procedureNumber
-procedureDetials
-assectId
-isActive
-isDeleted
-createdAt
-updatedAt
-    }
         }
         pageInfo {
             currentPage

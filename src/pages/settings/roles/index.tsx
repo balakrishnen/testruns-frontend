@@ -21,12 +21,22 @@ const Roles = () => {
   const roleSliceData = useSelector(
     (state: any) => state.role.data?.get_role,
   );
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin?.data?.verifyToken, 
+  );
+  console.log(loginUserSliceData);
+  
+  console.log(roleSliceData);
+ 
   React.useEffect(() => {
     setFormValues(roleSliceData)
   }, [roleSliceData]);
 
   React.useEffect(() => {
- dispatch(fetchSingleRoleData())
+    let payload={
+      _id:loginUserSliceData?._id
+    }
+    dispatch(fetchSingleRoleData(payload))
   }, []);
   console.log(roleData);
 
