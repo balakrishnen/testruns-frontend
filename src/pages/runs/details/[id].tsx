@@ -35,7 +35,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
 import AddPeoplePopup from '../../../components/AddPeoplePopup';
-import * as html2json from "html2json";
+
 import {
   LineChart,
   Line,
@@ -700,32 +700,7 @@ export default function RunsDetails() {
   const handleChartChange = (event: any) => {
     setSelectedChart(event.target.value);
   };
-  const [htmlInput, setHtmlInput] = React.useState<any>({});
-  const htmlToJSON: any = html2json.html2json(htmlData);
 
-  const uses = htmlToJSON?.child.map((ele: any) => ele);
-
-  const handleHtmlInput = () => {
-    let objects = {};
-    // @ts-ignore
-    let inputEl: any = document
-      ?.getElementById("content")
-      ?.querySelectorAll("input");
-
-    inputEl?.forEach((ele: any) => {
-      const { id, value } = ele;
-      let temp = { [id]: value };
-      objects = { ...objects, temp };
-      setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
-      // @ts-ignore
-      ele.onChange = (e) => {
-        const { id, value } = e.target;
-        setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
-      };
-    });
-  };
-  console.log(htmlInput);
-  
   return (
     <PrivateRoute>
       {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
@@ -1087,17 +1062,6 @@ export default function RunsDetails() {
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
                 {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
-                <div id='content'>
-                <div
-                    id="content"
-                    style={{ overflowY: "scroll" }}
-                  >
-                    <form onChange={handleHtmlInput}>
-                      {uses.map((el: any) =>
-                        parse(htmlToJSON && html2json.json2html(el))
-                      )}
-                    </form>
-                  </div>
                 <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}
@@ -1169,7 +1133,6 @@ export default function RunsDetails() {
           // onChange={handleEditorChange}
           onEditorChange={handleChanges}
                 />
-                </div>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">
@@ -1220,7 +1183,6 @@ export default function RunsDetails() {
                 </Box>
               </CustomTabPanel>
               <CustomTabPanel value={value} index={2}>
-                <div id='content'>
                 <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}
@@ -1287,7 +1249,6 @@ export default function RunsDetails() {
                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                   }}
                 />
-                </div>
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={3}>
