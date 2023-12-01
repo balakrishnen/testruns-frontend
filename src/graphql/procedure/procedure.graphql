@@ -26,7 +26,7 @@ mutation Create_procedure(
         procedureNumber
         procedureDetials
         organisationId
-        assectId
+        
         userId
         isActive
         isDeleted

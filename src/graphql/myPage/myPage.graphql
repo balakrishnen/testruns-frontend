@@ -46,7 +46,7 @@ export const GET_RUNS = gql`
 name
 procedureNumber
 procedureDetials
-assectId
+
 isActive
 isDeleted
 createdAt

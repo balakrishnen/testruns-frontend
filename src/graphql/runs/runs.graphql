@@ -133,7 +133,7 @@ export const POST_RUNS = gql`
             procedureDetials
             departmentId
             laboratoryId
-            assectId
+           
             isActive
             isDeleted
             createdAt
@@ -239,7 +239,7 @@ mutation Update_run(
             procedureDetials
             departmentId
             laboratoryId
-            assectId
+            
             isActive
             isDeleted
             createdAt
