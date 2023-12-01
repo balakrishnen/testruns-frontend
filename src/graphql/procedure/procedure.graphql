@@ -142,7 +142,7 @@ mutation Update_procedure(
         organisationId
         departmentId
         laboratoryId
-        assectId
+        
         userId
         isActive
         isDeleted
