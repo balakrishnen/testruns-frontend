@@ -168,8 +168,8 @@ query Get_run($_id: String!) {
             name
             procedureNumber
             procedureDetials
-            assectId
-            userId
+            
+            
             isActive
             isDeleted
             createdAt
