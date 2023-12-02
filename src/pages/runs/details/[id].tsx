@@ -35,7 +35,8 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
 import AddPeoplePopup from '../../../components/AddPeoplePopup';
-
+import * as html2json from "html2json";
+import parse from "html-react-parser";
 import {
   LineChart,
   Line,
@@ -63,7 +64,7 @@ import { navigate } from 'gatsby';
 import { useSelector } from 'react-redux';
 import TableChart from '../../../components/charts/TableChart';
 import RealtimeChart from '../../../components/charts/RealtimeChart';
-import { postUserRunsData } from '../../../api/userRunsAPI';
+import { UpdateUserRunsData, fetchSingleUserRunzData, postUserRunsData } from '../../../api/userRunsAPI';
 import { fetchUpdateProcedureData } from '../../../api/procedureAPI';
 import { nanoid } from 'nanoid';
 
@@ -227,6 +228,7 @@ export default function RunsDetails() {
   const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content:"" });
+  const formRef: any = React.useRef(null);
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -358,6 +360,7 @@ export default function RunsDetails() {
   // const runzValue = location.state?.props;
   // console.log(runzValue);
   const [runzValue, setRunzValue] = React.useState<any>(location.state?.props)
+  const [userRunzID, setUserRunzID] = React.useState<any>({})
 
   const procedureSliceData = useSelector(
     (state: any) => state.runs.data
@@ -368,8 +371,27 @@ export default function RunsDetails() {
       console.log(window.location.pathname.split('/'));
       const procedureId = { _id: window.location.pathname.split('/')[3] };
       dispatch(fetchSingleRunsData(procedureId));
+      const runz={
+        runId:window.location.pathname.split('/')[3] 
+      }
+      dispatch(fetchSingleUserRunzData(runz)).then((res)=>{
+        console.log(res?.get_userRun?._id);
+        setUserRunzID(res?.get_userRun)
+        
+      })
     }
   }, []);
+
+ function isEmptyObject(obj: any) {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+ 
 
   const handleReloadSingleData = () => {
     const procedureId = { _id: runzValue?._id };
@@ -380,13 +402,34 @@ export default function RunsDetails() {
     setRunzValue(runzValue)
     setuserProcedure(userProcedure)
     setState({content:userProcedure})
+    handleHtmlInput()
   }, [runzValue, userProcedure,])
   React.useEffect(() => {
     setRunzValue(procedureSliceData?.get_run)
-    setuserProcedure(procedureSliceData?.get_run?.procedureId?.procedureDetials)
-
+    setuserProcedure(procedureSliceData?.get_run?.procedureId[0]?.procedureDetials)
+   
   }, [procedureSliceData]);
-
+  React.useEffect(() => {
+  
+    const filtered =
+    userRunzID?.userProcedure &&
+      Object.entries(JSON.parse( userRunzID?.userProcedure)).filter(
+        ([key]) => key 
+      );
+      console.log(userProcedure);
+      
+    const obj = filtered && Object.fromEntries(filtered);
+    if (!isEmptyObject(obj && userProcedure) ) {
+      for (const [key, values] of Object.entries(obj)) {
+        if (values && document.getElementById(key)) {
+          // @ts-ignore
+          document.getElementById(key).value = values;
+        }
+      }
+    }
+console.log(obj);
+  
+}, [userRunzID?.userProcedure,state]);
   console.log(runzValue);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -561,23 +604,49 @@ export default function RunsDetails() {
     setCharts(data);
   };
   const handleChanges = (content:any) => {
-    // console.log(content);
+    console.log("content",content.querySelectorAll("input"));
     
     setState({ content });
   };
   console.log(state);
   const onSubmit=()=>{
     console.log(runzValue,state.content)
-    let payload={
-      _id: runzValue.procedureId._id,
-    procedureDetials: state.content
+    var payload:any ={
+      runId: runzValue._id,
+      organisationId:"655376d2659b7b0012108a33",
+      userProcedure:JSON.stringify(htmlInput),
+
     }
-    dispatch(fetchUpdateProcedureData(payload))
-  toast(`Procedure updated !`, {
+    console.log(runzValue.status);
+    
+   if(runzValue.status=="Created") {
+    dispatch(postUserRunsData(payload))
+    let payload1={
+      _id:runzValue._id,
+      status:'Started'
+    }
+    dispatch(fetchUpdateRunsData(payload1))
+  toast(`User Procedure Created !`, {
     style: {
       background: '#00bf70', color: '#fff'
     }
   });
+}
+  else{
+   let payload2={
+    _id:userRunzID?._id,
+    organisationId:"655376d2659b7b0012108a33",
+    userProcedure:JSON.stringify(htmlInput),
+   }
+    dispatch(UpdateUserRunsData(payload2))
+    
+    toast(`User Procedure updated !`, {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
+  }
+
   }
   const handleColorPickerChange = (event: any, dataIndex: any, keyIndex) => {
     const data = [...charts];
@@ -700,6 +769,38 @@ export default function RunsDetails() {
   const handleChartChange = (event: any) => {
     setSelectedChart(event.target.value);
   };
+  const htmlData: any = state?.content
+    ? state?.content
+    : "";
+  const [htmlInput, setHtmlInput] = React.useState<any>({});
+  const htmlToJSON: any = html2json?.html2json(htmlData);
+
+  const uses = htmlToJSON?.child.map((ele: any) => ele);
+  const handleHtmlInput = () => {
+    let objects = {};
+    // @ts-ignore
+    let inputEl: any = document
+      ?.getElementById("content")
+      ?.querySelectorAll("input");
+console.log("inputEl",inputEl);
+
+    inputEl?.forEach((ele: any) => {
+      const { id, value } = ele;
+      let temp = { [id]: value };
+      objects = { ...objects, temp };
+      console.log(id);
+      
+      setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+      // @ts-ignore
+      ele.onChange = (e) => {
+        const { id, value } = e.target;
+        setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+      };
+    });
+    console.log("inputEl",objects);
+    
+  };
+  console.log('htmlInput',htmlInput);
 
   return (
     <PrivateRoute>
@@ -1062,7 +1163,18 @@ export default function RunsDetails() {
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
                 {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
-                <Editor
+                <div
+            id="content"
+            style={{ overflowY: "scroll" }}
+          >
+            <form ref={formRef} onChange={handleHtmlInput}>
+              {uses.map((el: any) =>
+                parse(htmlToJSON && html2json.json2html(el))
+              )}
+            </form>
+          </div>
+
+                {/* <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   init={{
@@ -1132,7 +1244,7 @@ export default function RunsDetails() {
                   value={state.content}
           // onChange={handleEditorChange}
           onEditorChange={handleChanges}
-                />
+                /> */}
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">

@@ -251,8 +251,6 @@ console.log(inputEl);
     
   };
   console.log(htmlInput);
-  
-
   const handleSave = (e:any) => {
   //  console.log(state);
    const payload={

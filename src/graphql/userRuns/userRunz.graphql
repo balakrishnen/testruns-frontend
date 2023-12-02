@@ -20,3 +20,41 @@ mutation Create_userRunz(
     }
 }
 `;
+
+export const UPDATE_USER_RUNS = gql`
+mutation Update_userRun(
+    $_id: String!
+    $userProcedure: String!
+) {
+    update_userRun(_id: $_id, userProcedure: $userProcedure) {
+        _id
+        runId
+        organisationId
+        userProcedure
+        remarks
+        results
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`;
+
+export const GET_SINGLE_USER_RUNS = gql`
+query Get_userRun(
+    $runId: String!
+) {
+    get_userRun(runId: $runId) {
+        _id
+        runId
+        organisationId
+        userProcedure
+        remarks
+        results
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}`;
