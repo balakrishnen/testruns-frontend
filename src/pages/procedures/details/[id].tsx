@@ -393,10 +393,35 @@ console.log(inputEl);
   const checkCredentials = (values: any) => {
     return true;
   };
-const onChangeValue=(e)=>{
+const onChangeValue=(e:any)=>{
 console.log(e.target.value);
 
 }
+const uploadVideo = async (e:any) => {
+  const file = e.target.files[0];
+  if (file) {
+    const videoUrl = URL.createObjectURL(file);
+
+    if (editorRef.current) {
+      const editor = editorRef.current.editor;
+      editor.insertContent(
+        `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
+      );
+    }
+  }
+};
+const handleEditorInit = (editor:any) => {
+  editor.ui.registry.addButton("uploadvideo", {
+    text: "Upload Video",
+    onAction: () => {
+      const input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "video/*");
+      input.onchange = uploadVideo;
+      input.click();
+    },
+  });
+};
   return (
     <PrivateRoute>
       <Box className="proceduredetails-page">
@@ -566,7 +591,7 @@ console.log(e.target.value);
                         toolbar: 'undo redo | blocks formatselect | ' +
                         'charmap subscript superscript bold italic | alignleft aligncenter ' +
                         'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'help |image code table customInsertButton insertdatetime template insertinput customDataAttrButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                        'help |link image code table customInsertButton insertdatetime template insertinput customDataAttrButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                         image_advtab: true,
                     image_title: true,
                     automatic_uploads: true,
@@ -594,7 +619,7 @@ console.log(e.target.value);
                       input.click();
                     },
                     setup: function (editor) {
-
+                      handleEditorInit(editor);
                       editor.ui.registry.addButton("customInsertButton", {
                         icon: "edit-block",
                         tooltip: "Insert Input Element",
@@ -605,7 +630,17 @@ console.log(e.target.value);
                           );
                         },
                       });
-                     
+                      editor.ui.registry.addButton("customVideoUpload", {
+                        text: "Upload Video",
+                        onAction: function () {
+                          editor.insertContent(
+                            `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
+                          );
+                          // if (fileInputRef.current) {
+                          //   fileInputRef.current.click();
+                          // }
+                        },
+                      });
                       editor.ui.registry.addButton("customDataAttrButton", {
                         icon: "fas fa-cog",
                         tooltip: "Assign Data Attribute",

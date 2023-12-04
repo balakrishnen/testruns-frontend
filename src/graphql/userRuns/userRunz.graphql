@@ -5,12 +5,14 @@ mutation Create_userRunz(
     $runId :String!
     $organisationId :String!
     $userProcedure :String!
+    $static_chart_data: String
 ) {
-    create_userRunz(runId: $runId, organisationId: $organisationId, userProcedure: $userProcedure) {
+    create_userRunz(runId: $runId, organisationId: $organisationId, userProcedure: $userProcedure, static_chart_data:$static_chart_data) {
         _id
         runId
         organisationId
         userProcedure
+        static_chart_data
         remarks
         results
         isActive
@@ -25,12 +27,14 @@ export const UPDATE_USER_RUNS = gql`
 mutation Update_userRun(
     $_id: String!
     $userProcedure: String!
+    $static_chart_data: String
 ) {
-    update_userRun(_id: $_id, userProcedure: $userProcedure) {
+    update_userRun(_id: $_id, userProcedure: $userProcedure, static_chart_data: $static_chart_data) {
         _id
         runId
         organisationId
         userProcedure
+        static_chart_data
         remarks
         results
         isActive
@@ -50,6 +54,7 @@ query Get_userRun(
         runId
         organisationId
         userProcedure
+        static_chart_data
         remarks
         results
         isActive

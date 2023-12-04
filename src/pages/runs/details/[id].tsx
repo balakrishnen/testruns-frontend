@@ -410,8 +410,9 @@ export default function RunsDetails() {
     setRunzValue(runzValue)
     setuserProcedure(userProcedure)
     setState({content:userProcedure})
-    handleHtmlInput()
-  }, [runzValue, userProcedure,])
+  
+  }, [runzValue, userProcedure])
+ 
   React.useEffect(() => {
     setRunzValue(procedureSliceData?.get_run)
     setuserProcedure(procedureSliceData?.get_run?.procedureId[0]?.procedureDetials)
@@ -440,6 +441,10 @@ console.log(obj);
   
 }, [userRunzID?.userProcedure,state]);
   console.log(runzValue);
+
+  React.useEffect(()=>{
+    handleHtmlInput()
+  },[state?.content,userRunzID?.userProcedure])
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -618,46 +623,194 @@ console.log(obj);
     setState({ content });
   };
   console.log(state);
-  const onSubmit=()=>{
-    console.log(runzValue,state.content)
-    var payload:any ={
-      runId: runzValue._id,
-      organisationId:"655376d2659b7b0012108a33",
-      userProcedure:JSON.stringify(htmlInput),
+  const[arr,setArr]=React.useState<any>([])
+  console.log(arr);
+  const mergedData: any = [];
+  const onSubmit = () => {
+    handleHtmlInput();
 
-    }
-    console.log(runzValue.status);
+    const tablesEles: any = document
+      ?.getElementById("content")
+      ?.querySelectorAll("table");
+    let finalTableTitleResult: any;
+    console.log("tablesEles",tablesEles);
     
-   if(runzValue.status=="Created") {
-    dispatch(postUserRunsData(payload))
-    let payload1={
-      _id:runzValue._id,
-      status:'Started'
-    }
-    dispatch(fetchUpdateRunsData(payload1))
-  toast(`User Procedure Created !`, {
-    style: {
-      background: '#00bf70', color: '#fff'
-    }
-  });
-}
-  else{
-   let payload2={
-    _id:userRunzID?._id,
-    organisationId:"655376d2659b7b0012108a33",
-    userProcedure:JSON.stringify(htmlInput),
-   }
-    dispatch(UpdateUserRunsData(payload2))
-    
-    toast(`User Procedure updated !`, {
-      style: {
-        background: '#00bf70', color: '#fff'
-      }
-    });
-  }
+    if (tablesEles) {
+      const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
+        const headerCells = tablesInstance?.querySelectorAll("[data-column]");
+        const headerNames = Array.from(headerCells).map((header: any) => ({
+          key: header.getAttribute("data-column"),
+          value: header.textContent.trim(),
+        }));
+        const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
+        const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
+          const tableCells = tableDataRow.querySelectorAll("td[data-column]");
+          return Array.from(tableCells).map((cell: any) => {
+            const inputCntext = cell.querySelector('input[type="text"]');
+            console.log(inputCntext);
+            
+            if (inputCntext) {
+              console.log(cell.getAttribute("data-column"));
+              console.log(htmlInput[inputCntext.id]);
+              
+              return {
+                key: cell.getAttribute("data-column"),
+                value: htmlInput[inputCntext.id],
+              };
+            }
+          });
+        });
+        return {
+          headerNames: headerNames,
+          rowData: rowData,
+        };
+      });
+console.log("result",htmlInput);
 
-  }
-  const handleColorPickerChange = (event: any, dataIndex: any, keyIndex) => {
+      const mergedDatasets = result.map((dataset) => {
+        
+        for (let i = 0; i < dataset.rowData.length; i++) {
+          const rowData = dataset.rowData[i];
+          const mergedRow: any = {};
+          for (let j = 0; j < rowData?.length; j++) {
+            const header = dataset.headerNames[j];
+            const value: any = rowData[j];
+            mergedRow[header?.value] = value?.value;
+          }
+          console.log("mergedRow",mergedRow);
+          
+          mergedData.push(mergedRow);
+        
+        }
+        return mergedData;
+        
+      });
+      console.log("mergedDatasets",mergedDatasets);
+      
+      let filteredData = mergedDatasets?.filter((sublist) =>
+        sublist?.some((obj: any) => Object?.keys(obj).length > 0)
+      );
+      filteredData = filteredData?.map((sublist) =>
+        sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
+      );
+console.log("filteredData",filteredData);
+
+      const results = filteredData?.map((dataset, index) => {
+        const subResult = [];
+        const firstDataItem = dataset[index];
+        for (const key in firstDataItem) {
+          const label = key;
+          const values: any = [];
+          dataset?.forEach((item: any) => {
+            if (item[key]) {
+              values.push(parseInt(item[key]));
+            }
+          });
+          subResult.push({ label, values });
+        }
+        return subResult;
+      });
+
+      const tablesin = document
+        ?.getElementById("content")
+        ?.querySelectorAll("[data-table]");
+      const getTitle: any = [];
+
+      tablesin?.forEach((element, index) => {
+        getTitle.push(element.textContent);
+      });
+
+      finalTableTitleResult = getTitle?.map((list: any, index: any) => {
+        return { label: list, value: list, data: results[index] };
+      });
+    }
+    setArr(finalTableTitleResult)
+    let vals = Object.values(htmlInput);
+    const empty = vals.filter((item) => item === "");
+    console.log('finalTableTitleResult',empty);
+    
+    // if (empty.length > 0) {
+    //   Toast("Must fill all Required Readings", "LONG", "error");
+    // } else if (empty.length === 0) {
+      handleHtmlInput();
+      var payload:any ={
+              runId: runzValue._id,
+              organisationId:"655376d2659b7b0012108a33",
+              userProcedure:JSON.stringify(htmlInput),
+              static_chart_data:JSON.stringify(arr)
+        
+            }
+            console.log(runzValue.status);
+            
+           if(runzValue.status=="Created") {
+            dispatch(postUserRunsData(payload))
+            let payload1={
+              _id:runzValue._id,
+              status:'Started'
+            }
+            dispatch(fetchUpdateRunsData(payload1))
+          toast(`User Procedure Created !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+        }
+          else{
+           let payload2={
+            _id:userRunzID?._id,
+            organisationId:"655376d2659b7b0012108a33",
+            userProcedure:JSON.stringify(htmlInput),
+            static_chart_data:JSON.stringify(arr)
+           }
+            dispatch(UpdateUserRunsData(payload2))
+            
+            toast(`User Procedure updated !`, {
+              style: {
+                background: '#00bf70', color: '#fff'
+              }
+            });
+          }
+  };
+//   const onSubmit=()=>{
+//     console.log(runzValue,state.content)
+//     var payload:any ={
+//       runId: runzValue._id,
+//       organisationId:"655376d2659b7b0012108a33",
+//       userProcedure:JSON.stringify(htmlInput),
+
+//     }
+//     console.log(runzValue.status);
+    
+//    if(runzValue.status=="Created") {
+//     dispatch(postUserRunsData(payload))
+//     let payload1={
+//       _id:runzValue._id,
+//       status:'Started'
+//     }
+//     dispatch(fetchUpdateRunsData(payload1))
+//   toast(`User Procedure Created !`, {
+//     style: {
+//       background: '#00bf70', color: '#fff'
+//     }
+//   });
+// }
+//   else{
+//    let payload2={
+//     _id:userRunzID?._id,
+//     organisationId:"655376d2659b7b0012108a33",
+//     userProcedure:JSON.stringify(htmlInput),
+//    }
+//     dispatch(UpdateUserRunsData(payload2))
+    
+//     toast(`User Procedure updated !`, {
+//       style: {
+//         background: '#00bf70', color: '#fff'
+//       }
+//     });
+//   }
+
+//   }
+  const handleColorPickerChange = (event: any, dataIndex: any, keyIndex:any) => {
     const data = [...charts];
     const values = { ...data[dataIndex] };
     values.tableChartOptionsList[keyIndex].color = event.target.value;
@@ -788,6 +941,9 @@ console.log(obj);
   const handleHtmlInput = () => {
     let objects = {};
     // @ts-ignore
+    console.log(document ?.getElementById("content")
+    ?.querySelectorAll("td"));
+    
     let inputEl: any = document
       ?.getElementById("content")
       ?.querySelectorAll("input");
@@ -810,7 +966,31 @@ console.log("inputEl",inputEl);
     
   };
   console.log('htmlInput',htmlInput);
-
+  const uploadVideo = async (e:any) => {
+    const file = e.target.files[0];
+    if (file) {
+      const videoUrl = URL.createObjectURL(file);
+  
+      if (editorRef.current) {
+        const editor = editorRef.current.editor;
+        editor.insertContent(
+          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
+        );
+      }
+    }
+  };
+  const handleEditorInit = (editor:any) => {
+    editor.ui.registry.addButton("uploadvideo", {
+      text: "Upload Video",
+      onAction: () => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "video/*");
+        input.onchange = uploadVideo;
+        input.click();
+      },
+    });
+  };
   return (
     <PrivateRoute>
       {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
@@ -1339,12 +1519,13 @@ console.log("inputEl",inputEl);
                       'undo redo | blocks formatselect | ' +
                       'charmap subscript superscript bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                      'help |link image code table customInsertButton insertdatetime template insertinput customAlertButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                     image_advtab: true,
                     image_title: true,
                     automatic_uploads: true,
                     file_picker_types: 'image',
                     setup: function (editor) {
+                      handleEditorInit(editor);
                       editor.ui.registry.addButton('customInsertButton', {
                         icon: 'edit-block',
                         tooltip: 'Insert Input Element',
@@ -1353,6 +1534,17 @@ console.log("inputEl",inputEl);
                           editor.insertContent(
                             `&nbsp;<input type='text' >&nbsp;`,
                           );
+                        },
+                      });
+                      editor.ui.registry.addButton("customVideoUpload", {
+                        text: "Upload Video",
+                        onAction: function () {
+                          editor.insertContent(
+                            `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
+                          );
+                          // if (fileInputRef.current) {
+                          //   fileInputRef.current.click();
+                          // }
                         },
                       });
                       editor.ui.registry.addButton('customAlertButton', {
@@ -1410,12 +1602,13 @@ console.log("inputEl",inputEl);
                       'undo redo | blocks formatselect | ' +
                       'charmap subscript superscript bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                      'help |link image code table customInsertButton insertdatetime template insertinput customAlertButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                     image_advtab: true,
                     image_title: true,
                     automatic_uploads: true,
                     file_picker_types: 'image',
                     setup: function (editor) {
+                      handleEditorInit(editor);
                       editor.ui.registry.addButton('customInsertButton', {
                         icon: 'edit-block',
                         tooltip: 'Insert Input Element',
@@ -1434,6 +1627,17 @@ console.log("inputEl",inputEl);
                             'Enter data key attribute',
                           );
                           console.log(userInput);
+                        },
+                      });
+                      editor.ui.registry.addButton("customVideoUpload", {
+                        text: "Upload Video",
+                        onAction: function () {
+                          editor.insertContent(
+                            `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
+                          );
+                          // if (fileInputRef.current) {
+                          //   fileInputRef.current.click();
+                          // }
                         },
                       });
                     },
