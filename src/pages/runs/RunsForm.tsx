@@ -35,7 +35,7 @@ import {
 } from '../../utils/data';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 
-import { fetchUpdateRunsData, postRunsData } from '../../api/RunsAPI';
+import { fetchSingleRunsData, fetchUpdateRunsData, postRunsData } from '../../api/RunsAPI';
 import { fetchLabData } from '../../api/labAPI';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
@@ -101,9 +101,27 @@ const RunsForm = React.forwardRef(
     };
     const [runsOpen, setRunsOpen] = React.useState(false);
     const [runCreate, setRunsCreate] = React.useState(false);
+    const runzSliceData = useSelector(
+      (state: any) => state.runs.data
+    );
+  
+    React.useEffect(()=>{
+      formik.setFieldValue('objective',runzSliceData?.get_run?.objective)
+      console.log("runzSliceData",runzSliceData);
+      
+    },[runzSliceData])
+
     React.useImperativeHandle(ref, () => ({
-      open(state: any) {
-        setRunsCreate(state);
+      open(state: any,row: any) {
+        setRunsCreate(state)
+        if (row?._id) {
+       
+          let payload={
+            _id:row?._id
+          }
+       
+        dispatch(fetchSingleRunsData(payload))
+        }
       },
     }));
     // const departments: any = [];

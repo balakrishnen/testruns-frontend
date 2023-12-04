@@ -542,8 +542,7 @@ const Profile = () => {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>
-                            First name
-                            <span style={{ color: '#E2445C' }}>*</span>
+                            First name <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           <TextField
                             margin="none"
@@ -585,7 +584,7 @@ const Profile = () => {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>
-                            Last name<span style={{ color: '#E2445C' }}>*</span>
+                            Last name <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           <TextField
                             margin="normal"
@@ -634,7 +633,7 @@ const Profile = () => {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>
-                            Email<span style={{ color: '#E2445C' }}>*</span>
+                            Email <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           <TextField
                             margin="normal"
@@ -676,7 +675,7 @@ const Profile = () => {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>
-                            Mobile<span style={{ color: '#E2445C' }}>*</span>
+                            Mobile
                           </label>
                           <TextField
                             margin="none"
@@ -717,10 +716,10 @@ const Profile = () => {
                     <Grid container spacing={2} className="profile-inner">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label>Organisation</label>
+                          <label>Organisation <span style={{ color: '#E2445C' }}>*</span></label>
                           <Select
                             className="placeholder-color"
-                            style={{ color: 'black' }}
+                            style={{ color: 'black' ,marginTop:"10px"}}
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={
@@ -770,7 +769,7 @@ const Profile = () => {
                     >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label>Department/s</label>
+                          <label>Department/s <span style={{ color: '#E2445C' }}>*</span></label>
                           <Autocomplete
                             multiple
                             id="departmentId"
@@ -832,7 +831,7 @@ const Profile = () => {
                     >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label>Labs assigned</label>
+                          <label>Labs assigned <span style={{ color: '#E2445C' }}>*</span></label>
                           <Autocomplete
                             multiple
                             id="departmentId"
@@ -899,7 +898,7 @@ const Profile = () => {
                         }}
                       >
                         <Box style={{ position: 'relative' }}>
-                          <label>Designation</label>
+                          <label>Designation <span style={{ color: '#E2445C' }}>*</span></label>
                           <Select
                             // MenuProps={{
                             //   PaperProps: {

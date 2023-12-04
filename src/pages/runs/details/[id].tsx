@@ -864,7 +864,7 @@ console.log("inputEl",inputEl);
                     className="edit-btn"
                     onClick={() => {
                       // setDialog2Open(true);
-                      runsPopupRef.current.open(true);
+                      runsPopupRef.current.open(true,runzValue);
                     }}
                   >
                     <img src={edit} alt="edit" style={{ marginRight: '8px' }} />
