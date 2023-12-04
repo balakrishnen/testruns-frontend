@@ -172,7 +172,11 @@ const Profile = () => {
               (item: any) => labData?.find((obj) => obj.id == item),
             ) || [],
           );
+          console.log(isSucess.get_user.imageUr,"isSucess.get_user.imageUr");
+          
           formikProfile.setFieldValue('role', isSucess.get_user.role || '');
+          setUploadedFile(isSucess.get_user.imageUrl)
+          // formikProfile.setFieldValue('imageUrl', isSucess.get_user.imageUrl || null);
         }
       })
       .catch((err) => {
@@ -246,6 +250,8 @@ const Profile = () => {
     // return false;
     // }
   };
+  console.log(uploadedFile,"uploadedFile");
+
   const onSubmitProfile = (values: any) => {
     const isMatch = checkCredentialsProfile(
       values.firstName,
@@ -269,6 +275,7 @@ const Profile = () => {
       formikProfile.values.laboratoryId?.map((item: any) =>
         labArray.push(item?.id),
       );
+      
       let userValues: any = {
         // uid:"",
         firstName: values.firstName,
@@ -276,6 +283,7 @@ const Profile = () => {
         email: values.email,
         phoneNumber: values.phoneNumber.toString(),
         organisationId: values.organisationId,
+        imageUrl:uploadedFile,
         // instituteId: values.institution,
         departmentId: deptArray,
         laboratoryId: labArray,
@@ -470,16 +478,16 @@ const Profile = () => {
       >
         <Box sx={{ paddingLeft: '0rem !important' }}>
           <Box className="profile-camera">
-            <div>
+            <div style={{width:"200px", height:'200px'}}>
               <img
-                src={uploadedFile === null ? profile : uploadedFile}
-                alt="profile"
+                src={uploadedFile == null ? profile : uploadedFile}
+                alt="profiles"
                 style={{
                   width: '100%',
                   height: '100%',
                   border: '5px solid #F3F3F3',
                   borderRadius: '200px',
-                  // padding: '3px',
+                  padding: uploadedFile === null ? '0px' : '16px',
                 }}
               />
             </div>
@@ -494,7 +502,7 @@ const Profile = () => {
             >
               <img src={camera} alt="camera" />
             </div>
-          </Box>
+          </Box >
           <input
             style={{ display: 'none' }}
             type="file"

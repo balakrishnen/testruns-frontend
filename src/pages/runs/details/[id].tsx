@@ -396,6 +396,14 @@ export default function RunsDetails() {
   const handleReloadSingleData = () => {
     const procedureId = { _id: runzValue?._id };
     dispatch(fetchSingleRunsData(procedureId));
+    const runz={
+      runId:window.location.pathname.split('/')[3] 
+    }
+    dispatch(fetchSingleUserRunzData(runz)).then((res)=>{
+      console.log(res?.get_userRun?._id);
+      setUserRunzID(res?.get_userRun)
+      
+    })
     // setRunzValue(procedureSliceData.get_run)
   }
   React.useEffect(() => {
@@ -409,6 +417,7 @@ export default function RunsDetails() {
     setuserProcedure(procedureSliceData?.get_run?.procedureId[0]?.procedureDetials)
    
   }, [procedureSliceData]);
+
   React.useEffect(() => {
   
     const filtered =

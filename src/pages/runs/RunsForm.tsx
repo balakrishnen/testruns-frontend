@@ -107,6 +107,12 @@ const RunsForm = React.forwardRef(
   
     React.useEffect(()=>{
       formik.setFieldValue('objective',runzSliceData?.get_run?.objective)
+      formik.setFieldValue('laboratoryId',runzSliceData?.get_run?.laboratoryId)
+      formik.setFieldValue('departmentId',runzSliceData?.get_run?.departmentId)
+      formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId[0]?._id)
+      // formik.setFieldValue('procedureDetials',runzSliceData?.get_run?.procedureId[0]?.procedureDetials)
+
+      
       console.log("runzSliceData",runzSliceData);
       
     },[runzSliceData])
@@ -148,6 +154,7 @@ const RunsForm = React.forwardRef(
           createdAt: values.createdAt,
           status: values.status,
           organisationId: values.organisationId,
+          // procedureDetials:values.procedureDetials
 
         };
 
@@ -174,7 +181,7 @@ const RunsForm = React.forwardRef(
     };
     const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
 
-    const dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
+    var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
     console.log(dateDue);
 
     const formik = useFormik({
@@ -188,7 +195,8 @@ const RunsForm = React.forwardRef(
         createdAt: createdDate,
         assignedBy: "username",
         assignedTo: 'toy',
-        status: "Created"
+        status: "Created",
+        // procedureDetials:""
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,

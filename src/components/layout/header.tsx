@@ -16,6 +16,9 @@ import notification from '../../assets/images/notification.svg';
 import dark from '../../assets/images/Darkmode.svg';
 import account from '../../assets/images/account.svg';
 import '../../assets/styles/App.scss';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { fetchSingleUserData } from '../../api/userAPI';
 
 const mobileMenuId = 'primary-search-account-menu-mobile';
 
@@ -95,10 +98,25 @@ function AppHeader(props: any) {
   const openNotificationList = () => {
     props.toggleNotificationDrawer();
   };
-
-  // const changeTheme = () => {
-  //   props.toggleTheme();
-  // };
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data?.verifyToken, 
+  );
+  const dispatch: any = useDispatch();
+  const[userData, setUserData]=React.useState<any>({})
+ 
+  React.useEffect(() => {
+    let temp = { _id: loginUserSliceData?._id };
+    // if (row?._id) {
+    dispatch(fetchSingleUserData(temp))
+      .then((isSucess:any) => {
+        setUserData(isSucess?.get_user)
+        })
+      
+      .catch((err:any) => {
+        console.log(err);
+      });
+    // }
+  },[]);
 
   return (
     <Box className="app-bar-block">
@@ -180,9 +198,11 @@ function AppHeader(props: any) {
               onClick={openEditProfile}
             >
               <Typography variant="inherit" className="app-bar-username">
-                Hi Admin
+                Hi {userData?.firstName}
               </Typography>
-              <img src={account} alt="help_icon" className="app-bar-images" />
+              <div>
+              <img src={(userData?.imageUrl!=="" && userData?.imageUrl!==null)?userData?.imageUrl:account} className="app-bar-images" style={{borderRadius: "13px"}}/>
+              </div>
             </IconButton>
             {/* <IconButton
               size="large"

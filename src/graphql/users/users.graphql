@@ -99,6 +99,7 @@ mutation  update_user(
        $email:String
        $role:String
        $isActive:Boolean
+       $imageUrl:String
        $phoneNumber:String
     ) {
     update_user(
@@ -110,6 +111,7 @@ mutation  update_user(
         organisationId:$organisationId
         email:$email
         role:$role
+        imageUrl:$imageUrl
         isActive:$isActive
         phoneNumber:$phoneNumber
     ) {
@@ -138,6 +140,7 @@ query Get_user($_id: String!) {
         lastName
         departmentId
         laboratoryId
+        imageUrl
         organisationId
         email
         role
@@ -177,6 +180,7 @@ query Find_users {
         _id
         uid
         firstName
+        imageUrl
         lastName
         departmentId
         laboratoryId
