@@ -8,6 +8,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import CircularProgress from '@mui/material/CircularProgress';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -32,6 +33,7 @@ import { useDispatch } from 'react-redux';
 import { fetchLoginUser } from '../../api/userAPI';
 import { client } from '../../utils/config';
 import {LOGIN_USER} from '../../graphql/users/users.graphql'
+
 import { useSelector } from 'react-redux';
 
 const validUser = {
@@ -53,6 +55,7 @@ const Login = () => {
   if (typeof window !== 'undefined') {
     isLoggedIn = sessionStorage.getItem('isLoggedIn');
   }
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -69,7 +72,8 @@ const userSliceData=  useSelector(
 
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(values.email, values.password);
-
+console.log('isMatch',isMatch);
+    setIsSubmitted(true);
     if (isMatch) {
       if (typeof window !== 'undefined') {
         signInWithEmailAndPassword(auth, values.email, values.password)
@@ -107,6 +111,10 @@ const userSliceData=  useSelector(
               background: 'red', color: '#fff'
             }
           });
+          setTimeout(() => {
+            setIsSubmitted(isSubmitted);
+          }, 2000);
+          
         });
      
         // },1000)
@@ -260,6 +268,8 @@ const userSliceData=  useSelector(
               </Typography>
             </Box>
           </Box>
+
+          
           <Box>
             <Button
               type="submit"
@@ -271,8 +281,9 @@ const userSliceData=  useSelector(
                 // background: "#FFC60B",
               }}
               className="signup-btn"
+              disabled={isSubmitted}
             >
-              Log in
+              Log in 
             </Button>
           </Box>
         </Box>
