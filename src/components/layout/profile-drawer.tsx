@@ -191,7 +191,7 @@ export default function AppProfileDrawer({
       });
       // alert("User Details updated successful!");
 
-    };
+    }
   }
   const formik = useFormik({
     initialValues: {
@@ -423,8 +423,8 @@ export default function AppProfileDrawer({
                       disabled={edit}
                       margin="none"
                       fullWidth
-                      id="mobile"
-                      name="mobile"
+                      id="phoneNumber"
+                      name="phoneNumber"
                       type="number"
                       InputLabelProps={{ shrink: false }}
                       placeholder="Mobile number"
@@ -667,10 +667,10 @@ export default function AppProfileDrawer({
             </Box> */}
             </Box>
             <Box className="edit-details-profile" sx={{padding: '15px 32px'}}>
-              <Button type="submit" variant="contained" onClick={() => { toggleProfileDrawer(), setEdit(true) }} className="cancel-btn" >
+              <Button  variant="contained" onClick={() => { toggleProfileDrawer()}}  className="cancel-btn" >
                 Cancel
               </Button>
-              <Button type="submit" variant="contained" className="add-btn">
+              <Button type="submit" variant="contained" onClick={() => { toggleProfileDrawer(), setEdit(true) }} className="add-btn">
                 Save
               </Button>
             </Box>
