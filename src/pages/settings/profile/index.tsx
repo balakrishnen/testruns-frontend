@@ -264,7 +264,7 @@ const Profile = () => {
       // values.designation,
       // values.reqstId
     );
-    console.log(departments);
+    console.log('departments',departments);
 
     if (isMatch) {
       var deptArray: any = [];
