@@ -29,6 +29,7 @@ export const GET_ASSETS = gql`
             organisationId
             perchasedDate
             lastUsedDate
+            assetImageUrl
             status
             expiryDate
             isActive
@@ -47,7 +48,7 @@ export const GET_ASSETS = gql`
             laboratoryId {
                 _id
                 name
-                userId
+                
                 departmentId
                 isActive
                 isDeleted
@@ -69,6 +70,8 @@ export const POST_ASSETS = gql`
     $status: AssetStatus!
     $availability: AssetAvailability!
     $expiryDate: String!
+    $assetImageUrl: String
+    $instituteId: String!
   ) {
     create_asset(
       name: $name
@@ -80,6 +83,8 @@ export const POST_ASSETS = gql`
       status: $status
       availability: $availability
       expiryDate: $expiryDate
+      assetImageUrl: $assetImageUrl
+      instituteId: $instituteId
     ) {
       _id
       name
@@ -108,6 +113,7 @@ query Get_asset($_id: String!) {
         name
         assetNumber
         organisationId
+        assetImageUrl
         perchasedDate
         lastUsedDate
         status

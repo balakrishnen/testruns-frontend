@@ -65,7 +65,7 @@ const Users = () => {
   const deletePopupRef: any = React.useRef(null);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(Rows.length / itemsPerPage);
+  // const totalPages = Math.ceil(Rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const [userData, setUserData] = React.useState<any>([]);
@@ -105,7 +105,7 @@ const Users = () => {
   const Data = Rows.slice(startIndex, endIndex);
   const [rowId, setRowId] = React.useState<any>([]);
 
-  const [visibleRow, setVisibleRow] = React.useState<any>(Data);
+  const [visibleRow, setVisibleRow] = React.useState<any>(userData);
 
   const roleSliceData = useSelector(
     (state: any) => state.role.data?.get_all_roles,
@@ -119,12 +119,17 @@ const Users = () => {
       setLoader(false);
     }, 1000);
     setUserData(userData);
-  }, [userData]);
+  },[userData]);
 
   React.useEffect(() => {
     setLoader(true);
     dispatch(fetchUserData(queryStrings));
-  }, [pageInfo, queryStrings]);
+    setTableHeaderVisible(false);
+    setRowId([]);
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
+  },[pageInfo,queryStrings]);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
@@ -135,6 +140,9 @@ const Users = () => {
     page['totalCount'] = userSliceData?.pageInfo.totalCount;
     setUserData(userSliceData?.Identity);
     setPageInfo(page);
+    // setTimeout(() => {
+    //   setLoader(false);
+    // }, 1000);
   }, [userSliceData]);
 
 
@@ -222,11 +230,11 @@ const Users = () => {
 
   const handleCloseTableHeader = (status: boolean) => {
     setTableHeaderVisible(status);
-    const updatedRows = Rows.map((row: any) => ({
+    const updatedRows = userData.map((row: any) => ({
       ...row,
       is_checked: false,
     }));
-    setSelectedRows(updatedRows);
+    setUserData(updatedRows);
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
@@ -794,7 +802,7 @@ const Users = () => {
           perPage={queryStrings.perPage}
           handlePageChange={handlePageChange}
           currentPageNumber={queryStrings.page}
-          totalRecords={Rows?.length}
+          totalRecords={userData?.length}
           page={pageInfo}
         />
       </Box>
@@ -810,9 +818,9 @@ const Users = () => {
         <DeletePopup
           rowId={rowId}
           ref={deletePopupRef}
-          closeDeletePopup={() => deletePopupRef.current.open(false, 'User')}
+          closeDeletePopup={() => deletePopupRef.current.open(false, 'User',rowId)}
           deleteConfirmation={handleDeleteConfirmation}
-          reload={reload}
+          // reload={reload}
         />
       </Box>
     </Box>

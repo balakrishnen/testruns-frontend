@@ -102,7 +102,8 @@ const ProcedureForm = React.forwardRef(
         departmentId: deptArray,
         laboratoryId: labArray,
         createdBy: values.createdBy,
-        procedureDetials: values.procedureDetials
+        procedureDetials: values.procedureDetials,
+        instituteId: "6548f51edf956b3b14ca00e0"
       };
       if (type == 'create') {
         procedures['organisationId'] = values.organisationId

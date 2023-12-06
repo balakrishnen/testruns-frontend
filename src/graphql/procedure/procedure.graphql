@@ -10,6 +10,7 @@ mutation Create_procedure(
         $createdOn: String!
         $createdBy: String!
         $procedureDetials: String!
+        $instituteId: String!
        
         ) {
     create_procedure(
@@ -20,6 +21,7 @@ mutation Create_procedure(
         createdOn: $createdOn
         createdBy: $createdBy
         procedureDetials: $procedureDetials
+        instituteId: $instituteId
     ) {
         _id
         name

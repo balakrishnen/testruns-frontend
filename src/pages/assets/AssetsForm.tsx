@@ -108,19 +108,23 @@ const Addnewpopup = React.forwardRef(
         var labArray:any=[]
         laboratory.map((item:any)=>(labArray.push(item?.id)))
         
-        let assetValues={
+        let assetValues:any={
         name: values.name,
         organisationId: values.organisationId,
         perchasedDate: values.perchasedDate,
+       
         lastUsedDate: moment().format("MM/DD/YYYY"),
         availability: values.availability,
         expiryDate: values.expiryDate,
         departmentId: deptArray,
         laboratoryId: labArray,
         status: values.status,
+        instituteId:"6548f51edf956b3b14ca00e0"
         }
         console.log(values.organisationId);
-        
+        if(uploadedFile!==null){
+          assetValues["assetImageUrl"]=uploadedFile
+        }
         dispatch(postAssetsData(assetValues));
        
         submitFormPopup();
@@ -134,6 +138,7 @@ const Addnewpopup = React.forwardRef(
     const clearForm = () => {
       formik.resetForm();
       setDepartments([]);
+      setUploadedFile(null)
       setLaboratory([]);
       setOrganization([]);
     };

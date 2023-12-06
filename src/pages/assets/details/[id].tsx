@@ -40,6 +40,7 @@ import {
 import { navigate } from 'gatsby';
 import SuccessPopup from '../../../components/SuccessPopup';
 import { toast } from 'react-toastify';
+import { Height } from '@mui/icons-material';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -388,14 +389,14 @@ console.log(assetValue?.organisationId,);
                 >
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img src={test} alt="test" className="dynamic-img" />
+                      <img src={assetValue.assetImageUrl==null?test:assetValue.assetImageUrl} alt="test" className="dynamic-img"  style={{height:"394px", width:"394px"}}/>
                     </Box>
 
                     <Box
                       className="edit-profile-btn"
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
-                      <Button>Upload photo</Button>
+                      {/* <Button>Upload photo</Button> */}
                     </Box>
                   </Box>
                 </Grid>

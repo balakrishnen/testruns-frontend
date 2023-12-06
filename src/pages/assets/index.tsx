@@ -317,7 +317,6 @@ export default function Assets() {
     }
     deletePopupRef.current.open(false);
   };
-  console.log(assetsData);
 
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'Assest');
@@ -692,7 +691,7 @@ export default function Assets() {
                                 >
                                   <Box>
                                     <img
-                                      src={test}
+                                      src={row.assetImageUrl==null ? test:row.assetImageUrl}
                                       alt="no_image"
                                       style={{ width: '50px', height: '50px' }}
                                     />
