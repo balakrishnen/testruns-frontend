@@ -21,11 +21,13 @@ import { fetchLabData } from '../../api/labAPI';
 import { OrganizationList } from '../../utils/data';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { fetchOrganizationData } from '../../api/organizationAPI';
-import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData } from '../../api/userAPI';
+import { fetchGetUser, fetchLogoutUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData } from '../../api/userAPI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { fetchRoleData } from '../../api/roleApi';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase.config';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -208,7 +210,21 @@ export default function AppProfileDrawer({
     validationSchema: validationSchema,
     onSubmit: onSubmitProfile,
   });
+  const handleLogout=()=>{
+    signOut(auth).then(() => {
+      dispatch(fetchLogoutUser())
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem('isLoggedIn', 'false');
+          navigate('/login');
+        }
 
+    }).catch((error) => {
+     console.log(error);
+     
+    });
+  }
+  
+  
   return (
     <Drawer
       className="profile-head"
@@ -246,12 +262,7 @@ export default function AppProfileDrawer({
                   alignItems: 'center',
                   cursor: 'pointer',
                 }}
-                onClick={() => {
-                  if (typeof window !== 'undefined') {
-                    window.sessionStorage.setItem('isLoggedIn', 'false');
-                    navigate('/login');
-                  }
-                }}
+                onClick={handleLogout}
               >
                 <Typography className="logout-text">Logout</Typography>
                 <img src={logout} alt="logout" />

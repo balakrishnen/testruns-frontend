@@ -190,7 +190,7 @@ React.useEffect(()=>{
     formik.setValues({...formik.values,"name":procedureSliceData?.name})
   }, [procedureSliceData]);
 
-  // console.log(procedureSliceData);
+  console.log(procedureSliceData);
   const location: any = useLocation();
   const procedureValue = location.state?.props;
   // console.log(procedureValue);
@@ -434,7 +434,7 @@ const handleEditorInit = (editor:any) => {
                   {procedureData?.procedureNumber}
                   </Typography>
                   <Typography className="id-detail-title">
-                  {procedureData?.name}
+                  {formik.values.name}
                   </Typography>
                 </Box>
               </Grid>
