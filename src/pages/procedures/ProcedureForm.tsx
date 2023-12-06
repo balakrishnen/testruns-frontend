@@ -118,10 +118,14 @@ const ProcedureForm = React.forwardRef(
       if (isMatch) {
         if (type == 'edit') {
           dispatch(fetchUpdateProcedureData(procedures))
-          reloadSingleData()
+          // reload()
+          setTimeout(()=>{
+            reloadSingleData()
+          },3000)
+          
           submitFormPopup();
           clearForm()
-          reload()
+          
           // if(type=='edit'){
 
           // }

@@ -691,7 +691,7 @@ export default function Assets() {
                                 >
                                   <Box>
                                     <img
-                                      src={row.assetImageUrl==null ? test:row.assetImageUrl}
+                                      src={row?.assetImageUrl==null ? test:row?.assetImageUrl}
                                       alt="no_image"
                                       style={{ width: '50px', height: '50px' }}
                                     />

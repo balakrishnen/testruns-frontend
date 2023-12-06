@@ -389,7 +389,7 @@ console.log(assetValue?.organisationId,);
                 >
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img src={assetValue.assetImageUrl==null?test:assetValue.assetImageUrl} alt="test" className="dynamic-img"  style={{height:"394px", width:"394px"}}/>
+                      <img src={assetValue?.assetImageUrl==null?test:assetValue?.assetImageUrl} alt="test" className="dynamic-img"  style={{height:"394px", width:"327px"}}/>
                     </Box>
 
                     <Box

@@ -329,7 +329,7 @@ const Addnewpopup = React.forwardRef(
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
                       <span className="file-wrapper">
-                        <input   ref={fileUploadField} type="file" name="photo" id="photo"   onChange={handleImageUpload} />
+                        <input   ref={fileUploadField} type="file" name="photo" id="photo" accept="image/*, image/jpeg, image/png"  onChange={handleImageUpload} />
                         <span className="button" onClick={triggerFileUploadField}>Upload photo</span>
                       </span>
                       {/* {formik.touched.assets_image &&

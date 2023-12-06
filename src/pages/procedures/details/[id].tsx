@@ -350,8 +350,11 @@ console.log(inputEl);
       background: '#00bf70', color: '#fff'
     }
   });
-  const procedureId = { _id: procedureData._id,};
+  setTimeout(()=>{
+    const procedureId = { _id: procedureData._id,};
   dispatch(fetchSingleProcedureData(procedureId));
+  },3000)
+ 
 // }
 }
   // console.log(state);
