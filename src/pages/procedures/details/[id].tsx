@@ -434,7 +434,7 @@ const handleEditorInit = (editor:any) => {
                   {procedureData?.procedureNumber}
                   </Typography>
                   <Typography className="id-detail-title">
-                  {formik.values.name}
+                  {procedureData?.name}
                   </Typography>
                 </Box>
               </Grid>
