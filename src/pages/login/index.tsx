@@ -84,18 +84,20 @@ console.log('isMatch',isMatch);
           }
           
           dispatch(fetchLoginUser(payload))
+            window.sessionStorage.setItem('isLoggedIn', 'true');
+         
+            // setTimeout(()=>{
+              navigate('/mypage')
+              toast(`Login successful !`, {
+                style: {
+                  background: '#00bf70', color: '#fff'
+                }
+              });
+            // },4000)
+
+          // })
               // console.log(isSucess);
-              console.log(userSliceData);
-              
-              window.sessionStorage.setItem('isLoggedIn', 'true');
-           
-              // setTimeout(()=>{
-                navigate('/mypage')
-                toast(`Login successful !`, {
-                  style: {
-                    background: '#00bf70', color: '#fff'
-                  }
-                });
+             
             })
           
           

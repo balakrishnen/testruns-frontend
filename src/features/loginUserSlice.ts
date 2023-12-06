@@ -23,9 +23,9 @@ const loginUserSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    fetchLoginUserLogout: (state) => {
-      state.data = null;
-    },
+    // fetchLoginUserLogout: (state) => {
+    //   state.data = null;
+    // },
   },
 });
 
@@ -33,7 +33,7 @@ export const {
     fetchLoginUserStart,
     fetchLoginUserSuccess,
     fetchLoginUserFailure,
-    fetchLoginUserLogout
+    // fetchLoginUserLogout
 } = loginUserSlice.actions;
 
 export default loginUserSlice.reducer;

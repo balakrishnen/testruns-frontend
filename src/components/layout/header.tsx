@@ -98,14 +98,19 @@ function AppHeader(props: any) {
   const openNotificationList = () => {
     props.toggleNotificationDrawer();
   };
+  // const loginUserSliceData=  useSelector(
+  //   (state: any) => state.userLogin?.verifyToken, 
+  // );
   const loginUserSliceData=  useSelector(
-    (state: any) => state.userLogin.data?.verifyToken, 
+    (state: any) => state.userLogin.data, 
   );
+    console.log(loginUserSliceData);
   const dispatch: any = useDispatch();
   const[userData, setUserData]=React.useState<any>({})
+ console.log(loginUserSliceData);
  
   React.useEffect(() => {
-    let temp = { _id: loginUserSliceData?._id };
+    let temp = { _id: loginUserSliceData?.verifyToken?._id };
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp))
       .then((isSucess:any) => {

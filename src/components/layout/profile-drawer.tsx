@@ -21,7 +21,7 @@ import { fetchLabData } from '../../api/labAPI';
 import { OrganizationList } from '../../utils/data';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { fetchOrganizationData } from '../../api/organizationAPI';
-import { fetchGetUser, fetchLogoutUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData } from '../../api/userAPI';
+import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData } from '../../api/userAPI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -210,9 +210,11 @@ export default function AppProfileDrawer({
     validationSchema: validationSchema,
     onSubmit: onSubmitProfile,
   });
+  console.log(formik);
+  
   const handleLogout=()=>{
     signOut(auth).then(() => {
-      dispatch(fetchLogoutUser())
+      // dispatch(fetchLogoutUser())
         if (typeof window !== 'undefined') {
           window.sessionStorage.setItem('isLoggedIn', 'false');
           navigate('/login');
