@@ -159,9 +159,9 @@ export default function RealtimeChart() {
     setDisableStart(true);
     setDisableStop(false);
     const data: any = [];
-    socket.emit('joinRoom', 'temperature');
+    socket.emit('joinRoom', 'sensor_data');
     socket.emit('sendMessageToRoom', {
-      room: 'temperature',
+      room: 'sensor_data',
       message: 'value',
     });
     socket.on('message', (message) => {
