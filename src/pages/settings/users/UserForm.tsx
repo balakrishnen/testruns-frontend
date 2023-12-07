@@ -146,7 +146,7 @@ const UserForm = React.forwardRef(
           email: values.email,
           phoneNumber: values.phoneNumber.toString(),
           organisationId: values.organisationId,
-          instituteId: values.instituteId,
+          instituteId: "6548f51edf956b3b14ca00e0",
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,

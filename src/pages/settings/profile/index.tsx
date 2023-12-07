@@ -115,6 +115,8 @@ const Profile = () => {
   const [organizationData, setOrganizationData] = React.useState([]);
   const [roleData, setRoleData] = React.useState([]);
   const [uploadedFile, setUploadedFile] = React.useState(null);
+  const[userData, setUserData]=React.useState({})
+
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -143,6 +145,7 @@ const Profile = () => {
     dispatch(fetchSingleUserData(temp))
       .then((isSucess) => {
         if (isSucess.get_user) {
+          setUserData(isSucess.get_user)
           formikProfile.setFieldValue(
             'firstName',
             isSucess.get_user.firstName || '',
@@ -176,7 +179,7 @@ const Profile = () => {
           
           formikProfile.setFieldValue('role', isSucess.get_user.role || '');
           setUploadedFile(isSucess.get_user.imageUrl)
-          // formikProfile.setFieldValue('imageUrl', isSucess.get_user.imageUrl || null);
+          formikProfile.setFieldValue('institution', isSucess.get_user.instituteId || "");
         }
       })
       .catch((err) => {
@@ -252,7 +255,7 @@ const Profile = () => {
   };
   console.log(uploadedFile,"uploadedFile");
 
-  const onSubmitProfile = (values: any) => {
+  const onSubmitProfile = async(values: any) => {
     const isMatch = checkCredentialsProfile(
       values.firstName,
       // values.lastName,
@@ -275,6 +278,7 @@ const Profile = () => {
       formikProfile.values.laboratoryId?.map((item: any) =>
         labArray.push(item?.id),
       );
+      console.log(values.institution);
       
       let userValues: any = {
         // uid:"",
@@ -284,16 +288,16 @@ const Profile = () => {
         phoneNumber: values.phoneNumber.toString(),
         organisationId: values.organisationId,
         imageUrl:uploadedFile,
-        // instituteId: values.institution,
+        instituteId: "6548f51edf956b3b14ca00e0",
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
-        _id: loginUserSliceData?._id,
+        _id: userData?._id,
       };
       // debugger
       // userValues['_id'] = userData?._id
-      dispatch(fetchUpdateUserData(userValues));
-      toast(`User Details updated successful !`, {
+      await dispatch(fetchUpdateUserData(userValues));
+      await toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70',
           color: '#fff',
@@ -318,7 +322,7 @@ const Profile = () => {
       email: '',
       phoneNumber: '',
       organisationId: '',
-      // institution:  '',
+      institution:  '',
       departmentId: [],
       laboratoryId: [],
       role: '',
@@ -507,6 +511,7 @@ const Profile = () => {
             style={{ display: 'none' }}
             type="file"
             ref={fileUploadField}
+            accept="image/*, image/jpeg, image/png"
             onChange={handleImageUpload}
           />
         </Box>

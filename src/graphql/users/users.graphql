@@ -47,7 +47,7 @@ mutation Create_user(
        $email:String!
        $role:String!
        $phoneNumber:String
-       $instituteId: String !
+       $instituteId: String!
     
 ) {
     create_user(
@@ -103,7 +103,7 @@ mutation  update_user(
        $isActive:Boolean
        $imageUrl:String
        $phoneNumber:String
-       $instituteId:String!
+       $instituteId:String
     ) {
     update_user(
         _id:$_id
