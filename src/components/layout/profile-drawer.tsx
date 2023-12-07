@@ -28,6 +28,8 @@ import { toast } from 'react-toastify';
 import { fetchRoleData } from '../../api/roleApi';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase.config';
+import AWS from 'aws-sdk';
+
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -59,6 +61,11 @@ export default function AppProfileDrawer({
   const [departments, setDepartments] = React.useState([])
   const [laboratory, setLaboratory] = React.useState([])
   const [roleData, setRoleData] = React.useState([]);
+  const fileUploadField = React.useRef<any>(null);
+  const [uploadedFile, setUploadedFile] = React.useState(null);
+  const triggerFileUploadField = () => {
+    fileUploadField.current?.click();
+  };
 
   const dispatch: any = useDispatch();
   const departmentSliceData = useSelector(
@@ -129,6 +136,9 @@ export default function AppProfileDrawer({
         formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item)))) || []);
         // formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
         formik.setFieldValue('role', isSucess.get_user.role || '');
+        formik.setFieldValue('institution', isSucess.get_user.instituteId || "");
+
+        setUploadedFile(isSucess.get_user.imageUrl)
       }
     })
       .catch((err) => {
@@ -146,13 +156,14 @@ export default function AppProfileDrawer({
     dispatch(fetchRoleData())
     dispatch(fetchSingleUserData(payload))
     setEdit(true)
+    // setUploadedFile(null)
   }, []);
   const checkCredentialsProfile = (
     firstName: any,
   ) => {
     return true
   };
-  const onSubmitProfile = (values: any) => {
+  const onSubmitProfile = async(values: any) => {
     const isMatch = checkCredentialsProfile(
       values.firstName,
       // values.lastName,
@@ -177,20 +188,24 @@ export default function AppProfileDrawer({
         email: values.email,
         phoneNumber: values.phoneNumber.toString(),
         organisationId: values.organisationId,
-        // instituteId: values.institution,
+        imageUrl:uploadedFile,
+        instituteId: values.institution,
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
-        _id: "6561fde22f447d0012e3d8cf"
+        _id:loginUserSliceData?._id
       }
       // debugger
       // userValues['_id'] = userData?._id
-      dispatch(fetchUpdateUserData(userValues))
-      toast(`User Details updated successful !`, {
+      console.log(userValues);
+      
+      await dispatch(fetchUpdateUserData(userValues))
+      await toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }
       });
+      // setUploadedFile(null)
       // alert("User Details updated successful!");
 
     }
@@ -202,7 +217,7 @@ export default function AppProfileDrawer({
       email: '',
       phoneNumber: '',
       organisationId: '',
-      // institution:  '',
+      institution:  '',
       departmentId: [],
       laboratoryId: [],
       role: '',
@@ -225,7 +240,51 @@ export default function AppProfileDrawer({
      
     });
   }
-  
+  const handleImageUpload = async () => {
+    const selectedFile = fileUploadField.current.files[0];
+    // const formData = new FormData();
+    // formData.append('file', selectedFile);
+    // const payload = {
+    //   file: formData,
+    //   type: 'profile'
+    // }
+    // dispatch(fileUploadData(payload));
+
+    const s3 = new AWS.S3({
+      // params: { Bucket: S3_BUCKET, folderName: "profile" },
+      region: 'us-east-1',
+      accessKeyId: 'AKIAUVVYVBYI2GJ3ENMQ',
+      secretAccessKey: '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',
+    });
+    const keyPath = `profile/${Date.now()}`;
+    const params = {
+      Bucket: 'test-run-v2',
+      Key: keyPath,
+      Body: selectedFile,
+      ACL: 'public-read',
+      // ContentType: selectedFile.type
+    };
+
+    const result = s3.upload(params).promise();
+    await result.then((res: any) => {
+      setUploadedFile(res.Location);
+      toast(`Image uploaded successfully !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
+    });
+    await result.catch((err) => {
+      console.error('Failed to upload');
+      toast(`Failed to upload !`, {
+        style: {
+          background: '#e2445c',
+          color: '#fff',
+        },
+      });
+    });
+  };
   
   return (
     <Drawer
@@ -271,8 +330,16 @@ export default function AppProfileDrawer({
               </Box>
             </Box>
             <Box className="profile-camera">
-              <img src={profile} alt="profile" className="profile-user" />
-              <img src={camera} alt="camera" className="upload-img" />
+              <img src={uploadedFile == null ? profile : uploadedFile} alt="profile" className="profile-user" style={{width:"200px", height:"200px",padding: uploadedFile == null ? '0px' : '16px',}} />
+              <img src={camera} alt="camera" className="upload-img" onClick={triggerFileUploadField} />
+              <input
+            style={{ display: 'none' }}
+            type="file"
+            disabled={edit}
+            ref={fileUploadField}
+            accept="image/*, image/jpeg, image/png"
+            onChange={handleImageUpload}
+          />
             </Box>
           </Box>
           <Box className="edit-profile-btn">
@@ -683,7 +750,7 @@ export default function AppProfileDrawer({
               <Button  variant="contained" onClick={() => { toggleProfileDrawer()}}  className="cancel-btn" >
                 Cancel
               </Button>
-              <Button type="submit" variant="contained" onClick={() => { toggleProfileDrawer(), setEdit(true) }} className="add-btn">
+              <Button type="submit" variant="contained" onClick={() => {toggleProfileDrawer(), setEdit(true) }} className="add-btn">
                 Save
               </Button>
             </Box>
