@@ -686,32 +686,33 @@ const Profile = () => {
                             Mobile
                           </label>
                           <TextField
-                            margin="none"
-                            fullWidth
-                            id="mobile"
-                            name="mobile"
-                            type="number"
-                            inputProps={{
-                              maxLength: 11,
-                            }}
-                            InputLabelProps={{ shrink: false }}
-                            placeholder="Mobile number"
-                            onChange={formikProfile.handleChange}
-                            onBlur={formikProfile.handleBlur}
-                            value={formikProfile.values.phoneNumber}
-                            size="small"
-                            error={
-                              formikProfile.touched.phoneNumber &&
-                              Boolean(formikProfile.errors.phoneNumber)
-                            }
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment sx={{ mx: 2 }} position="start">
-                                  +91{' '}
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
+                        margin="none"
+                        fullWidth
+                        id="phoneNumber"
+                        type='number'
+                        name="phoneNumber"
+                        autoComplete="off"
+                        onInput={(e:any)=>{ 
+                          e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+                      }}
+                        InputLabelProps={{ shrink: false }}
+                        placeholder="Mobile number"
+                        onChange={formikProfile.handleChange}
+                        onBlur={formikProfile.handleBlur}
+                        value={formikProfile.values.phoneNumber}
+                        size="small"
+                        error={
+                          formikProfile.touched.phoneNumber &&
+                          Boolean(formikProfile.errors.phoneNumber)
+                        }
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment sx={{ mx: 2 }} position="start">
+                              +91{' '}
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
                           {formikProfile.touched.phoneNumber &&
                             formikProfile.errors.phoneNumber && (
                               <Typography className="error-field">

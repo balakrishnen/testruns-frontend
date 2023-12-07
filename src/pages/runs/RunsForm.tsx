@@ -182,7 +182,7 @@ const RunsForm = React.forwardRef(
     const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
 
     var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
-    console.log(dateDue);
+    console.log(formData);
 
     const formik = useFormik({
       initialValues: {
@@ -202,7 +202,7 @@ const RunsForm = React.forwardRef(
       onSubmit: onSubmit,
     });
 
-    console.log(formik.dirty);
+    console.log(formik);
     
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -324,7 +324,6 @@ const RunsForm = React.forwardRef(
                               <Placeholder>Select Procedure</Placeholder>
                             )
                         }
-
                         margin="none"
                         fullWidth
                         id="procedureId"

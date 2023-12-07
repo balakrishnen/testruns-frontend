@@ -109,7 +109,7 @@ function AppHeader(props: any) {
   const[userData, setUserData]=React.useState<any>({})
  console.log(loginUserSliceData);
  
-  React.useEffect(() => {
+  React.useEffect(()=> {
     let temp = { _id: loginUserSliceData?.verifyToken?._id };
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp))
@@ -121,7 +121,7 @@ function AppHeader(props: any) {
         console.log(err);
       });
     // }
-  },[]);
+  },[loginUserSliceData]);
 
   return (
     <Box className="app-bar-block">

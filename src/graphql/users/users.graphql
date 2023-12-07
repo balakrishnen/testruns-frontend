@@ -17,6 +17,7 @@ query Get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
             organisationId
             email
             role
+            instituteId
             phoneNumber
             isActive
             isDeleted
@@ -70,6 +71,7 @@ mutation Create_user(
             laboratoryId
             organisationId
             email
+            instituteId
             role
             phoneNumber
             isActive
@@ -101,6 +103,7 @@ mutation  update_user(
        $isActive:Boolean
        $imageUrl:String
        $phoneNumber:String
+       $instituteId:String!
     ) {
     update_user(
         _id:$_id
@@ -112,6 +115,7 @@ mutation  update_user(
         email:$email
         role:$role
         imageUrl:$imageUrl
+        instituteId: $instituteId
         isActive:$isActive
         phoneNumber:$phoneNumber
     ) {
@@ -143,6 +147,7 @@ query Get_user($_id: String!) {
         imageUrl
         organisationId
         email
+        instituteId
         role
         phoneNumber
         isActive

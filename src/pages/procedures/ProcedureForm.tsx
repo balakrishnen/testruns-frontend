@@ -543,7 +543,7 @@ const ProcedureForm = React.forwardRef(
                         autoComplete="off"
                         autoFocus
                         InputLabelProps={{ shrink: false }}
-                        placeholder="The simple pendulum"
+                        placeholder="Procedure Name"
                         value={formik.values.name}
                         error={
                           formik.touched.name && Boolean(formik.errors.name)

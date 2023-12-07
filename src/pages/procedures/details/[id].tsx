@@ -149,7 +149,7 @@ export default function ProcedureDetails() {
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
-  const [assetName, setAssetName] = React.useState([])
+  const [assetName, setAssetName] = React.useState<any>([])
   // console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
   // console.log(procedureData?.procedureDetials);
@@ -177,15 +177,39 @@ export default function ProcedureDetails() {
     validationSchema: validationSchema,
     onSubmit: onSubmit,
   });
+  // const assetsSliceData = useSelector(
+  //   (state: any) => state.assets.data?.get_all_assets_name,
+  // );
+  // React.useEffect(() => {
+  //   dispatch(fetchAssetsName());
+  //   // setAssetsData(assetsData);
+  // }, []);
+  // React.useEffect(() => {
+  //   setAssetsData(
+  //     assetsSliceData?.map((item: any) => ({
+  //       label: item.name,
+  //       value: item.name,
+  //     id: item._id,
+  //     })))
+  // }, [assetsSliceData]);
+
+
 React.useEffect(()=>{
   setprocedureData(procedureData) 
   console.log(procedureData);
-  
+  // setAssetsData(procedureData?.assetId)
 },[procedureData])
 
   React.useEffect(() => {
     console.log("1");
     setprocedureData(procedureSliceData);
+    // setAssetsData(
+    //   procedureSliceData?.assetId?.map((item: any) => ({
+    //     label: item.name,
+    //     value: item.name,
+    //     id: item._id,
+    //   })),
+    // );
     setState({"content":procedureSliceData?.procedureDetials})
     formik.setValues({...formik.values,"name":procedureSliceData?.name})
   }, [procedureSliceData]);
@@ -253,10 +277,13 @@ console.log(inputEl);
   console.log(htmlInput);
   const handleSave = (e:any) => {
   //  console.log(state);
+  // var assetIds: any = []
+  // assetName?.map((item: any) => (assetName.push(item?.id)))
    const payload={
     _id: procedureData._id,
     name:formik.values.name,
-    procedureDetials: state.content
+    procedureDetials: state.content,
+    // assetId:assetIds
    }
    handleHtmlInput();
 

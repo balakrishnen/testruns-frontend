@@ -111,6 +111,9 @@ query Get_procedure($_id: String!) {
         organisationId
         userId
         isActive
+         assetId {
+            _id
+            name }
         isDeleted
         createdAt
         createdOn
@@ -126,6 +129,7 @@ mutation Update_procedure(
         $laboratoryId: [String]
         $organisationId: String
         $createdBy: String
+        $assetId: [String]
         $procedureDetials:String
 ) {
     update_procedure(
@@ -135,6 +139,7 @@ mutation Update_procedure(
         laboratoryId: $laboratoryId
         organisationId: $organisationId
         createdBy: $createdBy
+        assetId: $assetId
         procedureDetials: $procedureDetials
     ) {
          _id

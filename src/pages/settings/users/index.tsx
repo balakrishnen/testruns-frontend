@@ -763,7 +763,7 @@ const Users = () => {
                         <TableCell>
                           <Select
                             className={
-                              row.isActive !== 'true'
+                              row.isActive == true
                                 ? 'active-select td-select'
                                 : 'inactive-select td-select'
                             }
