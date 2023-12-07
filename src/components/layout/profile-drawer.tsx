@@ -189,7 +189,7 @@ export default function AppProfileDrawer({
         phoneNumber: values.phoneNumber.toString(),
         organisationId: values.organisationId,
         imageUrl:uploadedFile,
-        instituteId: values.institution,
+        instituteId: "6548f51edf956b3b14ca00e0",
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
