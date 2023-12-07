@@ -117,7 +117,7 @@ export default function AppProfileDrawer({
   React.useEffect(()=>{
     let temp = { '_id': loginUserSliceData?._id}
     // if (row?._id) {
-    dispatch(fetchSingleUserData(temp)).then((isSucess) => {
+    dispatch(fetchSingleUserData(temp)).then((isSucess: { get_user: { firstName: any; lastName: any; email: any; phoneNumber: any; organisationId: any; departmentId: any[]; role: any; }; }) => {
       if (isSucess.get_user) {
         formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
         formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
@@ -129,7 +129,7 @@ export default function AppProfileDrawer({
         formik.setFieldValue('role', isSucess.get_user.role || '');
       }
     })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
     // }    
