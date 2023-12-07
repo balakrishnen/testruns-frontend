@@ -172,7 +172,11 @@ const Profile = () => {
               (item: any) => labData?.find((obj) => obj.id == item),
             ) || [],
           );
+          console.log(isSucess.get_user.imageUr,"isSucess.get_user.imageUr");
+          
           formikProfile.setFieldValue('role', isSucess.get_user.role || '');
+          setUploadedFile(isSucess.get_user.imageUrl)
+          // formikProfile.setFieldValue('imageUrl', isSucess.get_user.imageUrl || null);
         }
       })
       .catch((err) => {
@@ -246,6 +250,8 @@ const Profile = () => {
     // return false;
     // }
   };
+  console.log(uploadedFile,"uploadedFile");
+
   const onSubmitProfile = (values: any) => {
     const isMatch = checkCredentialsProfile(
       values.firstName,
@@ -269,6 +275,7 @@ const Profile = () => {
       formikProfile.values.laboratoryId?.map((item: any) =>
         labArray.push(item?.id),
       );
+      
       let userValues: any = {
         // uid:"",
         firstName: values.firstName,
@@ -276,6 +283,7 @@ const Profile = () => {
         email: values.email,
         phoneNumber: values.phoneNumber.toString(),
         organisationId: values.organisationId,
+        imageUrl:uploadedFile,
         // instituteId: values.institution,
         departmentId: deptArray,
         laboratoryId: labArray,
@@ -470,16 +478,16 @@ const Profile = () => {
       >
         <Box sx={{ paddingLeft: '0rem !important' }}>
           <Box className="profile-camera">
-            <div>
+            <div style={{width:"200px", height:'200px'}}>
               <img
-                src={uploadedFile === null ? profile : uploadedFile}
-                alt="profile"
+                src={uploadedFile == null ? profile : uploadedFile}
+                alt="profiles"
                 style={{
                   width: '100%',
                   height: '100%',
                   border: '5px solid #F3F3F3',
                   borderRadius: '200px',
-                  // padding: '3px',
+                  padding: uploadedFile === null ? '0px' : '16px',
                 }}
               />
             </div>
@@ -494,7 +502,7 @@ const Profile = () => {
             >
               <img src={camera} alt="camera" />
             </div>
-          </Box>
+          </Box >
           <input
             style={{ display: 'none' }}
             type="file"
@@ -542,8 +550,7 @@ const Profile = () => {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>
-                            First name
-                            <span style={{ color: '#E2445C' }}>*</span>
+                            First name <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           <TextField
                             margin="none"
@@ -585,7 +592,7 @@ const Profile = () => {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>
-                            Last name<span style={{ color: '#E2445C' }}>*</span>
+                            Last name <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           <TextField
                             margin="normal"
@@ -634,7 +641,7 @@ const Profile = () => {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>
-                            Email<span style={{ color: '#E2445C' }}>*</span>
+                            Email <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           <TextField
                             margin="normal"
@@ -676,35 +683,36 @@ const Profile = () => {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>
-                            Mobile<span style={{ color: '#E2445C' }}>*</span>
+                            Mobile
                           </label>
                           <TextField
-                            margin="none"
-                            fullWidth
-                            id="mobile"
-                            name="mobile"
-                            type="number"
-                            inputProps={{
-                              maxLength: 11,
-                            }}
-                            InputLabelProps={{ shrink: false }}
-                            placeholder="Mobile number"
-                            onChange={formikProfile.handleChange}
-                            onBlur={formikProfile.handleBlur}
-                            value={formikProfile.values.phoneNumber}
-                            size="small"
-                            error={
-                              formikProfile.touched.phoneNumber &&
-                              Boolean(formikProfile.errors.phoneNumber)
-                            }
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment sx={{ mx: 2 }} position="start">
-                                  +91{' '}
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
+                        margin="none"
+                        fullWidth
+                        id="phoneNumber"
+                        type='number'
+                        name="phoneNumber"
+                        autoComplete="off"
+                        onInput={(e:any)=>{ 
+                          e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+                      }}
+                        InputLabelProps={{ shrink: false }}
+                        placeholder="Mobile number"
+                        onChange={formikProfile.handleChange}
+                        onBlur={formikProfile.handleBlur}
+                        value={formikProfile.values.phoneNumber}
+                        size="small"
+                        error={
+                          formikProfile.touched.phoneNumber &&
+                          Boolean(formikProfile.errors.phoneNumber)
+                        }
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment sx={{ mx: 2 }} position="start">
+                              +91{' '}
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
                           {formikProfile.touched.phoneNumber &&
                             formikProfile.errors.phoneNumber && (
                               <Typography className="error-field">
@@ -717,10 +725,10 @@ const Profile = () => {
                     <Grid container spacing={2} className="profile-inner">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label>Organisation</label>
+                          <label>Organisation <span style={{ color: '#E2445C' }}>*</span></label>
                           <Select
                             className="placeholder-color"
-                            style={{ color: 'black' }}
+                            style={{ color: 'black' ,marginTop:"10px"}}
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={
@@ -770,7 +778,7 @@ const Profile = () => {
                     >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label>Department/s</label>
+                          <label>Department/s <span style={{ color: '#E2445C' }}>*</span></label>
                           <Autocomplete
                             multiple
                             id="departmentId"
@@ -832,7 +840,7 @@ const Profile = () => {
                     >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label>Labs assigned</label>
+                          <label>Labs assigned <span style={{ color: '#E2445C' }}>*</span></label>
                           <Autocomplete
                             multiple
                             id="departmentId"
@@ -899,7 +907,7 @@ const Profile = () => {
                         }}
                       >
                         <Box style={{ position: 'relative' }}>
-                          <label>Designation</label>
+                          <label>Designation <span style={{ color: '#E2445C' }}>*</span></label>
                           <Select
                             // MenuProps={{
                             //   PaperProps: {

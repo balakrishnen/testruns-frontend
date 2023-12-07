@@ -149,7 +149,7 @@ export default function ProcedureDetails() {
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
-  const [assetName, setAssetName] = React.useState([])
+  const [assetName, setAssetName] = React.useState<any>([])
   // console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
   // console.log(procedureData?.procedureDetials);
@@ -177,20 +177,44 @@ export default function ProcedureDetails() {
     validationSchema: validationSchema,
     onSubmit: onSubmit,
   });
+  // const assetsSliceData = useSelector(
+  //   (state: any) => state.assets.data?.get_all_assets_name,
+  // );
+  // React.useEffect(() => {
+  //   dispatch(fetchAssetsName());
+  //   // setAssetsData(assetsData);
+  // }, []);
+  // React.useEffect(() => {
+  //   setAssetsData(
+  //     assetsSliceData?.map((item: any) => ({
+  //       label: item.name,
+  //       value: item.name,
+  //     id: item._id,
+  //     })))
+  // }, [assetsSliceData]);
+
+
 React.useEffect(()=>{
   setprocedureData(procedureData) 
   console.log(procedureData);
-  
+  // setAssetsData(procedureData?.assetId)
 },[procedureData])
 
   React.useEffect(() => {
     console.log("1");
     setprocedureData(procedureSliceData);
+    // setAssetsData(
+    //   procedureSliceData?.assetId?.map((item: any) => ({
+    //     label: item.name,
+    //     value: item.name,
+    //     id: item._id,
+    //   })),
+    // );
     setState({"content":procedureSliceData?.procedureDetials})
     formik.setValues({...formik.values,"name":procedureSliceData?.name})
   }, [procedureSliceData]);
 
-  // console.log(procedureSliceData);
+  console.log(procedureSliceData);
   const location: any = useLocation();
   const procedureValue = location.state?.props;
   // console.log(procedureValue);
@@ -251,14 +275,15 @@ console.log(inputEl);
     
   };
   console.log(htmlInput);
-  
-
   const handleSave = (e:any) => {
   //  console.log(state);
+  // var assetIds: any = []
+  // assetName?.map((item: any) => (assetName.push(item?.id)))
    const payload={
     _id: procedureData._id,
     name:formik.values.name,
-    procedureDetials: state.content
+    procedureDetials: state.content,
+    // assetId:assetIds
    }
    handleHtmlInput();
 
@@ -352,8 +377,11 @@ console.log(inputEl);
       background: '#00bf70', color: '#fff'
     }
   });
-  const procedureId = { _id: procedureData._id,};
+  setTimeout(()=>{
+    const procedureId = { _id: procedureData._id,};
   dispatch(fetchSingleProcedureData(procedureId));
+  },3000)
+ 
 // }
 }
   // console.log(state);
@@ -395,10 +423,35 @@ console.log(inputEl);
   const checkCredentials = (values: any) => {
     return true;
   };
-const onChangeValue=(e)=>{
+const onChangeValue=(e:any)=>{
 console.log(e.target.value);
 
 }
+const uploadVideo = async (e:any) => {
+  const file = e.target.files[0];
+  if (file) {
+    const videoUrl = URL.createObjectURL(file);
+
+    if (editorRef.current) {
+      const editor = editorRef.current.editor;
+      editor.insertContent(
+        `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
+      );
+    }
+  }
+};
+const handleEditorInit = (editor:any) => {
+  editor.ui.registry.addButton("uploadvideo", {
+    text: "Upload Video",
+    onAction: () => {
+      const input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "video/*");
+      input.onchange = uploadVideo;
+      input.click();
+    },
+  });
+};
   return (
     <PrivateRoute>
       <Box className="proceduredetails-page">
@@ -568,7 +621,7 @@ console.log(e.target.value);
                         toolbar: 'undo redo | blocks formatselect | ' +
                         'charmap subscript superscript bold italic | alignleft aligncenter ' +
                         'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'help |image code table customInsertButton insertdatetime template insertinput customDataAttrButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                        'help |link image code table customInsertButton insertdatetime template insertinput customDataAttrButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                         image_advtab: true,
                     image_title: true,
                     automatic_uploads: true,
@@ -596,7 +649,7 @@ console.log(e.target.value);
                       input.click();
                     },
                     setup: function (editor) {
-
+                      handleEditorInit(editor);
                       editor.ui.registry.addButton("customInsertButton", {
                         icon: "edit-block",
                         tooltip: "Insert Input Element",
@@ -607,7 +660,17 @@ console.log(e.target.value);
                           );
                         },
                       });
-                     
+                      editor.ui.registry.addButton("customVideoUpload", {
+                        text: "Upload Video",
+                        onAction: function () {
+                          editor.insertContent(
+                            `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
+                          );
+                          // if (fileInputRef.current) {
+                          //   fileInputRef.current.click();
+                          // }
+                        },
+                      });
                       editor.ui.registry.addButton("customDataAttrButton", {
                         icon: "fas fa-cog",
                         tooltip: "Assign Data Attribute",

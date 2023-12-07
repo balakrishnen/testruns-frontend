@@ -10,6 +10,7 @@ mutation Create_procedure(
         $createdOn: String!
         $createdBy: String!
         $procedureDetials: String!
+        $instituteId: String!
        
         ) {
     create_procedure(
@@ -20,13 +21,14 @@ mutation Create_procedure(
         createdOn: $createdOn
         createdBy: $createdBy
         procedureDetials: $procedureDetials
+        instituteId: $instituteId
     ) {
         _id
         name
         procedureNumber
         procedureDetials
         organisationId
-        assectId
+        
         userId
         isActive
         isDeleted
@@ -109,6 +111,9 @@ query Get_procedure($_id: String!) {
         organisationId
         userId
         isActive
+         assetId {
+            _id
+            name }
         isDeleted
         createdAt
         createdOn
@@ -124,6 +129,7 @@ mutation Update_procedure(
         $laboratoryId: [String]
         $organisationId: String
         $createdBy: String
+        $assetId: [String]
         $procedureDetials:String
 ) {
     update_procedure(
@@ -133,6 +139,7 @@ mutation Update_procedure(
         laboratoryId: $laboratoryId
         organisationId: $organisationId
         createdBy: $createdBy
+        assetId: $assetId
         procedureDetials: $procedureDetials
     ) {
          _id
@@ -142,7 +149,7 @@ mutation Update_procedure(
         organisationId
         departmentId
         laboratoryId
-        assectId
+        
         userId
         isActive
         isDeleted

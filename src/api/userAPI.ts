@@ -94,6 +94,10 @@ export const fetchLoginUser = (payload: any) => async (dispatch: any) => {
 };
 
 
+// export const fetchLogoutUser = () => async (dispatch: any) => {
+//   dispatch(fetchLoginUserLogout());
+// }
+
 export const fetchAllUser = () => async (dispatch: any) => {
   dispatch(fetchUserStart());
   try {

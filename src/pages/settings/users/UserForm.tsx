@@ -39,6 +39,7 @@ import Confirmationpopup from '../../../components/ConfirmationPopup';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebase.config';
 import { toast } from 'react-toastify';
+import { fetchinstitutionData } from '../../../api/institutionAPI';
 
 const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -47,9 +48,10 @@ const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Lase name is required"),
   email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
-  phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
-  .min(10, "Enter valid number")
-  .max(10, "too long").required("Mobile number is required"),
+  phoneNumber: Yup.string().notRequired(),
+  // .matches(phoneRegExp, 'Phone number is not valid')
+  // .min(10, "Enter valid number")
+  // .max(10, "too long").required("Mobile number is required"),
   organisationId: Yup.string().required("Organistation is required"),
   institution: Yup.string().required("Institution is required"),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
@@ -107,7 +109,7 @@ const UserForm = React.forwardRef(
               formik.setFieldValue('email', isSucess.get_user.email || '');
               formik.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
               formik.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
-              formik.setFieldValue('institution', isSucess.get_user.institution || '');
+              formik.setFieldValue('institution', isSucess.get_user.instituteId || '');
               formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
               formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
               formik.setFieldValue('user_id', isSucess.get_user.user_id || '');
@@ -144,7 +146,7 @@ const UserForm = React.forwardRef(
           email: values.email,
           phoneNumber: values.phoneNumber.toString(),
           organisationId: values.organisationId,
-          instituteId: values.institution,
+          instituteId: values.instituteId,
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,
@@ -220,7 +222,7 @@ const UserForm = React.forwardRef(
       validationSchema: validationSchema,
       onSubmit: onSubmit,
     });
-    console.log(formik.errors);
+    console.log(formik);
 
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -266,7 +268,12 @@ const UserForm = React.forwardRef(
           id: item._id,
         })),
       );
-    }, [departmentSliceData, labSliceData, roleSliceData, organizationSliceData]);
+      // setInstitutionData(institutionSliceData.map((item: any) => ({
+      //   label: item.name,
+      //   value: item.name,
+      //   id: item._id,
+      // })))
+    }, [departmentSliceData, labSliceData, roleSliceData, organizationSliceData,institutionSliceData]);
 
 
 
@@ -278,6 +285,7 @@ const UserForm = React.forwardRef(
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
       dispatch(fetchRoleData());
+      dispatch(fetchinstitutionData())
     }, []);
 
     return (
@@ -563,8 +571,8 @@ const UserForm = React.forwardRef(
                           Boolean(formik.errors.institution)
                         }
                       >
-                        {InstitutionList.map((item) => (
-                          <MenuItem key={item.id} value={item.name}>
+                        {institutionSliceData?.map((item:any) => (
+                          <MenuItem key={item._id} value={item._id}>
                             {item.name}
                           </MenuItem>
                         ))}

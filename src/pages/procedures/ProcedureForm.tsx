@@ -102,7 +102,8 @@ const ProcedureForm = React.forwardRef(
         departmentId: deptArray,
         laboratoryId: labArray,
         createdBy: values.createdBy,
-        procedureDetials: values.procedureDetials
+        procedureDetials: values.procedureDetials,
+        instituteId: "6548f51edf956b3b14ca00e0"
       };
       if (type == 'create') {
         procedures['organisationId'] = values.organisationId
@@ -117,10 +118,14 @@ const ProcedureForm = React.forwardRef(
       if (isMatch) {
         if (type == 'edit') {
           dispatch(fetchUpdateProcedureData(procedures))
-          reloadSingleData()
+          // reload()
+          setTimeout(()=>{
+            reloadSingleData()
+          },3000)
+          
           submitFormPopup();
           clearForm()
-          reload()
+          
           // if(type=='edit'){
 
           // }
@@ -538,7 +543,7 @@ const ProcedureForm = React.forwardRef(
                         autoComplete="off"
                         autoFocus
                         InputLabelProps={{ shrink: false }}
-                        placeholder="The simple pendulum"
+                        placeholder="Procedure Name"
                         value={formik.values.name}
                         error={
                           formik.touched.name && Boolean(formik.errors.name)

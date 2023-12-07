@@ -35,7 +35,8 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
 import AddPeoplePopup from '../../../components/AddPeoplePopup';
-
+import * as html2json from "html2json";
+import parse from "html-react-parser";
 import {
   LineChart,
   Line,
@@ -63,7 +64,7 @@ import { navigate } from 'gatsby';
 import { useSelector } from 'react-redux';
 import TableChart from '../../../components/charts/TableChart';
 import RealtimeChart from '../../../components/charts/RealtimeChart';
-import { postUserRunsData } from '../../../api/userRunsAPI';
+import { UpdateUserRunsData, fetchSingleUserRunzData, postUserRunsData } from '../../../api/userRunsAPI';
 import { fetchUpdateProcedureData } from '../../../api/procedureAPI';
 import { nanoid } from 'nanoid';
 
@@ -227,6 +228,7 @@ export default function RunsDetails() {
   const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content:"" });
+  const formRef: any = React.useRef(null);
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -358,6 +360,7 @@ export default function RunsDetails() {
   // const runzValue = location.state?.props;
   // console.log(runzValue);
   const [runzValue, setRunzValue] = React.useState<any>(location.state?.props)
+  const [userRunzID, setUserRunzID] = React.useState<any>({})
 
   const procedureSliceData = useSelector(
     (state: any) => state.runs.data
@@ -368,26 +371,80 @@ export default function RunsDetails() {
       console.log(window.location.pathname.split('/'));
       const procedureId = { _id: window.location.pathname.split('/')[3] };
       dispatch(fetchSingleRunsData(procedureId));
+      const runz={
+        runId:window.location.pathname.split('/')[3] 
+      }
+      dispatch(fetchSingleUserRunzData(runz)).then((res)=>{
+        console.log(res?.get_userRun?._id);
+        setUserRunzID(res?.get_userRun)
+        
+      })
     }
   }, []);
+
+ function isEmptyObject(obj: any) {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+ 
 
   const handleReloadSingleData = () => {
     const procedureId = { _id: runzValue?._id };
     dispatch(fetchSingleRunsData(procedureId));
+    const runz={
+      runId:window.location.pathname.split('/')[3] 
+    }
+    dispatch(fetchSingleUserRunzData(runz)).then((res)=>{
+      console.log(res?.get_userRun?._id);
+      setUserRunzID(res?.get_userRun)
+      
+    })
     // setRunzValue(procedureSliceData.get_run)
   }
   React.useEffect(() => {
     setRunzValue(runzValue)
     setuserProcedure(userProcedure)
     setState({content:userProcedure})
-  }, [runzValue, userProcedure,])
+  
+  }, [runzValue, userProcedure])
+ 
   React.useEffect(() => {
     setRunzValue(procedureSliceData?.get_run)
-    setuserProcedure(procedureSliceData?.get_run?.procedureId?.procedureDetials)
-
+    setuserProcedure(procedureSliceData?.get_run?.procedureId[0]?.procedureDetials)
+   
   }, [procedureSliceData]);
 
+  React.useEffect(() => {
+  
+    const filtered =
+    userRunzID?.userProcedure &&
+      Object.entries(JSON.parse( userRunzID?.userProcedure)).filter(
+        ([key]) => key 
+      );
+      console.log(userProcedure);
+      
+    const obj = filtered && Object.fromEntries(filtered);
+    if (!isEmptyObject(obj && userProcedure) ) {
+      for (const [key, values] of Object.entries(obj)) {
+        if (values && document.getElementById(key)) {
+          // @ts-ignore
+          document.getElementById(key).value = values;
+        }
+      }
+    }
+console.log(obj);
+  
+}, [userRunzID?.userProcedure,state]);
   console.log(runzValue);
+
+  React.useEffect(()=>{
+    handleHtmlInput()
+  },[state?.content,userRunzID?.userProcedure])
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -561,25 +618,199 @@ export default function RunsDetails() {
     setCharts(data);
   };
   const handleChanges = (content:any) => {
-    // console.log(content);
+    console.log("content",content.querySelectorAll("input"));
     
     setState({ content });
   };
   console.log(state);
-  const onSubmit=()=>{
-    console.log(runzValue,state.content)
-    let payload={
-      _id: runzValue.procedureId._id,
-    procedureDetials: state.content
+  const[arr,setArr]=React.useState<any>([])
+  console.log(arr);
+  const mergedData: any = [];
+  const onSubmit = () => {
+    handleHtmlInput();
+
+    const tablesEles: any = document
+      ?.getElementById("content")
+      ?.querySelectorAll("table");
+    let finalTableTitleResult: any;
+    console.log("tablesEles",tablesEles);
+    
+    if (tablesEles) {
+      const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
+        const headerCells = tablesInstance?.querySelectorAll("[data-column]");
+        const headerNames = Array.from(headerCells).map((header: any) => ({
+          key: header.getAttribute("data-column"),
+          value: header.textContent.trim(),
+        }));
+        const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
+        const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
+          const tableCells = tableDataRow.querySelectorAll("td[data-column]");
+          return Array.from(tableCells).map((cell: any) => {
+            const inputCntext = cell.querySelector('input[type="text"]');
+            console.log(inputCntext);
+            
+            if (inputCntext) {
+              console.log(cell.getAttribute("data-column"));
+              console.log(htmlInput[inputCntext.id]);
+              
+              return {
+                key: cell.getAttribute("data-column"),
+                value: htmlInput[inputCntext.id],
+              };
+            }
+          });
+        });
+        return {
+          headerNames: headerNames,
+          rowData: rowData,
+        };
+      });
+console.log("result",htmlInput);
+
+      const mergedDatasets = result.map((dataset) => {
+        
+        for (let i = 0; i < dataset.rowData.length; i++) {
+          const rowData = dataset.rowData[i];
+          const mergedRow: any = {};
+          for (let j = 0; j < rowData?.length; j++) {
+            const header = dataset.headerNames[j];
+            const value: any = rowData[j];
+            mergedRow[header?.value] = value?.value;
+          }
+          console.log("mergedRow",mergedRow);
+          
+          mergedData.push(mergedRow);
+        
+        }
+        return mergedData;
+        
+      });
+      console.log("mergedDatasets",mergedDatasets);
+      
+      let filteredData = mergedDatasets?.filter((sublist) =>
+        sublist?.some((obj: any) => Object?.keys(obj).length > 0)
+      );
+      filteredData = filteredData?.map((sublist) =>
+        sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
+      );
+console.log("filteredData",filteredData);
+
+      const results = filteredData?.map((dataset, index) => {
+        const subResult = [];
+        const firstDataItem = dataset[index];
+        for (const key in firstDataItem) {
+          const label = key;
+          const values: any = [];
+          dataset?.forEach((item: any) => {
+            if (item[key]) {
+              values.push(parseInt(item[key]));
+            }
+          });
+          subResult.push({ label, values });
+        }
+        return subResult;
+      });
+
+      const tablesin = document
+        ?.getElementById("content")
+        ?.querySelectorAll("[data-table]");
+      const getTitle: any = [];
+
+      tablesin?.forEach((element, index) => {
+        getTitle.push(element.textContent);
+      });
+
+      finalTableTitleResult = getTitle?.map((list: any, index: any) => {
+        return { label: list, value: list, data: results[index] };
+      });
     }
-    dispatch(fetchUpdateProcedureData(payload))
-  toast(`Procedure updated !`, {
-    style: {
-      background: '#00bf70', color: '#fff'
-    }
-  });
-  }
-  const handleColorPickerChange = (event: any, dataIndex: any, keyIndex) => {
+    setArr(finalTableTitleResult)
+    let vals = Object.values(htmlInput);
+    const empty = vals.filter((item) => item === "");
+    console.log('finalTableTitleResult',empty);
+    
+    // if (empty.length > 0) {
+    //   Toast("Must fill all Required Readings", "LONG", "error");
+    // } else if (empty.length === 0) {
+      handleHtmlInput();
+      var payload:any ={
+              runId: runzValue._id,
+              organisationId:"655376d2659b7b0012108a33",
+              userProcedure:JSON.stringify(htmlInput),
+              static_chart_data:JSON.stringify(arr)
+        
+            }
+            console.log(runzValue.status);
+            
+           if(runzValue.status=="Created") {
+            dispatch(postUserRunsData(payload))
+            let payload1={
+              _id:runzValue._id,
+              status:'Started'
+            }
+            dispatch(fetchUpdateRunsData(payload1))
+          toast(`User Procedure Created !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+        }
+          else{
+           let payload2={
+            _id:userRunzID?._id,
+            organisationId:"655376d2659b7b0012108a33",
+            userProcedure:JSON.stringify(htmlInput),
+            static_chart_data:JSON.stringify(arr)
+           }
+            dispatch(UpdateUserRunsData(payload2))
+            
+            toast(`User Procedure updated !`, {
+              style: {
+                background: '#00bf70', color: '#fff'
+              }
+            });
+          }
+  };
+//   const onSubmit=()=>{
+//     console.log(runzValue,state.content)
+//     var payload:any ={
+//       runId: runzValue._id,
+//       organisationId:"655376d2659b7b0012108a33",
+//       userProcedure:JSON.stringify(htmlInput),
+
+//     }
+//     console.log(runzValue.status);
+    
+//    if(runzValue.status=="Created") {
+//     dispatch(postUserRunsData(payload))
+//     let payload1={
+//       _id:runzValue._id,
+//       status:'Started'
+//     }
+//     dispatch(fetchUpdateRunsData(payload1))
+//   toast(`User Procedure Created !`, {
+//     style: {
+//       background: '#00bf70', color: '#fff'
+//     }
+//   });
+// }
+//   else{
+//    let payload2={
+//     _id:userRunzID?._id,
+//     organisationId:"655376d2659b7b0012108a33",
+//     userProcedure:JSON.stringify(htmlInput),
+//    }
+//     dispatch(UpdateUserRunsData(payload2))
+    
+//     toast(`User Procedure updated !`, {
+//       style: {
+//         background: '#00bf70', color: '#fff'
+//       }
+//     });
+//   }
+
+//   }
+  const handleColorPickerChange = (event: any, dataIndex: any, keyIndex:any) => {
     const data = [...charts];
     const values = { ...data[dataIndex] };
     values.tableChartOptionsList[keyIndex].color = event.target.value;
@@ -700,7 +931,66 @@ export default function RunsDetails() {
   const handleChartChange = (event: any) => {
     setSelectedChart(event.target.value);
   };
+  const htmlData: any = state?.content
+    ? state?.content
+    : "";
+  const [htmlInput, setHtmlInput] = React.useState<any>({});
+  const htmlToJSON: any = html2json?.html2json(htmlData);
 
+  const uses = htmlToJSON?.child.map((ele: any) => ele);
+  const handleHtmlInput = () => {
+    let objects = {};
+    // @ts-ignore
+    console.log(document ?.getElementById("content")
+    ?.querySelectorAll("td"));
+    
+    let inputEl: any = document
+      ?.getElementById("content")
+      ?.querySelectorAll("input");
+console.log("inputEl",inputEl);
+
+    inputEl?.forEach((ele: any) => {
+      const { id, value } = ele;
+      let temp = { [id]: value };
+      objects = { ...objects, temp };
+      console.log(id);
+      
+      setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+      // @ts-ignore
+      ele.onChange = (e) => {
+        const { id, value } = e.target;
+        setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+      };
+    });
+    console.log("inputEl",objects);
+    
+  };
+  console.log('htmlInput',htmlInput);
+  const uploadVideo = async (e:any) => {
+    const file = e.target.files[0];
+    if (file) {
+      const videoUrl = URL.createObjectURL(file);
+  
+      if (editorRef.current) {
+        const editor = editorRef.current.editor;
+        editor.insertContent(
+          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
+        );
+      }
+    }
+  };
+  const handleEditorInit = (editor:any) => {
+    editor.ui.registry.addButton("uploadvideo", {
+      text: "Upload Video",
+      onAction: () => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "video/*");
+        input.onchange = uploadVideo;
+        input.click();
+      },
+    });
+  };
   return (
     <PrivateRoute>
       {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
@@ -763,7 +1053,7 @@ export default function RunsDetails() {
                     className="edit-btn"
                     onClick={() => {
                       // setDialog2Open(true);
-                      runsPopupRef.current.open(true);
+                      runsPopupRef.current.open(true,runzValue);
                     }}
                   >
                     <img src={edit} alt="edit" style={{ marginRight: '8px' }} />
@@ -1062,7 +1352,18 @@ export default function RunsDetails() {
             <Box sx={{ paddingBottom: '6rem' }}>
               <CustomTabPanel value={value} index={0}>
                 {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
-                <Editor
+                <div
+            id="content"
+            style={{ overflowY: "scroll" }}
+          >
+            <form ref={formRef} onChange={handleHtmlInput}>
+              {uses.map((el: any) =>
+                parse(htmlToJSON && html2json.json2html(el))
+              )}
+            </form>
+          </div>
+
+                {/* <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   init={{
@@ -1132,7 +1433,7 @@ export default function RunsDetails() {
                   value={state.content}
           // onChange={handleEditorChange}
           onEditorChange={handleChanges}
-                />
+                /> */}
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <Box id="divToPrint">
@@ -1218,12 +1519,13 @@ export default function RunsDetails() {
                       'undo redo | blocks formatselect | ' +
                       'charmap subscript superscript bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                      'help |link image code table customInsertButton insertdatetime template insertinput customAlertButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                     image_advtab: true,
                     image_title: true,
                     automatic_uploads: true,
                     file_picker_types: 'image',
                     setup: function (editor) {
+                      handleEditorInit(editor);
                       editor.ui.registry.addButton('customInsertButton', {
                         icon: 'edit-block',
                         tooltip: 'Insert Input Element',
@@ -1232,6 +1534,17 @@ export default function RunsDetails() {
                           editor.insertContent(
                             `&nbsp;<input type='text' >&nbsp;`,
                           );
+                        },
+                      });
+                      editor.ui.registry.addButton("customVideoUpload", {
+                        text: "Upload Video",
+                        onAction: function () {
+                          editor.insertContent(
+                            `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
+                          );
+                          // if (fileInputRef.current) {
+                          //   fileInputRef.current.click();
+                          // }
                         },
                       });
                       editor.ui.registry.addButton('customAlertButton', {
@@ -1289,12 +1602,13 @@ export default function RunsDetails() {
                       'undo redo | blocks formatselect | ' +
                       'charmap subscript superscript bold italic | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'help |image code table customInsertButton insertdatetime template insertinput customAlertButton tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                      'help |link image code table customInsertButton insertdatetime template insertinput customAlertButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
                     image_advtab: true,
                     image_title: true,
                     automatic_uploads: true,
                     file_picker_types: 'image',
                     setup: function (editor) {
+                      handleEditorInit(editor);
                       editor.ui.registry.addButton('customInsertButton', {
                         icon: 'edit-block',
                         tooltip: 'Insert Input Element',
@@ -1313,6 +1627,17 @@ export default function RunsDetails() {
                             'Enter data key attribute',
                           );
                           console.log(userInput);
+                        },
+                      });
+                      editor.ui.registry.addButton("customVideoUpload", {
+                        text: "Upload Video",
+                        onAction: function () {
+                          editor.insertContent(
+                            `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
+                          );
+                          // if (fileInputRef.current) {
+                          //   fileInputRef.current.click();
+                          // }
                         },
                       });
                     },

@@ -21,6 +21,9 @@ import {
 } from "firebase/auth";
 import { navigate } from "gatsby";
 import { toast } from "react-toastify";
+import { fetchLoginUser, postUserData } from "../../api/userAPI";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export const CardLayout = ({ children }: any, props: any) => {
   const [answer, setAnswer] = React.useState<any>(10);
@@ -32,14 +35,33 @@ export const CardLayout = ({ children }: any, props: any) => {
   const onLoginStart = React.useCallback((e: void) => {
     return e;
   }, []);
-
+  const dispatch: any= useDispatch()
+  const userSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
+    console.log(userSliceData);
+  
   const googleSignup = (varient:string) => {
     const googleProvider = provider("google.com");
     signInWithPopup(auth, googleProvider)
-      .then((result) => {
+      .then((result:any) => {
         console.log(result);
         if(varient=='signup'){
-          toast(`Google Signin successful !`, {
+          console.log(result.user.uid);
+          let payload={
+            firstName: result.user.displayName,
+            lastName: "",
+            email: result.user.email,
+            uid:result.user.uid,
+            organisationId:"655376d2659b7b0012108a33",
+            role:"6564afdbc3bd760012def0f4",
+            // phoneNumber:'9876543210',
+            departmentId: [],
+            laboratoryId: [],
+            instituteId: "",
+          }
+          dispatch(postUserData(payload))
+          toast(`Signup successful !`, {
             style: {
               background: '#00bf70', color: '#fff'
             }
@@ -47,16 +69,42 @@ export const CardLayout = ({ children }: any, props: any) => {
           setTimeout(()=>{
             navigate('/login')
           },1000)
+          // toast(`Google Signin successful !`, {
+          //   style: {
+          //     background: '#00bf70', color: '#fff'
+          //   }
+          // });
+          // setTimeout(()=>{
+          //   navigate('/login')
+          // },1000)
         }
         else{
-          toast(`Google Login successful !`, {
-            style: {
-              background: '#00bf70', color: '#fff'
-            }
-          });
-          setTimeout(()=>{
-            navigate('/mypage')
-          },1000)
+          let payload={
+            idToken:result.user?.accessToken
+          }
+          
+          dispatch(fetchLoginUser(payload))
+              // console.log(isSucess);
+              console.log(userSliceData);
+              
+              window.sessionStorage.setItem('isLoggedIn', 'true');
+           
+              // setTimeout(()=>{
+                navigate('/mypage')
+                toast(`Google Login successful !`, {
+                  style: {
+                    background: '#00bf70', color: '#fff'
+                  }
+                });
+           
+          // toast(`Google Login successful !`, {
+          //   style: {
+          //     background: '#00bf70', color: '#fff'
+          //   }
+          // });
+          // setTimeout(()=>{
+          //   navigate('/mypage')
+          // },1000)
           window.sessionStorage.setItem('isLoggedIn', 'true');
         }
       })

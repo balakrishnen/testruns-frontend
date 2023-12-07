@@ -108,19 +108,23 @@ const Addnewpopup = React.forwardRef(
         var labArray:any=[]
         laboratory.map((item:any)=>(labArray.push(item?.id)))
         
-        let assetValues={
+        let assetValues:any={
         name: values.name,
         organisationId: values.organisationId,
         perchasedDate: values.perchasedDate,
+       
         lastUsedDate: moment().format("MM/DD/YYYY"),
         availability: values.availability,
         expiryDate: values.expiryDate,
         departmentId: deptArray,
         laboratoryId: labArray,
         status: values.status,
+        instituteId:"6548f51edf956b3b14ca00e0"
         }
         console.log(values.organisationId);
-        
+        if(uploadedFile!==null){
+          assetValues["assetImageUrl"]=uploadedFile
+        }
         dispatch(postAssetsData(assetValues));
        
         submitFormPopup();
@@ -134,6 +138,7 @@ const Addnewpopup = React.forwardRef(
     const clearForm = () => {
       formik.resetForm();
       setDepartments([]);
+      setUploadedFile(null)
       setLaboratory([]);
       setOrganization([]);
     };
@@ -324,7 +329,7 @@ const Addnewpopup = React.forwardRef(
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
                       <span className="file-wrapper">
-                        <input   ref={fileUploadField} type="file" name="photo" id="photo"   onChange={handleImageUpload} />
+                        <input   ref={fileUploadField} type="file" name="photo" id="photo" accept="image/*, image/jpeg, image/png"  onChange={handleImageUpload} />
                         <span className="button" onClick={triggerFileUploadField}>Upload photo</span>
                       </span>
                       {/* {formik.touched.assets_image &&

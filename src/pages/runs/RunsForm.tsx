@@ -35,7 +35,7 @@ import {
 } from '../../utils/data';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 
-import { fetchUpdateRunsData, postRunsData } from '../../api/RunsAPI';
+import { fetchSingleRunsData, fetchUpdateRunsData, postRunsData } from '../../api/RunsAPI';
 import { fetchLabData } from '../../api/labAPI';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
@@ -101,9 +101,33 @@ const RunsForm = React.forwardRef(
     };
     const [runsOpen, setRunsOpen] = React.useState(false);
     const [runCreate, setRunsCreate] = React.useState(false);
+    const runzSliceData = useSelector(
+      (state: any) => state.runs.data
+    );
+  
+    React.useEffect(()=>{
+      formik.setFieldValue('objective',runzSliceData?.get_run?.objective)
+      formik.setFieldValue('laboratoryId',runzSliceData?.get_run?.laboratoryId)
+      formik.setFieldValue('departmentId',runzSliceData?.get_run?.departmentId)
+      formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId[0]?._id)
+      // formik.setFieldValue('procedureDetials',runzSliceData?.get_run?.procedureId[0]?.procedureDetials)
+
+      
+      console.log("runzSliceData",runzSliceData);
+      
+    },[runzSliceData])
+
     React.useImperativeHandle(ref, () => ({
-      open(state: any) {
-        setRunsCreate(state);
+      open(state: any,row: any) {
+        setRunsCreate(state)
+        if (row?._id) {
+       
+          let payload={
+            _id:row?._id
+          }
+       
+        dispatch(fetchSingleRunsData(payload))
+        }
       },
     }));
     // const departments: any = [];
@@ -130,6 +154,7 @@ const RunsForm = React.forwardRef(
           createdAt: values.createdAt,
           status: values.status,
           organisationId: values.organisationId,
+          // procedureDetials:values.procedureDetials
 
         };
 
@@ -156,8 +181,8 @@ const RunsForm = React.forwardRef(
     };
     const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
 
-    const dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
-    console.log(dateDue);
+    var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
+    console.log(formData);
 
     const formik = useFormik({
       initialValues: {
@@ -170,13 +195,14 @@ const RunsForm = React.forwardRef(
         createdAt: createdDate,
         assignedBy: "username",
         assignedTo: 'toy',
-        status: "Created"
+        status: "Created",
+        // procedureDetials:""
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
     });
 
-    console.log(formik.dirty);
+    console.log(formik);
     
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -298,7 +324,6 @@ const RunsForm = React.forwardRef(
                               <Placeholder>Select Procedure</Placeholder>
                             )
                         }
-
                         margin="none"
                         fullWidth
                         id="procedureId"
