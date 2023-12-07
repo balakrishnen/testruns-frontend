@@ -59,8 +59,8 @@ query Get_all_roles {
 
 `;
 export const GET_ROLE = gql`
-query Get_role($_id :String!) {
-    get_role(_id: $_id) {
+query Get_role($instituteId :String!) {
+    get_role(instituteId: $instituteId) {
         _id
         name
         isActive

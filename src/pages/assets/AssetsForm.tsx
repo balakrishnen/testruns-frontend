@@ -281,7 +281,12 @@ const Addnewpopup = React.forwardRef(
     const triggerFileUploadField = () => {
       fileUploadField.current?.click();
     };
-    
+    // const handleLabList=()=>{
+    //   let payload={
+    //     departmentId:formik.values.departmentId
+    //   }
+    //   dispatch(fetchDepartmentData());
+    // }
     return (
       <div>
         <Dialog
@@ -637,6 +642,7 @@ const Addnewpopup = React.forwardRef(
                             id="laboratoryId"
                             options={labData !== undefined ? labData : []}
                             getOptionLabel={(option: any) => option.label}
+                            // onFocus={()=>handleLabList()}
                             isOptionEqualToValue={(option: any, value: any) =>
                               value.id == option.id
                             }

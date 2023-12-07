@@ -34,7 +34,7 @@ const Roles = () => {
 
   React.useEffect(() => {
     let payload={
-      _id:loginUserSliceData?._id
+      instituteId:loginUserSliceData?.instituteId
     }
     dispatch(fetchSingleRoleData(payload))
   }, []);
@@ -121,7 +121,7 @@ setFormValues((prevValues) => ({
   const handleSave=()=>{
     console.log('submited');
     var payload={
-      _id: '65487c60fe14a40012118efe',
+      _id: loginUserSliceData?._id,
       procedure_management:[{
         assign : formValues.procedure_management[0].assign,
         create : formValues.procedure_management[0].create,

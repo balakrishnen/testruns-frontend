@@ -145,6 +145,8 @@ const Profile = () => {
     dispatch(fetchSingleUserData(temp))
       .then((isSucess) => {
         if (isSucess.get_user) {
+          console.log("isSucess.get_user",isSucess.get_user);
+          
           setUserData(isSucess.get_user)
           formikProfile.setFieldValue(
             'firstName',
@@ -169,6 +171,8 @@ const Profile = () => {
               (item: any) => departmentData?.find((obj) => obj.id == item),
             ) || [],
           );
+          console.log("isSucess.get_user?.laboratoryId",isSucess.get_user?.departmentId);
+          
           formikProfile.setFieldValue(
             'laboratoryId',
             isSucess.get_user?.laboratoryId?.map(
@@ -353,6 +357,8 @@ const Profile = () => {
         id: item._id,
       })),
     );
+    console.log("labSliceData",labSliceData);
+    
     setLabData(
       labSliceData?.map((item: any) => ({
         label: item.name,
@@ -375,7 +381,7 @@ const Profile = () => {
     );
   }, [departmentSliceData, labSliceData, roleSliceData, organizationSliceData]);
 
-  console.log(departmentData);
+  console.log("labData",labData);
 
   console.log(DepartmentList);
 
