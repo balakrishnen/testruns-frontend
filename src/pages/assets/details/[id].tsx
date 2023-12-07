@@ -21,7 +21,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import moment from 'moment';
-import test from '../../../assets/images/test.svg';
+import test from '../../../assets/images/Noimage.png';
 import HistoryTable from "../details/history";
 import {
   fetchSingleAssetsData,
@@ -41,6 +41,8 @@ import { navigate } from 'gatsby';
 import SuccessPopup from '../../../components/SuccessPopup';
 import { toast } from 'react-toastify';
 import { Height } from '@mui/icons-material';
+import AWS from 'aws-sdk';
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -101,8 +103,13 @@ export default function AssetDetails() {
   const location: any = useLocation();
   const assetValue = location.state?.props;
   const getFunction = location.state?.func;
-
-
+  const fileUploadField = React.useRef<any>(null);
+  
+  console.log("assetValue",assetValue?.assetImageUrl);
+  const [uploadedFile, setUploadedFile] = React.useState<any>(assetValue?.assetImageUrl);
+  const triggerFileUploadField = () => {
+    fileUploadField.current?.click();
+  };
   // console.log(assetValue);
   const successPopupRef: any = React.useRef(null);
   const [formPopup, setFormPopup] = React.useState(false);
@@ -326,6 +333,7 @@ console.log(assetValue?.organisationId,);
       // userId: 'USER_1001', 
       status: assetValue?.status,
       availability: assetValue?.availability,
+      
       // assets_id: assetValue.assets_id,
       lastUsedDate: assetValue?.lastUsedDate,
       perchasedDate:dayjs(purchaseDate),
@@ -338,7 +346,51 @@ console.log(assetValue?.organisationId,);
   });
 
   // console.log("datas",assetValue);
+  const handleImageUpload = async () => {
+    const selectedFile = fileUploadField.current.files[0];
+    // const formData = new FormData();
+    // formData.append('file', selectedFile);
+    // const payload = {
+    //   file: formData,
+    //   type: 'profile'
+    // }
+    // dispatch(fileUploadData(payload));
 
+    const s3 = new AWS.S3({
+      // params: { Bucket: S3_BUCKET, folderName: "profile" },
+      region: 'us-east-1',
+      accessKeyId: 'AKIAUVVYVBYI2GJ3ENMQ',
+      secretAccessKey: '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',
+    });
+    const keyPath = `profile/${Date.now()}`;
+    const params = {
+      Bucket: 'test-run-v2',
+      Key: keyPath,
+      Body: selectedFile,
+      ACL: 'public-read',
+      // ContentType: selectedFile.type
+    };
+
+    const result = s3.upload(params).promise();
+    await result.then((res: any) => {
+      setUploadedFile(res.Location);
+      toast(`Image uploaded successfully !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
+    });
+    await result.catch((err) => {
+      console.error('Failed to upload');
+      toast(`Failed to upload !`, {
+        style: {
+          background: '#e2445c',
+          color: '#fff',
+        },
+      });
+    });
+  };
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -389,14 +441,21 @@ console.log(assetValue?.organisationId,);
                 >
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img src={assetValue?.assetImageUrl==null?test:assetValue?.assetImageUrl} alt="test" className="dynamic-img"  style={{height:"394px", width:"327px"}}/>
+                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img"  style={{height:"394px", width:"327px",objectFit: "fill"}}/>
                     </Box>
 
                     <Box
                       className="edit-profile-btn"
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
-                      {/* <Button>Upload photo</Button> */}
+                      <Button onClick={triggerFileUploadField}>Upload photo</Button>
+                      <input
+            style={{ display: 'none' }}
+            type="file"
+            ref={fileUploadField}
+            accept="image/*, image/jpeg, image/png"
+            onChange={handleImageUpload}
+            />
                     </Box>
                   </Box>
                 </Grid>

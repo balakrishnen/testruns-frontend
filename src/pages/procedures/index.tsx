@@ -433,7 +433,7 @@ export default function Procedures() {
     const payload: any = { ...queryStrings };
     const headersList: any = [...headers];
     payload['sortBy'] = headersList[_index].id;
-    payload['sortOrder'] = headersList[_index].sort === 'asc' ? 'desc' : 'asc';
+    payload['sortOrder'] = headersList[_index].sort == 'asc' ? 'desc' : 'asc';
     headersList[_index].sort =
       headersList[_index].sort === 'asc' ? 'desc' : 'asc';
     setHeaders(headersList);
@@ -462,6 +462,7 @@ export default function Procedures() {
     });
     return result;
   };
+  console.log("headers",headers);
 
   return (
     <PrivateRoute>

@@ -61,7 +61,7 @@ import { Value } from 'sass';
 import { bool } from 'yup';
 import moment from 'moment';
 import TablePopup from '../../components/table/TablePopup';
-import test from '../../assets/images/test.svg';
+import test from '../../assets/images/Noimage.png';
 import filterIcon from '../../assets/images/filter-icon1.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
