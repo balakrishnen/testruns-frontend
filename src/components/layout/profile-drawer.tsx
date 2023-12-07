@@ -121,7 +121,6 @@ export default function AppProfileDrawer({
   const loginUserSliceData=  useSelector(
     (state: any) => state.userLogin?.data?.verifyToken, 
   );
-  console.log(loginUserSliceData);
   
   React.useEffect(()=>{
     let temp = { '_id': loginUserSliceData?._id}
@@ -209,6 +208,7 @@ export default function AppProfileDrawer({
       // alert("User Details updated successful!");
 
     }
+    window.location.reload()
   }
   const formik = useFormik({
     initialValues: {

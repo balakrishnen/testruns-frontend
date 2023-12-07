@@ -104,7 +104,7 @@ function AppHeader(props: any) {
   const loginUserSliceData=  useSelector(
     (state: any) => state.userLogin.data, 
   );
-    console.log(loginUserSliceData);
+    // console.log('wwwww',loginUserSliceData);
   const dispatch: any = useDispatch();
   const[userData, setUserData]=React.useState<any>({})
  console.log(loginUserSliceData);

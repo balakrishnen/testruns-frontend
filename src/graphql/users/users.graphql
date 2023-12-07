@@ -130,6 +130,7 @@ mutation  update_user(
         role
         phoneNumber
         isActive
+        imageUrl
         isDeleted
         createdAt
         updatedAt
