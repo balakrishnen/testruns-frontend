@@ -18,8 +18,9 @@ import { fetchAllUser } from '../api/userAPI';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { fetchbulkRunz } from '../api/bulkRunz';
+import { toast } from 'react-toastify';
 
-const AddPeople = ({ open, close,runzId,runzRow }: any) => {
+const AddPeople = ({ open, close,runzId,runzRow,typePopup }: any) => {
   const dispatch : any =useDispatch()
   const [allUserData, setAlluserData] = React.useState<any>([]);
   const [userList, setuserList]=React.useState<any>([])
@@ -46,12 +47,12 @@ React.useEffect(()=>{
   })))          
   },[allUser])
 
-  const handleSave=()=>{
+  const handleSave=async()=>{
     console.log("save",runzRow);
     const allIds = userList.map((item:any) => item.id);
     const newArray = runzRow.map((item:any) => ({ 
       objective: item?.objective,
-      shared: false,
+      shared: typePopup=='share'?true:false,
       procedureId: item?.procedureId._id ,
       departmentId: item?.departmentId.map(((item:any)=>item?._id)) ,
       laboratoryId:  item?.laboratoryId.map(((item:any)=>item?._id)) ,
@@ -69,7 +70,14 @@ React.useEffect(()=>{
     let payload={
       runs:output
     }
-    dispatch(fetchbulkRunz(payload))
+   await dispatch(fetchbulkRunz(payload))
+   await close()
+   await toast(`Runs ${typePopup} successfully !`, {
+    style: {
+      background: '#00bf70',
+      color: '#fff',
+    },
+  });
 }
   
   return (

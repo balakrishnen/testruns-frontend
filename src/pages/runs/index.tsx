@@ -108,6 +108,7 @@ export default function Runs() {
   const [rowId, setRowId] = React.useState<any>([]);
   const[runsRow, setRunsRow]=React.useState<any>([])
   const dispatch: any = useDispatch();
+  const [filter, setFilter] = React.useState<any>(false);
 
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
@@ -163,6 +164,7 @@ export default function Runs() {
     applyFilters('search', null);
     handleFilterPopoverClose();
     setFilterKey(null);
+    setFilter(false)
   };
   React.useEffect(() => {
     setTimeout(() => {
@@ -372,6 +374,7 @@ export default function Runs() {
     payload['searchBy'] = field;
     payload['search'] = value;
     setQueryString(payload);
+    setFilter(true)
   };
   var arr:any=[]
   const array = [
@@ -467,7 +470,7 @@ export default function Runs() {
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
                 <Badge
                   color="secondary"
-                  variant={filterKey === null ? 'standard' : 'dot'}
+                  variant={filter? 'dot' : 'standard'}
                   invisible={false}
                   className="red-badge-filter"
                 >
@@ -597,6 +600,7 @@ export default function Runs() {
                             onClick={() => {
                               setFilterType(element.type);
                               setFilterOptions(element.filters[0]?.options);
+                              setFilterKey(element.id);
                             }}
                           >
                             {element.label}
@@ -700,7 +704,7 @@ export default function Runs() {
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
-                        setFilterKey('key');
+                        
                       }}
                     >
                       Show results
@@ -726,6 +730,7 @@ export default function Runs() {
           applyFilters={applyFilters}
           runzId={rowId}
           runzRow={runsRow}
+          reload={()=>{setRowId([]),setRunsRow([])}}
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>

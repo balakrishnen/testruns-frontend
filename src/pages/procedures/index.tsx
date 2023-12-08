@@ -83,6 +83,7 @@ export default function Procedures() {
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterOptions, setFilterOptions] = React.useState([]);
   const [loader, setLoader] = React.useState(false);
+  const [filter, setFilter] = React.useState(false)
 
   const handleRequestSort = () => {
     // event: React.MouseEvent<unknown>,
@@ -155,6 +156,7 @@ export default function Procedures() {
     applyFilters(null, null);
     handleFilterPopoverClose();
     setFilterKey(null);
+    setFilter(false)
   };
 
   React.useEffect(() => {
@@ -445,6 +447,7 @@ export default function Procedures() {
     payload['searchBy'] = key;
     payload['search'] = value;
     setQueryString(payload);
+    setFilter(true)
   };
   const reload = () => {
     const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
@@ -495,7 +498,7 @@ export default function Procedures() {
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
                 <Badge
                   color="secondary"
-                  variant={filterKey === null ? 'standard' : 'dot'}
+                  variant={filter? 'dot' : 'standard'}
                   invisible={false}
                   className="red-badge-filter"
                 >
@@ -591,6 +594,7 @@ export default function Procedures() {
                             onClick={() => {
                               setFilterType(element.type);
                               setFilterOptions(element.filters[0]?.options);
+                              setFilterKey(element.id);
                             }}
                           >
                             {element.label}
@@ -694,7 +698,6 @@ export default function Procedures() {
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
-                        setFilterKey('key');
                       }}
                     >
                       Show results

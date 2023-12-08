@@ -78,6 +78,8 @@ const Users = () => {
   const [filterType, setFilterType] = React.useState(null);
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterKey, setFilterKey] = React.useState<any>(null);
+  const [filter, setFilter] = React.useState<any>(false);
+
 
   const [columnAnchorEl, setColumnAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -293,6 +295,7 @@ const Users = () => {
     payload['searchBy'] = field;
     payload['search'] = value;
     setQueryString(payload);
+    setFilter(true)
   };
   const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
@@ -337,6 +340,7 @@ const Users = () => {
     applyFilters('search', null);
     handleFilterPopoverClose();
     setFilterKey(null);
+    setFilter(false)
   };
 
   const Placeholder = ({ children }: any) => {
@@ -409,7 +413,7 @@ const Users = () => {
               {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
               <Badge
                 color="secondary"
-                variant={filterKey === null ? 'standard' : 'dot'}
+                variant={filter? 'dot' : 'standard'}
                 invisible={false}
                 className="red-badge-filter"
               >
@@ -499,6 +503,7 @@ const Users = () => {
                           onClick={() => {
                             setFilterType(element.type);
                             setFilterOptions(element.filters[0]?.options);
+                            setFilterKey(element.id);
                           }}
                         >
                           {element.label}
@@ -602,7 +607,6 @@ const Users = () => {
                     onClick={() => {
                       handleFilterPopoverClose();
                       applyFilters(filterKey, filterSearchValue);
-                      setFilterKey('key');
 
                     }}
                   >

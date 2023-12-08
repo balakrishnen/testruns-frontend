@@ -93,6 +93,7 @@ export default function TableFilters({
   const [filterOptions, setFilterOptions] = React.useState([]);
   const [filterKey, setFilterKey] = React.useState(null);
   const [runsOpen, setRunsOpen] = React.useState(false);
+  const [typePopup, settypePopup]= React.useState('')
   const handleColumnPopoverClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -114,8 +115,9 @@ export default function TableFilters({
     setFilterPopoverEl(null);
   };
 
-  const handleAssignClick = () => {
+  const handleAssignClick = (val:string) => {
     setRunsOpen(true);
+    settypePopup(val)
   };
 
   const handleClearFilter = () => {
@@ -207,7 +209,7 @@ export default function TableFilters({
                 Delete
               </Button>
               {module == 'runs' && (
-                <Button className="delete-actions" onClick={handleAssignClick}>
+                <Button className="delete-actions" onClick={()=>handleAssignClick("assign")}>
                   <img src={assign} alt="assign" className="Image-actions" />
                   Assign
                 </Button>
@@ -218,12 +220,14 @@ export default function TableFilters({
                 close={() => setRunsOpen(false)}
                 runzId={runzId}
                 runzRow={runzRow}
+                typePopup={typePopup}
               />
-
-              <Button className="delete-actions" onClick={handleAssignClick}>
+               {module == 'runs' && (
+              <Button className="delete-actions" onClick={()=>handleAssignClick("share")}>
                 <img src={share} alt="Share" className="Image-actions" />
                 Share
               </Button>
+              )}
               <IconButton onClick={handleColumnPopoverClick}>
                 <MoreVertOutlined />
               </IconButton>

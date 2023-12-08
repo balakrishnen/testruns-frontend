@@ -105,6 +105,7 @@ export default function Assets() {
   console.log(rowId);
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
   const [loader, setLoader] = React.useState(false);
+  const [filter, setFilter]=React.useState(false)
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -183,6 +184,7 @@ export default function Assets() {
     applyFilters(null, null);
     handleFilterPopoverClose();
     setFilterKey(null);
+    setFilter(false)
   };
 
   const handlePageChange = (even: any, page_no: number) => {
@@ -342,6 +344,7 @@ export default function Assets() {
     payload['searchBy'] = key;
     payload['search'] = value;
     setQueryString(payload);
+    setFilter(true)
   };
 
   const Placeholder = ({ children }: any) => {
@@ -390,7 +393,7 @@ export default function Assets() {
               >
                 <Badge
                   color="secondary"
-                  variant={filterKey === null ? 'standard' : 'dot'}
+                  variant={filter? 'dot' : 'standard'}
                   invisible={false}
                   className="red-badge-filter"
                 >
@@ -490,7 +493,7 @@ export default function Assets() {
                             key={element.id}
                             onClick={() => {
                               setFilterType(element.type);
-                              
+                              setFilterKey(element.id);
                             }}
                           >
                             {element.label}
@@ -594,7 +597,6 @@ export default function Assets() {
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
-                        setFilterKey('key');
                       }}
                     >
                       Show results

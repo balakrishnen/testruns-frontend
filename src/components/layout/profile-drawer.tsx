@@ -127,6 +127,7 @@ export default function AppProfileDrawer({
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp)).then((isSucess: { get_user: { firstName: any; lastName: any; email: any; phoneNumber: any; organisationId: any; departmentId: any[]; role: any; }; }) => {
       if (isSucess.get_user) {
+        console.log(isSucess.get_user);
         formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
         formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
         formik.setFieldValue('email', isSucess.get_user.email || '');
@@ -144,7 +145,7 @@ export default function AppProfileDrawer({
         console.log(err);
       });
     // }    
-  }, [departmentData, labData])
+  }, [departmentData, labData, loginUserSliceData])
   React.useEffect(() => {
     let payload = {
       _id:  loginUserSliceData?._id
