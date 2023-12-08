@@ -177,7 +177,7 @@ export default function Runs() {
     setTableHeaderVisible(false);
     setRowId([]);
     setRunsRow([]);
-  }, [pageInfo, queryStrings]);
+  }, [queryStrings]);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
@@ -211,7 +211,11 @@ export default function Runs() {
       runsChange['status'] = e.target.value;
     }
     console.log(runsChange);
+    setLoader(true)
     dispatch(fetchUpdateRunsData(runsChange));
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
     toast('Runs status updated !', {
       style: {
         background: '#00bf70',

@@ -47,8 +47,8 @@ import { navigate } from 'gatsby';
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().required("Procedure ID is requied" ),
   createdAt: Yup.string().required('Created date is required'),
-  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
-  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  departmentId: Yup.array().notRequired(),
+  laboratoryId: Yup.array().notRequired(),
   objective: Yup.string().required('Test Objective is required'),
   dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().required(),
@@ -135,7 +135,7 @@ const RunsForm = React.forwardRef(
     const checkCredentials = (values: any) => {
       return true;
     };
-    const onSubmit = (values: any) => {
+    const onSubmit = async(values: any) => {
       const isMatch = checkCredentials(values.name);
       if (isMatch) {
 
@@ -162,8 +162,10 @@ const RunsForm = React.forwardRef(
           runsValues['_id'] = formData._id
         }
         if (type == 'edit') {
-          dispatch(fetchUpdateRunsData(runsValues))
+         await dispatch(fetchUpdateRunsData(runsValues))
+         setTimeout(()=>{
           handleReloadSingleData()
+         },2000)
           
         }
         else {

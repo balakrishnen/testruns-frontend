@@ -169,7 +169,7 @@ export default function Procedures() {
     dispatch(fetchProcedureData(queryStrings));
     setTableHeaderVisible(false);
     setRowId([]);
-  }, [pageInfo, queryStrings]);
+  }, [queryStrings]);
   // console.log('procedureData',procedureData[0].departmentId.length);
 
   React.useEffect(() => {
