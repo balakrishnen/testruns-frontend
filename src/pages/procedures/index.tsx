@@ -68,7 +68,7 @@ export default function Procedures() {
   // const [deletePopup, setDeletePopup] = React.useState(false);
   const deletePopupRef: any = React.useRef(null);
   const tablePopupRef: any = React.useRef(null);
-  const [filterKey, setFilterKey] = React.useState(null);
+  const [filterKey, setFilterKey] = React.useState<any>(null);
   const [columnAnchorEl, setColumnAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const [filterPopoverEl, setFilterPopoverEl] =
@@ -591,7 +591,6 @@ export default function Procedures() {
                             onClick={() => {
                               setFilterType(element.type);
                               setFilterOptions(element.filters[0]?.options);
-                              setFilterKey(element.id);
                             }}
                           >
                             {element.label}
@@ -695,6 +694,7 @@ export default function Procedures() {
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
+                        setFilterKey('key');
                       }}
                     >
                       Show results

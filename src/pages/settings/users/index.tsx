@@ -77,7 +77,7 @@ const Users = () => {
   const [filterFieldName, setFilterFieldName] = React.useState('');
   const [filterType, setFilterType] = React.useState(null);
   const [filterAvailability, setFilterAvailability] = React.useState(null);
-  const [filterKey, setFilterKey] = React.useState(null);
+  const [filterKey, setFilterKey] = React.useState<any>(null);
 
   const [columnAnchorEl, setColumnAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -499,7 +499,6 @@ const Users = () => {
                           onClick={() => {
                             setFilterType(element.type);
                             setFilterOptions(element.filters[0]?.options);
-                            setFilterKey(element.id);
                           }}
                         >
                           {element.label}
@@ -603,6 +602,8 @@ const Users = () => {
                     onClick={() => {
                       handleFilterPopoverClose();
                       applyFilters(filterKey, filterSearchValue);
+                      setFilterKey('key');
+
                     }}
                   >
                     Show results

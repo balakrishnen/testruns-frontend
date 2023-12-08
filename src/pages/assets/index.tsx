@@ -490,7 +490,7 @@ export default function Assets() {
                             key={element.id}
                             onClick={() => {
                               setFilterType(element.type);
-                              setFilterKey(element.id);
+                              
                             }}
                           >
                             {element.label}
@@ -594,6 +594,7 @@ export default function Assets() {
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
+                        setFilterKey('key');
                       }}
                     >
                       Show results

@@ -206,7 +206,7 @@ export default function TableFilters({
                 <img src={bin} alt="Delete" className="Image-actions" />
                 Delete
               </Button>
-              {module !== 'assets' && (
+              {module == 'runs' && (
                 <Button className="delete-actions" onClick={handleAssignClick}>
                   <img src={assign} alt="assign" className="Image-actions" />
                   Assign
