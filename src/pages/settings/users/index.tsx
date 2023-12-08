@@ -169,6 +169,8 @@ const Users = () => {
    
   };
   const handleCheckboxValues = (id:any) => {
+       console.log('id---',id);
+       console.log('rowId',rowId.includes(id));
     // Check if the ID is already in the selectedIds
     if (rowId.includes(id)) {
       // If it is, remove it
@@ -178,6 +180,7 @@ const Users = () => {
       setRowId([...rowId, id]);
     }
   };
+
   const handleDeChange = handleDeCheckboxChange(
     isDeselectAllChecked,
     userData,
@@ -710,7 +713,8 @@ const Users = () => {
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                                  handleCheckboxValues( row._id),
+
+                                  handleCheckboxValues(row._id),
                                   handleChange(event, row._id);
                                 }}
                               />

@@ -2,6 +2,7 @@ import { Box, Drawer, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import '../../assets/styles/App.scss';
 import Avatars from '../../assets/images/Avatars.svg';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { fetchNotificationData } from '../../api/notification.API';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +13,8 @@ export default function AppNotificationDrawer({
   openDrawer,
   toggleNotificationDrawer,
 }: any) {
+
+  const [show, setShow] = React.useState(false);
   const NotificationSliceData = useSelector(
     (state: any) => state.notification.data?.get_all_notifications,
   );
@@ -53,7 +56,7 @@ export default function AppNotificationDrawer({
         },
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
-      onClose={toggleNotificationDrawer}
+      onClose={() => { toggleNotificationDrawer(), setShow(!show) }}
     >
       <Toolbar />
       <Box className="notification-header">
@@ -69,7 +72,11 @@ export default function AppNotificationDrawer({
                 cursor: 'pointer',
               }}
             >
-              <OpenInNewIcon style={{ width: '24px', height: '24px' }} />
+                <CloseOutlinedIcon
+                sx={{ cursor: 'pointer' }}
+                onClick={() => { toggleNotificationDrawer(), setShow(!show) }}
+              />
+              {/* <OpenInNewIcon style={{ width: '24px', height: '24px' }} /> */}
             </span>
           </Typography>
         </Box>
