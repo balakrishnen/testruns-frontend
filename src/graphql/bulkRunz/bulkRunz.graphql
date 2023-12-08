@@ -1,0 +1,18 @@
+import { gql } from '@apollo/client';
+
+export const POST_BULKRUNZ = gql`
+mutation BulkCreate_run($runs: [BulkCreateRun]) {
+    bulkCreate_run(runs: $runs) {
+        _id
+        runNumber
+        assignedTo
+        assignedBy
+        dueDate
+        status
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+        objective
+    }
+}`;

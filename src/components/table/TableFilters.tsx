@@ -74,6 +74,8 @@ export default function TableFilters({
   applyFilters,
   status,
   availability,
+  runzId,
+  runzRow
 }: any) {
   const [columnAnchorEl, setColumnAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -96,6 +98,7 @@ export default function TableFilters({
   ) => {
     setColumnAnchorEl(event.currentTarget);
   };
+  console.log(runzId,runzRow);
 
   const handleFilterPopoverClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -213,6 +216,8 @@ export default function TableFilters({
               <AddPeoplePopup
                 open={runsOpen}
                 close={() => setRunsOpen(false)}
+                runzId={runzId}
+                runzRow={runzRow}
               />
 
               <Button className="delete-actions" onClick={handleAssignClick}>

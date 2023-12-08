@@ -24,7 +24,7 @@ const Roles = () => {
   const loginUserSliceData=  useSelector(
     (state: any) => state.userLogin?.data?.verifyToken, 
   );
-  console.log(loginUserSliceData);
+  console.log("loginUserSliceData",loginUserSliceData);
   
   console.log(roleSliceData);
  
@@ -38,7 +38,7 @@ const Roles = () => {
     }
     dispatch(fetchSingleRoleData(payload))
   }, []);
-  console.log(roleData);
+  console.log("roleData",roleData);
 
   const initailState={
     procedure_management:[{

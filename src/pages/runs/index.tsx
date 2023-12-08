@@ -106,6 +106,7 @@ export default function Runs() {
   const endIndex = startIndex + itemsPerPage;
   const [runsData, setRunsData] = React.useState<any>([]);
   const [rowId, setRowId] = React.useState<any>([]);
+  const[runsRow, setRunsRow]=React.useState<any>([])
   const dispatch: any = useDispatch();
 
   const [pageInfo, setPageInfo] = React.useState({
@@ -175,7 +176,7 @@ export default function Runs() {
     dispatch(fetchRunsData(queryStrings));
     setTableHeaderVisible(false);
     setRowId([]);
-    // setRunsData(runsData);
+    setRunsRow([]);
   }, [pageInfo, queryStrings]);
 
   React.useEffect(() => {
@@ -368,16 +369,42 @@ export default function Runs() {
     payload['search'] = value;
     setQueryString(payload);
   };
-  const handleCheckboxValues = (id: any) => {
+  var arr:any=[]
+  const array = [
+    { id: "65670efa4e0aad001292d6ab", label: "users4@gmail.com", value: "adbul@testrunz.com" },
+    { id: "6561ef0d2f447d0012e3d8cd", label: "users14@gmail.com", value: "users4@gmail.com" },
+    { id: "6561ef0d2f447d0012e3d8cd", label: "users42@gmail.com", value: "users4@gmail.com" },
+    // ... other objects
+  ];
+  
+  const labelToFind = "users4@gmail.com";
+  
+  const newArray = array.filter(item => item.label !== labelToFind)
+                        .map(({ id, label }) => ({ id, label }));
+  
+  console.log(newArray);
+  const handleCheckboxValues = (id: any,row:any) => {
     // Check if the ID is already in the selectedIds
+    console.log(row);
+    
     if (rowId.includes(id)) {
       // If it is, remove it
       setRowId(rowId.filter((rowId: any) => rowId !== id));
+      
+      setRunsRow( runsRow.filter(item => item._id !== id)
+      .map((val) => (val)))
+      // setRunsRow(row)
     } else {
       // If it's not, add it
       setRowId([...rowId, id]);
+      // console.log("arr",[...row,row]);
+      
+      arr.push(row)
+      setRunsRow([...runsRow,row])
     }
   };
+  console.log("arr",runsRow);
+  
   // const handleChangePage = (event: unknown, newPage: number) => {
   //   setPage(newPage);
   // };
@@ -693,6 +720,8 @@ export default function Runs() {
           module="runs"
           status={runsStatus}
           applyFilters={applyFilters}
+          runzId={rowId}
+          runzRow={runsRow}
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
@@ -754,7 +783,7 @@ export default function Runs() {
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                                  handleCheckboxValues(row._id),
+                                  handleCheckboxValues(row._id,row),
                                     handleChange(event, row._id);
                                 }}
                               />
