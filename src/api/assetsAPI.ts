@@ -20,13 +20,15 @@ export const fetchAssetsData = (payload: any) => async (dispatch: any) => {
   }
 };
 
-export const postAssetsData = (payload: any) => async () => {
+export const postAssetsData = (payload: any) => async (dispatch: any) => {
   try {
     const response = await client.mutate({
       mutation: POST_ASSETS,
       variables: payload,
     });
     console.log(response);
+    const q: any = { page: 1, perPage: 10, sortOrder: 'desc' };
+    dispatch(fetchAssetsData(q));
   } catch (error: any) {
     console.log(error);
   }

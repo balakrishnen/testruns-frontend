@@ -130,7 +130,6 @@ const Addnewpopup = React.forwardRef(
        
         submitFormPopup();
         clearForm();
-        reload();
         // dispatch(fetchAssetsData(queryStrings));
       } else {
         formik.setFieldError('name', 'Invalid first name');

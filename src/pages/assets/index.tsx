@@ -148,7 +148,7 @@ export default function Assets() {
     setTimeout(() => {
       setLoader(false);
     }, 1000);
-  }, [pageInfo, queryStrings]);
+  }, [queryStrings]);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
