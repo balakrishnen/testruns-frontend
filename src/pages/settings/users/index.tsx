@@ -27,7 +27,11 @@ import DeletePopup from '../../../components/DeletePopup';
 import UserForm from './UserForm';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
 import SuccessPopup from '../../../components/SuccessPopup';
-import { fetchUserData, deleteUserData, fetchUpdateUserData } from '../../../api/userAPI';
+import {
+  fetchUserData,
+  deleteUserData,
+  fetchUpdateUserData,
+} from '../../../api/userAPI';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -80,7 +84,6 @@ const Users = () => {
   const [filterKey, setFilterKey] = React.useState<any>(null);
   const [filter, setFilter] = React.useState<any>(false);
 
-
   const [columnAnchorEl, setColumnAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const [filterPopoverEl, setFilterPopoverEl] =
@@ -100,9 +103,7 @@ const Users = () => {
     hasNextPage: false,
     hasPreviousPage: false,
   });
-  const userSliceData = useSelector(
-    (state: any) => state.user.data?.get_all_users,
-  );
+  const userSliceData = useSelector((state: any) => state.user.data);
 
   const Data = Rows.slice(startIndex, endIndex);
   const [rowId, setRowId] = React.useState<any>([]);
@@ -117,11 +118,11 @@ const Users = () => {
   );
 
   React.useEffect(() => {
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-    setUserData(userData);
-  },[userData]);
+    // setTimeout(() => {
+    //   setLoader(false);
+    // }, 1000);
+    userData && setUserData(userData);
+  }, [userData]);
 
   React.useEffect(() => {
     setLoader(true);
@@ -131,22 +132,23 @@ const Users = () => {
     setTimeout(() => {
       setLoader(false);
     }, 1000);
-  },[pageInfo,queryStrings]);
+  }, [queryStrings]);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
-    page['currentPage'] = userSliceData?.pageInfo.currentPage;
-    page['totalPages'] = userSliceData?.pageInfo.totalPages;
-    page['hasNextPage'] = userSliceData?.pageInfo.hasNextPage;
-    page['hasPreviousPage'] = userSliceData?.pageInfo.hasPreviousPage;
-    page['totalCount'] = userSliceData?.pageInfo.totalCount;
-    setUserData(userSliceData?.Identity);
+    page['currentPage'] = userSliceData?.get_all_users?.pageInfo.currentPage;
+    page['totalPages'] = userSliceData?.get_all_users?.pageInfo.totalPages;
+    page['hasNextPage'] = userSliceData?.get_all_users?.pageInfo.hasNextPage;
+    page['hasPreviousPage'] =
+      userSliceData?.get_all_users?.pageInfo.hasPreviousPage;
+    page['totalCount'] = userSliceData?.get_all_users?.pageInfo.totalCount;
+    userSliceData?.get_all_users?.Identity &&
+      setUserData(userSliceData?.get_all_users?.Identity);
     setPageInfo(page);
     // setTimeout(() => {
     //   setLoader(false);
     // }, 1000);
   }, [userSliceData]);
-
 
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
@@ -158,7 +160,6 @@ const Users = () => {
     setCurrentPage(page_no);
   };
 
-
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       userData,
@@ -168,15 +169,13 @@ const Users = () => {
       setTableHeaderVisible,
       setVisibleRow,
     )(event, id);
-   
   };
-  const handleCheckboxValues = (id:any) => {
-       console.log('id---',id);
-       console.log('rowId',rowId.includes(id));
+
+  const handleCheckboxValues = (id: any) => {
     // Check if the ID is already in the selectedIds
     if (rowId.includes(id)) {
       // If it is, remove it
-      setRowId(rowId.filter((rowId:any) => rowId !== id));
+      setRowId(rowId.filter((rowId: any) => rowId !== id));
     } else {
       // If it's not, add it
       setRowId([...rowId, id]);
@@ -224,7 +223,7 @@ const Users = () => {
     });
   };
 
-  const reload = () => {
+  const reload = () => {    
     const payload: any = {
       page: 1,
       perPage: 10,
@@ -295,7 +294,7 @@ const Users = () => {
     payload['searchBy'] = field;
     payload['search'] = value;
     setQueryString(payload);
-    setFilter(true)
+    setFilter(true);
   };
   const clickHandler = (e: MouseEvent) => {
     e.stopPropagation();
@@ -306,18 +305,15 @@ const Users = () => {
     var assetsChange: any = {
       _id: row._id,
     };
-      assetsChange['isActive'] = e.target.value;
-    
+    assetsChange['isActive'] = e.target.value;
+
     dispatch(fetchUpdateUserData(assetsChange));
-    toast(
-      `Assets status updated !`,
-      {
-        style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
+    toast(`Assets status updated !`, {
+      style: {
+        background: '#00bf70',
+        color: '#fff',
       },
-    );
+    });
     reload();
   };
   const handleFilterPopoverClose = () => {
@@ -340,20 +336,20 @@ const Users = () => {
     applyFilters('search', null);
     handleFilterPopoverClose();
     setFilterKey(null);
-    setFilter(false)
+    setFilter(false);
   };
 
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
-  const inputValue = "someValue";
+  const inputValue = 'someValue';
 
   // Assuming dataArray is your array of values
-  const dataArray = ["value1", "value2", "someValue", "value3"];
-  
+  const dataArray = ['value1', 'value2', 'someValue', 'value3'];
+
   // Use the filter method to create a new array excluding the inputValue
-  const filteredArray = dataArray.filter(value => value !== inputValue);
-  
+  const filteredArray = dataArray.filter((value) => value !== inputValue);
+
   // Now, filteredArray does not contain the inputValue
   console.log(rowId);
 
@@ -413,7 +409,7 @@ const Users = () => {
               {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
               <Badge
                 color="secondary"
-                variant={filter? 'dot' : 'standard'}
+                variant={filter ? 'dot' : 'standard'}
                 invisible={false}
                 className="red-badge-filter"
               >
@@ -470,10 +466,9 @@ const Users = () => {
                       size="small"
                       fullWidth
                       displayEmpty
-                      autoComplete='off'
+                      autoComplete="off"
                       IconComponent={ExpandMoreOutlinedIcon}
                       onChange={(event: any, data: any) => {
-                        //   debugger;
                         setFilterSearchValue(null);
                         setFilterSearchBy(event.target?.value);
                         setFilterFieldName(data.props.children);
@@ -484,7 +479,9 @@ const Users = () => {
                           setFilterOptions(getFilterOptions(roleSliceData));
                         }
                         if (event.target?.value === 'organisationId') {
-                          setFilterOptions(getFilterOptions(organizationSliceData));
+                          setFilterOptions(
+                            getFilterOptions(organizationSliceData),
+                          );
                         }
                         if (event.target?.value === 'status') {
                           setFilterOptions(StatusList);
@@ -534,7 +531,7 @@ const Users = () => {
                         placeholder="Search"
                         size="small"
                         value={filterSearchValue}
-                        autoComplete='off'
+                        autoComplete="off"
                         onChange={(event: any) =>
                           setFilterSearchValue(event.target.value)
                         }
@@ -607,7 +604,6 @@ const Users = () => {
                     onClick={() => {
                       handleFilterPopoverClose();
                       applyFilters(filterKey, filterSearchValue);
-
                     }}
                   >
                     Show results
@@ -719,7 +715,7 @@ const Users = () => {
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
                                   handleCheckboxValues(row._id),
-                                  handleChange(event, row._id);
+                                    handleChange(event, row._id);
                                 }}
                               />
                             </Box>
@@ -733,18 +729,17 @@ const Users = () => {
                                 />
                               </Box>
                               <Box sx={{ ml: 1 }}>
-                                <Box >{row.firstName} {row.lastName}</Box>
+                                <Box>
+                                  {row.firstName} {row.lastName}
+                                </Box>
                               </Box>
                             </Box>
                           </Box>
-                          
                         </TableCell>
                       )}
                       {headers[1].is_show && (
-                      <TableCell align="center">
-                        {row.email}
-                      </TableCell>
-                    )}
+                        <TableCell align="center">{row.email}</TableCell>
+                      )}
                       {headers[2].is_show && (
                         <TableCell align="center">
                           {
@@ -781,20 +776,12 @@ const Users = () => {
                             onClick={(e: any) => clickHandler(e)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                          
-                              <MenuItem
-                                value={true}
-                                key={true}
-                              >
-                                Active
-                              </MenuItem>
-                              <MenuItem
-                                value={false}
-                                key={false}
-                              >
-                                In-active
-                              </MenuItem>
-                            
+                            <MenuItem value={true} key={true}>
+                              Active
+                            </MenuItem>
+                            <MenuItem value={false} key={false}>
+                              In-active
+                            </MenuItem>
                           </Select>
                         </TableCell>
                       )}
@@ -826,7 +813,9 @@ const Users = () => {
         <DeletePopup
           rowId={rowId}
           ref={deletePopupRef}
-          closeDeletePopup={() => deletePopupRef.current.open(false, 'User',rowId)}
+          closeDeletePopup={() =>
+            deletePopupRef.current.open(false, 'User', rowId)
+          }
           deleteConfirmation={handleDeleteConfirmation}
           // reload={reload}
         />
