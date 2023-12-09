@@ -1,6 +1,22 @@
-import { GET_USER, POST_USER, DELETE_USER, UPDATE_USER, GET_SINGLE_USER , LOGIN_USER,GET_USER_DATA} from '../graphql/users/users.graphql';
-import { fetchUserFailure, fetchUserStart, fetchUserSuccess } from '../features/userSlice';
-import { fetchLoginUserFailure,fetchLoginUserStart,fetchLoginUserSuccess } from '../features/loginUserSlice';
+import {
+  GET_USER,
+  POST_USER,
+  DELETE_USER,
+  UPDATE_USER,
+  GET_SINGLE_USER,
+  LOGIN_USER,
+  GET_USER_DATA,
+} from '../graphql/users/users.graphql';
+import {
+  fetchUserFailure,
+  fetchUserStart,
+  fetchUserSuccess,
+} from '../features/userSlice';
+import {
+  fetchLoginUserFailure,
+  fetchLoginUserStart,
+  fetchLoginUserSuccess,
+} from '../features/loginUserSlice';
 import { client } from '../utils/config';
 
 export const fetchUserData = (payload: any) => async (dispatch: any) => {
@@ -16,13 +32,19 @@ export const fetchUserData = (payload: any) => async (dispatch: any) => {
     dispatch(fetchUserFailure(error.message));
   }
 };
-export const postUserData = (payload: any) => async () => {
+export const postUserData = (payload: any) => async (dispatch: any) => {
   try {
     const response = await client.mutate({
       mutation: POST_USER,
       variables: payload,
     });
     console.log(response);
+    const queryStrings: any = {
+      page: 1,
+      perPage: 10,
+      sortOrder: 'desc',
+    };
+    dispatch(fetchUserData(queryStrings));
   } catch (error: any) {
     console.log(error);
   }
@@ -46,21 +68,28 @@ export const fetchSingleUserData = (payload: any) => async (dispatch: any) => {
       query: GET_SINGLE_USER,
       variables: payload,
       fetchPolicy: 'network-only',
-    }); return response.data
+    });
+    return response.data;
     // dispatch(fetchUserSuccess(response.data));
   } catch (error: any) {
-    return error
+    return error;
     // dispatch(fetchUserFailure(error.message));
   }
 };
 
-export const fetchUpdateUserData = (payload: any) => async () => {
+export const fetchUpdateUserData = (payload: any) => async (dispatch: any) => {
   try {
     const response = await client.mutate({
       mutation: UPDATE_USER,
       variables: payload,
     });
     console.log(response);
+    const queryStrings: any = {
+      page: 1,
+      perPage: 10,
+      sortOrder: 'desc',
+    };
+    dispatch(fetchUserData(queryStrings));
   } catch (error: any) {
     console.log(error);
   }
@@ -92,7 +121,6 @@ export const fetchLoginUser = (payload: any) => async (dispatch: any) => {
     dispatch(fetchLoginUserFailure(error.message));
   }
 };
-
 
 // export const fetchLogoutUser = () => async (dispatch: any) => {
 //   dispatch(fetchLoginUserLogout());

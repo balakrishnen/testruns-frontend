@@ -151,14 +151,12 @@ const UserForm = React.forwardRef(
           laboratoryId: labArray,
           role: values.role,
         }
-        // debugger
         console.log(userValues);
         
         if (type == 'edit') {
           userValues['_id'] = userData?._id
           dispatch(fetchUpdateUserData(userValues))
-          submitFormPopup();
-          reload()
+          submitFormPopup();    
         }
         else {
           console.log(userValues);
@@ -167,7 +165,6 @@ const UserForm = React.forwardRef(
           userValues['uid'] = res.user.uid,
           dispatch(postUserData(userValues));
           submitFormPopup();
-          reload()
         });
         }catch (err){
           console.error(err);
