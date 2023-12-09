@@ -110,7 +110,7 @@ const RunsForm = React.forwardRef(
       formik.setFieldValue('laboratoryId',runzSliceData?.get_run?.laboratoryId)
       formik.setFieldValue('departmentId',runzSliceData?.get_run?.departmentId)
       formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId[0]?._id)
-      // formik.setFieldValue('procedureDetials',runzSliceData?.get_run?.procedureId[0]?.procedureDetials)
+      // formik.setFieldValue('dueDate',runzSliceData?.get_run?.dueDate )
 
       
       console.log("runzSliceData",runzSliceData);
@@ -190,7 +190,7 @@ const RunsForm = React.forwardRef(
       initialValues: {
         departmentId: formData ? formData.departmentId : "",
         laboratoryId: formData ? formData.laboratoryId : "",
-        organisationId: '655376ee659b7b0012108a34',
+        organisationId: '657420e5c63327a74f3c756a',
         procedureId: formData ? formData.procedureId?._id : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,

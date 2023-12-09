@@ -1687,16 +1687,17 @@ console.log("inputEl",inputEl);
             </Button>
             <Box
               sx={{ display: 'flex', alignItems: 'center' }}
-              onClick={() => printDocument()}
+             
             >
               {value == 1 && (
                 <img
+                onClick={() => printDocument()}
                   src={printer}
                   alt="printer"
                   style={{ marginRight: '1rem', cursor: 'pointer' }}
                 />
               )}
-              <Button type="submit" variant="contained" className="add-btn" onClick={()=>{value == 0 && onSubmit()}}>
+              <Button type="submit" variant="contained" className="add-btn" style={{position:"sticky"}} onClick={()=>{value == 0 && onSubmit()}}>
                 Save
               </Button>
             </Box>

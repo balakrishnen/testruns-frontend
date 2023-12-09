@@ -110,7 +110,7 @@ const Users = () => {
   const [visibleRow, setVisibleRow] = React.useState<any>(userData);
 
   const roleSliceData = useSelector(
-    (state: any) => state.role.data?.get_all_roles,
+    (state: any) => state.role.data?.find_roles,
   );
   const organizationSliceData = useSelector(
     (state: any) => state.organization.data?.get_all_organisations,

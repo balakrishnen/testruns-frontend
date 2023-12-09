@@ -195,3 +195,57 @@ mutation Update_role(
     }
 }
 `;
+
+export const FIND_ROLE = gql`
+query Find_roles($instituteId: String!) {
+    find_roles(instituteId: $instituteId){
+        _id
+        name
+        type
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+        procedure_management {
+            create
+            delete
+            edit
+            view
+            assign
+            share
+        }
+        asset_management {
+            create
+            delete
+            edit
+            view
+            assign
+            share
+        }
+        runs_management {
+            create
+            delete
+            edit
+            view
+            assign
+            share
+        }
+        profile_management {
+            editUserName
+            changePassword
+            editDepartment
+            editLab
+            editOrganisation
+            editContact
+        }
+        user_management {
+            create
+            delete
+            edit
+            view
+        }
+        role_management {
+            edit
+        }
+    }
+}`

@@ -343,7 +343,7 @@ const Profile = () => {
     (state: any) => state.lab.data?.get_all_labs,
   );
   const roleSliceData = useSelector(
-    (state: any) => state.role.data?.get_all_roles,
+    (state: any) => state.role.data?.find_roles,
   );
   const organizationSliceData = useSelector(
     (state: any) => state.organization.data?.get_all_organisations,
@@ -386,9 +386,12 @@ const Profile = () => {
   console.log(DepartmentList);
 
   React.useEffect(() => {
+    let payload2={
+      instituteId:loginUserSliceData?.instituteId
+    }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
-    dispatch(fetchRoleData());
+    dispatch(fetchRoleData(payload2));
   }, []);
   console.log(formikProfile);
 

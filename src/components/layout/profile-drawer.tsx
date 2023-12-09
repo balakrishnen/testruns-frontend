@@ -81,7 +81,7 @@ export default function AppProfileDrawer({
     (state: any) => state.user.data?.get_user,
   );
   const roleSliceData = useSelector(
-    (state: any) => state.role.data?.get_all_roles,
+    (state: any) => state.role.data?.find_roles,
   );
   React.useEffect(() => {
     setDepartmentData(departmentSliceData?.map((item: any) => ({
@@ -91,7 +91,8 @@ export default function AppProfileDrawer({
     })))
     setLabData(labSliceData?.map((item: any) => ({
       label: item.name,
-      value: item._id
+      value: item._id,
+      id: item._id,
     })))
     setOrganizationData(
       organizationSliceData?.map((item: any) => ({
@@ -110,7 +111,7 @@ export default function AppProfileDrawer({
 
   }, [departmentSliceData, labSliceData, organizationSliceData, userSliceData, roleSliceData])
 
-  console.log(userDetail);
+  console.log(roleData);
 
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
@@ -121,13 +122,29 @@ export default function AppProfileDrawer({
   const loginUserSliceData=  useSelector(
     (state: any) => state.userLogin?.data?.verifyToken, 
   );
-  
+  var payload2={
+    instituteId:loginUserSliceData?.instituteId
+  }
+  React.useEffect(() => {
+    let payload = {
+      _id:  loginUserSliceData?._id
+    }
+    dispatch(fetchDepartmentData());
+    dispatch(fetchLabData());
+    dispatch(fetchOrganizationData());
+    
+    dispatch(fetchRoleData(payload2))
+    dispatch(fetchSingleUserData(payload))
+    setEdit(true)
+    // setUploadedFile(null)
+  }, []);
   React.useEffect(()=>{
     let temp = { '_id': loginUserSliceData?._id}
     // if (row?._id) {
+    
     dispatch(fetchSingleUserData(temp)).then((isSucess: { get_user: { firstName: any; lastName: any; email: any; phoneNumber: any; organisationId: any; departmentId: any[]; role: any; }; }) => {
       if (isSucess.get_user) {
-        console.log(isSucess.get_user);
+        console.log(isSucess.get_user.role);
         formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
         formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
         formik.setFieldValue('email', isSucess.get_user.email || '');
@@ -137,7 +154,6 @@ export default function AppProfileDrawer({
         // formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
         formik.setFieldValue('role', isSucess.get_user.role || '');
         formik.setFieldValue('institution', isSucess.get_user.instituteId || "");
-
         setUploadedFile(isSucess.get_user.imageUrl)
       }
     })
@@ -145,19 +161,8 @@ export default function AppProfileDrawer({
         console.log(err);
       });
     // }    
-  }, [departmentData, labData, loginUserSliceData])
-  React.useEffect(() => {
-    let payload = {
-      _id:  loginUserSliceData?._id
-    }
-    dispatch(fetchDepartmentData());
-    dispatch(fetchLabData());
-    dispatch(fetchOrganizationData());
-    dispatch(fetchRoleData())
-    dispatch(fetchSingleUserData(payload))
-    setEdit(true)
-    // setUploadedFile(null)
-  }, []);
+  }, [departmentData, labData, loginUserSliceData,roleSliceData])
+ 
   const checkCredentialsProfile = (
     firstName: any,
   ) => {

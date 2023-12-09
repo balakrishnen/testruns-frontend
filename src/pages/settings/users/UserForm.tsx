@@ -231,7 +231,7 @@ const UserForm = React.forwardRef(
       (state: any) => state.lab.data?.get_all_labs,
     );
     const roleSliceData = useSelector(
-      (state: any) => state.role.data?.get_all_roles,
+      (state: any) => state.role.data?.find_roles,
     );
     const organizationSliceData = useSelector(
       (state: any) => state.organization.data?.get_all_organisations,
@@ -280,11 +280,14 @@ const UserForm = React.forwardRef(
     console.log(departmentData);
 
     console.log(DepartmentList);
-
+    let payload2={
+      instituteId:userData?.instituteId
+    }
     React.useEffect(() => {
+     
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
-      dispatch(fetchRoleData());
+      dispatch(fetchRoleData(payload2));
       dispatch(fetchinstitutionData())
     }, []);
 
