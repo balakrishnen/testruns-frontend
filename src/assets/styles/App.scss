@@ -1266,6 +1266,7 @@ tbody td .td-select {
 .active-select.td-select .MuiSelect-select,
 .inuse-select.td-select .MuiSelect-select,
 .create-select.td-select .MuiSelect-select,
+.submit-select.td-select .MuiSelect-select,
 .start-select.td-select .MuiSelect-select {
   width: 140px;
   border-radius: 20px;
@@ -1285,7 +1286,9 @@ tbody td .td-select {
 .inactive-select.td-select .MuiSelect-select {
   background: $red;
 }
-
+.submit-select.td-select .MuiSelect-select{
+  background: #a01fb1;
+}
 .active-select.td-select .MuiSelect-select {
   background: $green;
 }

@@ -22,6 +22,7 @@ export const RunsStatusList = [
   { id: 1, name: 'Created', value: 'Created' },
   { id: 2, name: 'Started', value: 'Started' },
   { id: 3, name: 'Stopped', value: 'Stopped' },
+  { id: 4, name: 'Submitted', value: 'Submitted' },
   { id: 3, name: 'Completed', value: 'Complete' },
 ];
 

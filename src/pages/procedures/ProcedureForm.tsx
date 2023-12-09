@@ -103,7 +103,7 @@ const ProcedureForm = React.forwardRef(
         laboratoryId: labArray,
         createdBy: values.createdBy,
         procedureDetials: values.procedureDetials,
-        instituteId: "6548f51edf956b3b14ca00e0"
+        instituteId: "65741c069d53d19df8321e6b"
       };
       if (type == 'create') {
         procedures['organisationId'] = values.organisationId
@@ -201,7 +201,7 @@ const ProcedureForm = React.forwardRef(
         createdBy: new Date(),
         departmentId: formData?formData.departmentId:"",
         laboratoryId: formData?formData.laboratoryId:"",
-        organisationId: formData?formData.organisationId:"655376d2659b7b0012108a33",
+        organisationId: formData?formData.organisationId:"657420e5c63327a74f3c756a",
         procedureDetials:''
       },
       validationSchema: validationSchema,
@@ -397,7 +397,7 @@ const ProcedureForm = React.forwardRef(
                           value.id == option.id
                         }
                         renderInput={(params) => (
-                          <TextField {...params} placeholder="Department/s" />
+                          <TextField {...params} placeholder={departments.length==0?"Department/s":""} />
                         )}
                         fullWidth
                         placeholder="Department"
@@ -491,7 +491,7 @@ const ProcedureForm = React.forwardRef(
                         }
                         disableCloseOnSelect
                         value={laboratory}
-                        renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies" />}
+                        renderInput={(params) => <TextField {...params} placeholder={laboratory.length==0?"Laboratory/ies":""} />}
                         fullWidth
                         placeholder="Laboratory"
                         size="medium"

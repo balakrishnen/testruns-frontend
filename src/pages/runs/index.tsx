@@ -977,6 +977,8 @@ export default function Runs() {
                                 ? 'create-select td-select'
                                 : row.status === 'Started'
                                 ? 'start-select td-select'
+                                : row.status === 'Submitted'
+                                ? 'submit-select td-select'
                                 : row.status === 'Complete'
                                 ? 'active-select td-select'
                                 : 'inactive-select td-select'

@@ -93,12 +93,12 @@ const userSliceData = useSelector(
             lastName: "",
             email: values.email,
             uid:res.user.uid,
-            organisationId:"655376d2659b7b0012108a33",
-            role:"6564afdbc3bd760012def0f4",
+            organisationId:"657420e5c63327a74f3c756a",
+            role:"65741c069d53d19df8321e6e",
             // phoneNumber:'9876543210',
             departmentId: [],
             laboratoryId: [],
-            instituteId: "",
+            instituteId: "65741c069d53d19df8321e6b",
           }
           dispatch(postUserData(payload))
           toast(`Signup successful !`, {

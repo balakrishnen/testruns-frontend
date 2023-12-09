@@ -189,7 +189,7 @@ export default function AppProfileDrawer({
         phoneNumber: values.phoneNumber.toString(),
         organisationId: values.organisationId,
         imageUrl:uploadedFile,
-        instituteId: "6548f51edf956b3b14ca00e0",
+        instituteId: "65741c069d53d19df8321e6b",
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,
@@ -604,10 +604,9 @@ export default function AppProfileDrawer({
                         value?.id == option?.id
                       }
                       renderInput={(params) => (
-                        <TextField {...params} placeholder="Department/s" />
+                        <TextField {...params} placeholder={formik.values.departmentId.length==0?"Department/s" :""}/>
                       )}
                       fullWidth
-                      placeholder="Department"
                       size="medium"
                       renderOption={(
                         props,

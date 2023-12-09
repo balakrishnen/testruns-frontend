@@ -85,7 +85,7 @@ const validationSchema = Yup.object().shape({
   availability: Yup.string().required('Availability is required'),
   perchasedDate: Yup.string().required('Purchase date is required'),
   expiryDate: Yup.string().required('Expiry date is required'),
- 
+  assetImageUrl:Yup.string().required('Asset image is required')
  
   // lastUsedDate: Yup.string().required(),
 });
@@ -236,6 +236,7 @@ export default function AssetDetails() {
         organisationId: values?.organisationId,
         perchasedDate: values?.perchasedDate,
         lastUsedDate: values.lastUsedDate,
+        assetImageUrl:values.assetImageUrl,
         availability: values.availability,
         expiryDate: values?.expiryDate,
         departmentId: deptArray,
@@ -333,7 +334,7 @@ console.log(assetValue?.organisationId,);
       // userId: 'USER_1001', 
       status: assetValue?.status,
       availability: assetValue?.availability,
-      
+      assetImageUrl:uploadedFile,
       // assets_id: assetValue.assets_id,
       lastUsedDate: assetValue?.lastUsedDate,
       perchasedDate:dayjs(purchaseDate),
@@ -391,6 +392,9 @@ console.log(assetValue?.organisationId,);
       });
     });
   };
+
+  console.log("formik",formik);
+  
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -663,7 +667,7 @@ console.log(assetValue?.organisationId,);
                                 value.id == option.id
                               }
                               renderInput={(params) => (
-                                <TextField {...params} />
+                                <TextField {...params} placeholder={departments.length==0?"Department/s":""} />
                               )}
                               fullWidth
                               placeholder="Department"
@@ -762,7 +766,7 @@ console.log(assetValue?.organisationId,);
                             }
                             disableCloseOnSelect
                             value={laboratory}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => <TextField {...params} placeholder={laboratory.length==0?"Laboratory/ies":""}/>}
                             fullWidth
                             placeholder="Laboratory"
                             size="medium"

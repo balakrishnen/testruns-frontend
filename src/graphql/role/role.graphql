@@ -1,23 +1,47 @@
 import { gql } from '@apollo/client';
 
 gql`
-type ProcedureManagementType {
-  create: Boolean
-  delete: Boolean
-  edit: Boolean
-  view: Boolean
-  assign: Boolean
-  share: Boolean
+  input ProcedureManagement {
+    create: Boolean
+    delete: Boolean
+    edit: Boolean
+    view: Boolean
+    assign:Boolean
+    share: Boolean
+    }
+  input ProfileManagement {
+  editUserName: Boolean
+  changePassword: Boolean
+  editDepartment: Boolean
+  editLab: Boolean
+  editOrganisation: Boolean
+  editContact: Boolean
 }
-
-input ProcedureManagementInput {
-  create: Boolean
-  delete: Boolean
-  edit: Boolean
-  view: Boolean
-  assign: Boolean
-  share: Boolean
+  input UserManagement {
+    create: Boolean
+    delete: Boolean
+    edit: Boolean
+    view: Boolean
 }
+  input RoleManagement {
+  edit: Boolean
+}
+  input RunsManagement {
+          create: Boolean
+          delete: Boolean
+          edit: Boolean
+          view: Boolean
+          assign:Boolean
+          share:Boolean
+        }
+ input AssetManagement {
+          create: Boolean
+          delete: Boolean
+          edit: Boolean
+          view: Boolean
+          assign:Boolean
+          share:Boolean
+        }
 `
 export const GET_ALL_ROLE = gql`
 
@@ -61,19 +85,21 @@ query Get_all_roles {
 export const GET_ROLE = gql`
 query Get_role($instituteId :String!) {
     get_role(instituteId: $instituteId) {
-        _id
+         _id
         name
+        type
         isActive
         isDeleted
         createdAt
         updatedAt
-        procedure_management {
+        role_management {
+            edit
+        }
+        user_management {
             create
             delete
             edit
             view
-            assign
-            share
         }
         profile_management {
             editUserName
@@ -83,39 +109,57 @@ query Get_role($instituteId :String!) {
             editOrganisation
             editContact
         }
-        user_management {
+        runs_management {
             create
             delete
             edit
             view
+            assign
+            share
         }
-        role_management {
+        asset_management {
+            create
+            delete
             edit
+            view
+            assign
+            share
+        }
+        procedure_management {
+            create
+            delete
+            edit
+            view
+            assign
+            share
         }
     }
 }
 `;
- 
-
-
 
 export const UPDATE_ROLE = gql`
 
 mutation Update_role(
-     $_id: String!
+        $_id: String!
         $name: String
-        $procedure_management: [ProcedureManagementType]
-        $profile_management: [ProfileManagementType]
-        $user_management: [UserManagementType]
-        $role_management: [RoleManagementType]
+        $procedure_management:[ProcedureManagement]
+        $asset_management:[AssetManagement]!
+        $runs_management:[RunsManagement]! 
+        $profile_management:[ProfileManagement]
+        $instituteId: String, 
+        $user_management:[UserManagement] 
+        $role_management:[RoleManagement]
 ) {
     update_role(
         _id : $_id
         name : $name
-        procedure_management : $procedure_management
-        profile_management : $profile_management
-        user_management : $user_management
-        role_management : $role_management
+        procedure_management:$procedure_management
+        asset_management:$asset_management
+        runs_management:$runs_management 
+        profile_management:$profile_management
+        instituteId:$instituteId 
+        user_management:$user_management
+        role_management:$role_management
     ) {
         _id
         name

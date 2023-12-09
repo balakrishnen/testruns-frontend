@@ -119,7 +119,7 @@ const Addnewpopup = React.forwardRef(
         departmentId: deptArray,
         laboratoryId: labArray,
         status: values.status,
-        instituteId:"6548f51edf956b3b14ca00e0"
+        instituteId:"65741c069d53d19df8321e6b"
         }
         console.log(values.organisationId);
         if(uploadedFile!==null){
@@ -593,7 +593,7 @@ const Addnewpopup = React.forwardRef(
                               value.id == option.id
                             }
                             renderInput={(params) => (
-                              <TextField {...params} placeholder="Department/s" />
+                              <TextField {...params} placeholder={departments.length==0?"Department/s":""} />
                             )}
                             fullWidth
                             placeholder="Department"
@@ -649,7 +649,7 @@ const Addnewpopup = React.forwardRef(
                             disableCloseOnSelect
                             value={laboratory}
                             renderInput={(params) => (
-                              <TextField {...params} placeholder="Laboratory/ies"/>
+                              <TextField {...params} placeholder={laboratory.length==0?"Laboratory/ies":""}/>
                             )}
                             fullWidth
                             placeholder="Laboratory"

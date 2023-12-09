@@ -146,7 +146,7 @@ const UserForm = React.forwardRef(
           email: values.email,
           phoneNumber: values.phoneNumber.toString(),
           organisationId: values.organisationId,
-          instituteId: "6548f51edf956b3b14ca00e0",
+          instituteId: "65741c069d53d19df8321e6b",
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,
@@ -618,7 +618,7 @@ const UserForm = React.forwardRef(
                               value.id == option.id
                               }
                               renderInput={(params) => (
-                                <TextField {...params} placeholder="Department/s"/>
+                                <TextField {...params} placeholder={formik.values.departmentId.length==0?"Department/s":""} />
                               )}
                               fullWidth
                               placeholder="Department"
@@ -680,7 +680,7 @@ const UserForm = React.forwardRef(
                                 }
                                 disableCloseOnSelect
                                
-                                renderInput={(params) => <TextField {...params} placeholder="Laboratory/ies"/>}
+                                renderInput={(params) => <TextField {...params} placeholder={formik.values.laboratoryId.length==0?"Laboratory/ies":""}/>}
                                 fullWidth
                                 placeholder="Laboratory"
                                 size="medium"
