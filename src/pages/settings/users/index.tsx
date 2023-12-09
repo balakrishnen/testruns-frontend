@@ -125,6 +125,16 @@ const Users = () => {
   }, [userData]);
 
   React.useEffect(() => {
+    return () => {
+      const headersList: any = [...headers];
+      headersList.map((item) => {
+        return (item.sort = 'asc');
+      });
+      setHeaders(headersList);
+    };
+  }, []);
+  
+  React.useEffect(() => {
     setLoader(true);
     dispatch(fetchUserData(queryStrings));
     setTableHeaderVisible(false);
