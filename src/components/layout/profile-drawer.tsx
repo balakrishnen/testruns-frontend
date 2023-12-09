@@ -609,7 +609,7 @@ export default function AppProfileDrawer({
                         value?.id == option?.id
                       }
                       renderInput={(params) => (
-                        <TextField {...params} placeholder={formik.values.departmentId.length==0?"Department/s" :""}/>
+                        <TextField {...params} placeholder={formik.values.departmentId?.length==0?"Department/s" :""}/>
                       )}
                       fullWidth
                       size="medium"

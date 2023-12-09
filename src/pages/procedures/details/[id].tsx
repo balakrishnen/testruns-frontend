@@ -566,7 +566,7 @@ const handleEditorInit = (editor:any) => {
                     isOptionEqualToValue={(option: any, value: any) =>
                       value.id == option.id
                     }
-                    renderInput={(params) => <TextField {...params} placeholder='Assets name' />}
+                    renderInput={(params) => <TextField {...params} 'Assets name' />}
                     fullWidth
                     placeholder="Department"
                     size="medium"
