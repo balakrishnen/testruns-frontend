@@ -64,9 +64,10 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('newpassword'), ''], 'Password mismatch'),
 });
 const validationSchemaProfile = Yup.object().shape({
-  firstName: Yup.string().required('First name is required'),
-
-  lastName: Yup.string().required('Lase name is required'),
+  // firstName: Yup.string().required('First name is required'),
+  firstName: Yup.string().trim().required('First name is required').matches(/^\S*$/, 'Label cannot have empty spaces'),
+  // lastName: Yup.string().required('Lase name is required'),
+  lastName: Yup.string().trim().required('Lase name is required').matches(/^\S*$/, 'Label cannot have empty spaces'),
   email: Yup.string()
     .required('Email is required')
     .email('Invalid email')
