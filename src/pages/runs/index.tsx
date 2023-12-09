@@ -174,6 +174,16 @@ export default function Runs() {
   }, [runsData]);
 
   React.useEffect(() => {
+    return () => {
+      const headersList: any = [...headers];
+      headersList.map((item) => {
+        return (item.sort = 'asc');
+      });
+      setHeaders(headersList);
+    };
+  }, []);
+  
+  React.useEffect(() => {
     setLoader(true);
     dispatch(fetchRunsData(queryStrings));
     setTableHeaderVisible(false);

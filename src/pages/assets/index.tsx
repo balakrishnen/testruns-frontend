@@ -105,7 +105,7 @@ export default function Assets() {
   console.log(rowId);
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
   const [loader, setLoader] = React.useState(false);
-  const [filter, setFilter]=React.useState(false)
+  const [filter, setFilter] = React.useState(false);
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -139,6 +139,16 @@ export default function Assets() {
     }, 1000);
     setAssetsData(assetsData);
   }, [assetsData]);
+
+  React.useEffect(() => {
+    return () => {
+      const headersList: any = [...headers];
+      headersList.map((item) => {
+        return (item.sort = 'asc');
+      });
+      setHeaders(headersList);
+    };
+  }, []);
 
   React.useEffect(() => {
     setLoader(true);
@@ -184,7 +194,7 @@ export default function Assets() {
     applyFilters(null, null);
     handleFilterPopoverClose();
     setFilterKey(null);
-    setFilter(false)
+    setFilter(false);
   };
 
   const handlePageChange = (even: any, page_no: number) => {
@@ -344,7 +354,7 @@ export default function Assets() {
     payload['searchBy'] = key;
     payload['search'] = value;
     setQueryString(payload);
-    setFilter(true)
+    setFilter(true);
   };
 
   const Placeholder = ({ children }: any) => {
@@ -393,7 +403,7 @@ export default function Assets() {
               >
                 <Badge
                   color="secondary"
-                  variant={filter? 'dot' : 'standard'}
+                  variant={filter ? 'dot' : 'standard'}
                   invisible={false}
                   className="red-badge-filter"
                 >
@@ -694,7 +704,11 @@ export default function Assets() {
                                 >
                                   <Box>
                                     <img
-                                      src={row?.assetImageUrl==null ? test:row?.assetImageUrl}
+                                      src={
+                                        row?.assetImageUrl == null
+                                          ? test
+                                          : row?.assetImageUrl
+                                      }
                                       alt="no_image"
                                       style={{ width: '50px', height: '50px' }}
                                     />
