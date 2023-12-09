@@ -118,6 +118,16 @@ export default function HistoryTable() {
         setRunzData(RunsSliceData?.Runs);
         setPageInfo(page);
       }, [RunsSliceData]);
+      
+      React.useEffect(() => {
+        return () => {
+          const headersList: any = [...headers];
+          headersList.map((item) => {
+            return (item.sort = 'asc');
+          });
+          setHeaders(headersList);
+        };
+      }, []);
     
       const handlePageChange = (even: any, page_no: number) => {
         const payload: any = { ...queryStrings };

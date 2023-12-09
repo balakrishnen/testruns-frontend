@@ -166,8 +166,16 @@ export default function Assets() {
 
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
-  };
-
+  };  
+  React.useEffect(() => {
+    return () => {
+      const headersList: any = [...headers];
+      headersList.map((item) => {
+        return (item.sort = 'asc');
+      });
+      setHeaders(headersList);
+    };
+  }, []);
   const handleFilterPopoverClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
