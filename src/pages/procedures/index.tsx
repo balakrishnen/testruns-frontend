@@ -167,11 +167,11 @@ export default function Procedures() {
   }, [procedureData]);
 
   React.useEffect(() => {
-    setLoader(true);
+    // setLoader(true);
     dispatch(fetchProcedureData(queryStrings));
     setTableHeaderVisible(false);
     setRowId([]);
-  }, [queryStrings]);
+  }, [pageInfo,queryStrings]);
   // console.log('procedureData',procedureData[0].departmentId.length);
 
   React.useEffect(() => {

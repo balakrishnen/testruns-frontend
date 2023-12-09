@@ -85,39 +85,9 @@ export const POST_RUNS = gql`
         isDeleted
         createdAt
         updatedAt
-        departmentId {
-            _id
-            name
-            departmentNumber
-            organisationID
-            status
-            isActive
-            isDeleted
-            createdAt
-            updatedAt
-        }
-        laboratoryId {
-            _id
-            name
-            departmentId
-            isActive
-            isDeleted
-            createdAt
-            updatedAt
-        }
-        procedureId {
-            _id
-            name
-            procedureNumber
-            procedureDetials
-            departmentId
-            laboratoryId
-           
-            isActive
-            isDeleted
-            createdAt
-            updatedAt
-        }
+        departmentId 
+        laboratoryId 
+        procedureId
       
     }
   }

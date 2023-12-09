@@ -88,7 +88,7 @@ const ProcedureForm = React.forwardRef(
 
       return true;
     };
-    const onSubmit = (values: any) => {
+    const onSubmit = async(values: any) => {
       console.log("values", values);
 
       const isMatch = checkCredentials(values.name);
@@ -131,7 +131,7 @@ const ProcedureForm = React.forwardRef(
           // }
         }
         else {
-          dispatch(postProcedureData(procedures));
+          await dispatch(postProcedureData(procedures));
           submitFormPopup();
           clearForm()
           reload()

@@ -179,7 +179,7 @@ export default function Runs() {
     setTableHeaderVisible(false);
     setRowId([]);
     setRunsRow([]);
-  }, [queryStrings]);
+  }, [pageInfo,queryStrings]);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };

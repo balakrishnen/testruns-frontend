@@ -693,7 +693,6 @@ console.log("result",htmlInput);
       filteredData = filteredData?.map((sublist) =>
         sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
       );
-console.log("filteredData",filteredData);
 
       const results = filteredData?.map((dataset, index) => {
         const subResult = [];
@@ -926,6 +925,7 @@ console.log("filteredData",filteredData);
       },
     });
     // reload();
+    handleReloadSingleData()
   };
 
   const handleChartChange = (event: any) => {
@@ -1242,39 +1242,68 @@ console.log("inputEl",inputEl);
               <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
                 <Box>
                   <Typography className="id-detail">Status</Typography>
-                  <FormControl
+                  {/* <FormControl
                     className="Status-info"
                     style={{ marginTop: '7px' }}
-                  >
+                  > */}
                     <Box
-                      style={{
-                        borderRadius: '20px',
-                        color: 'white',
-                        width: '110px',
-                        padding: '9px 0px',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        height: '24px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        fontSize: '12px',
-                        backgroundColor:
-                          runzValue?.status == 'Created'
-                            ? '#8d8d8d'
-                            : runzValue?.status == 'Started'
-                              ? '#faaa49'
-                              : runzValue?.status == 'Complete'
-                                ? '#00bf70'
-                                : '#e2445c',
-                      }}
+                     style={{padding:"0px"}}
+                      // style={{
+                      //   borderRadius: '20px',
+                      //   color: 'white',
+                      //   width: '110px',
+                      //   padding: '9px 0px',
+                      //   alignItems: 'center',
+                      //   textAlign: 'center',
+                      //   height: '24px',
+                      //   display: 'flex',
+                      //   justifyContent: 'center',
+                      //   fontSize: '12px',
+                      //   backgroundColor:
+                      //     runzValue?.status == 'Created'
+                      //       ? '#8d8d8d'
+                      //       : runzValue?.status == 'Started'
+                      //         ? '#faaa49'
+                      //         : runzValue?.status == 'Complete'
+                      //           ? '#00bf70'
+                      //           : '#e2445c',
+                      // }}
                     >
-                      {runzValue?.status == 'Created'
+                      <Select
+                            name="status"
+                          style={{borderRadius: "11px",color:"white"}}  
+
+                            className={
+                              runzValue?.status === 'Created'
+                                ? 'create-select td-select'
+                                : runzValue?.status === 'Started'
+                                ? 'start-select td-select'
+                                : runzValue?.status === 'Complete'
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
+                            }
+                            value={runzValue?.status ? runzValue?.status : 'Stopped'}
+                            displayEmpty
+                            // onClick={(e: any) => clickHandler(e)}
+                            onChange={(e) => handleOnChange(e, runzValue)}
+                            IconComponent={ExpandMoreOutlinedIcon}
+                          >
+                            {runsStatus?.map((element: any) => (
+                              <MenuItem
+                                value={element.value}
+                                key={element.value}
+                              >
+                                {element.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                      {/* {runzValue?.status == 'Created'
                         ? 'Created'
                         : runzValue?.status == 'Started'
                           ? 'Started'
                           : runzValue?.status == 'Complete'
                             ? 'Completed'
-                            : 'Stopped'}
+                            : 'Stopped'} */}
                     </Box>
                     {/* <Select
                       labelId="Status-popup-label"
@@ -1299,7 +1328,7 @@ console.log("inputEl",inputEl);
                               </MenuItem>
                             ))}
                     </Select> */}
-                  </FormControl>
+                  {/* </FormControl> */}
                   {/* <FormControl className="Status-info"> */}
                   {/* <Select
                             name="status"
