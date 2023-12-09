@@ -39,7 +39,8 @@ const validationSchema = Yup.object().shape({
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
   laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
   organisationId: Yup.string().notRequired(),
-  name: Yup.string().required("Procedure name is required"),
+  // name: Yup.string().required("Procedure name is required"),
+  name: Yup.string().trim().required("Procedure name is required").matches(/^\S*$/, 'Label cannot have empty spaces'),
 });
 
 const ProcedureForm = React.forwardRef(
@@ -397,7 +398,7 @@ const ProcedureForm = React.forwardRef(
                           value.id == option.id
                         }
                         renderInput={(params) => (
-                          <TextField {...params} placeholder={departments.length==0?"Department/s":""} />
+                          <TextField {...params} placeholder={departments?.length==0?"Department/s":""} />
                         )}
                         fullWidth
                         placeholder="Department"
@@ -491,7 +492,7 @@ const ProcedureForm = React.forwardRef(
                         }
                         disableCloseOnSelect
                         value={laboratory}
-                        renderInput={(params) => <TextField {...params} placeholder={laboratory.length==0?"Laboratory/ies":""} />}
+                        renderInput={(params) => <TextField {...params} placeholder={laboratory?.length==0?"Laboratory/ies":""} />}
                         fullWidth
                         placeholder="Laboratory"
                         size="medium"

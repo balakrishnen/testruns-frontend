@@ -3,14 +3,15 @@ import {
     fetchRoleSuccess,
     fetchRoleFailure,
 } from '../features/roleSlice';
-import { GET_ALL_ROLE, GET_ROLE, UPDATE_ROLE} from '../graphql/role/role.graphql';
+import { FIND_ROLE, GET_ROLE, UPDATE_ROLE} from '../graphql/role/role.graphql';
 import { client } from '../utils/config';
 
-export const fetchRoleData = () => async (dispatch: any) => {
+export const fetchRoleData = (payload:any) => async (dispatch: any) => {
     dispatch(fetchRoleStart());
     try {
         const response = await client.query({
-            query: GET_ALL_ROLE
+            query: FIND_ROLE,
+            variables: payload,
         });
 
         dispatch(fetchRoleSuccess(response.data));

@@ -228,7 +228,7 @@ const UserForm = React.forwardRef(
       (state: any) => state.lab.data?.get_all_labs,
     );
     const roleSliceData = useSelector(
-      (state: any) => state.role.data?.get_all_roles,
+      (state: any) => state.role.data?.find_roles,
     );
     const organizationSliceData = useSelector(
       (state: any) => state.organization.data?.get_all_organisations,
@@ -277,11 +277,14 @@ const UserForm = React.forwardRef(
     console.log(departmentData);
 
     console.log(DepartmentList);
-
+    let payload2={
+      instituteId:userData?.instituteId
+    }
     React.useEffect(() => {
+     
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
-      dispatch(fetchRoleData());
+      dispatch(fetchRoleData(payload2));
       dispatch(fetchinstitutionData())
     }, []);
 
@@ -615,7 +618,7 @@ const UserForm = React.forwardRef(
                               value.id == option.id
                               }
                               renderInput={(params) => (
-                                <TextField {...params} placeholder={formik.values.departmentId.length==0?"Department/s":""} />
+                                <TextField {...params} placeholder={formik.values.departmentId?.length==0?"Department/s":""} />
                               )}
                               fullWidth
                               placeholder="Department"
@@ -677,7 +680,7 @@ const UserForm = React.forwardRef(
                                 }
                                 disableCloseOnSelect
                                
-                                renderInput={(params) => <TextField {...params} placeholder={formik.values.laboratoryId.length==0?"Laboratory/ies":""}/>}
+                                renderInput={(params) => <TextField {...params} placeholder={formik.values.laboratoryId?.length==0?"Laboratory/ies":""}/>}
                                 fullWidth
                                 placeholder="Laboratory"
                                 size="medium"

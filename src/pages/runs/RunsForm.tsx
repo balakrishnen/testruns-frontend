@@ -49,7 +49,7 @@ const validationSchema = Yup.object().shape({
   createdAt: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
-  objective: Yup.string().required('Test Objective is required'),
+  objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^\S*$/, 'Label cannot have empty spaces'),
   dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().required(),
   organisationId:Yup.string().required('Procedure Name is required')
@@ -110,7 +110,7 @@ const RunsForm = React.forwardRef(
       formik.setFieldValue('laboratoryId',runzSliceData?.get_run?.laboratoryId)
       formik.setFieldValue('departmentId',runzSliceData?.get_run?.departmentId)
       formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId[0]?._id)
-      // formik.setFieldValue('procedureDetials',runzSliceData?.get_run?.procedureId[0]?.procedureDetials)
+      // formik.setFieldValue('dueDate',runzSliceData?.get_run?.dueDate )
 
       
       console.log("runzSliceData",runzSliceData);
@@ -190,7 +190,7 @@ const RunsForm = React.forwardRef(
       initialValues: {
         departmentId: formData ? formData.departmentId : "",
         laboratoryId: formData ? formData.laboratoryId : "",
-        organisationId: '655376ee659b7b0012108a34',
+        organisationId: '657420e5c63327a74f3c756a',
         procedureId: formData ? formData.procedureId?._id : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
@@ -472,7 +472,7 @@ const RunsForm = React.forwardRef(
                           </React.Fragment>
                         )}
                         onChange={(_, selectedOptions: any) => setDepartment(selectedOptions)}
-                        renderInput={(params) => <TextField {...params} value={params.value} placeholder={department.length==0?"Department/s":""}  />}
+                        renderInput={(params) => <TextField {...params} value={params.value} placeholder={department?.length==0?"Department/s":""}  />}
                         fullWidth
                         placeholder="Department"
                         size="medium"
@@ -501,7 +501,7 @@ const RunsForm = React.forwardRef(
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
 
-                        renderInput={(params) => <TextField {...params} placeholder={lab.length==0?"Laboratory/ies":""} />}
+                        renderInput={(params) => <TextField {...params} placeholder={lab?.length==0?"Laboratory/ies":""} />}
                         fullWidth
 
                         placeholder="Laboratory"
@@ -532,7 +532,7 @@ const RunsForm = React.forwardRef(
                   </Grid>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Test objective<span style={{ color: "#E2445C" }}>*</span></label>
+                      <label style={{ display: 'block', marginBottom: '8px' }}>Test objective<span style={{ color: "#E2445C" }}>*</span></label>
                       <TextField
                         margin="none"
                         fullWidth
@@ -540,6 +540,7 @@ const RunsForm = React.forwardRef(
                         name="objective"
                         autoComplete="off"
                         InputLabelProps={{ shrink: false }}
+                        inputProps={{ maxLength: 20 }}
                         placeholder="Test objective"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}

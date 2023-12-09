@@ -111,7 +111,7 @@ const Users = () => {
   const [visibleRow, setVisibleRow] = React.useState<any>(userData);
 
   const roleSliceData = useSelector(
-    (state: any) => state.role.data?.get_all_roles,
+    (state: any) => state.role.data?.find_roles,
   );
   const organizationSliceData = useSelector(
     (state: any) => state.organization.data?.get_all_organisations,
@@ -744,7 +744,7 @@ const Users = () => {
                         <TableCell align="center">
                           {
                             organizationSliceData?.find(
-                              (obj) => obj._id == row.organisationId,
+                              (obj:any) => obj._id == row.organisationId,
                             )?.name
                           }
                         </TableCell>
@@ -757,7 +757,7 @@ const Users = () => {
                       {headers[4].is_show && (
                         <TableCell align="center">
                           {
-                            roleSliceData?.find((obj) => obj._id == row.role)
+                            roleSliceData?.find((obj:any) => obj._id == row.role)
                               ?.name
                           }
                         </TableCell>

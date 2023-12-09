@@ -10,15 +10,14 @@ export const handleCheckboxChange = (
 ) => (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
   const checked = event.target.checked;
   const updatedRows = Rows.map((row) => {
-    console.log(row._id === id);
+    console.log('updatedRows',row._id === id);
     
     if (row._id === id) {
       return { ...row, is_checked: checked };
     }
     return row;
   });
-console.log(updatedRows);
-
+console.log('updatedRows',updatedRows);
   setSelectedRows(updatedRows);
   const anyCheckboxSelected = updatedRows.some((row) => row.is_checked);
   setIsDeselectAllChecked(false);

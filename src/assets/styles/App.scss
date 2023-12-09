@@ -28,6 +28,7 @@ input[type=number] {
       0px 0px 0px 0px rgba(0, 0, 0, 0.12);
     // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding: 0.5rem 0rem;
+    padding-right: 0px !important;
 
     button[aria-label='open drawer'] {
       margin-right: 15px !important;
@@ -201,6 +202,8 @@ input[type=number] {
 html body {
   margin: 0px;
   background-color: $white;
+  overflow-y: auto !important;
+  padding-right: 0px !important;
 }
 
 .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
@@ -1582,7 +1585,7 @@ p.follow-people {
       position: fixed;
       bottom: 0px;
       width: 100%;
-      z-index: 9;
+      z-index: 9999 !important;
     }
   }
 
