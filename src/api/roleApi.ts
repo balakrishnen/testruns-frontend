@@ -23,7 +23,7 @@ export const fetchSingleRoleData = (payload: any) => async (dispatch: any) => {
     dispatch(fetchRoleStart());
     try {
         const response = await client.query({
-            query: GET_ROLE,
+            query: FIND_ROLE,
             variables: payload,
         });
         dispatch(fetchRoleSuccess(response.data));
