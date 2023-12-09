@@ -67,6 +67,7 @@ import RealtimeChart from '../../../components/charts/RealtimeChart';
 import { UpdateUserRunsData, fetchSingleUserRunzData, postUserRunsData } from '../../../api/userRunsAPI';
 import { fetchUpdateProcedureData } from '../../../api/procedureAPI';
 import { nanoid } from 'nanoid';
+import SpinerLoader from '../../../components/SpinnerLoader';
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
 <p>&nbsp;</p>
@@ -225,6 +226,7 @@ export default function RunsDetails() {
   const [chartTable, setChartTable] = React.useState(null);
   const [userProcedure, setuserProcedure] = React.useState(editorData);
   const runsStatus = RunsStatusList;
+  const [isLoader, setIsLoader] = React.useState(true)
   const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content:"" });
@@ -414,9 +416,16 @@ export default function RunsDetails() {
   }, [runzValue, userProcedure])
  
   React.useEffect(() => {
-    setRunzValue(procedureSliceData?.get_run)
-    setuserProcedure(procedureSliceData?.get_run?.procedureId[0]?.procedureDetials)
-   
+    // Set a timer for 1 second (1000 milliseconds)
+    const timerId = setTimeout(() => {
+      setIsLoader(false);
+      setRunzValue(procedureSliceData?.get_run);
+      setuserProcedure(procedureSliceData?.get_run?.procedureId[0]?.procedureDetials);
+    }, 2000);
+  
+    // Clean up the timer on component unmount or if procedureSliceData changes
+    return () => clearTimeout(timerId);
+  
   }, [procedureSliceData]);
 
   React.useEffect(() => {
@@ -993,6 +1002,8 @@ console.log("inputEl",inputEl);
   };
   return (
     <PrivateRoute>
+       {!isLoader ?
+       <>
       {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
       <Box className="runzdetails-page">
         <Box className="top-section">
@@ -1715,6 +1726,8 @@ console.log("inputEl",inputEl);
         handleReloadSingleData={handleReloadSingleData}
       />
       <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} />
+      </>:
+      <SpinerLoader isLoader={isLoader} />}
     </PrivateRoute>
   );
 }

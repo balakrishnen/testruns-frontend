@@ -26,6 +26,7 @@ import { fetchAssetsName } from '../../../api/assetsAPI';
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
+import SpinerLoader from '../../../components/SpinnerLoader';
 // import ProceduresRichText from './Editor';
 
 const validationSchema = Yup.object().shape({
@@ -152,7 +153,7 @@ export default function ProcedureDetails() {
   const [assetName, setAssetName] = React.useState<any>([])
   // console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
-
+  const [isLoader, setIsLoader] = React.useState(true)
   const onSubmit = (values: any) => {
 
     // debugger
@@ -195,24 +196,30 @@ export default function ProcedureDetails() {
   // }, [assetsSliceData]);
 
 
-React.useEffect(()=>{
-  setprocedureData(procedureData) 
-  console.log(procedureData);
-  // setAssetsData(procedureData?.assetId)
-},[procedureData])
-
   React.useEffect(() => {
     console.log("1");
-    setprocedureData(procedureSliceData);
-    // setAssetsData(
-    //   procedureSliceData?.assetId?.map((item: any) => ({
-    //     label: item.name,
-    //     value: item.name,
-    //     id: item._id,
-    //   })),
-    // );
-    setState({"content":procedureSliceData?.procedureDetials})
-    formik.setValues({...formik.values,"name":procedureSliceData?.name})
+  
+    // Set a timer for 1 second (1000 milliseconds)
+    const timerId = setTimeout(() => {
+      setprocedureData(procedureSliceData);
+      setIsLoader(false);
+  
+      // Uncomment the following lines if you have data structure like procedureSliceData.assetId
+      // setAssetsData(
+      //   procedureSliceData?.assetId?.map((item: any) => ({
+      //     label: item.name,
+      //     value: item.name,
+      //     id: item._id,
+      //   })),
+      // );
+  
+      setState({ content: procedureSliceData?.procedureDetials });
+      formik.setValues({ ...formik.values, name: procedureSliceData?.name });
+    }, 1000); // 1000 milliseconds = 1 second
+  
+    // Clean up the timer on component unmount or if procedureSliceData changes
+    return () => clearTimeout(timerId);
+  
   }, [procedureSliceData]);
 
   console.log(procedureSliceData);
@@ -453,6 +460,7 @@ const handleEditorInit = (editor:any) => {
 };
   return (
     <PrivateRoute>
+      {!isLoader ?
       <Box className="proceduredetails-page">
         <Box className="top-section">
           <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
@@ -776,7 +784,9 @@ const handleEditorInit = (editor:any) => {
         />
 
         <SuccessPopup ref={successPopupRef} />
-      </Box>
+      </Box>:
+      
+        <SpinerLoader isLoader={isLoader} />}
     </PrivateRoute>
   );
 }
