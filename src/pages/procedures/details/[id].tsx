@@ -29,7 +29,7 @@ import { toast } from 'react-toastify';
 // import ProceduresRichText from './Editor';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Procedure Name is required"),
+  name: Yup.string().trim().required('Label is required').matches(/^\S*$/, 'Label cannot have empty spaces'),
   assets: Yup.array().notRequired(),
   procedure: Yup.string().notRequired(),
 });
@@ -152,8 +152,9 @@ export default function ProcedureDetails() {
   const [assetName, setAssetName] = React.useState<any>([])
   // console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
-  // console.log(procedureData?.procedureDetials);
+
   const onSubmit = (values: any) => {
+
     // debugger
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
@@ -241,8 +242,6 @@ React.useEffect(()=>{
     confirmationPopupRef.current.open(false);
   };
   const handleChange = (content:any) => {
-    console.log(content);
-    
     setState({ content });
   };
 

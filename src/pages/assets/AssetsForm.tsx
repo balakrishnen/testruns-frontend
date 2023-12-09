@@ -56,7 +56,8 @@ import { toast } from 'react-toastify';
 import AWS from 'aws-sdk';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Asset Name is required'),
+  // name: Yup.string().required('Asset Name is required'),
+  name: Yup.string().trim().required('Asset Name is required').matches(/^\S*$/, 'Label cannot have empty spaces'),
   perchasedDate: Yup.string().required('Purchase date is required'),
   expiryDate: Yup.string().required('Expiry date is required'),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
@@ -510,12 +511,12 @@ const Addnewpopup = React.forwardRef(
                               value={formik.values.expiryDate}
                             />
                           </LocalizationProvider>
-                          {/* {formik.touched.expiryDate &&
+                          {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (
-                              <Typography className="error-field">
+                              <Typography className="error-field" style={{ color: "#E2445C" ,position: 'absolute',top:'15.2em' }}>
                                 required
                               </Typography>
-                            )} */}
+                            )}
                         </Box>
                       </Grid>
                     </Grid>

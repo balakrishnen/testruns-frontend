@@ -39,7 +39,8 @@ const validationSchema = Yup.object().shape({
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
   laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
   organisationId: Yup.string().notRequired(),
-  name: Yup.string().required("Procedure name is required"),
+  // name: Yup.string().required("Procedure name is required"),
+  name: Yup.string().trim().required("Procedure name is required").matches(/^\S*$/, 'Label cannot have empty spaces'),
 });
 
 const ProcedureForm = React.forwardRef(

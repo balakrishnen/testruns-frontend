@@ -49,7 +49,7 @@ const validationSchema = Yup.object().shape({
   createdAt: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
-  objective: Yup.string().required('Test Objective is required'),
+  objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^\S*$/, 'Label cannot have empty spaces'),
   dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().required(),
   organisationId:Yup.string().required('Procedure Name is required')
@@ -532,7 +532,7 @@ const RunsForm = React.forwardRef(
                   </Grid>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Test objective<span style={{ color: "#E2445C" }}>*</span></label>
+                      <label style={{ display: 'block', marginBottom: '8px' }}>Test objective<span style={{ color: "#E2445C" }}>*</span></label>
                       <TextField
                         margin="none"
                         fullWidth
@@ -540,6 +540,7 @@ const RunsForm = React.forwardRef(
                         name="objective"
                         autoComplete="off"
                         InputLabelProps={{ shrink: false }}
+                        inputProps={{ maxLength: 20 }}
                         placeholder="Test objective"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}

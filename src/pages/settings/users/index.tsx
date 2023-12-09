@@ -718,7 +718,6 @@ const Users = () => {
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-
                                   handleCheckboxValues(row._id),
                                   handleChange(event, row._id);
                                 }}
@@ -750,7 +749,7 @@ const Users = () => {
                         <TableCell align="center">
                           {
                             organizationSliceData?.find(
-                              (obj) => obj._id == row.organisationId,
+                              (obj:any) => obj._id == row.organisationId,
                             )?.name
                           }
                         </TableCell>
@@ -763,7 +762,7 @@ const Users = () => {
                       {headers[4].is_show && (
                         <TableCell align="center">
                           {
-                            roleSliceData?.find((obj) => obj._id == row.role)
+                            roleSliceData?.find((obj:any) => obj._id == row.role)
                               ?.name
                           }
                         </TableCell>

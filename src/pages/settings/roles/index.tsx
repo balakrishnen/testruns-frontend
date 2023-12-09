@@ -664,6 +664,926 @@ setFormValues((prevValues) => ({
                       />
                     </TableCell>
                   </TableRow>
+{/* RunsRole Access  */}
+
+<TableRow>
+                    <TableCell colSpan={12} className="procedure-profile">
+                      <Typography>Runs</Typography>
+                      <Typography>Control the actions of users under procedure section.</Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can create</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].create}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].create)}
+                            name="create"
+                            // checked={true}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can delete</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].delete}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].delete)}
+                            name="delete"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can edit</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].edit}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].edit)}
+                            name="edit"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can view</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].view}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].view)}
+                            name="view"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can assign</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].assign}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].assign)}
+                            name="assign"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can share</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].share}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].share)}
+                            name="share"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+
+{/* AssetRole Access */}
+
+<TableRow>
+                    <TableCell colSpan={12} className="procedure-profile">
+                      <Typography>Assert</Typography>
+                      <Typography>Control the actions of users under procedure section.</Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can create</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].create}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].create)}
+                            name="create"
+                            // checked={true}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can delete</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].delete}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].delete)}
+                            name="delete"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can edit</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].edit}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].edit)}
+                            name="edit"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can view</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].view}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].view)}
+                            name="view"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can assign</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].assign}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].assign)}
+                            name="assign"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can share</TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.procedure_management[0].share}
+                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].share)}
+                            name="share"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+
                   <TableRow>
                     <TableCell colSpan={12} className="procedure-profile" style={{ paddingTop: '50px' }}>
                       <Typography>Profile</Typography>
