@@ -41,12 +41,12 @@ export const CardLayout = ({ children }: any, props: any) => {
   );
     console.log(userSliceData);
   
-  const googleSignup = (varient:string) => {
+  const googleSignup = async() => {
     const googleProvider = provider("google.com");
-    signInWithPopup(auth, googleProvider)
+   await signInWithPopup(auth, googleProvider)
       .then((result:any) => {
         console.log(result);
-        if(varient=='signup'){
+        // if(varient=='signup'){
           console.log(result.user.uid);
           let payload={
             firstName: result.user.displayName,
@@ -54,36 +54,19 @@ export const CardLayout = ({ children }: any, props: any) => {
             email: result.user.email,
             uid:result.user.uid,
             organisationId:"657420e5c63327a74f3c756a",
-            role:"6564afdbc3bd760012def0f4",
+            role:"65741c069d53d19df8321e6e",
             // phoneNumber:'9876543210',
             departmentId: [],
             laboratoryId: [],
-            instituteId: "",
+            instituteId: "65741c069d53d19df8321e6b",
           }
-          dispatch(postUserData(payload))
-          toast(`Signup successful !`, {
-            style: {
-              background: '#00bf70', color: '#fff'
-            }
-          });
-          setTimeout(()=>{
-            navigate('/login')
-          },1000)
-          // toast(`Google Signin successful !`, {
-          //   style: {
-          //     background: '#00bf70', color: '#fff'
-          //   }
-          // });
-          // setTimeout(()=>{
-          //   navigate('/login')
-          // },1000)
-        }
-        else{
-          let payload={
+       dispatch(postUserData(payload))
+         
+          let payload2={
             idToken:result.user?.accessToken
           }
           
-          dispatch(fetchLoginUser(payload))
+          dispatch(fetchLoginUser(payload2))
               // console.log(isSucess);
               console.log(userSliceData);
               
@@ -106,39 +89,54 @@ export const CardLayout = ({ children }: any, props: any) => {
           //   navigate('/mypage')
           // },1000)
           window.sessionStorage.setItem('isLoggedIn', 'true');
-        }
+              // }
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const microsoftSignup = (varient:string) => {
+  const microsoftSignup = () => {
     const microsoftProvider = provider("microsoft.com");
     signInWithPopup(auth, microsoftProvider)
-      .then((result) => {
+      .then((result:any) => {
         console.log(result);
-        if(varient=='signup'){
-          toast(`Microsoft Signin successful !`, {
-            style: {
-              background: '#00bf70', color: '#fff'
-            }
-          });
-          setTimeout(()=>{
-            navigate('/login')
-          },1000)
-        }
-        else{
-          toast(`Microsoft Login successful !`, {
-            style: {
-              background: '#00bf70', color: '#fff'
-            }
-          });
-          setTimeout(()=>{
-            navigate('/mypage')
-          },1000)
+        // if(varient=='signup'){
+          console.log(result.user.uid);
+          let payload={
+            firstName: result.user.displayName,
+            lastName: "",
+            email: result.user.email,
+            uid:result.user.uid,
+            organisationId:"657420e5c63327a74f3c756a",
+            role:"65741c069d53d19df8321e6e",
+            // phoneNumber:'9876543210',
+            departmentId: [],
+            laboratoryId: [],
+            instituteId: "65741c069d53d19df8321e6b",
+          }
+       dispatch(postUserData(payload))
+         
+          let payload2={
+            idToken:result.user?.accessToken
+          }
+          
+          dispatch(fetchLoginUser(payload2))
+              // console.log(isSucess);
+              console.log(userSliceData);
+              
+              window.sessionStorage.setItem('isLoggedIn', 'true');
+           
+              // setTimeout(()=>{
+                navigate('/mypage')
+                toast(`Microsoft Login successful !`, {
+                  style: {
+                    background: '#00bf70', color: '#fff'
+                  }
+                });
+           
           window.sessionStorage.setItem('isLoggedIn', 'true');
-        }
+        // }
       })
       .catch((error) => {
         console.error(error);
@@ -197,7 +195,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => googleSignup('signin')}
+                  onClick={() => googleSignup()}
                 >
                   {" "}
                   <img src={google} alt="google" />
@@ -227,7 +225,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => microsoftSignup('signin')}
+                  onClick={() => microsoftSignup()}
                 >
                   {" "}
                   <img src={microsoft} alt="microsoft" />
@@ -292,7 +290,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => googleSignup('signup')}
+                  onClick={() => googleSignup()}
                 >
                   {" "}
                   <img src={google} alt="google" />
@@ -322,7 +320,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => microsoftSignup('signup')}
+                  onClick={() => microsoftSignup()}
                 >
                   {" "}
                   <img src={microsoft} alt="microsoft" />

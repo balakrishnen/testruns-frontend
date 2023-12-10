@@ -29,7 +29,9 @@ const Roles = () => {
   console.log(roleSliceData);
  
   React.useEffect(() => {
-    setFormValues(roleSliceData)
+    setFormValues(roleSliceData[0])
+    setFormValues1(roleSliceData[1])
+    setFormValues2(roleSliceData[2])
   }, [roleSliceData]);
 
   React.useEffect(() => {
@@ -39,7 +41,7 @@ const Roles = () => {
     dispatch(fetchSingleRoleData(payload))
   }, []);
   console.log("roleData",roleData);
-  const initailState : any=[{
+  const initailState : any={
     "procedure_management":{
       assign : false,
       create : false,
@@ -82,7 +84,8 @@ const Roles = () => {
       edit    : false,
       view    :false
     },
-  },{
+  }
+  const initailState1 : any={
     "procedure_management":{
       assign : false,
       create : false,
@@ -125,7 +128,8 @@ const Roles = () => {
       edit    : false,
       view    :false
     },
-  },{
+  }
+  const initailState2 : any={
     "procedure_management":{
       assign : false,
       create : false,
@@ -168,102 +172,102 @@ const Roles = () => {
       edit    : false,
       view    :false
     },
-  }]
-  const [formValues, setFormValues]=React.useState(initailState)
+  }
+  const [formValues, setFormValues]=React.useState<any>(initailState)
+  const [formValues1, setFormValues1]=React.useState(initailState1)
+  const [formValues2, setFormValues2]=React.useState(initailState2)
+
   console.log(formValues);
   
-  const handleChange=(e:any,val:boolean)=>{
-console.log(e.target.name);
-// setFormValues((prevValues: { procedure_management: any[]; }) => ({
-//   ...prevValues,
-//   procedure_management: [
-//     {
-//       ...prevValues.procedure_management[0],
-//       [e.target.name]: val,
-//     },
-//   ],
-// }));
-  }
-  const handleChangeUser=(e:any,val:boolean)=>{
-    console.log(e.target.name);
-    // setFormValues((prevValues: { user_management: any[]; }) => ({
-    //   ...prevValues,
-    //   user_management: [
-    //     {
-    //       ...prevValues.user_management[0],
-    //       [e.target.name]: val,
-    //     },
-    //   ],
-    // }));
-      }
-      const handleChangeProfile=(e:any,val:boolean)=>{
-        console.log(e.target.name);
-        // setFormValues((prevValues: { profile_management: any[]; }) => ({
-        //   ...prevValues,
-        //   profile_management: [
-        //     {
-        //       ...prevValues.profile_management[0],
-        //       [e.target.name]: val,
-        //     },
-        //   ],
-        // }));
-          }
-          const handleChangeRole=(e:any,val:boolean)=>{
-            console.log(e.target.name);
-            // setFormValues((prevValues: { role_management: any[]; }) => ({
-            //   ...prevValues,
-            //   role_management: [
-            //     {
-            //       ...prevValues.role_management[0],
-            //       [e.target.name]: val,
-            //     },
-            //   ],
-            // }));
-          }
+//   const handleChange=(e:any,val:boolean)=>{
+// console.log(e.target.name);
+// const handleChange = (index, fieldName, nestedFieldName, value) => {
+//   setFormValues((prevFormValues) => {
+//     const newFormValues = [...prevFormValues];
+
+//     // Get the specific object at the given index
+//     const targetObject = newFormValues[index];
+
+//     // Update the nested field with the new value
+//     updateNestedField(targetObject, fieldName, nestedFieldName, value);
+
+//     // Create a new array with the updated state
+//     return [...newFormValues];
+//   });
+// };
+const handleChange = (category, field, value) => {
+  setFormValues((prevValues) => ({
+    ...prevValues,
+    [category]: {
+      ...prevValues[category],
+      [field]: value,
+    },
+  }));
+};
+const handleChange1 = (category, field, value) => {
+  setFormValues1((prevValues) => ({
+    ...prevValues,
+    [category]: {
+      ...prevValues[category],
+      [field]: value,
+    },
+  }));
+};
+const handleChange2 = (category, field, value) => {
+  setFormValues2((prevValues) => ({
+    ...prevValues,
+    [category]: {
+      ...prevValues[category],
+      [field]: value,
+    },
+  }));
+};
+console.log(formValues);
+
   const handleSave=()=>{
     console.log('submited');
     var payload={
       _id: loginUserSliceData?._id,
       asset_management:[{
-        assign : formValues[0].asset_management.assign,
-        create : formValues[0].asset_management.create,
-        delete : formValues[0].asset_management.delete,
-        edit   : formValues[0].asset_management.edit,
-        share  : formValues[0].asset_management.share,
-        view   : formValues[0].asset_management.view,
+        assign : formValues.asset_management.assign,
+        create : formValues.asset_management.create,
+        delete : formValues.asset_management.delete,
+        edit   : formValues.asset_management.edit,
+        share  : formValues.asset_management.share,
+        view   : formValues.asset_management.view,
       }],
       procedure_management:[{
-        assign : formValues[0].procedure_management.assign,
-        create : formValues[0].procedure_management.create,
-        delete : formValues[0].procedure_management.delete,
-        edit   : formValues[0].procedure_management.edit,
-        share  : formValues[0].procedure_management.share,
-        view   : formValues[0].procedure_management.view,
+        assign : formValues.procedure_management.assign,
+        create : formValues.procedure_management.create,
+        delete : formValues.procedure_management.delete,
+        edit   : formValues.procedure_management.edit,
+        share  : formValues.procedure_management.share,
+        view   : formValues.procedure_management.view,
       }],
       profile_management:[{
-        changePassword : formValues[0].profile_management.changePassword,
-        editContact    : formValues[0].profile_management.editContact,
-        editDepartment : formValues[0].profile_management.editDepartment,
-        editLab   : formValues[0].profile_management.editLab,
-        editOrganisation : formValues[0].profile_management.editOrganisation,
-        editUserName     : formValues[0].profile_management.editUserName,
+        changePassword : formValues.profile_management.changePassword,
+        editContact    : formValues.profile_management.editContact,
+        editDepartment : formValues.profile_management.editDepartment,
+        editLab   : formValues.profile_management.editLab,
+        editOrganisation : formValues.profile_management.editOrganisation,
+        editUserName     : formValues.profile_management.editUserName,
       }],
       runs_management:[{
-        assign : formValues[0].runs_management.assign,
-        create : formValues[0].runs_management.create,
-        delete : formValues[0].runs_management.delete,
-        edit   : formValues[0].runs_management.edit,
-        share  : formValues[0].runs_management.share,
-        view   : formValues[0].runs_management.view,
+        assign : formValues.runs_management.assign,
+        create : formValues.runs_management.create,
+        delete : formValues.runs_management.delete,
+        edit   : formValues.runs_management.edit,
+        share  : formValues.runs_management.share,
+        view   : formValues.runs_management.view,
       }],
       role_management:[{
-        edit : formValues[0].role_management.edit
+        edit : formValues.role_management.edit
       }],
       user_management:[{
   
-        create  : formValues[0].user_management.create,
-        delete  : formValues[0].user_management.delete,
-        edit    : formValues[0].user_management.edit,
+        create  : formValues.user_management.create,
+        delete  : formValues.user_management.delete,
+        edit    : formValues.user_management.edit,
       }]
     }
     // dispatch(fetchUpdateRoleData(payload))
@@ -347,8 +351,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.procedure_management.create? true:false}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.create)}
+                            checked={formValues?.procedure_management.create? true:false}
+                            onChange={(e)=>handleChange('procedure_management','create', !formValues?.procedure_management.create)}
                             name="create"
                             // checked={true}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
@@ -374,8 +378,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.procedure_management.create? true:false}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.create)}
+                            checked={formValues1?.procedure_management.create? true:false}
+                            onChange={(e)=>handleChange1('procedure_management','create', !formValues1?.procedure_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -400,8 +404,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.procedure_management.create? true:false}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.create)}
+                            checked={formValues2?.procedure_management.create? true:false}
+                            onChange={(e)=>handleChange2('procedure_management','create', !formValues2?.procedure_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -429,8 +433,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.procedure_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.delete)}
+                            checked={formValues?.procedure_management.delete}
+                            onChange={(e)=>handleChange('procedure_management','delete', !formValues?.procedure_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -455,8 +459,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.procedure_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.delete)}
+                            checked={formValues1?.procedure_management.delete}
+                            onChange={(e)=>handleChange1('procedure_management','delete', !formValues1?.procedure_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -481,8 +485,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.procedure_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.delete)}
+                            checked={formValues2?.procedure_management.delete}
+                            onChange={(e)=>handleChange2('procedure_management','delete', !formValues2?.procedure_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -510,8 +514,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.procedure_management.edit}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.edit)}
+                            checked={formValues?.procedure_management.edit}
+                            onChange={(e)=>handleChange('procedure_management','edit', !formValues?.procedure_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -536,8 +540,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.procedure_management.edit}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.edit)}
+                            checked={formValues1?.procedure_management.edit}
+                            onChange={(e)=>handleChange1('procedure_management','edit', !formValues1?.procedure_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -562,8 +566,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.procedure_management.edit}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.edit)}
+                            checked={formValues2?.procedure_management.edit}
+                            onChange={(e)=>handleChange2('procedure_management','edit', !formValues2?.procedure_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -591,8 +595,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.procedure_management.view}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.view)}
+                            checked={formValues?.procedure_management.view}
+                            onChange={(e)=>handleChange('procedure_management','view', !formValues?.procedure_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -617,8 +621,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.procedure_management.view}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.view)}
+                            checked={formValues1?.procedure_management.view}
+                            onChange={(e)=>handleChange1('procedure_management','view', !formValues1?.procedure_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -643,8 +647,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.procedure_management.view}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.view)}
+                            checked={formValues2?.procedure_management.view}
+                            onChange={(e)=>handleChange2('procedure_management','view', !formValues2?.procedure_management.view)}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -672,8 +676,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.procedure_management.assign}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.assign)}
+                            checked={formValues?.procedure_management.assign}
+                            onChange={(e)=>handleChange('procedure_management','assign', !formValues?.procedure_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -698,8 +702,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.procedure_management.assign}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.assign)}
+                            checked={formValues1?.procedure_management.assign}
+                            onChange={(e)=>handleChange1('procedure_management','assign', !formValues1?.procedure_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -728,8 +732,8 @@ console.log(e.target.name);
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
                         }
-                        checked={formValues[2]?.procedure_management.assign}
-                        onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.assign)}
+                        checked={formValues2?.procedure_management.assign}
+                        onChange={(e)=>handleChange2('procedure_management','assign', !formValues2?.procedure_management.assign)}
                         name="assign"
                         className="common-radio"
                         style={{ margin: "0rem" }}
@@ -752,8 +756,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.procedure_management.share}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.share)}
+                            checked={formValues?.procedure_management.share}
+                            onChange={(e)=>handleChange('procedure_management','share', !formValues?.procedure_management.share)}
                             name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -778,9 +782,9 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.procedure_management.assign}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.assign)}
-                            name="assign"
+                            checked={formValues1?.procedure_management.share}
+                            onChange={(e)=>handleChange1('procedure_management','share', !formValues1?.procedure_management.share)}
+                            name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -804,9 +808,9 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.procedure_management.assign}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.assign)}
-                            name="assign"
+                            checked={formValues2?.procedure_management.share}
+                            onChange={(e)=>handleChange2('procedure_management','share', !formValues2?.procedure_management.share)}
+                            name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -841,8 +845,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.runs_management.create}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.create)}
+                            checked={formValues?.runs_management.create}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues?.runs_management.create)}
                             name="create"
                             // checked={true}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
@@ -868,8 +872,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.runs_management.create}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.create)}
+                            checked={formValues?.runs_management.create}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues1?.runs_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -894,8 +898,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.runs_management.create}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.create)}
+                            checked={formValues2?.runs_management.create}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues2?.runs_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -923,8 +927,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.delete)}
+                            checked={formValues?.runs_management.delete}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -949,8 +953,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            checked={formValues1?.runs_management.delete}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues1?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -975,8 +979,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            checked={formValues2?.runs_management.delete}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues2?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1004,8 +1008,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.runs_management.edit}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.edit)}
+                            checked={formValues?.runs_management.edit}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues?.runs_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1030,8 +1034,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            checked={formValues1?.runs_management.delete}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues1?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1056,8 +1060,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            checked={formValues2?.runs_management.delete}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues2?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1085,8 +1089,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.runs_management.view}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.view)}
+                            checked={formValues?.runs_management.view}
+                            onChange={(e)=>handleChange("runs_management","view",!formValues?.runs_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1111,8 +1115,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            checked={formValues1?.runs_management.delete}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues1?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1137,8 +1141,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            checked={formValues2?.runs_management.delete}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues2?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1166,8 +1170,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.runs_management.assign}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.assign)}
+                            checked={formValues?.runs_management.assign}
+                            onChange={(e)=>handleChange("runs_management","assign",!formValues?.runs_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1192,9 +1196,9 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
-                            name="delete"
+                            checked={formValues1?.runs_management.assign}
+                            onChange={(e)=>handleChange("runs_management","assign",!formValues1?.runs_management.assign)}
+                            name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1218,9 +1222,9 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
-                            name="delete"
+                            checked={formValues2?.runs_management.assign}
+                            onChange={(e)=>handleChange2("runs_management","create",!formValues2?.runs_management.assign)}
+                            name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1247,8 +1251,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.runs_management.share}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.share)}
+                            checked={formValues?.runs_management.share}
+                            onChange={(e)=>handleChange("runs_management","create",!formValues?.runs_management.share)}
                             name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1273,9 +1277,9 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
-                            name="delete"
+                            checked={formValues1?.runs_management.share}
+                            onChange={(e)=>handleChange("runs_management","share",!formValues1?.runs_management.share)}
+                            name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1299,9 +1303,9 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
-                            name="delete"
+                            checked={formValues2?.runs_management.share}
+                            onChange={(e)=>handleChange2("runs_management","share",!formValues2?.runs_management.share)}
+                            name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1315,7 +1319,7 @@ console.log(e.target.name);
 
 {/* AssetRole Access */}
 
-<TableRow>
+ <TableRow>
                     <TableCell colSpan={12} className="procedure-profile">
                       <Typography>Assert</Typography>
                       <Typography>Control the actions of users under procedure section.</Typography>
@@ -1337,8 +1341,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.asset_management.create}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.create)}
+                            checked={formValues?.asset_management.create}
+                            onChange={(e)=>handleChange("asset_management","create",!formValues?.asset_management.create)}
                             name="create"
                             // checked={true}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
@@ -1364,9 +1368,9 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
-                            name="delete"
+                            checked={formValues1?.runs_management.create}
+                            onChange={(e)=>handleChange1("asset_management","create",!formValues1?.runs_management.create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1390,9 +1394,9 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.runs_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
-                            name="delete"
+                            checked={formValues2?.runs_management.create}
+                            onChange={(e)=>handleChange2("asset_management","create",!formValues2?.runs_management.create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1419,8 +1423,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.asset_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.delete)}
+                            checked={formValues?.asset_management.delete}
+                            onChange={(e)=>handleChange("asset_management","delete",!formValues?.asset_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1445,8 +1449,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.asset_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.delete)}
+                            checked={formValues1?.asset_management.delete}
+                            onChange={(e)=>handleChange1("asset_management","delete",!formValues1?.asset_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1471,8 +1475,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.asset_management.delete}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.delete)}
+                            checked={formValues2?.asset_management.delete}
+                            onChange={(e)=>handleChange2("asset_management","delete",!formValues2?.asset_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1500,8 +1504,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.asset_management.edit}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.edit)}
+                            checked={formValues?.asset_management.edit}
+                            onChange={(e)=>handleChange("asset_management","edit",!formValues?.asset_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1526,8 +1530,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.asset_management.edit}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.edit)}
+                            checked={formValues1?.asset_management.edit}
+                            onChange={(e)=>handleChange1("asset_management","edit",!formValues1?.asset_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1552,8 +1556,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.asset_management.edit}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.edit)}
+                            checked={formValues2?.asset_management.edit}
+                            onChange={(e)=>handleChange2("asset_management","edit",!formValues2?.asset_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1581,8 +1585,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.asset_management.view}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.view)}
+                            checked={formValues?.asset_management.view}
+                            onChange={(e)=>handleChange("asset_management","view",!formValues?.asset_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1607,8 +1611,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.asset_management.view}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.view)}
+                            checked={formValues1?.asset_management.view}
+                            onChange={(e)=>handleChange1("asset_management","view",!formValues1?.asset_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1633,8 +1637,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.asset_management.view}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.view)}
+                            checked={formValues2?.asset_management.view}
+                            onChange={(e)=>handleChange2("asset_management","view",!formValues2?.asset_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1662,8 +1666,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.asset_management.assign}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.assign)}
+                            checked={formValues?.asset_management.assign}
+                            onChange={(e)=>handleChange("asset_management","assign",!formValues?.asset_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1688,8 +1692,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.asset_management.assign}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.assign)}
+                            checked={formValues1?.asset_management.assign}
+                            onChange={(e)=>handleChange1("asset_management","assign",!formValues1?.asset_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1714,8 +1718,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.asset_management.assign}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.assign)}
+                            checked={formValues2?.asset_management.assign}
+                            onChange={(e)=>handleChange2("asset_management","assign",!formValues2?.asset_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1743,8 +1747,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.asset_management.share}
-                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.share)}
+                            checked={formValues?.asset_management.share}
+                            onChange={(e)=>handleChange("asset_management","share",!formValues?.asset_management.share)}
                             name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1769,8 +1773,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.asset_management.share}
-                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.share)}
+                            checked={formValues1?.asset_management.share}
+                            onChange={(e)=>handleChange1("asset_management","share",!formValues1?.asset_management.share)}
                             name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1795,8 +1799,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.asset_management.share}
-                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.share)}
+                            checked={formValues2?.asset_management.share}
+                            onChange={(e)=>handleChange2("asset_management","share",!formValues2?.asset_management.share)}
                             name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1831,8 +1835,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.profile_management.editUserName}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editUserName)}
+                            checked={formValues?.profile_management.editUserName}
+                            onChange={(e)=>handleChange("profile_management","editUserName",!formValues?.profile_management.editUserName)}
                             name="editUserName"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1857,8 +1861,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.profile_management.editUserName}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editUserName)}
+                            checked={formValues1?.profile_management.editUserName}
+                            onChange={(e)=>handleChange1("profile_management","editUserName",!formValues1?.profile_management.editUserName)}
                             name="editUserName"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1883,8 +1887,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.profile_management.editUserName}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editUserName)}
+                            checked={formValues2?.profile_management.editUserName}
+                            onChange={(e)=>handleChange2("profile_management","editUserName",!formValues2?.profile_management.editUserName)}
                             name="editUserName"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1912,8 +1916,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.profile_management.changePassword}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.changePassword)}
+                            checked={formValues?.profile_management.changePassword}
+                            onChange={(e)=>handleChange("profile_management","changePassword",!formValues?.profile_management.changePassword)}
                             name="changePassword"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1938,8 +1942,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.profile_management.changePassword}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.changePassword)}
+                            checked={formValues1?.profile_management.changePassword}
+                            onChange={(e)=>handleChange1("profile_management","changePassword",!formValues1?.profile_management.changePassword)}
                             name="changePassword"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1964,8 +1968,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.profile_management.changePassword}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.changePassword)}
+                            checked={formValues2?.profile_management.changePassword}
+                            onChange={(e)=>handleChange2("profile_management","changePassword",!formValues2?.profile_management.changePassword)}
                             name="changePassword"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1994,8 +1998,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.profile_management.editOrganisation}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editOrganisation)}
+                            checked={formValues?.profile_management.editOrganisation}
+                            onChange={(e)=>handleChange("profile_management","editOrganisation",!formValues?.profile_management.editOrganisation)}
                             name="editOrganisation"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2020,8 +2024,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.profile_management.editOrganisation}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editOrganisation)}
+                            checked={formValues1?.profile_management.editOrganisation}
+                            onChange={(e)=>handleChange1("profile_management","editOrganisation",!formValues1?.profile_management.editOrganisation)}
                             name="editOrganisation"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2046,8 +2050,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.profile_management.editOrganisation}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editOrganisation)}
+                            checked={formValues2?.profile_management.editOrganisation}
+                            onChange={(e)=>handleChange2("profile_management","editOrganisation",!formValues2?.profile_management.editOrganisation)}
                             name="editOrganisation"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2075,8 +2079,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.profile_management.editDepartment}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editDepartment)}
+                            checked={formValues?.profile_management.editDepartment}
+                            onChange={(e)=>handleChange("profile_management","editDepartment",!formValues?.profile_management.editDepartment)}
                             name="editDepartment"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2101,8 +2105,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.profile_management.editDepartment}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editDepartment)}
+                            checked={formValues1?.profile_management.editDepartment}
+                            onChange={(e)=>handleChange1("profile_management","editDepartment",!formValues1?.profile_management.editDepartment)}
                             name="editDepartment"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2127,8 +2131,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.profile_management.editDepartment}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editDepartment)}
+                            checked={formValues2?.profile_management.editDepartment}
+                            onChange={(e)=>handleChange2("profile_management","editDepartment",!formValues2?.profile_management.editDepartment)}
                             name="editDepartment"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2156,8 +2160,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.profile_management.editLab}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editLab)}
+                            checked={formValues?.profile_management.editLab}
+                            onChange={(e)=>handleChange("profile_management","editLab",!formValues?.profile_management.editLab)}
                             name="editLab"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2182,8 +2186,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.profile_management.editLab}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editLab)}
+                            checked={formValues1?.profile_management.editLab}
+                            onChange={(e)=>handleChange1("profile_management","editLab",!formValues1?.profile_management.editLab)}
                             name="editLab"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2208,8 +2212,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.profile_management.editLab}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editLab)}
+                            checked={formValues2?.profile_management.editLab}
+                            onChange={(e)=>handleChange2("profile_management","editLab",!formValues2?.profile_management.editLab)}
                             name="editLab"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2237,8 +2241,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.profile_management.editContact}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editContact)}
+                            checked={formValues?.profile_management.editContact}
+                            onChange={(e)=>handleChange("profile_management","editContact",!formValues?.profile_management.editContact)}
                             name="editContact"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2263,8 +2267,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.profile_management.editContact}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editContact)}
+                            checked={formValues1?.profile_management.editContact}
+                            onChange={(e)=>handleChange1("profile_management","editContact",!formValues1?.profile_management.editContact)}
                             name="editContact"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2289,8 +2293,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.profile_management.editContact}
-                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editContact)}
+                            checked={formValues2?.profile_management.editContact}
+                            onChange={(e)=>handleChange2("profile_management","editContact",!formValues2?.profile_management.editContact)}
                             name="editContact"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2324,8 +2328,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.role_management.edit}
-                            onChange={(e)=>handleChangeRole(e,!formValues[0]?.role_management.edit)}
+                            checked={formValues?.role_management.edit}
+                            onChange={(e)=>handleChange("role_management","edit",!formValues?.role_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2350,8 +2354,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.role_management.edit}
-                            onChange={(e)=>handleChangeRole(e,!formValues[1]?.role_management.edit)}
+                            checked={formValues1?.role_management.edit}
+                            onChange={(e)=>handleChange1("role_management","edit",!formValues1?.role_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2376,8 +2380,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.role_management.edit}
-                            onChange={(e)=>handleChangeRole(e,!formValues[2]?.role_management.edit)}
+                            checked={formValues2?.role_management.edit}
+                            onChange={(e)=>handleChange2("role_management","edit",!formValues2?.role_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2411,8 +2415,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.user_management.create}
-                            onChange={(e)=>handleChangeUser(e,!formValues[0]?.user_management.create)}
+                            checked={formValues?.user_management.create}
+                            onChange={(e)=>handleChange("user_management","create",!formValues?.user_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2437,8 +2441,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.user_management.create}
-                            onChange={(e)=>handleChangeUser(e,!formValues[1]?.user_management.create)}
+                            checked={formValues1?.user_management.create}
+                            onChange={(e)=>handleChange1("user_management","create",!formValues1?.user_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2463,8 +2467,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.user_management.create}
-                            onChange={(e)=>handleChangeUser(e,!formValues[2]?.user_management.create)}
+                            checked={formValues2?.user_management.create}
+                            onChange={(e)=>handleChange2("user_management","create",!formValues2?.user_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2492,8 +2496,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.user_management.delete}
-                            onChange={(e)=>handleChangeUser(e,!formValues[0]?.user_management.delete)}
+                            checked={formValues?.user_management.delete}
+                            onChange={(e)=>handleChange("user_management","delete",!formValues?.user_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2518,8 +2522,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.user_management.delete}
-                            onChange={(e)=>handleChangeUser(e,!formValues[1]?.user_management.delete)}
+                            checked={formValues1?.user_management.delete}
+                            onChange={(e)=>handleChange1("user_management","delete",!formValues1?.user_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2544,8 +2548,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.user_management.delete}
-                            onChange={(e)=>handleChangeUser(e,!formValues[2]?.user_management.delete)}
+                            checked={formValues2?.user_management.delete}
+                            onChange={(e)=>handleChange("user_management","delete",!formValues2?.user_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2573,8 +2577,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[0]?.user_management.edit}
-                            onChange={(e)=>handleChangeUser(e,!formValues[0]?.user_management.edit)}
+                            checked={formValues?.user_management.edit}
+                            onChange={(e)=>handleChange("user_management","edit",!formValues?.user_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2599,8 +2603,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[1]?.user_management.edit}
-                            onChange={(e)=>handleChangeUser(e,!formValues[1]?.user_management.edit)}
+                            checked={formValues1?.user_management.edit}
+                            onChange={(e)=>handleChange1("user_management","edit",!formValues1?.user_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2625,8 +2629,8 @@ console.log(e.target.name);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues[2]?.user_management.edit}
-                            onChange={(e)=>handleChangeUser(e,!formValues[2]?.user_management.edit)}
+                            checked={formValues2?.user_management.edit}
+                            onChange={(e)=>handleChange2("user_management","edit",!formValues2?.user_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2637,7 +2641,7 @@ console.log(e.target.name);
                         style={{ margin: "0rem" }}
                       />
                     </TableCell>
-                  </TableRow>
+                  </TableRow>  
 
                 </TableBody>
               </Table>

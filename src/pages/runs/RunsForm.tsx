@@ -518,7 +518,7 @@ const RunsForm = React.forwardRef(
 
                           </React.Fragment>
                         )}
-                        onChange={(_, selectedOptions: any) => { debugger; setLaboratory(selectedOptions) }}
+                        onChange={(_, selectedOptions: any) => {setLaboratory(selectedOptions) }}
 
                         disabled
                       />

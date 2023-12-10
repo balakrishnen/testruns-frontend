@@ -237,7 +237,7 @@ export default function TableChart() {
         channels.charts.push({
           [outputKey]: '',
         });
-        debugger;
+        // debugger;
         channels.charts[index][outputKey] =
           dataItem.data[index][`plot${keys + 1}`];
       }
@@ -297,7 +297,7 @@ export default function TableChart() {
       data: plot1,
       value: yAxisOptions[0].value,
     };
-    debugger
+    // debugger
     setChartData(data);
   };
 
