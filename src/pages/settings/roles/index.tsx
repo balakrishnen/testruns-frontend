@@ -1128,7 +1128,7 @@ setFormValues((prevValues) => ({
 
 <TableRow>
                     <TableCell colSpan={12} className="procedure-profile">
-                      <Typography>Assert</Typography>
+                      <Typography>Assets</Typography>
                       <Typography>Control the actions of users under procedure section.</Typography>
                     </TableCell>
                   </TableRow>

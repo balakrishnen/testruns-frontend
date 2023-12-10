@@ -468,7 +468,7 @@ const Addnewpopup = React.forwardRef(
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
                         <Box style={{ position: 'relative' }}>
-                          <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
+                          <label style={{marginBottom:'1em'}}>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}  name='perchasedDate'>
                             <DatePicker 
                               format="DD/MM/YYYY"
@@ -480,7 +480,7 @@ const Addnewpopup = React.forwardRef(
                           </LocalizationProvider>
                           {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
-                              <Typography className="error-field">
+                              <Typography className="error-field" style={{ color: "#E2445C" ,position: 'absolute',top:'2em',right:"9.4em" }}>
                                 Purchase date required
                               </Typography>
                             )}
@@ -501,8 +501,8 @@ const Addnewpopup = React.forwardRef(
                         }}
                       >
                         <Box>
-                          <label>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <label style={{marginBottom:'1em'}}>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
+                          <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker disablePast
                               format="DD/MM/YYYY"
                               onChange={(selectedDate: any) =>
@@ -513,8 +513,8 @@ const Addnewpopup = React.forwardRef(
                           </LocalizationProvider>
                           {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (
-                              <Typography className="error-field" style={{ color: "#E2445C" ,position: 'absolute',top:'15.2em' }}>
-                                required
+                              <Typography className="error-field" style={{ color: "#E2445C" ,position: 'absolute',top:'17em',right:"4.2em" }}>
+                               Guaranty/warranty/expiry date required
                               </Typography>
                             )}
                         </Box>

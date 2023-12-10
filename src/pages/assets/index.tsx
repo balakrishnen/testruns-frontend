@@ -102,7 +102,7 @@ export default function Assets() {
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [rowId, setRowId] = React.useState<any>([]);
-  console.log(rowId);
+  console.log("rowId",rowId);
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
   const [loader, setLoader] = React.useState(false);
   const [filter, setFilter]=React.useState(false)
@@ -487,6 +487,7 @@ export default function Assets() {
                             : () => <Placeholder>Search by</Placeholder>
                         }
                       >
+                        
                         {headers.map((element: any) => (
                           <MenuItem
                             value={element.id}
@@ -653,6 +654,10 @@ export default function Assets() {
                     image={true}
                     rows={queryStrings.perPage}
                   />
+                </TableBody>
+              ) : assetsData.length === 0 ? (
+                <TableBody>
+                <p style={{textAlign:'center', position:'absolute', left:'45em'}}>No data found.</p>
                 </TableBody>
               ) : (
                 <TableBody>
