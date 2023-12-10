@@ -764,6 +764,10 @@ export default function Procedures() {
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
+               ) : procedureData.length === 0 ? (
+                <TableBody>
+               <p style={{textAlign:'center', position:'absolute', left:'45em'}}>No data found.</p>
+                </TableBody>
               ) : (
                 <TableBody>
                   {procedureData?.map((row: any, index: number) => {

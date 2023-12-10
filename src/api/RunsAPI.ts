@@ -24,7 +24,7 @@ export const fetchRunsData = (payload: any) => async (dispatch: any) => {
       variables: payload,
       fetchPolicy: 'network-only',
     });
-    console.log('reponse.data', response.data);
+    console.log('reponse.data786', response.data);
     dispatch(fetchRunsSuccess(response.data));
   } catch (error: any) {
     dispatch(fetchRunsFailure(error.message));

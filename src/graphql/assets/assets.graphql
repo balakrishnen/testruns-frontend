@@ -134,6 +134,7 @@ mutation Update_asset(
         $name: String
         $organisationId: String
         $perchasedDate: String
+        $assetImageUrl: String
         $lastUsedDate: String
         $availability: AssetAvailability
         $expiryDate: String
@@ -146,6 +147,7 @@ mutation Update_asset(
         name: $name
         organisationId: $organisationId
         perchasedDate: $perchasedDate
+        assetImageUrl:$assetImageUrl
         lastUsedDate: $lastUsedDate
         availability: $availability
         expiryDate: $expiryDate

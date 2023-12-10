@@ -669,6 +669,10 @@ const Users = () => {
                   rows={queryStrings.perPage}
                 />
               </TableBody>
+            ) : userData.length === 0 ? (
+              <TableBody>
+              <p style={{textAlign:'center', position:'absolute', left:'55em'}}>No data found.</p>
+              </TableBody>
             ) : (
               <TableBody>
                 {userData?.map((row: any, index: number) => {

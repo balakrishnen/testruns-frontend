@@ -105,6 +105,8 @@ export default function Runs() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const [runsData, setRunsData] = React.useState<any>([]);
+  console.log('runsData',runsData);
+  
   const [rowId, setRowId] = React.useState<any>([]);
   const[runsRow, setRunsRow]=React.useState<any>([])
   const dispatch: any = useDispatch();
@@ -128,6 +130,7 @@ export default function Runs() {
   const runsSliceData = useSelector(
     (state: any) => state.runs.data?.get_all_runs,
   );
+console.log('runsSliceData',runsSliceData);
 
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
@@ -773,6 +776,10 @@ export default function Runs() {
                     image={true}
                     rows={queryStrings.perPage}
                   />
+                </TableBody>
+              ): runsData.length === 0 ? (
+                <TableBody>
+               <p style={{textAlign:'center', position:'absolute', left:'45em'}}>No data found.</p>
                 </TableBody>
               ) : (
                 <TableBody>

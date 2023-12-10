@@ -443,9 +443,11 @@ console.log(assetValue?.organisationId,);
                     },
                   }}
                 >
+                  {/* {console.log("formik",!formik.dirty)} */}
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img"  style={{height:"394px", width:"327px",objectFit: "fill"}}/>
+                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img"  style={{height:"394px", width:"327px",objectFit: "fill"}}
+                      />
                     </Box>
 
                     <Box
@@ -453,13 +455,13 @@ console.log(assetValue?.organisationId,);
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
                       <Button onClick={triggerFileUploadField}>Upload photo</Button>
-                      <input
-            style={{ display: 'none' }}
-            type="file"
-            ref={fileUploadField}
-            accept="image/*, image/jpeg, image/png"
-            onChange={handleImageUpload}
-            />
+                                  <input
+                        style={{ display: 'none' }}
+                        type="file"
+                        ref={fileUploadField}
+                        accept="image/*, image/jpeg, image/png"
+                        onChange={handleImageUpload}
+                        />
                     </Box>
                   </Box>
                 </Grid>
