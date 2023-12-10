@@ -673,7 +673,7 @@ export default function Assets() {
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-              ) : assetsData.length === 0 ? (
+              ) :!assetsData || assetsData.length === 0 ? (
                 <TableBody>
                 <p style={{textAlign:'center', position:'absolute', left:'45em'}}>No data found.</p>
                 </TableBody>

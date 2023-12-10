@@ -72,7 +72,9 @@ const validationSchemaProfile = Yup.object().shape({
     .required('Email is required')
     .email('Invalid email')
     .matches(emailRegex, 'In-correct email'),
-  phoneNumber: Yup.string().notRequired(),
+  phoneNumber: Yup.string()
+  .required('Phone number is required')
+  .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
   // .matches(phoneRegExp, 'Phone number is not valid')
   // .min(10, 'Enter valid number')
   // .max(10, 'too long')

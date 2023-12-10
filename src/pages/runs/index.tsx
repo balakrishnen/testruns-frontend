@@ -777,7 +777,7 @@ console.log('runsSliceData',runsSliceData);
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-              ): runsData.length === 0 ? (
+              ): !runsData || runsData.length === 0 ? (
                 <TableBody>
                <p style={{textAlign:'center', position:'absolute', left:'45em'}}>No data found.</p>
                 </TableBody>

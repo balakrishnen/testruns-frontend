@@ -24,6 +24,8 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup }: any) => {
   const dispatch : any =useDispatch()
   const [allUserData, setAlluserData] = React.useState<any>([]);
   const [userList, setuserList]=React.useState<any>([])
+  console.log('userList',userList);
+  
   const allUser=  useSelector(
     (state: any) => state.user.data?.find_users, 
   );
@@ -154,6 +156,7 @@ React.useEffect(()=>{
             onClick={()=>handleSave()}
             variant="contained"
             className="add-btn"
+            disabled={userList.length > 0? false : true}
           >
             Save
           </Button>

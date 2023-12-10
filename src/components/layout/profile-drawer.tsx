@@ -37,7 +37,9 @@ const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Lase name is required"),
   email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
-  phoneNumber: Yup.string().notRequired(),
+  phoneNumber: Yup.string()
+  .required('Phone number is required')
+  .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
   // .matches(phoneRegExp, 'Phone number is not valid')
   //   .min(10, "Enter valid number")
   //   .max(10, "too long").required("Mobile number is required"),
@@ -214,7 +216,7 @@ export default function AppProfileDrawer({
       // alert("User Details updated successful!");
 
     }
-    window.location.reload()
+    // window.location.reload()
   }
   const formik = useFormik({
     initialValues: {
@@ -238,7 +240,16 @@ export default function AppProfileDrawer({
       // dispatch(fetchLogoutUser())
         if (typeof window !== 'undefined') {
           window.sessionStorage.setItem('isLoggedIn', 'false');
-          navigate('/login');
+          toast(`User logout successfully !`, {
+            style: {
+              background: '#00bf70',
+              color: '#fff',
+            },
+          });
+          setTimeout(() => {
+            navigate('/login');
+          }, 1000);
+         
         }
 
     }).catch((error) => {

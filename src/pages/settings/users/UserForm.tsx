@@ -317,7 +317,7 @@ const UserForm = React.forwardRef(
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>First name</label>
+                      <label style={{ display: 'block' }}>First name<span style={{ color: "#E2445C" }}>*</span></label>
                       <TextField
                         margin="none"
                         fullWidth
@@ -358,7 +358,7 @@ const UserForm = React.forwardRef(
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Last name</label>
+                      <label style={{ display: 'block' }}>Last name<span style={{ color: "#E2445C" }}>*</span></label>
                       <TextField
                         margin="normal"
                         fullWidth
@@ -394,7 +394,7 @@ const UserForm = React.forwardRef(
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Email ID</label>
+                      <label style={{ display: 'block' }}>Email ID<span style={{ color: "#E2445C" }}>*</span></label>
 
                       <TextField
                         margin="normal"
@@ -483,7 +483,7 @@ const UserForm = React.forwardRef(
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Organisation</label>
+                      <label style={{ display: 'block' }}>Organisation<span style={{ color: "#E2445C" }}>*</span></label>
 
                       <Select
                         className="placeholder-color"
@@ -543,7 +543,7 @@ const UserForm = React.forwardRef(
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Institution</label>
+                      <label style={{ display: 'block' }}>Institution<span style={{ color: "#E2445C" }}>*</span></label>
 
                       <Select
                         className="placeholder-color"
@@ -601,7 +601,7 @@ const UserForm = React.forwardRef(
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Department/s</label>
+                      <label style={{ display: 'block' }}>Department/s<span style={{ color: "#E2445C" }}>*</span></label>
                       {console.log(formik.values.departmentId)}
                       <Autocomplete
                               multiple
@@ -667,7 +667,7 @@ const UserForm = React.forwardRef(
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Laboratory/ies</label>
+                      <label style={{ display: 'block' }}>Laboratory/ies<span style={{ color: "#E2445C" }}>*</span></label>
 
                       <Autocomplete
                                 multiple
@@ -766,7 +766,7 @@ const UserForm = React.forwardRef(
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Select role</label>
+                      <label style={{ display: 'block' }}>Select role<span style={{ color: "#E2445C" }}>*</span></label>
                       <Select
                         // MenuProps={{
                         //   PaperProps: {
