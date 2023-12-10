@@ -19,7 +19,7 @@ const Roles = () => {
   const dispatch: any = useDispatch();
 
   const roleSliceData = useSelector(
-    (state: any) => state.role.data?.get_role,
+    (state: any) => state.role.data?.find_roles,
   );
   const loginUserSliceData=  useSelector(
     (state: any) => state.userLogin?.data?.verifyToken, 
@@ -39,116 +39,234 @@ const Roles = () => {
     dispatch(fetchSingleRoleData(payload))
   }, []);
   console.log("roleData",roleData);
-
-  const initailState={
-    procedure_management:[{
+  const initailState : any=[{
+    "procedure_management":{
       assign : false,
       create : false,
       delete : false,
       edit   : false,
       share  : false,
       view   : false,
-    }],
-    profile_management:[{
+    },
+    "asset_management":{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    },
+    "profile_management":{
       changePassword : false,
       editContact    : false,
       editDepartment : false,
       editLab   : false,
       editOrganisation : false,
       editUserName     : false,
-    }],
-    role_management:[{
+    },
+    "role_management":{
       edit : false
-    }],
-    user_management:[{
+    },
+    "runs_management":{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    },
+    "user_management":{
 
       create  : false,
       delete  : false,
       edit    : false,
-    }]
-  }
+      view    :false
+    },
+  },{
+    "procedure_management":{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    },
+    "asset_management":{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    },
+    "profile_management":{
+      changePassword : false,
+      editContact    : false,
+      editDepartment : false,
+      editLab   : false,
+      editOrganisation : false,
+      editUserName     : false,
+    },
+    "role_management":{
+      edit : false
+    },
+    "runs_management":{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    },
+    "user_management":{
+
+      create  : false,
+      delete  : false,
+      edit    : false,
+      view    :false
+    },
+  },{
+    "procedure_management":{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    },
+    "asset_management":{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    },
+    "profile_management":{
+      changePassword : false,
+      editContact    : false,
+      editDepartment : false,
+      editLab   : false,
+      editOrganisation : false,
+      editUserName     : false,
+    },
+    "role_management":{
+      edit : false
+    },
+    "runs_management":{
+      assign : false,
+      create : false,
+      delete : false,
+      edit   : false,
+      share  : false,
+      view   : false,
+    },
+    "user_management":{
+
+      create  : false,
+      delete  : false,
+      edit    : false,
+      view    :false
+    },
+  }]
   const [formValues, setFormValues]=React.useState(initailState)
   console.log(formValues);
   
   const handleChange=(e:any,val:boolean)=>{
 console.log(e.target.name);
-setFormValues((prevValues) => ({
-  ...prevValues,
-  procedure_management: [
-    {
-      ...prevValues.procedure_management[0],
-      [e.target.name]: val,
-    },
-  ],
-}));
+// setFormValues((prevValues: { procedure_management: any[]; }) => ({
+//   ...prevValues,
+//   procedure_management: [
+//     {
+//       ...prevValues.procedure_management[0],
+//       [e.target.name]: val,
+//     },
+//   ],
+// }));
   }
   const handleChangeUser=(e:any,val:boolean)=>{
     console.log(e.target.name);
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      user_management: [
-        {
-          ...prevValues.user_management[0],
-          [e.target.name]: val,
-        },
-      ],
-    }));
+    // setFormValues((prevValues: { user_management: any[]; }) => ({
+    //   ...prevValues,
+    //   user_management: [
+    //     {
+    //       ...prevValues.user_management[0],
+    //       [e.target.name]: val,
+    //     },
+    //   ],
+    // }));
       }
       const handleChangeProfile=(e:any,val:boolean)=>{
         console.log(e.target.name);
-        setFormValues((prevValues) => ({
-          ...prevValues,
-          profile_management: [
-            {
-              ...prevValues.profile_management[0],
-              [e.target.name]: val,
-            },
-          ],
-        }));
+        // setFormValues((prevValues: { profile_management: any[]; }) => ({
+        //   ...prevValues,
+        //   profile_management: [
+        //     {
+        //       ...prevValues.profile_management[0],
+        //       [e.target.name]: val,
+        //     },
+        //   ],
+        // }));
           }
           const handleChangeRole=(e:any,val:boolean)=>{
             console.log(e.target.name);
-            setFormValues((prevValues) => ({
-              ...prevValues,
-              role_management: [
-                {
-                  ...prevValues.role_management[0],
-                  [e.target.name]: val,
-                },
-              ],
-            }));
+            // setFormValues((prevValues: { role_management: any[]; }) => ({
+            //   ...prevValues,
+            //   role_management: [
+            //     {
+            //       ...prevValues.role_management[0],
+            //       [e.target.name]: val,
+            //     },
+            //   ],
+            // }));
           }
   const handleSave=()=>{
     console.log('submited');
     var payload={
       _id: loginUserSliceData?._id,
+      asset_management:[{
+        assign : formValues[0].asset_management.assign,
+        create : formValues[0].asset_management.create,
+        delete : formValues[0].asset_management.delete,
+        edit   : formValues[0].asset_management.edit,
+        share  : formValues[0].asset_management.share,
+        view   : formValues[0].asset_management.view,
+      }],
       procedure_management:[{
-        assign : formValues.procedure_management[0].assign,
-        create : formValues.procedure_management[0].create,
-        delete : formValues.procedure_management[0].delete,
-        edit   : formValues.procedure_management[0].edit,
-        share  : formValues.procedure_management[0].share,
-        view   : formValues.procedure_management[0].view,
+        assign : formValues[0].procedure_management.assign,
+        create : formValues[0].procedure_management.create,
+        delete : formValues[0].procedure_management.delete,
+        edit   : formValues[0].procedure_management.edit,
+        share  : formValues[0].procedure_management.share,
+        view   : formValues[0].procedure_management.view,
       }],
       profile_management:[{
-        changePassword : formValues.profile_management[0].changePassword,
-        editContact    : formValues.profile_management[0].editContact,
-        editDepartment : formValues.profile_management[0].editDepartment,
-        editLab   : formValues.profile_management[0].editLab,
-        editOrganisation : formValues.profile_management[0].editOrganisation,
-        editUserName     : formValues.profile_management[0].editUserName,
+        changePassword : formValues[0].profile_management.changePassword,
+        editContact    : formValues[0].profile_management.editContact,
+        editDepartment : formValues[0].profile_management.editDepartment,
+        editLab   : formValues[0].profile_management.editLab,
+        editOrganisation : formValues[0].profile_management.editOrganisation,
+        editUserName     : formValues[0].profile_management.editUserName,
+      }],
+      runs_management:[{
+        assign : formValues[0].runs_management.assign,
+        create : formValues[0].runs_management.create,
+        delete : formValues[0].runs_management.delete,
+        edit   : formValues[0].runs_management.edit,
+        share  : formValues[0].runs_management.share,
+        view   : formValues[0].runs_management.view,
       }],
       role_management:[{
-        edit : formValues.role_management[0].edit
+        edit : formValues[0].role_management.edit
       }],
       user_management:[{
   
-        create  : formValues.user_management[0].create,
-        delete  : formValues.user_management[0].delete,
-        edit    : formValues.user_management[0].edit,
+        create  : formValues[0].user_management.create,
+        delete  : formValues[0].user_management.delete,
+        edit    : formValues[0].user_management.edit,
       }]
     }
-    dispatch(fetchUpdateRoleData(payload))
+    // dispatch(fetchUpdateRoleData(payload))
     
   }
   return (
@@ -229,8 +347,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].create}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].create)}
+                            checked={formValues[0]?.procedure_management.create? true:false}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.create)}
                             name="create"
                             // checked={true}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
@@ -256,6 +374,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.procedure_management.create? true:false}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -279,6 +400,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.procedure_management.create? true:false}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -305,8 +429,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].delete}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].delete)}
+                            checked={formValues[0]?.procedure_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -331,6 +455,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.procedure_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -354,6 +481,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.procedure_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -380,8 +510,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].edit}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].edit)}
+                            checked={formValues[0]?.procedure_management.edit}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -406,6 +536,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.procedure_management.edit}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -429,6 +562,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.procedure_management.edit}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -455,8 +591,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].view}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].view)}
+                            checked={formValues[0]?.procedure_management.view}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -481,6 +617,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.procedure_management.view}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.view)}
+                            name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -504,11 +643,14 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.procedure_management.view}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.view)}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
                         }
-                        label=""
+                       
+                        name="view"
                         className="common-radio"
                         style={{ margin: "0rem" }}
                       />
@@ -530,8 +672,34 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].assign}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].assign)}
+                            checked={formValues[0]?.procedure_management.assign}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.assign)}
+                            name="assign"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues[1]?.procedure_management.assign}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -560,30 +728,9 @@ setFormValues((prevValues) => ({
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
                         }
-                        label=""
-                        className="common-radio"
-                        style={{ margin: "0rem" }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            value="remember"
-                            color="primary"
-                            sx={{
-                              color: "#9F9F9F",
-                              "&.Mui-checked": {
-                                color: "#FFC60B",
-                              },
-                              width: '30px',
-                              height: '30px'
-                            }}
-                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
-                            icon={< RadioButtonUncheckedOutlinedIcon />}
-                          />
-                        }
-                        label=""
+                        checked={formValues[2]?.procedure_management.assign}
+                        onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.assign)}
+                        name="assign"
                         className="common-radio"
                         style={{ margin: "0rem" }}
                       />
@@ -605,8 +752,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].share}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].share)}
+                            checked={formValues[0]?.procedure_management.share}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.procedure_management.share)}
                             name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -631,6 +778,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.procedure_management.assign}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.procedure_management.assign)}
+                            name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -654,6 +804,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.procedure_management.assign}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.procedure_management.assign)}
+                            name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -688,8 +841,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].create}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].create)}
+                            checked={formValues[0]?.runs_management.create}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.create)}
                             name="create"
                             // checked={true}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
@@ -715,6 +868,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.runs_management.create}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -738,6 +894,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.runs_management.create}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -764,8 +923,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].delete}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].delete)}
+                            checked={formValues[0]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -790,6 +949,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -813,6 +975,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -839,8 +1004,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].edit}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].edit)}
+                            checked={formValues[0]?.runs_management.edit}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -865,6 +1030,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -888,6 +1056,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -914,8 +1085,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].view}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].view)}
+                            checked={formValues[0]?.runs_management.view}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -940,6 +1111,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -963,6 +1137,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -989,8 +1166,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].assign}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].assign)}
+                            checked={formValues[0]?.runs_management.assign}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1015,6 +1192,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1038,6 +1218,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1064,8 +1247,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].share}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].share)}
+                            checked={formValues[0]?.runs_management.share}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.runs_management.share)}
                             name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1090,6 +1273,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1113,6 +1299,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1148,8 +1337,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].create}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].create)}
+                            checked={formValues[0]?.asset_management.create}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.create)}
                             name="create"
                             // checked={true}
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
@@ -1175,6 +1364,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1198,6 +1390,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.runs_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.runs_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1224,8 +1419,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].delete}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].delete)}
+                            checked={formValues[0]?.asset_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1250,6 +1445,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.asset_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1273,6 +1471,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.asset_management.delete}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1299,8 +1500,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].edit}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].edit)}
+                            checked={formValues[0]?.asset_management.edit}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1325,6 +1526,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.asset_management.edit}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1348,6 +1552,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.asset_management.edit}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1374,8 +1581,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].view}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].view)}
+                            checked={formValues[0]?.asset_management.view}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.view)}
                             name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1400,6 +1607,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.asset_management.view}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.view)}
+                            name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1423,6 +1633,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.asset_management.view}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.view)}
+                            name="view"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1449,8 +1662,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].assign}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].assign)}
+                            checked={formValues[0]?.asset_management.assign}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.assign)}
                             name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1475,6 +1688,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.asset_management.assign}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.assign)}
+                            name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1498,6 +1714,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.asset_management.assign}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.assign)}
+                            name="assign"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1524,8 +1743,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management[0].share}
-                            onChange={(e)=>handleChange(e,!formValues?.procedure_management[0].share)}
+                            checked={formValues[0]?.asset_management.share}
+                            onChange={(e)=>handleChange(e,!formValues[0]?.asset_management.share)}
                             name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1550,6 +1769,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.asset_management.share}
+                            onChange={(e)=>handleChange(e,!formValues[1]?.asset_management.share)}
+                            name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1573,6 +1795,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.asset_management.share}
+                            onChange={(e)=>handleChange(e,!formValues[2]?.asset_management.share)}
+                            name="share"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1606,8 +1831,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.profile_management[0].editUserName}
-                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editUserName)}
+                            checked={formValues[0]?.profile_management.editUserName}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editUserName)}
                             name="editUserName"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1632,6 +1857,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.profile_management.editUserName}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editUserName)}
+                            name="editUserName"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1655,6 +1883,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.profile_management.editUserName}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editUserName)}
+                            name="editUserName"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1681,8 +1912,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.profile_management[0].changePassword}
-                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].changePassword)}
+                            checked={formValues[0]?.profile_management.changePassword}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.changePassword)}
                             name="changePassword"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1707,6 +1938,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.profile_management.changePassword}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.changePassword)}
+                            name="changePassword"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1730,6 +1964,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.profile_management.changePassword}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.changePassword)}
+                            name="changePassword"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1757,8 +1994,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.profile_management[0].editOrganisation}
-                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editOrganisation)}
+                            checked={formValues[0]?.profile_management.editOrganisation}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editOrganisation)}
                             name="editOrganisation"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1783,6 +2020,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.profile_management.editOrganisation}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editOrganisation)}
+                            name="editOrganisation"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1806,6 +2046,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.profile_management.editOrganisation}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editOrganisation)}
+                            name="editOrganisation"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1832,8 +2075,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.profile_management[0].editDepartment}
-                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editDepartment)}
+                            checked={formValues[0]?.profile_management.editDepartment}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editDepartment)}
                             name="editDepartment"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1858,6 +2101,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.profile_management.editDepartment}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editDepartment)}
+                            name="editDepartment"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1881,6 +2127,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.profile_management.editDepartment}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editDepartment)}
+                            name="editDepartment"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1907,8 +2156,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.profile_management[0].editLab}
-                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editLab)}
+                            checked={formValues[0]?.profile_management.editLab}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editLab)}
                             name="editLab"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1933,6 +2182,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.profile_management.editLab}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editLab)}
+                            name="editLab"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1956,6 +2208,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.profile_management.editLab}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editLab)}
+                            name="editLab"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -1982,8 +2237,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.profile_management[0].editContact}
-                            onChange={(e)=>handleChangeProfile(e,!formValues?.profile_management[0].editContact)}
+                            checked={formValues[0]?.profile_management.editContact}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[0]?.profile_management.editContact)}
                             name="editContact"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2008,6 +2263,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.profile_management.editContact}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[1]?.profile_management.editContact)}
+                            name="editContact"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2031,6 +2289,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.profile_management.editContact}
+                            onChange={(e)=>handleChangeProfile(e,!formValues[2]?.profile_management.editContact)}
+                            name="editContact"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2063,8 +2324,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.role_management[0].edit}
-                            onChange={(e)=>handleChangeRole(e,!formValues?.role_management[0].edit)}
+                            checked={formValues[0]?.role_management.edit}
+                            onChange={(e)=>handleChangeRole(e,!formValues[0]?.role_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2089,6 +2350,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.role_management.edit}
+                            onChange={(e)=>handleChangeRole(e,!formValues[1]?.role_management.edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2112,6 +2376,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.role_management.edit}
+                            onChange={(e)=>handleChangeRole(e,!formValues[2]?.role_management.edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2144,8 +2411,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.user_management[0].create}
-                            onChange={(e)=>handleChangeUser(e,!formValues?.user_management[0].create)}
+                            checked={formValues[0]?.user_management.create}
+                            onChange={(e)=>handleChangeUser(e,!formValues[0]?.user_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2170,6 +2437,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.user_management.create}
+                            onChange={(e)=>handleChangeUser(e,!formValues[1]?.user_management.create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2193,6 +2463,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.user_management.create}
+                            onChange={(e)=>handleChangeUser(e,!formValues[2]?.user_management.create)}
+                            name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2219,8 +2492,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.user_management[0].delete}
-                            onChange={(e)=>handleChangeUser(e,!formValues?.user_management[0].delete)}
+                            checked={formValues[0]?.user_management.delete}
+                            onChange={(e)=>handleChangeUser(e,!formValues[0]?.user_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2245,6 +2518,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.user_management.delete}
+                            onChange={(e)=>handleChangeUser(e,!formValues[1]?.user_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2268,6 +2544,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.user_management.delete}
+                            onChange={(e)=>handleChangeUser(e,!formValues[2]?.user_management.delete)}
+                            name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2294,8 +2573,8 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.user_management[0].edit}
-                            onChange={(e)=>handleChangeUser(e,!formValues?.user_management[0].edit)}
+                            checked={formValues[0]?.user_management.edit}
+                            onChange={(e)=>handleChangeUser(e,!formValues[0]?.user_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -2320,6 +2599,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[1]?.user_management.edit}
+                            onChange={(e)=>handleChangeUser(e,!formValues[1]?.user_management.edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />
@@ -2343,6 +2625,9 @@ setFormValues((prevValues) => ({
                               width: '30px',
                               height: '30px'
                             }}
+                            checked={formValues[2]?.user_management.edit}
+                            onChange={(e)=>handleChangeUser(e,!formValues[2]?.user_management.edit)}
+                            name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />

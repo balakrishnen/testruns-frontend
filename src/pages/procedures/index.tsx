@@ -83,7 +83,7 @@ export default function Procedures() {
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterOptions, setFilterOptions] = React.useState([]);
   const [loader, setLoader] = React.useState(false);
-  const [filter, setFilter] = React.useState(false)
+  const [filter, setFilter] = React.useState(false);
 
   const handleRequestSort = () => {
     // event: React.MouseEvent<unknown>,
@@ -156,7 +156,7 @@ export default function Procedures() {
     applyFilters(null, null);
     handleFilterPopoverClose();
     setFilterKey(null);
-    setFilter(false)
+    setFilter(false);
   };
 
   React.useEffect(() => {
@@ -171,8 +171,17 @@ export default function Procedures() {
     dispatch(fetchProcedureData(queryStrings));
     setTableHeaderVisible(false);
     setRowId([]);
-  }, [pageInfo,queryStrings]);
-  // console.log('procedureData',procedureData[0].departmentId.length);
+  }, [queryStrings]);
+
+  React.useEffect(() => {
+    return () => {
+      const headersList: any = [...headers];
+      headersList.map((item) => {
+        return (item.sort = 'asc');
+      });
+      setHeaders(headersList);
+    };
+  }, []);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
@@ -365,7 +374,6 @@ export default function Procedures() {
           return true;
         }
       });
-      console.log(filteredRows);
       setVisibleRow(filteredRows);
     } else {
       setVisibleRow(procedureData);
@@ -429,8 +437,6 @@ export default function Procedures() {
   const createdAtTimestamp = '1699599706383';
   const localTime = moment(createdAtTimestamp).format('YYYY-MM-DD HH:mm:ss');
 
-  console.log(localTime);
-
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
     const payload: any = { ...queryStrings };
     const headersList: any = [...headers];
@@ -447,7 +453,7 @@ export default function Procedures() {
     payload['searchBy'] = key;
     payload['search'] = value;
     setQueryString(payload);
-    setFilter(true)
+    setFilter(true);
   };
   const reload = () => {
     const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
@@ -465,7 +471,6 @@ export default function Procedures() {
     });
     return result;
   };
-  console.log("headers",headers);
 
   return (
     <PrivateRoute>
@@ -498,7 +503,7 @@ export default function Procedures() {
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
                 <Badge
                   color="secondary"
-                  variant={filter? 'dot' : 'standard'}
+                  variant={filter ? 'dot' : 'standard'}
                   invisible={false}
                   className="red-badge-filter"
                 >
@@ -571,13 +576,15 @@ export default function Procedures() {
                           }
                           if (event.target?.value === 'procedureNumber') {
                             const result: any = [];
-                            proceduresIdSliceData.Procedures.forEach((element) => {
-                              result.push({
-                                id: element.procedureNumber,
-                                name: element.procedureNumber,
-                                value: element.procedureNumber,
-                              });
-                            });
+                            proceduresIdSliceData.Procedures.forEach(
+                              (element) => {
+                                result.push({
+                                  id: element.procedureNumber,
+                                  name: element.procedureNumber,
+                                  value: element.procedureNumber,
+                                });
+                              },
+                            );
                             setFilterOptions(result);
                           }
                         }}
@@ -937,10 +944,7 @@ export default function Procedures() {
                             </TableCell>
                           )}
                           {headers[5].is_show && (
-                            <TableCell>
-                              {row.createdOn}
-                               
-                            </TableCell>
+                            <TableCell>{row.createdOn}</TableCell>
                           )}
                         </TableRow>
                       )
