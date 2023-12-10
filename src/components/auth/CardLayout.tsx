@@ -49,7 +49,7 @@ export const CardLayout = ({ children }: any, props: any) => {
         // if(varient=='signup'){
           console.log(result.user.uid);
           let payload={
-            firstName: result.user.displayName,
+            firstName: result.user.displayName!==null?result.user.displayName:result.user.email,
             lastName: "",
             email: result.user.email,
             uid:result.user.uid,
