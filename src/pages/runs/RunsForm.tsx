@@ -636,7 +636,11 @@ const RunsForm = React.forwardRef(
             </Box>
           </form>
         </Dialog>
-        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} />
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} 
+        // runzId={runzId}
+        //         runzRow={runzRow}
+        //         typePopup={typePopup}
+                 />
         <Confirmationpopup
           ref={confirmationPopupRef}
           confirmationState={handleConfirmationState}

@@ -1204,20 +1204,20 @@ export const HistoryHeaders: readonly HistoryHead[] = [
     sort: 'asc',
     is_show: true,
   },
-  {
-    id: 'updatedAt',
-    label: 'User ID',
-    filters: [
-      {
-        id: 'date',
-        type: 'date',
-        label: 'DD/MM/YYYY',
-        options: [],
-      },
-    ],
-    sort: 'asc',
-    is_show: true,
-  },
+  // {
+  //   id: 'updatedAt',
+  //   label: 'User ID',
+  //   filters: [
+  //     {
+  //       id: 'date',
+  //       type: 'date',
+  //       label: 'DD/MM/YYYY',
+  //       options: [],
+  //     },
+  //   ],
+  //   sort: 'asc',
+  //   is_show: true,
+  // },
   {
     id: 'status',
     label: 'User Name',

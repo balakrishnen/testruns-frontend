@@ -322,15 +322,15 @@ export default function HistoryTable() {
                                         {headers[4].is_show && (
                         <TableCell align="center">{row.dueDate}</TableCell>
                       )}
-                                        {headers[5].is_show && (
+                                        {/* {headers[5].is_show && (
                         <TableCell align="center">{row.dueDate}</TableCell>
                         // <TableCell align="center">{row.userId}</TableCell>
-                      )}
-                                        {headers[6].is_show && (
+                      )} */}
+                                        {headers[5].is_show && (
                                             <TableCell align="center">User Name</TableCell>
 
                                         )}
-                                        {headers[7].is_show && (
+                                        {headers[6].is_show && (
                                             <TableCell>
                                                {/* <FormControl className="Status-info" style={{ marginTop: '7px'}}> */}
                   <Box

@@ -111,8 +111,20 @@ query Get_run($_id: String!) {
         status
         isActive
         isDeleted
+        assignedBy
+        assignedTo
         createdAt
         updatedAt
+         departmentId {
+            _id
+            name
+          
+        }
+        laboratoryId {
+            _id
+            name
+            
+        }
         procedureId {
             _id
             name

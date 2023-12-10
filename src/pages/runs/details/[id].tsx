@@ -231,6 +231,7 @@ export default function RunsDetails() {
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content:"" });
   const formRef: any = React.useRef(null);
+  const [typePopup, settypePopup]= React.useState('')
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -367,7 +368,13 @@ export default function RunsDetails() {
   const procedureSliceData = useSelector(
     (state: any) => state.runs.data
   );
-
+  
+  var runzId:any=[];
+  runzId.push(runzValue?._id)
+  console.log("runsRow",runzId,runzValue);
+  var runzRow:any= []
+  runzRow.push(runzValue)
+  
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       console.log(window.location.pathname.split('/'));
@@ -1000,6 +1007,10 @@ console.log("inputEl",inputEl);
       },
     });
   };
+  const handleAssignClick = (val:string) => {
+    setRunsOpen(true);
+    settypePopup(val)
+  };
   return (
     <PrivateRoute>
        {!isLoader ?
@@ -1033,7 +1044,7 @@ console.log("inputEl",inputEl);
                     variant="contained"
                     className="edit-btn"
                     onClick={() => {
-                      setRunsOpen(true);
+                      handleAssignClick("assign")
                     }}
                   >
                     <img
@@ -1048,7 +1059,7 @@ console.log("inputEl",inputEl);
                     variant="contained"
                     className="edit-btn"
                     onClick={() => {
-                      setRunsOpen(true);
+                      handleAssignClick('share')
                     }}
                   >
                     <img
@@ -1725,7 +1736,11 @@ console.log("inputEl",inputEl);
         submitFormPopup={handleSubmitFormPopup}
         handleReloadSingleData={handleReloadSingleData}
       />
-      <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} />
+      <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} 
+      runzId={runzId}
+      runzRow={runzRow}
+     typePopup={typePopup} 
+                />
       </>:
       <SpinerLoader isLoader={isLoader} />}
     </PrivateRoute>

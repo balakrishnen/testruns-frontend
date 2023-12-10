@@ -29,7 +29,7 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup }: any) => {
   const allUser=  useSelector(
     (state: any) => state.user.data?.find_users, 
   );
-console.log(userList);
+console.log(runzRow);
 React.useEffect(()=>{
   setAlluserData(allUserData)
  },[allUserData])
@@ -52,10 +52,10 @@ React.useEffect(()=>{
   const handleSave=async()=>{
     console.log("save",runzRow);
     const allIds = userList.map((item:any) => item.id);
-    const newArray = runzRow.map((item:any) => ({ 
+    const newArray = runzRow?.map((item:any) => ({ 
       objective: item?.objective,
       shared: typePopup=='share'?true:false,
-      procedureId: item?.procedureId._id ,
+      procedureId: item?.procedureId._id==undefined?item?.procedureId[0]?._id :item?.procedureId._id,
       departmentId: item?.departmentId.map(((item:any)=>item?._id)) ,
       laboratoryId:  item?.laboratoryId.map(((item:any)=>item?._id)) ,
       assignedTo: item?.assignedTo ,
@@ -74,6 +74,7 @@ React.useEffect(()=>{
     }
    await dispatch(fetchbulkRunz(payload))
    await close()
+   setuserList([])
    await toast(`Runs ${typePopup} successfully !`, {
     style: {
       background: '#00bf70',
@@ -131,6 +132,7 @@ React.useEffect(()=>{
                 renderInput={(params) => (
                   <TextField  {...params} placeholder="Assignee" />
                 )}
+                value={userList}
                 onChange={(_, selectedOptions: any) => {setuserList(selectedOptions) }}
               />
             </Box>
@@ -145,9 +147,10 @@ React.useEffect(()=>{
         >
           <Button
             type="submit"
-            onClick={close}
+            onClick={()=>{close(),setuserList([])}}
             variant="contained"
             className="cancel-btn"
+            
           >
             Cancel
           </Button>

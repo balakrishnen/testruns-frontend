@@ -933,7 +933,7 @@ console.log(assetValue?.organisationId,);
           </form>
           <CustomTabPanel value={value} index={1}>
             <Box className="asset-id-name">
-              <img src={test} alt="test" className="dynamic-img" />
+              <img src={uploadedFile} alt="test" className="dynamic-img" />
               <Box className="asset-name">
                 <Typography>{assetValue?.assetNumber}</Typography>
                 <Typography>{assetValue?.name}</Typography>

@@ -111,6 +111,7 @@ export default function Runs() {
   const[runsRow, setRunsRow]=React.useState<any>([])
   const dispatch: any = useDispatch();
   const [filter, setFilter] = React.useState<any>(false);
+  console.log("runsRow",rowId,runsRow);
 
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
