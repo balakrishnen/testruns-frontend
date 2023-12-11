@@ -27,7 +27,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
 import moment from 'moment';
 import { fetchNotificationData } from '../../api/notification.API';
-import { fetchMyPageRunsData } from '../../api/myPageAPI'
+import {
+  fetchMyPageRunsData,
+  fetchCalendarEventData,
+} from '../../api/myPageAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import data from '../../assets/images/profile/user.jpg';
@@ -234,9 +237,7 @@ const customDayStyle = {
 };
 
 export default function MyPage() {
-
   const dispatch: any = useDispatch();
-
   const [viewAllNotifications, setViewAllNotifications] = useState(false);
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
@@ -246,12 +247,17 @@ export default function MyPage() {
     sortBy: null,
     sortOrder: 'desc',
   });
-  const [clickedDate, setClickedDate] = useState(null);
-  const [value, onChange] = useState<Value>(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [value, onChange] = useState<Value>(
+    moment(new Date()).format('MM-DD-YYYY'),
+  );
   const [viewAll, setViewAll] = useState(false);
   const [viewAlls, setViewAlls] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [localRowsPerPage, setLocalRowsPerPage] = useState(5);
+  const [CalendarContent, setCalendarContent] = useState([]);
+  const [calendarEventData, setCalendarEventData] = useState([]);
+  const [CalendarMark, setCalendarMark] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [answers, setAnswers] = React.useState('');
   const [notifications, setNotifications] = useState([
@@ -264,16 +270,39 @@ export default function MyPage() {
     (state: any) => state.notification.data?.get_all_notifications,
   );
 
+  const calendar_eventData = useSelector(
+    (state: any) => state.calendar_event.data,
+  );
   const MyPageRunsData = useSelector(
     (state: any) => state.myPageSlice.data?.get_all_runs,
   );
 
-
   React.useEffect(() => {
+    let pay = {
+      month: `${new Date().getMonth() + 1}`,
+      year: `${new Date().getFullYear()}`,
+    };
     dispatch(fetchNotificationData());
+    dispatch(fetchCalendarEventData(pay));
     dispatch(fetchMyPageRunsData(queryStrings));
   }, []);
 
+  React.useEffect(() => {
+    const calendarMarkSet = new Set();
+    const calendar = calendar_eventData.runs_calender_data.map((item) => {
+      const date = new Date(parseInt(item.createdAt));
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const year = date.getFullYear();
+      const formattedDate = `${month}-${day}-${year}`;
+      const temp = { ...item, createdAt: formattedDate };
+      calendarMarkSet.add(formattedDate);
+      return temp;
+    });
+    const calendarMark = Array.from(calendarMarkSet);
+    setCalendarMark(calendarMark);
+    setCalendarEventData(calendar);
+  }, [calendar_eventData]);
 
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: Date = new Date();
@@ -293,11 +322,14 @@ export default function MyPage() {
     return `${hoursDifference}h ago`;
   };
 
-
-
   const handleDateClick = (date: any) => {
-    setClickedDate(date);
+    const filCalendarContent = calendarEventData.filter(
+      (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
+    );
+    setCalendarContent(filCalendarContent);
+    setSelectedDate(moment(date).format('MM-DD-YYYY'));
   };
+
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -319,7 +351,6 @@ export default function MyPage() {
   const lastRowIndex = Math.min(currentPage * rowsPerPage, totalRows);
   const rowIndex = (currentPage - 1) * localRowsPerPage + 1;
   const lastIndex = Math.min(currentPage * localRowsPerPage, totalRows);
-
 
   const toggleViewNotifications = () => {
     setViewAllNotifications((prev) => !prev);
@@ -347,155 +378,164 @@ export default function MyPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-
-                {MyPageRunsData?.Runs
-                  .slice(0, viewAll ? MyPageRunsData?.Runs.length : rowsPerPage)
-                  .map((row: any, index: any) => (
-                    <TableRow
-                      key={row._id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell scope="row">
-                        <Box>
-                          <Box>{row.runNumber}</Box>
+                {MyPageRunsData?.Runs.slice(
+                  0,
+                  viewAll ? MyPageRunsData?.Runs.length : rowsPerPage,
+                ).map((row: any, index: any) => (
+                  <TableRow
+                    key={row._id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell scope="row">
+                      <Box>
+                        <Box>{row.runNumber}</Box>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{row.objective}</TableCell>
+                    <TableCell>
+                      {row.departmentId[0] !== null ? (
+                        <Box
+                          onClick={(_event) => {
+                            _event.preventDefault();
+                            _event.stopPropagation();
+                            tablePopupRef.current?.open(
+                              true,
+                              'departments',
+                              row.departmentId,
+                            );
+                          }}
+                          sx={{ display: 'flex', alignItems: 'center' }}
+                        >
+                          <>
+                            <Chip
+                              key={index}
+                              label={row.departmentId[0].name}
+                              sx={{
+                                m: 0.5,
+                                padding: '0px 3px',
+                              }}
+                              onClick={(_event) => {
+                                _event.preventDefault();
+                                _event.stopPropagation();
+                                tablePopupRef.current.open(
+                                  true,
+                                  'departments',
+                                  row.departmentId,
+                                );
+                              }}
+                            />
+                            {row.departmentId.length > 1 && (
+                              <span
+                                style={{
+                                  fontWeight: 500,
+                                  color: '#9F9F9F',
+                                  fontSize: '12px',
+                                  whiteSpace: 'nowrap',
+                                }}
+                              >
+                                +{row.departmentId.length - 1} More
+                              </span>
+                            )}
+                          </>
                         </Box>
-                      </TableCell>
-                      <TableCell>{row.objective}</TableCell>
-                      <TableCell>
-                        {row.departmentId[0] !== null ? (
-                          <Box
-                            onClick={(_event) => {
-                              _event.preventDefault();
-                              _event.stopPropagation();
-                              tablePopupRef.current?.open(
-                                true,
-                                'departments',
-                                row.departmentId,
-                              );
-                            }}
-                            sx={{ display: 'flex', alignItems: 'center' }}
-                          >
-                            <>
-                              <Chip
-                                key={index}
-                                label={row.departmentId[0].name}
-                                sx={{
-                                  m: 0.5,
-                                  padding: '0px 3px',
+                      ) : (
+                        '-'
+                      )}
+                    </TableCell>
+                    <TableCell style={{ whiteSpace: 'nowrap' }}>
+                      {row.laboratoryId[0] !== null ? (
+                        <Box
+                          onClick={(_event) => {
+                            _event.preventDefault();
+                            _event.stopPropagation();
+                            tablePopupRef.current?.open(
+                              true,
+                              'lab',
+                              row.laboratoryId,
+                            );
+                          }}
+                          sx={{ display: 'flex', alignItems: 'center' }}
+                        >
+                          <>
+                            <Chip
+                              key={index}
+                              label={row.laboratoryId[0].name}
+                              sx={{
+                                m: 0.5,
+                                padding: '0px 3px',
+                              }}
+                              onClick={(_event) => {
+                                _event.preventDefault();
+                                _event.stopPropagation();
+                                tablePopupRef.current.open(
+                                  true,
+                                  'lab',
+                                  row.laboratoryId,
+                                );
+                              }}
+                            />
+                            {row.laboratoryId.length > 1 && (
+                              <span
+                                style={{
+                                  fontWeight: 500,
+                                  color: '#9F9F9F',
+                                  fontSize: '12px',
+                                  whiteSpace: 'nowrap',
                                 }}
-                                onClick={(_event) => {
-                                  _event.preventDefault();
-                                  _event.stopPropagation();
-                                  tablePopupRef.current.open(
-                                    true,
-                                    'departments',
-                                    row.departmentId,
-                                  );
-                                }}
-                              />
-                              {row.departmentId.length > 1 && (
-                                <span
-                                  style={{
-                                    fontWeight: 500,
-                                    color: '#9F9F9F',
-                                    fontSize: '12px',
-                                    whiteSpace: 'nowrap',
-                                  }}
-                                >
-                                  +{row.departmentId.length - 1} More
-                                </span>
-                              )}
-                            </>
-                          </Box>
-                        ) : (
-                          '-'
-                        )}
-                      </TableCell>
-                      <TableCell style={{ whiteSpace: 'nowrap' }}>
-                        {row.laboratoryId[0] !== null ? (
-                          <Box
-                            onClick={(_event) => {
-                              _event.preventDefault();
-                              _event.stopPropagation();
-                              tablePopupRef.current?.open(
-                                true,
-                                'lab',
-                                row.laboratoryId,
-                              );
-                            }}
-                            sx={{ display: 'flex', alignItems: 'center' }}
-                          >
-                            <>
-                              <Chip
-                                key={index}
-                                label={row.laboratoryId[0].name}
-                                sx={{
-                                  m: 0.5,
-                                  padding: '0px 3px',
-                                }}
-                                onClick={(_event) => {
-                                  _event.preventDefault();
-                                  _event.stopPropagation();
-                                  tablePopupRef.current.open(
-                                    true,
-                                    'lab',
-                                    row.laboratoryId,
-                                  );
-                                }}
-                              />
-                              {row.laboratoryId.length > 1 && (
-                                <span
-                                  style={{
-                                    fontWeight: 500,
-                                    color: '#9F9F9F',
-                                    fontSize: '12px',
-                                    whiteSpace: 'nowrap',
-                                  }}
-                                >
-                                  +{row.laboratoryId.length - 1} More
-                                </span>
-                              )}
-                            </>
-                          </Box>
-                        ) : (
-                          <span style={{ textAlign: 'center' }}>-</span>
-                        )}
-                      </TableCell>
-                      <TableCell align="center">Super Admin</TableCell>
-                      <TableCell component="th" scope="row">
-                        <Box>{row.createdAt === null
+                              >
+                                +{row.laboratoryId.length - 1} More
+                              </span>
+                            )}
+                          </>
+                        </Box>
+                      ) : (
+                        <span style={{ textAlign: 'center' }}>-</span>
+                      )}
+                    </TableCell>
+                    <TableCell align="center">Super Admin</TableCell>
+                    <TableCell component="th" scope="row">
+                      <Box>
+                        {row.createdAt === null
                           ? '-'
                           : moment(row.createdAt).isValid()
-                            ? moment(row.createdAt).local().format('MM/DD/YYYY')
-                            : moment().format('MM/DD/YYYY')}</Box>
-                      </TableCell>
-                      <TableCell>
-                        <Box
-                          className={
+                          ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                          : moment().format('MM/DD/YYYY')}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        className={
+                          row.status === 'Created'
+                            ? 'create-select td-select'
+                            : row.status === 'Started'
+                            ? 'start-select td-select'
+                            : row.status === 'Complete'
+                            ? 'active-select td-select'
+                            : 'inactive-select td-select'
+                        }
+                        style={{
+                          background:
                             row.status === 'Created'
-                              ? 'create-select td-select'
+                              ? '#8d8d8d'
                               : row.status === 'Started'
-                                ? 'start-select td-select'
-                                : row.status === 'Complete'
-                                  ? 'active-select td-select'
-                                  : 'inactive-select td-select'
-                          }
-                          style={{
-                            background: row.status === 'Created' ? "#8d8d8d" : row.status === 'Started' ? '#faaa49' : row.status === 'Stopped' ? '#e2445c' : '#00bf70',
-                            padding: "6px",
-                            width: '140px',
-                            borderRadius: '20px',
-                            height: '26px',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                          }}
-                        >
-                          {row?.status}
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                              ? '#faaa49'
+                              : row.status === 'Stopped'
+                              ? '#e2445c'
+                              : '#00bf70',
+                          padding: '6px',
+                          width: '140px',
+                          borderRadius: '20px',
+                          height: '26px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        {row?.status}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -568,9 +608,7 @@ export default function MyPage() {
                         src={data}
                         sx={{ width: 56, height: 56, borderRadius: '50%' }}
                       />
-                      <Box
-                        className="text-container"
-                      >
+                      <Box className="text-container">
                         <Box className="heading">{row.title}</Box>
                         <Box className="content">{row.message}</Box>
                       </Box>
@@ -629,43 +667,53 @@ export default function MyPage() {
             }}
           >
             <Box className="calender-rightside">
-              <Calendar onChange={handleDateClick} value={'2023-11-05'} />
+              <Calendar
+                onChange={handleDateClick}
+                value={value}
+                tileClassName={({ date, view }) => {
+                  if (
+                    CalendarMark.includes(moment(date).format('MM-DD-YYYY'))
+                  ) {
+                    return 'events';
+                  }
+                }}
+              />
               <Divider className="hr-calender" />
-              <Box>
-                {clickedDate &&
-                  clickedDate.toISOString().split('T')[0] === '2023-11-04' ? (
-                  <Box sx={{ textAlign: 'left' }}>
-                    <Box className="hover-calender">
-                      <Typography
-                        className="id-detail"
-                        style={{ textDecoration: 'underline' }}
-                      >
-                        Submission / ID023659ADN
-                      </Typography>
-                      <Typography className="id-detail-title">
-                        Bubble sort
-                      </Typography>
-                    </Box>
-                    <hr
-                      style={{
-                        border: '1px solid #f5f5f5',
-                        margin: '0.5rem 0rem',
-                      }}
-                    />
-                    <Box className="hover-calender">
-                      <Typography
-                        className="id-detail"
-                        style={{ textDecoration: 'underline' }}
-                      >
-                        Test / 08:30 AM
-                      </Typography>
-                      <Typography className="id-detail-title">
-                        Department:
-                        <br />
-                        Lab
-                      </Typography>
-                    </Box>
-                  </Box>
+              <Box
+                sx={{
+                  overflowY: 'scroll',
+                  paddingBottom: '0rem',
+                  height: 'calc(100vh - 79vh)',
+                }}
+              >
+                {CalendarMark.includes(selectedDate) ? (
+                  <>
+                    {CalendarContent.map((item, index) => (
+                      <>
+                        <Box sx={{ textAlign: 'left' }}>
+                          <Box className="hover-calender">
+                            <Typography
+                              className="id-detail"
+                              style={{ textDecoration: 'underline' }}
+                            >
+                              {item.runNumber}/{item.createdAt}
+                            </Typography>
+                            <Typography className="id-detail-title">
+                              {item.objective}{' '}
+                            </Typography>
+                          </Box>
+                          {index < CalendarContent.length - 1 && (
+                            <hr
+                              style={{
+                                border: '1px solid #f5f5f5',
+                                margin: '0.5rem 0rem',
+                              }}
+                            />
+                          )}
+                        </Box>
+                      </>
+                    ))}
+                  </>
                 ) : (
                   <Box sx={{ textAlign: 'center' }}>
                     <img src={Emptystate} alt="" />
