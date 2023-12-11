@@ -43,13 +43,13 @@ const menuOption = [
     activeIcon: proceduresActive,
     path: "/procedures",
   },
-  {
-    id: 4,
-    name: "Projects",
-    icon: projects,
-    activeIcon: projectsActive,
-    path: "/projects",
-  },
+  // {
+  //   id: 4,
+  //   name: "Projects",
+  //   icon: projects,
+  //   activeIcon: projectsActive,
+  //   path: "/projects",
+  // },
   {
     id: 5,
     name: "Assets",
@@ -64,13 +64,13 @@ const menuOption = [
     activeIcon: settingsActive,
     path: "/settings/notifications",
   },
-  {
-    id: 7,
-    name: "Billing and subscriptions",
-    icon: billing,
-    activeIcon: billingActive,
-    path: "/billings",
-  },
+  // {
+  //   id: 7,
+  //   name: "Billing and subscriptions",
+  //   icon: billing,
+  //   activeIcon: billingActive,
+  //   path: "/billings",
+  // },
 ];
 
 export default function AppMenu(props: any) {

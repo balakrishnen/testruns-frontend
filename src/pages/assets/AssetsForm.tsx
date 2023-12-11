@@ -325,6 +325,7 @@ const Addnewpopup = React.forwardRef(
                     },
                   }}
                 >
+                  {console.log("formik",!formik.dirty)}
                   <Box>
                     <Box style={{width: '220px', height: '220px', padding: '10px', background: '#e4e5e7', margin: 'auto'}}>
                       <img src={uploadedFile === null ? preview : uploadedFile} alt="assetimg" style={{width: '100%', height: '100%'}} />

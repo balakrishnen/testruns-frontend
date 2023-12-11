@@ -61,7 +61,6 @@ export const CardLayout = ({ children }: any, props: any) => {
             instituteId: "65741c069d53d19df8321e6b",
           }
        dispatch(postUserData(payload))
-         
           let payload2={
             idToken:result.user?.accessToken
           }

@@ -203,7 +203,7 @@ function AppHeader(props: any) {
               onClick={openEditProfile}
             >
               <Typography variant="inherit" className="app-bar-username">
-                Hi {userData?.firstName}
+                Hi {userData?.firstName === ""? userData?.email : userData?.firstName}
               </Typography>
               <div>
               <img src={(userData?.imageUrl!=="" && userData?.imageUrl!==null)?userData?.imageUrl:account} className="app-bar-images" style={{borderRadius: "13px"}}/>

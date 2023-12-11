@@ -49,7 +49,7 @@ const validationSchema = Yup.object().shape({
   createdAt: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
-  objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^\S*$/, 'Label cannot have empty spaces'),
+  objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
   dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().required(),
   organisationId:Yup.string().required('Procedure Name is required')
@@ -580,8 +580,9 @@ const RunsForm = React.forwardRef(
                       )}
                     </Box>
                   </Grid>
+                  
                   <Grid item xs={0} sm={6} md={6} lg={6} />
-                  <Grid
+                  {/* <Grid
                     item
                     xs={12}
                     sm={6}
@@ -609,10 +610,11 @@ const RunsForm = React.forwardRef(
                         </Button>
                       </Box>
                     </Box>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
 
               </Box>
+              
               <Box
                 sx={{
                   display: { xs: 'block', sm: 'flex' },
