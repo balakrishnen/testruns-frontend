@@ -446,7 +446,7 @@ console.log(assetValue?.organisationId,);
                 >
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img"  style={{height:"394px", width:"327px",objectFit: "fill"}}
+                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img"  style={{height:"250px", objectFit: "contain"}}
                       />
                     </Box>
 
