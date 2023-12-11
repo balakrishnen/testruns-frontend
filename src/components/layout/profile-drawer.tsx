@@ -304,6 +304,8 @@ export default function AppProfileDrawer({
   };
   
   return (
+    <>
+    <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/>
     <Drawer
       className="profile-head"
       variant="temporary"
@@ -319,7 +321,7 @@ export default function AppProfileDrawer({
       }}
       onClose={() => { toggleProfileDrawer(), setEdit(true) }}
     >
-      <Toolbar />
+      
       <Box sx={{ overflow: 'auto' }}>
         <Box className="profile-page" sx={{ py: 2 }}>
           <Box className="profile-section1">
@@ -347,7 +349,7 @@ export default function AppProfileDrawer({
               </Box>
             </Box>
             <Box className="profile-camera">
-              <img src={uploadedFile == null ? profile : uploadedFile} alt="profile" className="profile-user" style={{width:"200px", height:"200px",padding: uploadedFile == null ? '0px' : '16px',}} />
+              <img src={uploadedFile == null ? profile : uploadedFile} alt="profile" className="profile-user" style={{width:"200px", height:"200px",objectFit:"cover",padding: uploadedFile == null ? '0px' : '16px',}} />
               <img src={camera} alt="camera" className="upload-img" onClick={triggerFileUploadField} />
               <input
             style={{ display: 'none' }}
@@ -774,5 +776,6 @@ export default function AppProfileDrawer({
         </Box>
       </Box>
     </Drawer>
+    </>
   );
 }

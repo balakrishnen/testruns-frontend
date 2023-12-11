@@ -44,6 +44,7 @@ input[type=number] {
     .app-bar-images {
       width: 24px;
       height: 24px;
+      object-fit: cover;
     }
 
     .app-bar-title {
@@ -156,6 +157,9 @@ input[type=number] {
       font-weight: 500;
     }
   }
+  .MuiListItemText-primary{
+    white-space: nowrap;
+  }
 }
 
 .MuiDrawer-docked {
@@ -204,6 +208,9 @@ html body {
   background-color: $white;
   overflow-y: auto !important;
   padding-right: 0px !important;
+}
+body{
+  position: relative;
 }
 
 .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
@@ -2368,7 +2375,7 @@ input#mobile_number {
 }
 
 .notification-header {
-  padding-top: 15px;
+  padding-top: 0px;
 }
 .red-badge , .red-badge-filter{
   span.MuiBadge-badge {
@@ -2412,4 +2419,13 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 .events abbr {
   color: #000;
   border-bottom: 5px solid #ffc60b !important;
+}
+.tox.tox-tinymce {
+  z-index: 0 !important;
+}
+.profile-head {
+  z-index: 9999 !important;
+}
+.profile-page {
+  padding-top: 0px !important;
 }

@@ -43,6 +43,8 @@ export default function AppNotificationDrawer({
   };
 
   return (
+    <>
+    <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/>
     <Drawer
       className="profile-head"
       variant="temporary"
@@ -58,7 +60,7 @@ export default function AppNotificationDrawer({
       }}
       onClose={() => { toggleNotificationDrawer(), setShow(!show) }}
     >
-      <Toolbar />
+     
       <Box className="notification-header">
         <Box className="notification-title">
           <Typography>Notifications</Typography>
@@ -100,5 +102,6 @@ export default function AppNotificationDrawer({
         </Box>
       </Box>
     </Drawer>
+    </>
   );
 }
