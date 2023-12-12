@@ -17,6 +17,7 @@ import userRunsSlice from '../features/userRunsSlice';
 import loginUserSlice from "../features/loginUserSlice"
 import fileUploadReducer from '../features/fileUploadSlice';
 import institutionReduced from '../features/institutionSlice'
+import notificationMessageReduced from '../features/notificationMessageSlice';
 
 const persistConfig = {
   key: 'root',
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   userLogin: loginUserSlice,
   fileUpload: fileUploadReducer,
   institution: institutionReduced,
+  notificationMessage: notificationMessageReduced,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

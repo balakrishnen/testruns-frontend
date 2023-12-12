@@ -1,0 +1,17 @@
+import { gql } from '@apollo/client';
+
+export const GET_NOTIFICATION_MESSAGE = gql`
+query Get_notification_message( $userId: String) {
+    get_notification_message( userId: $userId){
+        _id
+        title
+        userId
+        message
+        isRead
+        notificationRuleId
+        isActive
+        isDeleted
+    }
+}`
+
+

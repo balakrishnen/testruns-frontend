@@ -8,6 +8,7 @@ import { fetchNotificationData } from '../../api/notification.API';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import data from '../../assets/images/profile/user.jpg';
+import { fetchNotificationMessageData } from '../../api/notificationMessageAPI';
 
 export default function AppNotificationDrawer({
   openDrawer,
@@ -15,13 +16,26 @@ export default function AppNotificationDrawer({
 }: any) {
 
   const [show, setShow] = React.useState(false);
+  const [notificationQueryStrings, setNotificationQueryString] = React.useState({
+    userId: "657421dda6542a00128276a2"
+  });
   const NotificationSliceData = useSelector(
     (state: any) => state.notification.data?.get_all_notifications,
   );
+
+  const NotificationMessageSliceData = useSelector(
+
+    (state: any) => {
+      return state.notificationMessage.data?.get_notification_message
+
+    }
+
+  )
   const dispatch: any = useDispatch();
 
   React.useEffect(() => {
     dispatch(fetchNotificationData());
+    dispatch(fetchNotificationMessageData(notificationQueryStrings));
   }, []);
 
   const getTimeDifference = (notificationTime: any) => {
@@ -81,7 +95,7 @@ export default function AppNotificationDrawer({
           </Typography>
         </Box>
         <Box sx={{ height: 'calc(100vh - 150px)', overflowY: 'auto' }}>
-          {NotificationSliceData?.map((row: any, index: any) => (
+          {NotificationMessageSliceData?.map((row: any, index: any) => (
             <Box className="notifications" key={index}>
               <Box className="image-container">
                 <Avatar

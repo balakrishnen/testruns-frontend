@@ -27,6 +27,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
 import moment from 'moment';
 import { fetchNotificationData } from '../../api/notification.API';
+import { fetchNotificationMessageData } from '../../api/notificationMessageAPI';
 import { fetchMyPageRunsData } from '../../api/myPageAPI'
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
@@ -246,6 +247,10 @@ export default function MyPage() {
     sortBy: null,
     sortOrder: 'desc',
   });
+
+  const [notificationQueryStrings, setNotificationQueryString] = React.useState({
+    userId: "657421dda6542a00128276a2"
+  });
   const [clickedDate, setClickedDate] = useState(null);
   const [value, onChange] = useState<Value>(new Date());
   const [viewAll, setViewAll] = useState(false);
@@ -264,6 +269,14 @@ export default function MyPage() {
     (state: any) => state.notification.data?.get_all_notifications,
   );
 
+  const NotificationMessageSliceData = useSelector(
+
+    (state: any) => {
+      return state.notificationMessage.data?.get_notification_message
+
+    }
+
+  )
   const MyPageRunsData = useSelector(
     (state: any) => state.myPageSlice.data?.get_all_runs,
   );
@@ -272,6 +285,7 @@ export default function MyPage() {
   React.useEffect(() => {
     dispatch(fetchNotificationData());
     dispatch(fetchMyPageRunsData(queryStrings));
+    dispatch(fetchNotificationMessageData(notificationQueryStrings));
   }, []);
 
 
@@ -551,32 +565,28 @@ export default function MyPage() {
                   height: 'calc(100vh - 48vh)',
                 }}
               >
-                {NotificationSliceData?.slice(
-                  0,
-                  viewAlls ? NotificationSliceData.length : localRowsPerPage,
-                ).map((row: any, index: any) => (
+
+                {NotificationMessageSliceData?.map((notification: any, index: any) => (
                   <Box
                     className="notifications"
                     key={index}
                     style={{
-                      backgroundColor: row.i === '1' ? '#F3F3F3' : 'white',
+                      backgroundColor: index === 0 ? '#F3F3F3' : 'white', // Apply different background for the first notification
                     }}
                   >
                     <Box className="image-container">
                       <Avatar
                         alt="User Avatar"
-                        src={data}
+                        src={data} // Assuming `data` contains the image source
                         sx={{ width: 56, height: 56, borderRadius: '50%' }}
                       />
-                      <Box
-                        className="text-container"
-                      >
-                        <Box className="heading">{row.title}</Box>
-                        <Box className="content">{row.message}</Box>
+                      <Box className="text-container">
+                        <Box className="heading">{notification.title}</Box>
+                        <Box className="content">{notification.message}</Box>
                       </Box>
                     </Box>
                     <Box className="time">
-                      {getTimeDifference(row.postedTime)}
+                      {getTimeDifference(notification.postedTime)}
                     </Box>
                   </Box>
                 ))}
