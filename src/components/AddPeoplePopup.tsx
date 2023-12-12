@@ -29,6 +29,9 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup }: any) => {
   const allUser=  useSelector(
     (state: any) => state.user.data?.find_users, 
   );
+
+  console.log("allUser",allUser);
+  
 console.log(runzRow);
 React.useEffect(()=>{
   setAlluserData(allUserData)
@@ -63,7 +66,7 @@ React.useEffect(()=>{
       dueDate: item?.dueDate ,
       status: item?.status ,
     }));
-    console.log(newArray);
+    console.log("newArray",newArray);
     
     const output = newArray.flatMap((aItem:any) =>
     allIds.map((bItem:any) => ({ ...aItem, "userId": bItem }))
@@ -75,7 +78,8 @@ React.useEffect(()=>{
    await dispatch(fetchbulkRunz(payload))
    await close()
    setuserList([])
-   await toast(`Runs ${typePopup} successfully !`, {
+     //  Assigned
+   await toast(`Runs ${typePopup === "assign" ? "Assigned" : "shared"} successfully !`, {
     style: {
       background: '#00bf70',
       color: '#fff',
