@@ -304,7 +304,7 @@ export default function MyPage() {
 
   React.useEffect(() => {
     const calendarMarkSet = new Set();
-    const calendar = calendar_eventData.runs_calender_data.map((item) => {
+    const calendar = calendar_eventData?.runs_calender_data.map((item) => {
       const date = new Date(parseInt(item.createdAt));
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const day = date.getDate().toString().padStart(2, '0');
