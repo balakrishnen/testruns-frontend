@@ -737,7 +737,7 @@ export default function Procedures() {
           </Grid> */}
           <TableContainer className="tableHeight">
             <Table
-              sx={{ minWidth: 750 }}
+              sx={{ minWidth: 750 , position:'relative'}}
               aria-labelledby="tableTitle"
               stickyHeader
             >
@@ -766,7 +766,7 @@ export default function Procedures() {
                 </TableBody>
                ) : !procedureData || procedureData.length === 0 ? (
                 <TableBody>
-               <p style={{textAlign:'center', position:'absolute', left:'45em'}}>No data found.</p>
+               <p style={{textAlign:'center', position:'absolute', left:'0rem' , right:'0rem'}}>No data found.</p>
                 </TableBody>
               ) : (
                 <TableBody>
