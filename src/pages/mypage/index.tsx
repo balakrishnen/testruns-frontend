@@ -272,9 +272,9 @@ export default function MyPage() {
 
   const tablePopupRef: any = React.useRef(null);
 
-  const NotificationSliceData = useSelector(
-    (state: any) => state.notification.data?.get_all_notifications,
-  );
+  // const NotificationSliceData = useSelector(
+  //   (state: any) => state.notification.data?.get_all_notifications,
+  // );
 
   const NotificationMessageSliceData = useSelector(
 
@@ -607,7 +607,7 @@ export default function MyPage() {
                 }}
               >
 
-                {NotificationMessageSliceData?.map((notification: any, index: any) => (
+                {NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
                   <Box
                     className="notifications"
                     key={index}

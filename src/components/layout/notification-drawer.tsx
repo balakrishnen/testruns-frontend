@@ -97,7 +97,7 @@ export default function AppNotificationDrawer({
           </Typography>
         </Box>
         <Box sx={{ height: 'calc(100vh - 150px)', overflowY: 'auto' }}>
-          {NotificationMessageSliceData?.map((row: any, index: any) => (
+          {NotificationMessageSliceData?.message?.map((row: any, index: any) => (
             <Box className="notifications" key={index}>
               <Box className="image-container">
                 <Avatar

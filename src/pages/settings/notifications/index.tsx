@@ -11,6 +11,9 @@ import Switch, { } from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import search from "../../../assets/images/search.svg";
 import { withSettingsLayout } from "../../../components/settings";
+import { fetchUpdateNotification, fetchUserNotificationData } from "../../../api/notification.API";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 43,
   height: 20,
@@ -54,7 +57,61 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const Notification = () => {
-  return (
+  const dispatch : any = useDispatch()
+ const initialValues :any =[
+    {
+      createProcedure:[{email:false,notification:false}],
+      runAssiged:[{email:false,notification:false}],
+      runsCommend:[{email:false,notification:false}],
+    }
+  ]
+    
+  
+  const [notificationList, setNotificationList]=React.useState<any>([
+    {
+      createProcedure: [{ email: false, notification: false }],
+      runAssiged: [{ email: false, notification: false }],
+      runsCommend: [{ email: false, notification: false }],
+    }
+  ])
+  const NotificationSliceData = useSelector(
+    (state: any) => state.notification.data?.get_notification,
+  );
+  const userSliceData = useSelector(
+    (state: any) => state.userLogin?.data?.verifyToken,
+  );
+  React.useEffect(()=>{
+    setNotificationList(notificationList)
+  },[notificationList])
+
+  React.useEffect(()=>{
+    let payload={
+      userId:userSliceData?._id
+    }
+  dispatch(fetchUserNotificationData(payload))
+  setNotificationList(NotificationSliceData)
+ 
+  },[NotificationSliceData])
+  console.log(notificationList);
+  const handleChange = (category, subCategory, val) => {
+    // Create a deep copy of the state to avoid directly mutating state
+    const updatedValues = JSON.parse(JSON.stringify(notificationList));
+  
+    // Toggle between true and false for email and notification
+    updatedValues[0][category][0][subCategory] = val;
+  
+    // Set the state with the updated values
+    setNotificationList(updatedValues);
+    let payload={
+      _id: notificationList?._id,
+      createProcedure: notificationList!==undefined && notificationList[0]?.createProcedure,
+      runsCommend: notificationList!==undefined && notificationList[0]?.runsCommend,
+      runAssiged: notificationList!==undefined && notificationList[0]?.runAssiged,
+    }
+    dispatch(fetchUpdateNotification(payload))
+  };
+
+    return (
     <Box className="notification-page" style={{ padding: "24px" , paddingTop:"15px"}}>
       <Box
         className="title-main"
@@ -135,8 +192,10 @@ const Notification = () => {
                   Notification
                 </Typography>
                 <AntSwitch
-                  defaultChecked
+                  checked={notificationList!==undefined && notificationList[0]?.createProcedure[0]?.notification?true:false}
+                  onChange={()=>handleChange('createProcedure', 'notification',!notificationList[0]?.createProcedure[0]?.notification)}
                   inputProps={{ "aria-label": "ant design" }}
+                  name="notification"
                 />
               </Stack>
               <Stack
@@ -149,8 +208,10 @@ const Notification = () => {
                   Email
                 </Typography>
                 <AntSwitch
-                  defaultChecked
+                  checked={notificationList!==undefined && notificationList[0]?.createProcedure[0]?.email?true:false}
+                  onChange={()=>handleChange('createProcedure', 'email', !notificationList[0]?.createProcedure[0]?.email)}
                   inputProps={{ "aria-label": "ant design" }}
+                  name="email"
                 />
               </Stack>
             </Box>
@@ -198,8 +259,10 @@ const Notification = () => {
                   Notification
                 </Typography>
                 <AntSwitch
-                  defaultChecked
-                  inputProps={{ "aria-label": "ant design" }}
+                checked={notificationList!==undefined && notificationList[0]?.runsCommend[0]?.notification?true:false}
+                onChange={()=>handleChange('runsCommend', 'notification',!notificationList[0]?.runsCommend[0]?.notification)}
+                inputProps={{ "aria-label": "ant design" }}
+                name="notification"
                 />
               </Stack>
               <Stack
@@ -212,8 +275,10 @@ const Notification = () => {
                   Email
                 </Typography>
                 <AntSwitch
-                  defaultChecked
+                   checked={notificationList!==undefined && notificationList[0]?.runsCommend[0]?.email?true:false}
+                   onChange={()=>handleChange('runsCommend', 'email', !notificationList[0]?.runsCommend[0]?.email)}
                   inputProps={{ "aria-label": "ant design" }}
+                  name="email"
                 />
               </Stack>
             </Box>
@@ -261,8 +326,10 @@ const Notification = () => {
                   Notification
                 </Typography>
                 <AntSwitch
-                  defaultChecked
-                  inputProps={{ "aria-label": "ant design" }}
+                checked={notificationList!==undefined && notificationList[0]?.runAssiged[0]?.notification?true:false}
+                onChange={()=>handleChange('runAssiged', 'notification', !notificationList[0]?.runAssiged[0]?.notification)}
+                inputProps={{ "aria-label": "ant design" }}
+                name="notification"
                 />
               </Stack>
               <Stack
@@ -275,8 +342,10 @@ const Notification = () => {
                   Email
                 </Typography>
                 <AntSwitch
-                  defaultChecked
+                  checked={notificationList!==undefined && notificationList[0]?.runAssiged[0]?.email?true:false}
+                  onChange={()=>handleChange('runAssiged', 'email', notificationList[0]?.runAssiged[0]?.email)}
                   inputProps={{ "aria-label": "ant design" }}
+                  name="email"
                 />
               </Stack>
             </Box>
