@@ -22,4 +22,21 @@ perPage:$perPage  ){
     }
 }`
 
+export const READ_SINGLE_NOTIFICATION_MESSAGE = gql`
+
+mutation Update_single_notification(
+    $_id: String!
+    $isRead: Boolean!
+) {
+    update_single_notification(_id: $_id, isRead: $isRead)
+}`
+
+export const READ_BULK_NOTIFICATION_MESSAGE = gql`
+
+mutation update_notification_message(
+    $userId: String!
+    $isRead: Boolean!
+) {
+    update_notification_message(userId: $userId, isRead: $isRead)
+}`
 

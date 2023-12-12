@@ -27,7 +27,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
 import moment from 'moment';
 import { fetchNotificationData } from '../../api/notification.API';
-import { fetchNotificationMessageData } from '../../api/notificationMessageAPI';
+import { fetchNotificationMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchMyPageRunsData } from '../../api/myPageAPI'
 import {
     fetchCalendarEventData,
@@ -220,6 +220,7 @@ export const mypageRows = [
 
 import { MypageRowData } from '../../modals/mypage.modal';
 import TablePopup from '../../components/table/TablePopup';
+import { fetchSingleUserData } from '../../api/userAPI';
 
 // function createData(
 //   name: string,
@@ -250,7 +251,7 @@ export default function MyPage() {
   });
 
   const [notificationQueryStrings, setNotificationQueryString] = React.useState({
-    userId: "657421dda6542a00128276a2"
+    userId: ""
   });
   const [clickedDate, setClickedDate] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -290,17 +291,40 @@ export default function MyPage() {
   const MyPageRunsData = useSelector(
     (state: any) => state.myPageSlice.data?.get_all_runs,
   );
-
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
+    // console.log('wwwww',loginUserSliceData);
+  const[userData, setUserData]=React.useState<any>({})
+ console.log(loginUserSliceData);
+ 
+  React.useEffect(()=> {
+    let temp = { _id: loginUserSliceData?.verifyToken?._id };
+    // if (row?._id) {
+    dispatch(fetchSingleUserData(temp))
+      .then((isSucess:any) => {
+        setUserData(isSucess?.get_user)
+        setNotificationQueryString(isSucess?.get_user?._id)
+        })
+      
+      .catch((err:any) => {
+        console.log(err);
+      });
+    // }
+  },[loginUserSliceData]);
   React.useEffect(() => {
     let pay = {
       month: `${new Date().getMonth() + 1}`,
       year: `${new Date().getFullYear()}`,
     };
+    let payload={
+     userId: userData?._id
+    }
     dispatch(fetchNotificationData());
     dispatch(fetchCalendarEventData(pay));
     dispatch(fetchMyPageRunsData(queryStrings));
-    dispatch(fetchNotificationMessageData(notificationQueryStrings));
-  }, []);
+    dispatch(fetchNotificationMessageData(payload));
+  }, [userData]);
 
   React.useEffect(() => {
     const calendarMarkSet = new Set();
@@ -370,6 +394,15 @@ export default function MyPage() {
   const toggleViewNotifications = () => {
     setViewAllNotifications((prev) => !prev);
   };
+  const handleReadSingleNotification=async(id:any)=>{
+    let payload={
+      _id:id,
+      isRead:true
+    }
+   await dispatch(fetchReadSingleMessageData(payload))
+   await dispatch(fetchNotificationMessageData(notificationQueryStrings));
+
+  }
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
@@ -612,8 +645,9 @@ export default function MyPage() {
                     className="notifications"
                     key={index}
                     style={{
-                      backgroundColor: index === 0 ? '#F3F3F3' : 'white', // Apply different background for the first notification
+                      backgroundColor: notification?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
                     }}
+                    onClick={()=>handleReadSingleNotification(notification?._id)}
                   >
                     <Box className="image-container">
                       <Avatar

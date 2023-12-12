@@ -8,7 +8,8 @@ import { fetchNotificationData } from '../../api/notification.API';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import data from '../../assets/images/profile/user.jpg';
-import { fetchNotificationMessageData } from '../../api/notificationMessageAPI';
+import { fetchNotificationMessageData, fetchReadBulkMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
+import { fetchSingleUserData } from '../../api/userAPI';
 
 export default function AppNotificationDrawer({
   openDrawer,
@@ -17,7 +18,7 @@ export default function AppNotificationDrawer({
 
   const [show, setShow] = React.useState(false);
   const [notificationQueryStrings, setNotificationQueryString] = React.useState({
-    userId: "657421dda6542a00128276a2"
+    userId: ""
   });
   const NotificationSliceData = useSelector(
     (state: any) => state.notification.data?.get_all_notifications,
@@ -32,11 +33,34 @@ export default function AppNotificationDrawer({
 
   )
   const dispatch: any = useDispatch();
-
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
+    // console.log('wwwww',loginUserSliceData);
+  const[userData, setUserData]=React.useState<any>({})
+ console.log(loginUserSliceData);
+ 
+  React.useEffect(()=> {
+    let temp = { _id: loginUserSliceData?.verifyToken?._id };
+    // if (row?._id) {
+    dispatch(fetchSingleUserData(temp))
+      .then((isSucess:any) => {
+        setUserData(isSucess?.get_user)
+        setNotificationQueryString(isSucess?.get_user?._id)
+        })
+      
+      .catch((err:any) => {
+        console.log(err);
+      });
+    // }
+  },[loginUserSliceData]);
   React.useEffect(() => {
     dispatch(fetchNotificationData());
-    dispatch(fetchNotificationMessageData(notificationQueryStrings));
-  }, []);
+    let payload={
+      userId: userData?._id
+    }
+    dispatch(fetchNotificationMessageData(payload));
+  }, [userData]);
 
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: Date = new Date();
@@ -55,7 +79,31 @@ export default function AppNotificationDrawer({
 
     return `${hoursDifference}h ago`;
   };
+  const handleReadSingleNotification=async(id:any)=>{
+    let payload={
+      _id:id,
+      isRead:true
+    }
+   await dispatch(fetchReadSingleMessageData(payload))
+   await dispatch(fetchNotificationMessageData(notificationQueryStrings));
 
+  }
+
+  const handleReadBulkNotification=async()=>{
+    let payload={
+      userId:userData?._id,
+      isRead:true
+    }
+    let payload2={
+      userId: userData?._id
+    }
+    console.log(NotificationMessageSliceData?.length);
+    
+    if(NotificationMessageSliceData?.message?.length!==0){
+      await dispatch(fetchReadBulkMessageData(payload))
+      await dispatch(fetchNotificationMessageData(payload2));
+    }
+  }
   return (
     <>
     <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/>
@@ -79,7 +127,7 @@ export default function AppNotificationDrawer({
         <Box className="notification-title">
           <Typography>Notifications</Typography>
           <Typography className="mark-read">
-            <span style={{ cursor: 'pointer' }}>Mark all as read</span>{' '}
+            <span style={{ cursor: 'pointer' }} onClick={()=>handleReadBulkNotification()}>Mark all as read</span>{' '}
             <span
               style={{
                 width: '24px',
@@ -98,7 +146,12 @@ export default function AppNotificationDrawer({
         </Box>
         <Box sx={{ height: 'calc(100vh - 150px)', overflowY: 'auto' }}>
           {NotificationMessageSliceData?.message?.map((row: any, index: any) => (
-            <Box className="notifications" key={index}>
+            <Box className="notifications" key={index}
+            style={{
+              backgroundColor: row?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
+            }}
+            onClick={()=>handleReadSingleNotification(row?._id)}
+            >
               <Box className="image-container">
                 <Avatar
                   alt="User Avatar"
