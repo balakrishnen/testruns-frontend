@@ -1271,7 +1271,23 @@ tbody td .td-select {
     border: 0px !important;
   }
 }
-
+.assign-create{
+  .td-select{
+    svg {
+      right: 5px;
+      background-image: url('../images/chevrondown-white.svg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      width: 19px;
+      height: 19px;
+      top: 4px !important;
+  
+      path {
+        display: none;
+      }
+    }
+  }
+}
 .inactive-select.td-select .MuiSelect-select,
 .active-select.td-select .MuiSelect-select,
 .inuse-select.td-select .MuiSelect-select,
@@ -1304,6 +1320,9 @@ tbody td .td-select {
 }
 .inuse-select.td-select .MuiSelect-select {
   background: $primary-color;
+}
+.td-select fieldset.MuiOutlinedInput-notchedOutline {
+  border-width: 0px !important;
 }
 .asset-detail-title {
   p {
@@ -2293,11 +2312,7 @@ input#mobile_number {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
 }
-.css-1kkal6p-MuiAutocomplete-root .MuiOutlinedInput-root {
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-  padding-left: 7px !important;
-}
+
 .table-outer {
   thead {
     th {
@@ -2428,4 +2443,21 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 }
 .profile-page {
   padding-top: 0px !important;
+}
+@media (min-width:900px){
+  #primary-search-account-menu-mobile {
+    display: none !important;
+  }
+}
+@media (min-width:1200px){
+  #long-menu {
+    display: none !important;
+  }
+}
+.main-proceduredetails .multi-selection input#departmentId {
+  padding-top: 8.3px;
+  padding-bottom: 8.2px;
+}
+#menu-procedureId ul.MuiList-root.MuiList-padding.MuiMenu-list {
+  height: 200px;
 }
