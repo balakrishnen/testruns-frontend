@@ -503,6 +503,7 @@ const Profile = () => {
                   height: '100%',
                   border: '5px solid #F3F3F3',
                   borderRadius: '200px',
+                  objectFit:'cover',
                   padding: uploadedFile === null ? '0px' : '16px',
                 }}
               />
