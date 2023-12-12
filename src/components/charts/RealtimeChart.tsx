@@ -306,11 +306,11 @@ export default function RealtimeChart() {
             <Grid container key={dataIndex} sx={{ my: 2 }} spacing={2}>
               <Grid
                 item
-                xs={10}
-                sm={10}
-                md={10}
-                lg={10}
-                xl={10}
+                xs={12}
+                sm={12}
+                md={12}
+                lg={8}
+                xl={8}
                 // sx={{ pr: 4 }}
                 style={{ borderRight: '1px solid #e4e5e7' }}
               >
@@ -446,14 +446,14 @@ export default function RealtimeChart() {
                 chartData?.activeChannelOptions.length !== 0 && (
                   <Grid
                     item
-                    xs={2}
-                    sm={2}
-                    md={2}
-                    lg={2}
-                    xl={2}
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    lg={4}
+                    xl={4}
                     style={{
                       overflowY: 'scroll',
-                      height: '650px',
+                      
                     }}
                   >
                     <Grid container alignItems={'center'}>

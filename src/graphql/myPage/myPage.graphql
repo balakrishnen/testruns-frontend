@@ -43,25 +43,34 @@ export const GET_RUNS = gql`
                 updatedAt
             }
             procedureId{
-      _id
-name
-procedureNumber
-procedureDetials
-
-isActive
-isDeleted
-createdAt
-updatedAt
-    }
+                _id
+                name
+                procedureNumber
+                procedureDetials
+                isActive
+                isDeleted
+                createdAt
+                updatedAt
+            }
+            }
+                pageInfo {
+                    currentPage
+                    totalPages
+                    totalCount
+                    hasNextPage
+                    hasPreviousPage
+                }
+            }
         }
-        pageInfo {
-            currentPage
-            totalPages
-            totalCount
-            hasNextPage
-            hasPreviousPage
-        }
-    }
-}
 
 `; 
+
+export const CALENDER_DATA = gql`
+ query runs_calender_data($month: String, $year: String) {
+    runs_calender_data(month: $month, year: $year){
+        _id
+        runNumber
+        objective
+        createdAt
+    }
+}`; 

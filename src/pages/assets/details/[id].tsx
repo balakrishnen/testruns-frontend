@@ -374,6 +374,7 @@ console.log(assetValue?.organisationId,);
 
     const result = s3.upload(params).promise();
     await result.then((res: any) => {
+      formik.setFieldValue('assetImageUrl', res.Location)
       setUploadedFile(res.Location);
       toast(`Image uploaded successfully !`, {
         style: {
@@ -443,10 +444,9 @@ console.log(assetValue?.organisationId,);
                     },
                   }}
                 >
-                  {/* {console.log("formik",!formik.dirty)} */}
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img"  style={{height:"394px", width:"327px",objectFit: "fill"}}
+                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img"  style={{height:"250px", objectFit: "contain"}}
                       />
                     </Box>
 
@@ -455,7 +455,7 @@ console.log(assetValue?.organisationId,);
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
                       <Button onClick={triggerFileUploadField}>Upload photo</Button>
-                                  <input
+                        <input
                         style={{ display: 'none' }}
                         type="file"
                         ref={fileUploadField}

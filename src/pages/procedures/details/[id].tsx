@@ -561,7 +561,7 @@ const handleEditorInit = (editor:any) => {
                 </Box>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={6} lg={6}>
+              <Grid item xs={12} sm={12} md={6} lg={6} className='multi-selection asset-popup'>
                 <Box style={{ position: 'relative' }}>
                   <label>Assets name</label>
                   <Autocomplete

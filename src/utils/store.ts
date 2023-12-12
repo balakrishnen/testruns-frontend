@@ -9,12 +9,13 @@ import labReducer from '../features/labSlice';
 import organizationReducer from '../features/organizationSlice';
 import notificationReducer from '../features/notificationSlice';
 import runsReducer from '../features/runsSlice';
-import myPageReducer from '../features/myPageSlice'
+import myPageReducer from '../features/myPageSlice';
 import { chartTableReducer } from '../features/runsSlice';
+import { CalendarEventReducer } from '../features/myPageSlice';
 import procedureReducer from '../features/procedureSlice';
 import roleReducer from '../features/roleSlice';
 import userRunsSlice from '../features/userRunsSlice';
-import loginUserSlice from "../features/loginUserSlice"
+import loginUserSlice from '../features/loginUserSlice';
 import fileUploadReducer from '../features/fileUploadSlice';
 import institutionReduced from '../features/institutionSlice'
 import notificationMessageReduced from '../features/notificationMessageSlice';
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   runs: runsReducer,
   myPageSlice: myPageReducer,
   tableChart: chartTableReducer,
+  calendar_event: CalendarEventReducer,
   userRuns: userRunsSlice,
   userLogin: loginUserSlice,
   fileUpload: fileUploadReducer,

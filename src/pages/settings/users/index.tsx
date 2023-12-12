@@ -280,7 +280,7 @@ const Users = () => {
     if (state === 1) {
       // deletePopupRef.current.open(false);
       dispatch(deleteUserData(assetVal));
-      toast(`Assets deleted !`, {
+      toast(`User deleted !`, {
         style: {
           background: '#00bf70',
           color: '#fff',

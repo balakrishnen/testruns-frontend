@@ -337,11 +337,11 @@ export default function TableChart() {
           <Grid container key={index} sx={{ my: 2 }} spacing={2}>
             <Grid
               item
-              xs={9.5}
-              sm={9.5}
-              md={9.5}
-              lg={9.5}
-              xl={9.5}
+              xs={12}
+              sm={12}
+              md={12}
+              lg={8}
+              xl={8}
               // sx={{ pr: 4 }}
               style={{ borderRight: '1px solid #e4e5e7' }}
             >
@@ -483,12 +483,12 @@ export default function TableChart() {
 
             <Grid
               item
-              xs={2.5}
-              sm={2.5}
-              md={2.5}
-              lg={2.5}
-              xl={2.5}
-              style={{ overflowY: 'scroll', height: '650px' }}
+              xs={12}
+              sm={12}
+              md={12}
+              lg={4}
+              xl={4}
+              style={{ overflowY: 'scroll'}}
             >
               <Grid container alignItems={'center'}>
                 <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
