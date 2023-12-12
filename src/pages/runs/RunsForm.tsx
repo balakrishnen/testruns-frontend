@@ -50,7 +50,8 @@ const validationSchema = Yup.object().shape({
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
   objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
-  dueDate: Yup.string().required('Due Date is required'),
+  // dueDate: Yup.date().required('Due Date is required'),
+  dueDate: Yup.string().required('Due Date is required').matches(/^(19|20)\d\d[-\/](0[1-9]|1[012])[-\/](0[1-9]|[12][0-9]|3[01])$/, 'invalid date'),
   assignedTo: Yup.string().required(),
   organisationId:Yup.string().required('Procedure Name is required')
 });
@@ -239,7 +240,7 @@ const RunsForm = React.forwardRef(
     }, []);
 
     const handleDateChanges = (selectedDate: any, name: any) => {
-      const formattedDate = moment(selectedDate.$d).format('YYYY-MM-DD');
+      const formattedDate = moment(selectedDate?.$d).format('YYYY-MM-DD');
       formik.handleChange(name)(formattedDate);
     }
     const handleConfirmationState = (state: number) => {
