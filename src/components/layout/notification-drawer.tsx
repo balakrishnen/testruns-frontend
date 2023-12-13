@@ -10,6 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import data from '../../assets/images/profile/user.jpg';
 import { fetchNotificationMessageData, fetchReadBulkMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchSingleUserData } from '../../api/userAPI';
+import Emptystate from '../../assets/images/Emptystate.svg';
 import Moment from 'moment';
 
 export default function AppNotificationDrawer({
@@ -140,7 +141,7 @@ export default function AppNotificationDrawer({
           </Typography>
         </Box>
         <Box sx={{ height: 'calc(100vh - 150px)', overflowY: 'auto' }}>
-          {NotificationMessageSliceData?.message?.map((row: any, index: any) => (
+          {NotificationMessageSliceData?.message.length!==0 ? NotificationMessageSliceData?.message?.map((row: any, index: any) => (
             <Box className="notifications" key={index}
             style={{
               backgroundColor: row?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
@@ -160,7 +161,14 @@ export default function AppNotificationDrawer({
               </Box>
               <Box className="time">{getTimeDifference(row.createdAt)}</Box>
             </Box>
-          ))}
+          )):
+          <Box sx={{ textAlign: 'center', padding:"25%" }}>
+          <img src={Emptystate} alt="" />
+          <Typography className="no-remainder">
+            No notifications yet!
+          </Typography>
+          </Box>
+          }
         </Box>
       </Box>
     </Drawer>
