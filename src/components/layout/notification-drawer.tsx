@@ -10,6 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import data from '../../assets/images/profile/user.jpg';
 import { fetchNotificationMessageData, fetchReadBulkMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchSingleUserData } from '../../api/userAPI';
+import Moment from 'moment';
 
 export default function AppNotificationDrawer({
   openDrawer,
@@ -63,16 +64,10 @@ export default function AppNotificationDrawer({
   }, [userData]);
 
   const getTimeDifference = (notificationTime: any) => {
-    const currentTime: Date = new Date();
-    const postedTime: Date = new Date('2023-11-03T12:00:00');
-    const timeDifference: number = Math.abs(
-      currentTime.getTime() - postedTime.getTime(),
-    );
-    const hoursDifference: number = Math.floor(
-      timeDifference / (1000 * 60 * 60),
-    );
+    const currentTime: any = Moment().format('YYYY-MM-DD');
+    const hoursDifference = Moment(notificationTime).diff(currentTime, 'hours');
 
-    if (hoursDifference >= 24) {
+    if (hoursDifference > 24) {
       const daysDifference: number = Math.floor(hoursDifference / 24);
       return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
     }
@@ -163,7 +158,7 @@ export default function AppNotificationDrawer({
                   <Box className="content">{row.message}</Box>
                 </Box>
               </Box>
-              <Box className="time">{getTimeDifference(row.postedTime)}</Box>
+              <Box className="time">{getTimeDifference(row.createdAt)}</Box>
             </Box>
           ))}
         </Box>
