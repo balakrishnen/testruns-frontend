@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import { fetchSingleRoleData, fetchUpdateRoleData } from "../../../api/roleApi";
+import { toast } from "react-toastify";
 
 const Roles = () => {
 
@@ -30,8 +31,8 @@ const Roles = () => {
  
   React.useEffect(() => {
     setFormValues(roleSliceData[0])
-    setFormValues1(roleSliceData[1])
-    setFormValues2(roleSliceData[2])
+    setFormValues1(roleSliceData[2])
+    setFormValues2(roleSliceData[1])
   }, [roleSliceData]);
 
   React.useEffect(() => {
@@ -228,27 +229,48 @@ const handleChange2 = (category, field, value) => {
 };
 console.log(formValues);
 
-  const handleSave=()=>{
+  const handleSave=async()=>{
     console.log('submited',formValues);
 
     var { createdAt, isActive, updatedAt, isDeleted, __typename, ...rest } = formValues;
     var { createdAt, isActive, updatedAt, isDeleted, __typename, ...rest1 } = formValues1;
     var { createdAt, isActive, updatedAt, isDeleted, __typename, ...rest2 } = formValues2;
-
-    var { __typename, ...values } = rest;
-    var { __typename, ...values1 } = rest1;
-    var { __typename, ...values2 } = rest2;
-
-    console.log("modifiedRolesArray",values2)
+   
     var newarr=[]
-    newarr.push(values,values1,values2)
-    console.log(newarr);
-
+    newarr.push(rest,rest1,rest2)
+    const updatedData = newarr.map(item => {
+      // Create a copy of the item to avoid modifying the original object
+      const newItem = { ...item };
+    
+      // Iterate over the keys of the item
+      for (const key in newItem) {
+        if (Object.prototype.hasOwnProperty.call(newItem, key)) {
+          // Check if the key is an object and has the __typename property
+          if (typeof newItem[key] === 'object' && newItem[key] !== null && '__typename' in newItem[key]) {
+            // Create a copy of the nested object and delete __typename
+            newItem[key] = { ...newItem[key] };
+            delete newItem[key].__typename;
+          }
+        }
+      }
+    console.log(newItem);
+    
+      return newItem;
+      
+    })
+    console.log(updatedData);
+    
     var payload={
       // _id: loginUserSliceData?._id,
-      roles:newarr
+      roles:updatedData
     }
-    dispatch(fetchUpdateRoleData(payload))
+   await dispatch(fetchUpdateRoleData(payload)).then((res:any)=>{
+    toast(`Role updated successful !`, {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
+   })
     
   }
   return (
@@ -906,7 +928,7 @@ console.log(formValues);
                               height: '30px'
                             }}
                             checked={formValues?.runs_management.delete}
-                            onChange={(e)=>handleChange("runs_management","create",!formValues?.runs_management.delete)}
+                            onChange={(e)=>handleChange("runs_management","delete",!formValues?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}

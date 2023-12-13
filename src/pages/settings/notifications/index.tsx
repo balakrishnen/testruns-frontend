@@ -102,11 +102,39 @@ const Notification = () => {
   
     // Set the state with the updated values
     setNotificationList(updatedValues);
+   const createProcedureVal = notificationList!==undefined && notificationList[0]?.createProcedure
+   const runsCommendVal=  notificationList!==undefined && notificationList[0]?.runsCommend
+   const runAssigedVal =  notificationList!==undefined && notificationList[0]?.runAssiged
+
+const updatedData = createProcedureVal.map(item => {
+  const newItem = { ...item };
+  if ('__typename' in newItem) {
+    delete newItem.__typename;
+  }
+  return newItem;
+});
+const updatedData1 = runsCommendVal.map(item => {
+  const newItem = { ...item };
+  if ('__typename' in newItem) {
+    delete newItem.__typename;
+  }
+  return newItem;
+});
+const updatedData2 = runAssigedVal.map(item => {
+  const newItem = { ...item };
+  if ('__typename' in newItem) {
+    delete newItem.__typename;
+  }
+  return newItem;
+});
+
+console.log(updatedData);
+  
     let payload={
-      _id: notificationList?._id,
-      createProcedure: notificationList!==undefined && notificationList[0]?.createProcedure,
-      runsCommend: notificationList!==undefined && notificationList[0]?.runsCommend,
-      runAssiged: notificationList!==undefined && notificationList[0]?.runAssiged,
+      _id: notificationList!==undefined&& notificationList[0]?._id,
+      createProcedure: updatedData,
+      runsCommend: updatedData1,
+      runAssiged: updatedData2,
     }
     dispatch(fetchUpdateNotification(payload))
   };
