@@ -66,11 +66,24 @@ export const GET_RUNS = gql`
 `; 
 
 export const CALENDER_DATA = gql`
- query runs_calender_data($month: String, $year: String) {
+ query runs_calender_data($month: String!, $year: String!) {
     runs_calender_data(month: $month, year: $year){
-        _id
-        runNumber
+         _id
         objective
+        runNumber
+        procedureId
+        departmentId
+        laboratoryId
+        organisationId
+        instituteId
+        userId
+        dueDate
+        assignedTo
+        assignedBy
+        status
+        isActive
+        isDeleted
         createdAt
+        updatedAt
     }
 }`; 

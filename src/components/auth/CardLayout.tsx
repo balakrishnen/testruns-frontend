@@ -41,60 +41,45 @@ export const CardLayout = ({ children }: any, props: any) => {
   );
     console.log(userSliceData);
   
-  const googleSignup = async() => {
-    const googleProvider = provider("google.com");
-   await signInWithPopup(auth, googleProvider)
-      .then((result:any) => {
-        console.log(result);
-        // if(varient=='signup'){
-          console.log(result.user.uid);
-          let payload={
-            firstName: result.user.displayName!==null?result.user.displayName:result.user.email,
-            lastName: "",
-            email: result.user.email,
-            uid:result.user.uid,
-            organisationId:"657420e5c63327a74f3c756a",
-            role:"65741c069d53d19df8321e6e",
-            // phoneNumber:'9876543210',
-            departmentId: [],
-            laboratoryId: [],
-            instituteId: "65741c069d53d19df8321e6b",
-          }
-       dispatch(postUserData(payload))
-          let payload2={
-            idToken:result.user?.accessToken
-          }
-          
-          dispatch(fetchLoginUser(payload2))
-              // console.log(isSucess);
-              console.log(userSliceData);
-              
-              window.sessionStorage.setItem('isLoggedIn', 'true');
-           
-              // setTimeout(()=>{
-                navigate('/mypage')
-                toast(`Google Login successful !`, {
-                  style: {
-                    background: '#00bf70', color: '#fff'
-                  }
-                });
-           
-          // toast(`Google Login successful !`, {
-          //   style: {
-          //     background: '#00bf70', color: '#fff'
-          //   }
-          // });
-          // setTimeout(()=>{
-          //   navigate('/mypage')
-          // },1000)
-          window.sessionStorage.setItem('isLoggedIn', 'true');
-              // }
-      })
-      .catch((error) => {
-        console.log(error);
+  const googleSignup = async () => {
+    try {
+      const googleProvider = provider("google.com");
+      const result:any = await signInWithPopup(auth, googleProvider);
+  
+      console.log(result);
+  
+      let payload = {
+        firstName: result.user.displayName !== null ? result.user.displayName : result.user.email,
+        lastName: "",
+        email: result.user.email,
+        uid: result.user.uid,
+        organisationId: "657420e5c63327a74f3c756a",
+        role: "65741c069d53d19df8321e6e",
+        departmentId: [],
+        laboratoryId: [],
+        instituteId: "65741c069d53d19df8321e6b",
+      };
+  
+      await dispatch(postUserData(payload));
+  
+      let payload2 = {
+        idToken: result.user?.accessToken,
+      };
+  
+      await dispatch(fetchLoginUser(payload2));
+  
+      window.sessionStorage.setItem('isLoggedIn', 'true');
+      navigate('/mypage');
+      toast(`Google Login successful !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
       });
+  
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   const microsoftSignup = () => {
     const microsoftProvider = provider("microsoft.com");
     signInWithPopup(auth, microsoftProvider)

@@ -1,48 +1,5 @@
 import { gql } from '@apollo/client';
 
-gql`
-  input ProcedureManagement {
-    create: Boolean
-    delete: Boolean
-    edit: Boolean
-    view: Boolean
-    assign:Boolean
-    share: Boolean
-    }
-  input ProfileManagement {
-  editUserName: Boolean
-  changePassword: Boolean
-  editDepartment: Boolean
-  editLab: Boolean
-  editOrganisation: Boolean
-  editContact: Boolean
-}
-  input UserManagement {
-    create: Boolean
-    delete: Boolean
-    edit: Boolean
-    view: Boolean
-}
-  input RoleManagement {
-  edit: Boolean
-}
-  input RunsManagement {
-          create: Boolean
-          delete: Boolean
-          edit: Boolean
-          view: Boolean
-          assign:Boolean
-          share:Boolean
-        }
- input AssetManagement {
-          create: Boolean
-          delete: Boolean
-          edit: Boolean
-          view: Boolean
-          assign:Boolean
-          share:Boolean
-        }
-`
 export const GET_ALL_ROLE = gql`
 
 query Get_all_roles {
@@ -137,64 +94,6 @@ query Get_role($instituteId :String!) {
 }
 `;
 
-export const UPDATE_ROLE = gql`
-
-mutation Update_role(
-        $_id: String!
-        $name: String
-        $procedure_management:[ProcedureManagement]
-        $asset_management:[AssetManagement]!
-        $runs_management:[RunsManagement]! 
-        $profile_management:[ProfileManagement]
-        $instituteId: String, 
-        $user_management:[UserManagement] 
-        $role_management:[RoleManagement]
-) {
-    update_role(
-        _id : $_id
-        name : $name
-        procedure_management:$procedure_management
-        asset_management:$asset_management
-        runs_management:$runs_management 
-        profile_management:$profile_management
-        instituteId:$instituteId 
-        user_management:$user_management
-        role_management:$role_management
-    ) {
-        _id
-        name
-        isActive
-        isDeleted
-        createdAt
-        updatedAt
-        procedure_management {
-            create
-            delete
-            edit
-            view
-            assign
-            share
-        }
-        profile_management {
-            editUserName
-            changePassword
-            editDepartment
-            editLab
-            editOrganisation
-            editContact
-        }
-        user_management {
-            create
-            delete
-            edit
-            view
-        }
-        role_management {
-            edit
-        }
-    }
-}
-`;
 
 export const FIND_ROLE = gql`
 query Find_roles($instituteId: String!) {
@@ -249,3 +148,77 @@ query Find_roles($instituteId: String!) {
         }
     }
 }`
+export const UPDATE_FIND_ROLE = gql`
+mutation Update_role($roles: [BulkUpdateRole]) {
+    update_role(roles: $roles) {
+        _id
+        name
+        type
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}`
+
+
+gql`
+input ProcedureManagement {
+    create: Boolean
+    delete: Boolean
+    edit: Boolean
+    view: Boolean
+    assign:Boolean
+    share:Boolean
+    }
+
+   input AssetManagement {
+          create: Boolean
+          delete: Boolean
+          edit: Boolean
+          view: Boolean
+          assign:Boolean
+          share:Boolean
+        }
+
+ input RunsManagement {
+          create: Boolean
+          delete: Boolean
+          edit: Boolean
+          view: Boolean
+          assign:Boolean
+          share:Boolean
+        }
+
+ input BulkProfileManagement{
+  editUserName: Boolean
+  changePassword: Boolean
+  editDepartment: Boolean
+  editLab: Boolean
+  editOrganisation: Boolean
+  editContact: Boolean
+}
+  input BulkUserManagement {
+  create: Boolean
+  delete: Boolean
+  edit: Boolean
+  view: Boolean
+}
+
+ input BulkRoleManagement {
+  edit: Boolean
+}
+
+  input BulkUpdateRole {
+    _id: String!
+    name: String
+    type: String
+    procedure_management: ProcedureManagement
+    asset_management: AssetManagement
+    runs_management: RunsManagement
+    profile_management: BulkProfileManagement
+    user_management: BulkUserManagement
+    role_management: BulkRoleManagement
+    instituteId: String
+  }
+`

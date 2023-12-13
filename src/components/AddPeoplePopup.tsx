@@ -61,15 +61,15 @@ React.useEffect(()=>{
       procedureId: item?.procedureId._id==undefined?item?.procedureId[0]?._id :item?.procedureId._id,
       departmentId: item?.departmentId.map(((item:any)=>item?._id)) ,
       laboratoryId:  item?.laboratoryId.map(((item:any)=>item?._id)) ,
-      assignedTo: item?.assignedTo ,
-      assignedBy: item?.assignedBy ,
+      // assignedTo: item?.assignedTo ,
+      assignedBy: userSliceData?._id ,
       dueDate: item?.dueDate ,
       status: item?.status ,
     }));
     console.log("newArray",newArray);
     
     const output = newArray.flatMap((aItem:any) =>
-    allIds.map((bItem:any) => ({ ...aItem, "userId": bItem }))
+    allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
     );
 
     let payload={

@@ -25,9 +25,9 @@ import Calendar from 'react-calendar';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
-import moment from 'moment';
+import Moment from 'moment';
 import { fetchNotificationData } from '../../api/notification.API';
-import { fetchNotificationMessageData } from '../../api/notificationMessageAPI';
+import { fetchNotificationMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchMyPageRunsData } from '../../api/myPageAPI'
 import {
     fetchCalendarEventData,
@@ -220,6 +220,8 @@ export const mypageRows = [
 
 import { MypageRowData } from '../../modals/mypage.modal';
 import TablePopup from '../../components/table/TablePopup';
+import { fetchSingleUserData } from '../../api/userAPI';
+import moment from 'moment';
 
 // function createData(
 //   name: string,
@@ -250,7 +252,7 @@ export default function MyPage() {
   });
 
   const [notificationQueryStrings, setNotificationQueryString] = React.useState({
-    userId: "657421dda6542a00128276a2"
+    userId: ""
   });
   const [clickedDate, setClickedDate] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -272,9 +274,9 @@ export default function MyPage() {
 
   const tablePopupRef: any = React.useRef(null);
 
-  const NotificationSliceData = useSelector(
-    (state: any) => state.notification.data?.get_all_notifications,
-  );
+  // const NotificationSliceData = useSelector(
+  //   (state: any) => state.notification.data?.get_all_notifications,
+  // );
 
   const NotificationMessageSliceData = useSelector(
 
@@ -290,17 +292,40 @@ export default function MyPage() {
   const MyPageRunsData = useSelector(
     (state: any) => state.myPageSlice.data?.get_all_runs,
   );
-
+  const loginUserSliceData=  useSelector(
+    (state: any) => state.userLogin.data, 
+  );
+    // console.log('wwwww',loginUserSliceData);
+  const[userData, setUserData]=React.useState<any>({})
+ console.log(loginUserSliceData);
+ 
+  React.useEffect(()=> {
+    let temp = { _id: loginUserSliceData?.verifyToken?._id };
+    // if (row?._id) {
+    dispatch(fetchSingleUserData(temp))
+      .then((isSucess:any) => {
+        setUserData(isSucess?.get_user)
+        setNotificationQueryString(isSucess?.get_user?._id)
+        })
+      
+      .catch((err:any) => {
+        console.log(err);
+      });
+    // }
+  },[loginUserSliceData]);
   React.useEffect(() => {
     let pay = {
       month: `${new Date().getMonth() + 1}`,
       year: `${new Date().getFullYear()}`,
     };
+    let payload={
+     userId: userData?._id
+    }
     dispatch(fetchNotificationData());
     dispatch(fetchCalendarEventData(pay));
     dispatch(fetchMyPageRunsData(queryStrings));
-    dispatch(fetchNotificationMessageData(notificationQueryStrings));
-  }, []);
+    dispatch(fetchNotificationMessageData(payload));
+  }, [userData]);
 
   React.useEffect(() => {
     const calendarMarkSet = new Set();
@@ -320,21 +345,28 @@ export default function MyPage() {
   }, [calendar_eventData]);
 
   const getTimeDifference = (notificationTime: any) => {
-    const currentTime: Date = new Date();
-    const postedTime: Date = new Date('2023-11-01T12:00:00');
-    const timeDifference: number = Math.abs(
-      currentTime.getTime() - postedTime.getTime(),
-    );
-    const hoursDifference: number = Math.floor(
-      timeDifference / (1000 * 60 * 60),
-    );
+    const currentTime: any = Moment().format('YYYY-MM-DD');
 
-    if (hoursDifference >= 24) {
-      const daysDifference: number = Math.floor(hoursDifference / 24);
-      return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
-    }
+    const postedTime: any = Moment(notificationTime).format('YYYY-MM-DD');
+    const daysDifference = moment(notificationTime).diff(currentTime, 'hours');
+    // console.log("currentTime",currentTime)
+    // const postedTime: Date = new Date(notificationTime)
+    console.log("daysDifference",daysDifference)
+    // const timeDifference: number = Math.abs(
+    //   // currentTime.getTime() - postedTime.getTime(),
+    // );
 
-    return `${hoursDifference}h ago`;
+
+    // console.log("timeDifference timeDifference",timeDifference)
+
+    // const hoursDifference: number = Math.floor(
+    //   timeDifference / (1000 * 60 * 60),
+    // );
+
+    console.log("timeDifference timeDifference",daysDifference)
+
+
+    return `${daysDifference}h ago`;
   };
 
   const handleDateClick = (date: any) => {
@@ -370,6 +402,15 @@ export default function MyPage() {
   const toggleViewNotifications = () => {
     setViewAllNotifications((prev) => !prev);
   };
+  const handleReadSingleNotification=async(id:any)=>{
+    let payload={
+      _id:id,
+      isRead:true
+    }
+   await dispatch(fetchReadSingleMessageData(payload))
+   await dispatch(fetchNotificationMessageData(notificationQueryStrings));
+
+  }
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
@@ -607,13 +648,14 @@ export default function MyPage() {
                 }}
               >
 
-                {NotificationMessageSliceData?.map((notification: any, index: any) => (
+                {NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
                   <Box
                     className="notifications"
                     key={index}
                     style={{
-                      backgroundColor: index === 0 ? '#F3F3F3' : 'white', // Apply different background for the first notification
+                      backgroundColor: notification?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
                     }}
+                    onClick={()=>handleReadSingleNotification(notification?._id)}
                   >
                     <Box className="image-container">
                       <Avatar
@@ -627,10 +669,17 @@ export default function MyPage() {
                       </Box>
                     </Box>
                     <Box className="time">
-                      {getTimeDifference(notification.postedTime)}
+                      {getTimeDifference(notification.createdAt)}
                     </Box>
                   </Box>
                 ))}
+                {/* // : */}
+                <Box sx={{ textAlign: 'center' }}>
+                <img src={Emptystate} alt="" />
+                <Typography className="no-remainder">
+                  No reminders yet!
+                </Typography>
+                </Box>
                 {/* <Box className="show-page">
                   <Typography>
                     {viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`}

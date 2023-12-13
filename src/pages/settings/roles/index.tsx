@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import { fetchSingleRoleData, fetchUpdateRoleData } from "../../../api/roleApi";
+import { toast } from "react-toastify";
 
 const Roles = () => {
 
@@ -30,8 +31,8 @@ const Roles = () => {
  
   React.useEffect(() => {
     setFormValues(roleSliceData[0])
-    setFormValues1(roleSliceData[1])
-    setFormValues2(roleSliceData[2])
+    setFormValues1(roleSliceData[2])
+    setFormValues2(roleSliceData[1])
   }, [roleSliceData]);
 
   React.useEffect(() => {
@@ -40,7 +41,7 @@ const Roles = () => {
     }
     dispatch(fetchSingleRoleData(payload))
   }, []);
-  console.log("roleData",roleData);
+  console.log("roleData",roleSliceData);
   const initailState : any={
     "procedure_management":{
       assign : false,
@@ -85,6 +86,8 @@ const Roles = () => {
       view    :false
     },
   }
+
+  
   const initailState1 : any={
     "procedure_management":{
       assign : false,
@@ -173,11 +176,13 @@ const Roles = () => {
       view    :false
     },
   }
+
   const [formValues, setFormValues]=React.useState<any>(initailState)
   const [formValues1, setFormValues1]=React.useState(initailState1)
   const [formValues2, setFormValues2]=React.useState(initailState2)
 
   console.log(formValues);
+
   
 //   const handleChange=(e:any,val:boolean)=>{
 // console.log(e.target.name);
@@ -224,53 +229,48 @@ const handleChange2 = (category, field, value) => {
 };
 console.log(formValues);
 
-  const handleSave=()=>{
-    console.log('submited');
+  const handleSave=async()=>{
+    console.log('submited',formValues);
+
+    var { createdAt, isActive, updatedAt, isDeleted, __typename, ...rest } = formValues;
+    var { createdAt, isActive, updatedAt, isDeleted, __typename, ...rest1 } = formValues1;
+    var { createdAt, isActive, updatedAt, isDeleted, __typename, ...rest2 } = formValues2;
+   
+    var newarr=[]
+    newarr.push(rest,rest1,rest2)
+    const updatedData = newarr.map(item => {
+      // Create a copy of the item to avoid modifying the original object
+      const newItem = { ...item };
+    
+      // Iterate over the keys of the item
+      for (const key in newItem) {
+        if (Object.prototype.hasOwnProperty.call(newItem, key)) {
+          // Check if the key is an object and has the __typename property
+          if (typeof newItem[key] === 'object' && newItem[key] !== null && '__typename' in newItem[key]) {
+            // Create a copy of the nested object and delete __typename
+            newItem[key] = { ...newItem[key] };
+            delete newItem[key].__typename;
+          }
+        }
+      }
+    console.log(newItem);
+    
+      return newItem;
+      
+    })
+    console.log(updatedData);
+    
     var payload={
-      _id: loginUserSliceData?._id,
-      asset_management:[{
-        assign : formValues.asset_management.assign,
-        create : formValues.asset_management.create,
-        delete : formValues.asset_management.delete,
-        edit   : formValues.asset_management.edit,
-        share  : formValues.asset_management.share,
-        view   : formValues.asset_management.view,
-      }],
-      procedure_management:[{
-        assign : formValues.procedure_management.assign,
-        create : formValues.procedure_management.create,
-        delete : formValues.procedure_management.delete,
-        edit   : formValues.procedure_management.edit,
-        share  : formValues.procedure_management.share,
-        view   : formValues.procedure_management.view,
-      }],
-      profile_management:[{
-        changePassword : formValues.profile_management.changePassword,
-        editContact    : formValues.profile_management.editContact,
-        editDepartment : formValues.profile_management.editDepartment,
-        editLab   : formValues.profile_management.editLab,
-        editOrganisation : formValues.profile_management.editOrganisation,
-        editUserName     : formValues.profile_management.editUserName,
-      }],
-      runs_management:[{
-        assign : formValues.runs_management.assign,
-        create : formValues.runs_management.create,
-        delete : formValues.runs_management.delete,
-        edit   : formValues.runs_management.edit,
-        share  : formValues.runs_management.share,
-        view   : formValues.runs_management.view,
-      }],
-      role_management:[{
-        edit : formValues.role_management.edit
-      }],
-      user_management:[{
-  
-        create  : formValues.user_management.create,
-        delete  : formValues.user_management.delete,
-        edit    : formValues.user_management.edit,
-      }]
+      // _id: loginUserSliceData?._id,
+      roles:updatedData
     }
-    // dispatch(fetchUpdateRoleData(payload))
+   await dispatch(fetchUpdateRoleData(payload)).then((res:any)=>{
+    toast(`Role updated successful !`, {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
+   })
     
   }
   return (
@@ -928,7 +928,7 @@ console.log(formValues);
                               height: '30px'
                             }}
                             checked={formValues?.runs_management.delete}
-                            onChange={(e)=>handleChange("runs_management","create",!formValues?.runs_management.delete)}
+                            onChange={(e)=>handleChange("runs_management","delete",!formValues?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -980,7 +980,7 @@ console.log(formValues);
                               height: '30px'
                             }}
                             checked={formValues2?.runs_management.delete}
-                            onChange={(e)=>handleChange2("runs_management","create",!formValues2?.runs_management.delete)}
+                            onChange={(e)=>handleChange2("runs_management","delete",!formValues2?.runs_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
@@ -1394,8 +1394,8 @@ console.log(formValues);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues2?.runs_management.create}
-                            onChange={(e)=>handleChange2("asset_management","create",!formValues2?.runs_management.create)}
+                            checked={formValues2?.asset_management.create}
+                            onChange={(e)=>handleChange2("asset_management","create",!formValues2?.asset_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
