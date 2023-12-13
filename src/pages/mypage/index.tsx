@@ -644,11 +644,11 @@ export default function MyPage() {
                 sx={{
                   overflowY: 'scroll',
                   paddingBottom: '0rem',
-                  height: 'calc(100vh - 48vh)',
+                  height: 'calc(100vh - 31vh)',
                 }}
               >
 
-                {NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
+                {NotificationMessageSliceData?.message.length!==0? NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
                   <Box
                     className="notifications"
                     key={index}
@@ -672,14 +672,16 @@ export default function MyPage() {
                       {getTimeDifference(notification.createdAt)}
                     </Box>
                   </Box>
-                ))}
-                {/* // : */}
-                <Box sx={{ textAlign: 'center' }}>
+                ))
+                :
+                <Box sx={{ textAlign: 'center', padding:"15%" }}>
                 <img src={Emptystate} alt="" />
                 <Typography className="no-remainder">
-                  No reminders yet!
+                  No notifications yet!
                 </Typography>
-                </Box>
+                </Box>}
+                {/* // : */}
+                
                 {/* <Box className="show-page">
                   <Typography>
                     {viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`}
