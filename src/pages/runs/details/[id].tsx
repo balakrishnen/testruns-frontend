@@ -659,11 +659,15 @@ console.log(obj);
           value: header.textContent.trim(),
         }));
         const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
+        console.log("tableDataRows",tableDataRows);
+        
         const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
           const tableCells = tableDataRow.querySelectorAll("td[data-column]");
+          console.log("tableCells",tableCells);
+          
           return Array.from(tableCells).map((cell: any) => {
             const inputCntext = cell.querySelector('input[type="text"]');
-            console.log(inputCntext);
+            console.log("inputCntext",inputCntext);
             
             if (inputCntext) {
               console.log(cell.getAttribute("data-column"));
@@ -676,20 +680,26 @@ console.log(obj);
             }
           });
         });
+        console.log("header",rowData);
         return {
           headerNames: headerNames,
           rowData: rowData,
         };
       });
-console.log("result",htmlInput);
+
 
       const mergedDatasets = result.map((dataset) => {
+        console.log(dataset);
         
         for (let i = 0; i < dataset.rowData.length; i++) {
           const rowData = dataset.rowData[i];
+          console.log(dataset.rowData,"header");
+          
           const mergedRow: any = {};
           for (let j = 0; j < rowData?.length; j++) {
             const header = dataset.headerNames[j];
+            console.log(header,"header");
+            
             const value: any = rowData[j];
             mergedRow[header?.value] = value?.value;
           }

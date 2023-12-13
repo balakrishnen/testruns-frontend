@@ -328,7 +328,7 @@ console.log(formValues);
         <Typography className="Access-control">Access control</Typography>
         <Box>
           <Box className="role-table" sx={{ width: "100%" }}>
-            <TableContainer sx={{ height: 515 }}>
+            <TableContainer sx={{ height: 639 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
@@ -1378,8 +1378,8 @@ console.log(formValues);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues1?.runs_management.create}
-                            onChange={(e)=>handleChange1("asset_management","create",!formValues1?.runs_management.create)}
+                            checked={formValues1?.asset_management.create}
+                            onChange={(e)=>handleChange1("asset_management","create",!formValues1?.asset_management.create)}
                             name="create"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}

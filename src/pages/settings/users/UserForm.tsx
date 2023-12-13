@@ -32,7 +32,7 @@ import {
 } from '../../../utils/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from '../../../api/departmentAPI';
-import { fetchRoleData } from '../../../api/roleApi';
+import { fetchSingleRoleData } from '../../../api/roleApi';
 import { fetchLabData } from '../../../api/labAPI';
 import SuccessPopup from '../../../components/SuccessPopup';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
@@ -277,17 +277,20 @@ const UserForm = React.forwardRef(
     console.log(departmentData);
 
     console.log(DepartmentList);
-    let payload2={
-      instituteId:userData?.instituteId
-    }
+    
     React.useEffect(() => {
-     
+      
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
-      dispatch(fetchRoleData(payload2));
       dispatch(fetchinstitutionData())
     }, []);
 
+    React.useEffect(()=>{
+      let payload2={
+        instituteId:userData?.instituteId
+      }
+      dispatch(fetchSingleRoleData(payload2));
+    },[userData])
     return (
       <div>
         <Dialog

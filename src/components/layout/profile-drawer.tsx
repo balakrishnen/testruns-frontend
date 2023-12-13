@@ -25,7 +25,7 @@ import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData }
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { fetchRoleData } from '../../api/roleApi';
+import { fetchSingleRoleData } from '../../api/roleApi';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase.config';
 import AWS from 'aws-sdk';
@@ -135,7 +135,7 @@ export default function AppProfileDrawer({
     dispatch(fetchLabData());
     dispatch(fetchOrganizationData());
     
-    dispatch(fetchRoleData(payload2))
+    dispatch(fetchSingleRoleData(payload2))
     dispatch(fetchSingleUserData(payload))
     setEdit(true)
     // setUploadedFile(null)
