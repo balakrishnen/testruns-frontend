@@ -40,8 +40,8 @@ export const fetchUpdateRoleData = (payload: any) => async () => {
         mutation: UPDATE_FIND_ROLE,
         variables: payload
       });
-    
-      console.log("response",response);
+    return response.data
+    //   console.log("response",response);
     } catch (error: any) {
       console.log(error);
     }

@@ -673,6 +673,13 @@ export default function MyPage() {
                     </Box>
                   </Box>
                 ))}
+                {/* // : */}
+                <Box sx={{ textAlign: 'center' }}>
+                <img src={Emptystate} alt="" />
+                <Typography className="no-remainder">
+                  No reminders yet!
+                </Typography>
+                </Box>
                 {/* <Box className="show-page">
                   <Typography>
                     {viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`}

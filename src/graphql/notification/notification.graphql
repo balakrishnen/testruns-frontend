@@ -49,11 +49,6 @@ query Get_notification($userId: String) {
 `
 export const UPDATE_NOTIFICATION = gql`
 
-input NotificationMethodInput{
-  email: Boolean
-  notification: Boolean
-}
-
 mutation Update_notification(
   $_id: String!
         $createProcedure: [NotificationMethodInput]
@@ -72,5 +67,12 @@ mutation Update_notification(
         isActive
         isDeleted
     }
+}
+`
+
+gql`
+input NotificationMethodInput{
+  email: Boolean
+  notification: Boolean
 }
 `

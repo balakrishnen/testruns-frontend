@@ -149,8 +149,8 @@ query Find_roles($instituteId: String!) {
     }
 }`
 export const UPDATE_FIND_ROLE = gql`
-mutation Update_role($BulkUpdateRole: [BulkUpdateRole]) {
-    update_role(roles: $BulkUpdateRole) {
+mutation Update_role($roles: [BulkUpdateRole]) {
+    update_role(roles: $roles) {
         _id
         name
         type
@@ -159,9 +159,10 @@ mutation Update_role($BulkUpdateRole: [BulkUpdateRole]) {
         createdAt
         updatedAt
     }
-}
+}`
 
 
+gql`
 input ProcedureManagement {
     create: Boolean
     delete: Boolean
