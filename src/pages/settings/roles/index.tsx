@@ -28,20 +28,6 @@ const Roles = () => {
   console.log("loginUserSliceData",loginUserSliceData);
   
   console.log(roleSliceData);
- 
-  React.useEffect(() => {
-    setFormValues(roleSliceData[0])
-    setFormValues1(roleSliceData[2])
-    setFormValues2(roleSliceData[1])
-  }, [roleSliceData]);
-
-  React.useEffect(() => {
-    let payload={
-      instituteId:loginUserSliceData?.instituteId
-    }
-    dispatch(fetchSingleRoleData(payload))
-  }, []);
-  console.log("roleData",roleSliceData);
   const initailState : any={
     "procedure_management":{
       assign : false,
@@ -86,8 +72,6 @@ const Roles = () => {
       view    :false
     },
   }
-
-  
   const initailState1 : any={
     "procedure_management":{
       assign : false,
@@ -183,6 +167,28 @@ const Roles = () => {
 
   console.log(formValues);
 
+  React.useEffect(() => {
+    setFormValues(formValues)
+    setFormValues1(formValues1)
+    setFormValues2(formValues2)
+  }, [formValues,formValues1,formValues2]);
+
+  React.useEffect(() => {
+    setFormValues(roleSliceData[0])
+    setFormValues1(roleSliceData[2])
+    setFormValues2(roleSliceData[1])
+  }, [roleSliceData]);
+
+  React.useEffect(() => {
+    let payload={
+      instituteId:loginUserSliceData?.instituteId
+    }
+    dispatch(fetchSingleRoleData(payload))
+  }, []);
+
+  console.log("roleData",roleSliceData);
+
+
   
 //   const handleChange=(e:any,val:boolean)=>{
 // console.log(e.target.name);
@@ -271,6 +277,10 @@ console.log(formValues);
       }
     });
    })
+   let payload1={
+    instituteId:loginUserSliceData?.instituteId
+  }
+  await dispatch(fetchSingleRoleData(payload1))
     
   }
   return (

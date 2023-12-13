@@ -85,13 +85,15 @@ const Notification = () => {
   },[notificationList])
 
   React.useEffect(()=>{
+    setNotificationList(NotificationSliceData)
+  },[NotificationSliceData])
+
+  React.useEffect(()=>{
     let payload={
       userId:userSliceData?._id
     }
   dispatch(fetchUserNotificationData(payload))
-  setNotificationList(NotificationSliceData)
- 
-  },[userSliceData,NotificationSliceData])
+  },[userSliceData])
   
   console.log(notificationList);
   const handleChange = (category, subCategory, val) => {
@@ -138,6 +140,10 @@ console.log(updatedData);
       runAssiged: updatedData2,
     }
     dispatch(fetchUpdateNotification(payload))
+    let payload1={
+      userId:userSliceData?._id
+    }
+  dispatch(fetchUserNotificationData(payload1))
   };
 
     return (

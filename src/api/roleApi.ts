@@ -12,6 +12,7 @@ export const fetchRoleData = (payload:any) => async (dispatch: any) => {
         const response = await client.query({
             query: FIND_ROLE,
             variables: payload,
+            fetchPolicy: 'network-only',
         });
 
         dispatch(fetchRoleSuccess(response.data));
@@ -25,6 +26,7 @@ export const fetchSingleRoleData = (payload: any) => async (dispatch: any) => {
         const response = await client.query({
             query: FIND_ROLE,
             variables: payload,
+            fetchPolicy: 'network-only',
         });
         dispatch(fetchRoleSuccess(response.data));
     } catch (error: any) {
