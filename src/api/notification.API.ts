@@ -10,7 +10,8 @@ export const fetchNotificationData = () => async (dispatch: any) => {
     dispatch(fetchNotificationStart());
     try {
         const response = await client.query({
-            query: GET_ALL_NOTIFICATION
+            query: GET_ALL_NOTIFICATION,
+            fetchPolicy: 'network-only',
         });
         dispatch(fetchNotificationSuccess(response.data));
     } catch (error: any) {

@@ -66,14 +66,14 @@ const Notification = () => {
     }
   ]
     
-  
-  const [notificationList, setNotificationList]=React.useState<any>([
-    {
-      createProcedure: [{ email: false, notification: false }],
-      runAssiged: [{ email: false, notification: false }],
-      runsCommend: [{ email: false, notification: false }],
-    }
-  ])
+  const [notificationList, setNotificationList]=React.useState<any>(initialValues)
+  // const [notificationList, setNotificationList]=React.useState<any>([
+  //   {
+  //     createProcedure: [{ email: false, notification: false }],
+  //     runAssiged: [{ email: false, notification: false }],
+  //     runsCommend: [{ email: false, notification: false }],
+  //   }
+  // ])
   const NotificationSliceData = useSelector(
     (state: any) => state.notification.data?.get_notification,
   );
@@ -85,13 +85,16 @@ const Notification = () => {
   },[notificationList])
 
   React.useEffect(()=>{
+    setNotificationList(NotificationSliceData)
+  },[NotificationSliceData])
+
+  React.useEffect(()=>{
     let payload={
       userId:userSliceData?._id
     }
   dispatch(fetchUserNotificationData(payload))
-  setNotificationList(NotificationSliceData)
- 
-  },[NotificationSliceData])
+  },[userSliceData])
+  
   console.log(notificationList);
   const handleChange = (category, subCategory, val) => {
     // Create a deep copy of the state to avoid directly mutating state
@@ -137,6 +140,10 @@ console.log(updatedData);
       runAssiged: updatedData2,
     }
     dispatch(fetchUpdateNotification(payload))
+    let payload1={
+      userId:userSliceData?._id
+    }
+  dispatch(fetchUserNotificationData(payload1))
   };
 
     return (
@@ -371,9 +378,9 @@ console.log(updatedData);
                 </Typography>
                 <AntSwitch
                   checked={notificationList!==undefined && notificationList[0]?.runAssiged[0]?.email?true:false}
-                  onChange={()=>handleChange('runAssiged', 'email', notificationList[0]?.runAssiged[0]?.email)}
-                  inputProps={{ "aria-label": "ant design" }}
-                  name="email"
+                  onChange={()=>handleChange('runAssiged', 'email', !notificationList[0]?.runAssiged[0]?.email)}
+                 inputProps={{ "aria-label": "ant design" }}
+                 name="email"
                 />
               </Stack>
             </Box>
