@@ -25,7 +25,7 @@ import Calendar from 'react-calendar';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
-import moment from 'moment';
+import Moment from 'moment';
 import { fetchNotificationData } from '../../api/notification.API';
 import { fetchNotificationMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchMyPageRunsData } from '../../api/myPageAPI'
@@ -221,6 +221,7 @@ export const mypageRows = [
 import { MypageRowData } from '../../modals/mypage.modal';
 import TablePopup from '../../components/table/TablePopup';
 import { fetchSingleUserData } from '../../api/userAPI';
+import moment from 'moment';
 
 // function createData(
 //   name: string,
@@ -344,21 +345,28 @@ export default function MyPage() {
   }, [calendar_eventData]);
 
   const getTimeDifference = (notificationTime: any) => {
-    const currentTime: Date = new Date();
-    const postedTime: Date = new Date('2023-11-01T12:00:00');
-    const timeDifference: number = Math.abs(
-      currentTime.getTime() - postedTime.getTime(),
-    );
-    const hoursDifference: number = Math.floor(
-      timeDifference / (1000 * 60 * 60),
-    );
+    const currentTime: any = Moment().format('YYYY-MM-DD');
 
-    if (hoursDifference >= 24) {
-      const daysDifference: number = Math.floor(hoursDifference / 24);
-      return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
-    }
+    const postedTime: any = Moment(notificationTime).format('YYYY-MM-DD');
+    const daysDifference = moment(notificationTime).diff(currentTime, 'hours');
+    // console.log("currentTime",currentTime)
+    // const postedTime: Date = new Date(notificationTime)
+    console.log("daysDifference",daysDifference)
+    // const timeDifference: number = Math.abs(
+    //   // currentTime.getTime() - postedTime.getTime(),
+    // );
 
-    return `${hoursDifference}h ago`;
+
+    // console.log("timeDifference timeDifference",timeDifference)
+
+    // const hoursDifference: number = Math.floor(
+    //   timeDifference / (1000 * 60 * 60),
+    // );
+
+    console.log("timeDifference timeDifference",daysDifference)
+
+
+    return `${daysDifference}h ago`;
   };
 
   const handleDateClick = (date: any) => {
@@ -661,7 +669,7 @@ export default function MyPage() {
                       </Box>
                     </Box>
                     <Box className="time">
-                      {getTimeDifference(notification.postedTime)}
+                      {getTimeDifference(notification.createdAt)}
                     </Box>
                   </Box>
                 ))}
