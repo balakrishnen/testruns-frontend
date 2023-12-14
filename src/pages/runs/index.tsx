@@ -216,7 +216,7 @@ console.log('runsSliceData',runsSliceData);
     setCurrentPage(page_no);
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data);
-  const handleOnChange = (e: any, row: any) => {
+  const handleOnChange = async(e: any, row: any) => {
     console.log(e.target.value);
 
     console.log('change', row.departmentId, row.laboratoryId);
@@ -227,12 +227,12 @@ console.log('runsSliceData',runsSliceData);
       runsChange['status'] = e.target.value;
     }
     console.log(runsChange);
-    setLoader(true)
-    dispatch(fetchUpdateRunsData(runsChange));
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-    toast('Runs status updated !', {
+    // setLoader(true)
+   await dispatch(fetchUpdateRunsData(runsChange));
+    // setTimeout(() => {
+    //   // setLoader(false);
+    // }, 1000);
+    await toast('Runs status updated !', {
       style: {
         background: '#00bf70',
         color: '#fff',

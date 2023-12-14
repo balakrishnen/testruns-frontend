@@ -754,9 +754,14 @@ console.log(obj);
     const empty = vals.filter((item) => item === "");
     console.log('finalTableTitleResult',empty);
     
-    // if (empty.length > 0) {
-    //   Toast("Must fill all Required Readings", "LONG", "error");
-    // } else if (empty.length === 0) {
+    if (empty.length > 0) {
+      toast('Must fill all Required Readings', {
+        style: {
+          background: '#d92828',
+          color: '#fff',
+        },
+      });
+    } else if (empty.length === 0) {
       handleHtmlInput();
       var payload:any ={
               runId: runzValue._id,
@@ -795,7 +800,8 @@ console.log(obj);
               }
             });
           }
-  };
+  }
+}
 //   const onSubmit=()=>{
 //     console.log(runzValue,state.content)
 //     var payload:any ={
