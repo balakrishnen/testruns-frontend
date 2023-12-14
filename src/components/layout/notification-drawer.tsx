@@ -65,16 +65,21 @@ export default function AppNotificationDrawer({
   }, [userData]);
 
   const getTimeDifference = (notificationTime: any) => {
-    const currentTime: any = Moment().format('YYYY-MM-DD');
+    const currentTime = Moment().format('YYYY-MM-DD');
+    const minutesTime = Moment(notificationTime).diff(currentTime, 'minutes');
     const hoursDifference = Moment(notificationTime).diff(currentTime, 'hours');
-
-    if (hoursDifference > 24) {
-      const daysDifference: number = Math.floor(hoursDifference / 24);
-      return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
-    }
-
+    
+    if (minutesTime >= 60){
     return `${hoursDifference}h ago`;
-  };
+    }
+    
+    if (hoursDifference > 24) {
+    const daysDifference: number = Math.floor(hoursDifference / 24);
+    return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
+    }
+    
+    return `${minutesTime}min ago`;
+    };
   const handleReadSingleNotification=async(id:any)=>{
     let payload={
       _id:id,
