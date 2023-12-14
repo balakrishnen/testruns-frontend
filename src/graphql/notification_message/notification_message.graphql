@@ -18,6 +18,7 @@ perPage:$perPage  ){
             notificationRuleId
             isActive
             isDeleted
+            createdAt
         }
     }
 }`

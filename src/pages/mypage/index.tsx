@@ -25,7 +25,6 @@ import Calendar from 'react-calendar';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
-import Moment from 'moment';
 import { fetchNotificationData } from '../../api/notification.API';
 import { fetchNotificationMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchMyPageRunsData } from '../../api/myPageAPI'
@@ -267,6 +266,8 @@ export default function MyPage() {
   const [calendarEventData, setCalendarEventData] = useState([]);
   const [CalendarMark, setCalendarMark] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [ currentMonth, setCurrentMonth ] = useState()
+  const [ currentYear, setCurrentYear ] = useState()
   const [answers, setAnswers] = React.useState('');
   const [notifications, setNotifications] = useState([
     // Your notification data goes here
@@ -298,6 +299,7 @@ export default function MyPage() {
     // console.log('wwwww',loginUserSliceData);
   const[userData, setUserData]=React.useState<any>({})
  console.log(loginUserSliceData);
+ const [ calender, setCalender ] = React.useState()
  
   React.useEffect(()=> {
     let temp = { _id: loginUserSliceData?.verifyToken?._id };
@@ -340,36 +342,47 @@ export default function MyPage() {
       return temp;
     });
     const calendarMark = Array.from(calendarMarkSet);
+    console.log("calendarMark",calendarMark)
     setCalendarMark(calendarMark);
     setCalendarEventData(calendar);
   }, [calendar_eventData]);
 
   const getTimeDifference = (notificationTime: any) => {
-    const currentTime: any = Moment().format('YYYY-MM-DD');
-    const minutesTime = Moment(notificationTime).diff(currentTime, 'minutes');
-    const hoursDifference = moment(notificationTime).diff(currentTime, 'hours');
+    const currentTime: any = moment();
+    const timestamp = parseInt(notificationTime);
 
-    if (minutesTime >= 60){
-      return `${hoursDifference}h ago`;
+    // Create a Moment object from the timestamp
+    const notificationTimeData = moment(timestamp);
+
+  
+    // Calculate the difference in milliseconds
+    const timeDifferenceInMilliseconds = currentTime.diff(notificationTimeData);
+  
+    // Convert the difference to minutes and hours
+    const minutesDifference = moment.duration(timeDifferenceInMilliseconds).asMinutes();
+    const hoursDifference = moment.duration(timeDifferenceInMilliseconds).asHours();
+  
+    if (minutesDifference >= 60 && hoursDifference < 24) {
+      return `${Math.floor(hoursDifference)}h ago`;
     }
-
+  
     if (hoursDifference > 24) {
       const daysDifference: number = Math.floor(hoursDifference / 24);
       return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
     }
- 
-
-    return `${minutesTime}min ago`;
+  
+    return `${Math.floor(minutesDifference)}min ago`;
   };
 
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
       (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
-    );
+    );  
     setCalendarContent(filCalendarContent);
     setSelectedDate(moment(date).format('MM-DD-YYYY'));
   };
 
+  console.log("CalendarContent",CalendarContent)
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -733,6 +746,19 @@ export default function MyPage() {
                   ) {
                     return 'events';
                   }
+                }}
+                onActiveStartDateChange={({ activeStartDate, view }) => {
+                  // activeStartDate is a Date object representing the start date of the current view
+                  const month: any = activeStartDate?.getMonth();
+                  const year: any = activeStartDate?.getFullYear();
+                  setCurrentMonth(month+1)
+                  setCurrentYear(year)
+
+                  const calPayload = {
+                    month: `${month+1}`,
+                    year: `${year}`,
+                  }
+                  dispatch(fetchCalendarEventData(calPayload));
                 }}
               />
               <Divider className="hr-calender" />

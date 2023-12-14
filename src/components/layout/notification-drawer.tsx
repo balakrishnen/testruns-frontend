@@ -11,7 +11,7 @@ import data from '../../assets/images/profile/user.jpg';
 import { fetchNotificationMessageData, fetchReadBulkMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchSingleUserData } from '../../api/userAPI';
 import Emptystate from '../../assets/images/Emptystate.svg';
-import Moment from 'moment';
+import moment from 'moment';
 
 export default function AppNotificationDrawer({
   openDrawer,
@@ -65,21 +65,26 @@ export default function AppNotificationDrawer({
   }, [userData]);
 
   const getTimeDifference = (notificationTime: any) => {
-    const currentTime = Moment().format('YYYY-MM-DD');
-    const minutesTime = Moment(notificationTime).diff(currentTime, 'minutes');
-    const hoursDifference = Moment(notificationTime).diff(currentTime, 'hours');
-    
-    if (minutesTime >= 60){
-    return `${hoursDifference}h ago`;
+    const currentTime: any = moment();
+    const timestamp = parseInt(notificationTime);
+
+    const notificationTimeData = moment(timestamp);
+
+    const timeDifferenceInMilliseconds = currentTime.diff(notificationTimeData);
+  
+    const minutesDifference = moment.duration(timeDifferenceInMilliseconds).asMinutes();
+    const hoursDifference = moment.duration(timeDifferenceInMilliseconds).asHours();
+  
+    if (minutesDifference >= 60 && hoursDifference < 24) {
+      return `${Math.floor(hoursDifference)}h ago`;
     }
-    
     if (hoursDifference > 24) {
-    const daysDifference: number = Math.floor(hoursDifference / 24);
-    return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
+      const daysDifference: number = Math.floor(hoursDifference / 24);
+      return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
     }
-    
-    return `${minutesTime}min ago`;
-    };
+  
+    return `${Math.floor(minutesDifference)}min ago`;
+  };
   const handleReadSingleNotification=async(id:any)=>{
     let payload={
       _id:id,
