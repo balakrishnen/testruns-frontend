@@ -108,6 +108,8 @@ const Notification = () => {
     // Toggle between true and false for email and notification
     updatedValues[0][category][0][subCategory] = val;
 
+    setNotificationList(updatedValues)
+
    console.log("updatedValues",updatedValues)
    const createProcedureVal = updatedValues[0]?.createProcedure || [];
    const runsCommendVal=  updatedValues[0]?.runsCommend || [];
