@@ -29,7 +29,7 @@ import { fetchNotificationData } from '../../api/notification.API';
 import { fetchNotificationMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchMyPageRunsData } from '../../api/myPageAPI'
 import {
-    fetchCalendarEventData,
+  fetchCalendarEventData,
 } from '../../api/myPageAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
@@ -266,8 +266,8 @@ export default function MyPage() {
   const [calendarEventData, setCalendarEventData] = useState([]);
   const [CalendarMark, setCalendarMark] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ currentMonth, setCurrentMonth ] = useState()
-  const [ currentYear, setCurrentYear ] = useState()
+  const [currentMonth, setCurrentMonth] = useState()
+  const [currentYear, setCurrentYear] = useState()
   const [answers, setAnswers] = React.useState('');
   const [notifications, setNotifications] = useState([
     // Your notification data goes here
@@ -293,40 +293,42 @@ export default function MyPage() {
   const MyPageRunsData = useSelector(
     (state: any) => state.myPageSlice.data?.get_all_runs,
   );
-  const loginUserSliceData=  useSelector(
-    (state: any) => state.userLogin.data, 
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
   );
-    // console.log('wwwww',loginUserSliceData);
-  const[userData, setUserData]=React.useState<any>({})
- console.log(loginUserSliceData);
- const [ calender, setCalender ] = React.useState()
- 
-  React.useEffect(()=> {
+  // console.log('wwwww',loginUserSliceData);
+  const [userData, setUserData] = React.useState<any>({})
+  console.log(loginUserSliceData);
+  const [calender, setCalender] = React.useState()
+
+  React.useEffect(() => {
     let temp = { _id: loginUserSliceData?.verifyToken?._id };
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp))
-      .then((isSucess:any) => {
+      .then((isSucess: any) => {
         setUserData(isSucess?.get_user)
         setNotificationQueryString(isSucess?.get_user?._id)
-        })
-      
-      .catch((err:any) => {
+      })
+
+      .catch((err: any) => {
         console.log(err);
       });
+    let payload = {
+      userId: loginUserSliceData?.verifyToken?._id
+    }
+    dispatch(fetchNotificationMessageData(payload));
+
     // }
-  },[loginUserSliceData]);
+  }, [loginUserSliceData]);
   React.useEffect(() => {
     let pay = {
       month: `${new Date().getMonth() + 1}`,
       year: `${new Date().getFullYear()}`,
     };
-    let payload={
-     userId: userData?._id
-    }
+
     dispatch(fetchNotificationData());
     dispatch(fetchCalendarEventData(pay));
     dispatch(fetchMyPageRunsData(queryStrings));
-    dispatch(fetchNotificationMessageData(payload));
   }, [userData]);
 
   React.useEffect(() => {
@@ -342,7 +344,7 @@ export default function MyPage() {
       return temp;
     });
     const calendarMark = Array.from(calendarMarkSet);
-    console.log("calendarMark",calendarMark)
+    console.log("calendarMark", calendarMark)
     setCalendarMark(calendarMark);
     setCalendarEventData(calendar);
   }, [calendar_eventData]);
@@ -354,35 +356,35 @@ export default function MyPage() {
     // Create a Moment object from the timestamp
     const notificationTimeData = moment(timestamp);
 
-  
+
     // Calculate the difference in milliseconds
     const timeDifferenceInMilliseconds = currentTime.diff(notificationTimeData);
-  
+
     // Convert the difference to minutes and hours
     const minutesDifference = moment.duration(timeDifferenceInMilliseconds).asMinutes();
     const hoursDifference = moment.duration(timeDifferenceInMilliseconds).asHours();
-  
+
     if (minutesDifference >= 60 && hoursDifference < 24) {
       return `${Math.floor(hoursDifference)}h ago`;
     }
-  
+
     if (hoursDifference > 24) {
       const daysDifference: number = Math.floor(hoursDifference / 24);
       return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
     }
-  
+
     return `${Math.floor(minutesDifference)}min ago`;
   };
 
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
       (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
-    );  
+    );
     setCalendarContent(filCalendarContent);
     setSelectedDate(moment(date).format('MM-DD-YYYY'));
   };
 
-  console.log("CalendarContent",CalendarContent)
+  console.log("CalendarContent", CalendarContent)
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -408,13 +410,13 @@ export default function MyPage() {
   const toggleViewNotifications = () => {
     setViewAllNotifications((prev) => !prev);
   };
-  const handleReadSingleNotification=async(id:any)=>{
-    let payload={
-      _id:id,
-      isRead:true
+  const handleReadSingleNotification = async (id: any) => {
+    let payload = {
+      _id: id,
+      isRead: true
     }
-   await dispatch(fetchReadSingleMessageData(payload))
-   await dispatch(fetchNotificationMessageData(notificationQueryStrings));
+    await dispatch(fetchReadSingleMessageData(payload))
+    await dispatch(fetchNotificationMessageData(notificationQueryStrings));
 
   }
   return (
@@ -439,166 +441,177 @@ export default function MyPage() {
                   <TableCell align="right">Status</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {MyPageRunsData?.Runs.slice(
+              {MyPageRunsData?.Runs.length == 0
+                ? <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
+                  <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>
+                    <img src={Emptystate} alt="" />
+                    <Typography className="no-remainder">
+                      Runs not found.
+                    </Typography>
+                  </Box></p> :
+                MyPageRunsData?.Runs.slice(
                   0,
                   viewAll ? MyPageRunsData?.Runs.length : rowsPerPage,
                 ).map((row: any, index: any) => (
-                  <TableRow
-                    key={row._id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell scope="row">
-                      <Box>
-                        <Box>{row.runNumber}</Box>
-                      </Box>
-                    </TableCell>
-                    <TableCell>{row.objective}</TableCell>
-                    <TableCell>
-                      {row.departmentId[0] !== null ? (
-                        <Box
-                          onClick={(_event) => {
-                            _event.preventDefault();
-                            _event.stopPropagation();
-                            tablePopupRef.current?.open(
-                              true,
-                              'departments',
-                              row.departmentId,
-                            );
-                          }}
-                          sx={{ display: 'flex', alignItems: 'center' }}
-                        >
-                          <>
-                            <Chip
-                              key={index}
-                              label={row.departmentId[0].name}
-                              sx={{
-                                m: 0.5,
-                                padding: '0px 3px',
-                              }}
-                              onClick={(_event) => {
-                                _event.preventDefault();
-                                _event.stopPropagation();
-                                tablePopupRef.current.open(
-                                  true,
-                                  'departments',
-                                  row.departmentId,
-                                );
-                              }}
-                            />
-                            {row.departmentId.length > 1 && (
-                              <span
-                                style={{
-                                  fontWeight: 500,
-                                  color: '#9F9F9F',
-                                  fontSize: '12px',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                +{row.departmentId.length - 1} More
-                              </span>
-                            )}
-                          </>
+                  <TableBody>
+
+
+                    <TableRow
+                      key={row._id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell scope="row">
+                        <Box>
+                          <Box>{row.runNumber}</Box>
                         </Box>
-                      ) : (
-                        '-'
-                      )}
-                    </TableCell>
-                    <TableCell style={{ whiteSpace: 'nowrap' }}>
-                      {row.laboratoryId[0] !== null ? (
-                        <Box
-                          onClick={(_event) => {
-                            _event.preventDefault();
-                            _event.stopPropagation();
-                            tablePopupRef.current?.open(
-                              true,
-                              'lab',
-                              row.laboratoryId,
-                            );
-                          }}
-                          sx={{ display: 'flex', alignItems: 'center' }}
-                        >
-                          <>
-                            <Chip
-                              key={index}
-                              label={row.laboratoryId[0].name}
-                              sx={{
-                                m: 0.5,
-                                padding: '0px 3px',
-                              }}
-                              onClick={(_event) => {
-                                _event.preventDefault();
-                                _event.stopPropagation();
-                                tablePopupRef.current.open(
-                                  true,
-                                  'lab',
-                                  row.laboratoryId,
-                                );
-                              }}
-                            />
-                            {row.laboratoryId.length > 1 && (
-                              <span
-                                style={{
-                                  fontWeight: 500,
-                                  color: '#9F9F9F',
-                                  fontSize: '12px',
-                                  whiteSpace: 'nowrap',
+                      </TableCell>
+                      <TableCell>{row.objective}</TableCell>
+                      <TableCell>
+                        {row.departmentId[0] !== null ? (
+                          <Box
+                            onClick={(_event) => {
+                              _event.preventDefault();
+                              _event.stopPropagation();
+                              tablePopupRef.current?.open(
+                                true,
+                                'departments',
+                                row.departmentId,
+                              );
+                            }}
+                            sx={{ display: 'flex', alignItems: 'center' }}
+                          >
+                            <>
+                              <Chip
+                                key={index}
+                                label={row.departmentId[0].name}
+                                sx={{
+                                  m: 0.5,
+                                  padding: '0px 3px',
                                 }}
-                              >
-                                +{row.laboratoryId.length - 1} More
-                              </span>
-                            )}
-                          </>
+                                onClick={(_event) => {
+                                  _event.preventDefault();
+                                  _event.stopPropagation();
+                                  tablePopupRef.current.open(
+                                    true,
+                                    'departments',
+                                    row.departmentId,
+                                  );
+                                }}
+                              />
+                              {row.departmentId.length > 1 && (
+                                <span
+                                  style={{
+                                    fontWeight: 500,
+                                    color: '#9F9F9F',
+                                    fontSize: '12px',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  +{row.departmentId.length - 1} More
+                                </span>
+                              )}
+                            </>
+                          </Box>
+                        ) : (
+                          '-'
+                        )}
+                      </TableCell>
+                      <TableCell style={{ whiteSpace: 'nowrap' }}>
+                        {row.laboratoryId[0] !== null ? (
+                          <Box
+                            onClick={(_event) => {
+                              _event.preventDefault();
+                              _event.stopPropagation();
+                              tablePopupRef.current?.open(
+                                true,
+                                'lab',
+                                row.laboratoryId,
+                              );
+                            }}
+                            sx={{ display: 'flex', alignItems: 'center' }}
+                          >
+                            <>
+                              <Chip
+                                key={index}
+                                label={row.laboratoryId[0].name}
+                                sx={{
+                                  m: 0.5,
+                                  padding: '0px 3px',
+                                }}
+                                onClick={(_event) => {
+                                  _event.preventDefault();
+                                  _event.stopPropagation();
+                                  tablePopupRef.current.open(
+                                    true,
+                                    'lab',
+                                    row.laboratoryId,
+                                  );
+                                }}
+                              />
+                              {row.laboratoryId.length > 1 && (
+                                <span
+                                  style={{
+                                    fontWeight: 500,
+                                    color: '#9F9F9F',
+                                    fontSize: '12px',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  +{row.laboratoryId.length - 1} More
+                                </span>
+                              )}
+                            </>
+                          </Box>
+                        ) : (
+                          <span style={{ textAlign: 'center' }}>-</span>
+                        )}
+                      </TableCell>
+                      <TableCell align="center">Super Admin</TableCell>
+                      <TableCell component="th" scope="row">
+                        <Box>
+                          {row.createdAt === null
+                            ? '-'
+                            : moment(row.createdAt).isValid()
+                              ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
                         </Box>
-                      ) : (
-                        <span style={{ textAlign: 'center' }}>-</span>
-                      )}
-                    </TableCell>
-                    <TableCell align="center">Super Admin</TableCell>
-                    <TableCell component="th" scope="row">
-                      <Box>
-                        {row.createdAt === null
-                          ? '-'
-                          : moment(row.createdAt).isValid()
-                          ? moment(row.createdAt).local().format('MM/DD/YYYY')
-                          : moment().format('MM/DD/YYYY')}
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Box
-                        className={
-                          row.status === 'Created'
-                            ? 'create-select td-select'
-                            : row.status === 'Started'
-                            ? 'start-select td-select'
-                            : row.status === 'Complete'
-                            ? 'active-select td-select'
-                            : 'inactive-select td-select'
-                        }
-                        style={{
-                          background:
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          className={
                             row.status === 'Created'
-                              ? '#8d8d8d'
+                              ? 'create-select td-select'
                               : row.status === 'Started'
-                              ? '#faaa49'
-                              : row.status === 'Stopped'
-                              ? '#e2445c'
-                              : '#00bf70',
-                          padding: '6px',
-                          width: '140px',
-                          borderRadius: '20px',
-                          height: '26px',
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        {row?.status}
-                      </Box>
-                    </TableCell>
-                  </TableRow>
+                                ? 'start-select td-select'
+                                : row.status === 'Complete'
+                                  ? 'active-select td-select'
+                                  : 'inactive-select td-select'
+                          }
+                          style={{
+                            background:
+                              row.status === 'Created'
+                                ? '#8d8d8d'
+                                : row.status === 'Started'
+                                  ? '#faaa49'
+                                  : row.status === 'Stopped'
+                                    ? '#e2445c'
+                                    : '#00bf70',
+                            padding: '6px',
+                            width: '140px',
+                            borderRadius: '20px',
+                            height: '26px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          {row?.status}
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+
+                  </TableBody>
                 ))}
-              </TableBody>
             </Table>
           </TableContainer>
           <Box className="show-page">
@@ -654,14 +667,14 @@ export default function MyPage() {
                 }}
               >
 
-                {NotificationMessageSliceData?.message.length!==0? NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
+                {NotificationMessageSliceData?.message.length !== 0 ? NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
                   <Box
                     className="notifications"
                     key={index}
                     style={{
                       backgroundColor: notification?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
                     }}
-                    onClick={()=>handleReadSingleNotification(notification?._id)}
+                    onClick={() => handleReadSingleNotification(notification?._id)}
                   >
                     <Box className="image-container">
                       <Avatar
@@ -679,15 +692,15 @@ export default function MyPage() {
                     </Box>
                   </Box>
                 ))
-                :
-                <Box sx={{ textAlign: 'center', padding:"15%" }}>
-                <img src={Emptystate} alt="" />
-                <Typography className="no-remainder">
-                  No notifications yet!
-                </Typography>
-                </Box>}
+                  :
+                  <Box sx={{ textAlign: 'center', padding: "15%" }}>
+                    <img src={Emptystate} alt="" />
+                    <Typography className="no-remainder">
+                      No notifications yet!
+                    </Typography>
+                  </Box>}
                 {/* // : */}
-                
+
                 {/* <Box className="show-page">
                   <Typography>
                     {viewAlls ? `Showing 1 - ${totalRows} out of ${totalRows}` : `Showing ${rowIndex} - ${lastIndex} out of ${totalRows}`}
@@ -751,11 +764,11 @@ export default function MyPage() {
                   // activeStartDate is a Date object representing the start date of the current view
                   const month: any = activeStartDate?.getMonth();
                   const year: any = activeStartDate?.getFullYear();
-                  setCurrentMonth(month+1)
+                  setCurrentMonth(month + 1)
                   setCurrentYear(year)
 
                   const calPayload = {
-                    month: `${month+1}`,
+                    month: `${month + 1}`,
                     year: `${year}`,
                   }
                   dispatch(fetchCalendarEventData(calPayload));

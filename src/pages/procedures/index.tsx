@@ -59,6 +59,7 @@ import { toast } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
+import Emptystate from "../../assets/images/Emptystate.svg";
 const rows: ProceduresRowData[] = ProcedureRows;
 
 export default function Procedures() {
@@ -766,7 +767,13 @@ export default function Procedures() {
                 </TableBody>
                ) : !procedureData || procedureData.length === 0 ? (
                 <TableBody>
-               <p style={{textAlign:'center', position:'absolute', left:'0rem' , right:'0rem'}}>No data found.</p>
+                   <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
+                    <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>
+                      <img src={Emptystate} alt="" />
+                      <Typography className="no-remainder">
+                        Procedures not found.
+                      </Typography>
+                    </Box></p>
                 </TableBody>
               ) : (
                 <TableBody>

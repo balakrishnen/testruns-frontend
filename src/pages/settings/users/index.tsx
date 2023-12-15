@@ -48,6 +48,7 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import user from '../../../assets/images/profile/profile.svg';
 import { toast } from 'react-toastify';
+import Emptystate from '../../../assets/images/Emptystate.svg';
 
 const users: UserRowData[] = UserRows;
 const userStatus = StatusList;
@@ -671,7 +672,13 @@ const Users = () => {
               </TableBody>
             ) : !userData || userData.length === 0 ? (
               <TableBody>
-                <p style={{textAlign:'center', position:'absolute', left:'0rem' , right:'0rem'}}>No data found.</p>
+                <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
+                    <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>
+                      <img src={Emptystate} alt="" />
+                      <Typography className="no-remainder">
+                        Users not found.
+                      </Typography>
+                    </Box></p>
               </TableBody>
             ) : (
               <TableBody>
