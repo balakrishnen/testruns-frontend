@@ -72,8 +72,7 @@ input[type=number] {
 
   .header-right-side {
     button {
-      padding: 0px;
-      padding-left: 30px;
+      padding: 2px 23px 1px 1px
     }
 
     .search-field {
@@ -2469,7 +2468,23 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 .table-outer td{
   width: 300px;
 }
-// .prod-name input#name {
-//   padding-top: 9px;
-//   padding-bottom: 9px;
-// }
+.prod-input-auto fieldset {
+  border-radius: 10px;
+  border-color: #9F9F9F !important;
+  width: 100%;
+  top:0px !important;
+}
+.prod-input fieldset {
+  height: 56px;
+}
+.prod-input input#name {
+  height: 43px;
+}
+.prod-multi button.MuiAutocomplete-popupIndicator svg {
+  background-image: url('../images/chevrondown.svg');
+  background-size: 18px;
+  background-repeat: no-repeat;
+  color: transparent !important;
+  opacity: 1 !important;
+  background-position: center;
+}

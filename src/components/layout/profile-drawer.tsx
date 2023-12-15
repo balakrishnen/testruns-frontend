@@ -34,13 +34,10 @@ import AWS from 'aws-sdk';
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required("First name is required"),
-  lastName: Yup.string().required("Last name is required"),
+  firstName: Yup.string().required("First name is required").max(20, 'Must be 20 characters or less'),
+  lastName: Yup.string().required("Last name is required").max(20, 'Must be 20 characters or less'),
   email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
-  phoneNumber: Yup.string().notRequired(),
-  // phoneNumber: Yup.string()
-  // .required('Phone number is required')
-  // .matches(/^\d{10}$/, 'Phone number must be 10 digits'),
+  phoneNumber: Yup.string().matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
   // .matches(phoneRegExp, 'Phone number is not valid')
   //   .min(10, "Enter valid number")
   //   .max(10, "too long").required("Mobile number is required"),
@@ -517,7 +514,6 @@ export default function AppProfileDrawer({
                   <Box style={{ position: 'relative' }}>
                     <label>Mobile</label>
                     <TextField
-
                       onInput={(e: any) => {
                         e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10)
                       }}
