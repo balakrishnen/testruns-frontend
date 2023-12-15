@@ -20,7 +20,7 @@ export const fetchNotificationData = () => async (dispatch: any) => {
 };
 
 export const fetchUserNotificationData = (payload:any) => async (dispatch:any) => {
-    dispatch(fetchNotificationStart());
+    // dispatch(fetchNotificationStart());
     try {
         const response = await client.query({
             query: GET_SINGLE_NOTIFICATION,
@@ -28,10 +28,10 @@ export const fetchUserNotificationData = (payload:any) => async (dispatch:any) =
             fetchPolicy: 'network-only',
         });
         console.log("response1",response);
-        // return response.data
-        dispatch(fetchNotificationSuccess(response.data));
+        return response.data
+        // dispatch(fetchNotificationSuccess(response.data));
     } catch (error: any) {
-        dispatch(fetchNotificationFailure(error.message));
+        // dispatch(fetchNotificationFailure(error.message));
     }
 };
 export const fetchUpdateNotification = (payload: any) => async () => {

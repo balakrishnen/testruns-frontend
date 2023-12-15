@@ -25,7 +25,7 @@ import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData }
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { fetchRoleData } from '../../api/roleApi';
+import { fetchSingleRoleData } from '../../api/roleApi';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase.config';
 import AWS from 'aws-sdk';
@@ -133,7 +133,7 @@ export default function AppProfileDrawer({
     dispatch(fetchLabData());
     dispatch(fetchOrganizationData());
     
-    dispatch(fetchRoleData(payload2))
+    dispatch(fetchSingleRoleData(payload2))
     dispatch(fetchSingleUserData(payload))
     setEdit(true)
     // setUploadedFile(null)
@@ -205,6 +205,8 @@ export default function AppProfileDrawer({
       console.log(userValues);
       
       await dispatch(fetchUpdateUserData(userValues))
+     await toggleProfileDrawer()
+     await setEdit(true) 
       await toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70', color: '#fff'
@@ -318,6 +320,7 @@ export default function AppProfileDrawer({
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
       onClose={() => { toggleProfileDrawer(), setEdit(true) }}
+      disableScrollLock={ true }
     >
       
       <Box sx={{ overflow: 'auto' }}>
@@ -379,7 +382,7 @@ export default function AppProfileDrawer({
                     },
                   }}
                 >
-                  <Box>
+                  <Box style={{ position: 'relative' }}>
                     <label>
                       First name<span style={{ color: '#E2445C' }}>*</span>
                     </label>
@@ -407,7 +410,7 @@ export default function AppProfileDrawer({
                         <Typography className="error-field">
                           {formik.errors.firstName}
                         </Typography>
-                      )}
+                       )} 
                   </Box>
                 </Grid>
                 <Grid
@@ -420,7 +423,7 @@ export default function AppProfileDrawer({
                     paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
                   }}
                 >
-                  <Box>
+                  <Box style={{ position: 'relative' }}>
                     <label>
                       Last name<span style={{ color: '#E2445C' }}>*</span>
                     </label>
@@ -448,7 +451,7 @@ export default function AppProfileDrawer({
                       <Typography className="error-field">
                         {formik.errors.lastName}
                       </Typography>
-                    )}
+                     )} 
 
                   </Box>
                 </Grid>
@@ -467,7 +470,7 @@ export default function AppProfileDrawer({
                     },
                   }}
                 >
-                  <Box>
+                  <Box style={{ position: 'relative' }}>
                     <label>
                       Email<span style={{ color: '#E2445C' }}>*</span>
                     </label>
@@ -508,7 +511,7 @@ export default function AppProfileDrawer({
                     paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
                   }}
                 >
-                  <Box>
+                  <Box style={{ position: 'relative' }}>
                     <label>Mobile</label>
                     <TextField
                       onInput={(e: any) => {
@@ -540,20 +543,24 @@ export default function AppProfileDrawer({
                         ),
                       }}
                     />
-                    {/* {formik.touched.phoneNumber &&
+                    {formik.touched.phoneNumber &&
                       formik.errors.phoneNumber && (
                         <Typography className="error-field">
                           {formik.errors.phoneNumber}
                         </Typography>
-                      )} */}
+                      )}
                   </Box>
                 </Grid>
               </Grid>
               <Grid container spacing={2} className="profile-inner multi-selection">
                 <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Box>
+                  <Box style={{ position: 'relative' }}>
                     <label>Organisation</label>
                     <Select
+                    MenuProps={{                   
+                      disableScrollLock: true,                   
+                      marginThreshold: null
+                    }}
                       className={edit ? "bg-gray-input" : ""}
                       disabled={edit}
                       style={{ color: "black", backgroundColor: edit ? '#f3f3f3' : 'white' }}
@@ -600,7 +607,7 @@ export default function AppProfileDrawer({
               </Grid>
               <Grid container spacing={2} className="profile-inner multi-selection">
                 <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Box>
+                  <Box style={{ position: 'relative' }}>
                     <label>Department</label>
                     <Autocomplete
                       multiple
@@ -645,6 +652,11 @@ export default function AppProfileDrawer({
                       }
                       }
                     />
+                    {formik.touched.departmentId && formik.errors.departmentId && (
+                    <Typography className="error-field">
+                        {formik.errors.departmentId}
+                      </Typography>
+                    )}
                   </Box>
                 </Grid>
               </Grid>
@@ -662,17 +674,13 @@ export default function AppProfileDrawer({
                     },
                   }}
                 >
-                  <Box>
+                  <Box style={{ position: 'relative' }}>
                     <label>Role</label>
                     <Select
-                      // MenuProps={{
-                      //   PaperProps: {
-                      //     style: {
-                      //       maxHeight: '150px',
-                      //       overflowY: 'auto',
-                      //     },
-                      //   },
-                      // }}
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                       style={{ color: "black", backgroundColor: edit ? '#f3f3f3' : 'white', marginTop: "10px" }}
                       displayEmpty
                       IconComponent={ExpandMoreOutlinedIcon}
@@ -719,7 +727,7 @@ export default function AppProfileDrawer({
                     paddingLeft: { xs: '0rem !important', sm: '1rem !important' },
                   }}
                 >
-                  <Box>
+                  <Box style={{ position: 'relative' }}>
                     <label>Requestor ID/Tester ID</label>
                     <TextField
                       margin="normal"
@@ -765,7 +773,7 @@ export default function AppProfileDrawer({
               <Button  variant="contained" onClick={() => { toggleProfileDrawer()}}  className="cancel-btn" >
                 Cancel
               </Button>
-              <Button type="submit" variant="contained" onClick={() => {toggleProfileDrawer(), setEdit(true) }} className="add-btn">
+              <Button type="submit" variant="contained" className="add-btn">
                 Save
               </Button>
             </Box>

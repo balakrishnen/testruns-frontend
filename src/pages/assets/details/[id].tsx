@@ -600,6 +600,10 @@ console.log(assetValue?.organisationId,);
                           </label>
                           {/* <FormControl sx={{ width: '100%' }}> */}
                             <Select
+                            MenuProps={{                   
+                              disableScrollLock: true,                   
+                              marginThreshold: null
+                            }}
                               className="placeholder-color"
                               displayEmpty
                               IconComponent={ExpandMoreOutlinedIcon}
@@ -812,6 +816,10 @@ console.log(assetValue?.organisationId,);
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>Status<span style={{ color: "#E2445C" }}>*</span></label>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
@@ -871,6 +879,10 @@ console.log(assetValue?.organisationId,);
                             Availability<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}

@@ -68,6 +68,7 @@ import { toast } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
+import Emptystate from '../../assets/images/Emptystate.svg';
 
 const assetsStatus = StatusList;
 const assetsAvailability = AvailabilityList;
@@ -461,6 +462,10 @@ export default function Assets() {
                         Search by
                       </Typography>
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         labelId="table-select-label"
                         id="table-select"
                         value={filterSearchBy}
@@ -562,6 +567,10 @@ export default function Assets() {
                         </Box>
                       ) : (
                         <Select
+                        MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           value={filterSearchValue}
                           labelId="table-select-label2"
                           id="table-select2"
@@ -675,7 +684,13 @@ export default function Assets() {
                 </TableBody>
               ) :!assetsData || assetsData.length === 0 ? (
                 <TableBody>
-                <p style={{textAlign:'center', position:'absolute', left:'0rem' , right:'0rem'}}>No data found.</p>
+                 <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
+                    <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>
+                      <img src={Emptystate} alt="" />
+                      <Typography className="no-remainder">
+                        Assets not found.
+                      </Typography>
+                    </Box></p>
                 </TableBody>
               ) : (
                 <TableBody>
@@ -868,6 +883,10 @@ export default function Assets() {
                           {headers[6].is_show && (
                             <TableCell>
                               <Select
+                              MenuProps={{                   
+                                disableScrollLock: true,                   
+                                marginThreshold: null
+                              }}
                                 name="status"
                                 className={
                                   row.status == 'Active'
@@ -894,6 +913,10 @@ export default function Assets() {
                           {headers[7].is_show && (
                             <TableCell>
                               <Select
+                              MenuProps={{                   
+                                disableScrollLock: true,                   
+                                marginThreshold: null
+                              }}
                                 name="availability"
                                 className={
                                   row.availability === 'Available'

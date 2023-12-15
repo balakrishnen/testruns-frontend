@@ -27,6 +27,7 @@ const DeletePopup = React.forwardRef(({ closeDeletePopup, deleteConfirmation }: 
         fullWidth
         maxWidth="sm"
         className="popup-outer"
+        disableScrollLock={ true }
       >
         <Box className="popup-section">
           <Box className="title-popup">

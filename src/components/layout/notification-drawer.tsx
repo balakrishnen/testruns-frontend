@@ -54,15 +54,18 @@ export default function AppNotificationDrawer({
       .catch((err:any) => {
         console.log(err);
       });
+      
     // }
   },[loginUserSliceData]);
   React.useEffect(() => {
-    dispatch(fetchNotificationData());
+    // dispatch(fetchNotificationData());
     let payload={
-      userId: userData?._id
+      userId: loginUserSliceData?.verifyToken?._id
     }
+    console.log(payload);
+    
     dispatch(fetchNotificationMessageData(payload));
-  }, [userData]);
+  }, []);
 
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: any = moment();
@@ -90,8 +93,11 @@ export default function AppNotificationDrawer({
       _id:id,
       isRead:true
     }
+    let payload2={
+      userId: userData?._id
+    }
    await dispatch(fetchReadSingleMessageData(payload))
-   await dispatch(fetchNotificationMessageData(notificationQueryStrings));
+   await dispatch(fetchNotificationMessageData(payload2));
 
   }
 
@@ -126,7 +132,8 @@ export default function AppNotificationDrawer({
         },
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
-      onClose={() => { toggleNotificationDrawer(), setShow(!show) }}
+      onClose={() => { toggleNotificationDrawer(), setShow(!show) }}     
+      disableScrollLock={ true }
     >
      
       <Box className="notification-header">

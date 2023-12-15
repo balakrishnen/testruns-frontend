@@ -32,7 +32,7 @@ import {
 } from '../../../utils/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDepartmentData } from '../../../api/departmentAPI';
-import { fetchRoleData } from '../../../api/roleApi';
+import { fetchSingleRoleData } from '../../../api/roleApi';
 import { fetchLabData } from '../../../api/labAPI';
 import SuccessPopup from '../../../components/SuccessPopup';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
@@ -277,17 +277,20 @@ const UserForm = React.forwardRef(
     console.log(departmentData);
 
     console.log(DepartmentList);
-    let payload2={
-      instituteId:userData?.instituteId
-    }
+    
     React.useEffect(() => {
-     
+      
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
-      dispatch(fetchRoleData(payload2));
       dispatch(fetchinstitutionData())
     }, []);
 
+    React.useEffect(()=>{
+      let payload2={
+        instituteId:userData?.instituteId
+      }
+      dispatch(fetchSingleRoleData(payload2));
+    },[userData])
     return (
       <div>
         <Dialog
@@ -299,6 +302,7 @@ const UserForm = React.forwardRef(
           fullWidth
           maxWidth="md"
           className="popup-outer"
+          disableScrollLock={ true }
         >
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">
@@ -486,6 +490,10 @@ const UserForm = React.forwardRef(
                       <label style={{ display: 'block' }}>Organisation<span style={{ color: "#E2445C" }}>*</span></label>
 
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
@@ -546,6 +554,10 @@ const UserForm = React.forwardRef(
                       <label style={{ display: 'block' }}>Institution<span style={{ color: "#E2445C" }}>*</span></label>
 
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
@@ -768,14 +780,10 @@ const UserForm = React.forwardRef(
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Select role<span style={{ color: "#E2445C" }}>*</span></label>
                       <Select
-                        // MenuProps={{
-                        //   PaperProps: {
-                        //     style: {
-                        //       maxHeight: '150px',
-                        //       overflowY: 'auto',
-                        //     },
-                        //   },
-                        // }}
+                       MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}

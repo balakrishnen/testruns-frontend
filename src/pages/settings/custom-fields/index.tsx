@@ -286,6 +286,10 @@ const CustomFields = () => {
                     {headers[4].is_show && (
                       <TableCell>
                         <Select
+                        MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           className={
                             row.status === "1"
                               ? "active-select td-select"

@@ -80,11 +80,11 @@ export const CardLayout = ({ children }: any, props: any) => {
       console.log(error);
     }
   };
-  const microsoftSignup = () => {
+  const microsoftSignup = async() => {
     const microsoftProvider = provider("microsoft.com");
-    signInWithPopup(auth, microsoftProvider)
-      .then((result:any) => {
-        console.log(result);
+    const result:any = await signInWithPopup(auth, microsoftProvider)
+      // .then((result:any) => {
+      //   console.log(result);
         // if(varient=='signup'){
           console.log(result.user.uid);
           let payload={
@@ -99,13 +99,13 @@ export const CardLayout = ({ children }: any, props: any) => {
             laboratoryId: [],
             instituteId: "65741c069d53d19df8321e6b",
           }
-       dispatch(postUserData(payload))
+          await dispatch(postUserData(payload))
          
           let payload2={
             idToken:result.user?.accessToken
           }
           
-          dispatch(fetchLoginUser(payload2))
+          await  dispatch(fetchLoginUser(payload2))
               // console.log(isSucess);
               console.log(userSliceData);
               
@@ -121,10 +121,10 @@ export const CardLayout = ({ children }: any, props: any) => {
            
           window.sessionStorage.setItem('isLoggedIn', 'true');
         // }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      // })
+      // .catch((error) => {
+      //   console.error(error);
+      // });
   };
 
   return (
@@ -387,6 +387,10 @@ export const CardLayout = ({ children }: any, props: any) => {
                 <InfoOutlinedIcon sx={{ color: "#565656", mr: 2 }} />
                 <FormControl variant="standard">
                   <Select
+                    MenuProps={{                   
+                      disableScrollLock: true,                   
+                      marginThreshold: null
+                    }}
                     labelId="country-list-select-label"
                     id="country-list"
                     inputProps={{ "aria-label": "Without label" }}

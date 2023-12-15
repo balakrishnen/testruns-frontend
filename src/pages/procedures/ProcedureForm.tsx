@@ -285,6 +285,7 @@ const ProcedureForm = React.forwardRef(
           fullWidth
           maxWidth="md"
           className="popup-outer"
+          disableScrollLock={ true }
         >
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">

@@ -16,8 +16,18 @@ export const GET_RUNS = gql`
             _id
             objective
             runNumber
-            assignedTo
-            assignedBy
+            assignedTo {
+                _id
+                firstName
+                email
+                role
+            }
+            assignedBy {
+                _id
+                firstName
+                email
+                role
+            }
             dueDate
             status
             isActive

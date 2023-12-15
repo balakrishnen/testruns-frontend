@@ -40,7 +40,7 @@ import {
   OrganizationList,
 } from '../../../utils/data';
 import { toast } from 'react-toastify';
-import { fetchRoleData } from '../../../api/roleApi';
+import { fetchSingleRoleData } from '../../../api/roleApi';
 import { fetchSingleUserData, fetchUpdateUserData } from '../../../api/userAPI';
 import { fileUploadData } from '../../../api/uploadAPI';
 import { updatePassword } from 'firebase/auth';
@@ -394,7 +394,7 @@ const Profile = () => {
     }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
-    dispatch(fetchRoleData(payload2));
+    dispatch(fetchSingleRoleData(payload2));
   }, []);
   console.log(formikProfile);
 
@@ -745,6 +745,10 @@ const Profile = () => {
                         <Box style={{ position: 'relative' }}>
                           <label>Organisation <span style={{ color: '#E2445C' }}>*</span></label>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             style={{ color: 'black' ,marginTop:"10px"}}
                             displayEmpty
@@ -927,14 +931,10 @@ const Profile = () => {
                         <Box style={{ position: 'relative' }}>
                           <label>Designation <span style={{ color: '#E2445C' }}>*</span></label>
                           <Select
-                            // MenuProps={{
-                            //   PaperProps: {
-                            //     style: {
-                            //       maxHeight: '150px',
-                            //       overflowY: 'auto',
-                            //     },
-                            //   },
-                            // }}
+                            MenuProps={{                   
+                              disableScrollLock: true,                   
+                              marginThreshold: null
+                            }}
                             className="placeholder-color"
                             style={{ marginTop: '10px', color: 'black' }}
                             displayEmpty

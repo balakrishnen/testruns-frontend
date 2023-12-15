@@ -77,28 +77,24 @@ const Notification = () => {
   const userSliceData = useSelector(
     (state: any) => state.userLogin?.data?.verifyToken,
   );
-
+  // const NotificationSliceData = useSelector(
+  //   (state: any) => state.notification.data?.get_notification,
+  // );
   React.useEffect(()=>{
-    let payload={
-      userId:userSliceData?._id
-    }
-  dispatch(fetchUserNotificationData(payload))
-  })
+    fetchMessageApi()
+  },[])
 
-  const NotificationSliceData = useSelector(
-    (state: any) => state.notification.data?.get_notification,
-  );
+const fetchMessageApi=()=>{
+  let payload={
+    userId:userSliceData?._id
+  }
+dispatch(fetchUserNotificationData(payload)).then((res)=>{
+  console.log(res);
+  setNotificationList(res?.get_notification)
+})
+}
 
-  // React.useEffect(()=>{
-  //   console.log("notificationList1",notificationList)
-  //   setNotificationList(notificationList)
-  // },[notificationList])
-
-  React.useEffect(()=>{
-    setNotificationList(NotificationSliceData)
-  },[NotificationSliceData])
-
-  const handleChange = (category, subCategory, val) => {
+  const handleChange = async(category, subCategory, val) => {1
 
     if (!notificationList || !notificationList[0]) {
       return;
@@ -145,11 +141,8 @@ console.log(updatedData);
       runsCommend: updatedData1,
       runAssiged: updatedData2,
     }
-    dispatch(fetchUpdateNotification(payload))
-    let payload1={
-      userId:userSliceData?._id
-    }
-  dispatch(fetchUserNotificationData(payload1))
+    await dispatch(fetchUpdateNotification(payload))
+    await fetchMessageApi()
   };
 
     return (

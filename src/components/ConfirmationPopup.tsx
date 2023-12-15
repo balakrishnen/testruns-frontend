@@ -24,6 +24,7 @@ const Confirmationpopup = React.forwardRef(({ confirmationState ,clearForm}: any
       fullWidth
       maxWidth="xs"
       className="popup-outer"
+      disableScrollLock={ true }
     >
       <Box className="popup-section">
         <Box className="title-popup">

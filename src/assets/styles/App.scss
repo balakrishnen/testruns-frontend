@@ -2455,10 +2455,20 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
     display: none !important;
   }
 }
-.main-proceduredetails .multi-selection input#departmentId {
-  padding-top: 8.3px;
-  padding-bottom: 8.2px;
-}
+// .main-proceduredetails .multi-selection input#departmentId {
+//   padding-top: 8.3px;
+//   padding-bottom: 8.2px;
+// }
 #menu-procedureId ul.MuiList-root.MuiList-padding.MuiMenu-list {
   height: 200px;
 }
+.sort-section-head {
+  width: auto !important;
+}
+.table-outer td{
+  width: 300px;
+}
+// .prod-name input#name {
+//   padding-top: 9px;
+//   padding-bottom: 9px;
+// }

@@ -59,6 +59,7 @@ import { toast } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
+import Emptystate from "../../assets/images/Emptystate.svg";
 const rows: ProceduresRowData[] = ProcedureRows;
 
 export default function Procedures() {
@@ -167,7 +168,7 @@ export default function Procedures() {
   }, [procedureData]);
 
   React.useEffect(() => {
-    // setLoader(true);
+    setLoader(true);
     dispatch(fetchProcedureData(queryStrings));
     setTableHeaderVisible(false);
     setRowId([]);
@@ -456,7 +457,10 @@ export default function Procedures() {
     setFilter(true);
   };
   const reload = () => {
-    const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
+    const payload: any = { ...queryStrings };
+    const page: any = { ...pageInfo };
+    setPageInfo(page);
+    setQueryString(payload);
     dispatch(fetchProcedureData(payload));
   };
 
@@ -554,6 +558,10 @@ export default function Procedures() {
                       </Typography>
 
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         labelId="table-select-label"
                         id="table-select"
                         value={filterSearchBy}
@@ -651,6 +659,10 @@ export default function Procedures() {
                         </Box>
                       ) : (
                         <Select
+                        MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           value={filterSearchValue}
                           labelId="table-select-label2"
                           id="table-select2"
@@ -764,9 +776,15 @@ export default function Procedures() {
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-               ) : !procedureData || procedureData.length === 0 ? (
+               ) : !procedureData || procedureData.length === 0 && loader==false? (
                 <TableBody>
-               <p style={{textAlign:'center', position:'absolute', left:'0rem' , right:'0rem'}}>No data found.</p>
+                   <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
+                    <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>
+                      <img src={Emptystate} alt="" />
+                      <Typography className="no-remainder">
+                        Procedures not found.
+                      </Typography>
+                    </Box></p>
                 </TableBody>
               ) : (
                 <TableBody>

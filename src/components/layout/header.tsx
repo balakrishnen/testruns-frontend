@@ -34,6 +34,17 @@ function AppHeader(props: any) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const NotificationMessageSliceData = useSelector(
+
+    (state: any) => {
+      return state.notificationMessage.data?.get_notification_message
+
+    }
+
+  )
+  let data = NotificationMessageSliceData?.message?.some((item) => !item.isRead)
+  console.log(data);
+  
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -185,7 +196,7 @@ function AppHeader(props: any) {
             >
               <Badge
                 color="secondary"
-                variant={'dot'}
+                variant={data&&'dot'}
                 invisible={false}
                 className="red-badge"
               >
