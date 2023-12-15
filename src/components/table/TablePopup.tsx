@@ -31,6 +31,7 @@ const TablePopup = React.forwardRef((props, ref) => {
       fullWidth
       maxWidth="sm"
       className="popup-outer"
+      disableScrollLock={ true }
     >
       <Box className="popup-section">
         <Box className="title-popup" sx={{marginBottom: '1rem !important'}}>

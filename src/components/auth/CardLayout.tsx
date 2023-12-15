@@ -387,6 +387,10 @@ export const CardLayout = ({ children }: any, props: any) => {
                 <InfoOutlinedIcon sx={{ color: "#565656", mr: 2 }} />
                 <FormControl variant="standard">
                   <Select
+                    MenuProps={{                   
+                      disableScrollLock: true,                   
+                      marginThreshold: null
+                    }}
                     labelId="country-list-select-label"
                     id="country-list"
                     inputProps={{ "aria-label": "Without label" }}

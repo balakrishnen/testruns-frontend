@@ -290,6 +290,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                           return (
                             <FormControl key={index}>
                               <Select
+                              MenuProps={{                   
+                                disableScrollLock: true,                   
+                                marginThreshold: null
+                              }}
                                 style={{ width: "140px" }}
                                 labelId="table-select-label"
                                 id="table-select"

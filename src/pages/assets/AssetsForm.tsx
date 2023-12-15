@@ -298,6 +298,7 @@ const Addnewpopup = React.forwardRef(
           fullWidth
           maxWidth="md"
           className="popup-outer"
+          disableScrollLock={ true }
         >
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">
@@ -527,6 +528,10 @@ const Addnewpopup = React.forwardRef(
                             Organisation<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
@@ -696,6 +701,10 @@ const Addnewpopup = React.forwardRef(
                           <label style={{ display: 'block' }}>Status<span style={{ color: "#E2445C" }}>*</span></label>
 
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
@@ -754,6 +763,10 @@ const Addnewpopup = React.forwardRef(
                           </label>
 
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}

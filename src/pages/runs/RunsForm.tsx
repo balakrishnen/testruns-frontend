@@ -298,6 +298,7 @@ const RunsForm = React.forwardRef(
           fullWidth
           maxWidth="md"
           className="popup-outer"
+          disableScrollLock={ true }
         >
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">
@@ -319,6 +320,10 @@ const RunsForm = React.forwardRef(
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Procedure name<span style={{ color: "#E2445C" }}>*</span></label>
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
