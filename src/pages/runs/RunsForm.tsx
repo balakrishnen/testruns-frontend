@@ -193,7 +193,6 @@ const RunsForm = React.forwardRef(
         laboratoryId: formData ? formData.laboratoryId : "",
         organisationId: '657420e5c63327a74f3c756a',
         procedureId: formData ? formData.procedureId?._id : '',
-        procedurename: formData ? formData.procedureId?.name : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
         createdAt: createdDate,
@@ -331,7 +330,7 @@ const RunsForm = React.forwardRef(
                         margin="none"
                         fullWidth
                         id="procedureId"
-                        name="procedurename"
+                        name="procedureId"
                         // autoComplete="organisationId"
                         placeholder="organisationId"
 
@@ -360,14 +359,13 @@ const RunsForm = React.forwardRef(
                           setDepartments(DepartmentData)
 
                           formik.setFieldValue('procedureId', selectedProcedure?._id || '');
-                          formik.setFieldValue('procedurename', selectedProcedure?.name || '');
                           formik.setFieldValue('departmentId', DepartmentData || '');
                           setDepartment(DepartmentData)
                           setLab(LabData)
 
                         }}
                         onBlur={formik.handleBlur}
-                        value={formik.values.procedurename}
+                        value={formik.values.procedureId}
                         size="small"
                         error={
                           formik.touched.procedureId &&
