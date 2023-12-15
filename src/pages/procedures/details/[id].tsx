@@ -464,14 +464,44 @@ const handleEditorInit = (editor:any) => {
       <Box className="proceduredetails-page">
         <Box className="top-section">
           <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
-            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-              <Grid item xs={12} sm={12} md={9} lg={9}>
+            <Grid container spacing={2} >
+              <Grid item xs={12} sm={12} md={3} lg={3}>
                 <Box>
                   <Typography className="id-detail">
                   {procedureData?.procedureNumber}
                   </Typography>
                   <Typography className="id-detail-title">
                   {procedureData?.name}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Created by</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{
+                      fontWeight: '600',
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
+                    }}
+                  >
+                    Super Admin
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Created on</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{
+                      fontWeight: '600',
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
+                    }}
+                  >
+                 {moment(parseInt(procedureData?.createdAt)).format('MM/DD/YYYY')}
                   </Typography>
                 </Box>
               </Grid>
@@ -498,38 +528,9 @@ const handleEditorInit = (editor:any) => {
                 </Box>
               </Grid>
             </Grid>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                <Box>
-                  <Typography className="id-detail">Created by</Typography>
-                  <Typography
-                    className="id-detail"
-                    style={{
-                      fontWeight: '600',
-                      fontSize: '16px',
-                      marginTop: '0.4rem',
-                    }}
-                  >
-                    Super Admin
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                <Box>
-                  <Typography className="id-detail">Created on</Typography>
-                  <Typography
-                    className="id-detail"
-                    style={{
-                      fontWeight: '600',
-                      fontSize: '16px',
-                      marginTop: '0.4rem',
-                    }}
-                  >
-                 {moment(parseInt(procedureData?.createdAt)).format('MM/DD/YYYY')}
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
+            {/* <Grid container spacing={2}>
+             
+            </Grid> */}
           </Box>
           <Divider sx={{ borderColor: '#FFEAA5', borderBottomWidth: '5px' }} />
         </Box>
