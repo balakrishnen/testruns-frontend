@@ -179,6 +179,14 @@ export default function Runs() {
   }, [runsData]);
 
   React.useEffect(() => {
+    setLoader(true);
+    dispatch(fetchRunsData(queryStrings));
+    setTableHeaderVisible(false);
+    setRowId([]);
+    setRunsRow([]);
+  }, [queryStrings]);
+
+  React.useEffect(() => {
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
@@ -187,14 +195,6 @@ export default function Runs() {
       setHeaders(headersList);
     };
   }, []);
-
-  React.useEffect(() => {
-    setLoader(true);
-    dispatch(fetchRunsData(queryStrings));
-    setTableHeaderVisible(false);
-    setRowId([]);
-    setRunsRow([]);
-  }, [queryStrings]);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
@@ -778,7 +778,7 @@ export default function Runs() {
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-              ) : !runsData || runsData.length === 0 ? (
+              ) : !runsData || runsData.length === 0 && loader==false? (
                 <TableBody>
                   <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
                     <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>

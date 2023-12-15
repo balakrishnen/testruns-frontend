@@ -90,7 +90,7 @@ const fetchMessageApi=()=>{
   }
 dispatch(fetchUserNotificationData(payload)).then((res)=>{
   console.log(res);
-  setNotificationList(res.get_notification)
+  setNotificationList(res?.get_notification)
 })
 }
 

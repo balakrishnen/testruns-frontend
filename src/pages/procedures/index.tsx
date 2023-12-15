@@ -168,7 +168,7 @@ export default function Procedures() {
   }, [procedureData]);
 
   React.useEffect(() => {
-    // setLoader(true);
+    setLoader(true);
     dispatch(fetchProcedureData(queryStrings));
     setTableHeaderVisible(false);
     setRowId([]);
@@ -457,7 +457,10 @@ export default function Procedures() {
     setFilter(true);
   };
   const reload = () => {
-    const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
+    const payload: any = { ...queryStrings };
+    const page: any = { ...pageInfo };
+    setPageInfo(page);
+    setQueryString(payload);
     dispatch(fetchProcedureData(payload));
   };
 
@@ -765,7 +768,7 @@ export default function Procedures() {
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-               ) : !procedureData || procedureData.length === 0 ? (
+               ) : !procedureData || procedureData.length === 0 && loader==false? (
                 <TableBody>
                    <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
                     <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>

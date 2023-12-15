@@ -76,10 +76,11 @@ export default function TableHeader(props: any) {
                 sortDirection={headCell.sort}
               >
                  {headCell.label}
-                {headCell.id === 'departmentId' ||
-                headCell.id === 'laboratoryId' ? (
-                  <TableSortLabel hideSortIcon>{headCell.label}</TableSortLabel>
-                ) : (
+                {(headCell.id !== 'departmentId' && 
+                headCell.id !== 'laboratoryId') && (
+                //   <TableSortLabel hideSortIcon>{headCell.label}</TableSortLabel>
+                // ) : (
+                  
                   <TableSortLabel
                     direction={headCell.sort}
                     onClick={(event) =>
@@ -89,6 +90,7 @@ export default function TableHeader(props: any) {
                   >
                     {/* {headCell.label} */}
                   </TableSortLabel>
+                
                 )}
                 {/* <TableRow sx={{ width: "100%", display: "block" }}>
                 <TableCell
