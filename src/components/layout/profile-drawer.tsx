@@ -561,6 +561,10 @@ export default function AppProfileDrawer({
                   <Box style={{ position: 'relative' }}>
                     <label>Organisation</label>
                     <Select
+                    MenuProps={{                   
+                      disableScrollLock: true,                   
+                      marginThreshold: null
+                    }}
                       className={edit ? "bg-gray-input" : ""}
                       disabled={edit}
                       style={{ color: "black", backgroundColor: edit ? '#f3f3f3' : 'white' }}
@@ -677,14 +681,10 @@ export default function AppProfileDrawer({
                   <Box style={{ position: 'relative' }}>
                     <label>Role</label>
                     <Select
-                      // MenuProps={{
-                      //   PaperProps: {
-                      //     style: {
-                      //       maxHeight: '150px',
-                      //       overflowY: 'auto',
-                      //     },
-                      //   },
-                      // }}
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                       style={{ color: "black", backgroundColor: edit ? '#f3f3f3' : 'white', marginTop: "10px" }}
                       displayEmpty
                       IconComponent={ExpandMoreOutlinedIcon}

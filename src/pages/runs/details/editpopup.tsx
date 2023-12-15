@@ -28,6 +28,7 @@ export default function EditPopup({ open, close }: any) {
                 fullWidth
                 maxWidth="md"
                 className="popup-outer"
+                disableScrollLock={ true }
             >
                 <Box className="popup-section editrunz-popup">
                     <Box className="title-popup">
@@ -77,6 +78,10 @@ export default function EditPopup({ open, close }: any) {
                                     <label style={{ display: 'block' }}>Procedure name<span style={{ color: '#E2445C' }}>*</span></label>
                                     <FormControl sx={{ width: "100%" }}>
                                         <Select
+                                        MenuProps={{                   
+                                            disableScrollLock: true,                   
+                                            marginThreshold: null
+                                          }}
                                             labelId="tselect-popup-label"
                                             id="select-popup"
                                             value={answers}

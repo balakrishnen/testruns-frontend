@@ -745,6 +745,10 @@ const Profile = () => {
                         <Box style={{ position: 'relative' }}>
                           <label>Organisation <span style={{ color: '#E2445C' }}>*</span></label>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             style={{ color: 'black' ,marginTop:"10px"}}
                             displayEmpty
@@ -927,14 +931,10 @@ const Profile = () => {
                         <Box style={{ position: 'relative' }}>
                           <label>Designation <span style={{ color: '#E2445C' }}>*</span></label>
                           <Select
-                            // MenuProps={{
-                            //   PaperProps: {
-                            //     style: {
-                            //       maxHeight: '150px',
-                            //       overflowY: 'auto',
-                            //     },
-                            //   },
-                            // }}
+                            MenuProps={{                   
+                              disableScrollLock: true,                   
+                              marginThreshold: null
+                            }}
                             className="placeholder-color"
                             style={{ marginTop: '10px', color: 'black' }}
                             displayEmpty

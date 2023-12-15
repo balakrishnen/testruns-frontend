@@ -1308,6 +1308,10 @@ console.log("inputEl",inputEl);
                       // }}
                     >
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                             name="status"
                           style={{borderRadius: "11px",color:"white"}}  
 

@@ -52,6 +52,7 @@ const CustomFieldsForm = React.forwardRef(
         fullWidth
         maxWidth="md"
         className="popup-outer"
+        disableScrollLock={ true }
       >
         <Box className="popup-section">
           <Box className="title-popup">
@@ -95,6 +96,10 @@ const CustomFieldsForm = React.forwardRef(
                   <label style={{ display: "block" }}>Field Type</label>
                   <FormControl sx={{ width: "100%" }}>
                     <Select
+                    MenuProps={{                   
+                      disableScrollLock: true,                   
+                      marginThreshold: null
+                    }}
                       labelId="tselect-popup-label"
                       id="select-popup"
                       value={fieldType}
@@ -166,6 +171,10 @@ const CustomFieldsForm = React.forwardRef(
                   <label style={{ display: "block" }}>Field Group</label>
                   <FormControl sx={{ width: "100%" }}>
                     <Select
+                    MenuProps={{                   
+                      disableScrollLock: true,                   
+                      marginThreshold: null
+                    }}
                       labelId="tselect-popup-label"
                       id="select-popup"
                       value={fieldGroup}
@@ -200,6 +209,10 @@ const CustomFieldsForm = React.forwardRef(
                   <label style={{ display: "block" }}>Status</label>
                   <FormControl sx={{ width: "100%" }}>
                     <Select
+                    MenuProps={{                   
+                      disableScrollLock: true,                   
+                      marginThreshold: null
+                    }}
                       labelId="tselect-popup-label"
                       id="select-popup"
                       value={fieldStatus}

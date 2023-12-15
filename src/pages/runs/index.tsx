@@ -564,6 +564,10 @@ export default function Runs() {
                       </Typography>
 
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         labelId="table-select-label"
                         id="table-select"
                         value={filterSearchBy}
@@ -664,6 +668,10 @@ export default function Runs() {
                         </Box>
                       ) : (
                         <Select
+                        MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           value={filterSearchValue}
                           labelId="table-select-label2"
                           id="table-select2"
@@ -995,6 +1003,10 @@ export default function Runs() {
                       {headers[6].is_show && (
                         <TableCell>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             name="status"
                             className={
                               row.status === 'Created'

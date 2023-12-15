@@ -226,6 +226,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                   <Box sx={{ width: '100%' }}>
                     <FormControl>
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         labelId="table-select-label"
                         id="table-select"
                         value={answer}
@@ -437,6 +441,10 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Organisation</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             labelId="tselect-popup-label"
                             id="select-popup"
@@ -462,6 +470,10 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Department/s</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             labelId="tselect-popup-label"
                             id="select-popup"
                             value={answers}
@@ -486,6 +498,10 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Laboratory/ies</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             labelId="tselect-popup-label"
                             id="select-popup"
                             value={answers}
@@ -510,6 +526,10 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Status</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             labelId="tselect-popup-label"
                             id="select-popup"
@@ -533,6 +553,10 @@ export default function AssetDetails() {
                         <label style={{ display: 'block' }}>Availability</label>
                         <FormControl sx={{ width: '100%' }}>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className="placeholder-color"
                             labelId="tselect-popup-label"
                             id="select-popup"

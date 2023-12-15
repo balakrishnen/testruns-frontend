@@ -558,6 +558,10 @@ export default function Procedures() {
                       </Typography>
 
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         labelId="table-select-label"
                         id="table-select"
                         value={filterSearchBy}
@@ -655,6 +659,10 @@ export default function Procedures() {
                         </Box>
                       ) : (
                         <Select
+                        MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           value={filterSearchValue}
                           labelId="table-select-label2"
                           id="table-select2"

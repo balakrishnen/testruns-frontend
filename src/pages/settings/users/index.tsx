@@ -471,6 +471,10 @@ const Users = () => {
                     </Typography>
 
                     <Select
+                    MenuProps={{                   
+                      disableScrollLock: true,                   
+                      marginThreshold: null
+                    }}
                       labelId="table-select-label"
                       id="table-select"
                       value={filterSearchBy}
@@ -561,6 +565,10 @@ const Users = () => {
                       </Box>
                     ) : (
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         value={filterSearchValue}
                         labelId="table-select-label2"
                         id="table-select2"
@@ -786,6 +794,10 @@ const Users = () => {
                       {headers[5].is_show && (
                         <TableCell>
                           <Select
+                          MenuProps={{                   
+                            disableScrollLock: true,                   
+                            marginThreshold: null
+                          }}
                             className={
                               row.isActive == true
                                 ? 'active-select td-select'
