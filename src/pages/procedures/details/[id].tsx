@@ -536,8 +536,8 @@ const handleEditorInit = (editor:any) => {
         </Box>
         <form onSubmit={formik.handleSubmit}>
           <Box className="main-proceduredetails" sx={{padding:'1.5rem 1.5rem 8rem !important'}}>
-            <Grid container spacing={2} className="asset-popup">
-              <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid container spacing={2} className="">
+              <Grid item xs={12} sm={12} md={6} lg={6} className='prod-input-auto  prod-input'>
                 <Box style={{ position: 'relative' }}>
                   <label>Procedure name</label>
                   <TextField
@@ -563,7 +563,7 @@ const handleEditorInit = (editor:any) => {
                 </Box>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={6} lg={6} className='multi-selection asset-popup'>
+              <Grid item xs={12} sm={12} md={6} lg={6} className='prod-input-auto prod-multi'>
                 <Box style={{ position: 'relative' }}>
                   <label>Assets name</label>
                   <Autocomplete
