@@ -354,6 +354,10 @@ export default function TableChart() {
                     displayEmpty
                     IconComponent={ExpandMoreOutlinedIcon}
                     onChange={(event) => handleTableChange(event, index)}
+                    MenuProps={{                      
+                      disableScrollLock: true,                      
+                      marginThreshold: null
+                    }}
                     renderValue={
                       data.selectedTable !== null
                         ? undefined

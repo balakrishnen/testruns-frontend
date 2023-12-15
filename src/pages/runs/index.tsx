@@ -63,6 +63,7 @@ import { toast } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
+import Emptystate from '../../assets/images/Emptystate.svg';
 
 // table start
 
@@ -105,13 +106,13 @@ export default function Runs() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const [runsData, setRunsData] = React.useState<any>([]);
-  console.log('runsData',runsData);
-  
+  console.log('runsData', runsData);
+
   const [rowId, setRowId] = React.useState<any>([]);
-  const[runsRow, setRunsRow]=React.useState<any>([])
+  const [runsRow, setRunsRow] = React.useState<any>([])
   const dispatch: any = useDispatch();
   const [filter, setFilter] = React.useState<any>(false);
-  console.log("runsRow",rowId,runsRow);
+  console.log("runsRow", rowId, runsRow);
 
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
@@ -131,7 +132,7 @@ export default function Runs() {
   const runsSliceData = useSelector(
     (state: any) => state.runs.data?.get_all_runs,
   );
-console.log('runsSliceData',runsSliceData);
+  console.log('runsSliceData', runsSliceData);
 
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
@@ -178,6 +179,14 @@ console.log('runsSliceData',runsSliceData);
   }, [runsData]);
 
   React.useEffect(() => {
+    setLoader(true);
+    dispatch(fetchRunsData(queryStrings));
+    setTableHeaderVisible(false);
+    setRowId([]);
+    setRunsRow([]);
+  }, [queryStrings]);
+
+  React.useEffect(() => {
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
@@ -186,14 +195,6 @@ console.log('runsSliceData',runsSliceData);
       setHeaders(headersList);
     };
   }, []);
-  
-  React.useEffect(() => {
-    setLoader(true);
-    dispatch(fetchRunsData(queryStrings));
-    setTableHeaderVisible(false);
-    setRowId([]);
-    setRunsRow([]);
-  }, [pageInfo,queryStrings]);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
@@ -216,7 +217,7 @@ console.log('runsSliceData',runsSliceData);
     setCurrentPage(page_no);
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data);
-  const handleOnChange = (e: any, row: any) => {
+  const handleOnChange = async (e: any, row: any) => {
     console.log(e.target.value);
 
     console.log('change', row.departmentId, row.laboratoryId);
@@ -227,12 +228,12 @@ console.log('runsSliceData',runsSliceData);
       runsChange['status'] = e.target.value;
     }
     console.log(runsChange);
-    setLoader(true)
-    dispatch(fetchUpdateRunsData(runsChange));
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-    toast('Runs status updated !', {
+    // setLoader(true)
+    await dispatch(fetchUpdateRunsData(runsChange));
+    // setTimeout(() => {
+    //   // setLoader(false);
+    // }, 1000);
+    await toast('Runs status updated !', {
       style: {
         background: '#00bf70',
         color: '#fff',
@@ -270,7 +271,7 @@ console.log('runsSliceData',runsSliceData);
     setRowId,
   );
 
-  const handleRequestSort = () => {};
+  const handleRequestSort = () => { };
 
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
@@ -344,11 +345,10 @@ console.log('runsSliceData',runsSliceData);
     dispatch(fetchRunsData(queryStrings));
   };
   const reload = () => {
-    const payload: any = {
-      page: 1,
-      perPage: 10,
-      sortOrder: 'desc',
-    };
+    const payload: any = { ...queryStrings };
+    const page: any = { ...pageInfo };
+    setPageInfo(page);
+    setQueryString(payload);
     dispatch(fetchRunsData(payload));
   };
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
@@ -390,42 +390,42 @@ console.log('runsSliceData',runsSliceData);
     setQueryString(payload);
     setFilter(true)
   };
-  var arr:any=[]
+  var arr: any = []
   const array = [
     { id: "65670efa4e0aad001292d6ab", label: "users4@gmail.com", value: "adbul@testrunz.com" },
     { id: "6561ef0d2f447d0012e3d8cd", label: "users14@gmail.com", value: "users4@gmail.com" },
     { id: "6561ef0d2f447d0012e3d8cd", label: "users42@gmail.com", value: "users4@gmail.com" },
     // ... other objects
   ];
-  
+
   const labelToFind = "users4@gmail.com";
-  
+
   const newArray = array.filter(item => item.label !== labelToFind)
-                        .map(({ id, label }) => ({ id, label }));
-  
+    .map(({ id, label }) => ({ id, label }));
+
   console.log(newArray);
-  const handleCheckboxValues = (id: any,row:any) => {
+  const handleCheckboxValues = (id: any, row: any) => {
     // Check if the ID is already in the selectedIds
     console.log(row);
-    
+
     if (rowId.includes(id)) {
       // If it is, remove it
       setRowId(rowId.filter((rowId: any) => rowId !== id));
-      
-      setRunsRow( runsRow.filter(item => item._id !== id)
-      .map((val) => (val)))
+
+      setRunsRow(runsRow.filter(item => item._id !== id)
+        .map((val) => (val)))
       // setRunsRow(row)
     } else {
       // If it's not, add it
       setRowId([...rowId, id]);
       // console.log("arr",[...row,row]);
-      
+
       arr.push(row)
-      setRunsRow([...runsRow,row])
+      setRunsRow([...runsRow, row])
     }
   };
-  console.log("arr",runsRow);
-  
+  console.log("arr", runsRow);
+
   // const handleChangePage = (event: unknown, newPage: number) => {
   //   setPage(newPage);
   // };
@@ -484,7 +484,7 @@ console.log('runsSliceData',runsSliceData);
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
                 <Badge
                   color="secondary"
-                  variant={filter? 'dot' : 'standard'}
+                  variant={filter ? 'dot' : 'standard'}
                   invisible={false}
                   className="red-badge-filter"
                 >
@@ -628,8 +628,8 @@ console.log('runsSliceData',runsSliceData);
                           {filterType === 'text'
                             ? 'Search'
                             : filterType === 'date'
-                            ? `Date ${filterFieldName}`
-                            : `Select ${filterFieldName}`}
+                              ? `Date ${filterFieldName}`
+                              : `Select ${filterFieldName}`}
                         </Typography>
                       )}
 
@@ -718,7 +718,7 @@ console.log('runsSliceData',runsSliceData);
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
-                        
+
                       }}
                     >
                       Show results
@@ -744,13 +744,13 @@ console.log('runsSliceData',runsSliceData);
           applyFilters={applyFilters}
           runzId={rowId}
           runzRow={runsRow}
-          reload={()=>{setRowId([]),setRunsRow([])}}
+          reload={() => { setRowId([]), setRunsRow([]) }}
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
           <TableContainer className="tableHeight">
             <Table
-              sx={{ minWidth: 750 , position:'relative' }}
+              sx={{ minWidth: 750, position: 'relative' }}
               aria-labelledby="tableTitle"
               size="medium"
               stickyHeader
@@ -778,9 +778,15 @@ console.log('runsSliceData',runsSliceData);
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-              ): !runsData || runsData.length === 0 ? (
+              ) : !runsData || runsData.length === 0 && loader==false? (
                 <TableBody>
-                  <p style={{textAlign:'center', position:'absolute', left:'0rem' , right:'0rem'}}>No data found.</p>
+                  <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
+                    <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>
+                      <img src={Emptystate} alt="" />
+                      <Typography className="no-remainder">
+                        Runs not found.
+                      </Typography>
+                    </Box></p>
                 </TableBody>
               ) : (
                 <TableBody>
@@ -810,7 +816,7 @@ console.log('runsSliceData',runsSliceData);
                                 checked={row.is_checked == true ? true : false}
                                 onClick={(e: any) => clickHandler(e)}
                                 onChange={(event) => {
-                                  handleCheckboxValues(row._id,row),
+                                  handleCheckboxValues(row._id, row),
                                     handleChange(event, row._id);
                                 }}
                               />
@@ -831,10 +837,10 @@ console.log('runsSliceData',runsSliceData);
                                     row.status === 'Created'
                                       ? runCreated
                                       : row.status === 'Started'
-                                      ? runStarted
-                                      : row.status === 'Complete'
-                                      ? runCompleted
-                                      : runStopped
+                                        ? runStarted
+                                        : row.status === 'Complete'
+                                          ? runCompleted
+                                          : runStopped
                                   }
                                   alt="no_image"
                                   style={{ width: '35px', height: '35px' }}
@@ -973,8 +979,8 @@ console.log('runsSliceData',runsSliceData);
                           {row.createdAt === null
                             ? '-'
                             : moment(row.createdAt).isValid()
-                            ? moment(row.createdAt).local().format('MM/DD/YYYY')
-                            : moment().format('MM/DD/YYYY')}
+                              ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
                         </TableCell>
                       )}
                       {headers[5].is_show && (
@@ -982,8 +988,8 @@ console.log('runsSliceData',runsSliceData);
                           {row.dueDate === null
                             ? '-'
                             : moment(row.dueDate).isValid()
-                            ? moment(row.dueDate).local().format('MM/DD/YYYY')
-                            : moment().format('MM/DD/YYYY')}
+                              ? moment(row.dueDate).local().format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
                         </TableCell>
                       )}
                       {headers[6].is_show && (
@@ -994,12 +1000,12 @@ console.log('runsSliceData',runsSliceData);
                               row.status === 'Created'
                                 ? 'create-select td-select'
                                 : row.status === 'Started'
-                                ? 'start-select td-select'
-                                : row.status === 'Submitted'
-                                ? 'submit-select td-select'
-                                : row.status === 'Complete'
-                                ? 'active-select td-select'
-                                : 'inactive-select td-select'
+                                  ? 'start-select td-select'
+                                  : row.status === 'Submitted'
+                                    ? 'submit-select td-select'
+                                    : row.status === 'Complete'
+                                      ? 'active-select td-select'
+                                      : 'inactive-select td-select'
                             }
                             value={row.status ? row.status : 'Stopped'}
                             displayEmpty

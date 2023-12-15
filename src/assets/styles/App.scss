@@ -206,8 +206,8 @@ input[type=number] {
 html body {
   margin: 0px;
   background-color: $white;
-  overflow-y: auto !important;
-  padding-right: 0px !important;
+  // overflow-y: auto !important;
+  // padding-right: 0px !important;
 }
 body{
   position: relative;
@@ -2390,9 +2390,7 @@ input#mobile_number {
   }
 }
 
-.notification-header {
-  padding-top: 0px;
-}
+
 .red-badge , .red-badge-filter{
   span.MuiBadge-badge {
     background-color: $red;
@@ -2439,11 +2437,14 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 .tox.tox-tinymce {
   z-index: 0 !important;
 }
-.profile-head {
-  z-index: 9999 !important;
+// .profile-head {
+//   z-index: 9999 !important;
+// }
+.profile-page , .notification-header {
+  padding-top: 80px !important;
 }
-.profile-page {
-  padding-top: 0px !important;
+.profile-page .profile-section2 input#department {
+  padding-left: 15px;
 }
 @media (min-width:900px){
   #primary-search-account-menu-mobile {
@@ -2455,10 +2456,20 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
     display: none !important;
   }
 }
-.main-proceduredetails .multi-selection input#departmentId {
-  padding-top: 8.3px;
-  padding-bottom: 8.2px;
-}
+// .main-proceduredetails .multi-selection input#departmentId {
+//   padding-top: 8.3px;
+//   padding-bottom: 8.2px;
+// }
 #menu-procedureId ul.MuiList-root.MuiList-padding.MuiMenu-list {
   height: 200px;
 }
+.sort-section-head {
+  width: auto !important;
+}
+.table-outer td{
+  width: 300px;
+}
+// .prod-name input#name {
+//   padding-top: 9px;
+//   padding-bottom: 9px;
+// }

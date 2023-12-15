@@ -74,44 +74,46 @@ const Notification = () => {
   //     runsCommend: [{ email: false, notification: false }],
   //   }
   // ])
-  const NotificationSliceData = useSelector(
-    (state: any) => state.notification.data?.get_notification,
-  );
   const userSliceData = useSelector(
     (state: any) => state.userLogin?.data?.verifyToken,
   );
+  // const NotificationSliceData = useSelector(
+  //   (state: any) => state.notification.data?.get_notification,
+  // );
   React.useEffect(()=>{
-    setNotificationList(notificationList)
-  },[notificationList])
+    fetchMessageApi()
+  },[])
 
-  React.useEffect(()=>{
-    setNotificationList(NotificationSliceData)
-  },[NotificationSliceData])
+const fetchMessageApi=()=>{
+  let payload={
+    userId:userSliceData?._id
+  }
+dispatch(fetchUserNotificationData(payload)).then((res)=>{
+  console.log(res);
+  setNotificationList(res?.get_notification)
+})
+}
 
-  React.useEffect(()=>{
-    let payload={
-      userId:userSliceData?._id
-    }
-  dispatch(fetchUserNotificationData(payload))
-  },[userSliceData])
-  
-  console.log(notificationList);
-  const handleChange = (category, subCategory, val) => {
-    // Create a deep copy of the state to avoid directly mutating state
+  const handleChange = async(category, subCategory, val) => {1
+
+    if (!notificationList || !notificationList[0]) {
+      return;
+    }  
     const updatedValues = JSON.parse(JSON.stringify(notificationList));
   
     // Toggle between true and false for email and notification
     updatedValues[0][category][0][subCategory] = val;
-  
-    // Set the state with the updated values
-    setNotificationList(updatedValues);
-   const createProcedureVal = notificationList!==undefined && notificationList[0]?.createProcedure
-   const runsCommendVal=  notificationList!==undefined && notificationList[0]?.runsCommend
-   const runAssigedVal =  notificationList!==undefined && notificationList[0]?.runAssiged
+
+    setNotificationList(updatedValues)
+
+   console.log("updatedValues",updatedValues)
+   const createProcedureVal = updatedValues[0]?.createProcedure || [];
+   const runsCommendVal=  updatedValues[0]?.runsCommend || [];
+   const runAssigedVal =  updatedValues[0]?.runAssiged || [];
 
 const updatedData = createProcedureVal.map(item => {
   const newItem = { ...item };
-  if ('__typename' in newItem) {
+  if ('__typename' in newItem) { 
     delete newItem.__typename;
   }
   return newItem;
@@ -139,11 +141,8 @@ console.log(updatedData);
       runsCommend: updatedData1,
       runAssiged: updatedData2,
     }
-    dispatch(fetchUpdateNotification(payload))
-    let payload1={
-      userId:userSliceData?._id
-    }
-  dispatch(fetchUserNotificationData(payload1))
+    await dispatch(fetchUpdateNotification(payload))
+    await fetchMessageApi()
   };
 
     return (

@@ -11,7 +11,7 @@ import data from '../../assets/images/profile/user.jpg';
 import { fetchNotificationMessageData, fetchReadBulkMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
 import { fetchSingleUserData } from '../../api/userAPI';
 import Emptystate from '../../assets/images/Emptystate.svg';
-import Moment from 'moment';
+import moment from 'moment';
 
 export default function AppNotificationDrawer({
   openDrawer,
@@ -54,34 +54,50 @@ export default function AppNotificationDrawer({
       .catch((err:any) => {
         console.log(err);
       });
+      
     // }
   },[loginUserSliceData]);
   React.useEffect(() => {
-    dispatch(fetchNotificationData());
+    // dispatch(fetchNotificationData());
     let payload={
-      userId: userData?._id
+      userId: loginUserSliceData?.verifyToken?._id
     }
+    console.log(payload);
+    
     dispatch(fetchNotificationMessageData(payload));
-  }, [userData]);
+  }, []);
 
   const getTimeDifference = (notificationTime: any) => {
-    const currentTime: any = Moment().format('YYYY-MM-DD');
-    const hoursDifference = Moment(notificationTime).diff(currentTime, 'hours');
+    const currentTime: any = moment();
+    const timestamp = parseInt(notificationTime);
 
+    const notificationTimeData = moment(timestamp);
+
+    const timeDifferenceInMilliseconds = currentTime.diff(notificationTimeData);
+  
+    const minutesDifference = moment.duration(timeDifferenceInMilliseconds).asMinutes();
+    const hoursDifference = moment.duration(timeDifferenceInMilliseconds).asHours();
+  
+    if (minutesDifference >= 60 && hoursDifference < 24) {
+      return `${Math.floor(hoursDifference)}h ago`;
+    }
     if (hoursDifference > 24) {
       const daysDifference: number = Math.floor(hoursDifference / 24);
       return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
     }
-
-    return `${hoursDifference}h ago`;
+  
+    return `${Math.floor(minutesDifference)}min ago`;
   };
   const handleReadSingleNotification=async(id:any)=>{
     let payload={
       _id:id,
       isRead:true
     }
+    let payload2={
+      userId: userData?._id
+    }
    await dispatch(fetchReadSingleMessageData(payload))
-   await dispatch(fetchNotificationMessageData(notificationQueryStrings));
+   await dispatch(fetchNotificationMessageData(payload2));
 
   }
 
@@ -116,7 +132,8 @@ export default function AppNotificationDrawer({
         },
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
-      onClose={() => { toggleNotificationDrawer(), setShow(!show) }}
+      onClose={() => { toggleNotificationDrawer(), setShow(!show) }}     
+      disableScrollLock={ true }
     >
      
       <Box className="notification-header">

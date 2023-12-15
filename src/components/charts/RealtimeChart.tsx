@@ -322,6 +322,10 @@ export default function RealtimeChart() {
                       value={chartData?.selectedTable}
                       displayEmpty
                       IconComponent={ExpandMoreOutlinedIcon}
+                      MenuProps={{                      
+                        disableScrollLock: true,                      
+                        marginThreshold: null
+                      }}
                       onChange={(event) =>
                         handleTabularColumnChange(event, dataIndex)
                       }

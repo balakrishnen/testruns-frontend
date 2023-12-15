@@ -40,7 +40,7 @@ import {
   OrganizationList,
 } from '../../../utils/data';
 import { toast } from 'react-toastify';
-import { fetchRoleData } from '../../../api/roleApi';
+import { fetchSingleRoleData } from '../../../api/roleApi';
 import { fetchSingleUserData, fetchUpdateUserData } from '../../../api/userAPI';
 import { fileUploadData } from '../../../api/uploadAPI';
 import { updatePassword } from 'firebase/auth';
@@ -394,7 +394,7 @@ const Profile = () => {
     }
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
-    dispatch(fetchRoleData(payload2));
+    dispatch(fetchSingleRoleData(payload2));
   }, []);
   console.log(formikProfile);
 
