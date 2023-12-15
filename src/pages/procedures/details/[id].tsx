@@ -462,7 +462,7 @@ const handleEditorInit = (editor:any) => {
     <PrivateRoute>
       {!isLoader ?
       <Box className="proceduredetails-page">
-        <Box className="top-section">
+        <Box className="top-section" sx={{position:'relative !important',top:'0px !important',width:'100% !important'}}>
           <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
             <Grid container spacing={2} >
               <Grid item xs={12} sm={12} md={3} lg={3}>
@@ -535,7 +535,7 @@ const handleEditorInit = (editor:any) => {
           <Divider sx={{ borderColor: '#FFEAA5', borderBottomWidth: '5px' }} />
         </Box>
         <form onSubmit={formik.handleSubmit}>
-          <Box className="main-proceduredetails">
+          <Box className="main-proceduredetails" sx={{padding:'1.5rem 1.5rem 8rem !important'}}>
             <Grid container spacing={2} className="asset-popup">
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <Box style={{ position: 'relative' }}>
@@ -553,6 +553,7 @@ const handleEditorInit = (editor:any) => {
                     value={formik.values.name}
                     size="small"
                     error={formik.touched.name && Boolean(formik.errors.name)}
+                    className='prod-name'
                   />
                   {formik.touched.name && formik.errors.name && (
                     <Typography className="error-field">
