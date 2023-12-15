@@ -312,15 +312,15 @@ export default function MyPage() {
       .catch((err: any) => {
         console.log(err);
       });
-    let payload = {
-      userId: loginUserSliceData?.verifyToken?._id
-    }
-    dispatch(fetchNotificationMessageData(payload));
+      let payload = {
+        userId: loginUserSliceData?.verifyToken?._id
+      }
+      dispatch(fetchNotificationMessageData(payload));
 
     // }
   }, [loginUserSliceData]);
   React.useEffect(() => {
-    let pay = {
+        let pay = {
       month: `${new Date().getMonth() + 1}`,
       year: `${new Date().getFullYear()}`,
     };
@@ -379,7 +379,7 @@ export default function MyPage() {
       (item:any) => item.createdAt === moment(new Date()).format('MM-DD-YYYY'),
     );
     setCalendarContent(filCalendarContent);
-  }})
+  }},[])
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
       (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
@@ -421,6 +421,8 @@ export default function MyPage() {
     await dispatch(fetchNotificationMessageData(notificationQueryStrings));
 
   }
+  console.log(CalendarContent);
+  
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
