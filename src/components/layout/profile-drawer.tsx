@@ -323,6 +323,7 @@ export default function AppProfileDrawer({
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
       onClose={() => { toggleProfileDrawer(), setEdit(true) }}
+      disableScrollLock={ true }
     >
       
       <Box sx={{ overflow: 'auto' }}>

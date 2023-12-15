@@ -75,6 +75,7 @@ export default function TableHeader(props: any) {
                 id="tableFilter"
                 sortDirection={headCell.sort}
               >
+                 {headCell.label}
                 {headCell.id === 'departmentId' ||
                 headCell.id === 'laboratoryId' ? (
                   <TableSortLabel hideSortIcon>{headCell.label}</TableSortLabel>
@@ -84,8 +85,9 @@ export default function TableHeader(props: any) {
                     onClick={(event) =>
                       handleTableSorting(event, headCell, index)
                     }
+                    className='sort-section-head'
                   >
-                    {headCell.label}
+                    {/* {headCell.label} */}
                   </TableSortLabel>
                 )}
                 {/* <TableRow sx={{ width: "100%", display: "block" }}>

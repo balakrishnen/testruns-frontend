@@ -126,7 +126,8 @@ export default function AppNotificationDrawer({
         },
         boxShadow: '-12px 4px 19px 0px #0000001A',
       }}
-      onClose={() => { toggleNotificationDrawer(), setShow(!show) }}
+      onClose={() => { toggleNotificationDrawer(), setShow(!show) }}     
+      disableScrollLock={ true }
     >
      
       <Box className="notification-header">
