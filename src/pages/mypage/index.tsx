@@ -254,7 +254,7 @@ export default function MyPage() {
     userId: ""
   });
   const [clickedDate, setClickedDate] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(moment(new Date()).format('MM-DD-YYYY'));
   const [value, onChange] = useState<Value>(
     moment(new Date()).format('MM-DD-YYYY'),
   );
@@ -296,12 +296,11 @@ export default function MyPage() {
   const loginUserSliceData = useSelector(
     (state: any) => state.userLogin.data,
   );
-  // console.log('wwwww',loginUserSliceData);
-  const [userData, setUserData] = React.useState<any>({})
-  console.log(loginUserSliceData);
-  const [calender, setCalender] = React.useState()
-
-  React.useEffect(() => {
+    // console.log('wwwww',loginUserSliceData);
+  const[userData, setUserData]=React.useState<any>({})
+ const [ calender, setCalender ] = React.useState()
+ 
+  React.useEffect(()=> {
     let temp = { _id: loginUserSliceData?.verifyToken?._id };
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp))
@@ -344,7 +343,6 @@ export default function MyPage() {
       return temp;
     });
     const calendarMark = Array.from(calendarMarkSet);
-    console.log("calendarMark", calendarMark)
     setCalendarMark(calendarMark);
     setCalendarEventData(calendar);
   }, [calendar_eventData]);
@@ -375,7 +373,13 @@ export default function MyPage() {
 
     return `${Math.floor(minutesDifference)}min ago`;
   };
-
+  React.useEffect(()=> {
+  if(selectedDate === moment(new Date()).format('MM-DD-YYYY')){
+    const filCalendarContent = calendarEventData.filter(
+      (item:any) => item.createdAt === moment(new Date()).format('MM-DD-YYYY'),
+    );
+    setCalendarContent(filCalendarContent);
+  }})
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
       (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
@@ -383,8 +387,6 @@ export default function MyPage() {
     setCalendarContent(filCalendarContent);
     setSelectedDate(moment(date).format('MM-DD-YYYY'));
   };
-
-  console.log("CalendarContent", CalendarContent)
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
