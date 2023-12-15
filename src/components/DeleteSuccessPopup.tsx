@@ -20,6 +20,7 @@ const DeleteSuccessPopup =  React.forwardRef(({ close }: any, ref) => {
       fullWidth
       maxWidth="xs"
       className="popup-outer"
+      disableScrollLock={ true }
     >
       <Box className="popup-section" sx={{background:'#FFB9B9'}}>         
           <Box sx={{textAlign:'center'}}>

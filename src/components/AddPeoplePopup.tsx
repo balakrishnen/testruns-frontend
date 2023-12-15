@@ -97,6 +97,7 @@ React.useEffect(()=>{
       fullWidth
       maxWidth="md"
       className="popup-outer"
+      disableScrollLock={ true }      
     >
       <Box className="popup-section">
         <Box className="title-popup">

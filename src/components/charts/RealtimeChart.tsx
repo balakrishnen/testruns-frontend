@@ -316,7 +316,7 @@ export default function RealtimeChart() {
               >
                 <Grid container sx={{ px: 4 }}>
                   <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-                    <Select
+                    <Select                    
                       labelId="view-all-label"
                       id="time-sec"
                       value={chartData?.selectedTable}
@@ -514,6 +514,10 @@ export default function RealtimeChart() {
                                     }}
                                   >
                                     <Select
+                                      MenuProps={{                   
+                                        disableScrollLock: true,                   
+                                        marginThreshold: null
+                                      }}
                                       labelId="view-all-label"
                                       size="small"
                                       value={element.channelValue}
@@ -568,6 +572,10 @@ export default function RealtimeChart() {
                                               {element.axisY}
                                             </Typography> */}
                                     <Select
+                                    MenuProps={{                   
+                                      disableScrollLock: true,                   
+                                      marginThreshold: null
+                                    }}
                                       labelId="view-all-label"
                                       size="small"
                                       value={element.yValue}

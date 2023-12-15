@@ -27,6 +27,7 @@ const SuccessPopup = React.forwardRef(({ close, type }: any, ref) => {
       fullWidth
       maxWidth="xs"
       className="popup-outer"
+      disableScrollLock={ true }
     >
       <Box className="popup-section" sx={{ background: "#C6FFD9" }}>
         <Box sx={{ textAlign: "center" }}>

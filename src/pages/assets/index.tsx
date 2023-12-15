@@ -462,6 +462,10 @@ export default function Assets() {
                         Search by
                       </Typography>
                       <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
                         labelId="table-select-label"
                         id="table-select"
                         value={filterSearchBy}
@@ -563,6 +567,10 @@ export default function Assets() {
                         </Box>
                       ) : (
                         <Select
+                        MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           value={filterSearchValue}
                           labelId="table-select-label2"
                           id="table-select2"
@@ -875,6 +883,10 @@ export default function Assets() {
                           {headers[6].is_show && (
                             <TableCell>
                               <Select
+                              MenuProps={{                   
+                                disableScrollLock: true,                   
+                                marginThreshold: null
+                              }}
                                 name="status"
                                 className={
                                   row.status == 'Active'
@@ -901,6 +913,10 @@ export default function Assets() {
                           {headers[7].is_show && (
                             <TableCell>
                               <Select
+                              MenuProps={{                   
+                                disableScrollLock: true,                   
+                                marginThreshold: null
+                              }}
                                 name="availability"
                                 className={
                                   row.availability === 'Available'
