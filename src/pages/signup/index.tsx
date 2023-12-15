@@ -86,36 +86,53 @@ const userSliceData = useSelector(
 
     if (isMatch) {
       try {
-         createUserWithEmailAndPassword(auth, values.email, values.password).then((res)=>{
-          console.log(res.user.uid);
-          let payload={
-            firstName: values.fullname,
-            lastName: "",
-            email: values.email,
-            uid:res.user.uid,
-            organisationId:"657420e5c63327a74f3c756a",
-            role:"65741c069d53d19df8321e6e",
-            // phoneNumber:'9876543210',
-            departmentId: [],
-            laboratoryId: [],
-            instituteId: "65741c069d53d19df8321e6b",
-          }
-          dispatch(postUserData(payload))
-          toast(`Signup successful !`, {
-            style: {
-              background: '#00bf70', color: '#fff'
-            }
-          });
-          setTimeout(()=>{
-            navigate('/login')
-          },1000)
-         });
-        } catch (err){
-          console.error(err);
-        }
+        createUserWithEmailAndPassword(auth, values.email, values.password)
+          .then((res) => {
+            console.log(res.user.uid);
+            let payload = {
+              firstName: values.fullname,
+              lastName: "",
+              email: values.email,
+              uid: res.user.uid,
+              organisationId: "657420e5c63327a74f3c756a",
+              role: "65741c069d53d19df8321e6e",
+              // phoneNumber:'9876543210',
+              departmentId: [],
+              laboratoryId: [],
+              instituteId: "65741c069d53d19df8321e6b",
+            };
     
-      // alert("Signin successful!");
-     
+            dispatch(postUserData(payload));
+            toast(`Signup successful !`, {
+              style: {
+                background: '#00bf70',
+                color: '#fff',
+              },
+            });
+    
+            setTimeout(() => {
+              navigate('/login');
+            }, 1000);
+          })
+          .catch((err) => {
+            console.log("err", err);
+    
+            toast(`Email already Exists !`, {
+              style: {
+                background: '#d92828',
+                color: '#fff',
+              },
+            });
+          });
+      } catch (err) {
+        console.log("err", err);
+        toast(`Email already Exists !`, {
+          style: {
+            background: '#d92828',
+            color: '#fff',
+          },
+        });
+      }
     } else {
       formik.setFieldError("fullname", "Invalid fullname");
       formik.setFieldError("email", "Invalid email");

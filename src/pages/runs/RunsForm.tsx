@@ -52,7 +52,7 @@ const validationSchema = Yup.object().shape({
   objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
   // dueDate: Yup.date().required('Due Date is required'),
   dueDate: Yup.string().required('Due Date is required').matches(/^(19|20)\d\d[-\/](0[1-9]|1[012])[-\/](0[1-9]|[12][0-9]|3[01])$/, 'invalid date'),
-  assignedTo: Yup.string().required(),
+  assignedTo: Yup.string().notRequired(),
   organisationId:Yup.string().required('Procedure Name is required')
 });
 
@@ -78,7 +78,9 @@ const RunsForm = React.forwardRef(
       value: item.name,
       id: item._id,
     }))
-
+    const loginUserSliceData=  useSelector(
+      (state: any) => state.userLogin.data, 
+    );
     const [lab, setLab] = React.useState(LabData ? LabData : [])
 
     const [department, setDepartment] = React.useState(DepartmentData ? DepartmentData : [])
@@ -196,8 +198,8 @@ const RunsForm = React.forwardRef(
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
         createdAt: createdDate,
-        assignedBy: "username",
-        assignedTo: 'toy',
+        assignedBy: loginUserSliceData?.verifyToken?._id,
+        assignedTo:loginUserSliceData?.verifyToken?._id,
         status: "Created",
         // procedureDetials:""
       },

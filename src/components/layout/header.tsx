@@ -42,8 +42,8 @@ function AppHeader(props: any) {
     }
 
   )
-  let data = NotificationMessageSliceData?.message?.some((item) => !item.isRead)
-  console.log(data);
+  // let data = NotificationMessageSliceData?.message?.some((item) => !item.isRead)
+  // console.log(data);
   
   const renderMobileMenu = (
     <Menu
@@ -196,7 +196,7 @@ function AppHeader(props: any) {
             >
               <Badge
                 color="secondary"
-                variant={data&&'dot'}
+                variant={'dot'}
                 invisible={false}
                 className="red-badge"
               >
@@ -214,7 +214,7 @@ function AppHeader(props: any) {
               onClick={openEditProfile}
             >
               <Typography variant="inherit" className="app-bar-username">
-                Hi {userData?.firstName === ""? userData?.email : userData?.firstName}
+                Hi {userData?.firstName}
               </Typography>
               <div >
               <img style={{cursor:'pointer'}} src={(userData?.imageUrl!=="" && userData?.imageUrl!==null)?userData?.imageUrl:account} className="app-bar-images" style={{borderRadius: "13px"}}/>
