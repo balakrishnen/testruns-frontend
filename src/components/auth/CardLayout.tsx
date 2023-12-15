@@ -47,7 +47,7 @@ export const CardLayout = ({ children }: any, props: any) => {
       const result:any = await signInWithPopup(auth, googleProvider);
   
       console.log(result);
-  
+      
       let payload = {
         firstName: result.user.displayName !== null ? result.user.displayName : result.user.email.split("@")[0],
         lastName: "",
