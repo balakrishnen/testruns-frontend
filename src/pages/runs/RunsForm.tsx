@@ -45,7 +45,7 @@ import { toast } from 'react-toastify';
 import { navigate } from 'gatsby';
 
 const validationSchema = Yup.object().shape({
-  procedureId: Yup.string().required("Procedure ID is requied" ),
+  procedureId: Yup.string().required("Procedure name is required" ),
   createdAt: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
