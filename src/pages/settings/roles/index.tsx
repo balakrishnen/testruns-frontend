@@ -169,12 +169,14 @@ const Roles = () => {
 
   React.useEffect(() => {
     setFormValues(formValues)
+    console.log("formValues",formValues);
     setFormValues1(formValues1)
     setFormValues2(formValues2)
   }, [formValues,formValues1,formValues2]);
 
   React.useEffect(() => {
     setFormValues(roleSliceData[0])
+    console.log("formValues",roleSliceData);
     setFormValues1(roleSliceData[2])
     setFormValues2(roleSliceData[1])
   }, [roleSliceData]);
@@ -284,13 +286,16 @@ console.log(formValues);
     
   }
   const handleReset=async()=>{
-    let payload1={
+    let payload={
       instituteId:loginUserSliceData?.instituteId
     }
-    await dispatch(fetchSingleRoleData(payload1))
-       
+    dispatch(fetchSingleRoleData(payload))
+    console.log("formValues",roleSliceData);
+    setFormValues(roleSliceData[0])
+    setFormValues1(roleSliceData[2])
+    setFormValues2(roleSliceData[1])
   }
-  console.log(formValues);
+  console.log(roleSliceData);
   
   return (
     <Box className="role-setting-page">
