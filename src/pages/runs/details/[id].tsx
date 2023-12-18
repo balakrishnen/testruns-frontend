@@ -659,15 +659,11 @@ console.log(obj);
           value: header.textContent.trim(),
         }));
         const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
-        console.log("tableDataRows",tableDataRows);
-        
         const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
           const tableCells = tableDataRow.querySelectorAll("td[data-column]");
-          console.log("tableCells",tableCells);
-          
           return Array.from(tableCells).map((cell: any) => {
             const inputCntext = cell.querySelector('input[type="text"]');
-            console.log("inputCntext",inputCntext);
+            console.log(inputCntext);
             
             if (inputCntext) {
               console.log(cell.getAttribute("data-column"));
@@ -680,26 +676,20 @@ console.log(obj);
             }
           });
         });
-        console.log("header",rowData);
         return {
           headerNames: headerNames,
           rowData: rowData,
         };
       });
-
+console.log("result",htmlInput);
 
       const mergedDatasets = result.map((dataset) => {
-        console.log(dataset);
         
         for (let i = 0; i < dataset.rowData.length; i++) {
           const rowData = dataset.rowData[i];
-          console.log(dataset.rowData,"header");
-          
           const mergedRow: any = {};
           for (let j = 0; j < rowData?.length; j++) {
             const header = dataset.headerNames[j];
-            console.log(header,"header");
-            
             const value: any = rowData[j];
             mergedRow[header?.value] = value?.value;
           }
@@ -735,21 +725,24 @@ console.log(obj);
         }
         return subResult;
       });
+console.log("results",results);
+// console.log("results",subResult);
 
+// var resultofdata=()=>{ return results}
       const tablesin = document
         ?.getElementById("content")
         ?.querySelectorAll("[data-table]");
       const getTitle: any = [];
 
-      tablesin?.forEach((element, index) => {
+      results?.forEach((element, index) => {
         getTitle.push(element.textContent);
       });
-console.log("tablesin",tablesin);
 
       finalTableTitleResult = getTitle?.map((list: any, index: any) => {
         return { label: list, value: list, data: results[index] };
       });
     }
+    console.log("results",finalTableTitleResult);
     setArr(finalTableTitleResult)
     let vals = Object.values(htmlInput);
     const empty = vals.filter((item) => item === "");
@@ -757,11 +750,11 @@ console.log("tablesin",tablesin);
     
     if (empty.length > 0) {
       toast('Must fill all Required Readings', {
-        style: {
-          background: '#d92828',
-          color: '#fff',
-        },
-      });
+            style: {
+              background: '#d92828',
+              color: '#fff',
+            },
+          });
     } else if (empty.length === 0) {
       handleHtmlInput();
       var payload:any ={
@@ -801,8 +794,57 @@ console.log("tablesin",tablesin);
               }
             });
           }
-  }
-}
+        }
+  };
+    
+    // if (empty.length > 0) {
+    //   toast('Must fill all Required Readings', {
+    //     style: {
+    //       background: '#d92828',
+    //       color: '#fff',
+    //     },
+    //   });
+    // } else if (empty.length === 0) {
+    //   handleHtmlInput();
+    //   var payload:any ={
+    //           runId: runzValue._id,
+    //           organisationId:"657420e5c63327a74f3c756a",
+    //           userProcedure:JSON.stringify(htmlInput),
+    //           static_chart_data:JSON.stringify(finalTableTitleResult)
+        
+    //         }
+    //         console.log(runzValue.status);
+            
+    //        if(runzValue.status=="Created") {
+    //         dispatch(postUserRunsData(payload))
+    //         let payload1={
+    //           _id:runzValue._id,
+    //           status:'Started'
+    //         }
+    //         dispatch(fetchUpdateRunsData(payload1))
+    //       toast(`User Procedure Created !`, {
+    //         style: {
+    //           background: '#00bf70', color: '#fff'
+    //         }
+    //       });
+    //     }
+    //       else{
+    //        let payload2={
+    //         _id:userRunzID?._id,
+    //         organisationId:"657420e5c63327a74f3c756a",
+    //         userProcedure:JSON.stringify(htmlInput),
+    //         static_chart_data:JSON.stringify(finalTableTitleResult)
+    //        }
+    //         dispatch(UpdateUserRunsData(payload2))
+            
+    //         toast(`User Procedure updated !`, {
+    //           style: {
+    //             background: '#00bf70', color: '#fff'
+    //           }
+    //         });
+    //       }
+  // }
+// }
 //   const onSubmit=()=>{
 //     console.log(runzValue,state.content)
 //     var payload:any ={
