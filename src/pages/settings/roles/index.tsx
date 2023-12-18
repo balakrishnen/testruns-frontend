@@ -283,6 +283,15 @@ console.log(formValues);
   await dispatch(fetchSingleRoleData(payload1))
     
   }
+  const handleReset=async()=>{
+    let payload1={
+      instituteId:loginUserSliceData?.instituteId
+    }
+    await dispatch(fetchSingleRoleData(payload1))
+       
+  }
+  console.log(formValues);
+  
   return (
     <Box className="role-setting-page">
       <Box
@@ -2660,7 +2669,7 @@ console.log(formValues);
         </Box>
       </Box>
       <Box className="edit-details" sx={{ p: 2 }}>
-        <Button type="submit" variant="contained" className="cancel-btn">
+        <Button  variant="contained" className="cancel-btn" onClick={()=>handleReset()}>
           Reset
         </Button>
         <Button type="submit" variant="contained" className="add-btn" onClick={()=>handleSave()}>

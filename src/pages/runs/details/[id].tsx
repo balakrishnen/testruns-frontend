@@ -756,6 +756,8 @@ export default function RunsDetails() {
       });
     }
     setArr(finalTableTitleResult);
+    console.log(htmlInput);
+    
     let vals = Object.values(htmlInput);
     const empty = vals.filter((item) => item === '');
     console.log('finalTableTitleResult', empty);

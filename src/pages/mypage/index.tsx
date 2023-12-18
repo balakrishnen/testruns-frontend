@@ -249,10 +249,13 @@ export default function MyPage() {
     sortBy: null,
     sortOrder: 'desc',
   });
-
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
   const [notificationQueryStrings, setNotificationQueryString] = React.useState({
-    userId: ""
+    userId: loginUserSliceData?.verifyToken?._id
   });
+  const [notificationMesssage,setNotificationMesssage]=React.useState([])
   const [clickedDate, setClickedDate] = useState(null);
   const [selectedDate, setSelectedDate] = useState(moment(new Date()).format('MM-DD-YYYY'));
   const [value, onChange] = useState<Value>(
@@ -293,9 +296,7 @@ export default function MyPage() {
   const MyPageRunsData = useSelector(
     (state: any) => state.myPageSlice.data?.get_all_runs,
   );
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
+
     // console.log('wwwww',loginUserSliceData);
   const[userData, setUserData]=React.useState<any>({})
  const [ calender, setCalender ] = React.useState()
@@ -312,13 +313,24 @@ export default function MyPage() {
       .catch((err: any) => {
         console.log(err);
       });
-      let payload = {
-        userId: loginUserSliceData?.verifyToken?._id
-      }
-      dispatch(fetchNotificationMessageData(payload));
-
-    // }
   }, [loginUserSliceData]);
+
+  React.useEffect(() => {
+    // dispatch(fetchNotificationData());
+    console.log("notification1", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
+    
+    let payload={
+      userId: loginUserSliceData?.verifyToken?._id
+    }
+    console.log(payload);
+    
+    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+      setNotificationMesssage(res.data?.get_notification_message)
+      console.log(res.data?.get_notification_message);
+      
+    });
+  }, []);
+
   React.useEffect(() => {
         let pay = {
       month: `${new Date().getMonth() + 1}`,
@@ -417,12 +429,20 @@ export default function MyPage() {
       _id: id,
       isRead: true
     }
+    let payload2 ={
+      userId:userData?._id
+    }
     await dispatch(fetchReadSingleMessageData(payload))
-    await dispatch(fetchNotificationMessageData(notificationQueryStrings));
+    console.log("notification3", userData?._id,"==",NotificationMessageSliceData);
+    await dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
+      setNotificationMesssage(res.data?.get_notification_message)
+      console.log(res.data?.get_notification_message);
+      
+    });
 
   }
   console.log(CalendarContent);
-  
+  console.log("notificationMesssage",notificationMesssage);
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
@@ -671,7 +691,7 @@ export default function MyPage() {
                 }}
               >
 
-                {NotificationMessageSliceData?.message.length !== 0 ? NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
+                {notificationMesssage?.message?.length !== 0 ? notificationMesssage?.message?.map((notification: any, index: any) => (
                   <Box
                     className="notifications"
                     key={index}
