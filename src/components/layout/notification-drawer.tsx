@@ -68,8 +68,8 @@ export default function AppNotificationDrawer({
     console.log(payload);
     
     dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-      setNotificationMesssage(res.data?.get_notification_message)
-      console.log(res.data?.get_notification_message);
+      setNotificationMesssage(res?.data?.get_notification_message)
+      console.log(res?.data?.get_notification_message);
       
     });
   }, []);
@@ -105,8 +105,8 @@ export default function AppNotificationDrawer({
     }
    await dispatch(fetchReadSingleMessageData(payload))
    await  dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
-    setNotificationMesssage(res.data?.get_notification_message)
-    console.log(res.data?.get_notification_message);
+    setNotificationMesssage(res?.data?.get_notification_message)
+    console.log(res?.data?.get_notification_message);
     
   });
 
@@ -125,8 +125,8 @@ export default function AppNotificationDrawer({
     if(NotificationMessageSliceData?.message?.length!==0){
       await dispatch(fetchReadBulkMessageData(payload))
       await  dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
-        setNotificationMesssage(res.data?.get_notification_message)
-        console.log(res.data?.get_notification_message);
+        setNotificationMesssage(res?.data?.get_notification_message)
+        console.log(res?.data?.get_notification_message);
         
       });
     }

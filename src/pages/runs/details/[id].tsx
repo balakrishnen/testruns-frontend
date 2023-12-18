@@ -35,8 +35,8 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
 import AddPeoplePopup from '../../../components/AddPeoplePopup';
-import * as html2json from 'html2json';
-import parse from 'html-react-parser';
+import * as html2json from "html2json";
+import parse from "html-react-parser";
 import {
   LineChart,
   Line,
@@ -58,21 +58,13 @@ import SuccessPopup from '../../../components/SuccessPopup';
 import { useLocation } from '@reach/router';
 import moment from 'moment';
 import { RunsStatusList } from '../../../utils/data';
-import {
-  fetchSingleRunsData,
-  fetchTableChartData,
-  fetchUpdateRunsData,
-} from '../../../api/RunsAPI';
+import { fetchSingleRunsData, fetchTableChartData, fetchUpdateRunsData } from '../../../api/RunsAPI';
 import { useDispatch } from 'react-redux';
 import { navigate } from 'gatsby';
 import { useSelector } from 'react-redux';
 import TableChart from '../../../components/charts/TableChart';
 import RealtimeChart from '../../../components/charts/RealtimeChart';
-import {
-  UpdateUserRunsData,
-  fetchSingleUserRunzData,
-  postUserRunsData,
-} from '../../../api/userRunsAPI';
+import { UpdateUserRunsData, fetchSingleUserRunzData, postUserRunsData } from '../../../api/userRunsAPI';
 import { fetchUpdateProcedureData } from '../../../api/procedureAPI';
 import { nanoid } from 'nanoid';
 import SpinerLoader from '../../../components/SpinnerLoader';
@@ -234,12 +226,12 @@ export default function RunsDetails() {
   const [chartTable, setChartTable] = React.useState(null);
   const [userProcedure, setuserProcedure] = React.useState(editorData);
   const runsStatus = RunsStatusList;
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = React.useState(true)
   const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
-  const [state, setState] = React.useState({ content: '' });
+  const [state, setState] = React.useState({ content:"" });
   const formRef: any = React.useRef(null);
-  const [typePopup, settypePopup] = React.useState('');
+  const [typePopup, settypePopup]= React.useState('')
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -370,83 +362,90 @@ export default function RunsDetails() {
   const location: any = useLocation();
   // const runzValue = location.state?.props;
   // console.log(runzValue);
-  const [runzValue, setRunzValue] = React.useState<any>(location.state?.props);
-  const [userRunzID, setUserRunzID] = React.useState<any>({});
+  const [runzValue, setRunzValue] = React.useState<any>(location.state?.props)
+  const [userRunzID, setUserRunzID] = React.useState<any>({})
 
-  const procedureSliceData = useSelector((state: any) => state.runs.data);
-
-  var runzId: any = [];
-  runzId.push(runzValue?._id);
-  console.log('runsRow', runzId, runzValue);
-  var runzRow: any = [];
-  runzRow.push(runzValue);
-
+  const procedureSliceData = useSelector(
+    (state: any) => state.runs.data
+  );
+  
+  var runzId:any=[];
+  runzId.push(runzValue?._id)
+  console.log("runsRow",runzId,runzValue);
+  var runzRow:any= []
+  runzRow.push(runzValue)
+  
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       console.log(window.location.pathname.split('/'));
       const procedureId = { _id: window.location.pathname.split('/')[3] };
       dispatch(fetchSingleRunsData(procedureId));
-      const runz = {
-        runId: window.location.pathname.split('/')[3],
-      };
-      dispatch(fetchSingleUserRunzData(runz)).then((res) => {
+      const runz={
+        runId:window.location.pathname.split('/')[3] 
+      }
+      dispatch(fetchSingleUserRunzData(runz)).then((res)=>{
         console.log(res?.get_userRun?._id);
-        setUserRunzID(res?.get_userRun);
-      });
+        setUserRunzID(res?.get_userRun)
+        
+      })
     }
   }, []);
 
-  function isEmptyObject(obj: any) {
-    for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        return false;
-      }
+ function isEmptyObject(obj: any) {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      return false;
     }
-    return true;
   }
+  return true;
+}
+
+ 
 
   const handleReloadSingleData = () => {
     const procedureId = { _id: runzValue?._id };
     dispatch(fetchSingleRunsData(procedureId));
-    const runz = {
-      runId: window.location.pathname.split('/')[3],
-    };
-    dispatch(fetchSingleUserRunzData(runz)).then((res) => {
+    const runz={
+      runId:window.location.pathname.split('/')[3] 
+    }
+    dispatch(fetchSingleUserRunzData(runz)).then((res)=>{
       console.log(res?.get_userRun?._id);
-      setUserRunzID(res?.get_userRun);
-    });
+      setUserRunzID(res?.get_userRun)
+      
+    })
     // setRunzValue(procedureSliceData.get_run)
-  };
+  }
   React.useEffect(() => {
-    setRunzValue(runzValue);
-    setuserProcedure(userProcedure);
-    setState({ content: userProcedure });
-  }, [runzValue, userProcedure]);
-
+    setRunzValue(runzValue)
+    setuserProcedure(userProcedure)
+    setState({content:userProcedure})
+  
+  }, [runzValue, userProcedure])
+ 
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
     const timerId = setTimeout(() => {
       setIsLoader(false);
       setRunzValue(procedureSliceData?.get_run);
-      setuserProcedure(
-        procedureSliceData?.get_run?.procedureId[0]?.procedureDetials,
-      );
+      setuserProcedure(procedureSliceData?.get_run?.procedureId[0]?.procedureDetials);
     }, 2000);
-
+  
     // Clean up the timer on component unmount or if procedureSliceData changes
     return () => clearTimeout(timerId);
+  
   }, [procedureSliceData]);
 
   React.useEffect(() => {
+  
     const filtered =
-      userRunzID?.userProcedure &&
-      Object.entries(JSON.parse(userRunzID?.userProcedure)).filter(
-        ([key]) => key,
+    userRunzID?.userProcedure &&
+      Object.entries(JSON.parse( userRunzID?.userProcedure)).filter(
+        ([key]) => key 
       );
-    console.log(userProcedure);
-
+      console.log(userProcedure);
+      
     const obj = filtered && Object.fromEntries(filtered);
-    if (!isEmptyObject(obj && userProcedure)) {
+    if (!isEmptyObject(obj && userProcedure) ) {
       for (const [key, values] of Object.entries(obj)) {
         if (values && document.getElementById(key)) {
           // @ts-ignore
@@ -454,13 +453,14 @@ export default function RunsDetails() {
         }
       }
     }
-    console.log(obj);
-  }, [userRunzID?.userProcedure, state]);
+console.log(obj);
+  
+}, [userRunzID?.userProcedure,state]);
   console.log(runzValue);
 
-  React.useEffect(() => {
-    handleHtmlInput();
-  }, [state?.content, userRunzID?.userProcedure]);
+  React.useEffect(()=>{
+    handleHtmlInput()
+  },[state?.content,userRunzID?.userProcedure])
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -474,8 +474,6 @@ export default function RunsDetails() {
   const tableChartSlice = useSelector(
     (state) => state.tableChart.data?.static_chart,
   );
-
-  const getRunsSlice = useSelector((state: any) => state.runs.data);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -492,12 +490,6 @@ export default function RunsDetails() {
   React.useEffect(() => {
     dispatch(fetchTableChartData('655b261e7e26fb0012425184'));
   }, []);
-
-  React.useEffect(() => {
-    if (getRunsSlice) {
-      setUserRunzID(getRunsSlice.get_run);
-    }
-  }, [getRunsSlice]);
 
   React.useEffect(() => {
     const data: any = [];
@@ -523,10 +515,10 @@ export default function RunsDetails() {
               i === 0
                 ? 'left1'
                 : i === 1
-                ? 'right1'
-                : i === 2
-                ? 'left2'
-                : 'right2',
+                  ? 'right1'
+                  : i === 2
+                    ? 'left2'
+                    : 'right2',
             orientation: i % 2 === 0 ? 'left' : 'right',
             dataKey: `plot${[i + 1]}`,
             channelValue: null,
@@ -641,89 +633,91 @@ export default function RunsDetails() {
 
     setCharts(data);
   };
-  const handleChanges = (content: any) => {
-    console.log('content', content.querySelectorAll('input'));
-
+  const handleChanges = (content:any) => {
+    console.log("content",content.querySelectorAll("input"));
+    
     setState({ content });
   };
   console.log(state);
-  const [arr, setArr] = React.useState<any>([]);
+  const[arr,setArr]=React.useState<any>([])
   console.log(arr);
   const mergedData: any = [];
   const onSubmit = () => {
     handleHtmlInput();
 
     const tablesEles: any = document
-      ?.getElementById('content')
-      ?.querySelectorAll('table');
+      ?.getElementById("content")
+      ?.querySelectorAll("table");
     let finalTableTitleResult: any;
-    console.log('tablesEles', tablesEles);
-
+    console.log("tablesEles",tablesEles);
+    
     if (tablesEles) {
       const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
-        const headerCells = tablesInstance?.querySelectorAll('[data-column]');
+        const headerCells = tablesInstance?.querySelectorAll("[data-column]");
         const headerNames = Array.from(headerCells).map((header: any) => ({
-          key: header.getAttribute('data-column'),
+          key: header.getAttribute("data-column"),
           value: header.textContent.trim(),
         }));
-        const tableDataRows: any = tablesInstance.querySelectorAll('tbody tr');
-        console.log('tableDataRows', tableDataRows);
-
+        const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
+        console.log("tableDataRows",tableDataRows);
+        
         const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
-          const tableCells = tableDataRow.querySelectorAll('td[data-column]');
-          console.log('tableCells', tableCells);
-
+          const tableCells = tableDataRow.querySelectorAll("td[data-column]");
+          console.log("tableCells",tableCells);
+          
           return Array.from(tableCells).map((cell: any) => {
             const inputCntext = cell.querySelector('input[type="text"]');
-            console.log('inputCntext', inputCntext);
-
+            console.log("inputCntext",inputCntext);
+            
             if (inputCntext) {
-              console.log(cell.getAttribute('data-column'));
+              console.log(cell.getAttribute("data-column"));
               console.log(htmlInput[inputCntext.id]);
-
+              
               return {
-                key: cell.getAttribute('data-column'),
+                key: cell.getAttribute("data-column"),
                 value: htmlInput[inputCntext.id],
               };
             }
           });
         });
-        console.log('header', rowData);
+        console.log("header",rowData);
         return {
           headerNames: headerNames,
           rowData: rowData,
         };
       });
 
+
       const mergedDatasets = result.map((dataset) => {
         console.log(dataset);
-
+        
         for (let i = 0; i < dataset.rowData.length; i++) {
           const rowData = dataset.rowData[i];
-          console.log(dataset.rowData, 'header');
-
+          console.log(dataset.rowData,"header");
+          
           const mergedRow: any = {};
           for (let j = 0; j < rowData?.length; j++) {
             const header = dataset.headerNames[j];
-            console.log(header, 'header');
-
+            console.log(header,"header");
+            
             const value: any = rowData[j];
             mergedRow[header?.value] = value?.value;
           }
-          console.log('mergedRow', mergedRow);
-
+          console.log("mergedRow",mergedRow);
+          
           mergedData.push(mergedRow);
+        
         }
         return mergedData;
+        
       });
-      console.log('mergedDatasets', mergedDatasets);
-
-      let filteredData = mergedDatasets?.filter(
-        (sublist) => sublist?.some((obj: any) => Object?.keys(obj).length > 0),
+      console.log("mergedDatasets",mergedDatasets);
+      
+      let filteredData = mergedDatasets?.filter((sublist) =>
+        sublist?.some((obj: any) => Object?.keys(obj).length > 0)
       );
-      filteredData = filteredData?.map(
-        (sublist) =>
-          sublist?.filter((obj: any) => Object?.keys(obj).length > 0),
+      filteredData = filteredData?.map((sublist) =>
+        sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
       );
 
       const results = filteredData?.map((dataset, index) => {
@@ -743,25 +737,24 @@ export default function RunsDetails() {
       });
 
       const tablesin = document
-        ?.getElementById('content')
-        ?.querySelectorAll('[data-table]');
+        ?.getElementById("content")
+        ?.querySelectorAll("[data-table]");
       const getTitle: any = [];
 
       tablesin?.forEach((element, index) => {
         getTitle.push(element.textContent);
       });
+console.log("tablesin",tablesin);
 
       finalTableTitleResult = getTitle?.map((list: any, index: any) => {
         return { label: list, value: list, data: results[index] };
       });
     }
-    setArr(finalTableTitleResult);
-    console.log(htmlInput);
-    
+    setArr(finalTableTitleResult)
     let vals = Object.values(htmlInput);
-    const empty = vals.filter((item) => item === '');
-    console.log('finalTableTitleResult', empty);
-
+    const empty = vals.filter((item) => item === "");
+    console.log('finalTableTitleResult',finalTableTitleResult);
+    
     if (empty.length > 0) {
       toast('Must fill all Required Readings', {
         style: {
@@ -771,89 +764,85 @@ export default function RunsDetails() {
       });
     } else if (empty.length === 0) {
       handleHtmlInput();
-      var payload: any = {
-        runId: runzValue._id,
-        organisationId: '657420e5c63327a74f3c756a',
-        userProcedure: JSON.stringify(htmlInput),
-        static_chart_data: JSON.stringify(arr),
-      };
-      console.log(runzValue.status);
+      var payload:any ={
+              runId: runzValue._id,
+              organisationId:"657420e5c63327a74f3c756a",
+              userProcedure:JSON.stringify(htmlInput),
+              static_chart_data:JSON.stringify(finalTableTitleResult)
+        
+            }
+            console.log(runzValue.status);
+            
+           if(runzValue.status=="Created") {
+            dispatch(postUserRunsData(payload))
+            let payload1={
+              _id:runzValue._id,
+              status:'Started'
+            }
+            dispatch(fetchUpdateRunsData(payload1))
+          toast(`User Procedure Created !`, {
+            style: {
+              background: '#00bf70', color: '#fff'
+            }
+          });
+        }
+          else{
+           let payload2={
+            _id:userRunzID?._id,
+            organisationId:"657420e5c63327a74f3c756a",
+            userProcedure:JSON.stringify(htmlInput),
+            static_chart_data:JSON.stringify(finalTableTitleResult)
+           }
+            dispatch(UpdateUserRunsData(payload2))
+            
+            toast(`User Procedure updated !`, {
+              style: {
+                background: '#00bf70', color: '#fff'
+              }
+            });
+          }
+  }
+}
+//   const onSubmit=()=>{
+//     console.log(runzValue,state.content)
+//     var payload:any ={
+//       runId: runzValue._id,
+//       organisationId:"655376d2659b7b0012108a33",
+//       userProcedure:JSON.stringify(htmlInput),
 
-      if (runzValue.status == 'Created') {
-        dispatch(postUserRunsData(payload));
-        // let payload1={
-        //   _id:runzValue._id,
-        //   status:'Started'
-        // }
-        // dispatch(fetchUpdateRunsData(payload1))
-        toast(`User Procedure Created !`, {
-          style: {
-            background: '#00bf70',
-            color: '#fff',
-          },
-        });
-      } else {
-        let payload2 = {
-          _id: userRunzID?._id,
-          organisationId: '657420e5c63327a74f3c756a',
-          userProcedure: JSON.stringify(htmlInput),
-          static_chart_data: JSON.stringify(arr),
-        };
-        dispatch(UpdateUserRunsData(payload2));
+//     }
+//     console.log(runzValue.status);
+    
+//    if(runzValue.status=="Created") {
+//     dispatch(postUserRunsData(payload))
+//     let payload1={
+//       _id:runzValue._id,
+//       status:'Started'
+//     }
+//     dispatch(fetchUpdateRunsData(payload1))
+//   toast(`User Procedure Created !`, {
+//     style: {
+//       background: '#00bf70', color: '#fff'
+//     }
+//   });
+// }
+//   else{
+//    let payload2={
+//     _id:userRunzID?._id,
+//     organisationId:"655376d2659b7b0012108a33",
+//     userProcedure:JSON.stringify(htmlInput),
+//    }
+//     dispatch(UpdateUserRunsData(payload2))
+    
+//     toast(`User Procedure updated !`, {
+//       style: {
+//         background: '#00bf70', color: '#fff'
+//       }
+//     });
+//   }
 
-        toast(`User Procedure updated !`, {
-          style: {
-            background: '#00bf70',
-            color: '#fff',
-          },
-        });
-      }
-    }
-  };
-  //   const onSubmit=()=>{
-  //     console.log(runzValue,state.content)
-  //     var payload:any ={
-  //       runId: runzValue._id,
-  //       organisationId:"655376d2659b7b0012108a33",
-  //       userProcedure:JSON.stringify(htmlInput),
-
-  //     }
-  //     console.log(runzValue.status);
-
-  //    if(runzValue.status=="Created") {
-  //     dispatch(postUserRunsData(payload))
-  //     let payload1={
-  //       _id:runzValue._id,
-  //       status:'Started'
-  //     }
-  //     dispatch(fetchUpdateRunsData(payload1))
-  //   toast(`User Procedure Created !`, {
-  //     style: {
-  //       background: '#00bf70', color: '#fff'
-  //     }
-  //   });
-  // }
-  //   else{
-  //    let payload2={
-  //     _id:userRunzID?._id,
-  //     organisationId:"655376d2659b7b0012108a33",
-  //     userProcedure:JSON.stringify(htmlInput),
-  //    }
-  //     dispatch(UpdateUserRunsData(payload2))
-
-  //     toast(`User Procedure updated !`, {
-  //       style: {
-  //         background: '#00bf70', color: '#fff'
-  //       }
-  //     });
-  //   }
-
-  //   }
-  const handleColorPickerChange = (
-    event: any,
-    dataIndex: any,
-    keyIndex: any,
-  ) => {
+//   }
+  const handleColorPickerChange = (event: any, dataIndex: any, keyIndex:any) => {
     const data = [...charts];
     const values = { ...data[dataIndex] };
     values.tableChartOptionsList[keyIndex].color = event.target.value;
@@ -932,21 +921,20 @@ export default function RunsDetails() {
     const pdfWidth = typeof window !== 'undefined' && window.innerWidth;
     const pdfHeight = typeof window !== 'undefined' && window.innerHeight;
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
 
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          format: [pdfWidth, pdfHeight],
-        });
-
-        pdf.addImage(imgData, 'JPEG', 0, 0);
-        pdf.save('chart.pdf');
-      })
-      .catch((err) => {
-        console.log(err);
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        format: [pdfWidth, pdfHeight],
       });
+
+      pdf.addImage(imgData, 'JPEG', 0, 0);
+      pdf.save('chart.pdf');
+    }).catch((err)=>{
+      console.log(err);
+      
+    });
   };
   const dispatch: any = useDispatch();
   console.log(value, 'value');
@@ -970,13 +958,15 @@ export default function RunsDetails() {
       },
     });
     // reload();
-    handleReloadSingleData();
+    handleReloadSingleData()
   };
 
   const handleChartChange = (event: any) => {
     setSelectedChart(event.target.value);
   };
-  const htmlData: any = state?.content ? state?.content : '';
+  const htmlData: any = state?.content
+    ? state?.content
+    : "";
   const [htmlInput, setHtmlInput] = React.useState<any>({});
   const htmlToJSON: any = html2json?.html2json(htmlData);
 
@@ -984,19 +974,20 @@ export default function RunsDetails() {
   const handleHtmlInput = () => {
     let objects = {};
     // @ts-ignore
-    console.log(document?.getElementById('content')?.querySelectorAll('td'));
-
+    console.log(document ?.getElementById("content")
+    ?.querySelectorAll("td"));
+    
     let inputEl: any = document
-      ?.getElementById('content')
-      ?.querySelectorAll('input');
-    console.log('inputEl', inputEl);
+      ?.getElementById("content")
+      ?.querySelectorAll("input");
+console.log("inputEl",inputEl);
 
     inputEl?.forEach((ele: any) => {
       const { id, value } = ele;
       let temp = { [id]: value };
       objects = { ...objects, temp };
       console.log(id);
-
+      
       setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
       // @ts-ignore
       ele.onChange = (e) => {
@@ -1004,73 +995,158 @@ export default function RunsDetails() {
         setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
       };
     });
-    console.log('inputEl', objects);
+    console.log("inputEl",objects);
+    
   };
-  console.log('htmlInput', htmlInput);
-  const uploadVideo = async (e: any) => {
+  console.log('htmlInput',htmlInput);
+  const uploadVideo = async (e:any) => {
     const file = e.target.files[0];
     if (file) {
       const videoUrl = URL.createObjectURL(file);
-
+  
       if (editorRef.current) {
         const editor = editorRef.current.editor;
         editor.insertContent(
-          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`,
+          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
         );
       }
     }
   };
-  const handleEditorInit = (editor: any) => {
-    editor.ui.registry.addButton('uploadvideo', {
-      text: 'Upload Video',
+  const handleEditorInit = (editor:any) => {
+    editor.ui.registry.addButton("uploadvideo", {
+      text: "Upload Video",
       onAction: () => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'video/*');
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "video/*");
         input.onchange = uploadVideo;
         input.click();
       },
     });
   };
-  const handleAssignClick = (val: string) => {
+  const handleAssignClick = (val:string) => {
     setRunsOpen(true);
-    settypePopup(val);
+    settypePopup(val)
   };
   return (
     <PrivateRoute>
-      {!isLoader ? (
-        <>
-          {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
-          <Box className="runzdetails-page">
-            <Box className="top-section">
-              <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={10} md={10} lg={5} xl={6}>
-                    <Box>
-                      <Typography className="id-detail">
-                        {runzValue?.runNumber}
-                      </Typography>
-                      <Typography className="id-detail-title">
-                        {runzValue?.objective}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={2} md={2} lg={7} xl={6}>
-                    <Box
-                      sx={{
-                        display: { xs: 'none', lg: 'flex' },
-                        alignItems: 'center',
-                        height: '100%',
-                        justifyContent: 'end',
-                      }}
-                    >
+       {!isLoader ?
+       <>
+      {/* <EditPopup open={openDlg2Dialog} close={() => setDialog2Open(false)} /> */}
+      <Box className="runzdetails-page">
+        <Box className="top-section">
+          <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={10} md={10} lg={5} xl={6}>
+                <Box>
+                  <Typography className="id-detail">
+                    {runzValue?.runNumber}
+                  </Typography>
+                  <Typography className="id-detail-title">
+                    {runzValue?.objective}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={2} md={2} lg={7} xl={6}>
+                <Box
+                  sx={{
+                    display: { xs: 'none', lg: 'flex' },
+                    alignItems: 'center',
+                    height: '100%',
+                    justifyContent: 'end',
+                  }}
+                >
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    className="edit-btn"
+                    onClick={() => {
+                      handleAssignClick("assign")
+                    }}
+                  >
+                    <img
+                      src={shareimgarrow}
+                      alt="edit"
+                      style={{ marginRight: '8px' }}
+                    />
+                    Assign
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    className="edit-btn"
+                    onClick={() => {
+                      handleAssignClick('share')
+                    }}
+                  >
+                    <img
+                      src={shareimg}
+                      alt="edit"
+                      style={{ marginRight: '8px' }}
+                    />
+                    Share
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    className="edit-btn"
+                    onClick={() => {
+                      // setDialog2Open(true);
+                      runsPopupRef.current.open(true,runzValue);
+                    }}
+                  >
+                    <img src={edit} alt="edit" style={{ marginRight: '8px' }} />
+                    Edit
+                  </Button>
+                  <Button
+                    className="edit-btn"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      marginRight: '0rem',
+                    }}
+                    onClick={() => setMoreInfo(!moreInfo)}
+                  >
+                    More Info &nbsp;
+                    {/* <img
+                      src={KeyboardArrowDownIcon}
+                      alt="KeyboardArrowDownIcon"
+                      style={{ marginLeft: '8px' }}
+                    /> */}
+                    {!moreInfo ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+                  </Button>
+                </Box>
+                <Box
+                  sx={{
+                    display: { xs: 'block', lg: 'none' },
+                    textAlign: 'right',
+                  }}
+                >
+                  <IconButton
+                    aria-label="more"
+                    id="long-button"
+                    aria-controls={open ? 'long-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id="long-menu"
+                    MenuListProps={{
+                      'aria-labelledby': 'long-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>
                       <Button
                         type="submit"
                         variant="contained"
                         className="edit-btn"
-                        onClick={() => {
-                          handleAssignClick('assign');
-                        }}
                       >
                         <img
                           src={shareimgarrow}
@@ -1079,13 +1155,12 @@ export default function RunsDetails() {
                         />
                         Assign
                       </Button>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
                       <Button
                         type="submit"
                         variant="contained"
                         className="edit-btn"
-                        onClick={() => {
-                          handleAssignClick('share');
-                        }}
                       >
                         <img
                           src={shareimg}
@@ -1094,13 +1169,15 @@ export default function RunsDetails() {
                         />
                         Share
                       </Button>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
                       <Button
                         type="submit"
                         variant="contained"
                         className="edit-btn"
                         onClick={() => {
                           // setDialog2Open(true);
-                          runsPopupRef.current.open(true, runzValue);
+                          runsPopupRef.current.open(true);
                         }}
                       >
                         <img
@@ -1110,6 +1187,8 @@ export default function RunsDetails() {
                         />
                         Edit
                       </Button>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
                       <Button
                         className="edit-btn"
                         style={{
@@ -1118,253 +1197,154 @@ export default function RunsDetails() {
                           cursor: 'pointer',
                           marginRight: '0rem',
                         }}
-                        onClick={() => setMoreInfo(!moreInfo)}
                       >
-                        More Info &nbsp;
-                        {/* <img
-                      src={KeyboardArrowDownIcon}
-                      alt="KeyboardArrowDownIcon"
-                      style={{ marginLeft: '8px' }}
-                    /> */}
-                        {!moreInfo ? (
-                          <KeyboardArrowDown />
-                        ) : (
-                          <KeyboardArrowUp />
-                        )}
+                        More Info{' '}
+                        <img
+                          src={KeyboardArrowDownIcon}
+                          alt="KeyboardArrowDownIcon"
+                          style={{ marginLeft: '8px' }}
+                        />
                       </Button>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: { xs: 'block', lg: 'none' },
-                        textAlign: 'right',
-                      }}
-                    >
-                      <IconButton
-                        aria-label="more"
-                        id="long-button"
-                        aria-controls={open ? 'long-menu' : undefined}
-                        aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu
-                        id="long-menu"
-                        MenuListProps={{
-                          'aria-labelledby': 'long-button',
-                        }}
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                      >
-                        <MenuItem onClick={handleClose}>
-                          <Button
-                            type="submit"
-                            variant="contained"
-                            className="edit-btn"
-                          >
-                            <img
-                              src={shareimgarrow}
-                              alt="edit"
-                              style={{ marginRight: '8px' }}
-                            />
-                            Assign
-                          </Button>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
-                          <Button
-                            type="submit"
-                            variant="contained"
-                            className="edit-btn"
-                          >
-                            <img
-                              src={shareimg}
-                              alt="edit"
-                              style={{ marginRight: '8px' }}
-                            />
-                            Share
-                          </Button>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
-                          <Button
-                            type="submit"
-                            variant="contained"
-                            className="edit-btn"
-                            onClick={() => {
-                              // setDialog2Open(true);
-                              runsPopupRef.current.open(true);
-                            }}
-                          >
-                            <img
-                              src={edit}
-                              alt="edit"
-                              style={{ marginRight: '8px' }}
-                            />
-                            Edit
-                          </Button>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
-                          <Button
-                            className="edit-btn"
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              cursor: 'pointer',
-                              marginRight: '0rem',
-                            }}
-                          >
-                            More Info{' '}
-                            <img
-                              src={KeyboardArrowDownIcon}
-                              alt="KeyboardArrowDownIcon"
-                              style={{ marginLeft: '8px' }}
-                            />
-                          </Button>
-                        </MenuItem>
-                      </Menu>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-              <Box
-                className="assign-create"
-                sx={{
-                  padding: '24px 0px',
-                  margin: '0px 24px',
-                  display: moreInfo ? 'block' : 'none',
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                    <Box>
-                      <Typography className="id-detail">
-                        Test objective
-                      </Typography>
-                      <Typography
-                        className="id-detail"
-                        style={{
-                          fontSize: '16px',
-                          marginTop: '0.4rem',
-                        }}
-                      >
-                        {runzValue?.objective}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                    <Box>
-                      <Typography className="id-detail">Assigned by</Typography>
-                      <Typography
-                        className="id-detail"
-                        style={{
-                          fontSize: '16px',
-                          marginTop: '0.4rem',
-                        }}
-                      >
-                        Super Admin
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                    <Box>
-                      <Typography className="id-detail">Created by</Typography>
-                      <Typography
-                        className="id-detail"
-                        style={{
-                          fontSize: '16px',
-                          marginTop: '0.4rem',
-                        }}
-                      >
-                        Teacher A
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                    <Box>
-                      <Typography className="id-detail">Created on</Typography>
-                      <Typography
-                        className="id-detail"
-                        style={{
-                          fontSize: '16px',
-                          marginTop: '0.4rem',
-                        }}
-                      >
-                        {moment(parseInt(runzValue?.createdAt)).format(
-                          'MM/DD/YYYY',
-                        )}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                    <Box>
-                      <Typography className="id-detail">Status</Typography>
-                      {/* <FormControl
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+          <Box
+            className="assign-create"
+            sx={{
+              padding: '24px 0px',
+              margin: '0px 24px',
+              display: moreInfo ? 'block' : 'none',
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Test objective</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
+                    }}
+                  >
+                    {runzValue?.objective}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Assigned by</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
+                    }}
+                  >
+                    Super Admin
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Created by</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
+                    }}
+                  >
+                    Teacher A
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Created on</Typography>
+                  <Typography
+                    className="id-detail"
+                    style={{
+                      fontSize: '16px',
+                      marginTop: '0.4rem',
+                    }}
+                  >
+                    {moment(parseInt(runzValue?.createdAt)).format(
+                      'MM/DD/YYYY',
+                    )}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Box>
+                  <Typography className="id-detail">Status</Typography>
+                  {/* <FormControl
                     className="Status-info"
                     style={{ marginTop: '7px' }}
                   > */}
-                      <Box
-                        style={{ padding: '0px' }}
-                        // style={{
-                        //   borderRadius: '20px',
-                        //   color: 'white',
-                        //   width: '110px',
-                        //   padding: '9px 0px',
-                        //   alignItems: 'center',
-                        //   textAlign: 'center',
-                        //   height: '24px',
-                        //   display: 'flex',
-                        //   justifyContent: 'center',
-                        //   fontSize: '12px',
-                        //   backgroundColor:
-                        //     runzValue?.status == 'Created'
-                        //       ? '#8d8d8d'
-                        //       : runzValue?.status == 'Started'
-                        //         ? '#faaa49'
-                        //         : runzValue?.status == 'Complete'
-                        //           ? '#00bf70'
-                        //           : '#e2445c',
-                        // }}
-                      >
-                        <Select
-                          MenuProps={{
-                            disableScrollLock: true,
-                            marginThreshold: null,
-                          }}
-                          name="status"
-                          style={{ borderRadius: '11px', color: 'white' }}
-                          className={
-                            runzValue?.status === 'Created'
-                              ? 'create-select td-select'
-                              : runzValue?.status === 'Started'
-                              ? 'start-select td-select'
-                              : runzValue?.status === 'Complete'
-                              ? 'active-select td-select'
-                              : 'inactive-select td-select'
-                          }
-                          value={
-                            runzValue?.status ? runzValue?.status : 'Stopped'
-                          }
-                          displayEmpty
-                          // onClick={(e: any) => clickHandler(e)}
-                          onChange={(e) => handleOnChange(e, runzValue)}
-                          IconComponent={ExpandMoreOutlinedIcon}
-                        >
-                          {runsStatus?.map((element: any) => (
-                            <MenuItem value={element.value} key={element.value}>
-                              {element.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                        {/* {runzValue?.status == 'Created'
+                    <Box
+                     style={{padding:"0px"}}
+                      // style={{
+                      //   borderRadius: '20px',
+                      //   color: 'white',
+                      //   width: '110px',
+                      //   padding: '9px 0px',
+                      //   alignItems: 'center',
+                      //   textAlign: 'center',
+                      //   height: '24px',
+                      //   display: 'flex',
+                      //   justifyContent: 'center',
+                      //   fontSize: '12px',
+                      //   backgroundColor:
+                      //     runzValue?.status == 'Created'
+                      //       ? '#8d8d8d'
+                      //       : runzValue?.status == 'Started'
+                      //         ? '#faaa49'
+                      //         : runzValue?.status == 'Complete'
+                      //           ? '#00bf70'
+                      //           : '#e2445c',
+                      // }}
+                    >
+                      <Select
+                            name="status"
+                          style={{borderRadius: "11px",color:"white"}}  
+
+                            className={
+                              runzValue?.status === 'Created'
+                                ? 'create-select td-select'
+                                : runzValue?.status === 'Started'
+                                ? 'start-select td-select'
+                                : runzValue?.status === 'Complete'
+                                ? 'active-select td-select'
+                                : 'inactive-select td-select'
+                            }
+                            value={runzValue?.status ? runzValue?.status : 'Stopped'}
+                            displayEmpty
+                            // onClick={(e: any) => clickHandler(e)}
+                            onChange={(e) => handleOnChange(e, runzValue)}
+                            IconComponent={ExpandMoreOutlinedIcon}
+                          >
+                            {runsStatus?.map((element: any) => (
+                              <MenuItem
+                                value={element.value}
+                                key={element.value}
+                              >
+                                {element.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                      {/* {runzValue?.status == 'Created'
                         ? 'Created'
                         : runzValue?.status == 'Started'
                           ? 'Started'
                           : runzValue?.status == 'Complete'
                             ? 'Completed'
                             : 'Stopped'} */}
-                      </Box>
-                      {/* <Select
+                    </Box>
+                    {/* <Select
                       labelId="Status-popup-label"
                       id="Status-info"
                       value={answers}
@@ -1387,9 +1367,9 @@ export default function RunsDetails() {
                               </MenuItem>
                             ))}
                     </Select> */}
-                      {/* </FormControl> */}
-                      {/* <FormControl className="Status-info"> */}
-                      {/* <Select
+                  {/* </FormControl> */}
+                  {/* <FormControl className="Status-info"> */}
+                  {/* <Select
                             name="status"
                             className={
                               runzValue?.status === 'Created'
@@ -1414,43 +1394,44 @@ export default function RunsDetails() {
                               </MenuItem>
                             ))}
                           </Select> */}
-                      {/* </FormControl> */}
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-              <Divider
-                sx={{ borderColor: '#FFEAA5', borderBottomWidth: '5px' }}
-              />
-            </Box>
-
-            <Box className="main-runzdetails runz-height">
-              <Box className="runz-height" sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 0 }}>
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="tabs-common"
-                    className="tabs-common"
-                  >
-                    <Tab label="Procedures" {...a11yProps(0)} />
-                    <Tab label="Charts" {...a11yProps(1)} />
-                    <Tab label="Results" {...a11yProps(2)} />
-                    <Tab label="Remarks" {...a11yProps(3)} />
-                  </Tabs>
+                  {/* </FormControl> */}
                 </Box>
-                <Box sx={{ paddingBottom: '6rem' }}>
-                  <CustomTabPanel value={value} index={0}>
-                    {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
-                    <div id="content" style={{ overflowY: 'scroll' }}>
-                      <form ref={formRef} onChange={handleHtmlInput}>
-                        {uses.map((el: any) =>
-                          parse(htmlToJSON && html2json.json2html(el)),
-                        )}
-                      </form>
-                    </div>
+              </Grid>
+            </Grid>
+          </Box>
+          <Divider sx={{ borderColor: '#FFEAA5', borderBottomWidth: '5px' }} />
+        </Box>
 
-                    {/* <Editor
+        <Box className="main-runzdetails runz-height">
+          <Box className="runz-height" sx={{ width: '100%' }}>
+            <Box sx={{ borderBottom: 0 }}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="tabs-common"
+                className="tabs-common"
+              >
+                <Tab label="Procedures" {...a11yProps(0)} />
+                <Tab label="Charts" {...a11yProps(1)} />
+                <Tab label="Results" {...a11yProps(2)} />
+                <Tab label="Remarks" {...a11yProps(3)} />
+              </Tabs>
+            </Box>
+            <Box sx={{ paddingBottom: '6rem' }}>
+              <CustomTabPanel value={value} index={0}>
+                {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
+                <div
+            id="content"
+            style={{ overflowY: "scroll" }}
+          >
+            <form ref={formRef} onChange={handleHtmlInput}>
+              {uses.map((el: any) =>
+                parse(htmlToJSON && html2json.json2html(el))
+              )}
+            </form>
+          </div>
+
+                {/* <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   init={{
@@ -1521,273 +1502,264 @@ export default function RunsDetails() {
           // onChange={handleEditorChange}
           onEditorChange={handleChanges}
                 /> */}
-                  </CustomTabPanel>
-                  <CustomTabPanel value={value} index={1}>
-                    <Box id="divToPrint">
-                      <Box sx={{ px: 4, mb: 2 }}>
-                        <FormControl>
-                          <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                            value={selectedChart}
-                            onChange={handleChartChange}
-                          >
-                            <FormControlLabel
-                              value="Table_Chart"
-                              control={<Radio />}
-                              label="Table Chart"
-                              sx={{
-                                px: 2,
-                              }}
-                            />
-                            <FormControlLabel
-                              value="Realtime_Chart"
-                              control={<Radio />}
-                              label="Realtime Chart"
-                              sx={{
-                                px: 2,
-                              }}
-                            />
-                            <FormControlLabel
-                              value="Archived_Chart"
-                              disabled
-                              control={<Radio />}
-                              label="Archive Chart"
-                              sx={{
-                                px: 2,
-                              }}
-                            />
-                          </RadioGroup>
-                        </FormControl>
-                      </Box>
-                      {selectedChart === 'Table_Chart' ? (
-                        <TableChart />
-                      ) : selectedChart === 'Realtime_Chart' ? (
-                        <RealtimeChart />
-                      ) : (
-                        <Box>Archived Chart</Box>
-                      )}
-                    </Box>
-                  </CustomTabPanel>
-                  <CustomTabPanel value={value} index={2}>
-                    <Editor
-                      apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
-                      onInit={(evt, editor) => (editorRef.current = editor)}
-                      init={{
-                        height: 500,
-                        menubar: true,
-                        selector: 'textarea',
-                        plugins: [
-                          'advlist',
-                          'autolink',
-                          'lists',
-                          'link',
-                          'image',
-                          'charmap',
-                          'preview',
-                          'anchor',
-                          'searchreplace',
-                          'visualblocks',
-                          'code',
-                          'fullscreen',
-                          'insertdatetime',
-                          'media',
-                          'table',
-                          'code',
-                          'help',
-                          'wordcount',
-                          'image',
-                          'insertdatetime',
-                          'template',
-                          'insertinput customInsertButton customAlertButton subscript superscript charmap',
-                        ],
-                        toolbar:
-                          'undo redo | blocks formatselect | ' +
-                          'charmap subscript superscript bold italic | alignleft aligncenter ' +
-                          'alignright alignjustify | bullist numlist outdent indent | ' +
-                          'help |link image code table customInsertButton insertdatetime template insertinput customAlertButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
-                        image_advtab: true,
-                        image_title: true,
-                        automatic_uploads: true,
-                        file_picker_types: 'image',
-                        setup: function (editor) {
-                          handleEditorInit(editor);
-                          editor.ui.registry.addButton('customInsertButton', {
-                            icon: 'edit-block',
-                            tooltip: 'Insert Input Element',
-                            onAction: function (_) {
-                              // const value = nanoid(7);
-                              editor.insertContent(
-                                `&nbsp;<input type='text' >&nbsp;`,
-                              );
-                            },
-                          });
-                          editor.ui.registry.addButton('customVideoUpload', {
-                            text: 'Upload Video',
-                            onAction: function () {
-                              editor.insertContent(
-                                `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`,
-                              );
-                              // if (fileInputRef.current) {
-                              //   fileInputRef.current.click();
-                              // }
-                            },
-                          });
-                          editor.ui.registry.addButton('customAlertButton', {
-                            icon: 'temporary-placeholder', // Use the built-in alert icon
-                            // tooltip: 'Custom Alert',
-                            onAction: function (_) {
-                              const userInput = window.prompt(
-                                'Enter data key attribute',
-                              );
-                              console.log(userInput);
-                            },
-                          });
-                        },
-                        content_style:
-                          'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                      }}
-                    />
-                  </CustomTabPanel>
-
-                  <CustomTabPanel value={value} index={3}>
-                    <Editor
-                      apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
-                      onInit={(evt, editor) => (editorRef.current = editor)}
-                      init={{
-                        height: 500,
-                        menubar: true,
-                        selector: 'textarea',
-                        plugins: [
-                          'advlist',
-                          'autolink',
-                          'lists',
-                          'link',
-                          'image',
-                          'charmap',
-                          'preview',
-                          'anchor',
-                          'searchreplace',
-                          'visualblocks',
-                          'code',
-                          'fullscreen',
-                          'insertdatetime',
-                          'media',
-                          'table',
-                          'code',
-                          'help',
-                          'wordcount',
-                          'image',
-                          'insertdatetime',
-                          'template',
-                          'insertinput',
-                          'customInsertButton',
-                          'customAlertButton subscript superscript charmap',
-                        ],
-                        toolbar:
-                          'undo redo | blocks formatselect | ' +
-                          'charmap subscript superscript bold italic | alignleft aligncenter ' +
-                          'alignright alignjustify | bullist numlist outdent indent | ' +
-                          'help |link image code table customInsertButton insertdatetime template insertinput customAlertButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
-                        image_advtab: true,
-                        image_title: true,
-                        automatic_uploads: true,
-                        file_picker_types: 'image',
-                        setup: function (editor) {
-                          handleEditorInit(editor);
-                          editor.ui.registry.addButton('customInsertButton', {
-                            icon: 'edit-block',
-                            tooltip: 'Insert Input Element',
-                            onAction: function (_) {
-                              // const value = nanoid(7);
-                              editor.insertContent(
-                                `&nbsp;<input type='text' >&nbsp;`,
-                              );
-                            },
-                          });
-                          editor.ui.registry.addButton('customAlertButton', {
-                            icon: 'temporary-placeholder', // Use the built-in alert icon
-                            // tooltip: 'Custom Alert',
-                            onAction: function (_) {
-                              const userInput = window.prompt(
-                                'Enter data key attribute',
-                              );
-                              console.log(userInput);
-                            },
-                          });
-                          editor.ui.registry.addButton('customVideoUpload', {
-                            text: 'Upload Video',
-                            onAction: function () {
-                              editor.insertContent(
-                                `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`,
-                              );
-                              // if (fileInputRef.current) {
-                              //   fileInputRef.current.click();
-                              // }
-                            },
-                          });
-                        },
-                        content_style:
-                          'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                      }}
-                    />
-                  </CustomTabPanel>
-                </Box>
-              </Box>
-              <Box className="edit-details" sx={{ p: 2 }}>
-                <Button
-                  onClick={() => navigate('/runs')}
-                  variant="contained"
-                  className="cancel-btn"
-                >
-                  Back
-                </Button>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  {value == 1 && (
-                    <img
-                      onClick={() => printDocument()}
-                      src={printer}
-                      alt="printer"
-                      style={{ marginRight: '1rem', cursor: 'pointer' }}
-                    />
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={1}>
+                <Box id="divToPrint">
+                  <Box sx={{ px: 4, mb: 2 }}>
+                    <FormControl>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        value={selectedChart}
+                        onChange={handleChartChange}
+                      >
+                        <FormControlLabel
+                          value="Table_Chart"
+                          control={<Radio />}
+                          label="Table Chart"
+                          sx={{
+                            px: 2,
+                          }}
+                        />
+                        <FormControlLabel
+                          value="Realtime_Chart"
+                          control={<Radio />}
+                          label="Realtime Chart"
+                          sx={{
+                            px: 2,
+                          }}
+                        />
+                        <FormControlLabel
+                          value="Archived_Chart"
+                          disabled
+                          control={<Radio />}
+                          label="Archive Chart"
+                          sx={{
+                            px: 2,
+                          }}
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </Box>
+                  {selectedChart === 'Table_Chart' ? (
+                    <TableChart />
+                  ) : selectedChart === 'Realtime_Chart' ? (
+                    <RealtimeChart />
+                  ) : (
+                    <Box>Archived Chart</Box>
                   )}
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    className="add-btn"
-                    style={{ position: 'sticky' }}
-                    onClick={() => {
-                      value == 0 && onSubmit();
-                    }}
-                  >
-                    Save
-                  </Button>
                 </Box>
-              </Box>
-              {/* </Grid> */}
-              {/* </SplitPane> */}
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={2}>
+                <Editor
+                  apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  init={{
+                    height: 500,
+                    menubar: true,
+                    selector: 'textarea',
+                    plugins: [
+                      'advlist',
+                      'autolink',
+                      'lists',
+                      'link',
+                      'image',
+                      'charmap',
+                      'preview',
+                      'anchor',
+                      'searchreplace',
+                      'visualblocks',
+                      'code',
+                      'fullscreen',
+                      'insertdatetime',
+                      'media',
+                      'table',
+                      'code',
+                      'help',
+                      'wordcount',
+                      'image',
+                      'insertdatetime',
+                      'template',
+                      'insertinput customInsertButton customAlertButton subscript superscript charmap'
+                    ],
+                    toolbar:
+                      'undo redo | blocks formatselect | ' +
+                      'charmap subscript superscript bold italic | alignleft aligncenter ' +
+                      'alignright alignjustify | bullist numlist outdent indent | ' +
+                      'help |link image code table customInsertButton insertdatetime template insertinput customAlertButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                    image_advtab: true,
+                    image_title: true,
+                    automatic_uploads: true,
+                    file_picker_types: 'image',
+                    setup: function (editor) {
+                      handleEditorInit(editor);
+                      editor.ui.registry.addButton('customInsertButton', {
+                        icon: 'edit-block',
+                        tooltip: 'Insert Input Element',
+                        onAction: function (_) {
+                          // const value = nanoid(7);
+                          editor.insertContent(
+                            `&nbsp;<input type='text' >&nbsp;`,
+                          );
+                        },
+                      });
+                      editor.ui.registry.addButton("customVideoUpload", {
+                        text: "Upload Video",
+                        onAction: function () {
+                          editor.insertContent(
+                            `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
+                          );
+                          // if (fileInputRef.current) {
+                          //   fileInputRef.current.click();
+                          // }
+                        },
+                      });
+                      editor.ui.registry.addButton('customAlertButton', {
+                        icon: 'temporary-placeholder', // Use the built-in alert icon
+                        // tooltip: 'Custom Alert',
+                        onAction: function (_) {
+                          const userInput = window.prompt(
+                            'Enter data key attribute',
+                          );
+                          console.log(userInput);
+                        },
+                      });
+                    },
+                    content_style:
+                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  }}
+                />
+              </CustomTabPanel>
+
+              <CustomTabPanel value={value} index={3}>
+                <Editor
+                  apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  init={{
+                    height: 500,
+                    menubar: true,
+                    selector: 'textarea',
+                    plugins: [
+                      'advlist',
+                      'autolink',
+                      'lists',
+                      'link',
+                      'image',
+                      'charmap',
+                      'preview',
+                      'anchor',
+                      'searchreplace',
+                      'visualblocks',
+                      'code',
+                      'fullscreen',
+                      'insertdatetime',
+                      'media',
+                      'table',
+                      'code',
+                      'help',
+                      'wordcount',
+                      'image',
+                      'insertdatetime',
+                      'template',
+                      'insertinput',
+                      'customInsertButton',
+                      'customAlertButton subscript superscript charmap'
+                    ],
+                    toolbar:
+                      'undo redo | blocks formatselect | ' +
+                      'charmap subscript superscript bold italic | alignleft aligncenter ' +
+                      'alignright alignjustify | bullist numlist outdent indent | ' +
+                      'help |link image code table customInsertButton insertdatetime template insertinput customAlertButton uploadVideo tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry ',
+                    image_advtab: true,
+                    image_title: true,
+                    automatic_uploads: true,
+                    file_picker_types: 'image',
+                    setup: function (editor) {
+                      handleEditorInit(editor);
+                      editor.ui.registry.addButton('customInsertButton', {
+                        icon: 'edit-block',
+                        tooltip: 'Insert Input Element',
+                        onAction: function (_) {
+                          // const value = nanoid(7);
+                          editor.insertContent(
+                            `&nbsp;<input type='text' >&nbsp;`,
+                          );
+                        },
+                      });
+                      editor.ui.registry.addButton('customAlertButton', {
+                        icon: 'temporary-placeholder', // Use the built-in alert icon
+                        // tooltip: 'Custom Alert',
+                        onAction: function (_) {
+                          const userInput = window.prompt(
+                            'Enter data key attribute',
+                          );
+                          console.log(userInput);
+                        },
+                      });
+                      editor.ui.registry.addButton("customVideoUpload", {
+                        text: "Upload Video",
+                        onAction: function () {
+                          editor.insertContent(
+                            `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
+                          );
+                          // if (fileInputRef.current) {
+                          //   fileInputRef.current.click();
+                          // }
+                        },
+                      });
+                    },
+                    content_style:
+                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  }}
+                />
+              </CustomTabPanel>
             </Box>
           </Box>
-          <SuccessPopup ref={successPopupRef} type="edit" />
-          <RunsForm
-            formData={runzValue}
-            ref={runsPopupRef}
-            type="edit"
-            submitFormPopup={handleSubmitFormPopup}
-            handleReloadSingleData={handleReloadSingleData}
-          />
-          <AddPeoplePopup
-            open={runsOpen}
-            close={() => setRunsOpen(false)}
-            runzId={runzId}
-            runzRow={runzRow}
-            typePopup={typePopup}
-          />
-        </>
-      ) : (
-        <SpinerLoader isLoader={isLoader} />
-      )}
+          <Box className="edit-details" sx={{ p: 2 }}>
+            <Button
+              onClick={() => navigate('/runs')}
+              variant="contained"
+              className="cancel-btn"
+            >
+              Back
+            </Button>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center' }}
+             
+            >
+              {value == 1 && (
+                <img
+                onClick={() => printDocument()}
+                  src={printer}
+                  alt="printer"
+                  style={{ marginRight: '1rem', cursor: 'pointer' }}
+                />
+              )}
+              <Button type="submit" variant="contained" className="add-btn" style={{position:"sticky"}} onClick={()=>{value == 0 && onSubmit()}}>
+                Save
+              </Button>
+            </Box>
+          </Box>
+          {/* </Grid> */}
+          {/* </SplitPane> */}
+        </Box>
+      </Box>
+      <SuccessPopup ref={successPopupRef} type="edit" />
+      <RunsForm
+        formData={runzValue}
+        ref={runsPopupRef}
+        type="edit"
+        submitFormPopup={handleSubmitFormPopup}
+        handleReloadSingleData={handleReloadSingleData}
+      />
+      <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} 
+      runzId={runzId}
+      runzRow={runzRow}
+     typePopup={typePopup} 
+                />
+      </>:
+      <SpinerLoader isLoader={isLoader} />}
     </PrivateRoute>
   );
 }
