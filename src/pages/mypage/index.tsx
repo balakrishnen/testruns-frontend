@@ -325,8 +325,8 @@ export default function MyPage() {
     console.log(payload);
     
     dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-      setNotificationMesssage(res.data?.get_notification_message)
-      console.log(res.data?.get_notification_message);
+      setNotificationMesssage(res?.data?.get_notification_message)
+      console.log(res?.data?.get_notification_message);
       
     });
   }, []);
@@ -435,8 +435,8 @@ export default function MyPage() {
     await dispatch(fetchReadSingleMessageData(payload))
     console.log("notification3", userData?._id,"==",NotificationMessageSliceData);
     await dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
-      setNotificationMesssage(res.data?.get_notification_message)
-      console.log(res.data?.get_notification_message);
+      setNotificationMesssage(res?.data?.get_notification_message)
+      console.log(res?.data?.get_notification_message);
       
     });
 

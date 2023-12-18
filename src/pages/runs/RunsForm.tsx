@@ -284,7 +284,7 @@ const RunsForm = React.forwardRef(
     React.useEffect(() => {
       dispatch(fetchProcedureData({
         page: 1,
-        perPage: 25
+        perPage: 10
       }));
     }, []);
 
