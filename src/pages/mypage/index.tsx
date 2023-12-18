@@ -241,17 +241,21 @@ const customDayStyle = {
 export default function MyPage() {
   const dispatch: any = useDispatch();
   const [viewAllNotifications, setViewAllNotifications] = useState(false);
+
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 10,
+    assignedTo:loginUserSliceData?.verifyToken?._id,
+    assignedBy:loginUserSliceData?.verifyToken?._id,
     searchBy: null,
     search: null,
     sortBy: null,
     sortOrder: 'desc',
   });
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
   const [notificationQueryStrings, setNotificationQueryString] = React.useState({
     userId: loginUserSliceData?.verifyToken?._id
   });
