@@ -72,7 +72,10 @@ input[type=number] {
 
   .header-right-side {
     button {
-      padding: 2px 23px 1px 1px
+      // padding: 2px 23px 1px 1px
+      margin: 2px 23px 1px 1px;
+      padding: 0;
+      height: 26px;
     }
 
     .search-field {
