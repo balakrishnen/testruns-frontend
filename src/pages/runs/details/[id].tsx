@@ -372,6 +372,7 @@ export default function RunsDetails() {
   // const runzValue = location.state?.props;
   // console.log(runzValue);
   const [runzValue, setRunzValue] = React.useState<any>(location.state?.props);
+  const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
   const [userRunzID, setUserRunzID] = React.useState<any>({});
 
@@ -396,7 +397,7 @@ export default function RunsDetails() {
         setUserRunzID(res?.get_userRun);
       });
     }
-  }, []);
+  }, [value]);
 
   React.useEffect(() => {
     fetch('http://18.221.90.180:5000/runPython/')
@@ -443,7 +444,7 @@ export default function RunsDetails() {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
     setState({ content: userProcedure });
-  }, [runzValue, userProcedure]);
+  }, [runzValue, userProcedure,value]);
 
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
@@ -457,7 +458,7 @@ export default function RunsDetails() {
 
     // Clean up the timer on component unmount or if procedureSliceData changes
     return () => clearTimeout(timerId);
-  }, [procedureSliceData]);
+  }, [procedureSliceData,value]);
 
   React.useEffect(() => {
     const filtered =
@@ -477,12 +478,12 @@ export default function RunsDetails() {
       }
     }
     console.log(obj);
-  }, [userRunzID?.userProcedure, state]);
+  }, [userRunzID?.userProcedure, state,value]);
   console.log(runzValue);
 
   React.useEffect(() => {
     handleHtmlInput();
-  }, [state?.content, userRunzID?.userProcedure]);
+  }, [state?.content, userRunzID?.userProcedure,value]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -492,13 +493,13 @@ export default function RunsDetails() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [value, setValue] = React.useState(0);
   const tableChartSlice = useSelector(
     (state) => state.tableChart.data?.static_chart,
   );
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+
   };
   const editorRef: any = React.useRef(null);
   // const log = () => {
@@ -755,7 +756,7 @@ export default function RunsDetails() {
         ?.querySelectorAll('[data-table]');
       const getTitle: any = [];
 
-      results?.forEach((element, index) => {
+      tablesin?.forEach((element, index) => {
         getTitle.push(element.textContent);
       });
 
@@ -767,7 +768,7 @@ export default function RunsDetails() {
     setArr(finalTableTitleResult);
     let vals = Object.values(htmlInput);
     const empty = vals.filter((item) => item === '');
-    console.log('finalTableTitleResult', finalTableTitleResult);
+    console.log('**finalTableTitleResult**', finalTableTitleResult);
 
     if (empty.length > 0) {
       toast('Must fill all Required Readings', {

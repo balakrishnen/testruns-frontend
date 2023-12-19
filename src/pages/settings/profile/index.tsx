@@ -43,7 +43,7 @@ import { toast } from 'react-toastify';
 import { fetchSingleRoleData } from '../../../api/roleApi';
 import { fetchSingleUserData, fetchUpdateUserData } from '../../../api/userAPI';
 import { fileUploadData } from '../../../api/uploadAPI';
-import { updatePassword } from 'firebase/auth';
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
 import { auth } from '../../../firebase.config';
 import { log } from 'console';
 import AWS from 'aws-sdk';
@@ -203,7 +203,17 @@ const Profile = () => {
     );
 
     if (isMatch) {
-      await updatePassword(auth.currentUser, values.newpassword)
+      const auths =auth;
+      const user = auths.currentUser;
+      console.log(auths.currentUser);
+      
+      // TODO(you): prompt the user to re-provide their sign-in credentials
+      const  credential :any= EmailAuthProvider.credential(auths.currentUser?.email, values.password);
+      console.log(credential);
+      
+      await reauthenticateWithCredential(user, credential).then((res) => {
+        // User re-authenticated.
+         updatePassword(auth.currentUser, values.newpassword)
         .then((res) => {
           toast(`Password Reset successful !`, {
             style: {
@@ -218,11 +228,23 @@ const Profile = () => {
         .catch((err) => {
           toast(err, {
             style: {
-              background: '#00bf70',
+              background: '#d92828',
               color: '#fff',
             },
           });
         });
+        
+      }).catch((error) => {
+        toast(`Invalid user password !`, {
+          style: {
+            background: '#d92828',
+              color: '#fff',
+          },
+        });
+        console.log(error);
+
+      });
+
 
       // alert("password updated successful!");
       // navigate('/login')

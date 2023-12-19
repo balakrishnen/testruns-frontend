@@ -19,6 +19,7 @@ import '../../assets/styles/App.scss';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { fetchSingleUserData } from '../../api/userAPI';
+import { fetchNotificationMessageData } from '../../api/notificationMessageAPI';
 
 const mobileMenuId = 'primary-search-account-menu-mobile';
 
@@ -118,6 +119,7 @@ function AppHeader(props: any) {
     // console.log('wwwww',loginUserSliceData);
   const dispatch: any = useDispatch();
   const[userData, setUserData]=React.useState<any>({})
+  const[isAnyRead,setisAnyRead]=React.useState<boolean>(false)
  console.log(loginUserSliceData);
  
   React.useEffect(()=> {
@@ -134,6 +136,71 @@ function AppHeader(props: any) {
     // }
   },[loginUserSliceData]);
 
+  React.useEffect(() => {
+    // dispatch(fetchNotificationData());
+    // console.log("notification2", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
+    
+    let payload={
+      userId: loginUserSliceData?.verifyToken?._id
+    }
+    console.log(payload);
+    
+    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+      // setNotificationMesssage(res?.data?.get_notification_message)
+      console.log(res?.data?.get_notification_message)
+      // const notifications = [
+      //   {
+      //     "_id": "6576bd5ad1f88bacee008528",
+      //     "title": "procedure",
+      //     "userId": "657938c0619b9200129b1145",
+      //     "message": "procedure created",
+      //     "isRead": true,
+      //     "notificationRuleId": "null",
+      //     "isActive": "true",
+      //     "isDeleted": "false",
+      //     "createdAt": "1702280538228",
+      //     "__typename": "NotificationMessage"
+      //   },
+      //   {
+      //     "_id": "6576bd5ad1f88bacee008528",
+      //     "title": "procedure",
+      //     "userId": "657938c0619b9200129b1145",
+      //     "message": "procedure created",
+      //     "isRead": true,
+      //     "notificationRuleId": "null",
+      //     "isActive": "true",
+      //     "isDeleted": "false",
+      //     "createdAt": "1702280538228",
+      //     "__typename": "NotificationMessage"
+      //   },
+      //   {
+      //     "_id": "6576bd5ad1f88bacee008528",
+      //     "title": "procedure",
+      //     "userId": "657938c0619b9200129b1145",
+      //     "message": "procedure created",
+      //     "isRead": true,
+      //     "notificationRuleId": "null",
+      //     "isActive": "true",
+      //     "isDeleted": "false",
+      //     "createdAt": "1702280538228",
+      //     "__typename": "NotificationMessage"
+      //   }
+      //   // ... (other notification objects)
+      // ]
+      const notifications:any = res?.data?.get_notification_message?.message
+      // Check if at least one notification has isRead set to true
+      setisAnyRead(notifications.some((notification:any) => notification.isRead === false))
+      
+      // console.log(isAnyRead);
+    //   const notifications:any = res?.data?.get_notification_message?.message
+      
+    //   // Check if at least one notification has isRead set to true
+    //  setisAnyRead(notifications?.some((notification:any) => {console.log("isAnyRead",notification.isRead === false);
+    //  (notification.isRead === false)}))
+      
+    });
+  }, []);
+  console.log("isAnyRead2",isAnyRead);
   return (
     <Box className="app-bar-block">
       <AppBar
@@ -196,8 +263,9 @@ function AppHeader(props: any) {
             >
               <Badge
                 color="secondary"
-                variant={'dot'}
-                invisible={false}
+                // variant={isAnyRead==true?"dot":"standard"}
+                variant={isAnyRead==true?"dot":"standard"}
+                // invisible={isAnyRead==true?false:true}
                 className="red-badge"
               >
                 <img
