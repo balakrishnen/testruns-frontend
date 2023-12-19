@@ -399,25 +399,25 @@ export default function RunsDetails() {
     }
   }, [value]);
 
-  React.useEffect(() => {
-    fetch('http://18.221.90.180:5000/runPython/')
-      .then((res) => res.json())
-      .then((res) => {
-        const data = res?.Centrifugal[0];
-        let text: any = '';
-        Object.entries(data).forEach(([key, value]) => {
-          text =
-            text +
-            `<div>
-            <div>
-            <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
-            </div>
-          </div>`;
-        });
-        console.log('####', text);
-        setUserRunzResult(text + '</ul>');
-      });
-  }, [userRunzResult]);
+  // React.useEffect(() => {
+  //   fetch('http://18.221.90.180:5000/runPython/')
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       const data = res?.Centrifugal!==undefined && res?.Centrifugal[0];
+  //       let text: any = '';
+  //       Object.entries(data).forEach(([key, value]) => {
+  //         text =
+  //           text +
+  //           `<div>
+  //           <div>
+  //           <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+  //           </div>
+  //         </div>`;
+  //       });
+  //       console.log('####', text);
+  //       setUserRunzResult(text + '</ul>');
+  //     });
+  // }, [userRunzResult]);
 
   function isEmptyObject(obj: any) {
     for (let key in obj) {
@@ -669,31 +669,26 @@ export default function RunsDetails() {
     handleHtmlInput();
 
     const tablesEles: any = document
-      ?.getElementById('content')
-      ?.querySelectorAll('table');
+      ?.getElementById("content")
+      ?.querySelectorAll("table");
     let finalTableTitleResult: any;
-    console.log('tablesEles', tablesEles);
-
+    console.log(tablesEles);
+    
     if (tablesEles) {
       const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
-        const headerCells = tablesInstance?.querySelectorAll('[data-column]');
+        const headerCells = tablesInstance?.querySelectorAll("[data-column]");
         const headerNames = Array.from(headerCells).map((header: any) => ({
-          key: header.getAttribute('data-column'),
+          key: header.getAttribute("data-column"),
           value: header.textContent.trim(),
         }));
-        const tableDataRows: any = tablesInstance.querySelectorAll('tbody tr');
+        const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
         const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
-          const tableCells = tableDataRow.querySelectorAll('td[data-column]');
+          const tableCells = tableDataRow.querySelectorAll("td[data-column]");
           return Array.from(tableCells).map((cell: any) => {
-            const inputCntext = cell.querySelector('input[type="text"]');
-            console.log(inputCntext);
-
+            const inputCntext = cell.querySelector("input[type='text']");
             if (inputCntext) {
-              console.log(cell.getAttribute('data-column'));
-              console.log(htmlInput[inputCntext.id]);
-
               return {
-                key: cell.getAttribute('data-column'),
+                key: cell.getAttribute("data-column"),
                 value: htmlInput[inputCntext.id],
               };
             }
@@ -704,9 +699,9 @@ export default function RunsDetails() {
           rowData: rowData,
         };
       });
-      console.log('result', htmlInput);
-
+      console.log("result",result);
       const mergedDatasets = result.map((dataset) => {
+        const mergedData: any = [];
         for (let i = 0; i < dataset.rowData.length; i++) {
           const rowData = dataset.rowData[i];
           const mergedRow: any = {};
@@ -715,24 +710,19 @@ export default function RunsDetails() {
             const value: any = rowData[j];
             mergedRow[header?.value] = value?.value;
           }
-          console.log('mergedRow', mergedRow);
-
           mergedData.push(mergedRow);
         }
         return mergedData;
       });
-      console.log('mergedDatasets', mergedDatasets);
-
-      let filteredData = mergedDatasets?.filter(
-        (sublist) => sublist?.some((obj: any) => Object?.keys(obj).length > 0),
+      console.log("mergedDatasets",mergedDatasets);
+      let filteredData = mergedDatasets?.filter((sublist) =>
+        sublist?.some((obj: any) => Object?.keys(obj).length > 0)
       );
-      filteredData = filteredData?.map(
-        (sublist) =>
-          sublist?.filter((obj: any) => Object?.keys(obj).length > 0),
+      filteredData = filteredData?.map((sublist) =>
+        sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
       );
-
+      console.log("filteredData",filteredData);
       const results = filteredData?.map((dataset, index) => {
-        
         const subResult = [];
         const firstDataItem = dataset[index];
         for (const key in firstDataItem) {
@@ -747,13 +737,10 @@ export default function RunsDetails() {
         }
         return subResult;
       });
-      console.log('results', results);
-      // console.log("results",subResult);
 
-      // var resultofdata=()=>{ return results}
       const tablesin = document
-        ?.getElementById('content')
-        ?.querySelectorAll('[data-table]');
+        ?.getElementById("content")
+        ?.querySelectorAll("[data-table]");
       const getTitle: any = [];
 
       tablesin?.forEach((element, index) => {
@@ -764,10 +751,8 @@ export default function RunsDetails() {
         return { label: list, value: list, data: results[index] };
       });
     }
-    console.log('results', finalTableTitleResult);
-    setArr(finalTableTitleResult);
     let vals = Object.values(htmlInput);
-    const empty = vals.filter((item) => item === '');
+    const empty = vals.filter((item) => item === "");
     console.log('**finalTableTitleResult**', finalTableTitleResult);
 
     if (empty.length > 0) {
@@ -817,6 +802,41 @@ export default function RunsDetails() {
           },
         });
       }
+      console.log("asdf",JSON.stringify(htmlInput));
+      
+       fetch("http://18.221.90.180:5000/runPython", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(htmlInput),
+      }).then((res) => {
+        console.log(res)
+        fetch('http://18.221.90.180:5000/runPython/')
+        .then((res) => res.json())
+        .then((res) => {
+          const data = res?.Centrifugal!==undefined && res?.Centrifugal[0];
+          let text: any = '';
+          Object.entries(data).forEach(([key, value]) => {
+            text =
+              text +
+              `<div>
+              <div>
+              <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+              </div>
+            </div>`;
+          });
+          console.log('####', text);
+          setUserRunzResult(text + '</ul>');
+        });
+      }
+     
+      
+      )
+      .catch((err)=>{
+        console.log(err);
+        
+      })
     }
   };
 
@@ -1056,10 +1076,13 @@ export default function RunsDetails() {
       console.log(id);
 
       setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+      setHtmlInput((prev: any) => ({ ...prev, ["title"]: "Vibrational_magnetometer_acet"}));
+
       // @ts-ignore
       ele.onChange = (e) => {
         const { id, value } = e.target;
         setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+        setHtmlInput((prev: any) => ({ ...prev, ["title"]: "Vibrational_magnetometer_acet"}));
       };
     });
     console.log('inputEl', objects);
