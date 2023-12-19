@@ -288,13 +288,13 @@ export default function TableChart({ staticChartData }: any) {
               xs={12}
               sm={12}
               md={12}
-              lg={10}
-              xl={10}
+              lg={8}
+              xl={9}
               // sx={{ pr: 4 }}
               style={{ borderRight: '1px solid #e4e5e7' }}
             >
               <Grid container sx={{ px: 4 }}>
-                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                   <Select
                     labelId="view-all-label"
                     id="time-sec"
@@ -313,8 +313,9 @@ export default function TableChart({ staticChartData }: any) {
                     }
                     size="small"
                     style={{
-                      width: '250px',
+                      width: '100%',
                       borderRadius: '10px',
+                      marginBottom:'15px'
                     }}
                   >
                     {tableList?.map((item, index) => (
@@ -324,7 +325,7 @@ export default function TableChart({ staticChartData }: any) {
                     ))}
                   </Select>
                 </Grid>
-                <Grid item xs={6} sm={6} md={6} lg={6} xl={6} textAlign={'end'}>
+                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} textAlign={'end'}>
                   <>
                     <Button
                       variant="contained"
@@ -443,8 +444,8 @@ export default function TableChart({ staticChartData }: any) {
               xs={12}
               sm={12}
               md={12}
-              lg={2}
-              xl={2}
+              lg={4}
+              xl={3}
               style={{ overflowY: 'scroll' }}
             >
               <Grid container alignItems={'center'}>
