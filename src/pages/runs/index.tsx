@@ -64,6 +64,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
+import { fetchSingleUserData } from '../../api/userAPI';
 
 // table start
 
@@ -120,18 +121,44 @@ export default function Runs() {
     hasNextPage: false,
     hasPreviousPage: false,
   });
+
+  const runsSliceData = useSelector(
+    (state: any) => state.runs.data?.get_all_runs,
+  );
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+  const[userData, setUserData]=React.useState<any>({})
+
+
+  // React.useEffect(()=> {
+  //   let temp = { _id: loginUserSliceData?.verifyToken?._id };
+  //   // if (row?._id) {
+  //   dispatch(fetchSingleUserData(temp))
+  //     .then((isSucess: any) => {
+  //       setUserData(isSucess?.get_user)
+  //     })
+
+  //     .catch((err: any) => {
+  //       console.log(err);
+  //     })
+
+  //   // }
+  // }, [loginUserSliceData,runsSliceData]);
+
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 10,
+    assignedTo:loginUserSliceData?.verifyToken?._id,
+    assignedBy:loginUserSliceData?.verifyToken?._id,
     searchBy: null,
     search: null,
     sortBy: null,
     sortOrder: 'desc',
   });
 
-  const runsSliceData = useSelector(
-    (state: any) => state.runs.data?.get_all_runs,
-  );
+console.log("userDataRuns",userData)
+
   console.log('runsSliceData', runsSliceData);
 
   const departmentSliceData = useSelector(

@@ -34,14 +34,14 @@ function AppHeader(props: any) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const NotificationMessageSliceData = useSelector(
+  // const NotificationMessageSliceData = useSelector(
 
-    (state: any) => {
-      return state.notificationMessage.data?.get_notification_message
+  //   (state: any) => {
+  //     return state.notificationMessage.data?.get_notification_message
 
-    }
+  //   }
 
-  )
+  // )
   // let data = NotificationMessageSliceData?.message?.some((item) => !item.isRead)
   // console.log(data);
   

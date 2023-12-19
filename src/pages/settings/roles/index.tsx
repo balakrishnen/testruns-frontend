@@ -169,12 +169,14 @@ const Roles = () => {
 
   React.useEffect(() => {
     setFormValues(formValues)
+    console.log("formValues",formValues);
     setFormValues1(formValues1)
     setFormValues2(formValues2)
   }, [formValues,formValues1,formValues2]);
 
   React.useEffect(() => {
     setFormValues(roleSliceData[0])
+    console.log("formValues",roleSliceData);
     setFormValues1(roleSliceData[2])
     setFormValues2(roleSliceData[1])
   }, [roleSliceData]);
@@ -283,6 +285,18 @@ console.log(formValues);
   await dispatch(fetchSingleRoleData(payload1))
     
   }
+  const handleReset=async()=>{
+    let payload={
+      instituteId:loginUserSliceData?.instituteId
+    }
+    dispatch(fetchSingleRoleData(payload))
+    console.log("formValues",roleSliceData);
+    setFormValues(roleSliceData[0])
+    setFormValues1(roleSliceData[2])
+    setFormValues2(roleSliceData[1])
+  }
+  console.log(roleSliceData);
+  
   return (
     <Box className="role-setting-page">
       <Box
@@ -2660,7 +2674,7 @@ console.log(formValues);
         </Box>
       </Box>
       <Box className="edit-details" sx={{ p: 2 }}>
-        <Button type="submit" variant="contained" className="cancel-btn">
+        <Button  variant="contained" className="cancel-btn" onClick={()=>handleReset()}>
           Reset
         </Button>
         <Button type="submit" variant="contained" className="add-btn" onClick={()=>handleSave()}>

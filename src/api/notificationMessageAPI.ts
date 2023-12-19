@@ -3,7 +3,7 @@ import { GET_NOTIFICATION_MESSAGE ,READ_SINGLE_NOTIFICATION_MESSAGE, READ_BULK_N
 import { client } from '../utils/config';
 
 export const fetchNotificationMessageData = (payload: any)=> async (dispatch: any) => {
-    dispatch(fetchNotificationMessageStart());
+    // dispatch(fetchNotificationMessageStart());
     try {
         const response = await client.query({
             query: GET_NOTIFICATION_MESSAGE,
@@ -12,10 +12,10 @@ export const fetchNotificationMessageData = (payload: any)=> async (dispatch: an
         })
 
         console.log('response',response)
-
-        dispatch(fetchNotificationMessageSuccess(response.data));
+        return response
+        // dispatch(fetchNotificationMessageSuccess(response.data));
     } catch (error: any) {
-        dispatch(fetchNotificationMessageFailure(error.message))   
+        // dispatch(fetchNotificationMessageFailure(error.message))   
     }
 };
 

@@ -22,9 +22,10 @@ export default function AppNotificationDrawer({
   const [notificationQueryStrings, setNotificationQueryString] = React.useState({
     userId: ""
   });
-  const NotificationSliceData = useSelector(
-    (state: any) => state.notification.data?.get_all_notifications,
-  );
+  // const NotificationSliceData = useSelector(
+  //   (state: any) => state.notification.data?.get_all_notifications,
+  // );
+  const [notificationMesssage,setNotificationMesssage]=React.useState([])
 
   const NotificationMessageSliceData = useSelector(
 
@@ -59,12 +60,18 @@ export default function AppNotificationDrawer({
   },[loginUserSliceData]);
   React.useEffect(() => {
     // dispatch(fetchNotificationData());
+    console.log("notification2", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
+    
     let payload={
       userId: loginUserSliceData?.verifyToken?._id
     }
     console.log(payload);
     
-    dispatch(fetchNotificationMessageData(payload));
+    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+      setNotificationMesssage(res?.data?.get_notification_message)
+      console.log(res?.data?.get_notification_message);
+      
+    });
   }, []);
 
   const getTimeDifference = (notificationTime: any) => {
@@ -97,7 +104,11 @@ export default function AppNotificationDrawer({
       userId: userData?._id
     }
    await dispatch(fetchReadSingleMessageData(payload))
-   await dispatch(fetchNotificationMessageData(payload2));
+   await  dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
+    setNotificationMesssage(res?.data?.get_notification_message)
+    console.log(res?.data?.get_notification_message);
+    
+  });
 
   }
 
@@ -113,9 +124,15 @@ export default function AppNotificationDrawer({
     
     if(NotificationMessageSliceData?.message?.length!==0){
       await dispatch(fetchReadBulkMessageData(payload))
-      await dispatch(fetchNotificationMessageData(payload2));
+      await  dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
+        setNotificationMesssage(res?.data?.get_notification_message)
+        console.log(res?.data?.get_notification_message);
+        
+      });
     }
   }
+  console.log("notificationMesssage",notificationMesssage);
+  
   return (
     <>
     <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/>
@@ -158,7 +175,7 @@ export default function AppNotificationDrawer({
           </Typography>
         </Box>
         <Box sx={{ height: 'calc(100vh - 150px)', overflowY: 'auto' }}>
-          {NotificationMessageSliceData?.message.length!==0 ? NotificationMessageSliceData?.message?.map((row: any, index: any) => (
+          {notificationMesssage?.message?.length!==0 ? notificationMesssage?.message?.map((row: any, index: any) => (
             <Box className="notifications" key={index}
             style={{
               backgroundColor: row?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
