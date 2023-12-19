@@ -399,25 +399,25 @@ export default function RunsDetails() {
     }
   }, [value]);
 
-  React.useEffect(() => {
-    fetch('http://18.221.90.180:5000/runPython/')
-      .then((res) => res.json())
-      .then((res) => {
-        const data = res?.Centrifugal[0];
-        let text: any = '';
-        Object.entries(data).forEach(([key, value]) => {
-          text =
-            text +
-            `<div>
-            <div>
-            <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
-            </div>
-          </div>`;
-        });
-        console.log('####', text);
-        setUserRunzResult(text + '</ul>');
-      });
-  }, [userRunzResult]);
+  // React.useEffect(() => {
+  //   fetch('http://18.221.90.180:5000/runPython/')
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       const data = res?.Centrifugal!==undefined && res?.Centrifugal[0];
+  //       let text: any = '';
+  //       Object.entries(data).forEach(([key, value]) => {
+  //         text =
+  //           text +
+  //           `<div>
+  //           <div>
+  //           <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+  //           </div>
+  //         </div>`;
+  //       });
+  //       console.log('####', text);
+  //       setUserRunzResult(text + '</ul>');
+  //     });
+  // }, [userRunzResult]);
 
   function isEmptyObject(obj: any) {
     for (let key in obj) {
@@ -802,6 +802,41 @@ export default function RunsDetails() {
           },
         });
       }
+      console.log("asdf",JSON.stringify(htmlInput));
+      
+       fetch("http://18.221.90.180:5000/runPython", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(htmlInput),
+      }).then((res) => {
+        console.log(res)
+        fetch('http://18.221.90.180:5000/runPython/')
+        .then((res) => res.json())
+        .then((res) => {
+          const data = res?.Centrifugal!==undefined && res?.Centrifugal[0];
+          let text: any = '';
+          Object.entries(data).forEach(([key, value]) => {
+            text =
+              text +
+              `<div>
+              <div>
+              <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+              </div>
+            </div>`;
+          });
+          console.log('####', text);
+          setUserRunzResult(text + '</ul>');
+        });
+      }
+     
+      
+      )
+      .catch((err)=>{
+        console.log(err);
+        
+      })
     }
   };
 
@@ -1041,10 +1076,13 @@ export default function RunsDetails() {
       console.log(id);
 
       setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+      setHtmlInput((prev: any) => ({ ...prev, ["title"]: "Vibrational_magnetometer_acet"}));
+
       // @ts-ignore
       ele.onChange = (e) => {
         const { id, value } = e.target;
         setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
+        setHtmlInput((prev: any) => ({ ...prev, ["title"]: "Vibrational_magnetometer_acet"}));
       };
     });
     console.log('inputEl', objects);
