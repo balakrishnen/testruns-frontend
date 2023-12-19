@@ -208,7 +208,7 @@ const Profile = () => {
       console.log(auths.currentUser);
       
       // TODO(you): prompt the user to re-provide their sign-in credentials
-      const  credential :any= EmailAuthProvider.credential("admin@yopmail.com", values.password);
+      const  credential :any= EmailAuthProvider.credential(auths.currentUser?.email, values.password);
       console.log(credential);
       
       await reauthenticateWithCredential(user, credential).then((res) => {
