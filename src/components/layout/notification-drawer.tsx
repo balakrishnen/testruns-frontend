@@ -58,22 +58,34 @@ export default function AppNotificationDrawer({
       
     // }
   },[loginUserSliceData]);
-  React.useEffect(() => {
-    // dispatch(fetchNotificationData());
-    console.log("notification2", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
+  // React.useEffect(() => {
+  //   // dispatch(fetchNotificationData());
+  //   console.log("notification2", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
     
-    let payload={
-      userId: loginUserSliceData?.verifyToken?._id
-    }
-    console.log(payload);
+  //   let payload={
+  //     userId: loginUserSliceData?.verifyToken?._id
+  //   }
+  //   console.log(payload);
     
-    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-      setNotificationMesssage(res?.data?.get_notification_message)
-      console.log(res?.data?.get_notification_message);
+  //   dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+  //     setNotificationMesssage(res?.data?.get_notification_message)
+  //     console.log(res?.data?.get_notification_message);
       
-    });
-  }, []);
-
+  //   });
+  // }, []);
+  React.useEffect(() => {
+    if (openDrawer) {
+      // Fetch data only when the drawer is open
+      let payload = {
+        userId: loginUserSliceData?.verifyToken?._id
+      };
+      dispatch(fetchNotificationMessageData(payload)).then((res) => {
+        setNotificationMesssage(res?.data?.get_notification_message);
+        console.log(res?.data?.get_notification_message);
+      });
+    }
+  }, [openDrawer]);
+  
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: any = moment();
     const timestamp = parseInt(notificationTime);
