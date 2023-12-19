@@ -1346,3 +1346,54 @@ export const HistoryRows = [
     deletedAt: '02/10/2023',
   },
 ];
+
+export const TableChartStaticData: any = [
+  {
+    label: 'TABULAR COLUMN:1',
+    value: 'TABULAR COLUMN:1',
+    data: [
+      {
+        label: 'Volume Of NaOH Solution',
+        values: [21, 21],
+      },
+      {
+        label: 'Volume Of Oxalic Acid',
+        values: [21, 212],
+      },
+      {
+        label: 'Concordant Titrate Value',
+        values: [21, 12, 41, 5],
+      },
+      {
+        label: 'Initial',
+        values: [21, 1, 54, 45],
+      },
+      {
+        label: 'Final',
+        values: [21, 554],
+      },
+    ],
+  },
+  {
+    label: 'TABULAR COLUMN:2',
+    value: 'TABULAR COLUMN:2',
+    data: [
+      {
+        label: 'Volume Of NaOH Solution2',
+        values: [21, 21],
+      },
+      {
+        label: 'Volume Of Oxalic Acid2',
+        values: [21, 212],
+      },
+      {
+        label: 'Concordant Titrate Value2',
+        values: [21, 12, 41, 5],
+      },
+      {
+        label: 'Initial2',
+        values: [21, 1, 54, 45],
+      },
+    ],
+  },
+];
