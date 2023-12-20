@@ -375,7 +375,7 @@ function EnhancedTableHead(props: any) {
                                 return (
                                   <FormControl key={index} className="calender-sec">
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                      <DatePicker format="DD/MM/YYYY" disablePast/>
+                                      <DatePicker format='MM/DD/YYYY' disablePast/>
                                     </LocalizationProvider>
                                   </FormControl>
                                 );

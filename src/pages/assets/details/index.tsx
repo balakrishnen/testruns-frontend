@@ -422,7 +422,7 @@ export default function AssetDetails() {
                       <Box>
                         <label>Purchase date</label>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker disablePast format="DD/MM/YYYY" />
+                          <DatePicker disablePast format='MM/DD/YYYY' />
                         </LocalizationProvider>
                       </Box>
                     </Grid>
@@ -430,7 +430,7 @@ export default function AssetDetails() {
                       <Box>
                         <label>Guaranty/warranty/expiry date</label>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker disablePast format="DD/MM/YYYY" />
+                          <DatePicker disablePast format='MM/DD/YYYY'/>
                         </LocalizationProvider>
                       </Box>
                     </Grid>
