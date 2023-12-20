@@ -46,7 +46,7 @@ import { navigate } from 'gatsby';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().required("Procedure name is required" ),
-  createdAt: Yup.string().required('Created date is required'),
+  createdOn: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
   objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
@@ -154,7 +154,7 @@ const RunsForm = React.forwardRef(
           assignedTo: values.assignedTo,
           assignedBy: values.assignedBy,
           dueDate: values.dueDate,
-          createdAt: values.createdAt,
+          createdOn: values.createdOn,
           status: values.status,
           organisationId: values.organisationId,
           // procedureDetials:values.procedureDetials
@@ -172,7 +172,7 @@ const RunsForm = React.forwardRef(
           
         }
         else {
-          dispatch(postRunsData(runsValues));
+          dispatch(postRunsData(runsValues)); 
           
         }
         submitFormPopup();
@@ -184,7 +184,7 @@ const RunsForm = React.forwardRef(
         formik.setFieldError('name', '');
       }
     };
-    const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
+    const createdDate = type === 'edit' ? dayjs(moment(formData?.createdOn).format('MM/DD/YYYY')) : moment(dayjs()?.$d).format('MM/DD/YYYY');
 
     var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
     console.log(formData);
@@ -197,7 +197,7 @@ const RunsForm = React.forwardRef(
         procedureId: formData ? formData.procedureId?._id : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
-        createdAt: createdDate,
+        createdOn: createdDate,
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo:loginUserSliceData?.verifyToken?._id,
         status: "Created",
@@ -436,9 +436,9 @@ const RunsForm = React.forwardRef(
                     <Box style={{position:'relative'}}>
                       <label>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="MM/DD/YYYY" value={formik.values.createdAt} disabled disablePast />
+                        <DatePicker format="MM/DD/YYYY" value={formik.values.createdOn} disabled disablePast />
                       </LocalizationProvider>
-                      {formik.touched.createdAt && formik.errors.createdAt && (
+                      {formik.touched.createdOn && formik.errors.createdOn && (
                         <Typography className="error-field">
                           Created Date is required
                         </Typography>
