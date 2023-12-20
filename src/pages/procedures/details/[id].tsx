@@ -283,13 +283,13 @@ console.log(inputEl);
   console.log(htmlInput);
   const handleSave = (e:any) => {
   //  console.log(state);
-  // var assetIds: any = []
-  // assetName?.map((item: any) => (assetName.push(item?.id)))
+  var assetIds: any = []
+  assetName?.map((item: any) => (assetIds.push(item?.id)))
    const payload={
     _id: procedureData._id,
     name:formik.values.name,
     procedureDetials: state.content,
-    // assetId:assetIds
+    assetId:assetIds
    }
    handleHtmlInput();
 
