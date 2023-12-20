@@ -60,6 +60,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from "../../assets/images/Emptystate.svg";
+import dayjs from 'dayjs';
+
 const rows: ProceduresRowData[] = ProcedureRows;
 
 export default function Procedures() {
@@ -452,7 +454,8 @@ export default function Procedures() {
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
-    payload['search'] = value;
+    // payload['search'] = value;
+    payload['search'] = moment(value).format('YYYY-MM-DD');
     setQueryString(payload);
     setFilter(true);
   };
@@ -650,7 +653,7 @@ export default function Procedures() {
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                               format="DD/MM/YYYY"
-                              value={filterSearchValue}
+                              value={dayjs(filterSearchValue)}
                               onChange={(event: any) =>
                                 setFilterSearchValue(event.$d)
                               }

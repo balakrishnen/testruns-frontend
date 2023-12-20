@@ -64,6 +64,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
+import dayjs from 'dayjs';
 import { fetchSingleUserData } from '../../api/userAPI';
 
 // table start
@@ -413,7 +414,8 @@ console.log("userDataRuns",userData)
   const applyFilters = (field: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = field;
-    payload['search'] = value;
+    // payload['search'] = value;
+    payload['search'] = moment(value).format('YYYY-MM-DD');
     setQueryString(payload);
     setFilter(true)
   };
@@ -686,7 +688,7 @@ console.log("userDataRuns",userData)
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                               format="DD/MM/YYYY"
-                              value={filterSearchValue}
+                              value={dayjs(filterSearchValue)}
                               onChange={(event: any) =>
                                 setFilterSearchValue(event.$d)
                               }

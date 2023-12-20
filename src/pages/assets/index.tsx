@@ -39,6 +39,8 @@ import { navigate } from 'gatsby';
 import TableHeader from '../../components/table/TableHeader';
 import image_holder from '../../assets/images/image-holder.svg';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import {
   AssetsHeaders,
   DepartmentList,
@@ -65,7 +67,6 @@ import test from '../../assets/images/Noimage.png';
 import filterIcon from '../../assets/images/filter-icon1.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
@@ -78,7 +79,7 @@ export default function Assets() {
   const [headers, setHeaders] = React.useState<any>(AssetsHeaders);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
-  const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
+    const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const deletePopupRef: any = React.useRef(null);
@@ -103,7 +104,7 @@ export default function Assets() {
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [rowId, setRowId] = React.useState<any>([]);
-  console.log("rowId",rowId);
+
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
   const [loader, setLoader] = React.useState(false);
   const [filter, setFilter] = React.useState(false);
@@ -361,7 +362,7 @@ export default function Assets() {
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
-    payload['search'] = value;
+    payload['search'] = moment(value).format('YYYY-MM-DD');
     setQueryString(payload);
     setFilter(true);
   };
@@ -558,9 +559,9 @@ export default function Assets() {
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                               format="DD/MM/YYYY"
-                              value={filterSearchValue}
+                              value={dayjs(filterSearchValue)}
                               onChange={(event: any) =>
-                                setFilterSearchValue(event.$d)
+                                setFilterSearchValue(new Date(event.$d))
                               }
                             />
                           </LocalizationProvider>
