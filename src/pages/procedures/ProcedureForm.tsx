@@ -358,7 +358,7 @@ const ProcedureForm = React.forwardRef(
                     <Box className="bg-gray-input" style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="DD/MM/YYYY" value={createdOn} disabled disablePast />
+                        <DatePicker format='MM/DD/YYYY'value={createdOn} disabled disablePast />
                       </LocalizationProvider>
                       {formik.touched.perchasedDate &&
                         formik.errors.perchasedDate && (

@@ -244,7 +244,7 @@ const RunsForm = React.forwardRef(
     }, []);
 
     const handleDateChanges = (selectedDate: any, name: any) => {
-      const formattedDate = moment(selectedDate?.$d).format('YYYY-MM-DD');
+      const formattedDate = moment(selectedDate?.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
     }
     const handleConfirmationState = (state: number) => {

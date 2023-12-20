@@ -362,7 +362,7 @@ export default function Assets() {
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
-    payload['search'] = moment(value).format('YYYY-MM-DD');
+    payload['search'] = moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true);
   };
