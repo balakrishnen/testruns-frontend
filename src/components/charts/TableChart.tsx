@@ -149,6 +149,7 @@ export default function TableChart({ staticChartData }: any) {
     );
     data[index].selectedTable = event.target.value;
     data[index].channelsList = activeChannel;
+    data[index].xAxisValue = activeChannel[0].name;
     data[index].charts = [];
     data[index].channelOptions.forEach((element) => {
       element.channel = null;
@@ -291,13 +292,13 @@ export default function TableChart({ staticChartData }: any) {
               xs={12}
               sm={12}
               md={12}
-              lg={8}
-              xl={9}
+              lg={10}
+              xl={10}
               // sx={{ pr: 4 }}
               style={{ borderRight: '1px solid #e4e5e7' }}
             >
               <Grid container sx={{ px: 4 }}>
-                <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
                   <Select
                     labelId="view-all-label"
                     id="time-sec"
@@ -318,7 +319,7 @@ export default function TableChart({ staticChartData }: any) {
                     style={{
                       width: '100%',
                       borderRadius: '10px',
-                      marginBottom:'15px'
+                      marginBottom: '15px',
                     }}
                   >
                     {tableList?.map((item, index) => (
@@ -328,7 +329,15 @@ export default function TableChart({ staticChartData }: any) {
                     ))}
                   </Select>
                 </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} textAlign={'end'}>
+                <Grid
+                  item
+                  xs={6}
+                  sm={6}
+                  md={10}
+                  lg={10}
+                  xl={10}
+                  textAlign={'end'}
+                >
                   <>
                     <Button
                       variant="contained"
@@ -351,13 +360,25 @@ export default function TableChart({ staticChartData }: any) {
                   </>
                 </Grid>
               </Grid>
-              {JSON.stringify(data.charts)}
               <Box sx={{ mt: 4 }}>
                 <ResponsiveContainer width="100%" height={500}>
                   <LineChart data={data.charts}>
-                    <XAxis
+                    {/* <XAxis
                       dataKey="dataKey"
                       axisLine={{ fontSize: 12, dy: 4 }}
+                    /> */}
+                    <XAxis
+                      orientation="bottom"
+                      label={{
+                        value: data.xAxisValue,
+                        position: 'insideBottom',
+                        fill: 'blue',
+                      }}
+                      tick={{
+                        fontSize: 12,
+                      }}
+                      domain={[0, 100]}
+                      tickFormatter={customTickFormatter}
                     />
                     {data.channelOptions?.map((axis, axisIndex) => (
                       <YAxis
@@ -451,8 +472,8 @@ export default function TableChart({ staticChartData }: any) {
               xs={12}
               sm={12}
               md={12}
-              lg={4}
-              xl={3}
+              lg={2}
+              xl={2}
               style={{ overflowY: 'scroll' }}
             >
               <Grid container alignItems={'center'}>
@@ -638,3 +659,7 @@ const StaticData = [
     y4: Math.ceil(Math.random()),
   },
 ];
+
+const customTickFormatter = (value) => {
+  return `${value}`;
+};
