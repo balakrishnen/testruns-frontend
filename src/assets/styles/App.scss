@@ -113,7 +113,7 @@ input[type=number] {
   .MuiDrawer-docked.app-drawer.openmenu {
     display: block;
     position: fixed;
-    z-index: 5;
+    z-index: 99;
   }
 }
 

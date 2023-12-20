@@ -678,7 +678,7 @@ const Users = () => {
                   rows={queryStrings.perPage}
                 />
               </TableBody>
-            ) : !userData || userData.length === 0 && loader!==false? (
+            ) : !userData || userData.length === 0 && loader==false? (
               <TableBody>
                 <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
                     <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>

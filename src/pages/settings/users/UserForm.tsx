@@ -165,7 +165,13 @@ const UserForm = React.forwardRef(
           userValues['uid'] = res.user.uid,
           dispatch(postUserData(userValues));
           submitFormPopup();
-        });
+        }).catch((err)=>{
+          toast(`This user email is already exists!`, {
+            style: {
+              background: '#FFC60B', color: 'black'
+            }
+            })
+        })
         }catch (err){
           console.error(err);
         }
