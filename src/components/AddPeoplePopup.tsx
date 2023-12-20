@@ -37,9 +37,12 @@ React.useEffect(()=>{
   setAlluserData(allUserData)
  },[allUserData])
 
-  React.useEffect(()=>{
-    dispatch(fetchAllUser())
-  },[])
+ React.useEffect(() => {
+  if (typePopup === 'addpeople') {
+    
+    dispatch(fetchAllUser());
+  }
+}, [typePopup]);
   const userSliceData = useSelector(
     (state: any) => state.userLogin?.data?.verifyToken,
   );
