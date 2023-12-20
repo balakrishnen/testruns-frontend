@@ -437,7 +437,12 @@ const uploadVideo = async (e:any) => {
   const file = e.target.files[0];
   if (file) {
     const videoUrl = URL.createObjectURL(file);
-
+         console.log('videoUrl',videoUrl);
+        //  toast(`Video uploaded !`, {
+        //   style: {
+        //     background: '#00bf70', color: '#fff'
+        //   }
+        // });
     if (editorRef.current) {
       const editor = editorRef.current.editor;
       editor.insertContent(
