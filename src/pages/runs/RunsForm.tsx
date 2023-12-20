@@ -186,10 +186,10 @@ const RunsForm = React.forwardRef(
         formik.setFieldError('name', '');
       }
     };
-    const createdDate = type === 'edit' ? dayjs(moment(formData?.createdOn).format('MM/DD/YYYY')) : moment(dayjs()?.$d).format('MM/DD/YYYY');
+    const createdDate = type === 'edit' ? dayjs(moment(formData?.createdOn).format('MM/DD/YYYY')) : dayjs(moment(new Date()).format('MM/DD/YYYY')) ;
 
     var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
-    console.log(formData);
+    console.log("date",moment(new Date()).format('MM/DD/YYYY'));
 
     const formik = useFormik({
       initialValues: {
@@ -199,7 +199,7 @@ const RunsForm = React.forwardRef(
         procedureId: formData ? formData.procedureId?._id : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
-        createdOn: createdDate,
+        createdOn: type=='edit' ? createdDate : dayjs(moment(new Date()).format('MM/DD/YYYY')),
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo:loginUserSliceData?.verifyToken?._id,
         status: "Created",
