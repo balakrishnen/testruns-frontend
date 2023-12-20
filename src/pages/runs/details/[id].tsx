@@ -452,7 +452,7 @@ export default function RunsDetails() {
       setIsLoader(false);
       setRunzValue(procedureSliceData?.get_run);
       setuserProcedure(
-        procedureSliceData?.get_run?.procedureId[0]?.procedureDetials,
+        procedureSliceData?.get_run?.procedureId?.procedureDetials,
       );
     }, 2000);
 
@@ -477,9 +477,9 @@ export default function RunsDetails() {
         }
       }
     }
-    console.log(obj);
+    console.log(userRunzID?.userProcedure);
   }, [userRunzID?.userProcedure, state,value]);
-  console.log(runzValue);
+  console.log(runzValue?.userProcedure);
 
   React.useEffect(() => {
     handleHtmlInput();
