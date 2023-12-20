@@ -32,7 +32,7 @@ import SpinerLoader from '../../../components/SpinnerLoader';
 const validationSchema = Yup.object().shape({
   name: Yup.string().trim().required('Label is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(20, 'Must be 20 characters or less'),
   assets: Yup.array().notRequired(),
-  procedure: Yup.string().notRequired().max(20, 'Must be 20 characters or less'),
+  procedure: Yup.string().notRequired().max(50, 'Must be 50 characters or less'),
 });
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>

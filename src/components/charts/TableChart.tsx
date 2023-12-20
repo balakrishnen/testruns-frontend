@@ -94,7 +94,6 @@ export default function TableChart({ staticChartData }: any) {
   const [tableList, setTableList] = React.useState<any>([]);
   const [channelsList, setChannelsList] = React.useState<any>([]);
   const [displayCount, setDisplayCount] = React.useState(1);
-  const [cData, setCData] = React.useState<any>([]);
   const dispatch: any = useDispatch();
   const tableChartSlice: any = useSelector(
     (state) => state.tableChart.data?.static_chart,
@@ -109,7 +108,6 @@ export default function TableChart({ staticChartData }: any) {
       const data: any = [];
       const tableList: any = [];
       const channels: any = [];
-      // const charts: any = []
       TableChartStaticData.forEach((element, index) => {
         tableList.push({
           name: element.label,
@@ -123,7 +121,6 @@ export default function TableChart({ staticChartData }: any) {
             index: index,
             data: channel.values,
           });
-          // charts.push(channel.values)
         });
 
         data.push({
@@ -132,6 +129,7 @@ export default function TableChart({ staticChartData }: any) {
           channelsList: [],
           xAxisValue: null,
           yAxisOptions: yAxisOptions,
+          charts: [],
         });
       });
       setTableList(tableList);
@@ -151,10 +149,9 @@ export default function TableChart({ staticChartData }: any) {
     );
     data[index].selectedTable = event.target.value;
     data[index].channelsList = activeChannel;
-    data.forEach((element, key) => {
-      element.channelOptions.forEach((item, position) => {
-        data[key].channelOptions[position].channel = null;
-      });
+    data[index].charts = [];
+    data[index].channelOptions.forEach((element) => {
+      element.channel = null;
     });
     setChartData(data);
   };
@@ -162,21 +159,27 @@ export default function TableChart({ staticChartData }: any) {
   const handleChannelChange = (event, index, keys) => {
     const data: any = [...chartData];
     const channels: any = { ...data[index] };
-    const charts: any = [];
+    const charts: any = [...channels.charts];
     const axisPosition: any =
-      channels.channelOptions[keys].yAxisValue.charAt(
-        channels.channelOptions[keys].yAxisValue.length - 1,
+      channels.channelOptions[keys].dataKey.charAt(
+        channels.channelOptions[keys].dataKey.length - 1,
       ) - 1;
     channels.channelOptions[keys].channel = event.target.value;
-    channels.channelsList.forEach((element) => {
-      charts.push({
-        [`plot${axisPosition + 1}`]: element.data[axisPosition]
+    channels.channelsList.forEach((element, index) => {
+      if (channels.charts.length === 0) {
+        charts.push({
+          [`plot${axisPosition + 1}`]: element.data[axisPosition]
+            ? element.data[axisPosition]
+            : 0,
+        });
+      } else {
+        charts[index][`plot${axisPosition + 1}`] = element.data[axisPosition]
           ? element.data[axisPosition]
-          : 0,
-      });
+          : 0;
+      }
     });
+    data[index].charts = charts;
     setChartData(data);
-    setCData(charts);
   };
 
   const handleXAxisChange = (event, index) => {
@@ -288,13 +291,13 @@ export default function TableChart({ staticChartData }: any) {
               xs={12}
               sm={12}
               md={12}
-              lg={10}
-              xl={10}
+              lg={8}
+              xl={9}
               // sx={{ pr: 4 }}
               style={{ borderRight: '1px solid #e4e5e7' }}
             >
               <Grid container sx={{ px: 4 }}>
-                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                   <Select
                     labelId="view-all-label"
                     id="time-sec"
@@ -313,8 +316,9 @@ export default function TableChart({ staticChartData }: any) {
                     }
                     size="small"
                     style={{
-                      width: '250px',
+                      width: '100%',
                       borderRadius: '10px',
+                      marginBottom:'15px'
                     }}
                   >
                     {tableList?.map((item, index) => (
@@ -324,7 +328,7 @@ export default function TableChart({ staticChartData }: any) {
                     ))}
                   </Select>
                 </Grid>
-                <Grid item xs={6} sm={6} md={6} lg={6} xl={6} textAlign={'end'}>
+                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} textAlign={'end'}>
                   <>
                     <Button
                       variant="contained"
@@ -347,10 +351,14 @@ export default function TableChart({ staticChartData }: any) {
                   </>
                 </Grid>
               </Grid>
+              {JSON.stringify(data.charts)}
               <Box sx={{ mt: 4 }}>
                 <ResponsiveContainer width="100%" height={500}>
-                  <LineChart data={cData}>
-                    <XAxis dataKey="y1" axisLine={{ fontSize: 12, dy: 4 }} />
+                  <LineChart data={data.charts}>
+                    <XAxis
+                      dataKey="dataKey"
+                      axisLine={{ fontSize: 12, dy: 4 }}
+                    />
                     {data.channelOptions?.map((axis, axisIndex) => (
                       <YAxis
                         key={axisIndex}
@@ -443,8 +451,8 @@ export default function TableChart({ staticChartData }: any) {
               xs={12}
               sm={12}
               md={12}
-              lg={2}
-              xl={2}
+              lg={4}
+              xl={3}
               style={{ overflowY: 'scroll' }}
             >
               <Grid container alignItems={'center'}>
