@@ -98,7 +98,7 @@ export default function AssetDetails() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const today=moment().format('YYYY-MM-DD')
+  const today=moment().format('MM/DD/YYYY')
 
   const location: any = useLocation();
   const assetValue = location.state?.props;
@@ -261,7 +261,7 @@ export default function AssetDetails() {
   const handleDateChanges = (selectedDate:any,name:any) => {
     console.log(selectedDate);
     if(selectedDate!==null){
-      const formattedDate = moment(selectedDate?.$d).format('YYYY-MM-DD');
+      const formattedDate = moment(selectedDate?.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
     }
   };
@@ -320,8 +320,8 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(AssetId));
   //    }
   // }, []);
-  const purchaseDate=moment(assetValue?.perchasedDate).local().format('YYYY-MM-DD')
-  const expireDate=moment(assetValue?.expiryDate).local().format('YYYY-MM-DD')
+  const purchaseDate=moment(assetValue?.perchasedDate).local().format('MM/DD/YYYY')
+  const expireDate=moment(assetValue?.expiryDate).local().format('MM/DD/YYYY')
 console.log(assetValue?.organisationId,);
 
   const formik = useFormik({

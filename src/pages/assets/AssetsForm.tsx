@@ -114,7 +114,7 @@ const Addnewpopup = React.forwardRef(
         organisationId: values.organisationId,
         perchasedDate: values.perchasedDate,
        
-        lastUsedDate: moment().format("MM/DD/YYYY"),
+        lastUsedDate: moment().format('MM/DD/YYYY'),
         availability: values.availability,
         expiryDate: values.expiryDate,
         departmentId: deptArray,
@@ -157,7 +157,7 @@ const Addnewpopup = React.forwardRef(
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
-    const today = moment().format('YYYY-MM-DD');
+    const today = moment().format('MM/DD/YYYY');
 
     const formik = useFormik({
       initialValues: {
@@ -227,7 +227,7 @@ const Addnewpopup = React.forwardRef(
       }
     };
     const handleDateChanges = (selectedDate: any, name: any) => {
-      const formattedDate = moment(selectedDate.$d).format('YYYY-MM-DD');
+      const formattedDate = moment(selectedDate.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
     };
     console.log('formvalues',formik.values);
@@ -472,7 +472,7 @@ const Addnewpopup = React.forwardRef(
                           <label style={{marginBottom:'1em'}}>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}  name='perchasedDate'>
                             <DatePicker 
-                              format="DD/MM/YYYY"
+                              format='MM/DD/YYYY'
                               onChange={(selectedDate: any) =>
                                 handleDateChanges(selectedDate, 'perchasedDate')
                               }
@@ -505,7 +505,7 @@ const Addnewpopup = React.forwardRef(
                           <label style={{marginBottom:'1em'}}>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker disablePast
-                              format="DD/MM/YYYY"
+                              format='MM/DD/YYYY'
                               onChange={(selectedDate: any) =>
                                 handleDateChanges(selectedDate, 'expiryDate')
                               }
