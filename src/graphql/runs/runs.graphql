@@ -67,6 +67,7 @@ export const POST_RUNS = gql`
   mutation Create_run(
         $objective: String!
         $procedureId: String!
+        $createdOn: String!
         $organisationId:String!
         $departmentId: [String]!
         $laboratoryId: [String]!
@@ -80,6 +81,7 @@ export const POST_RUNS = gql`
         objective: $objective
         procedureId: $procedureId
         organisationId:$organisationId
+        createdOn: $createdOn
         departmentId: $departmentId
         laboratoryId: $laboratoryId
         assignedTo: $assignedTo
