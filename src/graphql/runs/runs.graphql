@@ -38,7 +38,7 @@ export const GET_RUNS = gql`
                 _id
                 name
                 procedureNumber
-                assetId
+                #assetId
               
             }
             departmentId {
@@ -141,7 +141,10 @@ query Get_run($_id: String!) {
             name
             procedureNumber
             procedureDetials
-            assetId
+            assetId{
+                _id
+                name
+            }
             
         }
     }
