@@ -440,6 +440,8 @@ export default function RunsDetails() {
     });
     // setRunzValue(procedureSliceData.get_run)
   };
+  console.log(procedureSliceData);
+  
   React.useEffect(() => {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
@@ -1077,13 +1079,13 @@ console.log(htmlInput,"htmlInput");
       console.log(id);
 
       setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
-      setHtmlInput((prev: any) => ({ ...prev, ["title"]: "Vibrational_magnetometer_acet"}));
+      setHtmlInput((prev: any) => ({ ...prev, ["title"]: procedureSliceData?.get_run?.procedureId?.name}));
 
       // @ts-ignore
       ele.onChange = (e) => {
         const { id, value } = e.target;
         setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
-        setHtmlInput((prev: any) => ({ ...prev, ["title"]: "Vibrational_magnetometer_acet"}));
+        setHtmlInput((prev: any) => ({ ...prev, ["title"]: procedureSliceData?.get_run?.procedureId?.name}));
       };
     });
     console.log('inputEl', objects);
