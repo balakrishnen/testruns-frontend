@@ -1057,6 +1057,7 @@ export default function RunsDetails() {
   const htmlData: any = state?.content ? state?.content : '';
   const [htmlInput, setHtmlInput] = React.useState<any>({});
   const htmlToJSON: any = html2json?.html2json(htmlData);
+console.log(htmlInput,"htmlInput");
 
   const uses = htmlToJSON?.child.map((ele: any) => ele);
   const handleHtmlInput = () => {
