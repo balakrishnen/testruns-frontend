@@ -292,13 +292,13 @@ export default function TableChart({ staticChartData }: any) {
               xs={12}
               sm={12}
               md={12}
-              lg={10}
+              lg={9}
               xl={10}
               // sx={{ pr: 4 }}
               style={{ borderRight: '1px solid #e4e5e7' }}
             >
               <Grid container sx={{ px: 4 }}>
-                <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
+                <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
                   <Select
                     labelId="view-all-label"
                     id="time-sec"
@@ -331,11 +331,11 @@ export default function TableChart({ staticChartData }: any) {
                 </Grid>
                 <Grid
                   item
-                  xs={6}
-                  sm={6}
-                  md={10}
-                  lg={10}
-                  xl={10}
+                  xs={12}
+                  sm={4}
+                  md={6}
+                  lg={8}
+                  xl={8}
                   textAlign={'end'}
                 >
                   <>
@@ -472,7 +472,7 @@ export default function TableChart({ staticChartData }: any) {
               xs={12}
               sm={12}
               md={12}
-              lg={2}
+              lg={3}
               xl={2}
               style={{ overflowY: 'scroll' }}
             >
