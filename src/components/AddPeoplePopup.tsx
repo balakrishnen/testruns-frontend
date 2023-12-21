@@ -38,7 +38,7 @@ React.useEffect(()=>{
  },[allUserData])
 
  React.useEffect(() => {
-  if (typePopup === 'addpeople') {
+  if (typePopup === 'assign' || typePopup==="share") {
     
     dispatch(fetchAllUser());
   }

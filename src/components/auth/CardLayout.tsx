@@ -58,6 +58,7 @@ export const CardLayout = ({ children }: any, props: any) => {
         departmentId: [],
         laboratoryId: [],
         instituteId: "65741c069d53d19df8321e6b",
+        createdOn:"12/21/2023"
       };
   
       await dispatch(postUserData(payload));
@@ -98,6 +99,7 @@ export const CardLayout = ({ children }: any, props: any) => {
             departmentId: [],
             laboratoryId: [],
             instituteId: "65741c069d53d19df8321e6b",
+            createdOn:"12/21/2023"
           }
           await dispatch(postUserData(payload))
          
