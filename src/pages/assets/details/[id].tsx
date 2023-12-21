@@ -76,7 +76,7 @@ function a11yProps(index: number) {
   };
 }
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Asset Name is required').max(20, 'Must be 20 characters or less'),
+  name: Yup.string().required('Asset Name is required').max(50, 'Must be 50 characters or less'),
   assetId: Yup.string().required(),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
   laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),

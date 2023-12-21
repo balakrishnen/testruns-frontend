@@ -362,7 +362,7 @@ export default function Assets() {
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
-    payload['search'] = moment(value).format('MM/DD/YYYY');
+    payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true);
   };
@@ -627,6 +627,8 @@ export default function Assets() {
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
+                        console.log('====================================',filterKey);
+                        console.log('====================================',filterSearchValue);
                       }}
                     >
                       Show results
