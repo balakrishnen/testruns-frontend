@@ -680,7 +680,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     type: 'select',
   },
   {
-    id: 'createdAt',
+    id: 'createdOn',
     label: 'Created on',
     filters: [
       {
