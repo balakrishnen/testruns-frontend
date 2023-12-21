@@ -531,6 +531,7 @@ export default function Procedures() {
                 open={filterAnchorOpen}
                 anchorEl={filterPopoverEl}
                 onClose={handleFilterPopoverClose}
+                disableScrollLock={true}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'left',

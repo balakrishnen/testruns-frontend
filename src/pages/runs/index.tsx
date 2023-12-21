@@ -508,7 +508,7 @@ console.log("userDataRuns",userData)
                   padding: '0px',
                   justifyContent: 'center',
                 }}
-                className="filterButton"
+                className="filterButton"                
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
                 <Badge
@@ -534,6 +534,7 @@ console.log("userDataRuns",userData)
                 open={filterAnchorOpen}
                 anchorEl={filterPopoverEl}
                 onClose={handleFilterPopoverClose}
+                disableScrollLock={true}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'left',
