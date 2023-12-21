@@ -443,6 +443,7 @@ const Users = () => {
               open={filterAnchorOpen}
               anchorEl={filterPopoverEl}
               onClose={handleFilterPopoverClose}
+              disableScrollLock={true}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
