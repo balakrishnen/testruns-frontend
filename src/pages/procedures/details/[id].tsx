@@ -30,9 +30,9 @@ import SpinerLoader from '../../../components/SpinnerLoader';
 // import ProceduresRichText from './Editor';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().trim().required('Label is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(50, 'Must be 50 characters or less'),
-  assets: Yup.array().notRequired(),
-  procedure: Yup.string().notRequired().max(50, 'Must be 50 characters or less'),
+  name: Yup.string().trim().required('Label is required').max(50, 'Must be 50 characters or less'),
+  asset_Name: Yup.array().required(),
+  procedure: Yup.string().required().max(50, 'Must be 50 characters or less'),
 });
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
@@ -151,7 +151,8 @@ export default function ProcedureDetails() {
   const successPopupRef: any = React.useRef(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [assetName, setAssetName] = React.useState<any>([])
-  console.log('assetName',assetName);
+  const [assetNamepatch, setAssetNamepatch] = React.useState<any>([])
+  console.log('assetName',assetNamepatch);
   const [state, setState] = React.useState({ content:"" });
   const [isLoader, setIsLoader] = React.useState(true)
   const onSubmit = (values: any) => {
@@ -179,7 +180,7 @@ export default function ProcedureDetails() {
   const formik = useFormik({
     initialValues: {
       name: procedureData?.name,
-      assets: '',
+      asset_Name: '',
       procedure: '',
       html:''
     },
@@ -292,6 +293,8 @@ console.log(inputEl);
   //  console.log(state);
   var assetIds: any = []
   assetName?.map((item: any) => (assetIds.push(item?.id)))
+  console.log('assetIds',assetIds);
+  
    const payload={
     _id: procedureData._id,
     name:formik.values.name,
@@ -577,7 +580,7 @@ const handleEditorInit = (editor) => {
                   <label>Assets name</label>
                   <Autocomplete
                     multiple
-                    id="departmentId"
+                    id="asset_Name"
                     disableCloseOnSelect
                     value={assetName}
                     options={assetsData !== undefined ? assetsData : []}
@@ -587,7 +590,7 @@ const handleEditorInit = (editor) => {
                     }
                     renderInput={(params) => <TextField {...params}  />}
                     fullWidth
-                    placeholder="Department"
+                    placeholder="asset_Name"
                     size="medium"
                     renderOption={(props, option: any, { selected }) => (
                       <React.Fragment>
@@ -600,13 +603,18 @@ const handleEditorInit = (editor) => {
                         </li>
                       </React.Fragment>
                     )}
-                    onChange={(_, selectedOptions: any) =>
-                      setAssetName(selectedOptions)
+                    // onChange={(_, selectedOptions: any) =>
+                    //   // setAssetName(selectedOptions)
+                    //   setAssetName(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                    // }
+                    onChange={(_, selectedOptions: any) => {
+                      setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                    }
                     }
                   />
-                  {formik.touched.assets && formik.errors.assets && (
+                  {formik.touched.asset_Name && formik.errors.asset_Name && (
                     <Typography className="error-field">
-                      {formik.errors.assets}
+                      {formik.errors.asset_Name}
                     </Typography>
                   )}
                 </Box>

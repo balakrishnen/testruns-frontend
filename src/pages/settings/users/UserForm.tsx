@@ -150,6 +150,7 @@ const UserForm = React.forwardRef(
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,
+          createdOn:"12/21/2023"
         }
         console.log(userValues);
         

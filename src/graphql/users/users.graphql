@@ -48,6 +48,7 @@ mutation Create_user(
        $role:String!
        $phoneNumber:String
        $instituteId: String!
+       $createdOn: String
     
 ) {
     create_user(
@@ -61,6 +62,7 @@ mutation Create_user(
         role:$role
         phoneNumber:$phoneNumber
         instituteId:$instituteId
+        createdOn:$createdOn
         
     )  {identitys {
             _id

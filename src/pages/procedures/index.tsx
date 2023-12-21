@@ -459,8 +459,9 @@ export default function Procedures() {
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
-    // payload['search'] = value;
-    payload['search'] = moment(value).format('MM/DD/YYYY');
+    console.log("key",key);
+    console.log("filterSearchValue",filterSearchValue);
+    payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true);
   };
@@ -537,6 +538,7 @@ export default function Procedures() {
                 open={filterAnchorOpen}
                 anchorEl={filterPopoverEl}
                 onClose={handleFilterPopoverClose}
+                disableScrollLock={true}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'left',

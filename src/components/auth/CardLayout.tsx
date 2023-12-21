@@ -58,6 +58,7 @@ export const CardLayout = ({ children }: any, props: any) => {
         departmentId: [],
         laboratoryId: [],
         instituteId: "65741c069d53d19df8321e6b",
+        createdOn:"12/21/2023"
       };
   
       await dispatch(postUserData(payload));
@@ -70,7 +71,7 @@ export const CardLayout = ({ children }: any, props: any) => {
   
       window.sessionStorage.setItem('isLoggedIn', 'true');
       navigate('/mypage');
-      toast(`Google Login successful !`, {
+      toast(`Google Login successfully !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }
@@ -98,6 +99,7 @@ export const CardLayout = ({ children }: any, props: any) => {
             departmentId: [],
             laboratoryId: [],
             instituteId: "65741c069d53d19df8321e6b",
+            createdOn:"12/21/2023"
           }
           await dispatch(postUserData(payload))
          
@@ -113,7 +115,7 @@ export const CardLayout = ({ children }: any, props: any) => {
            
               // setTimeout(()=>{
                 navigate('/mypage')
-                toast(`Microsoft Login successful !`, {
+                toast(`Microsoft Login successfully !`, {
                   style: {
                     background: '#00bf70', color: '#fff'
                   }

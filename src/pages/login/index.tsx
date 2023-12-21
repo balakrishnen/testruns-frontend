@@ -88,7 +88,7 @@ console.log('isMatch',isMatch);
          
             // setTimeout(()=>{
               navigate('/mypage')
-              toast(`Login successful !`, {
+              toast(`Login successfully !`, {
                 style: {
                   background: '#00bf70', color: '#fff'
                 }
@@ -296,7 +296,7 @@ console.log('isMatch',isMatch);
                 className="forgot-pass1"
                 
               >
-              version 2. 1. 0
+              version 2. 1. 2
               </Typography>
             </Box>
       <Box sx={{ mt: "2rem" }}>

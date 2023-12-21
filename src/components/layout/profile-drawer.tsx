@@ -228,7 +228,7 @@ export default function AppProfileDrawer({
       await dispatch(fetchUpdateUserData(userValues))
      await toggleProfileDrawer()
      await setEdit(true) 
-      await toast(`User Details updated successful !`, {
+      await toast(`User Details updated successfully !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }

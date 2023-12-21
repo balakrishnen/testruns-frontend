@@ -454,8 +454,8 @@ export default function MyPage() {
           className="table-outer"
           sx={{ width: '100%', marginTop: '0rem !important' }}
         >
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableContainer className="tableHeight2">
+            <Table sx={{ minWidth: 650,  position:'relative' }} stickyHeader aria-label="simple table" >
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
@@ -469,20 +469,26 @@ export default function MyPage() {
                   <TableCell align="right">Status</TableCell>
                 </TableRow>
               </TableHead>
-              {MyPageRunsData?.Runs.length == 0
-                ? <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
-                  <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>
-                    <img src={Emptystate} alt="" />
-                    <Typography className="no-remainder">
-                      Runs not found.
-                    </Typography>
-                  </Box></p> :
-                MyPageRunsData?.Runs.slice(
+{console.log(MyPageRunsData?.Runs.length==0)}
+              {MyPageRunsData?.Runs.length == 0 ?
+
+<TableBody>
+<p style={{ textAlign: 'center',  position:'absolute', left: '0rem', right: '0rem' }}>
+   <Box sx={{ textAlign: 'center', padding: "1%", width: "100%" }}>
+     <img src={Emptystate} alt="" />
+     <Typography className="no-remainder">
+     Runs not found.
+     </Typography>
+   </Box></p>
+</TableBody>
+
+                :
+              
+                  <TableBody>
+  {MyPageRunsData?.Runs.slice(
                   0,
                   viewAll ? MyPageRunsData?.Runs.length : rowsPerPage,
                 ).map((row: any, index: any) => (
-                  <TableBody>
-
 
                     <TableRow
                       key={row._id}
@@ -637,9 +643,9 @@ export default function MyPage() {
                         </Box>
                       </TableCell>
                     </TableRow>
-
+ ))}
                   </TableBody>
-                ))}
+}
             </Table>
           </TableContainer>
           <Box className="show-page">
