@@ -32,7 +32,7 @@ import SpinerLoader from '../../../components/SpinnerLoader';
 const validationSchema = Yup.object().shape({
   name: Yup.string().trim().required('Label is required').max(50, 'Must be 50 characters or less'),
   asset_Name: Yup.array().required(),
-  procedure: Yup.string().notRequired().max(50, 'Must be 50 characters or less'),
+  procedure: Yup.string().required().max(50, 'Must be 50 characters or less'),
 });
 
 const editorData = `<h2>ESTIMATION OF IRON BY COLORIMETRY</h2>
@@ -543,7 +543,7 @@ const handleEditorInit = (editor) => {
             <Grid container spacing={2} className="">
               <Grid item xs={12} sm={12} md={6} lg={6} className='prod-input-auto  prod-input'>
                 <Box style={{ position: 'relative' }}>
-                  <label>Procedure name123</label>
+                  <label>Procedure name</label>
                   <TextField
                     margin="none"
                     fullWidth

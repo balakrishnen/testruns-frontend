@@ -414,8 +414,7 @@ console.log("userDataRuns",userData)
   const applyFilters = (field: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = field;
-    // payload['search'] = value;
-    payload['search'] = moment(value).format('MM/DD/YYYY');
+    payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true)
   };

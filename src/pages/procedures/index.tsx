@@ -454,8 +454,7 @@ export default function Procedures() {
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
-    // payload['search'] = value;
-    payload['search'] = moment(value).format('MM/DD/YYYY');
+    payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true);
   };
