@@ -135,6 +135,12 @@ const Users = () => {
       setHeaders(headersList);
     };
   }, []);
+
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
+  const credencial =  loginUserSliceData?.verifyToken?.role[0]
   
   React.useEffect(() => {
     setLoader(true);
@@ -402,6 +408,7 @@ const Users = () => {
             onClick={() => {
               formPopupRef.current.open(true, 'create', {});
             }}
+            disabled={!credencial.user_management.create}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create User

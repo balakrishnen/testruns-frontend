@@ -133,6 +133,11 @@ export default function Procedures() {
   const proceduresIdSliceData = useSelector(
     (state: any) => state.procedure.data?.get_all_procedures,
   );
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
+  const credencial =  loginUserSliceData?.verifyToken?.role[0]
 
   const dispatch: any = useDispatch();
   const [procedureData, setProcedureData] = React.useState<any>([]);
@@ -490,6 +495,7 @@ export default function Procedures() {
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
+              disabled={!credencial.procedure_management.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Procedure

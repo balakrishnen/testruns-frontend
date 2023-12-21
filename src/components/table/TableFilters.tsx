@@ -29,7 +29,8 @@ import { Pagination } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import search from '../../assets/images/search.svg';
 import '../../assets/styles/procedure.scss';
-import bin from '../../assets/images/bin.svg';
+import bin from '../../assets/images/bin.svg';  
+import { useSelector } from 'react-redux';
 import share from '../../assets/images/Share.svg';
 import assign from '../../assets/images/share-arrow.svg';
 import CloseIcon from '@mui/icons-material/Close';
@@ -100,6 +101,20 @@ export default function TableFilters({
     setColumnAnchorEl(event.currentTarget);
   };
   console.log(runzId,runzRow);
+
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
+  const credencial =  loginUserSliceData?.verifyToken?.role[0]
+
+  // user_management
+  //runs_management
+  //procedure_management
+  // asset_management
+  // profile_management
+  // role_management
+  // console.log("credencial",credencial)
 
   const handleFilterPopoverClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -203,17 +218,36 @@ export default function TableFilters({
                 className="common-checkbox"
                 style={{ marginBottom: '0rem' }}
               />
-              {/* <DeletePopup open={isDeletePopupOpen} close={handleCloseDeletePopup} /> */}
-              <Button className="delete-actions" onClick={deleteRecord}>
+              {/* <DeletePopup open={isDeletePopupOpen} close={handleCloseDeletePopup} /> */} 
+              {
+                module == 'procedures'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial.procedure_management.delete}>
+                <img src={bin} alt="Delete" className="Image-actions" />
+                Delete
+              </Button>)}
+              {
+                module == 'assets'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial.asset_management.delete}>
+                <img src={bin} alt="Delete" className="Image-actions" />
+                Delete
+              </Button>)}
+              {
+                module == 'users'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial.user_management.delete}>
+                <img src={bin} alt="Delete" className="Image-actions" />
+                Delete
+              </Button>)}
+              {
+               module == 'runs' && (
+                <Button className="delete-actions" onClick={deleteRecord} disabled={!credencial.runs_management.delete}>  
                 <img src={bin} alt="Delete" className="Image-actions" />
                 Delete
               </Button>
+               ) 
+              }
               {module == 'runs' && (
-                <Button className="delete-actions" onClick={()=>handleAssignClick("assign")}>
+                <Button className="delete-actions" onClick={()=>handleAssignClick("assign")} disabled={!credencial.runs_management.assign}>
                   <img src={assign} alt="assign" className="Image-actions" />
-                  Assign
+                  Assign 
                 </Button>
-              )}
+              )}  
 
               <AddPeoplePopup
                 open={runsOpen}
@@ -223,7 +257,7 @@ export default function TableFilters({
                 typePopup={typePopup}
               />
                {module == 'runs' && (
-              <Button className="delete-actions" onClick={()=>handleAssignClick("share")}>
+              <Button className="delete-actions" onClick={()=>handleAssignClick("share")} disabled={!credencial.runs_management.share}>
                 <img src={share} alt="Share" className="Image-actions" />
                 Share
               </Button>

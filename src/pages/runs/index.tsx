@@ -131,13 +131,14 @@ export default function Runs() {
   );
   const[userData, setUserData]=React.useState<any>({})
 
+  const credencial = loginUserSliceData?.verifyToken?.role[0]?.runs_management
 
   // React.useEffect(()=> {
-  //   let temp = { _id: loginUserSliceData?.verifyToken?._id };
+  //   let temp = { _id: loginUserSliceData?.verifyToken } ;
   //   // if (row?._id) {
   //   dispatch(fetchSingleUserData(temp))
   //     .then((isSucess: any) => {
-  //       setUserData(isSucess?.get_user)
+  //       setUserData(loginUserSliceData?.verifyToken)
   //     })
 
   //     .catch((err: any) => {
@@ -145,7 +146,7 @@ export default function Runs() {
   //     })
 
   //   // }
-  // }, [loginUserSliceData,runsSliceData]);
+  // }, []);
 
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
@@ -158,9 +159,6 @@ export default function Runs() {
     sortOrder: 'desc',
   });
 
-console.log("userDataRuns",userData)
-
-  console.log('runsSliceData', runsSliceData);
 
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
@@ -493,6 +491,7 @@ console.log("userDataRuns",userData)
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
+              disabled={!credencial.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Run

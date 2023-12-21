@@ -168,6 +168,13 @@ export default function ProcedureDetails() {
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_procedure,
   );
+
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
+  const credencial =  loginUserSliceData?.verifyToken?.role[0]
+
   
   const formik = useFormik({
     initialValues: {
@@ -522,6 +529,7 @@ const handleEditorInit = (editor) => {
                     onClick={() => {
                       formPopupRef.current.open(true ,procedureData);
                     }}
+                    disabled={!credencial.procedure_management.edit}
                   >
                     <img src={edit} alt="edit" style={{ marginRight: '8px' }} />
                     Edit

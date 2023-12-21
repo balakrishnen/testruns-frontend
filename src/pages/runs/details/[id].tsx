@@ -267,6 +267,12 @@ export default function RunsDetails() {
     { name: 'Time', value: 'Time' },
   ]);
 
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
+  const credencial =  loginUserSliceData?.verifyToken?.role[0]
+
   const [charts, setCharts] = React.useState<any>([]);
 
   const [chartLines, setChartLines] = React.useState([
@@ -1188,6 +1194,7 @@ console.log(htmlInput,"htmlInput");
                         onClick={() => {
                           handleAssignClick('assign');
                         }}
+                        disabled={!credencial.runs_management.assign}
                       >
                         <img
                           src={shareimgarrow}
@@ -1203,6 +1210,7 @@ console.log(htmlInput,"htmlInput");
                         onClick={() => {
                           handleAssignClick('share');
                         }}
+                        disabled={!credencial.runs_management.share}
                       >
                         <img
                           src={shareimg}
@@ -1219,6 +1227,7 @@ console.log(htmlInput,"htmlInput");
                           // setDialog2Open(true);
                           runsPopupRef.current.open(true, runzValue);
                         }}
+                        disabled={!credencial.runs_management.edit}
                       >
                         <img
                           src={edit}
