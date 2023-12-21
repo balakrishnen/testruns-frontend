@@ -440,6 +440,8 @@ export default function RunsDetails() {
     });
     // setRunzValue(procedureSliceData.get_run)
   };
+  console.log(procedureSliceData);
+  
   React.useEffect(() => {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
@@ -452,7 +454,7 @@ export default function RunsDetails() {
       setIsLoader(false);
       setRunzValue(procedureSliceData?.get_run);
       setuserProcedure(
-        procedureSliceData?.get_run?.procedureId[0]?.procedureDetials,
+        procedureSliceData?.get_run?.procedureId?.procedureDetials,
       );
     }, 2000);
 
@@ -477,9 +479,9 @@ export default function RunsDetails() {
         }
       }
     }
-    console.log(obj);
+    console.log(userRunzID?.userProcedure);
   }, [userRunzID?.userProcedure, state,value]);
-  console.log(runzValue);
+  console.log(runzValue?.userProcedure);
 
   React.useEffect(() => {
     handleHtmlInput();
@@ -802,8 +804,27 @@ export default function RunsDetails() {
           },
         });
       }
-      console.log("asdf",JSON.stringify(htmlInput));
+      const data = {
+        "value_1ZyZJXD": "0",
+        // ... (other key-value pairs)
+        "value_jouUqbl": "33"
+      };
       
+      // Add "title" property to the last object
+      data["title"] = "Vibrational_magnetometer_acet";
+      
+      // If you are working with React state, you can update the state using setState
+      // Assuming you have state like this:
+      // const [data, setData] = useState({ ... });
+      
+      // Update the state with the new data
+      // setData({ ...data, title: "Vibrational_magnetometer_acet" });
+      
+      // If you are working with a regular JavaScript object, you can just add the property directly.
+      
+      console.log("asdf",data)
+      console.log("asdf",JSON.stringify(htmlInput["title"]="adfad"));
+      htmlInput["title"]=procedureSliceData?.get_run?.procedureId?.name
        fetch("http://18.221.90.180:5000/runPython", {
         method: "POST", // or 'PUT'
         headers: {
@@ -815,7 +836,15 @@ export default function RunsDetails() {
         fetch('http://18.221.90.180:5000/runPython/')
         .then((res) => res.json())
         .then((res) => {
-          const data = res?.Centrifugal!==undefined && res?.Centrifugal[0];
+          console.log(res);
+          var newarray:any=[]
+          newarray=Object.keys(res)
+          console.log(newarray[0]);
+          
+          console.log(res[newarray][0]);
+          const data = res!==undefined ?res[newarray][0]:"";
+          console.log(data);
+          
           let text: any = '';
           Object.entries(data).forEach(([key, value]) => {
             text =
@@ -937,6 +966,7 @@ export default function RunsDetails() {
     values.tableChartOptionsList[keyIndex].color = event.target.value;
     setCharts(data);
   };
+console.log(userRunzResult);
 
   const handleAddChart = () => {
     const data = [...charts];
@@ -1077,15 +1107,20 @@ console.log(htmlInput,"htmlInput");
       console.log(id);
 
       setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
-      setHtmlInput((prev: any) => ({ ...prev, ["title"]: "Vibrational_magnetometer_acet"}));
-
+      // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
+      // setHtmlInput(prevData => ({
+      //   ...prevData,
+      //   title: "Vibrational_magnetometer_acet"
+      // }));
       // @ts-ignore
       ele.onChange = (e) => {
         const { id, value } = e.target;
         setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
-        setHtmlInput((prev: any) => ({ ...prev, ["title"]: "Vibrational_magnetometer_acet"}));
+        // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
       };
     });
+    // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
+
     console.log('inputEl', objects);
   };
   console.log('htmlInput', htmlInput);
