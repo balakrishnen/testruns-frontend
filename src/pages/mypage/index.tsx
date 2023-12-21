@@ -783,7 +783,7 @@ export default function MyPage() {
                 value={value}
                 tileClassName={({ date, view }) => {
                   if (
-                    CalendarMark.includes(moment(date).format('MM-DD-YYYY'))
+                    CalendarMark.includes(moment(date).format('MM/DD/YYYY'))
                   ) {
                     return 'events';
                   }

@@ -305,7 +305,7 @@ const Users = () => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = field;
     // payload['search'] = value;
-    payload['search'] = moment(value).format('YYYY-MM-DD');
+    payload['search'] = moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true);
   };
@@ -557,7 +557,7 @@ const Users = () => {
                       <Box id="filterDatePicker">
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DatePicker
-                            format="DD/MM/YYYY"
+                            format='MM/DD/YYYY'
                             value={dayjs(filterSearchValue)}
                             onChange={(event: any) =>
                               setFilterSearchValue(event.$d)

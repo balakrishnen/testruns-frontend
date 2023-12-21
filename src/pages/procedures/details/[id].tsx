@@ -30,7 +30,7 @@ import SpinerLoader from '../../../components/SpinnerLoader';
 // import ProceduresRichText from './Editor';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().trim().required('Label is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(20, 'Must be 20 characters or less'),
+  name: Yup.string().trim().required('Label is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(50, 'Must be 50 characters or less'),
   assets: Yup.array().notRequired(),
   procedure: Yup.string().notRequired().max(50, 'Must be 50 characters or less'),
 });
@@ -151,7 +151,7 @@ export default function ProcedureDetails() {
   const successPopupRef: any = React.useRef(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [assetName, setAssetName] = React.useState<any>([])
-  // console.log('assetName',assetName);
+  console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
   const [isLoader, setIsLoader] = React.useState(true)
   const onSubmit = (values: any) => {
@@ -283,13 +283,13 @@ console.log(inputEl);
   console.log(htmlInput);
   const handleSave = (e:any) => {
   //  console.log(state);
-  // var assetIds: any = []
-  // assetName?.map((item: any) => (assetName.push(item?.id)))
+  var assetIds: any = []
+  assetName?.map((item: any) => (assetIds.push(item?.id)))
    const payload={
     _id: procedureData._id,
     name:formik.values.name,
     procedureDetials: state.content,
-    // assetId:assetIds
+    assetId:assetIds
    }
    handleHtmlInput();
 
@@ -433,25 +433,21 @@ const onChangeValue=(e:any)=>{
 console.log(e.target.value);
 
 }
-const uploadVideo = async (e:any) => {
+const uploadVideo = async (e) => {
   const file = e.target.files[0];
   if (file) {
     const videoUrl = URL.createObjectURL(file);
-         console.log('videoUrl',videoUrl);
-        //  toast(`Video uploaded !`, {
-        //   style: {
-        //     background: '#00bf70', color: '#fff'
-        //   }
-        // });
+    console.log('videoUrl',videoUrl);
     if (editorRef.current) {
       const editor = editorRef.current.editor;
-      editor.insertContent(
+      editorRef.current.editor?.insertContent(
         `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
       );
     }
   }
 };
-const handleEditorInit = (editor:any) => {
+
+const handleEditorInit = (editor) => {
   editor.ui.registry.addButton("uploadvideo", {
     text: "Upload Video",
     onAction: () => {
@@ -628,9 +624,30 @@ const handleEditorInit = (editor:any) => {
                         menubar: true,
                         selector: 'textarea',
                         plugins: [
-                          'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount','image', 'insertdatetime' , 'template','insertinput customInsertButton charmap subscript superscript customDataAttrButton ' 
+                          'advlist',
+                          'autolink',
+                          'lists',
+                          'link',
+                          'image',
+                          'charmap',
+                          'preview',
+                          'anchor',
+                          'searchreplace',
+                          'visualblocks',
+                          'code',
+                          'fullscreen',
+                          'insertdatetime',
+                          'media',
+                          'table',
+                          'code',
+                          'help',
+                          'wordcount',
+                          'image',
+                          'insertdatetime',
+                          'template',
+                          'insertinput',
+                          'customInsertButton',
+                          'customAlertButton subscript superscript charmap',
                         ],
                         toolbar: 'undo redo | blocks formatselect | ' +
                         'charmap subscript superscript bold italic | alignleft aligncenter ' +
@@ -640,6 +657,7 @@ const handleEditorInit = (editor:any) => {
                     image_title: true,
                     automatic_uploads: true,
                     file_picker_types: "image",
+                    table_advtab: "true",
                     file_picker_callback: function (cb, value, meta) {
                       var input = document.createElement("input");
                       input.setAttribute("type", "file");
@@ -670,14 +688,14 @@ const handleEditorInit = (editor:any) => {
                         onAction: function (_) {
                           const value = nanoid(7);
                           editor.insertContent(
-                            `&nbsp;<input type='text' id='value_${value}' name='value_${value} onChange=${onChangeValue}'>&nbsp;`
+                            `&nbsp;<input type='text' id='value_${value}' name='value_${value}'>&nbsp;`
                           );
                         },
                       });
                       editor.ui.registry.addButton("customVideoUpload", {
                         text: "Upload Video",
                         onAction: function () {
-                          editor.insertContent(
+                          editor?.insertContent(
                             `<video width="320" height="240" controls><source src="${videoUrl}" type="video/mp4"></video>`
                           );
                           // if (fileInputRef.current) {

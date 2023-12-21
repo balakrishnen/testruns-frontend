@@ -46,12 +46,12 @@ import { navigate } from 'gatsby';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().required("Procedure name is required" ),
-  createdAt: Yup.string().required('Created date is required'),
+  createdOn: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
   objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
   // dueDate: Yup.date().required('Due Date is required'),
-  dueDate: Yup.string().required('Due Date is required').matches(/^(19|20)\d\d[-\/](0[1-9]|1[012])[-\/](0[1-9]|[12][0-9]|3[01])$/, 'invalid date'),
+  dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().notRequired(),
   organisationId:Yup.string().required('Procedure Name is required')
 });
@@ -109,17 +109,18 @@ const RunsForm = React.forwardRef(
     );
   
     React.useEffect(()=>{
+      console.log("procedureId",runzSliceData?.get_run?.procedureId._id);
+      
       formik.setFieldValue('objective',runzSliceData?.get_run?.objective)
       formik.setFieldValue('laboratoryId',runzSliceData?.get_run?.laboratoryId)
       formik.setFieldValue('departmentId',runzSliceData?.get_run?.departmentId)
-      formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId[0]?._id)
-      // formik.setFieldValue('dueDate',runzSliceData?.get_run?.dueDate )
+      // formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId[0]?._id)
+      formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
 
       
       console.log("runzSliceData",runzSliceData);
       
     },[runzSliceData])
-
     React.useImperativeHandle(ref, () => ({
       open(state: any,row: any) {
         setRunsCreate(state)
@@ -128,8 +129,9 @@ const RunsForm = React.forwardRef(
           let payload={
             _id:row?._id
           }
-       
         dispatch(fetchSingleRunsData(payload))
+        formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId?._id)
+        // console.log("procedureId",runzSliceData?.get_run?.procedureId[0]?._id);
         }
       },
     }));
@@ -154,7 +156,7 @@ const RunsForm = React.forwardRef(
           assignedTo: values.assignedTo,
           assignedBy: values.assignedBy,
           dueDate: values.dueDate,
-          createdAt: values.createdAt,
+          createdOn: values.createdOn,
           status: values.status,
           organisationId: values.organisationId,
           // procedureDetials:values.procedureDetials
@@ -172,7 +174,7 @@ const RunsForm = React.forwardRef(
           
         }
         else {
-          dispatch(postRunsData(runsValues));
+          dispatch(postRunsData(runsValues)); 
           
         }
         submitFormPopup();
@@ -184,10 +186,10 @@ const RunsForm = React.forwardRef(
         formik.setFieldError('name', '');
       }
     };
-    const createdDate = type === 'edit' ? dayjs(moment(parseInt(formData?.createdAt)).format('MM/DD/YYYY')) : dayjs();
+    const createdDate = type === 'edit' ? dayjs(moment(formData?.createdOn).format('MM/DD/YYYY')) : dayjs(moment(new Date()).format('MM/DD/YYYY')) ;
 
     var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
-    console.log(formData);
+    console.log("date",moment(new Date()).format('MM/DD/YYYY'));
 
     const formik = useFormik({
       initialValues: {
@@ -197,7 +199,7 @@ const RunsForm = React.forwardRef(
         procedureId: formData ? formData.procedureId?._id : '',
         objective: formData ? formData.objective : '',
         dueDate: dateDue,
-        createdAt: createdDate,
+        createdOn: type=='edit' ? createdDate : dayjs(moment(new Date()).format('MM/DD/YYYY')),
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo:loginUserSliceData?.verifyToken?._id,
         status: "Created",
@@ -242,7 +244,7 @@ const RunsForm = React.forwardRef(
     }, []);
 
     const handleDateChanges = (selectedDate: any, name: any) => {
-      const formattedDate = moment(selectedDate?.$d).format('YYYY-MM-DD');
+      const formattedDate = moment(selectedDate?.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
     }
     const handleConfirmationState = (state: number) => {
@@ -284,7 +286,7 @@ const RunsForm = React.forwardRef(
     React.useEffect(() => {
       dispatch(fetchProcedureData({
         page: 1,
-        perPage: 10
+        perPage: 25
       }));
     }, []);
 
@@ -372,6 +374,10 @@ const RunsForm = React.forwardRef(
 
                         }}
                         onBlur={formik.handleBlur}
+                        // getOptionLabel={(option: any) => option.label}
+                        // isOptionEqualToValue={(option: any, value: any) =>
+                        //       value.id == option.id
+                        //     }
                         value={formik.values.procedureId}
                         size="small"
                         error={
@@ -401,6 +407,31 @@ const RunsForm = React.forwardRef(
                     lg={6}
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
+                    {type=='edit'?
+                    <Box style={{ position: 'relative' }}>
+                      <label style={{ display: 'block' }}>
+                       Run Id(autogenerated)
+                      </label>
+                      <TextField
+                        margin="none"
+                        fullWidth
+                        id="procedureId"
+                        name="procedureId"
+                        // autoComplete="procedureId"
+                        InputLabelProps={{ shrink: false }}
+                        placeholder="Procedure Id"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formData?.runNumber}
+                        size="small"
+                        error={
+                          formik.touched.procedureId &&
+                          Boolean(formik.errors.procedureId)
+                        }
+                        disabled
+                      />
+                    </Box>
+                    :
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>
                         Procedure Id (autogenerated)
@@ -424,6 +455,7 @@ const RunsForm = React.forwardRef(
                         disabled
                       />
                     </Box>
+  }
                   </Grid>
                   <Grid
                     item
@@ -436,9 +468,9 @@ const RunsForm = React.forwardRef(
                     <Box style={{position:'relative'}}>
                       <label>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="MM/DD/YYYY" value={formik.values.createdAt} disabled disablePast />
+                        <DatePicker format="MM/DD/YYYY" value={formik.values.createdOn} disabled disablePast />
                       </LocalizationProvider>
-                      {formik.touched.createdAt && formik.errors.createdAt && (
+                      {formik.touched.createdOn && formik.errors.createdOn && (
                         <Typography className="error-field">
                           Created Date is required
                         </Typography>
@@ -579,7 +611,7 @@ const RunsForm = React.forwardRef(
                     <Box style={{position:'relative'}}>
                       <label>Due date<span style={{ color: "#E2445C" }}>*</span></label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker format="MM/DD/YYYY" disablePast onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
+                        <DatePicker format="MM/DD/YYYY"  disablePast onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
                       </LocalizationProvider>
                       {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">

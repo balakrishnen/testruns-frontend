@@ -438,7 +438,7 @@ export default function Procedures() {
   };
 
   const createdAtTimestamp = '1699599706383';
-  const localTime = moment(createdAtTimestamp).format('YYYY-MM-DD HH:mm:ss');
+  const localTime = moment(createdAtTimestamp).format('MM/DD/YYYY HH:mm:ss');
 
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
     const payload: any = { ...queryStrings };
@@ -455,7 +455,7 @@ export default function Procedures() {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
     // payload['search'] = value;
-    payload['search'] = moment(value).format('YYYY-MM-DD');
+    payload['search'] = moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true);
   };
@@ -652,7 +652,7 @@ export default function Procedures() {
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                              format="DD/MM/YYYY"
+                              format='MM/DD/YYYY'
                               value={dayjs(filterSearchValue)}
                               onChange={(event: any) =>
                                 setFilterSearchValue(event.$d)
