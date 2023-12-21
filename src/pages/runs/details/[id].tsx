@@ -240,7 +240,7 @@ export default function RunsDetails() {
   const [state, setState] = React.useState({ content: '' });
   const formRef: any = React.useRef(null);
   const [typePopup, settypePopup] = React.useState('');
-  const [staticChartData, setStaticChartData] = React.useState("")
+  const [staticChartData, setStaticChartData] = React.useState('');
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -441,12 +441,12 @@ export default function RunsDetails() {
     // setRunzValue(procedureSliceData.get_run)
   };
   console.log(procedureSliceData);
-  
+
   React.useEffect(() => {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
     setState({ content: userProcedure });
-  }, [runzValue, userProcedure,value]);
+  }, [runzValue, userProcedure, value]);
 
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
@@ -460,7 +460,7 @@ export default function RunsDetails() {
 
     // Clean up the timer on component unmount or if procedureSliceData changes
     return () => clearTimeout(timerId);
-  }, [procedureSliceData,value]);
+  }, [procedureSliceData, value]);
 
   React.useEffect(() => {
     const filtered =
@@ -480,12 +480,12 @@ export default function RunsDetails() {
       }
     }
     console.log(userRunzID?.userProcedure);
-  }, [userRunzID?.userProcedure, state,value]);
+  }, [userRunzID?.userProcedure, state, value]);
   console.log(runzValue?.userProcedure);
 
   React.useEffect(() => {
     handleHtmlInput();
-  }, [state?.content, userRunzID?.userProcedure,value]);
+  }, [state?.content, userRunzID?.userProcedure, value]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -501,7 +501,6 @@ export default function RunsDetails() {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-
   };
   const editorRef: any = React.useRef(null);
   // const log = () => {
@@ -671,26 +670,26 @@ export default function RunsDetails() {
     handleHtmlInput();
 
     const tablesEles: any = document
-      ?.getElementById("content")
-      ?.querySelectorAll("table");
+      ?.getElementById('content')
+      ?.querySelectorAll('table');
     let finalTableTitleResult: any;
     console.log(tablesEles);
-    
+
     if (tablesEles) {
       const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
-        const headerCells = tablesInstance?.querySelectorAll("[data-column]");
+        const headerCells = tablesInstance?.querySelectorAll('[data-column]');
         const headerNames = Array.from(headerCells).map((header: any) => ({
-          key: header.getAttribute("data-column"),
+          key: header.getAttribute('data-column'),
           value: header.textContent.trim(),
         }));
-        const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
+        const tableDataRows: any = tablesInstance.querySelectorAll('tbody tr');
         const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
-          const tableCells = tableDataRow.querySelectorAll("td[data-column]");
+          const tableCells = tableDataRow.querySelectorAll('td[data-column]');
           return Array.from(tableCells).map((cell: any) => {
             const inputCntext = cell.querySelector("input[type='text']");
             if (inputCntext) {
               return {
-                key: cell.getAttribute("data-column"),
+                key: cell.getAttribute('data-column'),
                 value: htmlInput[inputCntext.id],
               };
             }
@@ -701,7 +700,7 @@ export default function RunsDetails() {
           rowData: rowData,
         };
       });
-      console.log("result",result);
+      console.log('result', result);
       const mergedDatasets = result.map((dataset) => {
         const mergedData: any = [];
         for (let i = 0; i < dataset.rowData.length; i++) {
@@ -716,14 +715,15 @@ export default function RunsDetails() {
         }
         return mergedData;
       });
-      console.log("mergedDatasets",mergedDatasets);
-      let filteredData = mergedDatasets?.filter((sublist) =>
-        sublist?.some((obj: any) => Object?.keys(obj).length > 0)
+      console.log('mergedDatasets', mergedDatasets);
+      let filteredData = mergedDatasets?.filter(
+        (sublist) => sublist?.some((obj: any) => Object?.keys(obj).length > 0),
       );
-      filteredData = filteredData?.map((sublist) =>
-        sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
+      filteredData = filteredData?.map(
+        (sublist) =>
+          sublist?.filter((obj: any) => Object?.keys(obj).length > 0),
       );
-      console.log("filteredData",filteredData);
+      console.log('filteredData', filteredData);
       const results = filteredData?.map((dataset, index) => {
         const subResult = [];
         const firstDataItem = dataset[index];
@@ -741,8 +741,8 @@ export default function RunsDetails() {
       });
 
       const tablesin = document
-        ?.getElementById("content")
-        ?.querySelectorAll("[data-table]");
+        ?.getElementById('content')
+        ?.querySelectorAll('[data-table]');
       const getTitle: any = [];
 
       tablesin?.forEach((element, index) => {
@@ -754,7 +754,7 @@ export default function RunsDetails() {
       });
     }
     let vals = Object.values(htmlInput);
-    const empty = vals.filter((item) => item === "");
+    const empty = vals.filter((item) => item === '');
     console.log('**finalTableTitleResult**', finalTableTitleResult);
 
     if (empty.length > 0) {
@@ -795,8 +795,13 @@ export default function RunsDetails() {
           static_chart_data: JSON.stringify(finalTableTitleResult),
         };
         dispatch(UpdateUserRunsData(payload2));
-        console.log('#####', finalTableTitleResult)
-        setStaticChartData(finalTableTitleResult)
+        
+
+        const staticData =
+          "[{\"label\":\"TABULAR COLUMN:\",\"value\":\"TABULAR COLUMN:\",\"data\":[{\"label\":\"Initial temperature ◦C\",\"values\":[21,78]},{\"label\":\"Time (Sec)\",\"values\":[65,32]}]}]";
+
+        setStaticChartData(JSON.parse(staticData));
+        
         toast(`User Procedure updated !`, {
           style: {
             background: '#00bf70',
@@ -805,67 +810,81 @@ export default function RunsDetails() {
         });
       }
       const data = {
-        "value_1ZyZJXD": "0",
+        value_1ZyZJXD: '0',
         // ... (other key-value pairs)
-        "value_jouUqbl": "33"
+        value_jouUqbl: '33',
       };
-      
+
       // Add "title" property to the last object
-      data["title"] = "Vibrational_magnetometer_acet";
-      
-      // If you are working with React state, you can update the state using setState
-      // Assuming you have state like this:
-      // const [data, setData] = useState({ ... });
-      
-      // Update the state with the new data
-      // setData({ ...data, title: "Vibrational_magnetometer_acet" });
-      
-      // If you are working with a regular JavaScript object, you can just add the property directly.
-      
-      console.log("asdf",data)
-      console.log("asdf",JSON.stringify(htmlInput["title"]="adfad"));
-      htmlInput["title"]=procedureSliceData?.get_run?.procedureId?.name
-       fetch("http://18.221.90.180:5000/runPython", {
-        method: "POST", // or 'PUT'
+      data['title'] = 'Vibrational_magnetometer_acet';
+
+      htmlInput['title'] = procedureSliceData?.get_run?.procedureId?.name;
+
+      const staticPayload: any = {
+        value_m82LbgF: '20',
+        value_r8lRpW9: '0',
+        value_tFD_XSL: '20.3',
+        value_Ip_lq7g: '20.3',
+        value_mOc3VOJ: '20.3',
+        value_dgmNCR1: '20',
+        value_247Mj1l: '0',
+        value_kGJyWEN: '20.3',
+        value_lhqRcvF: '20.3',
+        value__n1GySX: '0.985',
+        'value_-GXpkop': '20',
+        value_ZhNQP5v: '0',
+        value_yUGEte6: '9.7',
+        value_4cDE_cD: '9.7',
+        value_g8aFSp7: '9.7',
+        value_MmMnOZG: '20',
+        value_9Y2IpJY: '0',
+        value_qAZL9aw: '9.7',
+        value_nDHOyuR: '9.7',
+        value_AbZdsRL: '9.554',
+        value_eq0aRh1: '4777.7',
+        title: 'EDTA Water_acet',
+      };
+
+      fetch('http://18.221.90.180:5000/runPython', {
+        method: 'POST', // or 'PUT'
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(htmlInput),
-      }).then((res) => {
-        console.log(res)
-        fetch('http://18.221.90.180:5000/runPython/')
-        .then((res) => res.json())
+        body: JSON.stringify(staticPayload),
+      })
         .then((res) => {
           console.log(res);
-          var newarray:any=[]
-          newarray=Object.keys(res)
-          console.log(newarray[0]);
-          
-          console.log(res[newarray][0]);
-          const data = res!==undefined ?res[newarray][0]:"";
-          console.log(data);
-          
-          let text: any = '';
-          Object.entries(data).forEach(([key, value]) => {
-            text =
-              text +
-              `<div>
+          fetch('http://18.221.90.180:5000/runPython/')
+            .then((res) => res.json())
+            .then((res) => {
+              console.log(res);
+              var newarray: any = [];
+              newarray = Object.keys(res);
+              console.log(newarray[0]);
+
+              console.log(res[newarray][0]);
+              const data = res !== undefined ? res[newarray][0] : '';
+              console.log(data);
+
+              let text: any = `<h2 style="text-transform: capitalize">${
+                Object.keys(res)[0]
+              }</h2>`;
+              Object.entries(data).forEach(([key, value]) => {
+                text =
+                  text +
+                  `<div>
               <div>
               <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
               </div>
             </div>`;
-          });
-          console.log('####', text);
-          setUserRunzResult(text + '</ul>');
+              });
+              console.log('####', text);
+              setUserRunzResult(text + '</ul>');
+            });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      }
-     
-      
-      )
-      .catch((err)=>{
-        console.log(err);
-        
-      })
     }
   };
 
@@ -966,7 +985,7 @@ export default function RunsDetails() {
     values.tableChartOptionsList[keyIndex].color = event.target.value;
     setCharts(data);
   };
-console.log(userRunzResult);
+  console.log(userRunzResult);
 
   const handleAddChart = () => {
     const data = [...charts];
@@ -1087,7 +1106,7 @@ console.log(userRunzResult);
   const htmlData: any = state?.content ? state?.content : '';
   const [htmlInput, setHtmlInput] = React.useState<any>({});
   const htmlToJSON: any = html2json?.html2json(htmlData);
-console.log(htmlInput,"htmlInput");
+  console.log(htmlInput, 'htmlInput');
 
   const uses = htmlToJSON?.child.map((ele: any) => ele);
   const handleHtmlInput = () => {
