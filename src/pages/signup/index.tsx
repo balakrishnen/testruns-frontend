@@ -104,7 +104,7 @@ const userSliceData = useSelector(
             };
     
             dispatch(postUserData(payload));
-            toast(`Signup successful !`, {
+            toast(`Signup successfully !`, {
               style: {
                 background: '#00bf70',
                 color: '#fff',
@@ -191,6 +191,7 @@ const userSliceData = useSelector(
               name="fullname"
               id="fullname"
               InputLabelProps={{ shrink: false }}
+              inputProps={{ maxLength: 20 }}
               placeholder="Fullname"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -268,8 +269,10 @@ const userSliceData = useSelector(
           <Box style={{ position: "relative" }}>
             <InputLabel>Confirm password</InputLabel>
             <TextField
+          
               type={initalStatus.confirmpassword ? "text" : "password"}
               fullWidth
+              inputProps={{ maxLength: 24 }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">

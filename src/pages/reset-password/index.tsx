@@ -67,7 +67,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
     );
 
     if (isMatch) {
-      toast(`Password Reset successful !`, {
+      toast(`Password Reset successfully !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }
@@ -205,6 +205,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
                   </InputAdornment>
                 ),
               }}
+              inputProps={{ maxLength: 24 }}
               name="confirm_password"
               id="confirm_password"
               onPaste={(event) => {

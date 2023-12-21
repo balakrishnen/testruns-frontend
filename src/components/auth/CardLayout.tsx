@@ -71,7 +71,7 @@ export const CardLayout = ({ children }: any, props: any) => {
   
       window.sessionStorage.setItem('isLoggedIn', 'true');
       navigate('/mypage');
-      toast(`Google Login successful !`, {
+      toast(`Google Login successfully !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }
@@ -115,7 +115,7 @@ export const CardLayout = ({ children }: any, props: any) => {
            
               // setTimeout(()=>{
                 navigate('/mypage')
-                toast(`Microsoft Login successful !`, {
+                toast(`Microsoft Login successfully !`, {
                   style: {
                     background: '#00bf70', color: '#fff'
                   }

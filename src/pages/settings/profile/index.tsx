@@ -215,7 +215,7 @@ const Profile = () => {
         // User re-authenticated.
          updatePassword(auth.currentUser, values.newpassword)
         .then((res) => {
-          toast(`Password Reset successful !`, {
+          toast(`Password Reset successfully !`, {
             style: {
               background: '#00bf70',
               color: '#fff',
@@ -326,7 +326,7 @@ const Profile = () => {
       // debugger
       // userValues['_id'] = userData?._id
       await dispatch(fetchUpdateUserData(userValues));
-      await toast(`User Details updated successful !`, {
+      await toast(`User Details updated successfully !`, {
         style: {
           background: '#00bf70',
           color: '#fff',

@@ -455,7 +455,7 @@ export default function MyPage() {
           sx={{ width: '100%', marginTop: '0rem !important' }}
         >
           <TableContainer className="tableHeight2">
-            <Table sx={{ minWidth: 650,  position:'relative' }} aria-label="simple table" >
+            <Table sx={{ minWidth: 650,  position:'relative' }} stickyHeader aria-label="simple table" >
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
