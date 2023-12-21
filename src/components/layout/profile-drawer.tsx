@@ -794,7 +794,7 @@ export default function AppProfileDrawer({
               <Button  variant="contained" onClick={() => { toggleProfileDrawer()}}  className="cancel-btn" >
                 Cancel
               </Button>
-              <Button type="submit" variant="contained" className="add-btn">
+              <Button type="submit" disabled={edit} variant="contained" className="add-btn">
                 Save
               </Button>
             </Box>
