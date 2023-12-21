@@ -1083,11 +1083,11 @@ const Profile = () => {
                                 edge="end"
                                 sx={{ mr: 0 }}
                               >
-                                {!initalStatus.newpassword ? (
+                                {/* {!initalStatus.newpassword ? (
                                   <VisibilityOff />
                                 ) : (
                                   <Visibility />
-                                )}
+                                )} */}
                               </IconButton>
                             </InputAdornment>
                           ),
@@ -1143,11 +1143,11 @@ const Profile = () => {
                                 edge="end"
                                 sx={{ mr: 0 }}
                               >
-                                {!initalStatus.confirmpassword ? (
+                                {/* {!initalStatus.confirmpassword ? (
                                   <VisibilityOff />
                                 ) : (
                                   <Visibility />
-                                )}
+                                )} */}
                               </IconButton>
                             </InputAdornment>
                           ),

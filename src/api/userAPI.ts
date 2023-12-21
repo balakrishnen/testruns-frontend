@@ -131,6 +131,7 @@ export const fetchAllUser = () => async (dispatch: any) => {
   try {
     const response = await client.query({
       query: GET_USER_DATA,
+      fetchPolicy: 'network-only',
     });
     console.log(response.data);
     dispatch(fetchUserSuccess(response.data));
