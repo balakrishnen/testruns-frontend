@@ -837,8 +837,12 @@ export default function RunsDetails() {
         .then((res) => res.json())
         .then((res) => {
           console.log(res);
+          var newarray:any=[]
+          newarray=Object.keys(res)
+          console.log(newarray[0]);
           
-          const data = res?.Result!==undefined ? res?.Result[0]:"";
+          console.log(res[newarray][0]);
+          const data = res!==undefined ?res[newarray][0]:"";
           console.log(data);
           
           let text: any = '';
