@@ -113,7 +113,7 @@ export const AssetsHeaders: any = [
     type: 'select',
   },
   {
-    id: 'purchasedDate',
+    id: 'perchasedDate',
     label: 'Purchased on',
     filters: [
       {
@@ -680,7 +680,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     type: 'select',
   },
   {
-    id: 'createdAt',
+    id: 'createdOn',
     label: 'Created on',
     filters: [
       {
@@ -974,7 +974,7 @@ export const RunsHeaders: any = [
   },
 
   {
-    id: 'createdAt',
+    id: 'createdOn',
     label: 'Created on',
     filters: [
       {
@@ -1191,7 +1191,7 @@ export const HistoryHeaders: readonly HistoryHead[] = [
     is_show: true,
   },
   {
-    id: 'purchasedDate',
+    id: 'perchasedDate',
     label: 'Last used',
     filters: [
       {

@@ -65,9 +65,9 @@ const validationSchema = Yup.object().shape({
 });
 const validationSchemaProfile = Yup.object().shape({
   // firstName: Yup.string().required('First name is required'),
-  firstName: Yup.string().trim().required('First name is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(20, 'Must be 20 characters or less'),
+  firstName: Yup.string().trim().required('First name is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(50, 'Must be 50 characters or less'),
   // lastName: Yup.string().required('Lase name is required'),
-  lastName: Yup.string().trim().required('Last name is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(20, 'Must be 20 characters or less'),
+  lastName: Yup.string().trim().required('Last name is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(50, 'Must be 50 characters or less'),
   email: Yup.string()
     .required('Email is required')
     .email('Invalid email')
@@ -1083,11 +1083,11 @@ const Profile = () => {
                                 edge="end"
                                 sx={{ mr: 0 }}
                               >
-                                {!initalStatus.newpassword ? (
+                                {/* {!initalStatus.newpassword ? (
                                   <VisibilityOff />
                                 ) : (
                                   <Visibility />
-                                )}
+                                )} */}
                               </IconButton>
                             </InputAdornment>
                           ),
@@ -1143,11 +1143,11 @@ const Profile = () => {
                                 edge="end"
                                 sx={{ mr: 0 }}
                               >
-                                {!initalStatus.confirmpassword ? (
+                                {/* {!initalStatus.confirmpassword ? (
                                   <VisibilityOff />
                                 ) : (
                                   <Visibility />
-                                )}
+                                )} */}
                               </IconButton>
                             </InputAdornment>
                           ),

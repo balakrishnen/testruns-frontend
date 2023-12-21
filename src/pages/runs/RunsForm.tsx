@@ -142,6 +142,8 @@ const RunsForm = React.forwardRef(
     };
     const onSubmit = async(values: any) => {
       const isMatch = checkCredentials(values.name);
+      console.log('values.createdOn', values.createdOn);
+      
       if (isMatch) {
 
         var deptArray: any = []
@@ -156,7 +158,7 @@ const RunsForm = React.forwardRef(
           assignedTo: values.assignedTo,
           assignedBy: values.assignedBy,
           dueDate: values.dueDate,
-          createdOn: values.createdOn,
+          createdOn: moment(values.createdOn.$d).format('MM/DD/YYYY'),
           status: values.status,
           organisationId: values.organisationId,
           // procedureDetials:values.procedureDetials
@@ -190,7 +192,7 @@ const RunsForm = React.forwardRef(
 
     var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
     console.log("date",moment(new Date()).format('MM/DD/YYYY'));
-
+    console.log("type",type);
     const formik = useFormik({
       initialValues: {
         departmentId: formData ? formData.departmentId : "",

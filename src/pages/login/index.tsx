@@ -288,10 +288,18 @@ console.log('isMatch',isMatch);
               Log in 
             </Button>
           </Box>
+          
         </Box>
       </form>
-
-      <Box sx={{ mt: 5 }}>
+      <Box sx={{ marginTop: { xs: '1rem', sm: '2rem' } }}>
+              <Typography
+                className="forgot-pass1"
+                
+              >
+              version 2. 1. 0
+              </Typography>
+            </Box>
+      <Box sx={{ mt: "2rem" }}>
         <Typography className="read-text">
           Don't have an account yet?{' '}
           <span
@@ -302,6 +310,7 @@ console.log('isMatch',isMatch);
           </span>
         </Typography>
       </Box>
+     
     </>
   );
 };
