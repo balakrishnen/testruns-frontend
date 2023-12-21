@@ -639,7 +639,17 @@ p.forgot-pass {
     color: $primary-color;
   }
 }
-
+.forgot-pass1 {
+  color: $black-shade-3;
+  font-size: $font-small;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.35px;
+  text-align: center;
+  // position: absolute;
+  // bottom: 87px;
+  // left: 77%;
+}
 p.reg-text {
   color: $black-shade-1;
   font-weight: 300;
