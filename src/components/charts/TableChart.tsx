@@ -166,7 +166,7 @@ export default function TableChart({ staticChartData }: any) {
     );
     channels.channelOptions[keys].channel = event.target.value;
     channels.channelOptions[keys].color = colorList[keys];
-    channels.channelsList.forEach((element, index) => {
+    channels.channelsList.forEach((element, position) => {
       if (channels.charts.length === 0) {
         charts.push({
           [`plot${keys + 1}`]: element.data[channelPosition]
@@ -174,7 +174,7 @@ export default function TableChart({ staticChartData }: any) {
             : 0,
         });
       } else {
-        charts[index][`plot${channelPosition + 1}`] = element.data[
+        charts[position][`plot${channelPosition + 1}`] = element.data[
           channelPosition
         ]
           ? element.data[channelPosition]
@@ -191,7 +191,7 @@ export default function TableChart({ staticChartData }: any) {
     const channelIndex = channelsList.findIndex(
       (item) => item.name === event.target.value,
     );
-    setXDataKey(`plot${channelIndex + 1}`);
+    data[index].xDataKey = `plot${channelIndex + 1}`
     setChartData(data);
   };
 
@@ -383,7 +383,7 @@ export default function TableChart({ staticChartData }: any) {
                       /> */}
                       <XAxis
                         orientation="bottom"
-                        dataKey={xDataKey}
+                        dataKey={data.xDataKey}
                         label={{
                           value: data.xAxisValue,
                           position: 'insideBottom',

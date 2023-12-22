@@ -772,6 +772,7 @@ export default function RunsDetails() {
         userProcedure: JSON.stringify(htmlInput),
         static_chart_data: JSON.stringify(finalTableTitleResult),
       };
+      debugger
       console.log(runzValue.status);
 
       if (runzValue.status == 'Created') {
@@ -800,7 +801,7 @@ export default function RunsDetails() {
         const staticData =
           "[{\"label\":\"TABULAR COLUMN:\",\"value\":\"TABULAR COLUMN:\",\"data\":[{\"label\":\"Initial temperature ◦C\",\"values\":[21,78]},{\"label\":\"Time (Sec)\",\"values\":[65,32]}]}]";
 
-        setStaticChartData(JSON.parse(staticData));
+        setStaticChartData(finalTableTitleResult);
         
         toast(`User Procedure updated !`, {
           style: {
@@ -820,37 +821,39 @@ export default function RunsDetails() {
 
       htmlInput['title'] = procedureSliceData?.get_run?.procedureId?.name;
 
-      const staticPayload: any = {
-        value_m82LbgF: '20',
-        value_r8lRpW9: '0',
-        value_tFD_XSL: '20.3',
-        value_Ip_lq7g: '20.3',
-        value_mOc3VOJ: '20.3',
-        value_dgmNCR1: '20',
-        value_247Mj1l: '0',
-        value_kGJyWEN: '20.3',
-        value_lhqRcvF: '20.3',
-        value__n1GySX: '0.985',
-        'value_-GXpkop': '20',
-        value_ZhNQP5v: '0',
-        value_yUGEte6: '9.7',
-        value_4cDE_cD: '9.7',
-        value_g8aFSp7: '9.7',
-        value_MmMnOZG: '20',
-        value_9Y2IpJY: '0',
-        value_qAZL9aw: '9.7',
-        value_nDHOyuR: '9.7',
-        value_AbZdsRL: '9.554',
-        value_eq0aRh1: '4777.7',
-        title: 'EDTA Water_acet',
-      };
+      // const staticPayload: any = {
+      //   value_m82LbgF: '20',
+      //   value_r8lRpW9: '0',
+      //   value_tFD_XSL: '20.3',
+      //   value_Ip_lq7g: '20.3',
+      //   value_mOc3VOJ: '20.3',
+      //   value_dgmNCR1: '20',
+      //   value_247Mj1l: '0',
+      //   value_kGJyWEN: '20.3',
+      //   value_lhqRcvF: '20.3',
+      //   value__n1GySX: '0.985',
+      //   'value_-GXpkop': '20',
+      //   value_ZhNQP5v: '0',
+      //   value_yUGEte6: '9.7',
+      //   value_4cDE_cD: '9.7',
+      //   value_g8aFSp7: '9.7',
+      //   value_MmMnOZG: '20',
+      //   value_9Y2IpJY: '0',
+      //   value_qAZL9aw: '9.7',
+      //   value_nDHOyuR: '9.7',
+      //   value_AbZdsRL: '9.554',
+      //   value_eq0aRh1: '4777.7',
+      //   title: 'EDTA Water_acet',
+      // };
+
+      // debugger
 
       fetch('http://18.221.90.180:5000/runPython', {
         method: 'POST', // or 'PUT'
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(staticPayload),
+        body: JSON.stringify(htmlInput),
       })
         .then((res) => {
           console.log(res);
