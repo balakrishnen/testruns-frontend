@@ -1293,6 +1293,9 @@ export default function RunsDetails() {
                         anchorEl={anchorEl}
                         open={open}
                         onClose={handleClose}
+                                         
+                        disableScrollLock={true}                 
+                        
                       >
                         <MenuItem onClick={handleClose}>
                           <Button
@@ -1463,6 +1466,10 @@ export default function RunsDetails() {
                         // }}
                       >
                         <Select
+                        MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           name="status"
                           style={{ borderRadius: '11px', color: 'white' }}
                           className={

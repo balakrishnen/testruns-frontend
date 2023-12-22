@@ -1865,7 +1865,8 @@ p.follow-people {
 }
 
 .notifications:hover {
-  background: $light-yellow-1;
+  // background: $light-yellow-1;
+  background: rgba(0,0,0,.04)!important;
 }
 
 .image-container {
@@ -2519,4 +2520,7 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   .app-bar-block header{
     z-index: 999;
   }
+}
+.tox.tox-silver-sink.tox-tinymce-aux {
+  z-index: 9;
 }
