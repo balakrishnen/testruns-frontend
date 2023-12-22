@@ -21,7 +21,7 @@ import {
 } from "firebase/auth";
 import { navigate } from "gatsby";
 import { toast } from "react-toastify";
-import { fetchLoginUser, postUserData } from "../../api/userAPI";
+import { fetchLoginUser, fetchSingleUserData, postUserData } from "../../api/userAPI";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
@@ -47,6 +47,7 @@ export const CardLayout = ({ children }: any, props: any) => {
       const result:any = await signInWithPopup(auth, googleProvider);
   
       console.log(result);
+
       
       let payload = {
         firstName: result.user.displayName !== null ? result.user.displayName : result.user.email.split("@")[0],
@@ -66,16 +67,38 @@ export const CardLayout = ({ children }: any, props: any) => {
       let payload2 = {
         idToken: result.user?.accessToken,
       };
+
+
+      let temp = { _id: userSliceData?.verifyToken?._id };
+
+      dispatch(fetchSingleUserData(temp))
+        .then((isSucess: any) => {
+          const data = isSucess?.get_user ?? {}
+          console.log("userdata ",data, isSucess)
+          if (!data.isActive) {
+            navigate('/login')
+          } else {
+            dispatch(fetchLoginUser(payload))
+            window.sessionStorage.setItem('isLoggedIn', 'true');
+
+            navigate('/mypage')
+            toast(`Login successful !`, {
+              style: {
+                background: '#00bf70', color: '#fff'
+              }
+            });
+          }
+        })
   
-      await dispatch(fetchLoginUser(payload2));
+      // await dispatch(fetchLoginUser(payload2));
   
-      window.sessionStorage.setItem('isLoggedIn', 'true');
-      navigate('/mypage');
-      toast(`Google Login successful !`, {
-        style: {
-          background: '#00bf70', color: '#fff'
-        }
-      });
+      // window.sessionStorage.setItem('isLoggedIn', 'true');
+      // navigate('/mypage');
+      // toast(`Google Login successful !`, {
+      //   style: {
+      //     background: '#00bf70', color: '#fff'
+      //   }
+      // });
   
     } catch (error) {
       console.log(error);
@@ -106,8 +129,19 @@ export const CardLayout = ({ children }: any, props: any) => {
           let payload2={
             idToken:result.user?.accessToken
           }
+
+          let temp = { _id: userSliceData?.verifyToken?._id };
+
+      dispatch(fetchSingleUserData(temp))
+        .then((isSucess: any) => {
+          const data = isSucess?.get_user ?? {}
+          console.log("userdata ",data, isSucess)
+          if (!data.isActive) {
+            navigate('/login')
+          } else {
+            dispatch(fetchLoginUser(payload))
           
-          await  dispatch(fetchLoginUser(payload2))
+          await  dispatch(fetchLoginUser(payload))
               // console.log(isSucess);
               console.log(userSliceData);
               

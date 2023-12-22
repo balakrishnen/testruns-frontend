@@ -30,9 +30,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase.config';
 import { useDispatch } from 'react-redux';
-import { fetchLoginUser } from '../../api/userAPI';
+import { fetchLoginUser, fetchSingleUserData } from '../../api/userAPI';
 import { client } from '../../utils/config';
-import {LOGIN_USER} from '../../graphql/users/users.graphql'
+import { LOGIN_USER } from '../../graphql/users/users.graphql'
 
 import { useSelector } from 'react-redux';
 
@@ -64,64 +64,73 @@ const Login = () => {
   ) => {
     event.preventDefault();
   };
-const dispatch: any= useDispatch()
-const userSliceData=  useSelector(
-  (state: any) => state.userLogin.data, 
-);
+  const dispatch: any = useDispatch()
+  const userSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
   console.log(userSliceData);
 
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(values.email, values.password);
-console.log('isMatch',isMatch);
+    console.log('isMatch', isMatch);
     setIsSubmitted(true);
     if (isMatch) {
       if (typeof window !== 'undefined') {
         signInWithEmailAndPassword(auth, values.email, values.password)
-        .then((userCredential:any) => {
-          console.log(userCredential.user?.accessToken);
-          let payload={
-            idToken:userCredential.user?.accessToken
-          }
-          
-          dispatch(fetchLoginUser(payload))
-            window.sessionStorage.setItem('isLoggedIn', 'true');
-         
-            // setTimeout(()=>{
-              navigate('/mypage')
-              toast(`Login successful !`, {
-                style: {
-                  background: '#00bf70', color: '#fff'
-                }
-              });
-            // },4000)
+          .then((userCredential: any) => {
+            console.log(userCredential.user?.accessToken);
+            let payload = {
+              idToken: userCredential.user?.accessToken
+            }
+            let temp = { _id: userSliceData?.verifyToken?._id };
 
-          // })
-              // console.log(isSucess);
-             
-            })
-          
-          
+            dispatch(fetchSingleUserData(temp))
+              .then((isSucess: any) => {
+                const data = isSucess?.get_user ?? {}
+                console.log("userdata ",data, isSucess)
+                if (!data.isActive) {
+                  navigate('/login')
+                } else {
+                  dispatch(fetchLoginUser(payload))
+                  window.sessionStorage.setItem('isLoggedIn', 'true');
+
+                  navigate('/mypage')
+                  toast(`Login successful !`, {
+                    style: {
+                      background: '#00bf70', color: '#fff'
+                    }
+                  });
+                }
+              })
+
+              .catch((err: any) => {
+                console.log(err);
+              });
+
+          })
+
+
           // Signed in 
           // const user = userCredential.user;
           // ...
-        // })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          toast(`Invalid Credentials !`, {
-            style: {
-              background: 'red', color: '#fff'
-            }
+          // })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            toast(`Invalid Credentials !`, {
+              style: {
+                background: 'red', color: '#fff'
+              }
+            });
+            setTimeout(() => {
+              setIsSubmitted(isSubmitted);
+            }, 2000);
+
           });
-          setTimeout(() => {
-            setIsSubmitted(isSubmitted);
-          }, 2000);
-          
-        });
-     
+
         // },1000)
       }
-    } 
+    }
     // else {
     //   if (values.email !== validUser.email) {
     //     formik.setFieldError('email', 'Invalid email');
@@ -134,7 +143,7 @@ console.log('isMatch',isMatch);
 
   const checkCredentials = (email: any, password: any) => {
     // if (email === validUser.email && password === validUser.password) {
-      return true;
+    return true;
     // } else {
     //   return false;
     // }
@@ -159,14 +168,14 @@ console.log('isMatch',isMatch);
 
   return (
     <>
-    <ToastContainer
-    position="top-right"
-    autoClose={2000}
-    closeOnClick={true}
-    pauseOnHover={true}
-    draggable={false}
-    hideProgressBar={true}
-  />
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        closeOnClick={true}
+        pauseOnHover={true}
+        draggable={false}
+        hideProgressBar={true}
+      />
       <Typography variant="h5" className="title-text">
         Log in to your Test Runs account
       </Typography>
@@ -271,7 +280,7 @@ console.log('isMatch',isMatch);
             </Box>
           </Box>
 
-          
+
           <Box>
             <Button
               type="submit"
@@ -285,20 +294,20 @@ console.log('isMatch',isMatch);
               className="signup-btn"
               disabled={isSubmitted}
             >
-              Log in 
+              Log in
             </Button>
           </Box>
-          
+
         </Box>
       </form>
       <Box sx={{ marginTop: { xs: '1rem', sm: '2rem' } }}>
-              <Typography
-                className="forgot-pass1"
-                
-              >
-              version 2. 1. 0
-              </Typography>
-            </Box>
+        <Typography
+          className="forgot-pass1"
+
+        >
+          version 2. 1. 0
+        </Typography>
+      </Box>
       <Box sx={{ mt: "2rem" }}>
         <Typography className="read-text">
           Don't have an account yet?{' '}
@@ -310,7 +319,7 @@ console.log('isMatch',isMatch);
           </span>
         </Typography>
       </Box>
-     
+
     </>
   );
 };
