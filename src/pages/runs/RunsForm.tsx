@@ -205,6 +205,7 @@ const RunsForm = React.forwardRef(
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo:loginUserSliceData?.verifyToken?._id,
         status: "Created",
+        procedureNumber:""
         // procedureDetials:""
       },
       validationSchema: validationSchema,
@@ -291,7 +292,7 @@ const RunsForm = React.forwardRef(
         perPage: 25
       }));
     }, []);
-
+//  var procedureId=""
     return (
       <div>
         <Dialog
@@ -370,6 +371,8 @@ const RunsForm = React.forwardRef(
                           setDepartments(DepartmentData)
 
                           formik.setFieldValue('procedureId', selectedProcedure?._id || '');
+                          formik.setFieldValue('procedureNumber', selectedProcedure?.procedureNumber || "")
+
                           formik.setFieldValue('departmentId', DepartmentData || '');
                           setDepartment(DepartmentData)
                           setLab(LabData)
@@ -448,7 +451,7 @@ const RunsForm = React.forwardRef(
                         placeholder="Procedure Id"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.procedureId}
+                        value={formik.values.procedureNumber}
                         size="small"
                         error={
                           formik.touched.procedureId &&
