@@ -100,7 +100,7 @@ export default function TableChart({ staticChartData }: any) {
   const [tableList, setTableList] = React.useState<any>([]);
   const [channelsList, setChannelsList] = React.useState<any>([]);
   const [displayCount, setDisplayCount] = React.useState(1);
-  const [xDataKey, setXDataKey] = React.useState<any>(null)
+  const [xDataKey, setXDataKey] = React.useState<any>(null);
 
   React.useEffect(() => {
     const data: any = [];
@@ -120,7 +120,6 @@ export default function TableChart({ staticChartData }: any) {
           data: channel.values,
         });
       });
-      debugger
       data.push({
         selectedTable: null,
         channelOptions: channelOptions,
@@ -189,8 +188,10 @@ export default function TableChart({ staticChartData }: any) {
   const handleXAxisChange = (event, index) => {
     const data = [...chartData];
     data[index].xAxisValue = event.target.value;
-    const channelIndex = channelsList.findIndex((item) => item.name === event.target.value)
-    setXDataKey(`plot${channelIndex + 1}`)
+    const channelIndex = channelsList.findIndex(
+      (item) => item.name === event.target.value,
+    );
+    setXDataKey(`plot${channelIndex + 1}`);
     setChartData(data);
   };
 
@@ -265,9 +266,16 @@ export default function TableChart({ staticChartData }: any) {
 
   const handleAddChart = () => {
     const data: any = [...chartData];
-    // const newIndex = data.length;
-    // data[newIndex] = initialData[0];
-    // setChartData(data);
+    const newIndex = data.length;
+    data[newIndex] = {
+      selectedTable: null,
+      channelOptions: channelOptions,
+      channelsList: [],
+      xAxisValue: null,
+      yAxisOptions: yAxisOptions,
+      charts: [],
+    };
+    setChartData(data);
     if (displayCount < data.length) {
       setDisplayCount(displayCount + 1);
     }
