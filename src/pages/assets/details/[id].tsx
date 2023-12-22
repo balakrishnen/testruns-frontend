@@ -92,6 +92,7 @@ const validationSchema = Yup.object().shape({
 export default function AssetDetails() {
   const [value, setValue] = React.useState(0);
   const [answers, setAnswers] = React.useState('');
+  const [editAcces, seteditAcces] = React.useState(true);
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -139,6 +140,14 @@ export default function AssetDetails() {
   // console.log(assetsData?.assetNumber);
 
   const dispatch: any = useDispatch();
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
+  React.useEffect(() =>{
+    
+  seteditAcces(loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit)
+},[])
   // const departments: any =
   // // []
   // assetValue.departmentId?.map((item: any) => ({
@@ -422,7 +431,7 @@ console.log(assetValue?.organisationId,);
               aria-label="tabs-common"
               className="tabs-common"
             >
-              <Tab label="Edit details" {...a11yProps(0)} />
+              { editAcces?<Tab label="Edit details" {...a11yProps(0)} disabled={true} />: <Tab label="Edit details" {...a11yProps(0)} />}
               <Tab label="History" {...a11yProps(1)} />
             </Tabs>
           </Box>
