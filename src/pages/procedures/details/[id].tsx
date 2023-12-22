@@ -145,12 +145,20 @@ export default function ProcedureDetails() {
   const dispatch: any = useDispatch();
   const [procedureData, setprocedureData] = React.useState<any>({});
   const [assetsList, setAssetsList] = React.useState([]);
+  const procedureSliceData = useSelector(
+    (state: any) => state.procedure.data?.get_procedure,
+  );
   // const [assetsData, setAssetsData] = React.useState([]);
   const formPopupRef: any = React.useRef(null);
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [assetName, setAssetName] = React.useState<any>([])
+    // procedureSliceData?.assetId?.map((item: any) => ({
+  //   label: item.name,
+  //   value: item.name,  
+  //   id: item._id,
+  // })))
   const [assetNamepatch, setAssetNamepatch] = React.useState<any>([])
   console.log('assetName',assetNamepatch);
   const [state, setState] = React.useState({ content:"" });
@@ -166,9 +174,6 @@ export default function ProcedureDetails() {
       formik.setFieldError('name', 'Invalid first name');
     }
   };
-  const procedureSliceData = useSelector(
-    (state: any) => state.procedure.data?.get_procedure,
-  );
 
   const loginUserSliceData = useSelector(
     (state: any) => state.userLogin.data,
@@ -203,6 +208,10 @@ export default function ProcedureDetails() {
   //     })))
   // }, [assetsSliceData]);
 
+React.useEffect(()=>{
+  setAssetName(assetName)
+},[assetName])
+console.log("assetName",assetName);
 
   React.useEffect(() => {
     console.log("1");
@@ -210,6 +219,13 @@ export default function ProcedureDetails() {
     // Set a timer for 1 second (1000 milliseconds)
     const timerId = setTimeout(() => {
       setprocedureData(procedureSliceData);
+      setAssetName(
+        procedureSliceData?.assetId?.map((item: any) => ({
+          label: item.name,
+          value: item.name,
+          id: item._id,
+        })),
+      );
       setIsLoader(false);
   
       // Uncomment the following lines if you have data structure like procedureSliceData.assetId
@@ -223,12 +239,23 @@ export default function ProcedureDetails() {
   
       setState({ content: procedureSliceData?.procedureDetials });
       formik.setValues({ ...formik.values, name: procedureSliceData?.name });
+     
     }, 1000); // 1000 milliseconds = 1 second
   
     // Clean up the timer on component unmount or if procedureSliceData changes
     return () => clearTimeout(timerId);
   
   }, [procedureSliceData]);
+
+// React.useEffect(()=>{
+//   setAssetName(
+//     procedureSliceData?.assetId?.map((item: any) => ({
+//       label: item.name,
+//       value: item.name,
+//       id: item._id,
+//     })),
+//   );
+// },[procedureSliceData])
 
   console.log(procedureSliceData);
   const location: any = useLocation();
@@ -603,14 +630,13 @@ const handleEditorInit = (editor) => {
                         </li>
                       </React.Fragment>
                     )}
-                    // onChange={(_, selectedOptions: any) =>
-                    //   // setAssetName(selectedOptions)
-                    //   setAssetName(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                    onChange={(_, selectedOptions: any) =>{
+                      setAssetName(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })}
+                    }
+                    // onChange={(_, selectedOptions: any) => {
+                    //   setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
                     // }
-                    onChange={(_, selectedOptions: any) => {
-                      setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
-                    }
-                    }
+                    // }
                   />
                   {formik.touched.asset_Name && formik.errors.asset_Name && (
                     <Typography className="error-field">
