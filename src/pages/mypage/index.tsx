@@ -327,21 +327,31 @@ export default function MyPage() {
       userId: loginUserSliceData?.verifyToken?._id
     }
     console.log(payload);
-    
-    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+    let payload2 ={
+      userId:userData?._id
+    }
+     dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
       setNotificationMesssage(res?.data?.get_notification_message)
       console.log(res?.data?.get_notification_message);
       
     });
-  }, []);
+  }, [userData]);
 
   React.useEffect(() => {
         let pay = {
       month: `${new Date().getMonth() + 1}`,
       year: `${new Date().getFullYear()}`,
     };
-
-    dispatch(fetchNotificationData());
+    // console.log(payload);
+    let payload2 ={
+      userId:userData?._id
+    }
+    //  dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
+    //   setNotificationMesssage(res?.data?.get_notification_message)
+    //   console.log(res?.data?.get_notification_message);
+      
+    // });
+    // dispatch(fetchNotificationData());
     dispatch(fetchCalendarEventData(pay));
     dispatch(fetchMyPageRunsData(queryStrings));
   }, [userData]);

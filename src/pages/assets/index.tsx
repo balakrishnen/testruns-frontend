@@ -402,7 +402,7 @@ export default function Assets() {
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
-              disabled={!credencial.asset_management.create}
+              disabled={!credencial?.asset_management?.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Asset

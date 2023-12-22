@@ -1213,7 +1213,7 @@ export default function RunsDetails() {
                         onClick={() => {
                           handleAssignClick('assign');
                         }}
-                        disabled={!credencial.runs_management.assign}
+                        disabled={!credencial?.runs_management?.assign}
                       >
                         <img
                           src={shareimgarrow}
@@ -1229,7 +1229,7 @@ export default function RunsDetails() {
                         onClick={() => {
                           handleAssignClick('share');
                         }}
-                        disabled={!credencial.runs_management.share}
+                        disabled={!credencial?.runs_management?.share}
                       >
                         <img
                           src={shareimg}
@@ -1246,7 +1246,7 @@ export default function RunsDetails() {
                           // setDialog2Open(true);
                           runsPopupRef.current.open(true, runzValue);
                         }}
-                        disabled={!credencial.runs_management.edit}
+                        disabled={!credencial?.runs_management?.edit}
                       >
                         <img
                           src={edit}

@@ -220,30 +220,30 @@ export default function TableFilters({
               />
               {/* <DeletePopup open={isDeletePopupOpen} close={handleCloseDeletePopup} /> */} 
               {
-                module == 'procedures'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial.procedure_management.delete}>
+                module == 'procedures'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial?.procedure_management?.delete}>
                 <img src={bin} alt="Delete" className="Image-actions" />
                 Delete
               </Button>)}
               {
-                module == 'assets'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial.asset_management.delete}>
+                module == 'assets'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial?.asset_management?.delete}>
                 <img src={bin} alt="Delete" className="Image-actions" />
                 Delete
               </Button>)}
               {
-                module == 'users'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial.user_management.delete}>
+                module == 'users'&&(<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial?.user_management?.delete}>
                 <img src={bin} alt="Delete" className="Image-actions" />
                 Delete
               </Button>)}
               {
                module == 'runs' && (
-                <Button className="delete-actions" onClick={deleteRecord} disabled={!credencial.runs_management.delete}>  
+                <Button className="delete-actions" onClick={deleteRecord} disabled={!credencial?.runs_management?.delete}>  
                 <img src={bin} alt="Delete" className="Image-actions" />
                 Delete
               </Button>
                ) 
               }
               {module == 'runs' && (
-                <Button className="delete-actions" onClick={()=>handleAssignClick("assign")} disabled={!credencial.runs_management.assign}>
+                <Button className="delete-actions" onClick={()=>handleAssignClick("assign")} disabled={!credencial?.runs_management?.assign}>
                   <img src={assign} alt="assign" className="Image-actions" />
                   Assign 
                 </Button>
@@ -257,7 +257,7 @@ export default function TableFilters({
                 typePopup={typePopup}
               />
                {module == 'runs' && (
-              <Button className="delete-actions" onClick={()=>handleAssignClick("share")} disabled={!credencial.runs_management.share}>
+              <Button className="delete-actions" onClick={()=>handleAssignClick("share")} disabled={!credencial?.runs_management?.share}>
                 <img src={share} alt="Share" className="Image-actions" />
                 Share
               </Button>

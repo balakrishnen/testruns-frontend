@@ -110,8 +110,8 @@ export default function AppMenu(props: any) {
                     : "app-drawer-list-item"
                 }
               >
-                <ListItemButton >
-                {/* onClick={() => redirectTo(item)}> */}
+                <ListItemButton 
+                onClick={() => redirectTo(item)}>
                   <ListItemIcon
                     style={{ justifyContent: "center", padding: "10px" }}
                   >

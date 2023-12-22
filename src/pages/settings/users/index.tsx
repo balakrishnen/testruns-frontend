@@ -407,7 +407,7 @@ const Users = () => {
             onClick={() => {
               formPopupRef.current.open(true, 'create', {});
             }}
-            disabled={!credencial.user_management.create}
+            disabled={!credencial?.user_management?.create}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create User

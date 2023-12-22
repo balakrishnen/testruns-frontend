@@ -296,7 +296,7 @@ console.log('isMatch',isMatch);
                 className="forgot-pass1"
                 
               >
-              version 2. 1. 2
+              version 2. 1. 3
               </Typography>
             </Box>
       <Box sx={{ mt: "2rem" }}>

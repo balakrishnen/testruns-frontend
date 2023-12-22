@@ -490,7 +490,7 @@ export default function Runs() {
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
-              disabled={!credencial.create}
+              disabled={!credencial?.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Run

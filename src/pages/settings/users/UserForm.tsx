@@ -279,7 +279,9 @@ const UserForm = React.forwardRef(
       // })))
     }, [departmentSliceData, labSliceData, roleSliceData, organizationSliceData,institutionSliceData]);
 
-
+    const loginUserSliceData=  useSelector(
+      (state: any) => state.userLogin?.data?.verifyToken, 
+    );
 
     console.log(departmentData);
 
@@ -294,7 +296,7 @@ const UserForm = React.forwardRef(
 
     React.useEffect(()=>{
       let payload2={
-        instituteId:userData?.instituteId
+        instituteId:loginUserSliceData?.instituteId
       }
       dispatch(fetchSingleRoleData(payload2));
     },[userData])
