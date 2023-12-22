@@ -50,7 +50,7 @@ const OTP = () => {
     const isMatch = checkCredentials(values.otp);
 
     if (isMatch) {
-      toast(`OTP submitted successfully !`, {
+      toast(`OTP submitted successful !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }

@@ -14,6 +14,8 @@ import { withSettingsLayout } from "../../../components/settings";
 import { fetchUpdateNotification, fetchUserNotificationData } from "../../../api/notification.API";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import SpinerLoader from "../../../components/SpinnerLoader";
+
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 43,
   height: 20,
@@ -57,16 +59,17 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const Notification = () => {
-  const dispatch : any = useDispatch()
- const initialValues :any =[
+  const dispatch: any = useDispatch()
+  const initialValues: any = [
     {
-      createProcedure:[{email:false,notification:false}],
-      runAssiged:[{email:false,notification:false}],
-      runsCommend:[{email:false,notification:false}],
+      createProcedure: [{ email: false, notification: false }],
+      runAssiged: [{ email: false, notification: false }],
+      runsCommend: [{ email: false, notification: false }],
     }
   ]
-    
-  const [notificationList, setNotificationList]=React.useState<any>(initialValues)
+  const [isLoader, setIsLoader] = React.useState(true);
+
+  const [notificationList, setNotificationList] = React.useState<any>(initialValues)
   // const [notificationList, setNotificationList]=React.useState<any>([
   //   {
   //     createProcedure: [{ email: false, notification: false }],
@@ -80,63 +83,66 @@ const Notification = () => {
   // const NotificationSliceData = useSelector(
   //   (state: any) => state.notification.data?.get_notification,
   // );
-  React.useEffect(()=>{
+  
+  React.useEffect(() => {
     fetchMessageApi()
-  },[])
+  }, [])
 
-const fetchMessageApi=()=>{
-  let payload={
-    userId:userSliceData?._id
+  const fetchMessageApi = () => {
+    let payload = {
+      userId: userSliceData?._id
+    }
+    dispatch(fetchUserNotificationData(payload)).then((res) => {
+      console.log(res);
+      setIsLoader(false);
+      setNotificationList(res?.get_notification)
+    })
   }
-dispatch(fetchUserNotificationData(payload)).then((res)=>{
-  console.log(res);
-  setNotificationList(res?.get_notification)
-})
-}
 
-  const handleChange = async(category, subCategory, val) => {1
+  const handleChange = async (category, subCategory, val) => {
+    1
 
     if (!notificationList || !notificationList[0]) {
       return;
-    }  
+    }
     const updatedValues = JSON.parse(JSON.stringify(notificationList));
-  
+
     // Toggle between true and false for email and notification
     updatedValues[0][category][0][subCategory] = val;
 
     setNotificationList(updatedValues)
 
-   console.log("updatedValues",updatedValues)
-   const createProcedureVal = updatedValues[0]?.createProcedure || [];
-   const runsCommendVal=  updatedValues[0]?.runsCommend || [];
-   const runAssigedVal =  updatedValues[0]?.runAssiged || [];
+    console.log("updatedValues", updatedValues)
+    const createProcedureVal = updatedValues[0]?.createProcedure || [];
+    const runsCommendVal = updatedValues[0]?.runsCommend || [];
+    const runAssigedVal = updatedValues[0]?.runAssiged || [];
 
-const updatedData = createProcedureVal.map(item => {
-  const newItem = { ...item };
-  if ('__typename' in newItem) { 
-    delete newItem.__typename;
-  }
-  return newItem;
-});
-const updatedData1 = runsCommendVal.map(item => {
-  const newItem = { ...item };
-  if ('__typename' in newItem) {
-    delete newItem.__typename;
-  }
-  return newItem;
-});
-const updatedData2 = runAssigedVal.map(item => {
-  const newItem = { ...item };
-  if ('__typename' in newItem) {
-    delete newItem.__typename;
-  }
-  return newItem;
-});
+    const updatedData = createProcedureVal.map(item => {
+      const newItem = { ...item };
+      if ('__typename' in newItem) {
+        delete newItem.__typename;
+      }
+      return newItem;
+    });
+    const updatedData1 = runsCommendVal.map(item => {
+      const newItem = { ...item };
+      if ('__typename' in newItem) {
+        delete newItem.__typename;
+      }
+      return newItem;
+    });
+    const updatedData2 = runAssigedVal.map(item => {
+      const newItem = { ...item };
+      if ('__typename' in newItem) {
+        delete newItem.__typename;
+      }
+      return newItem;
+    });
 
-console.log(updatedData);
-  
-    let payload={
-      _id: notificationList!==undefined&& notificationList[0]?._id,
+    console.log(updatedData);
+
+    let payload = {
+      _id: notificationList !== undefined && notificationList[0]?._id,
       createProcedure: updatedData,
       runsCommend: updatedData1,
       runAssiged: updatedData2,
@@ -145,8 +151,10 @@ console.log(updatedData);
     await fetchMessageApi()
   };
 
-    return (
-    <Box className="notification-page" style={{ padding: "24px" , paddingTop:"15px"}}>
+  return (
+    <>
+    {!isLoader ? (
+    <Box className="notification-page" style={{ padding: "24px", paddingTop: "15px" }}>
       <Box
         className="title-main"
         sx={{ borderBottom: "1px solid #F3F3F3", paddingBottom: "8px" }}
@@ -222,12 +230,12 @@ console.log(updatedData);
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
+                <Typography style={{ fontWeight: "500", fontSize: "14px", color: "#767676" }}>
                   Notification
                 </Typography>
                 <AntSwitch
-                  checked={notificationList!==undefined && notificationList[0]?.createProcedure[0]?.notification?true:false}
-                  onChange={()=>handleChange('createProcedure', 'notification',!notificationList[0]?.createProcedure[0]?.notification)}
+                  checked={notificationList !== undefined && notificationList[0]?.createProcedure[0]?.notification ? true : false}
+                  onChange={() => handleChange('createProcedure', 'notification', !notificationList[0]?.createProcedure[0]?.notification)}
                   inputProps={{ "aria-label": "ant design" }}
                   name="notification"
                 />
@@ -238,12 +246,12 @@ console.log(updatedData);
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
+                <Typography style={{ fontWeight: "500", fontSize: "14px", color: "#767676" }}>
                   Email
                 </Typography>
                 <AntSwitch
-                  checked={notificationList!==undefined && notificationList[0]?.createProcedure[0]?.email?true:false}
-                  onChange={()=>handleChange('createProcedure', 'email', !notificationList[0]?.createProcedure[0]?.email)}
+                  checked={notificationList !== undefined && notificationList[0]?.createProcedure[0]?.email ? true : false}
+                  onChange={() => handleChange('createProcedure', 'email', !notificationList[0]?.createProcedure[0]?.email)}
                   inputProps={{ "aria-label": "ant design" }}
                   name="email"
                 />
@@ -289,14 +297,14 @@ console.log(updatedData);
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
+                <Typography style={{ fontWeight: "500", fontSize: "14px", color: "#767676" }}>
                   Notification
                 </Typography>
                 <AntSwitch
-                checked={notificationList!==undefined && notificationList[0]?.runsCommend[0]?.notification?true:false}
-                onChange={()=>handleChange('runsCommend', 'notification',!notificationList[0]?.runsCommend[0]?.notification)}
-                inputProps={{ "aria-label": "ant design" }}
-                name="notification"
+                  checked={notificationList !== undefined && notificationList[0]?.runsCommend[0]?.notification ? true : false}
+                  onChange={() => handleChange('runsCommend', 'notification', !notificationList[0]?.runsCommend[0]?.notification)}
+                  inputProps={{ "aria-label": "ant design" }}
+                  name="notification"
                 />
               </Stack>
               <Stack
@@ -305,12 +313,12 @@ console.log(updatedData);
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
+                <Typography style={{ fontWeight: "500", fontSize: "14px", color: "#767676" }}>
                   Email
                 </Typography>
                 <AntSwitch
-                   checked={notificationList!==undefined && notificationList[0]?.runsCommend[0]?.email?true:false}
-                   onChange={()=>handleChange('runsCommend', 'email', !notificationList[0]?.runsCommend[0]?.email)}
+                  checked={notificationList !== undefined && notificationList[0]?.runsCommend[0]?.email ? true : false}
+                  onChange={() => handleChange('runsCommend', 'email', !notificationList[0]?.runsCommend[0]?.email)}
                   inputProps={{ "aria-label": "ant design" }}
                   name="email"
                 />
@@ -356,14 +364,14 @@ console.log(updatedData);
                 justifyContent="flex-end"
                 style={{ marginBottom: "0.8rem" }}
               >
-                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
+                <Typography style={{ fontWeight: "500", fontSize: "14px", color: "#767676" }}>
                   Notification
                 </Typography>
                 <AntSwitch
-                checked={notificationList!==undefined && notificationList[0]?.runAssiged[0]?.notification?true:false}
-                onChange={()=>handleChange('runAssiged', 'notification', !notificationList[0]?.runAssiged[0]?.notification)}
-                inputProps={{ "aria-label": "ant design" }}
-                name="notification"
+                  checked={notificationList !== undefined && notificationList[0]?.runAssiged[0]?.notification ? true : false}
+                  onChange={() => handleChange('runAssiged', 'notification', !notificationList[0]?.runAssiged[0]?.notification)}
+                  inputProps={{ "aria-label": "ant design" }}
+                  name="notification"
                 />
               </Stack>
               <Stack
@@ -372,14 +380,14 @@ console.log(updatedData);
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Typography style={{ fontWeight: "500", fontSize:"14px", color:"#767676" }}>
+                <Typography style={{ fontWeight: "500", fontSize: "14px", color: "#767676" }}>
                   Email
                 </Typography>
                 <AntSwitch
-                  checked={notificationList!==undefined && notificationList[0]?.runAssiged[0]?.email?true:false}
-                  onChange={()=>handleChange('runAssiged', 'email', !notificationList[0]?.runAssiged[0]?.email)}
-                 inputProps={{ "aria-label": "ant design" }}
-                 name="email"
+                  checked={notificationList !== undefined && notificationList[0]?.runAssiged[0]?.email ? true : false}
+                  onChange={() => handleChange('runAssiged', 'email', !notificationList[0]?.runAssiged[0]?.email)}
+                  inputProps={{ "aria-label": "ant design" }}
+                  name="email"
                 />
               </Stack>
             </Box>
@@ -387,6 +395,9 @@ console.log(updatedData);
         </Grid>
       </Box>
     </Box>
+):(
+<SpinerLoader isLoader={isLoader}/>
+)}</>
   );
 };
 

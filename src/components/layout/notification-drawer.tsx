@@ -147,7 +147,7 @@ export default function AppNotificationDrawer({
   
   return (
     <>
-    <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/>
+    {/* <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/> */}
     <Drawer
       className="profile-head"
       variant="temporary"

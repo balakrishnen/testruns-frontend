@@ -228,7 +228,7 @@ export default function AppProfileDrawer({
       await dispatch(fetchUpdateUserData(userValues))
      await toggleProfileDrawer()
      await setEdit(true) 
-      await toast(`User Details updated successfully !`, {
+      await toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70', color: '#fff'
         }
@@ -326,7 +326,7 @@ export default function AppProfileDrawer({
   
   return (
     <>
-    <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/>
+    {/* <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/> */}
     <Drawer
       className="profile-head"
       variant="temporary"
@@ -794,7 +794,7 @@ export default function AppProfileDrawer({
               <Button  variant="contained" onClick={() => { toggleProfileDrawer()}}  className="cancel-btn" >
                 Cancel
               </Button>
-              <Button type="submit" variant="contained" className="add-btn">
+              <Button type="submit" disabled={edit} variant="contained" className="add-btn">
                 Save
               </Button>
             </Box>

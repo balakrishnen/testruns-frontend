@@ -189,7 +189,7 @@ function AppHeader(props: any) {
       // ]
       const notifications:any = res?.data?.get_notification_message?.message
       // Check if at least one notification has isRead set to true
-      setisAnyRead(notifications.some((notification:any) => notification.isRead === false))
+      setisAnyRead(notifications?.some((notification:any) => notification.isRead === false))
       
       // console.log(isAnyRead);
     //   const notifications:any = res?.data?.get_notification_message?.message
