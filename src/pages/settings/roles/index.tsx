@@ -175,10 +175,10 @@ const Roles = () => {
   }, [formValues,formValues1,formValues2]);
 
   React.useEffect(() => {
-    setFormValues(roleSliceData[0])
+    setFormValues(roleSliceData!==undefined ? roleSliceData[0]:formValues)
     console.log("formValues",roleSliceData);
-    setFormValues1(roleSliceData[2])
-    setFormValues2(roleSliceData[1])
+    setFormValues1(roleSliceData!==undefined ? roleSliceData[2]:formValues1)
+    setFormValues2(roleSliceData!==undefined ? roleSliceData[1]:formValues2)
   }, [roleSliceData]);
 
   React.useEffect(() => {
@@ -291,9 +291,9 @@ console.log(formValues);
     }
     dispatch(fetchSingleRoleData(payload))
     console.log("formValues",roleSliceData);
-    setFormValues(roleSliceData[0])
-    setFormValues1(roleSliceData[2])
-    setFormValues2(roleSliceData[1])
+    setFormValues(roleSliceData!==undefined ?roleSliceData[0]:formValues)
+    setFormValues1(roleSliceData!==undefined ?roleSliceData[2]:formValues1)
+    setFormValues2(roleSliceData!==undefined ?roleSliceData[1]:formValues2)
   }
   console.log(roleSliceData);
   
@@ -375,7 +375,7 @@ console.log(formValues);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.procedure_management.create? true:false}
+                            checked={formValues?.procedure_management?.create? true:false}
                             onChange={(e)=>handleChange('procedure_management','create', !formValues?.procedure_management.create)}
                             name="create"
                             // checked={true}

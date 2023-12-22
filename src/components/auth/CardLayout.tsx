@@ -82,12 +82,13 @@ export const CardLayout = ({ children }: any, props: any) => {
     }
   };
   const microsoftSignup = async() => {
+    try {
     const microsoftProvider = provider("microsoft.com");
     const result:any = await signInWithPopup(auth, microsoftProvider)
       // .then((result:any) => {
       //   console.log(result);
         // if(varient=='signup'){
-          console.log(result.user.uid);
+          console.log("result",result.user.uid);
           let payload={
             firstName: result.user.displayName,
             lastName: "",
@@ -123,12 +124,16 @@ export const CardLayout = ({ children }: any, props: any) => {
            
           window.sessionStorage.setItem('isLoggedIn', 'true');
         // }
-      // })
-      // .catch((error) => {
-      //   console.error(error);
-      // });
-  };
-
+      } catch (error) {
+        console.log(error);
+        toast(`Account exists with different credentails !`, {
+          style: {
+            background: '#d92828',
+            color: '#fff',
+          },
+        });
+      }
+    };
   return (
     <Box
       className="main-center"
