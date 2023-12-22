@@ -320,7 +320,7 @@ const Users = () => {
     assetsChange['isActive'] = e.target.value;
 
     dispatch(fetchUpdateUserData(assetsChange));
-    toast(`Assets status updated !`, {
+    toast(`User status updated !`, {
       style: {
         background: '#00bf70',
         color: '#fff',
