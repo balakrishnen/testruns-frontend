@@ -98,7 +98,7 @@ const Login = () => {
                   toast(`Login successful !`, {
                     style: {
                       background: '#00bf70', color: '#fff'
-                    }
+                    } 
                   });
                 }
               })

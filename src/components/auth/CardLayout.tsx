@@ -104,65 +104,52 @@ export const CardLayout = ({ children }: any, props: any) => {
       console.log(error);
     }
   };
-  const microsoftSignup = async() => {
-    const microsoftProvider = provider("microsoft.com");
-    const result:any = await signInWithPopup(auth, microsoftProvider)
-      // .then((result:any) => {
-      //   console.log(result);
-        // if(varient=='signup'){
-          console.log(result.user.uid);
-          let payload={
-            firstName: result.user.displayName,
-            lastName: "",
-            email: result.user.email,
-            uid:result.user.uid,
-            organisationId:"657420e5c63327a74f3c756a",
-            role:"65741c069d53d19df8321e6e",
-            // phoneNumber:'9876543210',
-            departmentId: [],
-            laboratoryId: [],
-            instituteId: "65741c069d53d19df8321e6b",
-            createdOn:"12/21/2023"
-          }
-          await dispatch(postUserData(payload))
-         
-          let payload2={
-            idToken:result.user?.accessToken
-          }
+  const microsoftSignup = async () => {
+    try {
+      const microsoftProvider = provider("microsoft.com");
+      const result: any = await signInWithPopup(auth, microsoftProvider);
 
-          let temp = { _id: userSliceData?.verifyToken?._id };
+      const payload = {
+        firstName: result.user.displayName,
+        lastName: "",
+        email: result.user.email,
+        uid: result.user.uid,
+        organisationId: "657420e5c63327a74f3c756a",
+        role: "65741c069d53d19df8321e6e",
+        departmentId: [],
+        laboratoryId: [],
+        instituteId: "65741c069d53d19df8321e6b",
+        createdOn: "12/21/2023",
+      };
 
-      dispatch(fetchSingleUserData(temp))
-        .then((isSucess: any) => {
-          const data = isSucess?.get_user ?? {}
-          console.log("userdata ",data, isSucess)
-          if (!data.isActive) {
-            navigate('/login')
-          } else {
-            dispatch(fetchLoginUser(payload))
-          
-          await  dispatch(fetchLoginUser(payload))
-              // console.log(isSucess);
-              console.log(userSliceData);
-              
-              window.sessionStorage.setItem('isLoggedIn', 'true');
-           
-              // setTimeout(()=>{
-                navigate('/mypage')
-                toast(`Microsoft Login successful !`, {
-                  style: {
-                    background: '#00bf70', color: '#fff'
-                  }
-                });
-           
-          window.sessionStorage.setItem('isLoggedIn', 'true');
-        // }
-      // })
-      // .catch((error) => {
-      //   console.error(error);
-      // });
+      await dispatch(postUserData(payload));
+
+      const payload2 = {
+        idToken: result.user?.accessToken,
+      };
+
+      const temp = { _id: userSliceData?.verifyToken?._id };
+
+      dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
+        const data = isSuccess?.get_user ?? {};
+        if (!data.isActive) {
+          navigate("/login");
+        } else {
+          dispatch(fetchLoginUser(payload2));
+          window.sessionStorage.setItem("isLoggedIn", "true");
+          navigate("/mypage");
+          toast(`Microsoft Login successful !`, {
+            style: {
+              background: "#00bf70",
+              color: "#fff",
+            },
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   return (
     <Box
       className="main-center"
