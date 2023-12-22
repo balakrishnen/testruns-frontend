@@ -405,7 +405,18 @@ export default function MyPage() {
       (item:any) => item.createdAt === moment(new Date()).format('MM-DD-YYYY'),
     );
     setCalendarContent(filCalendarContent);
+ 
   }},[])
+  React.useEffect(()=>{
+    let payload ={
+      userId:userData?._id
+    }
+
+    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+      setNotificationMesssage(res?.data?.get_notification_message)
+      console.log(res?.data?.get_notification_message);
+    });  
+  },[])
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
       (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
@@ -438,23 +449,7 @@ export default function MyPage() {
   const toggleViewNotifications = () => {
     setViewAllNotifications((prev) => !prev);
   };
-  const handleReadSingleNotification = async (id: any) => {
-    let payload = {
-      _id: id,
-      isRead: true
-    }
-    let payload2 ={
-      userId:userData?._id
-    }
-    await dispatch(fetchReadSingleMessageData(payload))
-    console.log("notification3", userData?._id,"==",NotificationMessageSliceData);
-    await dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
-      setNotificationMesssage(res?.data?.get_notification_message)
-      console.log(res?.data?.get_notification_message);
-      
-    });
-
-  }
+  
   console.log(CalendarContent);
   console.log("notificationMesssage",notificationMesssage);
   return (
@@ -718,7 +713,7 @@ export default function MyPage() {
                     style={{
                       backgroundColor: notification?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
                     }}
-                    onClick={() => handleReadSingleNotification(notification?._id)}
+                    
                   >
                     <Box className="image-container">
                       <Avatar
@@ -793,16 +788,21 @@ export default function MyPage() {
               paddingLeft: { xs: '0px !important', lg: '16px !important' },
             }}
           >
+            
             <Box className="calender-rightside">
+            
               <Calendar
-                onChange={handleDateClick}
+            
+            onChange={handleDateClick}
                 value={value}
                 tileClassName={({ date, view }) => {
                   if (
                     CalendarMark.includes(moment(date).format('MM/DD/YYYY'))
-                  ) {
+                  
+                    ) {
                     return 'events';
                   }
+                  
                 }}
                 onActiveStartDateChange={({ activeStartDate, view }) => {
                   // activeStartDate is a Date object representing the start date of the current view
