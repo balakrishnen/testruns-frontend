@@ -46,6 +46,7 @@ import RunsForm from './RunsForm';
 import runCreated from '../../assets/images/run-created.svg';
 import runStarted from '../../assets/images/run-started.svg';
 import runStopped from '../../assets/images/run-stopped.svg';
+import runSubmitted from '../../assets/images/run-submitted.svg';
 import runCompleted from '../../assets/images/run-completed.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -877,6 +878,8 @@ console.log("userDataRuns",userData)
                                         ? runStarted
                                         : row.status === 'Complete'
                                           ? runCompleted
+                                          : row.status === 'Submitted'
+                                          ? runSubmitted
                                           : runStopped
                                   }
                                   alt="no_image"
@@ -905,7 +908,7 @@ console.log("userDataRuns",userData)
                       )}
 
                       {headers[1].is_show && (
-                        <TableCell>{row.objective}</TableCell>
+                        <TableCell>{row?.procedureId?.name}</TableCell>
                       )}
                       {headers[2].is_show && (
                         <TableCell>

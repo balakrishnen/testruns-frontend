@@ -352,6 +352,8 @@ export default function HistoryTable() {
                                 ? '#faaa49'
                                 : row?.status == 'Complete'
                                 ? '#00bf70'
+                                : row?.status == 'Submitted'
+                                ? '#a01fb1'
                                 : '#e2445c',
                           }}
                         >
@@ -361,6 +363,8 @@ export default function HistoryTable() {
                             ? 'Started'
                             : row?.status == 'Complete'
                             ? 'Completed'
+                            : row?.status == 'Submitted'
+                            ? 'Submitted'
                             : 'Stopped'}
                         </Box>
                                             </TableCell>
