@@ -198,8 +198,8 @@ const ProcedureForm = React.forwardRef(
     const formik = useFormik({
       initialValues: {
         name: '',
-        createdOn: userSliceData?.firstName + userSliceData?.lastName,
-        createdBy: new Date(),
+        createdOn: moment(new Date()).format('MM/DD/YYYY'),
+        createdBy: userSliceData?.firstName + userSliceData?.lastName,
         departmentId: formData?formData.departmentId:"",
         laboratoryId: formData?formData.laboratoryId:"",
         organisationId: formData?formData.organisationId:"657420e5c63327a74f3c756a",
