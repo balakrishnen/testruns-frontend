@@ -614,6 +614,8 @@ export default function MyPage() {
                                 ? 'start-select td-select'
                                 : row.status === 'Complete'
                                   ? 'active-select td-select'
+                                  : row.status === 'Submitted'
+                                  ? 'submit-select td-select'
                                   : 'inactive-select td-select'
                           }
                           style={{
@@ -624,6 +626,8 @@ export default function MyPage() {
                                   ? '#faaa49'
                                   : row.status === 'Stopped'
                                     ? '#e2445c'
+                                    : row?.status == 'Submitted'
+                                      ? '#a01fb1'
                                     : '#00bf70',
                             padding: '6px',
                             width: '140px',

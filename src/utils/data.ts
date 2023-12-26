@@ -922,7 +922,7 @@ export const RunsHeaders: any = [
   },
   {
     id: 'objective',
-    label: 'Runs name',
+    label: 'Procedure name',
     filters: [
       {
         id: 'search',

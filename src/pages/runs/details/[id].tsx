@@ -1472,10 +1472,12 @@ console.log(htmlInput,"htmlInput");
                             runzValue?.status === 'Created'
                               ? 'create-select td-select'
                               : runzValue?.status === 'Started'
-                              ? 'start-select td-select'
-                              : runzValue?.status === 'Complete'
-                              ? 'active-select td-select'
-                              : 'inactive-select td-select'
+                                ? 'start-select td-select'
+                                : runzValue?.status === 'Submitted'
+                                  ? 'submit-select td-select'
+                                  : runzValue?.status === 'Complete'
+                                    ? 'active-select td-select'
+                                    : 'inactive-select td-select'
                           }
                           value={
                             runzValue?.status ? runzValue?.status : 'Stopped'
