@@ -78,7 +78,7 @@ export const CardLayout = ({ children }: any, props: any) => {
           // if (!data.isActive) {
           //   navigate('/login')
           // } else {
-            dispatch(fetchLoginUser(payload))
+            dispatch(fetchLoginUser(payload2))
             window.sessionStorage.setItem('isLoggedIn', 'true');
 
             navigate('/mypage')

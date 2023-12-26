@@ -333,7 +333,7 @@ export default function MyPage() {
       console.log(res?.data?.get_notification_message);
       
     });
-  }, []);
+  }, [loginUserSliceData]);
 
   React.useEffect(() => {
         let pay = {
@@ -397,16 +397,16 @@ export default function MyPage() {
     setCalendarContent(filCalendarContent);
  
   }},[])
-  React.useEffect(()=>{
-    let payload ={
-      userId:userData?._id
-    }
+  // React.useEffect(()=>{
+  //   let payload ={
+  //     userId:loginUserSliceData?._id
+  //   }
 
-    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-      setNotificationMesssage(res?.data?.get_notification_message)
-      console.log(res?.data?.get_notification_message);
-    });  
-  },[])
+  //   dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+  //     setNotificationMesssage(res?.data?.get_notification_message)
+  //     console.log(res?.data?.get_notification_message);
+  //   });  
+  // },[loginUserSliceData])
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
       (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
@@ -450,7 +450,7 @@ export default function MyPage() {
           sx={{ width: '100%', marginTop: '0rem !important' }}
         >
           <TableContainer className="tableHeight2">
-            <Table sx={{ minWidth: 650,  position:'relative' }} aria-label="simple table" >
+            <Table sx={{ minWidth: 650,  position:'relative' }} aria-label="simple table" stickyHeader >
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
@@ -464,7 +464,6 @@ export default function MyPage() {
                   <TableCell align="right">Status</TableCell>
                 </TableRow>
               </TableHead>
-{console.log(MyPageRunsData?.Runs.length==0)}
               {MyPageRunsData?.Runs.length == 0 ?
 
 <TableBody>
