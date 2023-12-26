@@ -186,7 +186,7 @@ const Roles = () => {
       instituteId:loginUserSliceData?.instituteId
     }
     dispatch(fetchSingleRoleData(payload))
-  }, []);
+  }, [loginUserSliceData]);
 
   console.log("roleData",roleSliceData);
 

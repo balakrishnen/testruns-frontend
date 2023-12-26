@@ -95,8 +95,8 @@ export default function HistoryTable() {
         perPage: 5,
         searchBy: null,
         search: null,
-        sortBy: null,
-        sortOrder: null,
+        sortBy: "assetNumber",
+        sortOrder: "asc",
       });
       const filters = () => {
         dispatch(fetchRunsData(queryStrings));

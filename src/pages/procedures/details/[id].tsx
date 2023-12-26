@@ -391,16 +391,21 @@ console.log(inputEl);
   const empty = vals.filter((item) => item === "");
 
   }
-  dispatch(fetchUpdateProcedureData(payload))
-  toast(`Procedure updated !`, {
-    style: {
-      background: '#00bf70', color: '#fff'
-    }
-  });
-  setTimeout(()=>{
-    const procedureId = { _id: procedureData._id,};
-  dispatch(fetchSingleProcedureData(procedureId));
-  },3000)
+  dispatch(fetchUpdateProcedureData(payload)).then((res)=>{
+    toast(`Procedure updated !`, {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
+    // setTimeout(()=>{
+      const procedureId = { _id: procedureData._id,};
+    dispatch(fetchSingleProcedureData(procedureId));
+    // },3000)
+  }).catch((err)=>{
+    console.log(err);
+    
+  })
+
  
 // }
 }
@@ -451,10 +456,11 @@ const uploadVideo = async (e) => {
   const file = e.target.files[0];
   if (file) {
     const videoUrl = URL.createObjectURL(file);
-    console.log('videoUrl',videoUrl);
-    if (editorRef.current) {
+    if (videoUrl) {
       const editor = editorRef.current.editor;
-      editorRef.current.editor?.insertContent(
+    console.log('videoUrl',videoUrl);
+
+      editorRef.current?.insertContent(
         `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
       );
     }
@@ -685,7 +691,7 @@ const handleEditorInit = (editor) => {
                           var id = "blobid" + new Date().getTime();
                           var blobCache =
                             window?.tinymce?.activeEditor.editorUpload.blobCache;
-                          var base64 = reader?.result?.split(",")[1];
+                          var base64 = reader?.result.split(",")[1];
                           var blobInfo = blobCache.create(id, file, base64);
                           blobCache.add(blobInfo);
                           cb(blobInfo.blobUri(), { title: file.name });
@@ -707,6 +713,15 @@ const handleEditorInit = (editor) => {
                           );
                         },
                       });
+                      var toTimeHtml = function (date) {
+                        return (
+                          '<time datetime="' +
+                          date.toString() +
+                          '">' +
+                          date.toDateString() +
+                          "</time>"
+                        );
+                      };
                       editor.ui.registry.addButton("customVideoUpload", {
                         text: "Upload Video",
                         onAction: function () {
@@ -718,6 +733,27 @@ const handleEditorInit = (editor) => {
                           // }
                         },
                       });
+
+                      editor.ui.registry.addButton("customDateButton", {
+                        icon: "insert-time",
+                        tooltip: "Insert Current Date",
+                        disabled: true,
+                        onAction: function (_) {
+                          editor.insertContent(toTimeHtml(new Date()));
+                        },
+                        onSetup: function (buttonApi) {
+                          var editorEventCallback = function (eventApi:any) {
+                            buttonApi?.setDisabled(
+                              eventApi.element.nodeName.toLowerCase() === "time"
+                            );
+                          };
+                          editor.on("NodeChange", editorEventCallback);
+                          return function (buttonApi) {
+                            editor.off("NodeChange", editorEventCallback);
+                          };
+                        },
+                      });
+
                       editor.ui.registry.addButton("customDataAttrButton", {
                         icon: "fas fa-cog",
                         tooltip: "Assign Data Attribute",

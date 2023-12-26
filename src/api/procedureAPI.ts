@@ -75,7 +75,8 @@ export const fetchUpdateProcedureData = (payload: any) => async () => {
       mutation: UPDATE_PROCEDURE,
       variables: payload,
     });
-    console.log(response);
+    return response.data
+    // console.log(response);
   } catch (error: any) {
     console.log(error);
   }

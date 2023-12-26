@@ -92,7 +92,9 @@ const UserForm = React.forwardRef(
       return <div>{children}</div>;
     };
     console.log(userData);
-
+    const loginUserSliceData=  useSelector(
+      (state: any) => state.userLogin?.data?.verifyToken, 
+    );
     React.useImperativeHandle(ref, () => ({
       open(state: any, type: any,row: any) {
         setFormPopup(state);
@@ -143,7 +145,7 @@ const UserForm = React.forwardRef(
           // uid:"",
           firstName: values.firstName,
           lastName: values.lastName,
-          email: values.email,
+          email: values.email?.toLowerCase(),
           phoneNumber: values.phoneNumber.toString(),
           organisationId: values.organisationId,
           instituteId: "65741c069d53d19df8321e6b",
@@ -162,7 +164,7 @@ const UserForm = React.forwardRef(
         else {
           console.log(userValues);
           try {
-         createUserWithEmailAndPassword(auth, values.email, "Test@123").then((res)=>{
+         createUserWithEmailAndPassword(auth, values.email?.toLowerCase(), "Test@123").then((res)=>{
           userValues['uid'] = res.user.uid,
           dispatch(postUserData(userValues));
           submitFormPopup();
@@ -294,10 +296,10 @@ const UserForm = React.forwardRef(
 
     React.useEffect(()=>{
       let payload2={
-        instituteId:userData?.instituteId
+        instituteId:loginUserSliceData?.instituteId
       }
       dispatch(fetchSingleRoleData(payload2));
-    },[userData])
+    },[loginUserSliceData])
     return (
       <div>
         <Dialog
