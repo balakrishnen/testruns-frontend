@@ -196,6 +196,10 @@ export default function ProcedureDetails() {
   //     })))
   // }, [assetsSliceData]);
 
+React.useEffect(()=>{
+  setAssetName(assetName)
+},[assetName])
+console.log("assetName",assetName);
 
   React.useEffect(() => {
     console.log("1");
@@ -203,6 +207,13 @@ export default function ProcedureDetails() {
     // Set a timer for 1 second (1000 milliseconds)
     const timerId = setTimeout(() => {
       setprocedureData(procedureSliceData);
+      setAssetName(
+        procedureSliceData?.assetId?.map((item: any) => ({
+          label: item.name,
+          value: item.name,
+          id: item._id,
+        })),
+      );
       setIsLoader(false);
   
       // Uncomment the following lines if you have data structure like procedureSliceData.assetId
@@ -595,13 +606,13 @@ const handleEditorInit = (editor) => {
                         </li>
                       </React.Fragment>
                     )}
-                    // onChange={(_, selectedOptions: any) =>
-                    //   // setAssetName(selectedOptions)
-                    //   setAssetName(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
-                    // }
-                    onChange={(_, selectedOptions: any) => {
-                      setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                    onChange={(_, selectedOptions: any) =>
+                      // setAssetName(selectedOptions)
+                      {setAssetName(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
                     }
+                    // onChange={(_, selectedOptions: any) => {
+                    //   setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                    // }
                     }
                   />
                   {formik.touched.asset_Name && formik.errors.asset_Name && (
@@ -655,7 +666,7 @@ const handleEditorInit = (editor) => {
                           'template',
                           'insertinput',
                           'customInsertButton',
-                          'customAlertButton subscript superscript charmap',
+                          'customAlertButton subscript superscript charmap textpattern',
                         ],
                         toolbar: 'undo redo | blocks formatselect | ' +
                         'charmap subscript superscript bold italic | alignleft aligncenter ' +
