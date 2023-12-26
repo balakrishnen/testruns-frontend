@@ -31,7 +31,7 @@ import SpinerLoader from '../../../components/SpinnerLoader';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().trim().required('Label is required').max(50, 'Must be 50 characters or less'),
-  asset_Name: Yup.array().required(),
+  asset_Name: Yup.array(),
   procedure: Yup.string().required().max(50, 'Must be 50 characters or less'),
 });
 
@@ -152,7 +152,7 @@ export default function ProcedureDetails() {
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [assetName, setAssetName] = React.useState<any>([])
   const [assetNamepatch, setAssetNamepatch] = React.useState<any>([])
-  console.log('assetName',assetNamepatch);
+  console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
   const [isLoader, setIsLoader] = React.useState(true)
   const onSubmit = (values: any) => {
@@ -607,12 +607,8 @@ const handleEditorInit = (editor) => {
                       </React.Fragment>
                     )}
                     onChange={(_, selectedOptions: any) =>
-                      // setAssetName(selectedOptions)
                       {setAssetName(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
                     }
-                    // onChange={(_, selectedOptions: any) => {
-                    //   setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
-                    // }
                     }
                   />
                   {formik.touched.asset_Name && formik.errors.asset_Name && (

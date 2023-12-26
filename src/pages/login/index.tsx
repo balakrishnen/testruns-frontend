@@ -96,7 +96,7 @@ const Login = () => {
                   window.sessionStorage.setItem('isLoggedIn', 'true');
 
                   navigate('/mypage')
-                  toast(`Login successful !`, {
+                  toast(`Login successfully !`, {
                     style: {
                       background: '#00bf70', color: '#fff'
                     } 
