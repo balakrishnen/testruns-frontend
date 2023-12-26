@@ -22,7 +22,7 @@ const TablePagination: React.FC<any> = ({
     <Box className="show-page">
       <Typography>
         Showing{' '}
-        {perPage * currentPage - (perPage - 1)}{' '}
+        {page?.totalCount==0? 0:perPage * currentPage - (perPage - 1)}{' '}
         -
         {perPage * currentPage > page?.totalCount
           ? page?.totalCount
