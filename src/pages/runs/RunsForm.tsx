@@ -49,7 +49,7 @@ const validationSchema = Yup.object().shape({
   createdOn: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
-  objective: Yup.string().trim().required('Test Objective is required').max(20, 'Label must be at most 20 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
+  objective: Yup.string().trim().required('Test Objective is required').max(35, 'Label must be at most 35 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
   // dueDate: Yup.date().required('Due Date is required'),
   dueDate: Yup.string().required('Due Date is required'),
   assignedTo: Yup.string().notRequired(),
