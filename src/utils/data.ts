@@ -694,25 +694,40 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     is_show: true,
     type: 'date',
   },
-
   {
-    id: 'createdAt',
+    id: 'objective',
     label: 'Created by',
     filters: [
       {
-        id: 'availability',
-        type: 'autocomplete',
-        label: '-Select User-',
-        options: [
-          { value: '1', label: 'username' },
-          // { value: '2', label: 'Not available' },
-        ],
+        id: 'search',
+        type: 'textfield',
+        label: 'Search',
+        options: [],
       },
     ],
     sort: 'asc',
     is_show: true,
-    type: 'select',
+    type: 'text',
   },
+
+  // {
+  //   id: 'createdAt',
+  //   label: 'Created by',
+  //   filters: [
+  //     {
+  //       id: 'availability',
+  //       type: 'autocomplete',
+  //       label: '-Select User-',
+  //       options: [
+  //         { value: '1', label: 'username' },
+  //         // { value: '2', label: 'Not available' },
+  //       ],
+  //     },
+  //   ],
+  //   sort: 'asc',
+  //   is_show: true,
+  //   type: 'select',
+  // },
 ];
 export const ProcedureRows = [
   {
@@ -1024,24 +1039,39 @@ export const RunsHeaders: any = [
     type: 'select',
   },
   {
-    id: 'extraDate',
+    id: 'objective',
     label: 'Assigned by',
     filters: [
       {
-        id: 'status',
-        type: 'autocomplete',
-        label: '-Select Assignee-',
-        options: [
-          { value: 'User 1', label: 'User 1' },
-          { value: 'User 2', label: 'User 2' },
-          { value: 'User 3', label: 'User 3' },
-        ],
+        id: 'search',
+        type: 'textfield',
+        label: 'Search',
+        options: [],
       },
     ],
     sort: 'asc',
     is_show: true,
-    type: 'select',
+    type: 'text',
   },
+  // {
+  //   id: 'extraDate',
+  //   label: 'Assigned by',
+  //   filters: [
+  //     {
+  //       id: 'status',
+  //       type: 'autocomplete',
+  //       label: '-Select Assignee-',
+  //       options: [
+  //         { value: 'User 1', label: 'User 1' },
+  //         { value: 'User 2', label: 'User 2' },
+  //         { value: 'User 3', label: 'User 3' },
+  //       ],
+  //     },
+  //   ],
+  //   sort: 'asc',
+  //   is_show: true,
+  //   type: 'select',
+  // },
 ];
 export const RunsRows = [
   {

@@ -109,8 +109,9 @@ export default function Runs() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const [runsData, setRunsData] = React.useState<any>([]);
-  console.log('runsData', runsData);
-
+  console.log('filterSearchValue', filterSearchValue);
+  console.log('filterType', filterType);
+  console.log('filterKey', filterKey);
   const [rowId, setRowId] = React.useState<any>([]);
   const [runsRow, setRunsRow] = React.useState<any>([])
   const dispatch: any = useDispatch();
@@ -646,6 +647,7 @@ console.log("userDataRuns",userData)
                             value={element.id}
                             key={element.id}
                             onClick={() => {
+                              {console.log('elementtype',element.type)}
                               setFilterType(element.type);
                               setFilterOptions(element.filters[0]?.options);
                               setFilterKey(element.id);

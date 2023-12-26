@@ -273,7 +273,7 @@ console.log(formValues);
       roles:updatedData
     }
    await dispatch(fetchUpdateRoleData(payload)).then((res:any)=>{
-    toast(`Role updated successful !`, {
+    toast(`Role updated successfully !`, {
       style: {
         background: '#00bf70', color: '#fff'
       }
