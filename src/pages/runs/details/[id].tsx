@@ -1901,7 +1901,7 @@ console.log(htmlInput,"htmlInput");
                     type="submit"
                     variant="contained"
                     className="add-btn"
-                    style={{ position: 'sticky' }}
+                    style={{ position: 'sticky', display: value !== 0?"none" :"block"}}
                     onClick={() => {
                       value == 0 && onSubmit();
                     }}

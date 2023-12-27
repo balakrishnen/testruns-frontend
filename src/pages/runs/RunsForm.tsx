@@ -209,6 +209,7 @@ const RunsForm = React.forwardRef(
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo:loginUserSliceData?.verifyToken?._id,
         status: "Created",
+        procedureNumber:""
         // procedureDetials:""
       },
       validationSchema: validationSchema,
@@ -379,6 +380,8 @@ const handleClose=()=>{
 
                           formik.setFieldValue('procedureId', selectedProcedure?._id || '');
                           formik.setFieldValue('departmentId', DepartmentData || '');
+                          formik.setFieldValue('procedureNumber', selectedProcedure?.procedureNumber || "")
+
                           setDepartment(DepartmentData)
                           setLab(LabData)
 
@@ -456,7 +459,7 @@ const handleClose=()=>{
                         placeholder="Procedure Id"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.procedureId}
+                        value={formik.values.procedureNumber}
                         size="small"
                         error={
                           formik.touched.procedureId &&
