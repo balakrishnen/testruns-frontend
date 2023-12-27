@@ -88,12 +88,13 @@ const Login = () => {
               .then((isSucess: any) => {
                 const data = isSucess?.get_user ?? {}
                 console.log("userdata ",data, isSucess)
-              debugger
+              // debugger
                 if (!data.isActive) {
                   navigate('/login')
-                  toast(` user inactive  !`, {
+                  toast(`The user is inactive !`, {
                     style: {
-                      background: '#00bf70', color: '#fff'
+                      background: '#d92828',
+                      color: '#fff',
                     } 
                   });
                 } else {

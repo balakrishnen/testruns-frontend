@@ -28,136 +28,142 @@ const Roles = () => {
   console.log("loginUserSliceData",loginUserSliceData);
   
   console.log(roleSliceData);
-  const initailState : any={
+  var initailState : any={
+    name:"admin",
+    type:"1",
     "procedure_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "asset_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "profile_management":{
-      changePassword : false,
-      editContact    : false,
-      editDepartment : false,
-      editLab   : false,
-      editOrganisation : false,
-      editUserName     : false,
+      changePassword : true,
+      editContact    : true,
+      editDepartment : true,
+      editLab   : true,
+      editOrganisation : true,
+      editUserName     : true,
     },
     "role_management":{
-      edit : false
+      edit : true
     },
     "runs_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "user_management":{
 
-      create  : false,
-      delete  : false,
-      edit    : false,
-      view    :false
+      create  : true,
+      delete  : true,
+      edit    : true,
+      view    :true
     },
   }
-  const initailState1 : any={
+  var initailState1 : any={
+   name: "requester",
+   type:"2",
     "procedure_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "asset_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "profile_management":{
-      changePassword : false,
-      editContact    : false,
-      editDepartment : false,
-      editLab   : false,
-      editOrganisation : false,
-      editUserName     : false,
+      changePassword : true,
+      editContact    : true,
+      editDepartment : true,
+      editLab   : true,
+      editOrganisation : true,
+      editUserName     : true,
     },
     "role_management":{
-      edit : false
+      edit : true
     },
     "runs_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "user_management":{
 
-      create  : false,
-      delete  : false,
-      edit    : false,
-      view    :false
+      create  : true,
+      delete  : true,
+      edit    : true,
+      view    :true
     },
   }
-  const initailState2 : any={
+  var initailState2 : any={
+    name:"tester",
+    type:"3",
     "procedure_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "asset_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "profile_management":{
-      changePassword : false,
-      editContact    : false,
-      editDepartment : false,
-      editLab   : false,
-      editOrganisation : false,
-      editUserName     : false,
+      changePassword : true,
+      editContact    : true,
+      editDepartment : true,
+      editLab   : true,
+      editOrganisation : true,
+      editUserName     : true,
     },
     "role_management":{
-      edit : false
+      edit : true
     },
     "runs_management":{
-      assign : false,
-      create : false,
-      delete : false,
-      edit   : false,
-      share  : false,
-      view   : false,
+      assign : true,
+      create : true,
+      delete : true,
+      edit   : true,
+      share  : true,
+      view   : true,
     },
     "user_management":{
 
-      create  : false,
-      delete  : false,
-      edit    : false,
-      view    :false
+      create  : true,
+      delete  : true,
+      edit    : true,
+      view    :true
     },
   }
 
@@ -175,11 +181,24 @@ const Roles = () => {
   }, [formValues,formValues1,formValues2]);
 
   React.useEffect(() => {
-    setFormValues(roleSliceData[0])
-    console.log("formValues",roleSliceData);
-    setFormValues1(roleSliceData[2])
-    setFormValues2(roleSliceData[1])
+    roleSliceData?.map((ListItem:any,index:any)=>{
+      if(ListItem.type=="1"){
+        setFormValues(roleSliceData[0])
+        initailState["_id"] = roleSliceData[0]?._id
+        // initailState={...initailState,["id"]:roleSliceData[0]?._id}
+      }
+      else if(ListItem.type=="2")
+      {
+      setFormValues1(roleSliceData[1])
+      initailState1["_id"] = roleSliceData[1]?._id
+      }
+      else{
+        setFormValues2(roleSliceData[2])
+        initailState2["_id"] = roleSliceData[2]?._id
+      }
+    })
   }, [roleSliceData]);
+console.log(initailState,"initailState");
 
   React.useEffect(() => {
     let payload={
@@ -286,14 +305,32 @@ console.log(formValues);
     
   }
   const handleReset=async()=>{
-    let payload={
+    console.log(initailState,initailState1, initailState2,"initailState");
+    initailState["_id"] = roleSliceData[0]?._id
+    initailState1["_id"] = roleSliceData[1]?._id
+    initailState2["_id"] = roleSliceData[2]?._id
+    var newarr=[]
+    newarr.push(initailState,initailState1,initailState2)
+   
+    var payload={
+      // _id: loginUserSliceData?._id,
+      roles:newarr
+    }
+    await dispatch(fetchUpdateRoleData(payload)).then((res:any)=>{
+      toast(`Role updated successfully !`, {
+        style: {
+          background: '#00bf70', color: '#fff'
+        }
+      });
+     })
+     let payload1={
       instituteId:loginUserSliceData?.instituteId
     }
-    dispatch(fetchSingleRoleData(payload))
-    console.log("formValues",roleSliceData);
-    setFormValues(roleSliceData[0])
-    setFormValues1(roleSliceData[2])
-    setFormValues2(roleSliceData[1])
+    await dispatch(fetchSingleRoleData(payload1))
+    
+      setFormValues(initailState)
+      setFormValues1(initailState1)
+      setFormValues2(initailState2)
   }
   console.log(roleSliceData);
   
