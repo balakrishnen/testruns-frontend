@@ -93,7 +93,7 @@ const userSliceData = useSelector(
             let payload = {
               firstName: values.fullname,
               lastName: "",
-              email: values.email,
+              email: values.email.toLowerCase(),
               uid: res.user.uid,
               organisationId: "657420e5c63327a74f3c756a",
               role: "65741c069d53d19df8321e6e",

@@ -214,6 +214,9 @@ console.log("userDataRuns",userData)
     setTableHeaderVisible(false);
     setRowId([]);
     setRunsRow([]);
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
   }, [queryStrings]);
 
   React.useEffect(() => {
@@ -235,6 +238,9 @@ console.log("userDataRuns",userData)
     page['totalCount'] = runsSliceData?.pageInfo.totalCount;
     setRunsData(runsSliceData?.Runs);
     setPageInfo(page);
+    setTimeout(() => {
+      setLoader(false);
+    }, 2000);
   }, [runsSliceData]);
 
   const handlePageChange = (even: any, page_no: number) => {
@@ -261,9 +267,6 @@ console.log("userDataRuns",userData)
     console.log(runsChange);
     // setLoader(true)
     await dispatch(fetchUpdateRunsData(runsChange));
-    // setTimeout(() => {
-    //   // setLoader(false);
-    // }, 1000);
     await toast('Runs status updated !', {
       style: {
         background: '#00bf70',
@@ -374,7 +377,7 @@ console.log("userDataRuns",userData)
       ...row,
       is_checked: false,
     }));
-    setSelectedRows(updatedRows);
+    setRunsData(updatedRows);
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
@@ -405,8 +408,8 @@ console.log("userDataRuns",userData)
   const reload = () => {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
-    setPageInfo(page);
-    setQueryString(payload);
+    // setPageInfo(page);
+    // setQueryString(payload);
     dispatch(fetchRunsData(payload));
   };
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
