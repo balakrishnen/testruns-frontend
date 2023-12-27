@@ -284,6 +284,9 @@ export default function MyPage() {
   const [notifications, setNotifications] = useState([
     // Your notification data goes here
   ]);
+console.log("CalendarMark",CalendarMark.includes(selectedDate));
+console.log(CalendarContent,"CalendarContent");
+
 
   const tablePopupRef: any = React.useRef(null);
 
@@ -444,13 +447,30 @@ export default function MyPage() {
     return `${Math.floor(minutesDifference)}min ago`;
   };
   React.useEffect(()=> {
+    // console.log("selectedDate",selectedDate === moment(new Date()).format('MM-DD-YYYY'));
+    
   if(selectedDate === moment(new Date()).format('MM-DD-YYYY')){
-    const filCalendarContent = calendarEventData.filter(
-      (item:any) => item.createdAt === moment(new Date()).format('MM-DD-YYYY'),
-    );
-    setCalendarContent(filCalendarContent);
+    // const filCalendarContent = calendarEventData.filter(
+      
+    //   (item:any) => {console.log(item,"item");(item.createdAt === moment(new Date()).format('MM-DD-YYYY'))},
+    // );
+    let arr:any=[]
+
+  calendarEventData.map((item:any)=>{
+    if(item?.createdAt === moment(new Date()).format('MM-DD-YYYY'))
+    {
+      arr.push(item)
+      return item
+    }
+  })
+  //  console.log(arr,"filCalendarContent");
+    
+    setCalendarContent(arr);
  
-  }},[])
+  }},[calendarEventData])
+  // console.log(CalendarContent,"filCalendarContent");
+
+  
   // React.useEffect(()=>{
   //   let payload ={
   //     userId:loginUserSliceData?._id
@@ -828,14 +848,13 @@ export default function MyPage() {
           >
             
             <Box className="calender-rightside">
-            
               <Calendar
             
             onChange={handleDateClick}
                 value={value}
                 tileClassName={({ date, view }) => {
                   if (
-                    CalendarMark.includes(moment(date).format('MM/DD/YYYY'))
+                    CalendarMark.includes(moment(date).format('MM-DD-YYYY'))
                   
                     ) {
                     return 'events';
