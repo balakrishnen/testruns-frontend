@@ -1296,6 +1296,7 @@ console.log(htmlInput,"htmlInput");
                         anchorEl={anchorEl}
                         open={open}
                         onClose={handleClose}
+                        disableScrollLock={true}  
                       >
                         <MenuItem onClick={handleClose}>
                           <Button
@@ -1466,6 +1467,10 @@ console.log(htmlInput,"htmlInput");
                         // }}
                       >
                         <Select
+                         MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           name="status"
                           style={{ borderRadius: '11px', color: 'white' }}
                           className={
