@@ -247,7 +247,36 @@ console.log("userDataRuns",userData)
     setCurrentPage(page_no);
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data);
-  const handleOnChange = async (e: any, row: any) => {
+  //command by govind
+  // const handleOnChange = async (e: any, row: any) => {
+  //   console.log(e.target.value);
+
+  //   console.log('change', row.departmentId, row.laboratoryId);
+  //   var runsChange: any = {
+  //     _id: row._id,
+  //   };
+  //   if (e.target.name == 'status') {
+  //     runsChange['status'] = e.target.value;
+  //   }
+  //   console.log(runsChange);
+  //   // setLoader(true)
+  //   await dispatch(fetchUpdateRunsData(runsChange));
+  //   // setTimeout(() => {
+  //   //   // setLoader(false);
+  //   // }, 1000);
+  //   await toast('Runs status updated !', {
+  //     style: {
+  //       background: '#00bf70',
+  //       color: '#fff',
+  //     },
+  //   });
+  //   reload();
+  // };
+
+  const handleOnChange = async (e: any, row: any, index:number) => {
+    const data = JSON.parse(JSON.stringify(runsData))
+    data[index].status = e.target.value
+    console.log("runsData",runsData)
     console.log(e.target.value);
 
     console.log('change', row.departmentId, row.laboratoryId);
@@ -257,20 +286,19 @@ console.log("userDataRuns",userData)
     if (e.target.name == 'status') {
       runsChange['status'] = e.target.value;
     }
-    console.log(runsChange);
+    // console.log(runsChange);
     // setLoader(true)
-    await dispatch(fetchUpdateRunsData(runsChange));
-    // setTimeout(() => {
-    //   // setLoader(false);
-    // }, 1000);
-    await toast('Runs status updated !', {
-      style: {
-        background: '#00bf70',
-        color: '#fff',
-      },
-    });
-    reload();
+    await dispatch(fetchUpdateRunsData(runsChange)).then(()=>{
+      setRunsData(data)
+      toast('Runs status updated !', {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
+    })
   };
+
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       runsData,
@@ -1056,7 +1084,7 @@ console.log("userDataRuns",userData)
                             value={row.status ? row.status : 'Stopped'}
                             displayEmpty
                             onClick={(e: any) => clickHandler(e)}
-                            onChange={(e) => handleOnChange(e, row)}
+                            onChange={(e) => handleOnChange(e, row, index)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
                             {runsStatus.map((element: any) => (

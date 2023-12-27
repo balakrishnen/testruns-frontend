@@ -152,7 +152,7 @@ export default function ProcedureDetails() {
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [assetName, setAssetName] = React.useState<any>([])
   const [assetNamepatch, setAssetNamepatch] = React.useState<any>([])
-  console.log('assetName',assetName);
+  // console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
   const [isLoader, setIsLoader] = React.useState(true)
   const onSubmit = (values: any) => {
@@ -180,59 +180,36 @@ export default function ProcedureDetails() {
     validationSchema: validationSchema,
     onSubmit: onSubmit,
   });
-  // const assetsSliceData = useSelector(
-  //   (state: any) => state.assets.data?.get_all_assets_name,
-  // );
-  // React.useEffect(() => {
-  //   dispatch(fetchAssetsName());
-  //   // setAssetsData(assetsData);
-  // }, []);
-  // React.useEffect(() => {
-  //   setAssetsData(
-  //     assetsSliceData?.map((item: any) => ({
-  //       label: item.name,
-  //       value: item.name,
-  //     id: item._id,
-  //     })))
-  // }, [assetsSliceData]);
 
-React.useEffect(()=>{
-  setAssetName(assetName)
-},[assetName])
-console.log("assetName",assetName);
 
   React.useEffect(() => {
     console.log("1");
   
     // Set a timer for 1 second (1000 milliseconds)
-    const timerId = setTimeout(() => {
+    // const timerId = setTimeout(() => {
       setprocedureData(procedureSliceData);
-      setAssetName(
-        procedureSliceData?.assetId?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
       setIsLoader(false);
   
-      // Uncomment the following lines if you have data structure like procedureSliceData.assetId
-      // setAssetsData(
-      //   procedureSliceData?.assetId?.map((item: any) => ({
-      //     label: item.name,
-      //     value: item.name,
-      //     id: item._id,
-      //   })),
-      // );
   
       setState({ content: procedureSliceData?.procedureDetials });
       formik.setValues({ ...formik.values, name: procedureSliceData?.name });
-    }, 1000); // 1000 milliseconds = 1 second
+      const data:{label:string, value: string, id: number}[] = []
+      console.log()
+      if(procedureSliceData?.assetId.length !== 0){
+        console.log("sjdfjsdflik",procedureSliceData?.assetId)
+        // Uncomment the following lines if you have data structure like procedureSliceData.assetId
+          procedureSliceData?.assetId?.map((item: {name:string,_id:number}) => {
+            data.push({label: item.name,value: item.name,id: item._id})
+          })
+      }
+      setAssetNamepatch(data)
+    // }, 1000); // 1000 milliseconds = 1 second
   
     // Clean up the timer on component unmount or if procedureSliceData changes
-    return () => clearTimeout(timerId);
+    // return () => clearTimeout(timerId);
   
   }, [procedureSliceData]);
+
 
   console.log(procedureSliceData);
   const location: any = useLocation();
@@ -296,7 +273,7 @@ console.log(inputEl);
   const handleSave = (e:any) => {
   //  console.log(state);
   var assetIds: any = []
-  assetName?.map((item: any) => (assetIds.push(item?.id)))
+  assetNamepatch?.map((item: any) => (assetIds.push(item?.id)))
   console.log('assetIds',assetIds);
   
    const payload={
@@ -591,7 +568,7 @@ const handleEditorInit = (editor) => {
                     multiple
                     id="asset_Name"
                     disableCloseOnSelect
-                    value={assetName}
+                    value={assetNamepatch}
                     options={assetsData !== undefined ? assetsData : []}
                     getOptionLabel={(option: any) => option.label}
                     isOptionEqualToValue={(option: any, value: any) =>
@@ -613,7 +590,8 @@ const handleEditorInit = (editor) => {
                       </React.Fragment>
                     )}
                     onChange={(_, selectedOptions: any) =>
-                      {setAssetName(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                      {setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                      // setDropdownData((prevData) => [...prevData, newItem]);
                     }
                     }
                   />
@@ -624,7 +602,6 @@ const handleEditorInit = (editor) => {
                   )}
                 </Box>
               </Grid>
-
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Box style={{ position: 'relative' }}>
                   <label>Full procedure</label>
