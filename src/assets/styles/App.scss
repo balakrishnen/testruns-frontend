@@ -1504,6 +1504,7 @@ p.id-detail-title {
   font-weight: 500;
   line-height: normal;
   margin-top: 0.5rem;
+  word-break: break-word;
 }
 
 .more-info {
@@ -2510,13 +2511,13 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   border-radius: 10px;
   border-color: #9F9F9F !important;
   width: 100%;
-  top:0px !important;
+  // top:0px !important;
 }
 .prod-input fieldset {
-  height: 56px;
+  height: 61px;
 }
 .prod-input input#name {
-  height: 43px;
+  height: 38px;
 }
 .prod-multi button.MuiAutocomplete-popupIndicator svg {
   background-image: url('../images/chevrondown.svg');
