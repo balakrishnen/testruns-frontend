@@ -463,8 +463,8 @@ const handleEditorInit = (editor) => {
         <Box className="top-section" sx={{position:'relative !important',top:'0px !important',width:'100% !important'}}>
           <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
             <Grid container spacing={2} >
-              <Grid item xs={12} sm={12} md={3} lg={3}>
-                <Box>
+              <Grid item xs={12} sm={12} md={6} lg={3}>
+                <Box sx={{paddingRight:"4rem"}}>
                   <Typography className="id-detail">
                   {procedureData?.procedureNumber}
                   </Typography>
@@ -503,7 +503,7 @@ const handleEditorInit = (editor) => {
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={12} md={3} lg={3}>
+              <Grid item xs={12} sm={12} md={12} lg={3}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -537,7 +537,7 @@ const handleEditorInit = (editor) => {
             <Grid container spacing={2} className="">
               <Grid item xs={12} sm={12} md={6} lg={6} className='prod-input-auto  prod-input'>
                 <Box style={{ position: 'relative' }}>
-                  <label>Procedure name</label>
+                  <label style={{marginBottom:"0.6rem",display:"block"}}>Procedure name</label>
                   <TextField
                     margin="none"
                     fullWidth
@@ -563,7 +563,7 @@ const handleEditorInit = (editor) => {
 
               <Grid item xs={12} sm={12} md={6} lg={6} className='prod-input-auto prod-multi'>
                 <Box style={{ position: 'relative' }}>
-                  <label>Assets name</label>
+                  <label style={{marginBottom:"0.6rem",display:"block"}}>Assets name</label>
                   <Autocomplete
                     multiple
                     id="asset_Name"
