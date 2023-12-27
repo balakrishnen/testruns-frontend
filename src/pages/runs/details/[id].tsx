@@ -847,7 +847,7 @@ export default function RunsDetails() {
 
       // debugger
 
-      fetch('http://18.221.90.180:5000/runPython', {
+      fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython', {
         method: 'POST', // or 'PUT'
         headers: {
           "Content-Type": "application/json",
@@ -855,7 +855,7 @@ export default function RunsDetails() {
         body: JSON.stringify(htmlInput),
       }).then((res) => {
         console.log(res)
-        fetch('http://18.221.90.180:5000/runPython/')
+        fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython')
         .then((res) => res.json())
         .then((res) => {
           console.log(res);

@@ -456,7 +456,7 @@ console.log(CalendarContent,"CalendarContent");
     // );
     let arr:any=[]
 
-  calendarEventData.map((item:any)=>{
+  calendarEventData?.map((item:any)=>{
     if(item?.createdAt === moment(new Date()).format('MM-DD-YYYY'))
     {
       arr.push(item)
