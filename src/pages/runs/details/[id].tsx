@@ -1146,19 +1146,21 @@ console.log(htmlInput,"htmlInput");
     console.log('inputEl', objects);
   };
   console.log('htmlInput', htmlInput);
-  const uploadVideo = async (e: any) => {
+  const uploadVideo = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const videoUrl = URL.createObjectURL(file);
-
-      if (editorRef.current) {
+      if (videoUrl) {
         const editor = editorRef.current.editor;
-        editor.insertContent(
-          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`,
+      console.log('videoUrl',videoUrl);
+  
+        editorRef.current?.insertContent(
+          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
         );
       }
     }
   };
+  
   const handleEditorInit = (editor: any) => {
     editor.ui.registry.addButton('uploadvideo', {
       text: 'Upload Video',
