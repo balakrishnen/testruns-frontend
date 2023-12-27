@@ -270,8 +270,10 @@ export default function MyPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [localRowsPerPage, setLocalRowsPerPage] = useState(5);
   const [CalendarContent, setCalendarContent] = useState([]);
+  console.log('CalendarContent',CalendarContent);
   const [calendarEventData, setCalendarEventData] = useState([]);
   const [CalendarMark, setCalendarMark] = useState([]);
+  console.log('CalendarMark',CalendarMark);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentMonth, setCurrentMonth] = useState()
   const [currentYear, setCurrentYear] = useState()

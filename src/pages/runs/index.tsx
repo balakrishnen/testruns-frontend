@@ -248,35 +248,7 @@ console.log("userDataRuns",userData)
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data);
   //command by govind
-  // const handleOnChange = async (e: any, row: any) => {
-  //   console.log(e.target.value);
-
-  //   console.log('change', row.departmentId, row.laboratoryId);
-  //   var runsChange: any = {
-  //     _id: row._id,
-  //   };
-  //   if (e.target.name == 'status') {
-  //     runsChange['status'] = e.target.value;
-  //   }
-  //   console.log(runsChange);
-  //   // setLoader(true)
-  //   await dispatch(fetchUpdateRunsData(runsChange));
-  //   // setTimeout(() => {
-  //   //   // setLoader(false);
-  //   // }, 1000);
-  //   await toast('Runs status updated !', {
-  //     style: {
-  //       background: '#00bf70',
-  //       color: '#fff',
-  //     },
-  //   });
-  //   reload();
-  // };
-
-  const handleOnChange = async (e: any, row: any, index:number) => {
-    const data = JSON.parse(JSON.stringify(runsData))
-    data[index].status = e.target.value
-    console.log("runsData",runsData)
+  const handleOnChange = async (e: any, row: any) => {
     console.log(e.target.value);
 
     console.log('change', row.departmentId, row.laboratoryId);
@@ -286,18 +258,46 @@ console.log("userDataRuns",userData)
     if (e.target.name == 'status') {
       runsChange['status'] = e.target.value;
     }
-    // console.log(runsChange);
+    console.log(runsChange);
     // setLoader(true)
-    await dispatch(fetchUpdateRunsData(runsChange)).then(()=>{
-      setRunsData(data)
-      toast('Runs status updated !', {
-        style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
-      });
-    })
+    await dispatch(fetchUpdateRunsData(runsChange));
+    // setTimeout(() => {
+    //   // setLoader(false);
+    // }, 1000);
+    await toast('Runs status updated !', {
+      style: {
+        background: '#00bf70',
+        color: '#fff',
+      },
+    });
+    reload();
   };
+
+  // const handleOnChange = async (e: any, row: any, index:number) => {
+  //   const data = JSON.parse(JSON.stringify(runsData))
+  //   data[index].status = e.target.value
+  //   console.log("runsData",runsData)
+  //   console.log(e.target.value);
+
+  //   console.log('change', row.departmentId, row.laboratoryId);
+  //   var runsChange: any = {
+  //     _id: row._id,
+  //   };
+  //   if (e.target.name == 'status') {
+  //     runsChange['status'] = e.target.value;
+  //   }
+  //   // console.log(runsChange);
+  //   // setLoader(true)
+  //   await dispatch(fetchUpdateRunsData(runsChange)).then(()=>{
+  //     setRunsData(data)
+  //     toast('Runs status updated !', {
+  //       style: {
+  //         background: '#00bf70',
+  //         color: '#fff',
+  //       },
+  //     });
+  //   })
+  // };
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(

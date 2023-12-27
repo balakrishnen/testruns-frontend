@@ -695,7 +695,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     type: 'date',
   },
   {
-    id: 'objective',
+    id: 'createdOn',
     label: 'Created by',
     filters: [
       {
@@ -1039,7 +1039,7 @@ export const RunsHeaders: any = [
     type: 'select',
   },
   {
-    id: 'objective',
+    id: 'assignedBy',
     label: 'Assigned by',
     filters: [
       {
