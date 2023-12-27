@@ -71,7 +71,7 @@ export const CardLayout = ({ children }: any, props: any) => {
 
       let temp = { _id: userSliceData?.verifyToken?._id };
 
-      dispatch(fetchSingleUserData(temp))
+      await  dispatch(fetchSingleUserData(temp))
         .then((isSucess: any) => {
           const data = isSucess?.get_user ?? {}
           console.log("userdata ",data, isSucess)
@@ -136,7 +136,7 @@ export const CardLayout = ({ children }: any, props: any) => {
 
       const temp = { _id: userSliceData?.verifyToken?._id };
 
-      dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
+      await dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
         const data = isSuccess?.get_user ?? {};
         if (!data.isActive) {
           navigate("/login");
@@ -147,7 +147,7 @@ export const CardLayout = ({ children }: any, props: any) => {
             } 
           });
         } else {
-          dispatch(fetchLoginUser(payload2));
+         dispatch(fetchLoginUser(payload2));
           window.sessionStorage.setItem("isLoggedIn", "true");
           navigate("/mypage");
           toast(`Microsoft Login successful !`, {
