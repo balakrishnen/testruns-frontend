@@ -1102,7 +1102,7 @@ console.log("userDataRuns",userData)
                         </TableCell>
                       )}
                       {headers[7].is_show && (
-                        <TableCell align="center">Super Admin</TableCell>
+                        <TableCell align="center">{row.assignedTo.firstName}</TableCell>
                         //</TableRow>{/* <Select
                         //   className={
                         //     row.availability === 'AVAILABLE'

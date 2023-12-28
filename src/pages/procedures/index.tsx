@@ -959,7 +959,7 @@ export default function Procedures() {
                               )}
                             </TableCell>
                           )}
-                          {headers[4].is_show && (
+                          {headers[4].is_show && (console.log(row,row),
                             <TableCell>
                               {moment(parseInt(row.createdAt)).format(
                                 'MM/DD/YYYY',
