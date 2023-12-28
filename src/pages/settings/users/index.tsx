@@ -46,7 +46,7 @@ import filterIcon from '../../../assets/images/filter-icon1.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import user from '../../../assets/images/profile/profile.svg';
+import userr from '../../../assets/images/profile/profile.svg';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import Emptystate from '../../../assets/images/Emptystate.svg';
@@ -754,7 +754,7 @@ const Users = () => {
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                               <Box>
                                 <img
-                                  src={user}
+                                  src={userr}
                                   alt="no_image"
                                   style={{ width: '45px', height: '45px' }}
                                 />
