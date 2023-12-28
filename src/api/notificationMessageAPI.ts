@@ -3,19 +3,19 @@ import { GET_NOTIFICATION_MESSAGE ,READ_SINGLE_NOTIFICATION_MESSAGE, READ_BULK_N
 import { client } from '../utils/config';
 
 export const fetchNotificationMessageData = (payload: any)=> async (dispatch: any) => {
-    // dispatch(fetchNotificationMessageStart());
+    dispatch(fetchNotificationMessageStart());
     try {
         const response = await client.query({
             query: GET_NOTIFICATION_MESSAGE,
             variables: payload,
             fetchPolicy: 'network-only',
         })
+        dispatch(fetchNotificationMessageSuccess(response.data));
 
         console.log('response',response)
         return response
-        // dispatch(fetchNotificationMessageSuccess(response.data));
     } catch (error: any) {
-        // dispatch(fetchNotificationMessageFailure(error.message))   
+        dispatch(fetchNotificationMessageFailure(error.message))   
     }
 };
 

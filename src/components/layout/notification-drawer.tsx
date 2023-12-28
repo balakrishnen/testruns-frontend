@@ -75,17 +75,30 @@ export default function AppNotificationDrawer({
   // }, []);
   React.useEffect(() => {
     if (openDrawer) {
+      notificationMessageList()
       // Fetch data only when the drawer is open
-      let payload = {
-        userId: loginUserSliceData?.verifyToken?._id
-      };
-      dispatch(fetchNotificationMessageData(payload)).then((res) => {
-        setNotificationMesssage(res?.data?.get_notification_message);
-        console.log(res?.data?.get_notification_message);
-      });
+    //   let payload = {
+    //     userId: loginUserSliceData?.verifyToken?._id
+    //   };
+    //   dispatch(fetchNotificationMessageData(payload)).then((res) => {
+    //     setNotificationMesssage(res?.data?.get_notification_message);
+    //     console.log(res?.data?.get_notification_message);
+    //   });
     }
   }, [openDrawer]);
-  
+  const notificationMessageList=()=>{
+   
+    let payload={
+      userId: loginUserSliceData?.verifyToken?._id
+    }
+    console.log(payload);
+    
+    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+      setNotificationMesssage(res?.data?.get_notification_message)
+      console.log(res?.data?.get_notification_message);
+      
+    });
+  }
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: any = moment();
     const timestamp = parseInt(notificationTime);
@@ -107,22 +120,22 @@ export default function AppNotificationDrawer({
   
     return `${Math.floor(minutesDifference)}min ago`;
   };
-  const handleReadSingleNotification=async(id:any)=>{
-    let payload={
-      _id:id,
-      isRead:true
-    }
-    let payload2={
-      userId: userData?._id
-    }
-   await dispatch(fetchReadSingleMessageData(payload))
-   await  dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
-    setNotificationMesssage(res?.data?.get_notification_message)
-    console.log(res?.data?.get_notification_message);
+  // const handleReadSingleNotification=async(id:any)=>{
+  //   let payload={
+  //     _id:id,
+  //     isRead:true
+  //   }
+  //   let payload2={
+  //     userId: userData?._id
+  //   }
+  //  await dispatch(fetchReadSingleMessageData(payload))
+  //  await  dispatch(fetchNotificationMessageData(payload2)).then((res)=>{
+  //   setNotificationMesssage(res?.data?.get_notification_message)
+  //   console.log(res?.data?.get_notification_message);
     
-  });
+  // });
 
-  }
+  // }
 
   const handleReadBulkNotification=async()=>{
     let payload={
@@ -145,6 +158,14 @@ export default function AppNotificationDrawer({
   }
   console.log("notificationMesssage",notificationMesssage);
   
+const handleReadNotification=async(id:any)=>{
+  let payload2={
+    _id:id,
+    isRead: true
+  }
+  await dispatch(fetchReadSingleMessageData(payload2))
+  await notificationMessageList()
+}
   return (
     <>
     {/* <Toolbar sx={{position:"absolute",right:"0px",zIndex:"9999999 !important"}}/> */}
@@ -192,7 +213,7 @@ export default function AppNotificationDrawer({
             style={{
               backgroundColor: row?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
             }}
-            onClick={()=>handleReadSingleNotification(row?._id)}
+            onClick={()=>handleReadNotification(row?._id)}
             >
               <Box className="image-container">
                 <Avatar

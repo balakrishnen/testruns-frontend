@@ -351,17 +351,7 @@ console.log(CalendarContent,"CalendarContent");
   React.useEffect(() => {
     // dispatch(fetchNotificationData());
     console.log("notification1", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
-    
-    let payload={
-      userId: loginUserSliceData?.verifyToken?._id
-    }
-    console.log(payload);
-    
-    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-      setNotificationMesssage(res?.data?.get_notification_message)
-      console.log(res?.data?.get_notification_message);
-      
-    });
+    notificationMessageList()
   }, [loginUserSliceData]);
 
   React.useEffect(() => {
@@ -370,10 +360,24 @@ console.log(CalendarContent,"CalendarContent");
       year: `${new Date().getFullYear()}`,
     };
 
-    dispatch(fetchNotificationData());
+    // dispatch(fetchNotificationData());
     dispatch(fetchCalendarEventData(pay));
   
   }, [userData]);
+const notificationMessageList=()=>{
+   
+  let payload={
+    userId: loginUserSliceData?.verifyToken?._id
+  }
+  console.log(payload);
+  
+  dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+    setNotificationMesssage(res?.data?.get_notification_message)
+    console.log(res?.data?.get_notification_message);
+    
+  });
+}
+
   React.useEffect(() => {
     setTimeout(() => {
       setLoader(false);
@@ -517,6 +521,16 @@ console.log(CalendarContent,"CalendarContent");
   const arr=[1,2,3,4,5,6,7]
   console.log(CalendarContent);
   console.log("notificationMesssage",notificationMesssage);
+
+const handleReadNotification=async(id:any)=>{
+  let payload2={
+    _id:id,
+    isRead: false
+  }
+  await dispatch(fetchReadSingleMessageData(payload2))
+  await notificationMessageList()
+}
+
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
@@ -772,6 +786,7 @@ console.log(CalendarContent,"CalendarContent");
                     style={{
                       backgroundColor: notification?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
                     }}
+                    onClick={()=>{handleReadNotification(notification._id)}}
                     
                   >
                     <Box className="image-container">
