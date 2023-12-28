@@ -75,15 +75,16 @@ export const CardLayout = ({ children }: any, props: any) => {
         .then((isSucess: any) => {
           const data = isSucess?.get_user ?? {}
           console.log("userdata ",data, isSucess)
-          if (!data.isActive) {
-            navigate('/login')
-            toast(`The user is inactive !`, {
-              style: {
-                background: '#d92828',
-                color: '#fff',
-              } 
-            });
-          } else {
+          // if (!data.isActive) {
+          //   navigate('/login')
+          //   toast(`The user is inactive !`, {
+          //     style: {
+          //       background: '#d92828',
+          //       color: '#fff',
+          //     } 
+          //   });
+          // } 
+          // else {
             dispatch(fetchLoginUser(payload2))
             window.sessionStorage.setItem('isLoggedIn', 'true');
 
@@ -93,7 +94,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                 background: '#00bf70', color: '#fff'
               }
             });
-          }
+          // }
         })
   
       // await dispatch(fetchLoginUser(payload2));
