@@ -71,23 +71,29 @@ export const CardLayout = ({ children }: any, props: any) => {
 
       let temp = { _id: userSliceData?.verifyToken?._id };
 
-      dispatch(fetchSingleUserData(temp))
+      await  dispatch(fetchSingleUserData(temp))
         .then((isSucess: any) => {
           const data = isSucess?.get_user ?? {}
           console.log("userdata ",data, isSucess)
-          // if (!data.isActive) {
-          //   navigate('/login')
-          // } else {
-            dispatch(fetchLoginUser(payload))
+          if (!data.isActive) {
+            navigate('/login')
+            toast(`The user is inactive !`, {
+              style: {
+                background: '#d92828',
+                color: '#fff',
+              } 
+            });
+          } else {
+            dispatch(fetchLoginUser(payload2))
             window.sessionStorage.setItem('isLoggedIn', 'true');
 
             navigate('/mypage')
-            toast(`Login successful !`, {
+            toast(`Login successfully !`, {
               style: {
                 background: '#00bf70', color: '#fff'
               }
             });
-          // }
+          }
         })
   
       // await dispatch(fetchLoginUser(payload2));
@@ -130,12 +136,18 @@ export const CardLayout = ({ children }: any, props: any) => {
 
       const temp = { _id: userSliceData?.verifyToken?._id };
 
-      dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
+      await dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
         const data = isSuccess?.get_user ?? {};
         if (!data.isActive) {
           navigate("/login");
+          toast(`The user is inactive !`, {
+            style: {
+              background: '#d92828',
+              color: '#fff',
+            } 
+          });
         } else {
-          dispatch(fetchLoginUser(payload2));
+         dispatch(fetchLoginUser(payload2));
           window.sessionStorage.setItem("isLoggedIn", "true");
           navigate("/mypage");
           toast(`Microsoft Login successful !`, {

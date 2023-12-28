@@ -847,7 +847,7 @@ export default function RunsDetails() {
 
       // debugger
 
-      fetch('http://18.221.90.180:5000/runPython', {
+      fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython', {
         method: 'POST', // or 'PUT'
         headers: {
           "Content-Type": "application/json",
@@ -855,7 +855,7 @@ export default function RunsDetails() {
         body: JSON.stringify(htmlInput),
       }).then((res) => {
         console.log(res)
-        fetch('http://18.221.90.180:5000/runPython/')
+        fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython')
         .then((res) => res.json())
         .then((res) => {
           console.log(res);
@@ -1146,19 +1146,21 @@ console.log(htmlInput,"htmlInput");
     console.log('inputEl', objects);
   };
   console.log('htmlInput', htmlInput);
-  const uploadVideo = async (e: any) => {
+  const uploadVideo = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const videoUrl = URL.createObjectURL(file);
-
-      if (editorRef.current) {
+      if (videoUrl) {
         const editor = editorRef.current.editor;
-        editor.insertContent(
-          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`,
+      console.log('videoUrl',videoUrl);
+  
+        editorRef.current?.insertContent(
+          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
         );
       }
     }
   };
+  
   const handleEditorInit = (editor: any) => {
     editor.ui.registry.addButton('uploadvideo', {
       text: 'Upload Video',
@@ -1296,6 +1298,7 @@ console.log(htmlInput,"htmlInput");
                         anchorEl={anchorEl}
                         open={open}
                         onClose={handleClose}
+                        disableScrollLock={true}  
                       >
                         <MenuItem onClick={handleClose}>
                           <Button
@@ -1466,6 +1469,10 @@ console.log(htmlInput,"htmlInput");
                         // }}
                       >
                         <Select
+                         MenuProps={{                   
+                          disableScrollLock: true,                   
+                          marginThreshold: null
+                        }}
                           name="status"
                           style={{ borderRadius: '11px', color: 'white' }}
                           className={
@@ -1894,7 +1901,7 @@ console.log(htmlInput,"htmlInput");
                     type="submit"
                     variant="contained"
                     className="add-btn"
-                    style={{ position: 'sticky' }}
+                    style={{ position: 'sticky', display: value !== 0?"none" :"block"}}
                     onClick={() => {
                       value == 0 && onSubmit();
                     }}

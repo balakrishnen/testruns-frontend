@@ -417,7 +417,7 @@ const Profile = () => {
     dispatch(fetchDepartmentData());
     dispatch(fetchLabData());
     dispatch(fetchSingleRoleData(payload2));
-  }, []);
+  }, [loginUserSliceData]);
   console.log(formikProfile);
 
   const triggerFileUploadField = () => {

@@ -131,7 +131,11 @@ const RunsForm = React.forwardRef(
           }
         dispatch(fetchSingleRunsData(payload))
         formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId?._id)
+        formik.setFieldValue('objective',runzSliceData?.get_run?.objective)
         // console.log("procedureId",runzSliceData?.get_run?.procedureId[0]?._id);
+        }
+        else{
+          formik.setFieldValue('objective',"")
         }
       },
     }));
@@ -195,23 +199,24 @@ const RunsForm = React.forwardRef(
     console.log("type",type);
     const formik = useFormik({
       initialValues: {
-        departmentId: formData ? formData.departmentId : "",
-        laboratoryId: formData ? formData.laboratoryId : "",
+        departmentId:  "",
+        laboratoryId: "",
         organisationId: '657420e5c63327a74f3c756a',
-        procedureId: formData ? formData.procedureId?._id : '',
-        objective: formData ? formData.objective : '',
+        procedureId: "",
+        objective:  "",
         dueDate: dateDue,
         createdOn: type=='edit' ? createdDate : dayjs(moment(new Date()).format('MM/DD/YYYY')),
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo:loginUserSliceData?.verifyToken?._id,
         status: "Created",
+        procedureNumber:""
         // procedureDetials:""
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
     });
 
-    console.log(formik);
+    console.log("formik",formik);
     
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -254,8 +259,9 @@ const RunsForm = React.forwardRef(
         confirmationPopupRef.current.open(false);
       } else {
         confirmationPopupRef.current.open(false);
-        setRunsCreate(false);
-        clearForm()
+        // setRunsCreate(false);
+        // clearForm()
+        handleClose()
       }
     };
 
@@ -269,7 +275,8 @@ const RunsForm = React.forwardRef(
       // if(type=='edit'){
        
       // }
-      clearForm()
+      // clearForm()
+      handleClose()
       // successPopupRef.current.open(true, 'Run');
       // setTimeout(() => {
       //   successPopupRef.current.open(false, 'Run');
@@ -291,7 +298,15 @@ const RunsForm = React.forwardRef(
         perPage: 25
       }));
     }, []);
+const handleClose=()=>{
+  if (type !== 'edit') {
+    formik.resetForm();
+    setDepartment([]);
+    setLab([]);
+  }
 
+  setRunsCreate(false);
+}
     return (
       <div>
         <Dialog
@@ -309,13 +324,7 @@ const RunsForm = React.forwardRef(
               <Box className="title-popup">
                 <Typography>{type} Run</Typography>
                 <CloseIcon onClick={() => {
-                  if (type !== 'edit') {
-
-                    formik.resetForm();
-                    setDepartment([]);
-                    setLab([]);
-                  }
-                  setRunsCreate(false);
+                  handleClose()
                 }} />
               </Box>
               <Box>
@@ -371,6 +380,8 @@ const RunsForm = React.forwardRef(
 
                           formik.setFieldValue('procedureId', selectedProcedure?._id || '');
                           formik.setFieldValue('departmentId', DepartmentData || '');
+                          formik.setFieldValue('procedureNumber', selectedProcedure?.procedureNumber || "")
+
                           setDepartment(DepartmentData)
                           setLab(LabData)
 
@@ -448,7 +459,7 @@ const RunsForm = React.forwardRef(
                         placeholder="Procedure Id"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.procedureId}
+                        value={formik.values.procedureNumber}
                         size="small"
                         error={
                           formik.touched.procedureId &&

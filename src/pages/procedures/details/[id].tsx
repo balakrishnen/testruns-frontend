@@ -31,7 +31,7 @@ import SpinerLoader from '../../../components/SpinnerLoader';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().trim().required('Label is required').max(50, 'Must be 50 characters or less'),
-  asset_Name: Yup.array().required(),
+  asset_Name: Yup.array(),
   procedure: Yup.string().required().max(50, 'Must be 50 characters or less'),
 });
 
@@ -152,7 +152,7 @@ export default function ProcedureDetails() {
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [assetName, setAssetName] = React.useState<any>([])
   const [assetNamepatch, setAssetNamepatch] = React.useState<any>([])
-  console.log('assetName',assetNamepatch);
+  // console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
   const [isLoader, setIsLoader] = React.useState(true)
   const onSubmit = (values: any) => {
@@ -180,48 +180,36 @@ export default function ProcedureDetails() {
     validationSchema: validationSchema,
     onSubmit: onSubmit,
   });
-  // const assetsSliceData = useSelector(
-  //   (state: any) => state.assets.data?.get_all_assets_name,
-  // );
-  // React.useEffect(() => {
-  //   dispatch(fetchAssetsName());
-  //   // setAssetsData(assetsData);
-  // }, []);
-  // React.useEffect(() => {
-  //   setAssetsData(
-  //     assetsSliceData?.map((item: any) => ({
-  //       label: item.name,
-  //       value: item.name,
-  //     id: item._id,
-  //     })))
-  // }, [assetsSliceData]);
 
 
   React.useEffect(() => {
     console.log("1");
   
     // Set a timer for 1 second (1000 milliseconds)
-    const timerId = setTimeout(() => {
+    // const timerId = setTimeout(() => {
       setprocedureData(procedureSliceData);
       setIsLoader(false);
   
-      // Uncomment the following lines if you have data structure like procedureSliceData.assetId
-      // setAssetsData(
-      //   procedureSliceData?.assetId?.map((item: any) => ({
-      //     label: item.name,
-      //     value: item.name,
-      //     id: item._id,
-      //   })),
-      // );
   
       setState({ content: procedureSliceData?.procedureDetials });
       formik.setValues({ ...formik.values, name: procedureSliceData?.name });
-    }, 1000); // 1000 milliseconds = 1 second
+      const data:{label:string, value: string, id: number}[] = []
+      console.log()
+      if(procedureSliceData?.assetId.length !== 0){
+        console.log("sjdfjsdflik",procedureSliceData?.assetId)
+        // Uncomment the following lines if you have data structure like procedureSliceData.assetId
+          procedureSliceData?.assetId?.map((item: {name:string,_id:number}) => {
+            data.push({label: item.name,value: item.name,id: item._id})
+          })
+      }
+      setAssetNamepatch(data)
+    // }, 1000); // 1000 milliseconds = 1 second
   
     // Clean up the timer on component unmount or if procedureSliceData changes
-    return () => clearTimeout(timerId);
+    // return () => clearTimeout(timerId);
   
   }, [procedureSliceData]);
+
 
   console.log(procedureSliceData);
   const location: any = useLocation();
@@ -285,7 +273,7 @@ console.log(inputEl);
   const handleSave = (e:any) => {
   //  console.log(state);
   var assetIds: any = []
-  assetName?.map((item: any) => (assetIds.push(item?.id)))
+  assetNamepatch?.map((item: any) => (assetIds.push(item?.id)))
   console.log('assetIds',assetIds);
   
    const payload={
@@ -380,16 +368,21 @@ console.log(inputEl);
   const empty = vals.filter((item) => item === "");
 
   }
-  dispatch(fetchUpdateProcedureData(payload))
-  toast(`Procedure updated !`, {
-    style: {
-      background: '#00bf70', color: '#fff'
-    }
-  });
-  setTimeout(()=>{
-    const procedureId = { _id: procedureData._id,};
-  dispatch(fetchSingleProcedureData(procedureId));
-  },3000)
+  dispatch(fetchUpdateProcedureData(payload)).then((res)=>{
+    toast(`Procedure updated !`, {
+      style: {
+        background: '#00bf70', color: '#fff'
+      }
+    });
+    // setTimeout(()=>{
+      const procedureId = { _id: procedureData._id,};
+    dispatch(fetchSingleProcedureData(procedureId));
+    // },3000)
+  }).catch((err)=>{
+    console.log(err);
+    
+  })
+
  
 // }
 }
@@ -440,10 +433,11 @@ const uploadVideo = async (e) => {
   const file = e.target.files[0];
   if (file) {
     const videoUrl = URL.createObjectURL(file);
-    console.log('videoUrl',videoUrl);
-    if (editorRef.current) {
+    if (videoUrl) {
       const editor = editorRef.current.editor;
-      editorRef.current.editor?.insertContent(
+    console.log('videoUrl',videoUrl);
+
+      editorRef.current?.insertContent(
         `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
       );
     }
@@ -469,8 +463,8 @@ const handleEditorInit = (editor) => {
         <Box className="top-section" sx={{position:'relative !important',top:'0px !important',width:'100% !important'}}>
           <Box sx={{ padding: '24px 0px', margin: '0px 24px' }}>
             <Grid container spacing={2} >
-              <Grid item xs={12} sm={12} md={3} lg={3}>
-                <Box>
+              <Grid item xs={12} sm={12} md={6} lg={3}>
+                <Box sx={{paddingRight:"4rem"}}>
                   <Typography className="id-detail">
                   {procedureData?.procedureNumber}
                   </Typography>
@@ -509,7 +503,7 @@ const handleEditorInit = (editor) => {
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={12} md={3} lg={3}>
+              <Grid item xs={12} sm={12} md={12} lg={3}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -543,7 +537,7 @@ const handleEditorInit = (editor) => {
             <Grid container spacing={2} className="">
               <Grid item xs={12} sm={12} md={6} lg={6} className='prod-input-auto  prod-input'>
                 <Box style={{ position: 'relative' }}>
-                  <label>Procedure name</label>
+                  <label style={{marginBottom:"0.6rem",display:"block"}}>Procedure name</label>
                   <TextField
                     margin="none"
                     fullWidth
@@ -569,12 +563,12 @@ const handleEditorInit = (editor) => {
 
               <Grid item xs={12} sm={12} md={6} lg={6} className='prod-input-auto prod-multi'>
                 <Box style={{ position: 'relative' }}>
-                  <label>Assets name</label>
+                  <label style={{marginBottom:"0.6rem",display:"block"}}>Assets name</label>
                   <Autocomplete
                     multiple
                     id="asset_Name"
                     disableCloseOnSelect
-                    value={assetName}
+                    value={assetNamepatch}
                     options={assetsData !== undefined ? assetsData : []}
                     getOptionLabel={(option: any) => option.label}
                     isOptionEqualToValue={(option: any, value: any) =>
@@ -595,12 +589,9 @@ const handleEditorInit = (editor) => {
                         </li>
                       </React.Fragment>
                     )}
-                    // onChange={(_, selectedOptions: any) =>
-                    //   // setAssetName(selectedOptions)
-                    //   setAssetName(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
-                    // }
-                    onChange={(_, selectedOptions: any) => {
-                      setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                    onChange={(_, selectedOptions: any) =>
+                      {setAssetNamepatch(selectedOptions); formik.setValues({ ...formik.values, 'asset_Name': selectedOptions })
+                      // setDropdownData((prevData) => [...prevData, newItem]);
                     }
                     }
                   />
@@ -611,7 +602,6 @@ const handleEditorInit = (editor) => {
                   )}
                 </Box>
               </Grid>
-
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Box style={{ position: 'relative' }}>
                   <label>Full procedure</label>
@@ -655,7 +645,7 @@ const handleEditorInit = (editor) => {
                           'template',
                           'insertinput',
                           'customInsertButton',
-                          'customAlertButton subscript superscript charmap',
+                          'customAlertButton subscript superscript charmap textpattern',
                         ],
                         toolbar: 'undo redo | blocks formatselect | ' +
                         'charmap subscript superscript bold italic | alignleft aligncenter ' +
@@ -678,7 +668,7 @@ const handleEditorInit = (editor) => {
                           var id = "blobid" + new Date().getTime();
                           var blobCache =
                             window?.tinymce?.activeEditor.editorUpload.blobCache;
-                          var base64 = reader?.result?.split(",")[1];
+                          var base64 = reader?.result.split(",")[1];
                           var blobInfo = blobCache.create(id, file, base64);
                           blobCache.add(blobInfo);
                           cb(blobInfo.blobUri(), { title: file.name });
@@ -700,6 +690,15 @@ const handleEditorInit = (editor) => {
                           );
                         },
                       });
+                      var toTimeHtml = function (date) {
+                        return (
+                          '<time datetime="' +
+                          date.toString() +
+                          '">' +
+                          date.toDateString() +
+                          "</time>"
+                        );
+                      };
                       editor.ui.registry.addButton("customVideoUpload", {
                         text: "Upload Video",
                         onAction: function () {
@@ -711,6 +710,27 @@ const handleEditorInit = (editor) => {
                           // }
                         },
                       });
+
+                      editor.ui.registry.addButton("customDateButton", {
+                        icon: "insert-time",
+                        tooltip: "Insert Current Date",
+                        disabled: true,
+                        onAction: function (_) {
+                          editor.insertContent(toTimeHtml(new Date()));
+                        },
+                        onSetup: function (buttonApi) {
+                          var editorEventCallback = function (eventApi:any) {
+                            buttonApi?.setDisabled(
+                              eventApi.element.nodeName.toLowerCase() === "time"
+                            );
+                          };
+                          editor.on("NodeChange", editorEventCallback);
+                          return function (buttonApi) {
+                            editor.off("NodeChange", editorEventCallback);
+                          };
+                        },
+                      });
+
                       editor.ui.registry.addButton("customDataAttrButton", {
                         icon: "fas fa-cog",
                         tooltip: "Assign Data Attribute",

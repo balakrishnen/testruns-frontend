@@ -88,20 +88,26 @@ const Login = () => {
               .then((isSucess: any) => {
                 const data = isSucess?.get_user ?? {}
                 console.log("userdata ",data, isSucess)
-              
-                // if (!data.isActive) {
-                //   navigate('/login')
-                // } else {
+              // debugger
+                if (!data.isActive) {
+                  navigate('/login')
+                  toast(`The user is inactive !`, {
+                    style: {
+                      background: '#d92828',
+                      color: '#fff',
+                    } 
+                  });
+                } else {
                   dispatch(fetchLoginUser(payload))
                   window.sessionStorage.setItem('isLoggedIn', 'true');
 
                   navigate('/mypage')
-                  toast(`Login successful !`, {
+                  toast(`Login successfully !`, {
                     style: {
                       background: '#00bf70', color: '#fff'
                     } 
                   });
-                // }
+                }
               })
 
               .catch((err: any) => {
@@ -306,7 +312,7 @@ const Login = () => {
           className="forgot-pass1"
 
         >
-          version 2. 1. 1
+          version 2. 1. 7
         </Typography>
       </Box>
       <Box sx={{ mt: "2rem" }}>

@@ -14,7 +14,21 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+code,
+kbd,
+samp {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+code>span{
+  word-wrap: break-word;
+  color: #e83e8c;
+  font-size: .875em;
+}
 /* Firefox */
 input[type=number] {
   appearance:textfield;
@@ -1490,6 +1504,7 @@ p.id-detail-title {
   font-weight: 500;
   line-height: normal;
   margin-top: 0.5rem;
+  word-break: break-word;
 }
 
 .more-info {
@@ -1865,7 +1880,8 @@ p.follow-people {
 }
 
 .notifications:hover {
-  background: $light-yellow-1;
+  // background: $light-yellow-1;
+  background: rgba(0,0,0,.04)!important;
 }
 
 .image-container {
@@ -2495,13 +2511,13 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   border-radius: 10px;
   border-color: #9F9F9F !important;
   width: 100%;
-  top:0px !important;
+  // top:0px !important;
 }
 .prod-input fieldset {
-  height: 56px;
+  height: 61px;
 }
 .prod-input input#name {
-  height: 43px;
+  height: 38px;
 }
 .prod-multi button.MuiAutocomplete-popupIndicator svg {
   background-image: url('../images/chevrondown.svg');
@@ -2519,4 +2535,7 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   .app-bar-block header{
     z-index: 999;
   }
+}
+.tox.tox-silver-sink.tox-tinymce-aux {
+  z-index: 9;
 }

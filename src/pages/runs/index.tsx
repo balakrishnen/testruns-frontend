@@ -109,8 +109,9 @@ export default function Runs() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const [runsData, setRunsData] = React.useState<any>([]);
-  console.log('runsData', runsData);
-
+  console.log('filterSearchValue', filterSearchValue);
+  console.log('filterType', filterType);
+  console.log('filterKey', filterKey);
   const [rowId, setRowId] = React.useState<any>([]);
   const [runsRow, setRunsRow] = React.useState<any>([])
   const dispatch: any = useDispatch();
@@ -213,6 +214,9 @@ console.log("userDataRuns",userData)
     setTableHeaderVisible(false);
     setRowId([]);
     setRunsRow([]);
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
   }, [queryStrings]);
 
   React.useEffect(() => {
@@ -234,6 +238,9 @@ console.log("userDataRuns",userData)
     page['totalCount'] = runsSliceData?.pageInfo.totalCount;
     setRunsData(runsSliceData?.Runs);
     setPageInfo(page);
+    setTimeout(() => {
+      setLoader(false);
+    }, 2000);
   }, [runsSliceData]);
 
   const handlePageChange = (even: any, page_no: number) => {
@@ -246,7 +253,36 @@ console.log("userDataRuns",userData)
     setCurrentPage(page_no);
   };
   const [visibleRow, setVisibleRow] = React.useState<any>(Data);
-  const handleOnChange = async (e: any, row: any) => {
+  //command by govind
+  // const handleOnChange = async (e: any, row: any) => {
+  //   console.log(e.target.value);
+
+  //   console.log('change', row.departmentId, row.laboratoryId);
+  //   var runsChange: any = {
+  //     _id: row._id,
+  //   };
+  //   if (e.target.name == 'status') {
+  //     runsChange['status'] = e.target.value;
+  //   }
+  //   console.log(runsChange);
+  //   // setLoader(true)
+  //   await dispatch(fetchUpdateRunsData(runsChange));
+  //   // setTimeout(() => {
+  //   //   // setLoader(false);
+  //   // }, 1000);
+  //   await toast('Runs status updated !', {
+  //     style: {
+  //       background: '#00bf70',
+  //       color: '#fff',
+  //     },
+  //   });
+  //   reload();
+  // };
+
+  const handleOnChange = async (e: any, row: any, index:number) => {
+    const data = JSON.parse(JSON.stringify(runsData))
+    data[index].status = e.target.value
+    console.log("runsData",runsData)
     console.log(e.target.value);
 
     console.log('change', row.departmentId, row.laboratoryId);
@@ -257,11 +293,7 @@ console.log("userDataRuns",userData)
       runsChange['status'] = e.target.value;
     }
     console.log(runsChange);
-    // setLoader(true)
     await dispatch(fetchUpdateRunsData(runsChange));
-    // setTimeout(() => {
-    //   // setLoader(false);
-    // }, 1000);
     await toast('Runs status updated !', {
       style: {
         background: '#00bf70',
@@ -270,6 +302,7 @@ console.log("userDataRuns",userData)
     });
     reload();
   };
+
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       runsData,
@@ -345,7 +378,7 @@ console.log("userDataRuns",userData)
       ...row,
       is_checked: false,
     }));
-    setSelectedRows(updatedRows);
+    setRunsData(updatedRows);
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
@@ -376,8 +409,8 @@ console.log("userDataRuns",userData)
   const reload = () => {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
-    setPageInfo(page);
-    setQueryString(payload);
+    // setPageInfo(page);
+    // setQueryString(payload);
     dispatch(fetchRunsData(payload));
   };
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
@@ -646,6 +679,7 @@ console.log("userDataRuns",userData)
                             value={element.id}
                             key={element.id}
                             onClick={() => {
+                              {console.log('elementtype',element.type)}
                               setFilterType(element.type);
                               setFilterOptions(element.filters[0]?.options);
                               setFilterKey(element.id);
@@ -1054,7 +1088,7 @@ console.log("userDataRuns",userData)
                             value={row.status ? row.status : 'Stopped'}
                             displayEmpty
                             onClick={(e: any) => clickHandler(e)}
-                            onChange={(e) => handleOnChange(e, row)}
+                            onChange={(e) => handleOnChange(e, row, index)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
                             {runsStatus.map((element: any) => (

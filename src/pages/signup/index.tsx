@@ -78,7 +78,7 @@ const userSliceData = useSelector(
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(
       values.fullname,
-      values.email,
+      values.email.toLowerCase(),
       values.password,
       values.confirm_password,
       values.termsAndConditions
@@ -86,13 +86,14 @@ const userSliceData = useSelector(
 
     if (isMatch) {
       try {
-        createUserWithEmailAndPassword(auth, values.email, values.password)
+      values.email.toLowerCase(),
+      createUserWithEmailAndPassword(auth, values.email.toLowerCase(), values.password)
           .then((res) => {
             console.log(res.user.uid);
             let payload = {
               firstName: values.fullname,
               lastName: "",
-              email: values.email,
+              email: values.email.toLowerCase(),
               uid: res.user.uid,
               organisationId: "657420e5c63327a74f3c756a",
               role: "65741c069d53d19df8321e6e",

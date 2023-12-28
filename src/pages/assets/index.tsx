@@ -119,7 +119,7 @@ export default function Assets() {
     perPage: 10,
     searchBy: null,
     search: null,
-    sortBy: null,
+    sortBy: "assetNumber",
     sortOrder: 'desc',
   });
   const assetsSliceData = useSelector(
@@ -349,8 +349,12 @@ export default function Assets() {
   };
 
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
+    
     const payload: any = { ...queryStrings };
     const headersList: any = [...headers];
+    console.log(headersList[_index])
+    console.log(headersList[_index].sort == 'asc' ? 'desc' : 'asc');
+
     payload['sortBy'] = headersList[_index].id;
     payload['sortOrder'] = headersList[_index].sort === 'asc' ? 'desc' : 'asc';
     headersList[_index].sort =
@@ -686,7 +690,7 @@ export default function Assets() {
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-              ) :!assetsData || assetsData.length === 0 && loader!==false ? (
+              ) :!assetsData || assetsData.length === 0 && loader==false ? (
                 <TableBody>
                  <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
                     <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>

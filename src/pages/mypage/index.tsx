@@ -34,6 +34,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import data from '../../assets/images/profile/user.jpg';
+import TablePagination from '../../components/table/TablePagination';
 export const mypageRows = [
   {
     is_checked: false,
@@ -221,6 +222,8 @@ import { MypageRowData } from '../../modals/mypage.modal';
 import TablePopup from '../../components/table/TablePopup';
 import { fetchSingleUserData } from '../../api/userAPI';
 import moment from 'moment';
+import TableSkeleton from '../../components/table/TableSkeleton';
+import { RunsHeaders } from '../../utils/data';
 
 // function createData(
 //   name: string,
@@ -272,13 +275,18 @@ export default function MyPage() {
   const [CalendarContent, setCalendarContent] = useState([]);
   const [calendarEventData, setCalendarEventData] = useState([]);
   const [CalendarMark, setCalendarMark] = useState([]);
+  const [runzData, setRunzData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentMonth, setCurrentMonth] = useState()
   const [currentYear, setCurrentYear] = useState()
   const [answers, setAnswers] = React.useState('');
+  const [loader, setLoader] = React.useState(false);
   const [notifications, setNotifications] = useState([
     // Your notification data goes here
   ]);
+console.log("CalendarMark",CalendarMark.includes(selectedDate));
+console.log(CalendarContent,"CalendarContent");
+
 
   const tablePopupRef: any = React.useRef(null);
 
@@ -319,6 +327,26 @@ export default function MyPage() {
       });
   }, [loginUserSliceData]);
 
+
+  const [pageInfo, setPageInfo] = React.useState({
+    currentPage: 1,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
+
+  const handlePageChange = (even: any, page_no: number) => {
+    const payload: any = { ...queryStrings };
+    const page: any = { ...pageInfo };
+    payload['page'] = page_no;
+    page['currentPage'] = page_no;
+    setPageInfo(page);
+    console.log(page,payload);
+    
+    setQueryString(payload);
+    setCurrentPage(page_no);
+  };
+
   React.useEffect(() => {
     // dispatch(fetchNotificationData());
     console.log("notification1", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
@@ -333,7 +361,7 @@ export default function MyPage() {
       console.log(res?.data?.get_notification_message);
       
     });
-  }, []);
+  }, [loginUserSliceData]);
 
   React.useEffect(() => {
         let pay = {
@@ -343,9 +371,38 @@ export default function MyPage() {
 
     dispatch(fetchNotificationData());
     dispatch(fetchCalendarEventData(pay));
-    dispatch(fetchMyPageRunsData(queryStrings));
+  
   }, [userData]);
+  React.useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
+    setRunzData(runzData);
+  }, [runzData]);
 
+  React.useEffect(()=>{
+    setLoader(true);
+    dispatch(fetchMyPageRunsData(queryStrings));
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
+  },[queryStrings])
+
+  React.useEffect(() => {
+    const page: any = { ...pageInfo };
+    page['currentPage'] = MyPageRunsData?.pageInfo?.currentPage;
+    page['totalPages'] = MyPageRunsData?.pageInfo?.totalPages;
+    page['hasNextPage'] = MyPageRunsData?.pageInfo?.hasNextPage;
+    page['hasPreviousPage'] = MyPageRunsData?.pageInfo?.hasPreviousPage;
+    page['totalCount'] = MyPageRunsData?.pageInfo?.totalCount;
+    setRunzData(MyPageRunsData?.Runs);
+    console.log("MyPageRunsData",MyPageRunsData);
+    
+    setPageInfo(page);
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
+  }, [MyPageRunsData]);
   React.useEffect(() => {
     const calendarMarkSet = new Set();
     const calendar = calendar_eventData?.runs_calender_data.map((item) => {
@@ -390,23 +447,40 @@ export default function MyPage() {
     return `${Math.floor(minutesDifference)}min ago`;
   };
   React.useEffect(()=> {
+    // console.log("selectedDate",selectedDate === moment(new Date()).format('MM-DD-YYYY'));
+    
   if(selectedDate === moment(new Date()).format('MM-DD-YYYY')){
-    const filCalendarContent = calendarEventData.filter(
-      (item:any) => item.createdAt === moment(new Date()).format('MM-DD-YYYY'),
-    );
-    setCalendarContent(filCalendarContent);
- 
-  }},[])
-  React.useEffect(()=>{
-    let payload ={
-      userId:userData?._id
-    }
+    // const filCalendarContent = calendarEventData.filter(
+      
+    //   (item:any) => {console.log(item,"item");(item.createdAt === moment(new Date()).format('MM-DD-YYYY'))},
+    // );
+    let arr:any=[]
 
-    dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-      setNotificationMesssage(res?.data?.get_notification_message)
-      console.log(res?.data?.get_notification_message);
-    });  
-  },[])
+  calendarEventData?.map((item:any)=>{
+    if(item?.createdAt === moment(new Date()).format('MM-DD-YYYY'))
+    {
+      arr.push(item)
+      return item
+    }
+  })
+  //  console.log(arr,"filCalendarContent");
+    
+    setCalendarContent(arr);
+ 
+  }},[calendarEventData])
+  // console.log(CalendarContent,"filCalendarContent");
+
+  
+  // React.useEffect(()=>{
+  //   let payload ={
+  //     userId:loginUserSliceData?._id
+  //   }
+
+  //   dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+  //     setNotificationMesssage(res?.data?.get_notification_message)
+  //     console.log(res?.data?.get_notification_message);
+  //   });  
+  // },[loginUserSliceData])
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
       (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
@@ -439,7 +513,7 @@ export default function MyPage() {
   const toggleViewNotifications = () => {
     setViewAllNotifications((prev) => !prev);
   };
-  
+  const arr=[1,2,3,4,5,6,7]
   console.log(CalendarContent);
   console.log("notificationMesssage",notificationMesssage);
   return (
@@ -447,10 +521,10 @@ export default function MyPage() {
       <Box className="main-padding mypage-page">
         <Box
           className="table-outer"
-          sx={{ width: '100%', marginTop: '0rem !important' }}
+          sx={{ width: '100%', }}
         >
           <TableContainer className="tableHeight2">
-            <Table sx={{ minWidth: 650,  position:'relative' }} aria-label="simple table" >
+            <Table sx={{ minWidth: 650,  position:'relative' }} aria-label="simple table" stickyHeader >
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
@@ -464,10 +538,16 @@ export default function MyPage() {
                   <TableCell align="right">Status</TableCell>
                 </TableRow>
               </TableHead>
-{console.log(MyPageRunsData?.Runs.length==0)}
-              {MyPageRunsData?.Runs.length == 0 ?
-
-<TableBody>
+              {loader ? (
+                <TableBody>
+                  <TableSkeleton
+                    columns={arr}
+                    image={true}
+                    rows={queryStrings.perPage}
+                  />
+                  </TableBody>
+              ) :!runzData || runzData.length === 0 && loader==false ? (
+                <TableBody>
 <p style={{ textAlign: 'center',  position:'absolute', left: '0rem', right: '0rem' }}>
    <Box sx={{ textAlign: 'center', padding: "1%", width: "100%" }}>
      <img src={Emptystate} alt="" />
@@ -475,16 +555,14 @@ export default function MyPage() {
      Runs not found.
      </Typography>
    </Box></p>
-</TableBody>
+</TableBody>)
 
                 :
               
                   <TableBody>
-  {MyPageRunsData?.Runs.slice(
-                  0,
-                  viewAll ? MyPageRunsData?.Runs.length : rowsPerPage,
-                ).map((row: any, index: any) => (
+ 
 
+ {runzData?.map((row:any,index:any)=>(
                     <TableRow
                       key={row._id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -647,28 +725,14 @@ export default function MyPage() {
 }
             </Table>
           </TableContainer>
-          <Box className="show-page">
-            <Typography>
-              {totalRows > rowsPerPage
-                ? viewAll
-                  ? `Showing 1 - ${totalRows} out of ${totalRows}`
-                  : `Showing ${firstRowIndex} - ${lastRowIndex} out of ${totalRows}`
-                : `Showing ${totalRows} out of ${totalRows}`}
-            </Typography>
-            {totalRows > rowsPerPage && (
-              <Typography
-                onClick={toggleView}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                }}
-              >
-                {viewAll ? 'View less' : 'View all'}{' '}
-                {viewAll ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-              </Typography>
-            )}
-          </Box>
+          <TablePagination
+            currentPage={currentPage}
+            perPage={queryStrings.perPage}
+            handlePageChange={handlePageChange}
+            currentPageNumber={queryStrings.page}
+            totalRecords={runzData?.Runs?.length}
+            page={pageInfo}
+          />
         </Box>
         <Grid
           container
@@ -784,14 +848,13 @@ export default function MyPage() {
           >
             
             <Box className="calender-rightside">
-            
               <Calendar
             
             onChange={handleDateClick}
                 value={value}
                 tileClassName={({ date, view }) => {
                   if (
-                    CalendarMark.includes(moment(date).format('MM/DD/YYYY'))
+                    CalendarMark.includes(moment(date).format('MM-DD-YYYY'))
                   
                     ) {
                     return 'events';
