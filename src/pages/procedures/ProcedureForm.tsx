@@ -549,6 +549,7 @@ const ProcedureForm = React.forwardRef(
                         name="name"
                         autoComplete="off"
                         autoFocus
+                        inputProps={{ maxLength: 51 }}
                         InputLabelProps={{ shrink: false }}
                         placeholder="Procedure Name"
                         value={formik.values.name}
