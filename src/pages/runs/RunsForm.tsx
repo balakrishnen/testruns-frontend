@@ -593,7 +593,7 @@ const handleClose=()=>{
                         name="objective"
                         autoComplete="off"
                         InputLabelProps={{ shrink: false }}
-                        inputProps={{ maxLength: 20 }}
+                        inputProps={{ maxLength: 36 }}
                         placeholder="Test objective"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}

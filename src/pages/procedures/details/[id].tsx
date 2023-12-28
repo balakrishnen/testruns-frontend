@@ -545,6 +545,7 @@ const handleEditorInit = (editor) => {
                     name="name"
                     autoComplete="off"
                     InputLabelProps={{ shrink: false }}
+                    inputProps={{ maxLength: 51 }}
                     placeholder="Procedure name"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
