@@ -89,15 +89,15 @@ const Login = () => {
                 const data = isSucess?.get_user ?? {}
                 console.log("userdata ",data, isSucess)
               // debugger
-                if (!data.isActive) {
-                  navigate('/login')
-                  toast(`The user is inactive !`, {
-                    style: {
-                      background: '#d92828',
-                      color: '#fff',
-                    } 
-                  });
-                } else {
+                // if (!data.isActive) {
+                //   navigate('/login')
+                //   toast(`The user is inactive !`, {
+                //     style: {
+                //       background: '#d92828',
+                //       color: '#fff',
+                //     } 
+                //   });
+                // } else {
                   dispatch(fetchLoginUser(payload))
                   window.sessionStorage.setItem('isLoggedIn', 'true');
 
@@ -107,7 +107,7 @@ const Login = () => {
                       background: '#00bf70', color: '#fff'
                     } 
                   });
-                }
+                // }
               })
 
               .catch((err: any) => {
