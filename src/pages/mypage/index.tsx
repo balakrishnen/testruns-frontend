@@ -525,7 +525,7 @@ const notificationMessageList=()=>{
 const handleReadNotification=async(id:any)=>{
   let payload2={
     _id:id,
-    isRead: false
+    isRead: true
   }
   await dispatch(fetchReadSingleMessageData(payload2))
   await notificationMessageList()
@@ -775,7 +775,7 @@ const handleReadNotification=async(id:any)=>{
                 sx={{
                   overflowY: 'scroll',
                   paddingBottom: '0rem',
-                  height: 'calc(100vh - 31vh)',
+                  height: 'calc(100vh - 38vh)',
                 }}
               >
 
@@ -823,7 +823,7 @@ const handleReadNotification=async(id:any)=>{
                   </Typography> 
                 </Box> */}
               </Box>
-              <Box className="show-page">
+              {/* <Box className="show-page">
                 <Typography>
                   {totalRows > localRowsPerPage
                     ? viewAlls
@@ -848,7 +848,7 @@ const handleReadNotification=async(id:any)=>{
                     )}
                   </Typography>
                 )}
-              </Box>
+              </Box> */}
             </Box>
           </Grid>
           <Grid
