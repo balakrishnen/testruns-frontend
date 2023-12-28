@@ -150,11 +150,11 @@ export default function ProcedureDetails() {
   const confirmationPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
-  const [assetName, setAssetName] = React.useState<any>([])
-  const [assetNamepatch, setAssetNamepatch] = React.useState<any>([])
+  const [assetName, setAssetName] = React.useState<any>([]);
+  const [assetNamepatch, setAssetNamepatch] = React.useState<any>([]);
   // console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
-  const [isLoader, setIsLoader] = React.useState(true)
+  const [isLoader, setIsLoader] = React.useState(true);
   const onSubmit = (values: any) => {
 
     // debugger
