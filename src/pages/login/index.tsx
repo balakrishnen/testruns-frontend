@@ -50,7 +50,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
-  let isLoggedIn = null;
+  let isLoggedIn :any= null;
 
   if (typeof window !== 'undefined') {
     isLoggedIn = sessionStorage.getItem('isLoggedIn');
