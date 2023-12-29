@@ -782,7 +782,8 @@ const Users = () => {
                       )}
                       {headers[3].is_show && (
                         <TableCell align="center">
-                          {moment(parseInt(row.createdAt)).format('MM/DD/YYYY')}
+                          {/* {moment(parseInt(row.createdAt)).format('MM/DD/YYYY')} */}
+                          {row.createdOn}
                         </TableCell>
                       )}
                       {headers[4].is_show && (

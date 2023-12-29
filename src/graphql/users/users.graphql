@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_USER = gql`
-query Get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
+query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
     get_all_users(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search) {
         pageInfo {
             currentPage
@@ -20,6 +20,7 @@ query Get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
             instituteId
             phoneNumber
             isActive
+            createdOn
             isDeleted
             createdAt
             updatedAt
@@ -79,6 +80,7 @@ mutation Create_user(
             isActive
             isDeleted
             createdAt
+            createdOn
             updatedAt
         }
     }
