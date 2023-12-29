@@ -312,7 +312,7 @@ const Login = () => {
           className="forgot-pass1"
 
         >
-          version 2. 1. 7
+          version 2. 1. 8
         </Typography>
       </Box>
       <Box sx={{ mt: "2rem" }}>

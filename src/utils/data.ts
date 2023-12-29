@@ -695,7 +695,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     type: 'date',
   },
   {
-    id: 'createdOn',
+    id: 'createdBy',
     label: 'Created by',
     filters: [
       {

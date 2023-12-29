@@ -53,6 +53,7 @@ query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrde
             isActive
             isDeleted
             createdAt
+            createdBy
             createdOn
             updatedAt
             departmentId {
@@ -110,6 +111,18 @@ query Get_procedure($_id: String!) {
         organisationId
         userId
         isActive
+         departmentId {
+            _id
+            name
+            departmentNumber
+            
+        }
+        laboratoryId {
+            _id
+            name
+            departmentId
+           
+        }
          assetId {
             _id
             name }
@@ -158,3 +171,12 @@ mutation Update_procedure(
     }
 }
 `;
+
+export const GET_ALL_PROCEDURE_NAME = gql`
+query Get_all_procedures_name {
+    get_all_procedures_name {
+        name
+        _id
+    }
+}
+`
