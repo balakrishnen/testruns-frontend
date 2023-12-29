@@ -53,6 +53,7 @@ query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrde
             isActive
             isDeleted
             createdAt
+            createdBy
             createdOn
             updatedAt
             departmentId {
