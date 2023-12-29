@@ -36,7 +36,7 @@ import { fetchSingleRoleData } from '../../../api/roleApi';
 import { fetchLabData } from '../../../api/labAPI';
 import SuccessPopup from '../../../components/SuccessPopup';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../../firebase.config';
 import { toast } from 'react-toastify';
 import { fetchinstitutionData } from '../../../api/institutionAPI';
@@ -159,6 +159,18 @@ const UserForm = React.forwardRef(
         if (type == 'edit') {
           userValues['_id'] = userData?._id
           dispatch(fetchUpdateUserData(userValues))
+          const auths:any = auth;
+updateProfile(auths?.currentUser, {
+  displayName: values.firstName
+}).then((res) => {
+  console.log(res);
+  
+  // Profile updated!
+  // ...
+}).catch((error) => {
+  // An error occurred
+  // ...
+});
           submitFormPopup();    
         }
         else {
@@ -421,6 +433,8 @@ const UserForm = React.forwardRef(
                         onBlur={formik.handleBlur}
                         value={formik.values.email}
                         size="small"
+                        className={type=="edit" ? "bg-gray-input" : ""}
+                        disabled={type=='edit'? true: false}
                         error={
                           formik.touched.email &&
                           Boolean(formik.errors.email)

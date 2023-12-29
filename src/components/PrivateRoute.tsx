@@ -14,11 +14,21 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const PrivateRoute = ({ children }: any) => {
-  let isLoggedIn = null;
+  // let isLoggedIn :any= null;
 
+  // if (typeof window !== 'undefined') {
+  //   isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  // }
   if (typeof window !== 'undefined') {
-    isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  const storedData = sessionStorage.getItem("isLoggedIn");
+  console.log(storedData);
+  
+  if (!storedData) {
+    navigate("/login")
+    return null
   }
+
+}
   const [width, setWidth] = React.useState(95);
   const [classn, setClassn] = React.useState<any>('closemenu');
   const [editProfile, setEditProfile] = React.useState(false);
@@ -46,12 +56,12 @@ const PrivateRoute = ({ children }: any) => {
     );
   };
 
-  if (isLoggedIn === 'false') {
-    console.log('false');
+  // if (isLoggedIn === 'false') {
+  //   console.log('false');
 
-    navigate('/login');
-    return null;
-  }
+  //   navigate('/login');
+  //   return null;
+  // }
 
   return (
     <ThemeProvider theme={theme}>
