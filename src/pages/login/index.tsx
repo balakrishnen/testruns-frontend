@@ -84,35 +84,41 @@ const Login = () => {
             }
             let temp = { _id: userSliceData?.verifyToken?._id };
 
-            dispatch(fetchSingleUserData(temp))
-              .then((isSucess: any) => {
-                const data = isSucess?.get_user ?? {}
-                console.log("userdata ",data, isSucess)
-              // debugger
-                // if (!data.isActive) {
-                //   navigate('/login')
-                //   toast(`The user is inactive !`, {
-                //     style: {
-                //       background: '#d92828',
-                //       color: '#fff',
-                //     } 
-                //   });
-                // } else {
-                  dispatch(fetchLoginUser(payload))
-                  window.sessionStorage.setItem('isLoggedIn', 'true');
-
-                  navigate('/mypage')
-                  toast(`Login successfully !`, {
+             dispatch(fetchLoginUser(payload)).then((res)=>{
+              const temp = { _id: res?.verifyToken?._id };
+               dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
+                const data = isSuccess?.get_user ?? {};
+                if (!data.isActive) {
+                 
+                  toast(`The user is inactive !`, {
                     style: {
-                      background: '#00bf70', color: '#fff'
+                      background: '#d92828',
+                      color: '#fff',
                     } 
                   });
-                // }
-              })
+                  setTimeout(()=>{
+                    navigate("/login");
 
-              .catch((err: any) => {
-                console.log(err);
-              });
+                  },2000)
+                }
+                else{
+                  window.sessionStorage.setItem("isLoggedIn", "true");
+                 
+                  toast(` Login successfully !`, {
+                    style: {
+                      background: "#00bf70",
+                      color: "#fff",
+                    },
+                  });
+                  setTimeout(()=>{
+                    navigate("/mypage");
+
+                  },2000)
+                }
+             
+            // }
+          });
+             })
 
           })
 
@@ -312,7 +318,7 @@ const Login = () => {
           className="forgot-pass1"
 
         >
-          version 2. 1. 8
+          version 2. 1. 9
         </Typography>
       </Box>
       <Box sx={{ mt: "2rem" }}>

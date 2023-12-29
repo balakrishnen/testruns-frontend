@@ -390,7 +390,7 @@ console.log(formValues);
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
+                  {/* <TableRow>
                     <TableCell colSpan={12} className="procedure-profile">
                       <Typography>Procedure</Typography>
                       <Typography>Control the actions of users under procedure section.</Typography>
@@ -881,10 +881,10 @@ console.log(formValues);
                         style={{ margin: "0rem" }}
                       />
                     </TableCell>
-                  </TableRow>
+                  </TableRow> */}
 {/* RunsRole Access  */}
 
-<TableRow>
+{/* <TableRow>
                     <TableCell colSpan={12} className="procedure-profile">
                       <Typography>Runs</Typography>
                       <Typography>Control the actions of users under procedure section.</Typography>
@@ -1376,7 +1376,7 @@ console.log(formValues);
                         style={{ margin: "0rem" }}
                       />
                     </TableCell>
-                  </TableRow>
+                  </TableRow> */}
 
 {/* AssetRole Access */}
 
