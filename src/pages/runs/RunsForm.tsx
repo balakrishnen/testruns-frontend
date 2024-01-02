@@ -177,14 +177,14 @@ const RunsForm = React.forwardRef(
          setTimeout(()=>{
           handleReloadSingleData()
          },2000)
-          
+         await  reload()
         }
         else {
-          dispatch(postRunsData(runsValues)); 
-          
+        await dispatch(postRunsData(runsValues)); 
+        await  reload()
         }
         submitFormPopup();
-          reload()
+          // reload()
         clearForm()
         
 

@@ -27,6 +27,7 @@ export const fetchProcedureData = (payload: any) => async (dispatch: any) => {
     console.log('response',response);
 
     dispatch(fetchProcedureSuccess(response.data));
+    return response.data
   } catch (error: any) {
     dispatch(fetchProcedureFailure(error.message));
   }
