@@ -516,7 +516,7 @@ export default function Procedures() {
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
-              disabled={!credencial.procedure_management.create}
+              disabled={!credencial?.procedure_management?.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Procedure

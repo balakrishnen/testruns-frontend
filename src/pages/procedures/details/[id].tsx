@@ -526,7 +526,7 @@ const handleEditorInit = (editor) => {
                     onClick={() => {
                       formPopupRef.current.open(true ,procedureData);
                     }}
-                    disabled={!credencial.procedure_management.edit}
+                    disabled={!credencial?.procedure_management?.edit}
                   >
                     <img src={edit} alt="edit" style={{ marginRight: '8px' }} />
                     Edit

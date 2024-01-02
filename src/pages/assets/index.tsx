@@ -104,7 +104,7 @@ export default function Assets() {
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [rowId, setRowId] = React.useState<any>([]);
-
+  const [editAcces, seteditAcces] = React.useState(true);
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
   const [loader, setLoader] = React.useState(false);
   const [filter, setFilter] = React.useState(false);
@@ -281,7 +281,10 @@ getAllassets();
     );
     reload();
   };
-
+  React.useEffect(() =>{
+ 
+    seteditAcces(loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit)
+  },[])
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       assetsData,
@@ -435,7 +438,7 @@ getAllassets();
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
-              disabled={!credencial.asset_management.create}
+              disabled={!credencial?.asset_management?.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Asset
@@ -748,7 +751,7 @@ getAllassets();
                           tabIndex={-1}
                           key={index}
                           sx={{ cursor: 'pointer' }}
-                          onClick={(e: any) => {
+                          onClick={(e: any) => {editAcces &&
                             navigate(`/assets/details/${row._id}`, {
                               state: { props: row, func: reload() },
                             });
