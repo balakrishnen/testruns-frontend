@@ -21,6 +21,8 @@ import {
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { TableChartStaticData } from '../../utils/data';
+import moment from 'moment';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchTableChartData } from '../../api/RunsAPI';
 // import { TableChartStaticData } from '../../utils/data';
@@ -97,10 +99,10 @@ export default function TableChart({ staticChartData }: any) {
   const [chartData, setChartData] = React.useState<any>(
     staticChartData === '' ? [] : staticChartData,
   );
+  // const [chartData, setChartData] = React.useState<any>(TableChartStaticData);
   const [tableList, setTableList] = React.useState<any>([]);
   const [channelsList, setChannelsList] = React.useState<any>([]);
   const [displayCount, setDisplayCount] = React.useState(1);
-  const [xDataKey, setXDataKey] = React.useState<any>(null);
 
   React.useEffect(() => {
     const data: any = [];
@@ -146,6 +148,7 @@ export default function TableChart({ staticChartData }: any) {
     data[index].selectedTable = event.target.value;
     data[index].channelsList = activeChannel;
     data[index].xAxisValue = activeChannel[0].name;
+
     data[index].charts = [];
     data[index].channelOptions.forEach((element) => {
       element.channel = null;
@@ -157,10 +160,10 @@ export default function TableChart({ staticChartData }: any) {
     const data: any = [...chartData];
     const channels: any = { ...data[index] };
     const charts: any = [...channels.charts];
-    // const axisPosition: any =
-    //   channels.channelOptions[keys].dataKey.charAt(
-    //     channels.channelOptions[keys].dataKey.length - 1,
-    //   ) - 1;
+    const axisPosition: any =
+      channels.channelOptions[keys].dataKey.charAt(
+        channels.channelOptions[keys].dataKey.length - 1,
+      ) - 1;
     const channelPosition = channels.channelsList.findIndex(
       (item: any) => item.name === event.target.value,
     );
@@ -174,6 +177,7 @@ export default function TableChart({ staticChartData }: any) {
             : 0,
         });
       } else {
+       
         charts[position][`plot${channelPosition + 1}`] = element.data[
           channelPosition
         ]
@@ -181,7 +185,11 @@ export default function TableChart({ staticChartData }: any) {
           : 0;
       }
     });
-    data[index].charts = charts;
+    const ordered = charts.sort(
+      (a: any, b: any) =>
+        a[`plot${channelPosition + 1}`] - b[`plot${channelPosition + 1}`],
+    );
+    data[index].charts = ordered;
     setChartData(data);
   };
 
@@ -191,7 +199,7 @@ export default function TableChart({ staticChartData }: any) {
     const channelIndex = channelsList.findIndex(
       (item) => item.name === event.target.value,
     );
-    data[index].xDataKey = `plot${channelIndex + 1}`
+    data[index].xDataKey = `plot${channelIndex + 1}`;
     setChartData(data);
   };
 
@@ -377,23 +385,21 @@ export default function TableChart({ staticChartData }: any) {
                 <Box sx={{ mt: 4 }}>
                   <ResponsiveContainer width="100%" height={500}>
                     <LineChart data={data.charts}>
-                      {/* <XAxis
-                        dataKey="dataKey"
-                        axisLine={{ fontSize: 12, dy: 4 }}
-                      /> */}
                       <XAxis
                         orientation="bottom"
                         dataKey={data.xDataKey}
                         label={{
                           value: data.xAxisValue,
                           position: 'insideBottom',
-                          fill: 'blue',
+                          fill: "#111fdf",
                         }}
                         tick={{
                           fontSize: 12,
                         }}
-                        domain={[0, 100]}
-                        // tickFormatter={customTickFormatter}
+                        domain={['auto', 'auto']}
+                        interval="preserveStart"
+                        type="number"
+                        name={data.xAxisValue}
                       />
                       {data.channelOptions?.map((axis, axisIndex) => (
                         <YAxis
@@ -409,7 +415,8 @@ export default function TableChart({ staticChartData }: any) {
                           tick={{
                             fontSize: 12,
                           }}
-                          domain={[0, 100]}
+                          domain={['auto', 'auto']}
+                          name={data.xAxisValue}
                         />
                       ))}
                       <Tooltip />
@@ -428,7 +435,7 @@ export default function TableChart({ staticChartData }: any) {
                           strokeWidth={2}
                           yAxisId={line.yAxisId}
                           dot={{
-                            r: 1,
+                            r: 2,
                             fill: line.color,
                           }}
                         />
@@ -456,7 +463,7 @@ export default function TableChart({ staticChartData }: any) {
                             disableScrollLock: true,
                             marginThreshold: null,
                           }}
-                          labelId="view-all-label"
+                          labelId="view-all-label2"
                           size="small"
                           value={data.xAxisValue}
                           displayEmpty
