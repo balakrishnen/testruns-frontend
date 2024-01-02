@@ -38,6 +38,7 @@ import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import ListItemText from '@mui/material/ListItemText';
+import { useSelector } from 'react-redux';
 import { AssetsHeaders, OrganizationList } from '../../utils/data';
 import { MoreVertOutlined } from '@mui/icons-material';
 import AssignPopup from '../../components/AssignPopup';
@@ -93,19 +94,25 @@ export default function TableFilters({
   const [filterOptions, setFilterOptions] = React.useState([]);
   const [filterKey, setFilterKey] = React.useState(null);
   const [runsOpen, setRunsOpen] = React.useState(false);
-  const [typePopup, settypePopup]= React.useState('')
+  const [typePopup, settypePopup] = React.useState('')
   const handleColumnPopoverClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     setColumnAnchorEl(event.currentTarget);
   };
-  console.log(runzId,runzRow);
 
   const handleFilterPopoverClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     setFilterPopoverEl(event.currentTarget);
   };
+
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
+  const credencial = loginUserSliceData?.verifyToken?.role[0]
+
 
   const handleColumnPopoverClose = () => {
     setColumnAnchorEl(null);
@@ -115,7 +122,7 @@ export default function TableFilters({
     setFilterPopoverEl(null);
   };
 
-  const handleAssignClick = (val:string) => {
+  const handleAssignClick = (val: string) => {
     setRunsOpen(true);
     settypePopup(val)
   };
@@ -204,16 +211,33 @@ export default function TableFilters({
                 style={{ marginBottom: '0rem' }}
               />
               {/* <DeletePopup open={isDeletePopupOpen} close={handleCloseDeletePopup} /> */}
-              <Button className="delete-actions" onClick={deleteRecord}>
+              {/* <Button className="delete-actions" onClick={deleteRecord}>
                 <img src={bin} alt="Delete" className="Image-actions" />
                 Delete
-              </Button>
-              {module == 'runs' && (
-                <Button className="delete-actions" onClick={()=>handleAssignClick("assign")}>
-                  <img src={assign} alt="assign" className="Image-actions" />
-                  Assign
-                </Button>
-              )}
+              </Button> */}
+              {
+                module == 'procedures' && (<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial?.procedure_management?.delete}>
+                  <img src={bin} alt="Delete" className="Image-actions" />
+                  Delete
+                </Button>)}
+              {
+                module == 'assets' && (<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial?.asset_management?.delete}>
+                  <img src={bin} alt="Delete" className="Image-actions" />
+                  Delete
+                </Button>)}
+              {
+                module == 'users' && (<Button className="delete-actions" onClick={deleteRecord} disabled={!credencial?.user_management?.delete}>
+                  <img src={bin} alt="Delete" className="Image-actions" />
+                  Delete
+                </Button>)}
+              {
+                module == 'runs' && (
+                  <Button className="delete-actions" onClick={deleteRecord} disabled={!credencial?.runs_management?.delete}>
+                    <img src={bin} alt="Delete" className="Image-actions" />
+                    Delete
+                  </Button>
+                )
+              }
 
               <AddPeoplePopup
                 open={runsOpen}
@@ -222,11 +246,11 @@ export default function TableFilters({
                 runzRow={runzRow}
                 typePopup={typePopup}
               />
-               {module == 'runs' && (
-              <Button className="delete-actions" onClick={()=>handleAssignClick("share")}>
-                <img src={share} alt="Share" className="Image-actions" />
-                Share
-              </Button>
+              {module == 'runs' && (
+                <Button className="delete-actions" onClick={()=>handleAssignClick("share")} disabled={!credencial?.runs_management?.share}>
+                  <img src={share} alt="Share" className="Image-actions" />
+                  Share
+                </Button>
               )}
               <IconButton onClick={handleColumnPopoverClick}>
                 <MoreVertOutlined />

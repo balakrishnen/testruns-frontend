@@ -113,7 +113,7 @@ export default function AssetDetails() {
   // console.log(assetValue);
   const successPopupRef: any = React.useRef(null);
   const [formPopup, setFormPopup] = React.useState(false);
-
+  const [editAcces, seteditAcces] = React.useState(true);
   const [openSuccess, setSuccessOpen] = React.useState(false);
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
@@ -139,6 +139,14 @@ export default function AssetDetails() {
   // console.log(assetsData?.assetNumber);
 
   const dispatch: any = useDispatch();
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+ 
+  React.useEffect(() =>{
+ 
+  seteditAcces(loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit)
+},[])
   // const departments: any =
   // // []
   // assetValue.departmentId?.map((item: any) => ({
@@ -414,7 +422,7 @@ console.log(assetValue?.organisationId,);
         <Box sx={{ width: '100%', marginTop: '1rem' }}>
           <Box sx={{ borderBottom: 0 }}>
             <Tabs
-              value={value}
+              value={editAcces?value:1}
               onChange={handleChange}
               variant="scrollable"
               scrollButtons="auto"
@@ -422,7 +430,7 @@ console.log(assetValue?.organisationId,);
               aria-label="tabs-common"
               className="tabs-common"
             >
-              <Tab label="Edit details" {...a11yProps(0)} />
+              <Tab label="Edit details" {...a11yProps(0)} disabled={!editAcces?true:false} />
               <Tab label="History" {...a11yProps(1)} />
             </Tabs>
           </Box>

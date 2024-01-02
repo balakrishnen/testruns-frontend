@@ -25,59 +25,73 @@ import settingsActive from "../../assets/images/settings-active.svg";
 import billingActive from "../../assets/images/billings-active.svg";
 import upgrade from "../../assets/images/upgradecard.svg";
 import "../../assets/styles/App.scss";
+import { useSelector } from 'react-redux';
 import { navigate } from "gatsby";
 
-const menuOption = [
-  {
-    id: 1,
-    name: "My page",
-    icon: mypage,
-    activeIcon: mypageActive,
-    path: "/mypage",
-  },
-  { id: 2, name: "Runs", icon: runs, activeIcon: runsActive, path: "/runs" },
-  {
-    id: 3,
-    name: "Procedures",
-    icon: procedures,
-    activeIcon: proceduresActive,
-    path: "/procedures",
-  },
-  // {
-  //   id: 4,
-  //   name: "Projects",
-  //   icon: projects,
-  //   activeIcon: projectsActive,
-  //   path: "/projects",
-  // },
-  {
-    id: 5,
-    name: "Assets",
-    icon: assets,
-    activeIcon: assetsActive,
-    path: "/assets",
-  },
-  {
-    id: 6,
-    name: "Settings",
-    icon: settings,
-    activeIcon: settingsActive,
-    path: "/settings/notifications",
-  },
-  // {
-  //   id: 7,
-  //   name: "Billing and subscriptions",
-  //   icon: billing,
-  //   activeIcon: billingActive,
-  //   path: "/billings",
-  // },
-];
-
 export default function AppMenu(props: any) {
+
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+
+  const credencial = loginUserSliceData?.verifyToken?.role[0]
+
+
+  const menuOption = [
+    {
+      id: 1,
+      name: "My page",
+      icon: mypage,
+      activeIcon: mypageActive,
+      path: "/mypage",
+      isActive: true
+    },
+    { id: 2, name: "Runs", icon: runs, activeIcon: runsActive, path: "/runs",isActive: credencial?.runs_management?.view },
+    {
+      id: 3,
+      name: "Procedures",
+      icon: procedures,
+      activeIcon: proceduresActive,
+      path: "/procedures",
+      isActive: credencial?.procedure_management?.view
+    },
+    // {
+    //   id: 4,
+    //   name: "Projects",
+    //   icon: projects,
+    //   activeIcon: projectsActive,
+    //   path: "/projects",
+    // },
+    {
+      id: 5,
+      name: "Assets",
+      icon: assets,
+      activeIcon: assetsActive,
+      path: "/assets",
+      isActive: credencial?.asset_management?.view
+    },
+    {
+      id: 6,
+      name: "Settings",
+      icon: settings,
+      activeIcon: settingsActive,
+      path: "/settings/notifications",
+      isActive: true
+    },
+    // {
+    //   id: 7,
+    //   name: "Billing and subscriptions",
+    //   icon: billing,
+    //   activeIcon: billingActive,
+    //   path: "/billings",
+    // },
+  ];
+
   const [selectedItem, setSelectedItem] = React.useState<any>(menuOption[0].id);
   const redirectTo = (item: any) => {
     setSelectedItem(item.id);
     navigate(item.path);
+
   };
   const selectPath=(item:any)=>{
     if(typeof window !== 'undefined'){
@@ -102,7 +116,7 @@ export default function AppMenu(props: any) {
       >
         <Box>
           <List style={{ padding: "0px" }}>
-            {menuOption.map((item, index) => (
+            {menuOption.filter((element)=>element.isActive).map((item, index) => (
               <ListItem
                 disablePadding
                 key={index}
