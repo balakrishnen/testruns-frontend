@@ -101,7 +101,7 @@ const Addnewpopup = React.forwardRef(
     const checkCredentials = (name: any) => {
       return true;
     };
-    const onSubmit = (values: any) => {
+    const onSubmit = async(values: any) => {
       const isMatch = checkCredentials(values.name);
       if (isMatch) {
         var deptArray:any=[]
@@ -126,10 +126,10 @@ const Addnewpopup = React.forwardRef(
         if(uploadedFile!==null){
           assetValues["assetImageUrl"]=uploadedFile
         }
-        dispatch(postAssetsData(assetValues));
+        await dispatch(postAssetsData(assetValues));
        
-        submitFormPopup();
-        clearForm();
+        await submitFormPopup();
+        await clearForm();
         // dispatch(fetchAssetsData(queryStrings));
       } else {
         formik.setFieldError('name', 'Invalid first name');
@@ -144,6 +144,7 @@ const Addnewpopup = React.forwardRef(
     };
     const submitFormPopup = () => {
       setFormPopup(false);
+       reload()
       toast(`Assets created !`, {
         style: {
           background: '#00bf70', color: '#fff'

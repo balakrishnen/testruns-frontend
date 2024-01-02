@@ -15,6 +15,7 @@ export const fetchAssetsData = (payload: any) => async (dispatch: any) => {
       fetchPolicy: 'network-only',
     });
     dispatch(fetchAssetsSuccess(response.data));
+    return response.data
   } catch (error: any) {
     dispatch(fetchAssetsFailure(error.message));
   }
