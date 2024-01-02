@@ -145,7 +145,7 @@ export default function AppNotificationDrawer({
     let payload2={
       userId: userData?._id
     }
-    console.log(NotificationMessageSliceData?.length);
+    console.log('Govindraj',NotificationMessageSliceData?.length);
     
     if(NotificationMessageSliceData?.message?.length!==0){
       await dispatch(fetchReadBulkMessageData(payload))
