@@ -295,14 +295,9 @@ console.log(CalendarContent,"CalendarContent");
   //   (state: any) => state.notification.data?.get_all_notifications,
   // );
 
-  const NotificationMessageSliceData = useSelector(
+  const NotificationMessageSliceData = useSelector((state: any) => {return state.notificationMessage.data?.get_notification_message})
 
-    (state: any) => {
-      return state.notificationMessage.data?.get_notification_message
 
-    }
-
-  )
   const calendar_eventData = useSelector(
     (state: any) => state.calendar_event.data,
   );
@@ -351,7 +346,7 @@ console.log(CalendarContent,"CalendarContent");
   React.useEffect(() => {
     // dispatch(fetchNotificationData());
     console.log("notification1", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
-    notificationMessageList()
+    // notificationMessageList()
   }, [loginUserSliceData]);
 
   React.useEffect(() => {
@@ -364,19 +359,19 @@ console.log(CalendarContent,"CalendarContent");
     dispatch(fetchCalendarEventData(pay));
   
   }, [userData]);
-const notificationMessageList=()=>{
+// const notificationMessageList=()=>{
    
-  let payload={
-    userId: loginUserSliceData?.verifyToken?._id
-  }
-  console.log(payload);
+//   let payload={
+//     userId: loginUserSliceData?.verifyToken?._id
+//   }
+//   console.log(payload);
   
-  dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-    setNotificationMesssage(res?.data?.get_notification_message)
-    console.log(res?.data?.get_notification_message);
+//   dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+//     setNotificationMesssage(res?.data?.get_notification_message)
+//     console.log(res?.data?.get_notification_message);
     
-  });
-}
+//   });
+// }
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -528,7 +523,7 @@ const handleReadNotification=async(id:any)=>{
     isRead: true
   }
   await dispatch(fetchReadSingleMessageData(payload2))
-  await notificationMessageList()
+  // await notificationMessageList()
 }
 
   return (
@@ -778,8 +773,7 @@ const handleReadNotification=async(id:any)=>{
                   height: 'calc(100vh - 38vh)',
                 }}
               >
-
-                {notificationMesssage?.message?.length !== 0 ? notificationMesssage?.message?.map((notification: any, index: any) => (
+                {NotificationMessageSliceData?.message?.length !== 0 ? NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
                   <Box
                     className="notifications"
                     key={index}

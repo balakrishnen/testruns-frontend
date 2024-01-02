@@ -140,12 +140,12 @@ export default function Assets() {
  
   const credencial =  loginUserSliceData?.verifyToken?.role[0]
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-    setAssetsData(assetsData);
-  }, [assetsData]);
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoader(false);
+  //   }, 1000);
+  //   setAssetsData(assetsData);
+  // }, [assetsData]);
 
   React.useEffect(() => {
     return () => {
@@ -158,32 +158,56 @@ export default function Assets() {
   }, []);
 
   React.useEffect(() => {
-    setLoader(true);
-    dispatch(fetchAssetsData(queryStrings));
-    setTableHeaderVisible(false);
-    setRowId([]);
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
+    getAllassets()
+    // setLoader(true);
+    // dispatch(fetchAssetsData(queryStrings))
+    // setTableHeaderVisible(false);
+    // setRowId([]);
+    // setTimeout(() => {
+    //   setLoader(false);
+    // }, 1000);
   }, [queryStrings]);
 
-  React.useEffect(() => {
-    const page: any = { ...pageInfo };
-    page['currentPage'] = assetsSliceData?.pageInfo.currentPage;
-    page['totalPages'] = assetsSliceData?.pageInfo.totalPages;
-    page['hasNextPage'] = assetsSliceData?.pageInfo.hasNextPage;
-    page['hasPreviousPage'] = assetsSliceData?.pageInfo.hasPreviousPage;
-    page['totalCount'] = assetsSliceData?.pageInfo.totalCount;
-    setAssetsData(assetsSliceData?.Assets);
-    setPageInfo(page);
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-  }, [assetsSliceData]);
+  // React.useEffect(() => {
+  //   const page: any = { ...pageInfo };
+  //   page['currentPage'] = assetsSliceData?.pageInfo.currentPage;
+  //   page['totalPages'] = assetsSliceData?.pageInfo.totalPages;
+  //   page['hasNextPage'] = assetsSliceData?.pageInfo.hasNextPage;
+  //   page['hasPreviousPage'] = assetsSliceData?.pageInfo.hasPreviousPage;
+  //   page['totalCount'] = assetsSliceData?.pageInfo.totalCount;
+  //   setAssetsData(assetsSliceData?.Assets);
+  //   setPageInfo(page);
+  //   setTimeout(() => {
+  //     setLoader(false);
+  //   }, 1000);
+  // }, [assetsSliceData]);
 
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
   };  
+
+const getAllassets=()=>{
+  setLoader(true);
+  dispatch(fetchAssetsData(queryStrings)).then((res:any)=>{
+  console.log(res?.Assets);
+  setAssetsData(res?.get_all_assets?.Assets);
+  const page: any = { ...pageInfo };
+  page['currentPage'] = res?.get_all_assets?.pageInfo.currentPage;
+  page['totalPages'] = res?.get_all_assets?.pageInfo.totalPages;
+  page['hasNextPage'] = res?.get_all_assets?.pageInfo.hasNextPage;
+  page['hasPreviousPage'] = res?.get_all_assets?.pageInfo.hasPreviousPage;
+  page['totalCount'] = res?.get_all_assets?.pageInfo.totalCount;
+  setPageInfo(page);
+  setLoader(false);
+  setTableHeaderVisible(false);
+    setRowId([]);
+  }).catch((err:any)=>{
+    console.log(err);
+    
+  }) 
+}
+
+
   React.useEffect(() => {
     return () => {
       const headersList: any = [...headers];
@@ -206,7 +230,8 @@ export default function Assets() {
     setFilterSearchValue((prevState) => null);
     setFilterOptions([]);
     setFilterType(null);
-    applyFilters(null, null);
+    // applyFilters(null, null);
+    applyFilters('', '');
     handleFilterPopoverClose();
     setFilterKey(null);
     setFilter(false);
@@ -222,8 +247,11 @@ export default function Assets() {
     setCurrentPage(page_no);
   };
   const reload = () => {
-    const payload: any = { page: 1, perPage: 10, sortOrder: 'desc' };
-    dispatch(fetchAssetsData(payload));
+    const payload: any = {...queryStrings};
+    payload['page']=1
+    payload['perPage']=10
+    payload['sortOrder']= 'desc'
+getAllassets();
   };
 
   const handleOnChange = (e: any, row: any) => {
@@ -330,16 +358,17 @@ export default function Assets() {
 
   const assetVal: any = { _id: rowId };
 
-  const handleDeleteConfirmation = (state: any) => {
+  const handleDeleteConfirmation = async(state: any) => {
     if (state === 1) {
-      dispatch(deleteAssetsData(assetVal));
+      await dispatch(deleteAssetsData(assetVal));
+      await reload();
       toast(`Assets deleted !`, {
         style: {
           background: '#00bf70',
           color: '#fff',
         },
       });
-      reload();
+     
       setTableHeaderVisible(false);
     }
     deletePopupRef.current.open(false);
@@ -369,6 +398,8 @@ export default function Assets() {
   };
 
   const applyFilters = (key: any, value: any) => {
+    console.log('====================================1',key);
+    console.log('====================================2',value);
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
     payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');

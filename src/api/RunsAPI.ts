@@ -26,6 +26,7 @@ export const fetchRunsData = (payload: any) => async (dispatch: any) => {
     });
     console.log('reponse.data786', response.data);
     dispatch(fetchRunsSuccess(response.data));
+    return response.data
   } catch (error: any) {
     dispatch(fetchRunsFailure(error.message));
   }

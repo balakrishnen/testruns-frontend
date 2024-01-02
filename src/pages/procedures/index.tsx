@@ -162,24 +162,26 @@ export default function Procedures() {
     setFilterSearchValue((prevState) => null);
     setFilterOptions([]);
     setFilterType(null);
-    applyFilters(null, null);
+    // applyFilters(null, null);
+    applyFilters('', '');
     handleFilterPopoverClose();
     setFilterKey(null);
     setFilter(false);
   };
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-    setProcedureData(procedureData);
-  }, [procedureData]);
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoader(false);
+  //   }, 1000);
+  //   setProcedureData(procedureData);
+  // }, [procedureData]);
 
   React.useEffect(() => {
-    setLoader(true);
-    dispatch(fetchProcedureData(queryStrings));
-    setTableHeaderVisible(false);
-    setRowId([]);
+    getAllProcedures()
+    // setLoader(true);
+    // dispatch(fetchProcedureData(queryStrings));
+    // setTableHeaderVisible(false);
+    // setRowId([]);
   }, [queryStrings]);
 
   React.useEffect(() => {
@@ -192,17 +194,34 @@ export default function Procedures() {
     };
   }, []);
 
-  React.useEffect(() => {
-    const page: any = { ...pageInfo };
-    page['currentPage'] = procedureSliceData?.pageInfo.currentPage;
-    page['totalPages'] = procedureSliceData?.pageInfo.totalPages;
-    page['hasNextPage'] = procedureSliceData?.pageInfo.hasNextPage;
-    page['hasPreviousPage'] = procedureSliceData?.pageInfo.hasPreviousPage;
-    page['totalCount'] = procedureSliceData?.pageInfo.totalCount;
-    setProcedureData(procedureSliceData?.Procedures);
-    setPageInfo(page);
-  }, [procedureSliceData]);
+  // React.useEffect(() => {
+  //   const page: any = { ...pageInfo };
+  //   page['currentPage'] = procedureSliceData?.pageInfo.currentPage;
+  //   page['totalPages'] = procedureSliceData?.pageInfo.totalPages;
+  //   page['hasNextPage'] = procedureSliceData?.pageInfo.hasNextPage;
+  //   page['hasPreviousPage'] = procedureSliceData?.pageInfo.hasPreviousPage;
+  //   page['totalCount'] = procedureSliceData?.pageInfo.totalCount;
+  //   setProcedureData(procedureSliceData?.Procedures);
+  //   setPageInfo(page);
+  // }, [procedureSliceData]);
 
+  const getAllProcedures=()=>{
+    setLoader(true)
+    dispatch(fetchProcedureData(queryStrings)).then((res:any)=>{
+      const page: any = { ...pageInfo };
+        page['currentPage'] = res?.get_all_procedures?.pageInfo.currentPage;
+        page['totalPages'] = res?.get_all_procedures?.pageInfo.totalPages;
+        page['hasNextPage'] = res?.get_all_procedures?.pageInfo.hasNextPage;
+        page['hasPreviousPage'] = res?.get_all_procedures?.pageInfo.hasPreviousPage;
+        page['totalCount'] = res?.get_all_procedures?.pageInfo.totalCount;
+        setProcedureData(res?.get_all_procedures?.Procedures);
+        setPageInfo(page);
+        setLoader(false)
+    }).catch((err:any)=>{
+      console.log(err);
+      
+    })
+  }
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
@@ -471,7 +490,7 @@ export default function Procedures() {
     const page: any = { ...pageInfo };
     setPageInfo(page);
     setQueryString(payload);
-    dispatch(fetchProcedureData(payload));
+    getAllProcedures()
   };
 
   const getFilterOptions = (data) => {
