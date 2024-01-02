@@ -558,13 +558,14 @@ const handleReadNotification=async(id:any)=>{
                   </TableBody>
               ) :!runzData || runzData.length === 0 && loader==false ? (
                 <TableBody>
-<p style={{ textAlign: 'center',  position:'absolute', left: '0rem', right: '0rem' }}>
-   <Box sx={{ textAlign: 'center', padding: "1%", width: "100%" }}>
+{/* <p style={{ textAlign: 'center',  position:'absolute', left: '0rem', right: '0rem' }}> */}
+<Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "1%", width: "100%"  }}>
      <img src={Emptystate} alt="" />
      <Typography className="no-remainder">
      Runs not found.
      </Typography>
-   </Box></p>
+   </Box>
+   {/* </p> */}
 </TableBody>)
 
                 :

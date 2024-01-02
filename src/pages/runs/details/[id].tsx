@@ -375,6 +375,8 @@ export default function RunsDetails() {
   const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
   const [userRunzID, setUserRunzID] = React.useState<any>({});
+  const [result,setResult]=React.useState({})
+  const [remarks,setRemarks]=React.useState<any>("")
 
   const procedureSliceData = useSelector((state: any) => state.runs.data);
 
@@ -866,7 +868,7 @@ export default function RunsDetails() {
           console.log(res[newarray][0]);
           const data = res!==undefined ?res[newarray][0]:"";
           console.log(data);
-          
+          setResult(data)
           let text: any = '';
           Object.entries(data).forEach(([key, value]) => {
             text =
@@ -890,6 +892,58 @@ export default function RunsDetails() {
       })
     }
   };
+
+  // const handleEditorChange = (e:any) => {
+  //   console.log( e.target.getContent());
+  //   console.log("Content was updated:", e.target.getContent());
+  // };
+  const handleChanged = (content:any) => {
+    console.log(content);
+    setRemarks(content)
+  };
+ const resultSave=()=>{
+  
+  if(runzValue.status == 'Created'){
+    const payload: any = {
+      runId: runzValue._id,
+      results:JSON.stringify(result),
+      
+    }
+    dispatch(postUserRunsData(payload));
+
+  }
+  else{
+    const payload2: any = {
+    _id: userRunzID?._id,
+    results:JSON.stringify(result),
+   
+    }
+    console.log(payload2);
+    
+    dispatch(UpdateUserRunsData(payload2));
+  }
+ }
+
+ const remarkSave=()=>{
+ 
+  if(runzValue.status == 'Created'){
+    const payload: any = {
+      runId: runzValue._id,
+      remarks:remarks,
+    
+    }
+    dispatch(postUserRunsData(payload));
+
+  }
+  else{
+    const payload2: any = {
+    _id: userRunzID?._id,
+    remarks:remarks,
+    
+    }
+    dispatch(UpdateUserRunsData(payload2));
+  }
+ }
 
   // if (empty.length > 0) {
   //   toast('Must fill all Required Readings', {
@@ -1875,7 +1929,11 @@ console.log(htmlInput,"htmlInput");
                         },
                         content_style:
                           'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                          
                       }}
+                      value={remarks}
+                      // onChange={handleEditorChange}
+                      onEditorChange={handleChanged}
                     />
                   </CustomTabPanel>
                 </Box>
@@ -1901,9 +1959,9 @@ console.log(htmlInput,"htmlInput");
                     type="submit"
                     variant="contained"
                     className="add-btn"
-                    style={{ position: 'sticky', display: value !== 0?"none" :"block"}}
+                    style={{ position: 'sticky'}}
                     onClick={() => {
-                      value == 0 && onSubmit();
+                      value == 0 && onSubmit() || value == 2 && resultSave() || value == 3 && remarkSave() ;
                     }}
                   >
                     Save

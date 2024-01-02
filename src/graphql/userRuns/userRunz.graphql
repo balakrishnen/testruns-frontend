@@ -4,10 +4,12 @@ export const POST_USER_RUNS = gql`
 mutation Create_userRunz(
     $runId :String!
     $organisationId :String!
-    $userProcedure :String!
+    $userProcedure :String
     $static_chart_data: String
+    $remarks: String
+    $results : String
 ) {
-    create_userRunz(runId: $runId, organisationId: $organisationId, userProcedure: $userProcedure, static_chart_data:$static_chart_data) {
+    create_userRunz(runId: $runId, organisationId: $organisationId, userProcedure: $userProcedure, static_chart_data:$static_chart_data, remarks:$remarks, results:$results) {
         _id
         runId
         organisationId
@@ -26,10 +28,12 @@ mutation Create_userRunz(
 export const UPDATE_USER_RUNS = gql`
 mutation Update_userRun(
     $_id: String!
-    $userProcedure: String!
+    $userProcedure: String
     $static_chart_data: String
+    $remarks: String
+    $results : String
 ) {
-    update_userRun(_id: $_id, userProcedure: $userProcedure, static_chart_data: $static_chart_data) {
+    update_userRun(_id: $_id, userProcedure: $userProcedure, static_chart_data: $static_chart_data, remarks:$remarks, results:$results) {
         _id
         runId
         organisationId

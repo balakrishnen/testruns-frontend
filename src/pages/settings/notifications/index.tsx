@@ -301,8 +301,8 @@ const Notification = () => {
                   Notification
                 </Typography>
                 <AntSwitch
-                  checked={notificationList !== undefined && notificationList[0]?.runsCommend[0]?.notification ? true : false}
-                  onChange={() => handleChange('runsCommend', 'notification', !notificationList[0]?.runsCommend[0]?.notification)}
+                  checked={notificationList !== undefined && notificationList[0]?.runAssiged[0]?.notification ? true : false}
+                  onChange={() => handleChange('runAssiged', 'notification', !notificationList[0]?.runAssiged[0]?.notification)}
                   inputProps={{ "aria-label": "ant design" }}
                   name="notification"
                 />
@@ -317,8 +317,8 @@ const Notification = () => {
                   Email
                 </Typography>
                 <AntSwitch
-                  checked={notificationList !== undefined && notificationList[0]?.runsCommend[0]?.email ? true : false}
-                  onChange={() => handleChange('runsCommend', 'email', !notificationList[0]?.runsCommend[0]?.email)}
+                  checked={notificationList !== undefined && notificationList[0]?.runAssiged[0]?.email ? true : false}
+                  onChange={() => handleChange('runAssiged', 'email', !notificationList[0]?.runAssiged[0]?.email)}
                   inputProps={{ "aria-label": "ant design" }}
                   name="email"
                 />
@@ -368,8 +368,8 @@ const Notification = () => {
                   Notification
                 </Typography>
                 <AntSwitch
-                  checked={notificationList !== undefined && notificationList[0]?.runAssiged[0]?.notification ? true : false}
-                  onChange={() => handleChange('runAssiged', 'notification', !notificationList[0]?.runAssiged[0]?.notification)}
+                  checked={notificationList !== undefined && notificationList[0]?.runsCommend[0]?.notification ? true : false}
+                  onChange={() => handleChange('runsCommend', 'notification', !notificationList[0]?.runsCommend[0]?.notification)}
                   inputProps={{ "aria-label": "ant design" }}
                   name="notification"
                 />
@@ -384,8 +384,8 @@ const Notification = () => {
                   Email
                 </Typography>
                 <AntSwitch
-                  checked={notificationList !== undefined && notificationList[0]?.runAssiged[0]?.email ? true : false}
-                  onChange={() => handleChange('runAssiged', 'email', !notificationList[0]?.runAssiged[0]?.email)}
+                  checked={notificationList !== undefined && notificationList[0]?.runsCommend[0]?.email ? true : false}
+                  onChange={() => handleChange('runsCommend', 'email', !notificationList[0]?.runsCommend[0]?.email)}
                   inputProps={{ "aria-label": "ant design" }}
                   name="email"
                 />
