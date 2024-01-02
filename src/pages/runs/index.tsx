@@ -133,6 +133,8 @@ export default function Runs() {
   );
   const[userData, setUserData]=React.useState<any>({})
 
+  const credencial = loginUserSliceData?.verifyToken?.role[0]?.runs_management
+
 
   // React.useEffect(()=> {
   //   let temp = { _id: loginUserSliceData?.verifyToken?._id };
@@ -549,6 +551,7 @@ console.log("userDataRuns",userData)
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
+              disabled={!credencial.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Run

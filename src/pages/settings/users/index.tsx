@@ -136,6 +136,12 @@ const Users = () => {
     };
   }, []);
   
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+ 
+  const credencial =  loginUserSliceData?.verifyToken?.role[0]
+
   React.useEffect(() => {
     setLoader(true);
     dispatch(fetchUserData(queryStrings));
@@ -401,6 +407,7 @@ const Users = () => {
             onClick={() => {
               formPopupRef.current.open(true, 'create', {});
             }}
+            disabled={!credencial?.user_management?.create}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create User
@@ -704,7 +711,7 @@ const Users = () => {
                       // selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
                       onClick={(e: any) =>
-                        formPopupRef.current.open(true, 'edit', row)
+                        formPopupRef.current.open(credencial?.user_management?.edit, 'edit', row)
                       }
                     >
                       {/* {headers[0].is_show && (

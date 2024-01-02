@@ -24,48 +24,60 @@ import RoleActive from "../../assets/images/role-active.svg";
 import "../../assets/styles/setting.scss";
 import "../../assets/styles/App.scss";
 import { navigate } from "gatsby";
+import { useSelector } from 'react-redux';
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import procedures from "../../assets/images/procedures.svg";
 import proceduresActive from "../../assets/images/procedures-active.svg";
 
-const menuOption = [
-  {
-    id: 1,
-    name: "Notification settings",
-    icon: Notification,
-    activeIcon: NotificationActive,
-    path: "/settings/notifications",
-  },
-  {
-    id: 2,
-    name: "Profile settings",
-    icon: Profile,
-    activeIcon: ProfileActive,
-    path: "/settings/profile",
-  },
-  {
-    id: 3,
-    name: "User management",
-    icon: User,
-    activeIcon: UserActive,
-    path: "/settings/users",
-  },
-  {
-    id: 4,
-    name: "Role management",
-    icon: Role,
-    activeIcon: RoleActive,
-    path: "/settings/roles",
-  },
-  // {
-  //   id: 5,
-  //   name: "Custom fields",
-  //   icon: procedures,
-  //   activeIcon: proceduresActive,
-  //   path: "/settings/custom-fields",
-  // },
-];
 export const SettingsLayout = ({ children }: any, props: any) => {
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+  
+  const credencial = loginUserSliceData?.verifyToken?.role[0]
+
+  const menuOption = [
+    {
+      id: 1,
+      name: "Notification settings",
+      icon: Notification,
+      activeIcon: NotificationActive,
+      path: "/settings/notifications",
+      isActive: true
+    },
+    {
+      id: 2,
+      name: "Profile settings",
+      icon: Profile,
+      activeIcon: ProfileActive,
+      path: "/settings/profile",
+      isActive: true
+    },
+    {
+      id: 3,
+      name: "User management",
+      icon: User,
+      activeIcon: UserActive,
+      path: "/settings/users",
+      isActive: credencial?.user_management?.view
+    },
+    {
+      id: 4,
+      name: "Role management",
+      icon: Role,
+      activeIcon: RoleActive,
+      path: "/settings/roles",
+      isActive:  credencial?.role_management?.edit
+    },
+    // {
+    //   id: 5,
+    //   name: "Custom fields",
+    //   icon: procedures,
+    //   activeIcon: proceduresActive,
+    //   path: "/settings/custom-fields",
+    // },
+  ];
+
   const [selectedItem, setSelectedItem] = React.useState(menuOption[0].id);
 
   const redirectTo = (path: any) => {
@@ -120,7 +132,7 @@ export const SettingsLayout = ({ children }: any, props: any) => {
               </Box>
               <Typography className="setting-title">Settings</Typography>
               <List style={{ padding: "0px" }}>
-                {menuOption.map((item, index) => (
+                {menuOption.filter((element)=>element.isActive).map((item, index) => (
                   <ListItem
                     disablePadding
                     key={index}

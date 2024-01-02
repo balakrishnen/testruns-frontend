@@ -134,6 +134,11 @@ export default function Assets() {
   const assetsIdSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets,
   );
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+ 
+  const credencial =  loginUserSliceData?.verifyToken?.role[0]
 
   // React.useEffect(() => {
   //   setTimeout(() => {
@@ -430,6 +435,7 @@ getAllassets();
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
+              disabled={!credencial.asset_management.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Asset
