@@ -117,6 +117,7 @@ export const fetchLoginUser = (payload: any) => async (dispatch: any) => {
     });
     console.log(response.data);
     dispatch(fetchLoginUserSuccess(response.data));
+    return response.data
   } catch (error: any) {
     dispatch(fetchLoginUserFailure(error.message));
   }

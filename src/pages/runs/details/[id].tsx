@@ -781,7 +781,7 @@ export default function RunsDetails() {
           status: 'Started',
         };
         dispatch(fetchUpdateRunsData(payload1));
-        toast(`User Procedure Created !`, {
+        toast(`Run User Procedure Created !`, {
           style: {
             background: '#00bf70',
             color: '#fff',
@@ -802,7 +802,7 @@ export default function RunsDetails() {
 
         setStaticChartData(finalTableTitleResult);
         
-        toast(`User Procedure updated !`, {
+        toast(`Run User Procedure updated !`, {
           style: {
             background: '#00bf70',
             color: '#fff',

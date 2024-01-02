@@ -71,46 +71,44 @@ export const CardLayout = ({ children }: any, props: any) => {
 
       let temp = { _id: userSliceData?.verifyToken?._id };
 
-      await  dispatch(fetchSingleUserData(temp))
-        .then((isSucess: any) => {
-          const data = isSucess?.get_user ?? {}
-          console.log("userdata ",data, isSucess)
-          // if (!data.isActive) {
-          //   navigate('/login')
-          //   toast(`The user is inactive !`, {
-          //     style: {
-          //       background: '#d92828',
-          //       color: '#fff',
-          //     } 
-          //   });
-          // } 
-          // else {
-            dispatch(fetchLoginUser(payload2))
-            window.sessionStorage.setItem('isLoggedIn', 'true');
-
-            navigate('/mypage')
-            toast(`Login successfully !`, {
+      await dispatch(fetchLoginUser(payload2)).then((res)=>{
+        const temp = { _id: res?.verifyToken?._id };
+         dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
+          const data = isSuccess?.get_user ?? {};
+          if (!data.isActive) {
+            toast(`The user is inactive !`, {
               style: {
-                background: '#00bf70', color: '#fff'
-              }
+                background: '#d92828',
+                color: '#fff',
+              } 
             });
-          // }
-        })
-  
-      // await dispatch(fetchLoginUser(payload2));
-  
-      // window.sessionStorage.setItem('isLoggedIn', 'true');
-      // navigate('/mypage');
-      // toast(`Google Login successful !`, {
-      //   style: {
-      //     background: '#00bf70', color: '#fff'
-      //   }
-      // });
-  
-    } catch (error) {
-      console.log(error);
-    }
-  };
+            setTimeout(()=>{
+              navigate("/login");
+
+            },2000)
+          }
+          else{
+            window.sessionStorage.setItem("isLoggedIn", "true");
+            toast(`Google Login successful !`, {
+              style: {
+                background: "#00bf70",
+                color: "#fff",
+              },
+            });
+            setTimeout(()=>{
+              navigate("/mypage");
+
+            },2000)
+          }
+       
+      // }
+    });
+       })
+
+  } catch (error) {
+    console.log(error);
+  }
+};
   const microsoftSignup = async () => {
     try {
       const microsoftProvider = provider("microsoft.com");
@@ -137,28 +135,51 @@ export const CardLayout = ({ children }: any, props: any) => {
 
       const temp = { _id: userSliceData?.verifyToken?._id };
 
-      await dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
-        const data = isSuccess?.get_user ?? {};
-        if (!data.isActive) {
-          navigate("/login");
-          toast(`The user is inactive !`, {
-            style: {
-              background: '#d92828',
-              color: '#fff',
-            } 
-          });
-        } else {
-         dispatch(fetchLoginUser(payload2));
-          window.sessionStorage.setItem("isLoggedIn", "true");
-          navigate("/mypage");
-          toast(`Microsoft Login successful !`, {
-            style: {
-              background: "#00bf70",
-              color: "#fff",
-            },
-          });
-        }
+      // await dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
+      //   const data = isSuccess?.get_user ?? {};
+      //   if (!data.isActive) {
+      //     navigate("/login");
+      //     toast(`The user is inactive !`, {
+      //       style: {
+      //         background: '#d92828',
+      //         color: '#fff',
+      //       } 
+      //     });
+      //   } else {
+         await dispatch(fetchLoginUser(payload2)).then((res)=>{
+          const temp = { _id: res?.verifyToken?._id };
+           dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
+            const data = isSuccess?.get_user ?? {};
+            if (!data.isActive) {
+              toast(`The user is inactive !`, {
+                style: {
+                  background: '#d92828',
+                  color: '#fff',
+                } 
+              });
+              setTimeout(()=>{
+                navigate("/login");
+
+              },2000)
+            }
+            else{
+              window.sessionStorage.setItem("isLoggedIn", "true");
+              toast(`Microsoft Login successful !`, {
+                style: {
+                  background: "#00bf70",
+                  color: "#fff",
+                },
+              });
+              setTimeout(()=>{
+                navigate("/mypage");
+
+              },2000)
+            }
+         
+        // }
       });
+         })
+
     } catch (error) {
       console.log(error);
     }
