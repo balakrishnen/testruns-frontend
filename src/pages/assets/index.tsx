@@ -225,7 +225,8 @@ const getAllassets=()=>{
     setFilterSearchValue((prevState) => null);
     setFilterOptions([]);
     setFilterType(null);
-    applyFilters(null, null);
+    // applyFilters(null, null);
+    applyFilters('', '');
     handleFilterPopoverClose();
     setFilterKey(null);
     setFilter(false);
@@ -392,6 +393,8 @@ getAllassets();
   };
 
   const applyFilters = (key: any, value: any) => {
+    console.log('====================================1',key);
+    console.log('====================================2',value);
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
     payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');

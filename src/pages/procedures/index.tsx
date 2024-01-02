@@ -156,7 +156,8 @@ export default function Procedures() {
     setFilterSearchValue((prevState) => null);
     setFilterOptions([]);
     setFilterType(null);
-    applyFilters(null, null);
+    // applyFilters(null, null);
+    applyFilters('', '');
     handleFilterPopoverClose();
     setFilterKey(null);
     setFilter(false);

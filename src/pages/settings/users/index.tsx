@@ -345,7 +345,7 @@ const Users = () => {
     setFilterSearchValue(null);
     setFilterOptions([]);
     setFilterType(null);
-    applyFilters('search', null);
+    applyFilters('search', '');
     handleFilterPopoverClose();
     setFilterKey(null);
     setFilter(false);
