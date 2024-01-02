@@ -201,24 +201,43 @@ console.log("userDataRuns",userData)
     setFilterKey(null);
     setFilter(false)
   };
-  React.useEffect(() => {
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-    setRunsData(runsData);
-  }, [runsData]);
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoader(false);
+  //   }, 1000);
+  //   setRunsData(runsData);
+  // }, [runsData]);
 
   React.useEffect(() => {
-    setLoader(true);
-    dispatch(fetchRunsData(queryStrings));
-    setTableHeaderVisible(false);
-    setRowId([]);
-    setRunsRow([]);
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
+    getAllAsset()
+    // setLoader(true);
+    // dispatch(fetchRunsData(queryStrings));
+    // setTableHeaderVisible(false);
+    // setRowId([]);
+    // setRunsRow([]);
+    // setTimeout(() => {
+    //   setLoader(false);
+    // }, 1000);
   }, [queryStrings]);
 
+  const getAllAsset=()=>{
+    setLoader(true)
+    dispatch(fetchRunsData(queryStrings)).then((res:any)=>{
+      const page: any = { ...pageInfo };
+      page['currentPage'] = res?.get_all_runs?.pageInfo.currentPage;
+      page['totalPages'] = res?.get_all_runs?.pageInfo.totalPages;
+      page['hasNextPage'] = res?.get_all_runs?.pageInfo.hasNextPage;
+      page['hasPreviousPage'] = res?.get_all_runs?.pageInfo.hasPreviousPage;
+      page['totalCount'] = res?.get_all_runs?.pageInfo.totalCount;
+      setRunsData(res?.get_all_runs?.Runs);
+      setPageInfo(page);
+      setLoader(false)
+
+    }).catch((err:any)=>{
+      console.log(err);
+      
+    })
+  }
   React.useEffect(() => {
     return () => {
       const headersList: any = [...headers];
@@ -229,19 +248,19 @@ console.log("userDataRuns",userData)
     };
   }, []);
 
-  React.useEffect(() => {
-    const page: any = { ...pageInfo };
-    page['currentPage'] = runsSliceData?.pageInfo.currentPage;
-    page['totalPages'] = runsSliceData?.pageInfo.totalPages;
-    page['hasNextPage'] = runsSliceData?.pageInfo.hasNextPage;
-    page['hasPreviousPage'] = runsSliceData?.pageInfo.hasPreviousPage;
-    page['totalCount'] = runsSliceData?.pageInfo.totalCount;
-    setRunsData(runsSliceData?.Runs);
-    setPageInfo(page);
-    setTimeout(() => {
-      setLoader(false);
-    }, 2000);
-  }, [runsSliceData]);
+  // React.useEffect(() => {
+  //   const page: any = { ...pageInfo };
+  //   page['currentPage'] = runsSliceData?.pageInfo.currentPage;
+  //   page['totalPages'] = runsSliceData?.pageInfo.totalPages;
+  //   page['hasNextPage'] = runsSliceData?.pageInfo.hasNextPage;
+  //   page['hasPreviousPage'] = runsSliceData?.pageInfo.hasPreviousPage;
+  //   page['totalCount'] = runsSliceData?.pageInfo.totalCount;
+  //   setRunsData(runsSliceData?.Runs);
+  //   setPageInfo(page);
+  //   setTimeout(() => {
+  //     setLoader(false);
+  //   }, 2000);
+  // }, [runsSliceData]);
 
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
@@ -408,9 +427,14 @@ console.log("userDataRuns",userData)
   const reload = () => {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
-    // setPageInfo(page);
-    // setQueryString(payload);
-    dispatch(fetchRunsData(payload));
+    setPageInfo(page);
+    setQueryString(payload);
+    // getAllAsset()
+    // const payload: any = { ...queryStrings };
+    // const page: any = { ...pageInfo };
+    // // setPageInfo(page);
+    // // setQueryString(payload);
+    // dispatch(fetchRunsData(payload));
   };
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
     const payload: any = { ...queryStrings };
@@ -852,12 +876,13 @@ console.log("userDataRuns",userData)
               ) :!runsData || runsData.length === 0 && loader==false? (
                 <TableBody>
                   <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}>
-                    <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}>
+                    {/* <Box sx={{ textAlign: 'center', padding: "10%", width: "100%" }}> */}
                       <img src={Emptystate} alt="" />
                       <Typography className="no-remainder">
                         Runs not found.
                       </Typography>
-                    </Box></p>
+                    {/* </Box> */}
+                    </p>
                 </TableBody>
               ) : (
                 <TableBody>
