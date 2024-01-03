@@ -29,7 +29,7 @@ const SpinerLoader = ( isLoader:boolean) => {
           strokeWidthSecondary={5}
           wrapperStyle={{
             position: 'absolute',
-            top: '25%', // Adjust as needed
+            top: '50%', // Adjust as needed
             left: '50%', // Adjust as needed
             transform: 'translate(-50%, -50%)', // Center the element
           }}
