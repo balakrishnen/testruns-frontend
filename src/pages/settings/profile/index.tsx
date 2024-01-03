@@ -144,7 +144,6 @@ const Profile = () => {
   
   const credencial =  loginUserSliceData?.role[0]
 
-  console.log("credencial", credencial?.profile_management)
   React.useEffect(() => {
     let temp = { _id: loginUserSliceData?._id };
     // if (row?._id) {

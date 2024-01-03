@@ -125,6 +125,7 @@ export default function AppProfileDrawer({
   var payload2={
     instituteId:loginUserSliceData?.instituteId
   }
+  const credencial =  loginUserSliceData?.role[0]
   // React.useEffect(() => {
   //   let payload = {
   //     _id:  loginUserSliceData?._id
@@ -425,6 +426,7 @@ export default function AppProfileDrawer({
                         formik.touched.firstName &&
                         Boolean(formik.errors.firstName)
                       }
+                      disabled={!credencial?.profile_management?.editUserName}
                     />
                     {formik.touched.firstName &&
                       formik.errors.firstName && (
@@ -467,6 +469,7 @@ export default function AppProfileDrawer({
                         formik.touched.lastName &&
                         Boolean(formik.errors.lastName)
                       }
+                      disabled={!credencial?.profile_management?.editUserName}
                     />
                     {formik.touched.lastName && formik.errors.lastName && (
                       <Typography className="error-field">
@@ -556,6 +559,7 @@ export default function AppProfileDrawer({
                       //   formik.touched.phoneNumber &&
                       //   Boolean(formik.errors.phoneNumber)
                       // }
+                      disabled={!credencial?.profile_management?.editContact}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment sx={{ mx: 2 }} position="start">
@@ -610,6 +614,7 @@ export default function AppProfileDrawer({
                         formik.touched.organisationId &&
                         Boolean(formik.errors.organisationId)
                       }
+                      disabled= {!credencial?.profile_management?.editOrganisation}
                     >
                       {organizationData?.map((item: any, index) => (
                         <MenuItem key={index} value={item.id}>
@@ -651,6 +656,7 @@ export default function AppProfileDrawer({
                       )}
                       fullWidth
                       size="medium"
+                      disabled= {!credencial?.profile_management?.editDepartment}
                       renderOption={(
                         props,
                         option: any,
