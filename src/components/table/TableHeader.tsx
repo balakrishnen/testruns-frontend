@@ -61,7 +61,7 @@ export default function TableHeader(props: any) {
       })),
     );
   }, [departmentSliceData, labSliceData]);
-
+console.log(columns)
   return (
     <TableHead>
       <TableRow>
@@ -77,7 +77,7 @@ export default function TableHeader(props: any) {
               >
                  {headCell.label}
                 {(headCell.id !== 'departmentId' && 
-                headCell.id !== 'laboratoryId') && (
+                headCell.id !== 'laboratoryId' && headCell.id !== "perchasedDate" && headCell.id !== "lastUsedDate") && (
                 //   <TableSortLabel hideSortIcon>{headCell.label}</TableSortLabel>
                 // ) : (
                   

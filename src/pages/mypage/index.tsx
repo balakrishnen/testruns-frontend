@@ -612,15 +612,15 @@ export default function MyPage() {
                       <TableCell>
                         {row.departmentId[0] !== null ? (
                           <Box
-                            onClick={(_event) => {
-                              _event.preventDefault();
-                              _event.stopPropagation();
-                              tablePopupRef.current?.open(
-                                true,
-                                'departments',
-                                row.departmentId,
-                              );
-                            }}
+                            // onClick={(_event) => {
+                            //   _event.preventDefault();
+                            //   _event.stopPropagation();
+                            //   tablePopupRef.current?.open(
+                            //     true,
+                            //     'departments',
+                            //     row.departmentId,
+                            //   );
+                            // }}
                             sx={{ display: 'flex', alignItems: 'center' }}
                           >
                             <>
@@ -631,15 +631,15 @@ export default function MyPage() {
                                   m: 0.5,
                                   padding: '0px 3px',
                                 }}
-                                onClick={(_event) => {
-                                  _event.preventDefault();
-                                  _event.stopPropagation();
-                                  tablePopupRef.current.open(
-                                    true,
-                                    'departments',
-                                    row.departmentId,
-                                  );
-                                }}
+                                // onClick={(_event) => {
+                                //   _event.preventDefault();
+                                //   _event.stopPropagation();
+                                //   tablePopupRef.current.open(
+                                //     true,
+                                //     'departments',
+                                //     row.departmentId,
+                                //   );
+                                // }}
                               />
                               {row.departmentId.length > 1 && (
                                 <span
@@ -662,15 +662,15 @@ export default function MyPage() {
                       <TableCell style={{ whiteSpace: 'nowrap' }}>
                         {row.laboratoryId[0] !== null ? (
                           <Box
-                            onClick={(_event) => {
-                              _event.preventDefault();
-                              _event.stopPropagation();
-                              tablePopupRef.current?.open(
-                                true,
-                                'lab',
-                                row.laboratoryId,
-                              );
-                            }}
+                            // onClick={(_event) => {
+                            //   _event.preventDefault();
+                            //   _event.stopPropagation();
+                            //   tablePopupRef.current?.open(
+                            //     true,
+                            //     'lab',
+                            //     row.laboratoryId,
+                            //   );
+                            // }}
                             sx={{ display: 'flex', alignItems: 'center' }}
                           >
                             <>
@@ -681,15 +681,15 @@ export default function MyPage() {
                                   m: 0.5,
                                   padding: '0px 3px',
                                 }}
-                                onClick={(_event) => {
-                                  _event.preventDefault();
-                                  _event.stopPropagation();
-                                  tablePopupRef.current.open(
-                                    true,
-                                    'lab',
-                                    row.laboratoryId,
-                                  );
-                                }}
+                                // onClick={(_event) => {
+                                //   _event.preventDefault();
+                                //   _event.stopPropagation();
+                                //   tablePopupRef.current.open(
+                                //     true,
+                                //     'lab',
+                                //     row.laboratoryId,
+                                //   );
+                                // }}
                               />
                               {row.laboratoryId.length > 1 && (
                                 <span
