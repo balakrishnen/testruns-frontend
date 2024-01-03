@@ -70,6 +70,9 @@ import { toast } from 'react-toastify';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import SpinerLoader from '../../components/SpinnerLoader';
 
 const assetsStatus = StatusList;
 const assetsAvailability = AvailabilityList;
@@ -104,7 +107,7 @@ export default function Assets() {
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [assetsData, setAssetsData] = React.useState<any>([]);
   const [rowId, setRowId] = React.useState<any>([]);
-
+  const [editAcces, seteditAcces] = React.useState(true);
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
   const [loader, setLoader] = React.useState(false);
   const [filter, setFilter] = React.useState(false);
@@ -281,7 +284,10 @@ getAllassets();
     );
     reload();
   };
-
+  React.useEffect(() =>{
+ 
+    seteditAcces(loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit)
+  },[])
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       assetsData,
@@ -435,7 +441,7 @@ getAllassets();
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
-              disabled={!credencial.asset_management.create}
+              disabled={!credencial?.asset_management?.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Asset
@@ -719,11 +725,17 @@ getAllassets();
 
               {loader ? (
                 <TableBody>
-                  <TableSkeleton
+                    <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%" , display: "flex", justifyContent: "center",alignItems: "center" }}>
+                    {/* <SpinerLoader isLoader={loader} /> */}
+                     <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
+      <CircularProgress color="inherit" />
+      </Stack>
+      </Box>
+                  {/* <TableSkeleton
                     columns={headers}
                     image={true}
                     rows={queryStrings.perPage}
-                  />
+                  /> */}
                 </TableBody>
               ) :!assetsData || assetsData.length === 0 && loader==false ? (
                 <TableBody>
@@ -746,7 +758,7 @@ getAllassets();
                           tabIndex={-1}
                           key={index}
                           sx={{ cursor: 'pointer' }}
-                          onClick={(e: any) => {
+                          onClick={(e: any) => {editAcces &&
                             navigate(`/assets/details/${row._id}`, {
                               state: { props: row, func: reload() },
                             });

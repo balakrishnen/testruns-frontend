@@ -516,7 +516,7 @@ export default function Procedures() {
               onClick={() => {
                 formPopupRef.current.open(true);
               }}
-              disabled={!credencial.procedure_management.create}
+              disabled={!credencial?.procedure_management?.create}
             >
               <AddIcon sx={{ mr: 1 }} />
               Create Procedure
@@ -835,7 +835,7 @@ export default function Procedures() {
                           // selected={isItemSelected}
                           sx={{ cursor: 'pointer' }}
                           onClick={(e: any) =>
-                            // (e.target.name==undefined &&
+                            credencial?.procedure_management?.edit &&
                             navigate(`/procedures/details/${row._id}`, {
                               state: { props: row },
                             })

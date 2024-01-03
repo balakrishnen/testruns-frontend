@@ -422,7 +422,7 @@ console.log(assetValue?.organisationId,);
         <Box sx={{ width: '100%', marginTop: '1rem' }}>
           <Box sx={{ borderBottom: 0 }}>
             <Tabs
-              value={editAcces?value:1}
+              value={value}
               onChange={handleChange}
               variant="scrollable"
               scrollButtons="auto"
@@ -430,7 +430,7 @@ console.log(assetValue?.organisationId,);
               aria-label="tabs-common"
               className="tabs-common"
             >
-              <Tab label="Edit details" {...a11yProps(0)} disabled={!editAcces?true:false} />
+              <Tab label="Edit details" {...a11yProps(0)} />
               <Tab label="History" {...a11yProps(1)} />
             </Tabs>
           </Box>

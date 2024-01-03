@@ -695,10 +695,12 @@ const Profile = () => {
                             onBlur={formikProfile.handleBlur}
                             value={formikProfile.values.email}
                             size="small"
+                            className='bg-gray-input'
                             error={
                               formikProfile.touched.email &&
                               Boolean(formikProfile.errors.email)
                             }
+                            disabled
                           />
                           {formikProfile.touched.email &&
                             formikProfile.errors.email && (

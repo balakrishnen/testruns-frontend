@@ -406,19 +406,21 @@ console.log(CalendarContent,"CalendarContent");
   React.useEffect(() => {
     const calendarMarkSet = new Set();
     const calendar = calendar_eventData?.runs_calender_data.map((item) => {
-      const date = new Date(parseInt(item.createdAt));
+      const date = new Date(selectedDate);
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const day = date.getDate().toString().padStart(2, '0');
       const year = date.getFullYear();
       const formattedDate = `${month}-${day}-${year}`;
-      const temp = { ...item, createdAt: formattedDate };
+      // const temp = { ...item, "dueDate": formattedDate };
       calendarMarkSet.add(formattedDate);
-      return temp;
+      return item;
     });
+    console.log("calendarMarkSet",calendarMarkSet);
+    
     const calendarMark = Array.from(calendarMarkSet);
     setCalendarMark(calendarMark);
     setCalendarEventData(calendar);
-  }, [calendar_eventData]);
+  }, [calendar_eventData,selectedDate]);
 
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: any = moment();
@@ -449,7 +451,7 @@ console.log(CalendarContent,"CalendarContent");
   React.useEffect(()=> {
     // console.log("selectedDate",selectedDate === moment(new Date()).format('MM-DD-YYYY'));
     
-  if(selectedDate === moment(new Date()).format('MM-DD-YYYY')){
+  if(moment(selectedDate).format('MM-DD-YYYY') == moment(new Date()).format('MM-DD-YYYY')){
     // const filCalendarContent = calendarEventData.filter(
       
     //   (item:any) => {console.log(item,"item");(item.createdAt === moment(new Date()).format('MM-DD-YYYY'))},
@@ -457,7 +459,7 @@ console.log(CalendarContent,"CalendarContent");
     let arr:any=[]
 
   calendarEventData?.map((item:any)=>{
-    if(item?.createdAt === moment(new Date()).format('MM-DD-YYYY'))
+    if(moment(item?.dueDate).format('MM-DD-YYYY') == moment(new Date()).format('MM-DD-YYYY'))
     {
       arr.push(item)
       return item
@@ -483,7 +485,7 @@ console.log(CalendarContent,"CalendarContent");
   // },[loginUserSliceData])
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
-      (item) => item.createdAt === moment(date).format('MM-DD-YYYY'),
+      (item) =>  moment(item?.dueDate).format('MM-DD-YYYY') == moment(date).format('MM-DD-YYYY'),
     );
     setCalendarContent(filCalendarContent);
     setSelectedDate(moment(date).format('MM-DD-YYYY'));
@@ -864,8 +866,9 @@ const handleReadNotification=async(id:any)=>{
             onChange={handleDateClick}
                 value={value}
                 tileClassName={({ date, view }) => {
+                 
                   if (
-                    CalendarMark.includes(moment(date).format('MM-DD-YYYY'))
+                    calendarEventData.find((item) => moment(item?.dueDate).format('MM-DD-YYYY')==moment(date).format('MM-DD-YYYY'))
                   
                     ) {
                     return 'events';
@@ -887,6 +890,8 @@ const handleReadNotification=async(id:any)=>{
                 }}
               />
               <Divider className="hr-calender" />
+              {console.log(CalendarMark,selectedDate)
+              }
               <Box
                 sx={{
                   overflowY: 'scroll',
