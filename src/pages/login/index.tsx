@@ -98,7 +98,7 @@ const Login = () => {
                   });
                   setTimeout(()=>{
                     navigate("/login");
-
+                    setIsSubmitted(isSubmitted);
                   },2000)
                 }
                 else{
@@ -137,6 +137,8 @@ const Login = () => {
             });
             setTimeout(() => {
               setIsSubmitted(isSubmitted);
+              console.log("isSubmitted",isSubmitted);
+              
             }, 2000);
 
           });
