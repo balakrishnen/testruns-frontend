@@ -109,9 +109,6 @@ export default function Runs() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const [runsData, setRunsData] = React.useState<any>([]);
-  console.log('filterSearchValue', filterSearchValue);
-  console.log('filterType', filterType);
-  console.log('filterKey', filterKey);
   const [rowId, setRowId] = React.useState<any>([]);
   const [runsRow, setRunsRow] = React.useState<any>([])
   const dispatch: any = useDispatch();
@@ -875,8 +872,8 @@ console.log("userDataRuns",userData)
                     image={true}
                     rows={queryStrings.perPage}
                   />
-                </TableBody>
-              ) :!runsData || runsData.length === 0 && loader==false? (
+                </TableBody> 
+              ) :!runsData && runsData.length === 0 && loader==false? (
                 <TableBody>
                   {/* <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}> */}
                     <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%"  }}>

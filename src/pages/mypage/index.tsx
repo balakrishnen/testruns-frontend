@@ -26,11 +26,12 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Emptystate from '../../assets/images/Emptystate.svg';
 import { fetchNotificationData } from '../../api/notification.API';
-import { fetchNotificationMessageData, fetchReadSingleMessageData } from '../../api/notificationMessageAPI';
-import { fetchMyPageRunsData } from '../../api/myPageAPI'
 import {
-  fetchCalendarEventData,
-} from '../../api/myPageAPI';
+  fetchNotificationMessageData,
+  fetchReadSingleMessageData,
+} from '../../api/notificationMessageAPI';
+import { fetchMyPageRunsData } from '../../api/myPageAPI';
+import { fetchCalendarEventData } from '../../api/myPageAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import data from '../../assets/images/profile/user.jpg';
@@ -245,26 +246,28 @@ export default function MyPage() {
   const dispatch: any = useDispatch();
   const [viewAllNotifications, setViewAllNotifications] = useState(false);
 
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
+  const loginUserSliceData = useSelector((state: any) => state.userLogin.data);
 
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 10,
-    assignedTo:loginUserSliceData?.verifyToken?._id,
-    assignedBy:loginUserSliceData?.verifyToken?._id,
+    assignedTo: loginUserSliceData?.verifyToken?._id,
+    assignedBy: loginUserSliceData?.verifyToken?._id,
     searchBy: null,
     search: null,
     sortBy: null,
     sortOrder: 'desc',
   });
-  const [notificationQueryStrings, setNotificationQueryString] = React.useState({
-    userId: loginUserSliceData?.verifyToken?._id
-  });
-  const [notificationMesssage,setNotificationMesssage]=React.useState([])
+  const [notificationQueryStrings, setNotificationQueryString] = React.useState(
+    {
+      userId: loginUserSliceData?.verifyToken?._id,
+    },
+  );
+  const [notificationMesssage, setNotificationMesssage] = React.useState([]);
   const [clickedDate, setClickedDate] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(moment(new Date()).format('MM-DD-YYYY'));
+  const [selectedDate, setSelectedDate] = useState(
+    moment(new Date()).format('MM-DD-YYYY'),
+  );
   const [value, onChange] = useState<Value>(
     moment(new Date()).format('MM-DD-YYYY'),
   );
@@ -273,21 +276,22 @@ export default function MyPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [localRowsPerPage, setLocalRowsPerPage] = useState(5);
   const [CalendarContent, setCalendarContent] = useState([]);
-  console.log('CalendarContent',CalendarContent);
+  console.log('CalendarContent', CalendarContent);
   const [calendarEventData, setCalendarEventData] = useState([]);
   const [CalendarMark, setCalendarMark] = useState([]);
   const [runzData, setRunzData] = useState<any>([]);
+  console.log("runzData",runzData);
+  
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentMonth, setCurrentMonth] = useState()
-  const [currentYear, setCurrentYear] = useState()
+  const [currentMonth, setCurrentMonth] = useState();
+  const [currentYear, setCurrentYear] = useState();
   const [answers, setAnswers] = React.useState('');
   const [loader, setLoader] = React.useState(false);
   const [notifications, setNotifications] = useState([
     // Your notification data goes here
   ]);
-console.log("CalendarMark",CalendarMark.includes(selectedDate));
-console.log(CalendarContent,"CalendarContent");
-
+  console.log('CalendarMark', CalendarMark.includes(selectedDate));
+  console.log(CalendarContent, 'CalendarContent');
 
   const tablePopupRef: any = React.useRef(null);
 
@@ -295,8 +299,9 @@ console.log(CalendarContent,"CalendarContent");
   //   (state: any) => state.notification.data?.get_all_notifications,
   // );
 
-  const NotificationMessageSliceData = useSelector((state: any) => {return state.notificationMessage.data?.get_notification_message})
-
+  const NotificationMessageSliceData = useSelector((state: any) => {
+    return state.notificationMessage.data?.get_notification_message;
+  });
 
   const calendar_eventData = useSelector(
     (state: any) => state.calendar_event.data,
@@ -305,24 +310,23 @@ console.log(CalendarContent,"CalendarContent");
     (state: any) => state.myPageSlice.data?.get_all_runs,
   );
 
-    // console.log('wwwww',loginUserSliceData);
-  const[userData, setUserData]=React.useState<any>({})
- const [ calender, setCalender ] = React.useState()
- 
-  React.useEffect(()=> {
+  // console.log('wwwww',loginUserSliceData);
+  const [userData, setUserData] = React.useState<any>({});
+  const [calender, setCalender] = React.useState();
+
+  React.useEffect(() => {
     let temp = { _id: loginUserSliceData?.verifyToken?._id };
     // if (row?._id) {
     dispatch(fetchSingleUserData(temp))
       .then((isSucess: any) => {
-        setUserData(isSucess?.get_user)
-        setNotificationQueryString(isSucess?.get_user?._id)
+        setUserData(isSucess?.get_user);
+        setNotificationQueryString(isSucess?.get_user?._id);
       })
 
       .catch((err: any) => {
         console.log(err);
       });
   }, [loginUserSliceData]);
-
 
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
@@ -337,41 +341,45 @@ console.log(CalendarContent,"CalendarContent");
     payload['page'] = page_no;
     page['currentPage'] = page_no;
     setPageInfo(page);
-    console.log(page,payload);
-    
+    console.log(page, payload);
+
     setQueryString(payload);
     setCurrentPage(page_no);
   };
 
   React.useEffect(() => {
     // dispatch(fetchNotificationData());
-    console.log("notification1", loginUserSliceData?.verifyToken?._id,"==",NotificationMessageSliceData);
+    console.log(
+      'notification1',
+      loginUserSliceData?.verifyToken?._id,
+      '==',
+      NotificationMessageSliceData,
+    );
     // notificationMessageList()
   }, [loginUserSliceData]);
 
   React.useEffect(() => {
-        let pay = {
+    let pay = {
       month: `${new Date().getMonth() + 1}`,
       year: `${new Date().getFullYear()}`,
     };
 
     // dispatch(fetchNotificationData());
     dispatch(fetchCalendarEventData(pay));
-  
   }, [userData]);
-// const notificationMessageList=()=>{
-   
-//   let payload={
-//     userId: loginUserSliceData?.verifyToken?._id
-//   }
-//   console.log(payload);
-  
-//   dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-//     setNotificationMesssage(res?.data?.get_notification_message)
-//     console.log(res?.data?.get_notification_message);
-    
-//   });
-// }
+  // const notificationMessageList=()=>{
+
+  //   let payload={
+  //     userId: loginUserSliceData?.verifyToken?._id
+  //   }
+  //   console.log(payload);
+
+  //   dispatch(fetchNotificationMessageData(payload)).then((res)=>{
+  //     setNotificationMesssage(res?.data?.get_notification_message)
+  //     console.log(res?.data?.get_notification_message);
+
+  //   });
+  // }
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -380,13 +388,13 @@ console.log(CalendarContent,"CalendarContent");
     setRunzData(runzData);
   }, [runzData]);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     setLoader(true);
     dispatch(fetchMyPageRunsData(queryStrings));
     setTimeout(() => {
       setLoader(false);
     }, 1000);
-  },[queryStrings])
+  }, [queryStrings]);
 
   React.useEffect(() => {
     const page: any = { ...pageInfo };
@@ -396,8 +404,8 @@ console.log(CalendarContent,"CalendarContent");
     page['hasPreviousPage'] = MyPageRunsData?.pageInfo?.hasPreviousPage;
     page['totalCount'] = MyPageRunsData?.pageInfo?.totalCount;
     setRunzData(MyPageRunsData?.Runs);
-    console.log("MyPageRunsData",MyPageRunsData);
-    
+    console.log('MyPageRunsData', MyPageRunsData);
+
     setPageInfo(page);
     setTimeout(() => {
       setLoader(false);
@@ -415,12 +423,12 @@ console.log(CalendarContent,"CalendarContent");
       calendarMarkSet.add(formattedDate);
       return item;
     });
-    console.log("calendarMarkSet",calendarMarkSet);
-    
+    console.log('calendarMarkSet', calendarMarkSet);
+
     const calendarMark = Array.from(calendarMarkSet);
     setCalendarMark(calendarMark);
     setCalendarEventData(calendar);
-  }, [calendar_eventData,selectedDate]);
+  }, [calendar_eventData, selectedDate]);
 
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: any = moment();
@@ -429,13 +437,16 @@ console.log(CalendarContent,"CalendarContent");
     // Create a Moment object from the timestamp
     const notificationTimeData = moment(timestamp);
 
-
     // Calculate the difference in milliseconds
     const timeDifferenceInMilliseconds = currentTime.diff(notificationTimeData);
 
     // Convert the difference to minutes and hours
-    const minutesDifference = moment.duration(timeDifferenceInMilliseconds).asMinutes();
-    const hoursDifference = moment.duration(timeDifferenceInMilliseconds).asHours();
+    const minutesDifference = moment
+      .duration(timeDifferenceInMilliseconds)
+      .asMinutes();
+    const hoursDifference = moment
+      .duration(timeDifferenceInMilliseconds)
+      .asHours();
 
     if (minutesDifference >= 60 && hoursDifference < 24) {
       return `${Math.floor(hoursDifference)}h ago`;
@@ -448,31 +459,35 @@ console.log(CalendarContent,"CalendarContent");
 
     return `${Math.floor(minutesDifference)}min ago`;
   };
-  React.useEffect(()=> {
+  React.useEffect(() => {
     // console.log("selectedDate",selectedDate === moment(new Date()).format('MM-DD-YYYY'));
-    
-  if(moment(selectedDate).format('MM-DD-YYYY') == moment(new Date()).format('MM-DD-YYYY')){
-    // const filCalendarContent = calendarEventData.filter(
-      
-    //   (item:any) => {console.log(item,"item");(item.createdAt === moment(new Date()).format('MM-DD-YYYY'))},
-    // );
-    let arr:any=[]
 
-  calendarEventData?.map((item:any)=>{
-    if(moment(item?.dueDate).format('MM-DD-YYYY') == moment(new Date()).format('MM-DD-YYYY'))
-    {
-      arr.push(item)
-      return item
+    if (
+      moment(selectedDate).format('MM-DD-YYYY') ==
+      moment(new Date()).format('MM-DD-YYYY')
+    ) {
+      // const filCalendarContent = calendarEventData.filter(
+
+      //   (item:any) => {console.log(item,"item");(item.createdAt === moment(new Date()).format('MM-DD-YYYY'))},
+      // );
+      let arr: any = [];
+
+      calendarEventData?.map((item: any) => {
+        if (
+          moment(item?.dueDate).format('MM-DD-YYYY') ==
+          moment(new Date()).format('MM-DD-YYYY')
+        ) {
+          arr.push(item);
+          return item;
+        }
+      });
+      //  console.log(arr,"filCalendarContent");
+
+      setCalendarContent(arr);
     }
-  })
-  //  console.log(arr,"filCalendarContent");
-    
-    setCalendarContent(arr);
- 
-  }},[calendarEventData])
+  }, [calendarEventData]);
   // console.log(CalendarContent,"filCalendarContent");
 
-  
   // React.useEffect(()=>{
   //   let payload ={
   //     userId:loginUserSliceData?._id
@@ -481,11 +496,13 @@ console.log(CalendarContent,"CalendarContent");
   //   dispatch(fetchNotificationMessageData(payload)).then((res)=>{
   //     setNotificationMesssage(res?.data?.get_notification_message)
   //     console.log(res?.data?.get_notification_message);
-  //   });  
+  //   });
   // },[loginUserSliceData])
   const handleDateClick = (date: any) => {
     const filCalendarContent = calendarEventData.filter(
-      (item) =>  moment(item?.dueDate).format('MM-DD-YYYY') == moment(date).format('MM-DD-YYYY'),
+      (item) =>
+        moment(item?.dueDate).format('MM-DD-YYYY') ==
+        moment(date).format('MM-DD-YYYY'),
     );
     setCalendarContent(filCalendarContent);
     setSelectedDate(moment(date).format('MM-DD-YYYY'));
@@ -515,28 +532,29 @@ console.log(CalendarContent,"CalendarContent");
   const toggleViewNotifications = () => {
     setViewAllNotifications((prev) => !prev);
   };
-  const arr=[1,2,3,4,5,6,7]
+  const arr = [1, 2, 3, 4, 5, 6, 7];
   console.log(CalendarContent);
-  console.log("notificationMesssage",notificationMesssage);
+  console.log('notificationMesssage', notificationMesssage);
 
-const handleReadNotification=async(id:any)=>{
-  let payload2={
-    _id:id,
-    isRead: true
-  }
-  await dispatch(fetchReadSingleMessageData(payload2))
-  // await notificationMessageList()
-}
+  const handleReadNotification = async (id: any) => {
+    let payload2 = {
+      _id: id,
+      isRead: true,
+    };
+    await dispatch(fetchReadSingleMessageData(payload2));
+    // await notificationMessageList()
+  };
 
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
-        <Box
-          className="table-outer"
-          sx={{ width: '100%', }}
-        >
+        <Box className="table-outer" sx={{ width: '100%' }}>
           <TableContainer className="tableHeight2">
-            <Table sx={{ minWidth: 650,  position:'relative' }} aria-label="simple table" stickyHeader >
+            <Table
+              sx={{ minWidth: 650, position: 'relative' }}
+              aria-label="simple table"
+              stickyHeader
+            >
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
@@ -557,25 +575,30 @@ const handleReadNotification=async(id:any)=>{
                     image={true}
                     rows={queryStrings.perPage}
                   />
-                  </TableBody>
-              ) :!runzData || runzData.length === 0 && loader==false ? (
+                </TableBody>
+              ) : !runzData && (runzData.length === 0 && loader == false) ? (
                 <TableBody>
-{/* <p style={{ textAlign: 'center',  position:'absolute', left: '0rem', right: '0rem' }}> */}
-<Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "1%", width: "100%"  }}>
-     <img src={Emptystate} alt="" />
-     <Typography className="no-remainder">
-     Runs not found.
-     </Typography>
-   </Box>
-   {/* </p> */}
-</TableBody>)
-
-                :
-              
-                  <TableBody>
- 
-
- {runzData?.map((row:any,index:any)=>(
+                  {/* <p style={{ textAlign: 'center',  position:'absolute', left: '0rem', right: '0rem' }}> */}
+                  <Box
+                    sx={{
+                      textAlign: 'center',
+                      position: 'absolute',
+                      left: '0rem',
+                      right: '0rem',
+                      padding: '1%',
+                      width: '100%',
+                    }}
+                  >
+                    <img src={Emptystate} alt="" />
+                    <Typography className="no-remainder">
+                      Runs not found.
+                    </Typography>
+                  </Box>
+                  {/* </p> */}
+                </TableBody>
+              ) : (
+                <TableBody>
+                  {runzData?.map((row: any, index: any) => (
                     <TableRow
                       key={row._id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -692,8 +715,8 @@ const handleReadNotification=async(id:any)=>{
                           {row.createdAt === null
                             ? '-'
                             : moment(row.createdAt).isValid()
-                              ? moment(row.createdAt).local().format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                            ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                            : moment().format('MM/DD/YYYY')}
                         </Box>
                       </TableCell>
                       <TableCell>
@@ -702,24 +725,24 @@ const handleReadNotification=async(id:any)=>{
                             row.status === 'Created'
                               ? 'create-select td-select'
                               : row.status === 'Started'
-                                ? 'start-select td-select'
-                                : row.status === 'Complete'
-                                  ? 'active-select td-select'
-                                  : row.status === 'Submitted'
-                                  ? 'submit-select td-select'
-                                  : 'inactive-select td-select'
+                              ? 'start-select td-select'
+                              : row.status === 'Complete'
+                              ? 'active-select td-select'
+                              : row.status === 'Submitted'
+                              ? 'submit-select td-select'
+                              : 'inactive-select td-select'
                           }
                           style={{
                             background:
                               row.status === 'Created'
                                 ? '#8d8d8d'
                                 : row.status === 'Started'
-                                  ? '#faaa49'
-                                  : row.status === 'Stopped'
-                                    ? '#e2445c'
-                                    : row?.status == 'Submitted'
-                                      ? '#a01fb1'
-                                    : '#00bf70',
+                                ? '#faaa49'
+                                : row.status === 'Stopped'
+                                ? '#e2445c'
+                                : row?.status == 'Submitted'
+                                ? '#a01fb1'
+                                : '#00bf70',
                             padding: '6px',
                             width: '140px',
                             borderRadius: '20px',
@@ -733,9 +756,9 @@ const handleReadNotification=async(id:any)=>{
                         </Box>
                       </TableCell>
                     </TableRow>
- ))}
-                  </TableBody>
-}
+                  ))}
+                </TableBody>
+              )}
             </Table>
           </TableContainer>
           <TablePagination
@@ -776,39 +799,47 @@ const handleReadNotification=async(id:any)=>{
                   height: 'calc(100vh - 38vh)',
                 }}
               >
-                {NotificationMessageSliceData?.message?.length !== 0 ? NotificationMessageSliceData?.message?.map((notification: any, index: any) => (
-                  <Box
-                    className="notifications"
-                    key={index}
-                    style={{
-                      backgroundColor: notification?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
-                    }}
-                    onClick={()=>{handleReadNotification(notification._id)}}
-                    
-                  >
-                    <Box className="image-container">
-                      <Avatar
-                        alt="User Avatar"
-                        src={data} // Assuming `data` contains the image source
-                        sx={{ width: 56, height: 56, borderRadius: '50%' }}
-                      />
-                      <Box className="text-container">
-                        <Box className="heading">{notification.title}</Box>
-                        <Box className="content">{notification.message}</Box>
+                {NotificationMessageSliceData?.message?.length !== 0 ? (
+                  NotificationMessageSliceData?.message?.map(
+                    (notification: any, index: any) => (
+                      <Box
+                        className="notifications"
+                        key={index}
+                        style={{
+                          backgroundColor:
+                            notification?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification
+                        }}
+                        onClick={() => {
+                          handleReadNotification(notification._id);
+                        }}
+                      >
+                        <Box className="image-container">
+                          <Avatar
+                            alt="User Avatar"
+                            src={data} // Assuming `data` contains the image source
+                            sx={{ width: 56, height: 56, borderRadius: '50%' }}
+                          />
+                          <Box className="text-container">
+                            <Box className="heading">{notification.title}</Box>
+                            <Box className="content">
+                              {notification.message}
+                            </Box>
+                          </Box>
+                        </Box>
+                        <Box className="time">
+                          {getTimeDifference(notification.createdAt)}
+                        </Box>
                       </Box>
-                    </Box>
-                    <Box className="time">
-                      {getTimeDifference(notification.createdAt)}
-                    </Box>
-                  </Box>
-                ))
-                  :
-                  <Box sx={{ textAlign: 'center', padding: "15%" }}>
+                    ),
+                  )
+                ) : (
+                  <Box sx={{ textAlign: 'center', padding: '15%' }}>
                     <img src={Emptystate} alt="" />
                     <Typography className="no-remainder">
                       No notifications yet!
                     </Typography>
-                  </Box>}
+                  </Box>
+                )}
                 {/* // : */}
 
                 {/* <Box className="show-page">
@@ -859,39 +890,37 @@ const handleReadNotification=async(id:any)=>{
               paddingLeft: { xs: '0px !important', lg: '16px !important' },
             }}
           >
-            
             <Box className="calender-rightside">
               <Calendar
-            
-            onChange={handleDateClick}
+                onChange={handleDateClick}
                 value={value}
                 tileClassName={({ date, view }) => {
-                 
                   if (
-                    calendarEventData.find((item) => moment(item?.dueDate).format('MM-DD-YYYY')==moment(date).format('MM-DD-YYYY'))
-                  
-                    ) {
+                    calendarEventData.find(
+                      (item) =>
+                        moment(item?.dueDate).format('MM-DD-YYYY') ==
+                        moment(date).format('MM-DD-YYYY'),
+                    )
+                  ) {
                     return 'events';
                   }
-                  
                 }}
                 onActiveStartDateChange={({ activeStartDate, view }) => {
                   // activeStartDate is a Date object representing the start date of the current view
                   const month: any = activeStartDate?.getMonth();
                   const year: any = activeStartDate?.getFullYear();
-                  setCurrentMonth(month + 1)
-                  setCurrentYear(year)
+                  setCurrentMonth(month + 1);
+                  setCurrentYear(year);
 
                   const calPayload = {
                     month: `${month + 1}`,
                     year: `${year}`,
-                  }
+                  };
                   dispatch(fetchCalendarEventData(calPayload));
                 }}
               />
               <Divider className="hr-calender" />
-              {console.log(CalendarMark,selectedDate)
-              }
+              {console.log(CalendarMark, selectedDate)}
               <Box
                 sx={{
                   overflowY: 'scroll',
