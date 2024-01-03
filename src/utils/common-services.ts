@@ -42,12 +42,12 @@ export const handledAllSelected = (
     const updatedRows = Rows.map((row:any) => ({ ...row, is_checked: true }));
     const rowsId=[]
     rowsId.push(Rows.map((row:any) => (row._id)))
-    console.log(rowsId);
+    console.log("rowsId",rowsId.flat());
     setAssetsData(updatedRows);
     setIsDeselectAllChecked(false);
     setIsselectAllChecked(true);
     setVisibleRow(updatedRows);
-    setRowId(rowsId)
+    setRowId(rowsId.flat())
   // }
 };
 

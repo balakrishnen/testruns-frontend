@@ -12,6 +12,7 @@ import { fetchNotificationMessageData, fetchReadBulkMessageData, fetchReadSingle
 import { fetchSingleUserData } from '../../api/userAPI';
 import Emptystate from '../../assets/images/Emptystate.svg';
 import moment from 'moment';
+import SpinerLoader from '../SpinnerLoader';
 
 export default function AppNotificationDrawer({
   openDrawer,
@@ -19,6 +20,7 @@ export default function AppNotificationDrawer({
 }: any) {
 
   const [show, setShow] = React.useState(false);
+  const [loader, setLoader]=React.useState(false)
   const [notificationQueryStrings, setNotificationQueryString] = React.useState({
     userId: ""
   });
@@ -92,9 +94,10 @@ export default function AppNotificationDrawer({
       userId: loginUserSliceData?.verifyToken?._id
     }
     console.log(payload);
-    
+    setLoader(true)
     dispatch(fetchNotificationMessageData(payload)).then((res)=>{
       setNotificationMesssage(res?.data?.get_notification_message)
+      setLoader(false)
       console.log(res?.data?.get_notification_message);
       
     });
@@ -208,7 +211,10 @@ const handleReadNotification=async(id:any)=>{
           </Typography>
         </Box>
         <Box sx={{ height: 'calc(100vh - 150px)', overflowY: 'auto' }}>
-          {notificationMesssage?.message?.length!==0 ? notificationMesssage?.message?.map((row: any, index: any) => (
+          {loader?
+          <SpinerLoader isLoader={loader} />:
+          
+          notificationMesssage?.message?.length!==0 ? notificationMesssage?.message?.map((row: any, index: any) => (
             <Box className="notifications" key={index}
             style={{
               backgroundColor: row?.isRead == false ? '#F3F3F3' : 'white', // Apply different background for the first notification

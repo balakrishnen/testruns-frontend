@@ -91,6 +91,7 @@ const Addnewpopup = React.forwardRef(
     const [laboratory, setLaboratory] = React.useState([]);
     const fileUploadField = React.useRef<any>(null);
     const [uploadedFile, setUploadedFile] = React.useState(null);
+    const [loader,setLoader]=React.useState(false)
 
     React.useImperativeHandle(ref, () => ({
       open(state: any) {
@@ -130,6 +131,7 @@ const Addnewpopup = React.forwardRef(
        
         await submitFormPopup();
         await clearForm();
+        fileUploadField.current.value=null
         // dispatch(fetchAssetsData(queryStrings));
       } else {
         formik.setFieldError('name', 'Invalid first name');
@@ -257,8 +259,10 @@ const Addnewpopup = React.forwardRef(
         ACL: 'public-read',
         // ContentType: selectedFile.type
       };
-  
+      setLoader(true)
       const result = s3.upload(params).promise();
+      console.log("result", result);
+      
       await result.then((res: any) => {
         setUploadedFile(res.Location);
         toast(`Image uploaded successfully !`, {
@@ -267,6 +271,9 @@ const Addnewpopup = React.forwardRef(
             color: '#fff',
           },
         });
+      }).catch((err)=>{
+        console.log(err);
+        setLoader(false)
       });
       await result.catch((err) => {
         console.error('Failed to upload');
@@ -277,6 +284,7 @@ const Addnewpopup = React.forwardRef(
           },
         });
       });
+      setLoader(false)
     };
 
     const triggerFileUploadField = () => {
@@ -309,6 +317,7 @@ const Addnewpopup = React.forwardRef(
                   onClick={() => {
                     closeFormPopup(false);
                     clearForm();
+                    fileUploadField.current.value=null
                   }}
                 />
               </Box>
@@ -337,7 +346,7 @@ const Addnewpopup = React.forwardRef(
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
                       <span className="file-wrapper">
-                        <input   ref={fileUploadField} type="file" name="photo" id="photo" accept="image/*, image/jpeg, image/png"  onChange={handleImageUpload} />
+                        <input  disabled={loader} ref={fileUploadField} type="file" name="photo" id="photo" accept="image/jpg, image/jpeg, image/png"  onChange={handleImageUpload} />
                         <span className="button" onClick={triggerFileUploadField}>Upload photo</span>
                       </span>
                       {/* {formik.touched.assets_image &&
@@ -830,6 +839,7 @@ const Addnewpopup = React.forwardRef(
                   variant="contained"
                   onClick={() => {
                     confirmationPopupRef.current.open(true);
+                    fileUploadField.current.value=null
                   }}
                   className="cancel-btn"
                 >
