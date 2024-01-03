@@ -381,28 +381,32 @@ export default function RunsDetails() {
   const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
   const [userRunzID, setUserRunzID] = React.useState<any>({});
-  const [result,setResult]=React.useState({})
+  const [result,setResult]=React.useState<any>({})
   const [remarks,setRemarks]=React.useState<any>("")
-
+  console.log("JSON",result);
+  
   const procedureSliceData = useSelector((state: any) => state.runs.data);
 
   var runzId: any = [];
   runzId.push(runzValue?._id);
-  console.log('runsRow', runzId, runzValue);
+  // console.log('runsRow', runzId, runzValue);
   var runzRow: any = [];
   runzRow.push(runzValue);
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      console.log(window.location.pathname.split('/'));
+      // console.log(window.location.pathname.split('/'));
       const procedureId = { _id: window.location.pathname.split('/')[3] };
       dispatch(fetchSingleRunsData(procedureId));
       const runz = {
         runId: window.location.pathname.split('/')[3],
       };
       dispatch(fetchSingleUserRunzData(runz)).then((res) => {
-        console.log(res?.get_userRun?._id);
+        // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
+        setRemarks(res?.get_userRun?.remarks)
+        setResult(JSON.parse(res?.get_userRun?.results))
+        
       });
     }
   }, [value]);
@@ -443,18 +447,33 @@ export default function RunsDetails() {
       runId: window.location.pathname.split('/')[3],
     };
     dispatch(fetchSingleUserRunzData(runz)).then((res) => {
-      console.log(res?.get_userRun?._id);
+      // console.log(res?.get_userRun?._id);
       setUserRunzID(res?.get_userRun);
+      setResult(JSON.parse(res?.get_userRun?.results))
     });
     // setRunzValue(procedureSliceData.get_run)
   };
-  console.log(procedureSliceData);
+  // console.log(procedureSliceData);
   
   React.useEffect(() => {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
     setState({ content: userProcedure });
-  }, [runzValue, userProcedure,value]);
+    let text: any = '';
+    Object.entries(result).forEach(([key, value]) => {
+      text =
+        text +
+        `<div>
+        <div>
+        <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+        </div>
+      </div>`;
+    });
+    // console.log('####', text);
+    setUserRunzResult(text + '</ul>');
+  
+    // setResult(result)
+  }, [runzValue, userProcedure,value,result]);
 
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
@@ -476,7 +495,7 @@ export default function RunsDetails() {
       Object.entries(JSON.parse(userRunzID?.userProcedure)).filter(
         ([key]) => key,
       );
-    console.log(userProcedure);
+    // console.log(userProcedure);
 
     const obj = filtered && Object.fromEntries(filtered);
     if (!isEmptyObject(obj && userProcedure)) {
@@ -487,9 +506,9 @@ export default function RunsDetails() {
         }
       }
     }
-    console.log(userRunzID?.userProcedure);
+    // console.log(userRunzID?.userProcedure);
   }, [userRunzID?.userProcedure, state,value]);
-  console.log(runzValue?.userProcedure);
+  // console.log(runzValue?.userProcedure);
 
   React.useEffect(() => {
     handleHtmlInput();
@@ -667,13 +686,13 @@ export default function RunsDetails() {
     setCharts(data);
   };
   const handleChanges = (content: any) => {
-    console.log('content', content.querySelectorAll('input'));
+    // console.log('content', content.querySelectorAll('input'));
 
     setState({ content });
   };
-  console.log(state);
+  // console.log(state);
   const [arr, setArr] = React.useState<any>([]);
-  console.log(arr);
+  // console.log(arr);
   const mergedData: any = [];
   const onSubmit = () => {
     handleHtmlInput();
@@ -682,7 +701,7 @@ export default function RunsDetails() {
       ?.getElementById("content")
       ?.querySelectorAll("table");
     let finalTableTitleResult: any;
-    console.log(tablesEles);
+    // console.log(tablesEles);
     
     if (tablesEles) {
       const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
@@ -709,7 +728,7 @@ export default function RunsDetails() {
           rowData: rowData,
         };
       });
-      console.log("result",result);
+      // console.log("result",result);
       const mergedDatasets = result.map((dataset) => {
         const mergedData: any = [];
         for (let i = 0; i < dataset.rowData.length; i++) {
@@ -724,14 +743,14 @@ export default function RunsDetails() {
         }
         return mergedData;
       });
-      console.log("mergedDatasets",mergedDatasets);
+      // console.log("mergedDatasets",mergedDatasets);
       let filteredData = mergedDatasets?.filter((sublist) =>
         sublist?.some((obj: any) => Object?.keys(obj).length > 0)
       );
       filteredData = filteredData?.map((sublist) =>
         sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
       );
-      console.log("filteredData",filteredData);
+      // console.log("filteredData",filteredData);
       const results = filteredData?.map((dataset, index) => {
         const subResult = [];
         const firstDataItem = dataset[index];
@@ -762,10 +781,12 @@ export default function RunsDetails() {
       });
     }
     let vals = Object.values(htmlInput);
-    const empty = vals.filter((item) => item === "");
-    console.log('**finalTableTitleResult**', finalTableTitleResult);
+    // console.log(htmlInput);
+    
+    const empty = vals.filter((item) => item == "");
+    // console.log('**finalTableTitleResult**', empty);
 
-    if (empty.length > 0) {
+    if (empty.length !== 0) {
       toast('Must fill all Required Readings', {
         style: {
           background: '#d92828',
@@ -780,7 +801,7 @@ export default function RunsDetails() {
         userProcedure: JSON.stringify(htmlInput),
         static_chart_data: JSON.stringify(finalTableTitleResult),
       };
-      console.log(runzValue.status);
+      // console.log(runzValue.status);
 
       if (runzValue.status == 'Created') {
         dispatch(postUserRunsData(payload));
@@ -862,18 +883,18 @@ export default function RunsDetails() {
         },
         body: JSON.stringify(htmlInput),
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython')
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           var newarray:any=[]
           newarray=Object.keys(res)
-          console.log(newarray[0]);
+          // console.log(newarray[0]);
           
-          console.log(res[newarray][0]);
+          // console.log(res[newarray][0]);
           const data = res!==undefined ?res[newarray][0]:"";
-          console.log(data);
+          console.log("JSON",JSON.stringify(data),);
           setResult(data)
           let text: any = '';
           Object.entries(data).forEach(([key, value]) => {
@@ -885,7 +906,7 @@ export default function RunsDetails() {
               </div>
             </div>`;
           });
-          console.log('####', text);
+          // console.log('####', text);
           setUserRunzResult(text + '</ul>');
         });
       }
@@ -904,15 +925,16 @@ export default function RunsDetails() {
   //   console.log("Content was updated:", e.target.getContent());
   // };
   const handleChanged = (content:any) => {
-    console.log(content);
+    // console.log(content);
     setRemarks(content)
   };
  const resultSave=async()=>{
+  console.log("JSON",result);
   
   if(runzValue.status == 'Created'){
     const payload: any = {
       runId: runzValue._id,
-      results:JSON.stringify(result),
+      results:result
       
     }
     if(!JSON.stringify(result).includes("No calculations")){
@@ -921,6 +943,12 @@ export default function RunsDetails() {
         _id: runzValue._id,
         status: 'Complete',
       };
+      await toast(`Result saved successfully !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
       await dispatch(fetchUpdateRunsData(payload1));
     }
 
@@ -928,22 +956,28 @@ export default function RunsDetails() {
   else{
     const payload2: any = {
     _id: userRunzID?._id,
-    results:JSON.stringify(result),
+    results:result,
    
     }
-    console.log(payload2);
+    // console.log(payload2);
     if(!JSON.stringify(result).includes("No calculations")){
     await  dispatch(UpdateUserRunsData(payload2));
       let payload1 = {
         _id: runzValue._id,
         status: 'Complete',
       };
+      await toast(`Result saved successfully !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
     await  dispatch(fetchUpdateRunsData(payload1));
     }
   }
  }
 
- const remarkSave=()=>{
+ const remarkSave=async()=>{
  
   if(runzValue.status == 'Created'){
     const payload: any = {
@@ -951,8 +985,24 @@ export default function RunsDetails() {
       remarks:remarks,
     
     }
-    dispatch(postUserRunsData(payload));
-
+    if(remarks!==""){
+      await dispatch(postUserRunsData(payload));
+      await toast(`Remarks saved successfully !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
+    }
+    else{
+      toast('Remarks must be filled', {
+        style: {
+          background: '#d92828',
+          color: '#fff',
+        },
+      });
+    }
+  
   }
   else{
     const payload2: any = {
@@ -960,7 +1010,23 @@ export default function RunsDetails() {
     remarks:remarks,
     
     }
-    dispatch(UpdateUserRunsData(payload2));
+    if(remarks!==""){
+      await dispatch(UpdateUserRunsData(payload2));
+      await toast(`Remarks saved successfully !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
+    }
+    else{
+      toast('Remarks must be filled', {
+        style: {
+          background: '#d92828',
+          color: '#fff',
+        },
+      });
+    }
   }
  }
 
@@ -1061,7 +1127,7 @@ export default function RunsDetails() {
     values.tableChartOptionsList[keyIndex].color = event.target.value;
     setCharts(data);
   };
-console.log(userRunzResult);
+// console.log(userRunzResult);
 
   const handleAddChart = () => {
     const data = [...charts];
@@ -1152,19 +1218,19 @@ console.log(userRunzResult);
       });
   };
   const dispatch: any = useDispatch();
-  console.log(value, 'value');
+  // console.log(value, 'value');
 
   const handleOnChange = (e: any, row: any) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
 
-    console.log('change', row.departmentId, row.laboratoryId);
+    // console.log('change', row.departmentId, row.laboratoryId);
     var runsChange: any = {
       _id: row._id,
     };
     if (e.target.name == 'status') {
       runsChange['status'] = e.target.value;
     }
-    console.log(runsChange);
+    // console.log(runsChange);
     dispatch(fetchUpdateRunsData(runsChange));
     toast('Runs status updated !', {
       style: {
@@ -1182,24 +1248,24 @@ console.log(userRunzResult);
   const htmlData: any = state?.content ? state?.content : '';
   const [htmlInput, setHtmlInput] = React.useState<any>({});
   const htmlToJSON: any = html2json?.html2json(htmlData);
-console.log(htmlInput,"htmlInput");
+// console.log(htmlInput,"htmlInput");
 
   const uses = htmlToJSON?.child.map((ele: any) => ele);
   const handleHtmlInput = () => {
     let objects = {};
     // @ts-ignore
-    console.log(document?.getElementById('content')?.querySelectorAll('td'));
+    // console.log(document?.getElementById('content')?.querySelectorAll('td'));
 
     let inputEl: any = document
       ?.getElementById('content')
       ?.querySelectorAll('input');
-    console.log('inputEl', inputEl);
+    // console.log('inputEl', inputEl);
 
     inputEl?.forEach((ele: any) => {
       const { id, value } = ele;
       let temp = { [id]: value };
       objects = { ...objects, temp };
-      console.log(id);
+      // console.log(id);
 
       setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
       // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
@@ -1216,16 +1282,16 @@ console.log(htmlInput,"htmlInput");
     });
     // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
 
-    console.log('inputEl', objects);
+    // console.log('inputEl', objects);
   };
-  console.log('htmlInput', htmlInput);
+  // console.log('htmlInput', htmlInput);
   const uploadVideo = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const videoUrl = URL.createObjectURL(file);
       if (videoUrl) {
         const editor = editorRef.current.editor;
-      console.log('videoUrl',videoUrl);
+      // console.log('videoUrl',videoUrl);
   
         editorRef.current?.insertContent(
           `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
@@ -1862,7 +1928,7 @@ console.log(htmlInput,"htmlInput");
                               const userInput = window.prompt(
                                 'Enter data key attribute',
                               );
-                              console.log(userInput);
+                              // console.log(userInput);
                             },
                           });
                         },
@@ -1934,7 +2000,7 @@ console.log(htmlInput,"htmlInput");
                               const userInput = window.prompt(
                                 'Enter data key attribute',
                               );
-                              console.log(userInput);
+                              // console.log(userInput);
                             },
                           });
                           editor.ui.registry.addButton('customVideoUpload', {
@@ -1981,7 +2047,7 @@ console.log(htmlInput,"htmlInput");
                     type="submit"
                     variant="contained"
                     className="add-btn"
-                    style={{ position: 'sticky'}}
+                    style={{ position: 'sticky',display:value == 1?"none":"block"}}
                     onClick={() => {
                       value == 0 && onSubmit() || value == 2 && resultSave() || value == 3 && remarkSave() ;
                     }}

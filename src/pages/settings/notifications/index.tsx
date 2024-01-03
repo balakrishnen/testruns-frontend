@@ -148,7 +148,7 @@ const Notification = () => {
       runAssiged: updatedData2,
     }
     await dispatch(fetchUpdateNotification(payload))
-    await fetchMessageApi()
+    // await fetchMessageApi()
   };
 
   return (
