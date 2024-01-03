@@ -54,6 +54,7 @@ import test from '../../assets/images/test.svg';
 import preview from '../../assets/images/profile/preview.jpg';
 import { toast } from 'react-toastify';
 import AWS from 'aws-sdk';
+import SpinerLoader from '../../components/SpinnerLoader';
 
 const validationSchema = Yup.object().shape({
   // name: Yup.string().required('Asset Name is required'),
@@ -91,6 +92,9 @@ const Addnewpopup = React.forwardRef(
     const [laboratory, setLaboratory] = React.useState([]);
     const fileUploadField = React.useRef<any>(null);
     const [uploadedFile, setUploadedFile] = React.useState(null);
+    const [isLoader, setIsLoader] = React.useState(false);
+    console.log("uploadedFile",uploadedFile)
+    console.log("isLoader",isLoader)
 
     React.useImperativeHandle(ref, () => ({
       open(state: any) {
@@ -234,6 +238,7 @@ const Addnewpopup = React.forwardRef(
     console.log('formvalues',formik.values);
 
     const handleImageUpload = async () => {
+      setIsLoader(true)
       const selectedFile = fileUploadField.current.files[0];
       // const formData = new FormData();
       // formData.append('file', selectedFile);
@@ -268,6 +273,7 @@ const Addnewpopup = React.forwardRef(
           },
         });
       });
+      setIsLoader(false)
       await result.catch((err) => {
         console.error('Failed to upload');
         toast(`Failed to upload !`, {
@@ -327,10 +333,10 @@ const Addnewpopup = React.forwardRef(
                     },
                   }}
                 >
-                  {console.log("formik",!formik.dirty)}
                   <Box>
                     <Box style={{width: '220px', height: '220px', padding: '10px', background: '#e4e5e7', margin: 'auto'}}>
-                      <img src={uploadedFile === null ? preview : uploadedFile} alt="assetimg" style={{width: '100%', height: '100%'}} />
+                      {isLoader === false ? <img src={uploadedFile === null ? preview : uploadedFile} alt="assetimg" style={{width: '100%', height: '100%'}} /> : <SpinerLoader /> }
+                      
                     </Box>
                     <Box
                       className="edit-profile-btn"
