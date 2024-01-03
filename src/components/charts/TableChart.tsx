@@ -142,18 +142,33 @@ export default function TableChart({ staticChartData }: any) {
     const activeTable = tableList.findIndex(
       (item: any) => item.name === event.target.value,
     );
-    const activeChannel = channelsList.filter(
-      (item) => item.index === activeTable,
-    );
-    data[index].selectedTable = event.target.value;
-    data[index].channelsList = activeChannel;
-    data[index].xAxisValue = activeChannel[0].name;
+    if (activeTable !== -1) {
+      const activeChannel = channelsList.filter(
+        (item) => item.index === activeTable,
+      );
+      data[index].selectedTable = event.target.value;
+      data[index].channelsList = activeChannel;
+      // data[index].xAxisValue = activeChannel[0].name;
 
-    data[index].charts = [];
-    data[index].channelOptions.forEach((element) => {
-      element.channel = null;
-    });
-    setChartData(data);
+      data[index].charts = [];
+      data[index].channelOptions.forEach((element) => {
+        element.channel = null;
+      });
+      setChartData(data);
+    } else {
+      const charts: any = [];
+      chartData.forEach((element: any) => {
+        charts.push({
+          selectedTable: null,
+          channelOptions: channelOptions,
+          channelsList: [],
+          xAxisValue: null,
+          yAxisOptions: yAxisOptions,
+          charts: [],
+        });
+      });
+      setChartData(charts);
+    }
   };
 
   const handleChannelChange = (event, index, keys) => {
@@ -167,30 +182,38 @@ export default function TableChart({ staticChartData }: any) {
     const channelPosition = channels.channelsList.findIndex(
       (item: any) => item.name === event.target.value,
     );
-    channels.channelOptions[keys].channel = event.target.value;
-    channels.channelOptions[keys].color = colorList[keys];
-    channels.channelsList.forEach((element, position) => {
-      if (channels.charts.length === 0) {
-        charts.push({
-          [`plot${keys + 1}`]: element.data[channelPosition]
+    if (channelPosition !== -1) {
+      channels.channelOptions[keys].channel = event.target.value;
+      channels.channelOptions[keys].color = colorList[keys];
+      channels.channelsList.forEach((element, position) => {
+        if (channels.charts.length === 0) {
+          charts.push({
+            [`plot${keys + 1}`]: element.data[channelPosition]
+              ? element.data[channelPosition]
+              : 0,
+          });
+        } else {
+          charts[position][`plot${keys + 1}`] = element.data[
+            channelPosition
+          ]
             ? element.data[channelPosition]
-            : 0,
-        });
-      } else {
-       
-        charts[position][`plot${channelPosition + 1}`] = element.data[
-          channelPosition
-        ]
-          ? element.data[channelPosition]
-          : 0;
-      }
-    });
-    const ordered = charts.sort(
-      (a: any, b: any) =>
-        a[`plot${channelPosition + 1}`] - b[`plot${channelPosition + 1}`],
-    );
-    data[index].charts = ordered;
-    setChartData(data);
+            : 0;
+        }
+      });
+      const ordered = charts.sort(
+        (a: any, b: any) =>
+          a[`plot${channelPosition + 1}`] - b[`plot${channelPosition + 1}`],
+      );
+      data[index].charts = ordered;
+      setChartData(data);
+    } else {
+      channels.channelOptions[keys].channel = event.target.value;
+      channels.channelOptions[keys].color = colorList[axisPosition];
+      channels.charts.forEach((element, position) => {
+        delete channels.charts[position][`plot${axisPosition + 1}`];
+      });
+      setChartData(data);
+    }
   };
 
   const handleXAxisChange = (event, index) => {
@@ -199,7 +222,9 @@ export default function TableChart({ staticChartData }: any) {
     const channelIndex = channelsList.findIndex(
       (item) => item.name === event.target.value,
     );
-    data[index].xDataKey = `plot${channelIndex + 1}`;
+    if (channelIndex !== -1) {
+      data[index].xDataKey = `plot${channelIndex + 1}`;
+    } 
     setChartData(data);
   };
 
@@ -308,6 +333,7 @@ export default function TableChart({ staticChartData }: any) {
       <>
         {chartData.slice(0, displayCount).map((data: any, index: any) => (
           <>
+            {/* {JSON.stringify(data.charts)} */}
             <Grid container key={index} sx={{ my: 2 }} spacing={2}>
               <Grid
                 item
@@ -344,6 +370,7 @@ export default function TableChart({ staticChartData }: any) {
                         marginBottom: '15px',
                       }}
                     >
+                      <MenuItem value={null}>Null</MenuItem>
                       {tableList?.map((item, index) => (
                         <MenuItem key={index} value={item.value}>
                           {item.name}
@@ -391,13 +418,13 @@ export default function TableChart({ staticChartData }: any) {
                         label={{
                           value: data.xAxisValue,
                           position: 'insideBottom',
-                          fill: "#111fdf",
+                          fill: '#111fdf',
                         }}
                         tick={{
                           fontSize: 12,
                         }}
                         domain={['auto', 'auto']}
-                        interval="preserveStart"
+                        // interval="preserveStart"
                         type="number"
                         name={data.xAxisValue}
                       />
@@ -477,6 +504,7 @@ export default function TableChart({ staticChartData }: any) {
                           disabled={data.selectedTable === null}
                           style={{ width: '250px' }}
                         >
+                          <MenuItem value={null}>Null</MenuItem>
                           {data.channelsList?.map((item, index) => (
                             <MenuItem key={index} value={item.name}>
                               {item.name}
@@ -575,6 +603,7 @@ export default function TableChart({ staticChartData }: any) {
                                   style={{ width: '90%' }}
                                   // style={{ width: '220px' }}
                                 >
+                                  <MenuItem value={null}>Null</MenuItem>
                                   {data.channelsList?.map((item, index) => (
                                     <MenuItem key={index} value={item.name}>
                                       {item.name}
