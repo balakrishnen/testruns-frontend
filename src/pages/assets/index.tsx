@@ -70,6 +70,9 @@ import { toast } from 'react-toastify';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import SpinerLoader from '../../components/SpinnerLoader';
 
 const assetsStatus = StatusList;
 const assetsAvailability = AvailabilityList;
@@ -724,11 +727,17 @@ getAllassets();
 
               {loader ? (
                 <TableBody>
-                  <TableSkeleton
+                    <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%" , display: "flex", justifyContent: "center",alignItems: "center" }}>
+                    {/* <SpinerLoader isLoader={loader} /> */}
+                     <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
+      <CircularProgress color="inherit" />
+      </Stack>
+      </Box>
+                  {/* <TableSkeleton
                     columns={headers}
                     image={true}
                     rows={queryStrings.perPage}
-                  />
+                  /> */}
                 </TableBody>
               ) :!assetsData || assetsData.length === 0 && loader==false ? (
                 <TableBody>
