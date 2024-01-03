@@ -467,7 +467,7 @@ console.log(assetValue?.organisationId,);
                         style={{ display: 'none' }}
                         type="file"
                         ref={fileUploadField}
-                        accept="image/*, image/jpeg, image/png"
+                        accept="image/jpg, image/jpeg, image/png"
                         onChange={handleImageUpload}
                         />
                     </Box>

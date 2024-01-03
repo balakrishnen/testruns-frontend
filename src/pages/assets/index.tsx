@@ -674,8 +674,6 @@ getAllassets();
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
-                        console.log('====================================',filterKey);
-                        console.log('====================================',filterSearchValue);
                       }}
                     >
                       Show results

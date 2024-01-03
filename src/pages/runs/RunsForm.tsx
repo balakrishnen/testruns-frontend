@@ -149,7 +149,6 @@ const RunsForm = React.forwardRef(
       console.log('values.createdOn', values.createdOn);
       
       if (isMatch) {
-
         var deptArray: any = []
         departments.map((item: any) => (deptArray.push(item?.id)))
         var labArray: any = []
@@ -161,14 +160,15 @@ const RunsForm = React.forwardRef(
           laboratoryId: labArray,
           assignedTo: values.assignedTo,
           assignedBy: values.assignedBy,
-          dueDate: values.dueDate,
+          dueDate: moment(values.dueDate).format('MM/DD/YYYY'),
           createdOn: moment(values.createdOn.$d).format('MM/DD/YYYY'),
           status: values.status,
           organisationId: values.organisationId,
           // procedureDetials:values.procedureDetials
 
         };
-
+ console.log('type',type);
+ 
         if (type == 'edit') {
           runsValues['_id'] = formData._id
         }

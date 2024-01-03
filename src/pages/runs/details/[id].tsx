@@ -907,7 +907,7 @@ export default function RunsDetails() {
     console.log(content);
     setRemarks(content)
   };
- const resultSave=()=>{
+ const resultSave=async()=>{
   
   if(runzValue.status == 'Created'){
     const payload: any = {
@@ -915,7 +915,14 @@ export default function RunsDetails() {
       results:JSON.stringify(result),
       
     }
-    dispatch(postUserRunsData(payload));
+    if(!JSON.stringify(result).includes("No calculations")){
+      await  dispatch(postUserRunsData(payload));
+      let payload1 = {
+        _id: runzValue._id,
+        status: 'Complete',
+      };
+      await dispatch(fetchUpdateRunsData(payload1));
+    }
 
   }
   else{
@@ -925,8 +932,14 @@ export default function RunsDetails() {
    
     }
     console.log(payload2);
-    
-    dispatch(UpdateUserRunsData(payload2));
+    if(!JSON.stringify(result).includes("No calculations")){
+    await  dispatch(UpdateUserRunsData(payload2));
+      let payload1 = {
+        _id: runzValue._id,
+        status: 'Complete',
+      };
+    await  dispatch(fetchUpdateRunsData(payload1));
+    }
   }
  }
 

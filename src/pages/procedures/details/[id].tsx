@@ -668,7 +668,7 @@ const handleEditorInit = (editor) => {
                     file_picker_callback: function (cb, value, meta) {
                       var input = document.createElement("input");
                       input.setAttribute("type", "file");
-                      input.setAttribute("accept", "image/*");
+                      input.setAttribute("accept", "image/jpg, image/jpeg, image/png");
                       input.onchange = function () {
                         var file = this.files[0];
           
