@@ -873,7 +873,7 @@ console.log("userDataRuns",userData)
                     rows={queryStrings.perPage}
                   />
                 </TableBody> 
-              ) :!runsData && runsData.length === 0 && loader==false? (
+              ) :!runsData || runsData?.length === 0 && loader==false? (
                 <TableBody>
                   {/* <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}> */}
                     <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%"  }}>

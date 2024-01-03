@@ -576,7 +576,7 @@ export default function MyPage() {
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-              ) : !runzData && (runzData.length === 0 && loader == false) ? (
+              ) : !runzData || (runzData?.length === 0 && loader == false) ? (
                 <TableBody>
                   {/* <p style={{ textAlign: 'center',  position:'absolute', left: '0rem', right: '0rem' }}> */}
                   <Box

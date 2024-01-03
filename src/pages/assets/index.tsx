@@ -737,7 +737,7 @@ getAllassets();
                     rows={queryStrings.perPage}
                   /> */}
                 </TableBody>
-              ) :!assetsData && assetsData.length === 0 && loader==false ? (
+              ) :!assetsData || assetsData?.length === 0 && loader==false ? (
                 <TableBody>
                  {/* <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}> */}
                  <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%"  }}>
