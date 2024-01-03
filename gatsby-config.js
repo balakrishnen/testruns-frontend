@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 require('dotenv').config({
   path: `.env.development`,
 });
@@ -22,7 +23,7 @@ module.exports = {
       options: {
         typeName: 'RootQuery',
         fieldName: 'graphql',
-        url: 'https://api.dev.testrunz.com/graphql', // Replace with your GraphQL server URL
+        url: process.env.REACT_APP_GRAPHQL_URL, // Replace with your GraphQL server URL
       },
     },
   ],
