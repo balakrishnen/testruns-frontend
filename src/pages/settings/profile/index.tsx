@@ -142,6 +142,9 @@ const Profile = () => {
     (state: any) => state.userLogin.data?.verifyToken, 
   );
   
+  const credencial =  loginUserSliceData?.role[0]
+
+  console.log("credencial", credencial?.profile_management)
   React.useEffect(() => {
     let temp = { _id: loginUserSliceData?._id };
     // if (row?._id) {
@@ -201,6 +204,7 @@ const Profile = () => {
       values.newpassword,
       values.confirmpassword,
     );
+//profile_management
 
     if (isMatch) {
       const auths =auth;
@@ -608,7 +612,10 @@ const Profile = () => {
                               formikProfile.touched.firstName &&
                               Boolean(formikProfile.errors.firstName)
                             }
+                            
+                            disabled={!credencial?.profile_management?.editUserName}
                           />
+                         
                           {formikProfile.touched.firstName &&
                             formikProfile.errors.firstName && (
                               <Typography className="error-field">
@@ -651,6 +658,7 @@ const Profile = () => {
                               formikProfile.touched.lastName &&
                               Boolean(formikProfile.errors.lastName)
                             }
+                            disabled={!credencial?.profile_management?.editUserName}
                           />
                           {formikProfile.touched.lastName &&
                             formikProfile.errors.lastName && (
@@ -747,6 +755,7 @@ const Profile = () => {
                           formikProfile.touched.phoneNumber &&
                           Boolean(formikProfile.errors.phoneNumber)
                         }
+                        disabled={!credencial?.profile_management?.editContact}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment sx={{ mx: 2 }} position="start">
@@ -800,6 +809,7 @@ const Profile = () => {
                               formikProfile.touched.organisationId &&
                               Boolean(formikProfile.errors.organisationId)
                             }
+                            disabled= {!credencial?.profile_management?.editOrganisation}
                           >
                             {organizationData?.map((item: any, index) => (
                               <MenuItem key={index} value={item.id}>
@@ -846,6 +856,7 @@ const Profile = () => {
                             fullWidth
                             placeholder="Department"
                             size="medium"
+                            disabled= {!credencial?.profile_management?.editDepartment}
                             renderOption={(
                               props,
                               option: any,
@@ -906,6 +917,7 @@ const Profile = () => {
                             fullWidth
                             placeholder="Laboratory"
                             size="medium"
+                            disabled= {!credencial?.profile_management?.editLab}
                             renderOption={(
                               props,
                               option: any,
@@ -1057,6 +1069,7 @@ const Profile = () => {
                           formik.touched.password &&
                           Boolean(formik.errors.password)
                         }
+                        disabled= {!credencial?.profile_management?.changePassword}
                         placeholder="Password"
                       />
                       {formik.touched.password && formik.errors.password && (
@@ -1099,6 +1112,7 @@ const Profile = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.newpassword}
+                        disabled= {!credencial?.profile_management?.changePassword}
                         variant="outlined"
                         error={
                           formik.touched.newpassword &&
@@ -1160,6 +1174,7 @@ const Profile = () => {
                         onBlur={formik.handleBlur}
                         value={formik.values.confirmpassword}
                         variant="outlined"
+                        disabled= {!credencial?.profile_management?.changePassword}
                         error={
                           formik.touched.confirmpassword &&
                           Boolean(formik.errors.confirmpassword)

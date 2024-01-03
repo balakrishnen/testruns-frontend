@@ -721,7 +721,7 @@ console.log(formValues);
                       />
                     </TableCell>
                   </TableRow>
-                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  {/* <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell>Can assign</TableCell>
                     <TableCell>
                       <FormControlLabel
@@ -881,7 +881,7 @@ console.log(formValues);
                         style={{ margin: "0rem" }}
                       />
                     </TableCell>
-                  </TableRow>
+                  </TableRow> */}
 {/* RunsRole Access  */}
 
 {/* <TableRow>
