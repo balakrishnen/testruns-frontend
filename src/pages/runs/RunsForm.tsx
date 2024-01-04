@@ -51,7 +51,7 @@ const validationSchema = Yup.object().shape({
   laboratoryId: Yup.array().notRequired(),
   objective: Yup.string().trim().required('Test Objective is required').max(35, 'Label must be at most 35 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
   // dueDate: Yup.date().required('Due Date is required'),
-  dueDate: Yup.string().required('Due Date is required'),
+  dueDate: Yup.string().required('Due Date is required').matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/),
   assignedTo: Yup.string().notRequired(),
   organisationId:Yup.string().required('Procedure Name is required')
 });
@@ -177,6 +177,7 @@ const RunsForm = React.forwardRef(
          setTimeout(()=>{
           handleReloadSingleData()
          },2000)
+         submitFormPopup();
          await  reload()
         }
         else {

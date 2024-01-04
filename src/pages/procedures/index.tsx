@@ -142,6 +142,8 @@ export default function Procedures() {
 
   const dispatch: any = useDispatch();
   const [procedureData, setProcedureData] = React.useState<any>([]);
+  console.log("procedureData",procedureData);
+  
   const [rowId, setRowId] = React.useState<any>([]);
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
