@@ -66,8 +66,8 @@ export const GET_RUNS = gql`
 `; 
 
 export const CALENDER_DATA = gql`
- query runs_calender_data($month: String!, $year: String!) {
-    runs_calender_data(month: $month, year: $year){
+ query runs_calender_data($month: String!, $year: String!, $assignedTo:String) {
+    runs_calender_data(month: $month, year: $year, assignedTo:$assignedTo){
          _id
         objective
         runNumber

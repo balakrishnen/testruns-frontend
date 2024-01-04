@@ -82,7 +82,7 @@ const Login = () => {
             let payload = {
               idToken: userCredential.user?.accessToken
             }
-            let temp = { _id: userSliceData?.verifyToken?._id };
+            // let temp = { _id: userSliceData?.verifyToken?._id };
 
              dispatch(fetchLoginUser(payload)).then((res)=>{
               const temp = { _id: res?.verifyToken?._id };

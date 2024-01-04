@@ -193,9 +193,9 @@ export default function ProcedureDetails() {
     console.log("1");
   
     // Set a timer for 1 second (1000 milliseconds)
-    // const timerId = setTimeout(() => {
-      setprocedureData(procedureSliceData);
+    const timerId = setTimeout(() => {
       setIsLoader(false);
+      setprocedureData(procedureSliceData);
   
   
       setState({ content: procedureSliceData?.procedureDetials });
@@ -210,10 +210,10 @@ export default function ProcedureDetails() {
           })
       }
       setAssetNamepatch(data)
-    // }, 1000); // 1000 milliseconds = 1 second
+    }, 2000); // 1000 milliseconds = 1 second
   
     // Clean up the timer on component unmount or if procedureSliceData changes
-    // return () => clearTimeout(timerId);
+    return () => clearTimeout(timerId);
   
   }, [procedureSliceData]);
 

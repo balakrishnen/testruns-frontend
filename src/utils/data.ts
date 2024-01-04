@@ -361,7 +361,7 @@ export const UserHeaders: any = [
   //   type: 'select',
   // },
   {
-    id: 'createdOn',
+    id: 'addedOn',
     label: 'Added on',
     filters: [
       {
