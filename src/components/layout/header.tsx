@@ -121,7 +121,7 @@ function AppHeader(props: any) {
   const[userData, setUserData]=React.useState<any>({})
   const[isAnyRead,setisAnyRead]=React.useState<boolean>(false)
  console.log(loginUserSliceData);
- const singleUserData= useSelector((state:any)=> state.user.data.get_user)
+ const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
   React.useEffect(()=> {
     let temp = { _id: loginUserSliceData?.verifyToken?._id };
     // if (row?._id) {
