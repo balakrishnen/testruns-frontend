@@ -405,7 +405,7 @@ export default function RunsDetails() {
         // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks)
-        setResult(JSON.parse(res?.get_userRun?.results))
+        setResult(res?.get_userRun?.results!==undefined && JSON.parse(res?.get_userRun?.results))
         
       });
     }
@@ -449,7 +449,7 @@ export default function RunsDetails() {
     dispatch(fetchSingleUserRunzData(runz)).then((res) => {
       // console.log(res?.get_userRun?._id);
       setUserRunzID(res?.get_userRun);
-      setResult(JSON.parse(res?.get_userRun?.results))
+      setResult(res?.get_userRun?.results!==undefined && JSON.parse(res?.get_userRun?.results))
     });
     // setRunzValue(procedureSliceData.get_run)
   };
