@@ -16,3 +16,31 @@ mutation BulkCreate_run($runs: [BulkCreateRun]) {
         objective
     }
 }`;
+
+export const SHARE_RUNZ = gql`
+mutation Share_run(
+$runId: [String],
+$shareUserId: [String]
+) {
+    share_run(runId: $runId, shareUserId: $shareUserId) {
+        _id
+        objective
+        runNumber
+        procedureId
+        departmentId
+        laboratoryId
+        organisationId
+        instituteId
+        userId
+        createdOn
+        dueDate
+        assignedTo
+        assignedBy
+        status
+        isActive
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}
+`

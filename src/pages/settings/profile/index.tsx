@@ -141,7 +141,7 @@ const Profile = () => {
   const loginUserSliceData=  useSelector(
     (state: any) => state.userLogin.data?.verifyToken, 
   );
-  const singleUserData= useSelector((state:any)=> state.user.data)
+  const singleUserData= useSelector((state:any)=> state.user.data.get_user)
   const credencial =  loginUserSliceData?.role[0]
 console.log(singleUserData);
 

@@ -17,19 +17,24 @@ import {
   fetchLoginUserStart,
   fetchLoginUserSuccess,
 } from '../features/loginUserSlice';
+import {
+  fetchuserDataStart,
+  fetchuserDataFailure,
+  fetchuserDataSuccess
+} from "../features/userDataSlice"
 import { client } from '../utils/config';
 
 export const fetchUserData = (payload: any) => async (dispatch: any) => {
-  dispatch(fetchUserStart());
+  dispatch(fetchuserDataStart());
   try {
     const response = await client.query({
       query: GET_USER,
       variables: payload,
       fetchPolicy: 'network-only',
     });
-    dispatch(fetchUserSuccess(response.data));
+    dispatch(fetchuserDataSuccess(response.data));
   } catch (error: any) {
-    dispatch(fetchUserFailure(error.message));
+    dispatch(fetchuserDataFailure(error.message));
   }
 };
 export const postUserData = (payload: any) => async (dispatch: any) => {
@@ -137,6 +142,7 @@ export const fetchAllUser = () => async (dispatch: any) => {
     });
     console.log(response.data);
     dispatch(fetchUserSuccess(response.data));
+    return response.data
   } catch (error: any) {
     dispatch(fetchUserFailure(error.message));
   }

@@ -1,5 +1,10 @@
 import { gql } from '@apollo/client';
 
+gql`
+ enum AssetStatus {
+      Active
+      Inactive
+    }`
 export const GET_USER = gql`
 query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
     get_all_users(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search) {
@@ -19,7 +24,7 @@ query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
             role
             instituteId
             phoneNumber
-            isActive
+            status
             createdOn
             isDeleted
             createdAt
@@ -77,7 +82,7 @@ mutation Create_user(
             instituteId
             role
             phoneNumber
-            isActive
+            status
             isDeleted
             createdAt
             createdOn
@@ -104,7 +109,7 @@ mutation  update_user(
        $organisationId:String
        $email:String
        $role:String
-       $isActive:Boolean
+       $status:AssetStatus
        $imageUrl:String
        $phoneNumber:String
        $instituteId:String
@@ -120,7 +125,7 @@ mutation  update_user(
         role:$role
         imageUrl:$imageUrl
         instituteId: $instituteId
-        isActive:$isActive
+        status:$status
         phoneNumber:$phoneNumber
     ) {
         _id
@@ -133,7 +138,7 @@ mutation  update_user(
         email
         role
         phoneNumber
-        isActive
+        status
         imageUrl
         isDeleted
         createdAt
@@ -155,7 +160,8 @@ query Get_user($_id: String!) {
         instituteId
         role
         phoneNumber
-        isActive
+        status
+        #isActive
         isDeleted
         createdAt
         updatedAt
@@ -176,7 +182,8 @@ mutation VerifyToken($idToken:String!) {
         instituteId
         imageUrl
         phoneNumber
-        isActive
+        status
+        #isActive
         isDeleted
         createdAt
         updatedAt
@@ -184,7 +191,7 @@ mutation VerifyToken($idToken:String!) {
             _id
             name
             type
-            isActive
+            #isActive
             isDeleted
             createdAt
             updatedAt
@@ -250,7 +257,8 @@ query Find_users {
         imageUrl
         role
         phoneNumber
-        isActive
+        status
+        #isActive
         isDeleted
         createdAt
         updatedAt

@@ -17,7 +17,7 @@ import { CloseOutlined } from '@mui/icons-material';
 import { fetchAllUser } from '../api/userAPI';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { fetchbulkRunz } from '../api/bulkRunz';
+import { fetchShareRunz, fetchbulkRunz } from '../api/bulkRunz';
 import { toast } from 'react-toastify';
 
 const AddPeople = ({ open, close,runzId,runzRow,typePopup }: any) => {
@@ -26,11 +26,10 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup }: any) => {
   const [userList, setuserList]=React.useState<any>([])
   console.log('userList',userList);
   
-  const allUser=  useSelector(
-    (state: any) => state.user.data?.find_users, 
-  );
+  // const allUser=  useSelector(
+  //   (state: any) => state.user.data?.find_users, 
+  // );
 
-  console.log("allUser",allUser);
   
 console.log(runzRow);
 React.useEffect(()=>{
@@ -40,21 +39,28 @@ React.useEffect(()=>{
  React.useEffect(() => {
   if (typePopup === 'assign' || typePopup==="share") {
     
-    dispatch(fetchAllUser());
+    dispatch(fetchAllUser()).then((res)=>{
+      setAlluserData(res?.find_users.map((item: any) => ({
+        label: item.email,
+        value: item.email,
+        id: item._id,
+      })))  
+    }).catch((err)=>{
+      console.log(err);
+    })
+  
   }
 }, [typePopup]);
   const userSliceData = useSelector(
     (state: any) => state.userLogin?.data?.verifyToken,
   );
+console.log(allUserData,"allUserData");
 
   React.useEffect(()=>{
-   setAlluserData(allUser?.map((item: any) => ({
-    label: item.email,
-    value: item.email,
-    id: item._id,
-  })))          
-  },[allUser])
 
+       
+  },[])
+  // console.log("newArray",allUser);
   const handleSave=async()=>{
     console.log("save",runzRow);
     const allIds = userList.map((item:any) => item.id);
@@ -69,7 +75,7 @@ React.useEffect(()=>{
       dueDate: item?.dueDate ,
       status: item?.status ,
     }));
-    console.log("newArray",newArray);
+    
     
     const output = newArray.flatMap((aItem:any) =>
     allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
@@ -78,7 +84,20 @@ React.useEffect(()=>{
     let payload={
       runs:output
     }
-   await dispatch(fetchbulkRunz(payload))
+    if(typePopup!=='share'){
+      await dispatch(fetchbulkRunz(payload))
+    }
+    else{
+      const allIds = userList.map((item:any) => item.id);
+      const newArray = runzRow?.map((item:any) => item._id)
+      console.log(allIds);
+      
+      let payload1={
+        shareUserId: allIds, 
+        runId: newArray,
+      }
+       await dispatch(fetchShareRunz(payload1))
+    }
    await close()
    setuserList([])
      //  Assigned

@@ -88,7 +88,7 @@ const Login = () => {
               const temp = { _id: res?.verifyToken?._id };
                dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
                 const data = isSuccess?.get_user ?? {};
-                if (!data.isActive) {
+                if (data.status!=="Active") {
                  
                   toast(`The user is inactive !`, {
                     style: {

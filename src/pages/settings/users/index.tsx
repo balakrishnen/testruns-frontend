@@ -105,7 +105,8 @@ const Users = () => {
     hasNextPage: false,
     hasPreviousPage: false,
   });
-  const userSliceData = useSelector((state: any) => state.user.data);
+  const userSliceData = useSelector((state: any) => state.userData.data);
+console.log("userSliceData",userSliceData);
 
   const Data = Rows.slice(startIndex, endIndex);
   const [rowId, setRowId] = React.useState<any>([]);
@@ -323,7 +324,7 @@ const Users = () => {
     var assetsChange: any = {
       _id: row._id,
     };
-    assetsChange['isActive'] = e.target.value;
+    assetsChange['status'] = e.target.value;
 
     dispatch(fetchUpdateUserData(assetsChange));
     toast(`User status updated !`, {
@@ -810,20 +811,20 @@ const Users = () => {
                             marginThreshold: null
                           }}
                             className={
-                              row.isActive == true
+                              row.status == "Active"
                                 ? 'active-select td-select'
                                 : 'inactive-select td-select'
                             }
-                            value={row.isActive}
+                            value={row.status}
                             displayEmpty
                             onChange={(e) => handleOnChange(e, row)}
                             onClick={(e: any) => clickHandler(e)}
                             IconComponent={ExpandMoreOutlinedIcon}
                           >
-                            <MenuItem value={true} key={true}>
+                            <MenuItem value={"Active"} key={"Active"}>
                               Active
                             </MenuItem>
-                            <MenuItem value={false} key={false}>
+                            <MenuItem value={"Inactive"} key={"Inactive"}>
                               In-active
                             </MenuItem>
                           </Select>
