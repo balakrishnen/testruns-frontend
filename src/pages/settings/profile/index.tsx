@@ -141,8 +141,9 @@ const Profile = () => {
   const loginUserSliceData=  useSelector(
     (state: any) => state.userLogin.data?.verifyToken, 
   );
-  
+  const singleUserData= useSelector((state:any)=> state.user.data)
   const credencial =  loginUserSliceData?.role[0]
+console.log(singleUserData);
 
   React.useEffect(() => {
     let temp = { _id: loginUserSliceData?._id };
@@ -195,7 +196,7 @@ const Profile = () => {
         console.log(err);
       });
     // }
-  }, [departmentData, labData]);
+  }, [departmentData, labData,loginUserSliceData,singleUserData]);
 
   const onSubmit = async (values: any) => {
     const isMatch = checkCredentials(

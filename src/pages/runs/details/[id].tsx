@@ -460,15 +460,18 @@ export default function RunsDetails() {
     setuserProcedure(userProcedure);
     setState({ content: userProcedure });
     let text: any = '';
-    Object.entries(result).forEach(([key, value]) => {
-      text =
-        text +
-        `<div>
-        <div>
-        <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
-        </div>
-      </div>`;
-    });
+    if(result!==null && result!=="")
+    {
+      Object.entries(result).forEach(([key, value]) => {
+        text =
+          text +
+          `<div>
+          <div>
+          <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+          </div>
+        </div>`;
+      });
+    }
     // console.log('####', text);
     setUserRunzResult(text + '</ul>');
   

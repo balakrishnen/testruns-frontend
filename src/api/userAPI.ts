@@ -62,18 +62,19 @@ export const deleteUserData = (payload: any) => async () => {
   }
 };
 export const fetchSingleUserData = (payload: any) => async (dispatch: any) => {
-  // dispatch(fetchUserStart());
+  dispatch(fetchUserStart());
   try {
     const response = await client.query({
       query: GET_SINGLE_USER,
       variables: payload,
       fetchPolicy: 'network-only',
     });
+    dispatch(fetchUserSuccess(response.data));
     return response.data;
-    // dispatch(fetchUserSuccess(response.data));
+
   } catch (error: any) {
+    dispatch(fetchUserFailure(error.message));
     return error;
-    // dispatch(fetchUserFailure(error.message));
   }
 };
 

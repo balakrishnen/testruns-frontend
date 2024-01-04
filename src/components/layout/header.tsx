@@ -121,7 +121,7 @@ function AppHeader(props: any) {
   const[userData, setUserData]=React.useState<any>({})
   const[isAnyRead,setisAnyRead]=React.useState<boolean>(false)
  console.log(loginUserSliceData);
- 
+ const singleUserData= useSelector((state:any)=> state.user.data)
   React.useEffect(()=> {
     let temp = { _id: loginUserSliceData?.verifyToken?._id };
     // if (row?._id) {
@@ -134,7 +134,10 @@ function AppHeader(props: any) {
         console.log(err);
       });
     // }
-  },[loginUserSliceData]);
+  },[loginUserSliceData,singleUserData]);
+  const NotificationMessageSliceData = useSelector((state: any) => {
+    return state.notificationMessage.data?.get_notification_message;
+  });
 
   React.useEffect(() => {
     // dispatch(fetchNotificationData());
@@ -187,7 +190,7 @@ function AppHeader(props: any) {
       //   }
       //   // ... (other notification objects)
       // ]
-      const notifications:any = res?.data?.get_notification_message?.message
+      const notifications:any = NotificationMessageSliceData?.message
       // Check if at least one notification has isRead set to true
       setisAnyRead(notifications?.some((notification:any) => notification.isRead === false))
       
@@ -199,7 +202,7 @@ function AppHeader(props: any) {
     //  (notification.isRead === false)}))
       
     });
-  }, []);
+  }, [NotificationMessageSliceData]);
   console.log("isAnyRead2",isAnyRead);
   return (
     <Box className="app-bar-block">
