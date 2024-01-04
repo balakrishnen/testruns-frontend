@@ -30,8 +30,8 @@ import SpinerLoader from '../../../components/SpinnerLoader';
 // import ProceduresRichText from './Editor';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().trim().required('Label is required').max(50, 'Must be 50 characters or less'),
-  asset_Name: Yup.array(),
+  name: Yup.string().trim().required('name is required').max(50, 'Must be 50 characters or less'),
+  asset_Name: Yup.array().required('asset_Name is required'),
   procedure: Yup.string().required().max(50, 'Must be 50 characters or less'),
 });
 
@@ -463,6 +463,8 @@ const handleEditorInit = (editor) => {
     },
   });
 };
+
+
   return (
     <PrivateRoute>
       {!isLoader ?
@@ -829,7 +831,7 @@ const handleEditorInit = (editor) => {
                 alt="printer"
                 style={{ marginRight: '1rem', cursor: 'pointer' }}
               /> */}
-              <Button type="submit" variant="contained" className="add-btn" onClick={handleSave}>
+              <Button type="submit" variant="contained" disabled={""} className="add-btn" onClick={handleSave}>
                 Save
               </Button>
             </Box>
