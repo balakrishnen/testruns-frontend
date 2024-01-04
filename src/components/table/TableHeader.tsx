@@ -77,7 +77,7 @@ console.log(columns)
               >
                  {headCell.label}
                 {(headCell.id !== 'departmentId' && 
-                headCell.id !== 'laboratoryId' && headCell.id !== "perchasedDate" && headCell.id !== "lastUsedDate") && (
+                headCell.id !== 'laboratoryId' && headCell.id !== "perchasedDate" && headCell.id !== "lastUsedDate" && headCell.id !== "addedOn") && (
                 //   <TableSortLabel hideSortIcon>{headCell.label}</TableSortLabel>
                 // ) : (
                   

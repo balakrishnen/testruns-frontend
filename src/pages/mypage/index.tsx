@@ -280,8 +280,8 @@ export default function MyPage() {
   const [calendarEventData, setCalendarEventData] = useState([]);
   const [CalendarMark, setCalendarMark] = useState([]);
   const [runzData, setRunzData] = useState<any>([]);
-  console.log("runzData",runzData);
-  
+  console.log("runzData", runzData);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [currentMonth, setCurrentMonth] = useState();
   const [currentYear, setCurrentYear] = useState();
@@ -327,7 +327,9 @@ export default function MyPage() {
         console.log(err);
       });
   }, [loginUserSliceData]);
-
+  React.useEffect(() => {
+    setUserData(userData)
+  }, [userData])
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -359,27 +361,30 @@ export default function MyPage() {
   }, [loginUserSliceData]);
 
   React.useEffect(() => {
+    console.log("userData", userData);
+
     let pay = {
       month: `${new Date().getMonth() + 1}`,
       year: `${new Date().getFullYear()}`,
+      assignedTo: loginUserSliceData?.verifyToken?._id,
     };
 
     // dispatch(fetchNotificationData());
     dispatch(fetchCalendarEventData(pay));
-  }, [userData]);
-  // const notificationMessageList=()=>{
+  }, [loginUserSliceData]);
+  const notificationMessageList = () => {
 
-  //   let payload={
-  //     userId: loginUserSliceData?.verifyToken?._id
-  //   }
-  //   console.log(payload);
+    let payload = {
+      userId: loginUserSliceData?.verifyToken?._id
+    }
+    console.log(payload);
 
-  //   dispatch(fetchNotificationMessageData(payload)).then((res)=>{
-  //     setNotificationMesssage(res?.data?.get_notification_message)
-  //     console.log(res?.data?.get_notification_message);
+    dispatch(fetchNotificationMessageData(payload)).then((res) => {
+      setNotificationMesssage(res?.data?.get_notification_message)
+      console.log(res?.data?.get_notification_message);
 
-  //   });
-  // }
+    });
+  }
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -542,7 +547,7 @@ export default function MyPage() {
       isRead: true,
     };
     await dispatch(fetchReadSingleMessageData(payload2));
-    // await notificationMessageList()
+    await notificationMessageList()
   };
 
   return (
@@ -631,15 +636,15 @@ export default function MyPage() {
                                   m: 0.5,
                                   padding: '0px 3px',
                                 }}
-                                // onClick={(_event) => {
-                                //   _event.preventDefault();
-                                //   _event.stopPropagation();
-                                //   tablePopupRef.current.open(
-                                //     true,
-                                //     'departments',
-                                //     row.departmentId,
-                                //   );
-                                // }}
+                              // onClick={(_event) => {
+                              //   _event.preventDefault();
+                              //   _event.stopPropagation();
+                              //   tablePopupRef.current.open(
+                              //     true,
+                              //     'departments',
+                              //     row.departmentId,
+                              //   );
+                              // }}
                               />
                               {row.departmentId.length > 1 && (
                                 <span
@@ -681,15 +686,15 @@ export default function MyPage() {
                                   m: 0.5,
                                   padding: '0px 3px',
                                 }}
-                                // onClick={(_event) => {
-                                //   _event.preventDefault();
-                                //   _event.stopPropagation();
-                                //   tablePopupRef.current.open(
-                                //     true,
-                                //     'lab',
-                                //     row.laboratoryId,
-                                //   );
-                                // }}
+                              // onClick={(_event) => {
+                              //   _event.preventDefault();
+                              //   _event.stopPropagation();
+                              //   tablePopupRef.current.open(
+                              //     true,
+                              //     'lab',
+                              //     row.laboratoryId,
+                              //   );
+                              // }}
                               />
                               {row.laboratoryId.length > 1 && (
                                 <span
@@ -715,8 +720,8 @@ export default function MyPage() {
                           {row.createdAt === null
                             ? '-'
                             : moment(row.createdAt).isValid()
-                            ? moment(row.createdAt).local().format('MM/DD/YYYY')
-                            : moment().format('MM/DD/YYYY')}
+                              ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')}
                         </Box>
                       </TableCell>
                       <TableCell>
@@ -725,24 +730,24 @@ export default function MyPage() {
                             row.status === 'Created'
                               ? 'create-select td-select'
                               : row.status === 'Started'
-                              ? 'start-select td-select'
-                              : row.status === 'Complete'
-                              ? 'active-select td-select'
-                              : row.status === 'Submitted'
-                              ? 'submit-select td-select'
-                              : 'inactive-select td-select'
+                                ? 'start-select td-select'
+                                : row.status === 'Complete'
+                                  ? 'active-select td-select'
+                                  : row.status === 'Submitted'
+                                    ? 'submit-select td-select'
+                                    : 'inactive-select td-select'
                           }
                           style={{
                             background:
                               row.status === 'Created'
                                 ? '#8d8d8d'
                                 : row.status === 'Started'
-                                ? '#faaa49'
-                                : row.status === 'Stopped'
-                                ? '#e2445c'
-                                : row?.status == 'Submitted'
-                                ? '#a01fb1'
-                                : '#00bf70',
+                                  ? '#faaa49'
+                                  : row.status === 'Stopped'
+                                    ? '#e2445c'
+                                    : row?.status == 'Submitted'
+                                      ? '#a01fb1'
+                                      : '#00bf70',
                             padding: '6px',
                             width: '140px',
                             borderRadius: '20px',
@@ -915,6 +920,7 @@ export default function MyPage() {
                   const calPayload = {
                     month: `${month + 1}`,
                     year: `${year}`,
+                    assignedTo: userData?._id
                   };
                   dispatch(fetchCalendarEventData(calPayload));
                 }}

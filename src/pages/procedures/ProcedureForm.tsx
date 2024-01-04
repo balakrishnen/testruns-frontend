@@ -146,16 +146,18 @@ const ProcedureForm = React.forwardRef(
     };
     React.useImperativeHandle(ref, () => ({
       open(state: any,row: any) {
-        setFormOpen(state);
+      
          if (row?._id) {
        
           let payload={
             _id:row?._id
           }
+          formik.setValues({ ...formik.values, 'name': row?.name})
           dispatch(fetchProcedure(payload)).then((isSucess) => {
             if (isSucess?.get_procedure) {
-            console.log(isSucess?.get_procedure?.name);
-            formik.setFieldValue('name',isSucess?.get_procedure?.name || row?.name)  
+            console.log(row);
+            // formik.setFieldValue('name',isSucess?.get_procedure?.name || row?.name)  
+            formik.setValues({ ...formik.values, 'name': isSucess?.get_procedure?.name ||row?.name})
     //  formik.setFieldValue('departmentId',isSucess?.get_procedure?.departmentId) 
     //  formik.setFieldValue('laboratoryId',isSucess?.get_procedure?.laboratoryId) 
      formik.setFieldValue('organisationId',isSucess?.get_procedure?.organisationId || row?.organisationId) 
@@ -163,7 +165,7 @@ const ProcedureForm = React.forwardRef(
             }
           })
         }
-       
+        setFormOpen(state);
       },
     }));
     const clearForm = () => {

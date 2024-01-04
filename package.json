@@ -10,6 +10,7 @@
   "scripts": {
     "develop": "env-cmd -f .env.development gatsby develop",
     "start": "env-cmd -f .env.development gatsby develop",
+    "start:prod": "env-cmd -f .env.production gatsby develop",
     "build": "gatsby build",
     "build:prod": "env-cmd -f .env.production gatsby build",
     "serve": "gatsby serve",
