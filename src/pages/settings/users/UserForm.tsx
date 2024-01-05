@@ -313,18 +313,25 @@ updateProfile(auths?.currentUser, {
       }
       dispatch(fetchSingleRoleData(payload2));
     },[loginUserSliceData])
+
+    
     return (
       <div>
         <Dialog
+        
           open={formPopup}
           keepMounted
-          onClose={() => closeFormPopup(false)}
+          onClose={() => {
+            closeFormPopup(false);
+            clearForm(); 
+          }}
           aria-labelledby="add-new-asset-title"
           aria-describedby="add-new-asset"
           fullWidth
           maxWidth="md"
           className="popup-outer"
           disableScrollLock={ true }
+          
         >
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">
