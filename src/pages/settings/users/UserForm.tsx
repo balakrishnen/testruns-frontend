@@ -321,10 +321,10 @@ updateProfile(auths?.currentUser, {
         
           open={formPopup}
           keepMounted
-          onClose={() => {
-            closeFormPopup(false);
-            clearForm(); 
-          }}
+          // onClose={() => {
+          //   closeFormPopup(false);
+          //   clearForm(); 
+          // }}
           aria-labelledby="add-new-asset-title"
           aria-describedby="add-new-asset"
           fullWidth
