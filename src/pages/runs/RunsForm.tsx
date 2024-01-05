@@ -636,7 +636,7 @@ const handleClose=()=>{
                   </Grid>
                   
                   <Grid item xs={0} sm={6} md={6} lg={6} />
-                  {/* <Grid
+                  <Grid
                     item
                     xs={12}
                     sm={6}
@@ -653,6 +653,7 @@ const handleClose=()=>{
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <img src={Avatars} alt="Avatars" />
                         <Button
+                        disabled={Object.keys(formik.errors).length==0?false:true}
                           variant="contained"
                           className="avatar-add"
                           onClick={() => {
@@ -664,7 +665,7 @@ const handleClose=()=>{
                         </Button>
                       </Box>
                     </Box>
-                  </Grid> */}
+                  </Grid>
                 </Grid>
 
               </Box>
@@ -692,7 +693,7 @@ const handleClose=()=>{
             </Box>
           </form>
         </Dialog>
-        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} 
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)}  typePopup={"assign"} formValue={formik.values}
         // runzId={runzId}
         //         runzRow={runzRow}
         //         typePopup={typePopup}
