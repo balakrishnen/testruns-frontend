@@ -800,7 +800,7 @@ export default function RunsDetails() {
       handleHtmlInput();
       var payload: any = {
         runId: runzValue._id,
-        organisationId: '657420e5c63327a74f3c756a',
+        organisationId: process.env.ORGANIZATION_ID,
         userProcedure: JSON.stringify(htmlInput),
         static_chart_data: JSON.stringify(finalTableTitleResult),
       };
@@ -822,7 +822,7 @@ export default function RunsDetails() {
       } else {
         let payload2 = {
           _id: userRunzID?._id,
-          organisationId: '657420e5c63327a74f3c756a',
+          organisationId:process.env.ORGANIZATION_ID,
           userProcedure: JSON.stringify(htmlInput),
           static_chart_data: JSON.stringify(finalTableTitleResult),
         };
@@ -940,11 +940,11 @@ export default function RunsDetails() {
       results:result
       
     }
-    if(!JSON.stringify(result).includes("No calculations")){
+    if(!JSON.stringify(result).includes("No calculations") && (result!=="" && result!==null)){
       await  dispatch(postUserRunsData(payload));
       let payload1 = {
         _id: runzValue._id,
-        status: 'Complete',
+        status: 'Submitted',
       };
       await toast(`Result saved successfully !`, {
         style: {
@@ -954,7 +954,14 @@ export default function RunsDetails() {
       });
       await dispatch(fetchUpdateRunsData(payload1));
     }
-
+    else{
+      toast('Result must be filled', {
+        style: {
+          background: '#d92828',
+          color: '#fff',
+        },
+      });
+    }
   }
   else{
     const payload2: any = {
@@ -963,11 +970,11 @@ export default function RunsDetails() {
    
     }
     // console.log(payload2);
-    if(!JSON.stringify(result).includes("No calculations")){
+    if(!JSON.stringify(result).includes("No calculations") && (result!=="" && result!==null)){
     await  dispatch(UpdateUserRunsData(payload2));
       let payload1 = {
         _id: runzValue._id,
-        status: 'Complete',
+        status: 'Submitted',
       };
       await toast(`Result saved successfully !`, {
         style: {
@@ -976,6 +983,14 @@ export default function RunsDetails() {
         },
       });
     await  dispatch(fetchUpdateRunsData(payload1));
+    }
+    else{
+      toast('Result must be filled', {
+        style: {
+          background: '#d92828',
+          color: '#fff',
+        },
+      });
     }
   }
  }
@@ -988,7 +1003,7 @@ export default function RunsDetails() {
       remarks:remarks,
     
     }
-    if(remarks!==""){
+    if(remarks!=="" &&  remarks!==null){
       await dispatch(postUserRunsData(payload));
       await toast(`Remarks saved successfully !`, {
         style: {
@@ -1013,7 +1028,7 @@ export default function RunsDetails() {
     remarks:remarks,
     
     }
-    if(remarks!==""){
+    if(remarks!=="" &&  remarks!==null){
       await dispatch(UpdateUserRunsData(payload2));
       await toast(`Remarks saved successfully !`, {
         style: {
@@ -1044,7 +1059,7 @@ export default function RunsDetails() {
   //   handleHtmlInput();
   //   var payload:any ={
   //           runId: runzValue._id,
-  //           organisationId:"657420e5c63327a74f3c756a",
+  //           organisationId:"659789ec08693d0012352708",
   //           userProcedure:JSON.stringify(htmlInput),
   //           static_chart_data:JSON.stringify(finalTableTitleResult)
 
@@ -1067,7 +1082,7 @@ export default function RunsDetails() {
   //       else{
   //        let payload2={
   //         _id:userRunzID?._id,
-  //         organisationId:"657420e5c63327a74f3c756a",
+  //         organisationId:"659789ec08693d0012352708",
   //         userProcedure:JSON.stringify(htmlInput),
   //         static_chart_data:JSON.stringify(finalTableTitleResult)
   //        }

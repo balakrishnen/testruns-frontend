@@ -149,7 +149,7 @@ const UserForm = React.forwardRef(
           email: values.email?.toLowerCase(),
           phoneNumber: values.phoneNumber.toString(),
           organisationId: values.organisationId,
-          instituteId: "65741c069d53d19df8321e6b",
+          instituteId: process.env.INSTITUTION_ID,
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,

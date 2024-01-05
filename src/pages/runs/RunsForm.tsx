@@ -202,7 +202,7 @@ const RunsForm = React.forwardRef(
       initialValues: {
         departmentId:  "",
         laboratoryId: "",
-        organisationId: '657420e5c63327a74f3c756a',
+        organisationId: process.env.ORGANIZATION_ID,
         procedureId: "",
         objective:  "",
         dueDate: dateDue,

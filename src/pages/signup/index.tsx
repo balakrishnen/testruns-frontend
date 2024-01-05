@@ -95,12 +95,12 @@ const userSliceData = useSelector(
               lastName: "",
               email: values.email.toLowerCase(),
               uid: res.user.uid,
-              organisationId: "657420e5c63327a74f3c756a",
-              role: "65741c069d53d19df8321e6e",
+              organisationId: process.env.ORGANIZATION_ID,
+              role: process.env.ROLE_ID,
               // phoneNumber:'9876543210',
               departmentId: [],
               laboratoryId: [],
-              instituteId: "65741c069d53d19df8321e6b",
+              instituteId: process.env.INSTITUTION_ID,
               createdOn:"12/21/2023"
             };
     

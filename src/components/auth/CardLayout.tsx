@@ -54,11 +54,11 @@ export const CardLayout = ({ children }: any, props: any) => {
         lastName: "",
         email: result.user.email,
         uid: result.user.uid,
-        organisationId: "657420e5c63327a74f3c756a",
-        role: "65741c069d53d19df8321e6e",
+        organisationId: process.env.ORGANIZATION_ID,
+        role: process.env.ROLE_ID,
         departmentId: [],
         laboratoryId: [],
-        instituteId: "65741c069d53d19df8321e6b",
+        instituteId: process.env.INSTITUTION_ID,
         createdOn:"12/21/2023"
       };
   
@@ -119,11 +119,11 @@ export const CardLayout = ({ children }: any, props: any) => {
         lastName: "",
         email: result.user.email,
         uid: result.user.uid,
-        organisationId: "657420e5c63327a74f3c756a",
-        role: "65741c069d53d19df8321e6e",
+        organisationId: process.env.ORGANIZATION_ID,
+        role: process.env.ROLE_ID,
         departmentId: [],
         laboratoryId: [],
-        instituteId: "65741c069d53d19df8321e6b",
+        instituteId:process.env.INSTITUTION_ID,
         createdOn: "12/21/2023",
       };
 
