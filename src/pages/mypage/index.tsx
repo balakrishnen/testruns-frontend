@@ -225,6 +225,7 @@ import { fetchSingleUserData } from '../../api/userAPI';
 import moment from 'moment';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import { RunsHeaders } from '../../utils/data';
+import SpinerLoader from '../../components/SpinnerLoader';
 
 // function createData(
 //   name: string,
@@ -287,6 +288,8 @@ export default function MyPage() {
   const [currentYear, setCurrentYear] = useState();
   const [answers, setAnswers] = React.useState('');
   const [loader, setLoader] = React.useState(false);
+  const [loader1, setLoader1] = React.useState(false);
+
   const [notifications, setNotifications] = useState([
     // Your notification data goes here
   ]);
@@ -417,6 +420,7 @@ export default function MyPage() {
     }, 1000);
   }, [MyPageRunsData]);
   React.useEffect(() => {
+    setLoader1(true)
     const calendarMarkSet = new Set();
     const calendar = calendar_eventData?.runs_calender_data.map((item) => {
       const date = new Date(selectedDate);
@@ -433,6 +437,7 @@ export default function MyPage() {
     const calendarMark = Array.from(calendarMarkSet);
     setCalendarMark(calendarMark);
     setCalendarEventData(calendar);
+    setLoader1(false)
   }, [calendar_eventData, selectedDate]);
 
   const getTimeDifference = (notificationTime: any) => {
@@ -504,6 +509,7 @@ export default function MyPage() {
   //   });
   // },[loginUserSliceData])
   const handleDateClick = (date: any) => {
+    // setLoader1(true)
     const filCalendarContent = calendarEventData.filter(
       (item) =>
         moment(item?.dueDate).format('MM-DD-YYYY') ==
@@ -511,6 +517,7 @@ export default function MyPage() {
     );
     setCalendarContent(filCalendarContent);
     setSelectedDate(moment(date).format('MM-DD-YYYY'));
+    // setLoader1(false)
   };
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
@@ -901,7 +908,7 @@ export default function MyPage() {
                 value={value}
                 tileClassName={({ date, view }) => {
                   if (
-                    calendarEventData.find(
+                    calendarEventData?.length!==0 && calendarEventData?.find(
                       (item) =>
                         moment(item?.dueDate).format('MM-DD-YYYY') ==
                         moment(date).format('MM-DD-YYYY'),
@@ -934,9 +941,9 @@ export default function MyPage() {
                   height: 'calc(100vh - 79vh)',
                 }}
               >
-                {CalendarMark.includes(selectedDate) ? (
+                {CalendarMark?.includes(selectedDate) && (
                   <>
-                    {CalendarContent.map((item, index) => (
+                    {CalendarContent?.length!==0 ?CalendarContent?.map((item, index) => (
                       <>
                         <Box sx={{ textAlign: 'left' }}>
                           <Box className="hover-calender">
@@ -960,16 +967,24 @@ export default function MyPage() {
                           )}
                         </Box>
                       </>
-                    ))}
-                  </>
-                ) : (
-                  <Box sx={{ textAlign: 'center' }}>
+                    )): <Box sx={{ textAlign: 'center' }}>
                     <img src={Emptystate} alt="" />
                     <Typography className="no-remainder">
                       No reminders yet!
                     </Typography>
-                  </Box>
-                )}
+                  </Box>}
+                  </>
+                ) 
+                // : (
+                //   <SpinerLoader />
+                //   // <Box sx={{ textAlign: 'center' }}>
+                //   //   <img src={Emptystate} alt="" />
+                //   //   <Typography className="no-remainder">
+                //   //     No reminders yet!
+                //   //   </Typography>
+                //   // </Box>
+                // )
+                }
               </Box>
             </Box>
           </Grid>
