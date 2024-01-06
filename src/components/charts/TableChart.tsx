@@ -108,13 +108,13 @@ export default function TableChart({ staticChartData }: any) {
     const data: any = [];
     const tableList: any = [];
     const channels: any = [];
-    chartData.forEach((element, index) => {
+    chartData?.forEach((element, index) => {
       tableList.push({
         name: element.label,
         value: element.value,
       });
 
-      element.data.forEach((channel) => {
+      element?.data?.forEach((channel) => {
         channels.push({
           name: channel.label,
           value: channel.label,
@@ -185,7 +185,7 @@ export default function TableChart({ staticChartData }: any) {
     if (channelPosition !== -1) {
       channels.channelOptions[keys].channel = event.target.value;
       channels.channelOptions[keys].color = colorList[keys];
-      channels.channelsList.forEach((element, position) => {
+      channels.channelsList?.forEach((element, position) => {
         if (channels.charts.length === 0) {
           charts.push({
             [`plot${keys + 1}`]: element.data[channelPosition]

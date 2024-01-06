@@ -51,7 +51,7 @@ const validationSchema = Yup.object().shape({
   laboratoryId: Yup.array().notRequired(),
   objective: Yup.string().trim().required('Test Objective is required').max(35, 'Label must be at most 35 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
   // dueDate: Yup.date().required('Due Date is required'),
-  dueDate: Yup.string().required('Due Date is required').matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/),
+  dueDate: Yup.string().required('Due Date is required').matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/, 'Invalid date'),
   assignedTo: Yup.string().notRequired(),
   organisationId:Yup.string().required('Procedure Name is required')
 });
@@ -202,7 +202,7 @@ const RunsForm = React.forwardRef(
       initialValues: {
         departmentId:  "",
         laboratoryId: "",
-        organisationId: '657420e5c63327a74f3c756a',
+        organisationId: process.env.ORGANIZATION_ID,
         procedureId: "",
         objective:  "",
         dueDate: dateDue,
@@ -636,7 +636,7 @@ const handleClose=()=>{
                   </Grid>
                   
                   <Grid item xs={0} sm={6} md={6} lg={6} />
-                  {/* <Grid
+                  <Grid
                     item
                     xs={12}
                     sm={6}
@@ -653,6 +653,7 @@ const handleClose=()=>{
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <img src={Avatars} alt="Avatars" />
                         <Button
+                        disabled={Object.keys(formik.errors).length==0?false:true}
                           variant="contained"
                           className="avatar-add"
                           onClick={() => {
@@ -664,7 +665,7 @@ const handleClose=()=>{
                         </Button>
                       </Box>
                     </Box>
-                  </Grid> */}
+                  </Grid>
                 </Grid>
 
               </Box>
@@ -692,7 +693,7 @@ const handleClose=()=>{
             </Box>
           </form>
         </Dialog>
-        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} 
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)}  typePopup={"assign"} formValue={formik.values}
         // runzId={runzId}
         //         runzRow={runzRow}
         //         typePopup={typePopup}

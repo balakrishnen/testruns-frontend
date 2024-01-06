@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
 import { fetchShareRunz, fetchbulkRunz } from '../api/bulkRunz';
 import { toast } from 'react-toastify';
 
-const AddPeople = ({ open, close,runzId,runzRow,typePopup }: any) => {
+const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue}: any) => {
   const dispatch : any =useDispatch()
   const [allUserData, setAlluserData] = React.useState<any>([]);
   const [userList, setuserList]=React.useState<any>([])
@@ -31,7 +31,7 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup }: any) => {
   // );
 
   
-console.log(runzRow);
+console.log("formValue",formValue);
 React.useEffect(()=>{
   setAlluserData(allUserData)
  },[allUserData])
@@ -77,15 +77,43 @@ console.log(allUserData,"allUserData");
     }));
     
     
-    const output = newArray.flatMap((aItem:any) =>
-    allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
-    );
+console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.procedureId:formValue?.procedureId[0],formValue?.procedureId._id==undefined?formValue?.procedureId[0]==undefined?formValue?.procedureId:formValue?.procedureId[0]?._id :formValue?.procedureId._id,);
 
-    let payload={
-      runs:output
-    }
     if(typePopup!=='share'){
+      if(newArray!==undefined){
+      const output = newArray?.flatMap((aItem:any) =>
+      allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
+      );
+  
+      let payload={
+        runs:output
+      }
       await dispatch(fetchbulkRunz(payload))
+    }
+    else{
+      console.log(formValue?.departmentId?.map(((item:any)=>item?.id)));
+      
+      let output=[{
+        objective: formValue?.objective,
+      shared: typePopup=='share'?true:false,
+      procedureId: formValue?.procedureId,
+      departmentId: formValue?.departmentId?.map(((item:any)=>item?.id)) ,
+      laboratoryId:  formValue?.laboratoryId?.map(((item:any)=>item?.id)) ,
+      // assignedTo:  ,
+      assignedBy: userSliceData?._id ,
+      dueDate: formValue?.dueDate ,
+      status: formValue?.status ,
+      }]
+      const output1 = output?.flatMap((aItem:any) =>
+      allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
+      );
+      let payload={
+        runs:output1
+      }
+      console.log(payload);
+      
+      await dispatch(fetchbulkRunz(payload))
+    }
     }
     else{
       const allIds = userList.map((item:any) => item.id);

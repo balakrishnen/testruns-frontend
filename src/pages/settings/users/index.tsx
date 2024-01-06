@@ -815,7 +815,7 @@ console.log("userSliceData",userSliceData);
                                 ? 'active-select td-select'
                                 : 'inactive-select td-select'
                             }
-                            value={row.status}
+                            value={row.status==null? "Inactive":row.status}
                             displayEmpty
                             onChange={(e) => handleOnChange(e, row)}
                             onClick={(e: any) => clickHandler(e)}

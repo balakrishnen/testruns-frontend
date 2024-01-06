@@ -149,7 +149,7 @@ const UserForm = React.forwardRef(
           email: values.email?.toLowerCase(),
           phoneNumber: values.phoneNumber.toString(),
           organisationId: values.organisationId,
-          instituteId: "65741c069d53d19df8321e6b",
+          instituteId: process.env.INSTITUTION_ID,
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,
@@ -313,18 +313,25 @@ updateProfile(auths?.currentUser, {
       }
       dispatch(fetchSingleRoleData(payload2));
     },[loginUserSliceData])
+
+    
     return (
       <div>
         <Dialog
+        
           open={formPopup}
           keepMounted
-          onClose={() => closeFormPopup(false)}
+          // onClose={() => {
+          //   closeFormPopup(false);
+          //   clearForm(); 
+          // }}
           aria-labelledby="add-new-asset-title"
           aria-describedby="add-new-asset"
           fullWidth
           maxWidth="md"
           className="popup-outer"
           disableScrollLock={ true }
+          
         >
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">

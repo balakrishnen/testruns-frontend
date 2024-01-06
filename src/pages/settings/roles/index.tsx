@@ -2610,7 +2610,7 @@ console.log(formValues);
                               height: '30px'
                             }}
                             checked={formValues2?.user_management.delete}
-                            onChange={(e)=>handleChange("user_management","delete",!formValues2?.user_management.delete)}
+                            onChange={(e)=>handleChange2("user_management","delete",!formValues2?.user_management.delete)}
                             name="delete"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}

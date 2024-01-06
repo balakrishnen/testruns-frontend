@@ -105,7 +105,11 @@ export default function HistoryTable() {
 
     React.useEffect(() => {
         // console.log("runSliceData before dispatch:", RunsSliceData);
-        dispatch(fetchRunsData(queryStrings));
+        dispatch(fetchRunsData(queryStrings)).then((res)=>{
+          setRunzData(res?.get_all_runs?.Runs);
+        }).catch((err)=>{
+          console.log(err);
+        })
     }, [pageInfo, queryStrings]);
 
       React.useEffect(() => {
