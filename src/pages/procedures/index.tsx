@@ -59,7 +59,7 @@ import { toast } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
-import Emptystate from "../../assets/images/Emptystate.svg";
+import Emptystate from '../../assets/images/Emptystate.svg';
 import dayjs from 'dayjs';
 
 const rows: ProceduresRowData[] = ProcedureRows;
@@ -134,16 +134,13 @@ export default function Procedures() {
     (state: any) => state.procedure.data?.get_all_procedures,
   );
 
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
- 
-  const credencial =  loginUserSliceData?.verifyToken?.role[0]
+  const loginUserSliceData = useSelector((state: any) => state.userLogin.data);
+
+  const credencial = loginUserSliceData?.verifyToken?.role[0];
 
   const dispatch: any = useDispatch();
   const [procedureData, setProcedureData] = React.useState<any>([]);
-  console.log("procedureData",procedureData);
-  
+
   const [rowId, setRowId] = React.useState<any>([]);
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
@@ -179,7 +176,7 @@ export default function Procedures() {
   // }, [procedureData]);
 
   React.useEffect(() => {
-    getAllProcedures()
+    getAllProcedures();
     // setLoader(true);
     // dispatch(fetchProcedureData(queryStrings));
     // setTableHeaderVisible(false);
@@ -207,23 +204,25 @@ export default function Procedures() {
   //   setPageInfo(page);
   // }, [procedureSliceData]);
 
-  const getAllProcedures=()=>{
-    setLoader(true)
-    dispatch(fetchProcedureData(queryStrings)).then((res:any)=>{
-      const page: any = { ...pageInfo };
+  const getAllProcedures = () => {
+    setLoader(true);
+    dispatch(fetchProcedureData(queryStrings))
+      .then((res: any) => {
+        const page: any = { ...pageInfo };
         page['currentPage'] = res?.get_all_procedures?.pageInfo.currentPage;
         page['totalPages'] = res?.get_all_procedures?.pageInfo.totalPages;
         page['hasNextPage'] = res?.get_all_procedures?.pageInfo.hasNextPage;
-        page['hasPreviousPage'] = res?.get_all_procedures?.pageInfo.hasPreviousPage;
+        page['hasPreviousPage'] =
+          res?.get_all_procedures?.pageInfo.hasPreviousPage;
         page['totalCount'] = res?.get_all_procedures?.pageInfo.totalCount;
         setProcedureData(res?.get_all_procedures?.Procedures);
         setPageInfo(page);
-        setLoader(false)
-    }).catch((err:any)=>{
-      console.log(err);
-      
-    })
-  }
+        setLoader(false);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
@@ -426,7 +425,6 @@ export default function Procedures() {
   const foundItem = getObjectBySearchString(searchString);
   console.log(visibleRow);
   const Procedure: any = [];
-  console.log(rowId);
   const ProcedureVal: any = { _id: rowId };
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
@@ -481,9 +479,10 @@ export default function Procedures() {
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
-    console.log("key",key);
-    console.log("filterSearchValue",filterSearchValue);
-    payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');
+    console.log('key', key);
+    console.log('filterSearchValue', filterSearchValue);
+    payload['search'] =
+      typeof value === 'string' ? value : moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true);
   };
@@ -492,7 +491,8 @@ export default function Procedures() {
     const page: any = { ...pageInfo };
     setPageInfo(page);
     setQueryString(payload);
-    getAllProcedures()
+    setRowId([]);
+    getAllProcedures();
   };
 
   const getFilterOptions = (data) => {
@@ -513,16 +513,33 @@ export default function Procedures() {
         <Box className="title-main">
           <Typography>Procedures</Typography>
           <div className="buttonFilter">
-            <Button
-              variant="contained"
-              onClick={() => {
-                formPopupRef.current.open(true);
-              }}
-              disabled={!credencial?.procedure_management?.create}
-            >
-              <AddIcon sx={{ mr: 1 }} />
-              Create Procedure
-            </Button>
+            {rowId.length !== 0 ? (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  let SelectedRow: [] = [];
+                  rowId.forEach((ri: any) => {
+                    SelectedRow = procedureData.filter(
+                      (item: any) => item._id === ri,
+                    );
+                  });
+                  formPopupRef.current.open(true, SelectedRow[0], rowId[0]);
+                }}
+              >
+                Duplicate
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  formPopupRef.current.open(true);
+                }}
+                disabled={!credencial?.procedure_management?.create}
+              >
+                <AddIcon sx={{ mr: 1 }} />
+                Create Procedure
+              </Button>
+            )}
             <Box sx={{ position: 'relative' }}>
               <Button
                 // aria-describedby={id}
@@ -591,10 +608,10 @@ export default function Procedures() {
                       </Typography>
 
                       <Select
-                      MenuProps={{                   
-                        disableScrollLock: true,                   
-                        marginThreshold: null
-                      }}
+                        MenuProps={{
+                          disableScrollLock: true,
+                          marginThreshold: null,
+                        }}
                         labelId="table-select-label"
                         id="table-select"
                         value={filterSearchBy}
@@ -682,7 +699,7 @@ export default function Procedures() {
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                              format='MM/DD/YYYY'
+                              format="MM/DD/YYYY"
                               value={dayjs(filterSearchValue)}
                               onChange={(event: any) =>
                                 setFilterSearchValue(event.$d)
@@ -692,10 +709,10 @@ export default function Procedures() {
                         </Box>
                       ) : (
                         <Select
-                        MenuProps={{                   
-                          disableScrollLock: true,                   
-                          marginThreshold: null
-                        }}
+                          MenuProps={{
+                            disableScrollLock: true,
+                            marginThreshold: null,
+                          }}
                           value={filterSearchValue}
                           labelId="table-select-label2"
                           id="table-select2"
@@ -782,7 +799,7 @@ export default function Procedures() {
           </Grid> */}
           <TableContainer className="tableHeight">
             <Table
-              sx={{ minWidth: 750 , position:'relative'}}
+              sx={{ minWidth: 750, position: 'relative' }}
               aria-labelledby="tableTitle"
               stickyHeader
             >
@@ -809,16 +826,26 @@ export default function Procedures() {
                     rows={queryStrings.perPage}
                   />
                 </TableBody>
-               ) : !procedureData || procedureData?.length === 0 && loader==false? (
+              ) : !procedureData ||
+                (procedureData?.length === 0 && loader == false) ? (
                 <TableBody>
-                   {/* <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}> */}
-                   <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%"  }}>
-                      <img src={Emptystate} alt="" />
-                      <Typography className="no-remainder">
-                        Procedures not found.
-                      </Typography>
-                    </Box>
-                    {/* </p> */}
+                  {/* <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}> */}
+                  <Box
+                    sx={{
+                      textAlign: 'center',
+                      position: 'absolute',
+                      left: '0rem',
+                      right: '0rem',
+                      padding: '10%',
+                      width: '100%',
+                    }}
+                  >
+                    <img src={Emptystate} alt="" />
+                    <Typography className="no-remainder">
+                      Procedures not found.
+                    </Typography>
+                  </Box>
+                  {/* </p> */}
                 </TableBody>
               ) : (
                 <TableBody>
@@ -873,10 +900,6 @@ export default function Procedures() {
                             </TableCell>
                           )}
 
-                          {console.log(
-                            'procedureData',
-                            row.departmentId.length,
-                          )}
                           {headers[1].is_show && (
                             <TableCell>
                               <Box>{row.name}</Box>
@@ -988,13 +1011,12 @@ export default function Procedures() {
                               )}
                             </TableCell>
                           )}
-                          {headers[4].is_show && (console.log(row,row),
+                          {headers[4].is_show && (
                             <TableCell>
                               {/* {moment(parseInt(row.createdAt)).format(
                                 'MM/DD/YYYY',
                               )} */}
                               {row.createdOn}
-                             
                             </TableCell>
                           )}
                           {headers[5].is_show && (

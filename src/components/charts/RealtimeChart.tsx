@@ -354,7 +354,8 @@ export default function RealtimeChart() {
   const onRefresh = React.useCallback(
     async (values: any) => {
       if (channelTemp.length !== 0) {
-        const fields = channelTemp
+        try{
+          const fields = channelTemp
           .map((item: any) => `r._field == "${item}"`)
           .join(' or ');
         const query1: any = `from(bucket: "${bucket}")
@@ -365,15 +366,17 @@ export default function RealtimeChart() {
         const chart: any = { ...chartData };
         const result = await queryApi.collectRows(query1); 
 
-        if (result.length !== 0) {
+        if (result.length !== 0 && channelTemp.length === result.length ) {
           result.forEach((dataset: any, index) => {
             const sets = chart.datasets[index] ;
             console.log('SETS', sets);
             console.log('DATASETS', dataset);
-            sets.data.push({
-              x: moment(),
-              y: Math.random(),
-            });
+            if(dataset._value!==undefined && dataset._value!==null){
+              sets.data.push({
+                x: moment(dataset._stop),
+                y: dataset._value,
+              });
+            }
           });
         }
 
@@ -384,6 +387,10 @@ export default function RealtimeChart() {
         //     y: Math.random(),
         //   });
         // });
+        }
+        catch(error){
+          console.log("handle Error list",error)
+        }
       }
     },
     [channelTemp],
@@ -516,7 +523,7 @@ export default function RealtimeChart() {
     plugins: {
       streaming: {
         duration: 10000,
-        refresh: 1000,
+        refresh: 5000,
         delay: 2000,
         onRefresh: onRefresh,
       },
@@ -549,7 +556,7 @@ export default function RealtimeChart() {
             minUnit: 'second',
             source: 'auto',
             autoSkip: true,
-            callback: function (value) {
+            callback: function (value: moment.MomentInput) {
               return moment(value, 'HH:mm:ss').format('hh:mm:ss');
             },
           },
@@ -559,7 +566,7 @@ export default function RealtimeChart() {
         {
           ticks: {
             beginAtZero: true,
-            max: 1,
+            max: 50,
           },
         },
       ],

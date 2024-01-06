@@ -193,18 +193,16 @@ export default function TableChart({ staticChartData }: any) {
               : 0,
           });
         } else {
-          charts[position][`plot${keys + 1}`] = element.data[
-            channelPosition
-          ]
+          charts[position][`plot${keys + 1}`] = element.data[channelPosition]
             ? element.data[channelPosition]
             : 0;
         }
       });
-      const ordered = charts.sort(
-        (a: any, b: any) =>
-          a[`plot${channelPosition + 1}`] - b[`plot${channelPosition + 1}`],
-      );
-      data[index].charts = ordered;
+      // const ordered = charts.sort(
+      //   (a: any, b: any) =>
+      //     a[`plot${channelPosition + 1}`] - b[`plot${channelPosition + 1}`],
+      // );
+      data[index].charts = charts;
       setChartData(data);
     } else {
       channels.channelOptions[keys].channel = event.target.value;
@@ -219,12 +217,34 @@ export default function TableChart({ staticChartData }: any) {
   const handleXAxisChange = (event, index) => {
     const data = [...chartData];
     data[index].xAxisValue = event.target.value;
+    const channels: any = { ...data[index] };
+    const charts: any = [...channels.charts];
     const channelIndex = channelsList.findIndex(
       (item) => item.name === event.target.value,
     );
+    channels.channelsList.forEach((element, position) => {
+      if (channels.charts.length === 0) {
+        charts.push({
+          [`Xplot${channelIndex + 1}`]: element.data[channelIndex]
+            ? element.data[channelIndex]
+            : 0,
+        });
+      } else {
+        charts[position][`Xplot${channelIndex + 1}`] = element.data[
+          channelIndex
+        ]
+          ? element.data[channelIndex]
+          : 0;
+      }
+    });
     if (channelIndex !== -1) {
-      data[index].xDataKey = `plot${channelIndex + 1}`;
-    } 
+      data[index].xDataKey = `Xplot${channelIndex + 1}`;
+    } else {
+      charts.forEach((element, position) => {
+        delete charts[position][`Xplot${index + 1}`];
+      });
+    }
+    data[index].charts = charts;
     setChartData(data);
   };
 
