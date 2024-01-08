@@ -2389,8 +2389,8 @@ console.log(formValues);
                               width: '30px',
                               height: '30px'
                             }}
-                            checked={formValues?.role_management.edit}
-                            onChange={(e)=>handleChange("role_management","edit",!formValues?.role_management.edit)}
+                            checked={true}
+                            // onChange={(e)=>handleChange("role_management","edit",!formValues?.role_management.edit)}
                             name="edit"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}

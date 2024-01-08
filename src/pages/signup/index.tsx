@@ -21,6 +21,7 @@ import { auth } from "../../firebase.config";
 import { postUserData } from "../../api/userAPI";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -101,7 +102,8 @@ const userSliceData = useSelector(
               departmentId: [],
               laboratoryId: [],
               instituteId: process.env.INSTITUTION_ID,
-              createdOn:"12/21/2023"
+              createdOn:moment(new Date()).format("MM/DD/YYY"),
+              createdBy: "Self"
             };
     
             dispatch(postUserData(payload));

@@ -153,7 +153,8 @@ const UserForm = React.forwardRef(
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,
-          createdOn:moment(new Date()).format('MM/DD/YYYY')
+          createdOn:moment(new Date()).format('MM/DD/YYYY'),
+          createdBy: "Admin"
         }
         console.log(userValues);
         
@@ -175,22 +176,22 @@ updateProfile(auths?.currentUser, {
           submitFormPopup();    
         }
         else {
-          console.log(userValues);
-          try {
-         createUserWithEmailAndPassword(auth, values.email?.toLowerCase(), "Test@123").then((res)=>{
-          userValues['uid'] = res.user.uid,
+        //   console.log(userValues);
+        //   try {
+        //  createUserWithEmailAndPassword(auth, values.email?.toLowerCase(), "Test@123").then((res)=>{
+          // userValues['uid'] = res.user.uid,
           dispatch(postUserData(userValues));
           submitFormPopup();
-        }).catch((err)=>{
-          toast(`This user email is already exists!`, {
-            style: {
-              background: '#FFC60B', color: 'black'
-            }
-            })
-        })
-        }catch (err){
-          console.error(err);
-        }
+        // }).catch((err)=>{
+        //   toast(`This user email is already exists!`, {
+        //     style: {
+        //       background: '#FFC60B', color: 'black'
+        //     }
+        //     })
+        // })
+        // }catch (err){
+        //   console.error(err);
+        // }
         }
         // clearForm()
       } else {

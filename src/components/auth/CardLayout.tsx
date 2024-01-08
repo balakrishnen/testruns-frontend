@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { fetchLoginUser, fetchSingleUserData, postUserData } from "../../api/userAPI";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 export const CardLayout = ({ children }: any, props: any) => {
   const [answer, setAnswer] = React.useState<any>(10);
@@ -59,7 +60,8 @@ export const CardLayout = ({ children }: any, props: any) => {
         departmentId: [],
         laboratoryId: [],
         instituteId: process.env.INSTITUTION_ID,
-        createdOn:"12/21/2023"
+        createdOn:moment(new Date()).format("MM/DD/YYY"),
+        createdBy: "Self"
       };
   
       await dispatch(postUserData(payload));
@@ -124,7 +126,8 @@ export const CardLayout = ({ children }: any, props: any) => {
         departmentId: [],
         laboratoryId: [],
         instituteId:process.env.INSTITUTION_ID,
-        createdOn: "12/21/2023",
+        createdOn: moment(new Date()).format("MM/DD/YYY"),
+        createdBy: "Self"
       };
 
       await dispatch(postUserData(payload));

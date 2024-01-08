@@ -4,7 +4,12 @@ gql`
  enum AssetStatus {
       Active
       Inactive
-    }`
+    }
+ enum CreatedStatus{
+    Self
+    Admin
+ }   
+    `
 export const GET_USER = gql`
 query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
     get_all_users(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search) {
@@ -29,6 +34,7 @@ query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
             isDeleted
             createdAt
             updatedAt
+            createdBy
             
             
         }
@@ -44,7 +50,7 @@ query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
 `; 
 export const POST_USER = gql`
 mutation Create_user(
-       $uid: String!
+       $uid: String
        $firstName:String!
        $lastName:String!
        $departmentId:[String]
@@ -55,6 +61,7 @@ mutation Create_user(
        $phoneNumber:String
        $instituteId: String!
        $createdOn: String
+       $createdBy: CreatedStatus
     
 ) {
     create_user(
@@ -69,6 +76,7 @@ mutation Create_user(
         phoneNumber:$phoneNumber
         instituteId:$instituteId
         createdOn:$createdOn
+        createdBy:$createdBy
         
     )  {identitys {
             _id
@@ -165,6 +173,7 @@ query Get_user($_id: String!) {
         isDeleted
         createdAt
         updatedAt
+        createdBy
     }
 }
 `;

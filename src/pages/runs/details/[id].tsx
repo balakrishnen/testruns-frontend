@@ -459,10 +459,29 @@ export default function RunsDetails() {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
     setState({ content: userProcedure });
+  
+  
+    // setResult(result)
+  }, [runzValue, userProcedure,value,]);
+
+  React.useEffect(()=>{
     let text: any = '';
     if(result!==null && result!=="")
     {
+      setResult(result)
       Object.entries(result).forEach(([key, value]) => {
+        text =
+          text +
+          `<div>
+          <div>
+          <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+          </div>
+        </div>`;
+      });
+    }
+    else{
+      setResult(userRunzResult)
+      Object.entries(userRunzResult).forEach(([key, value]) => {
         text =
           text +
           `<div>
@@ -474,10 +493,7 @@ export default function RunsDetails() {
     }
     // console.log('####', text);
     setUserRunzResult(text + '</ul>');
-  
-    // setResult(result)
-  }, [runzValue, userProcedure,value,result]);
-
+  },[userRunzResult])
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
     const timerId = setTimeout(() => {
@@ -966,7 +982,7 @@ export default function RunsDetails() {
   else{
     const payload2: any = {
     _id: userRunzID?._id,
-    results:result,
+    results:JSON.stringify(result),
    
     }
     // console.log(payload2);
@@ -983,6 +999,25 @@ export default function RunsDetails() {
         },
       });
     await  dispatch(fetchUpdateRunsData(payload1));
+    // }
+    // else if(!JSON.stringify(userRunzResult).includes("No calculations") && (userRunzResult!=="" && userRunzResult!==null)){
+    //   const payload2: any = {
+    //     _id: userRunzID?._id,
+    //     results:userRunzResult,
+       
+    //     }
+    //   await  dispatch(UpdateUserRunsData(payload2));
+    //   let payload1 = {
+    //     _id: runzValue._id,
+    //     status: 'Submitted',
+    //   };
+    //   await toast(`Result saved successfully !`, {
+    //     style: {
+    //       background: '#00bf70',
+    //       color: '#fff',
+    //     },
+    //   });
+    // await  dispatch(fetchUpdateRunsData(payload1));
     }
     else{
       toast('Result must be filled', {
@@ -1003,8 +1038,13 @@ export default function RunsDetails() {
       remarks:remarks,
     
     }
+    let payload1 = {
+      _id: runzValue._id,
+      status: 'Complete',
+    };
     if(remarks!=="" &&  remarks!==null){
       await dispatch(postUserRunsData(payload));
+      await  dispatch(fetchUpdateRunsData(payload1));
       await toast(`Remarks saved successfully !`, {
         style: {
           background: '#00bf70',
@@ -1028,8 +1068,13 @@ export default function RunsDetails() {
     remarks:remarks,
     
     }
+    let payload1 = {
+      _id: runzValue._id,
+      status: 'Complete',
+    };
     if(remarks!=="" &&  remarks!==null){
       await dispatch(UpdateUserRunsData(payload2));
+      await  dispatch(fetchUpdateRunsData(payload1));
       await toast(`Remarks saved successfully !`, {
         style: {
           background: '#00bf70',
