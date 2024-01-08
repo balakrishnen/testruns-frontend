@@ -948,7 +948,7 @@ export const RunsHeaders: any = [
     ],
     sort: 'desc',
     is_show: true,
-    type: 'select',
+    type: 'autocomplete',
   },
   {
     id: 'departmentId',

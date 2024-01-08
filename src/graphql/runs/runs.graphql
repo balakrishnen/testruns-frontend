@@ -116,39 +116,51 @@ mutation Delete_run($_id: [String]!) {
 
 export const GET_SINGLE_RUNS = gql`
 query Get_run($_id: String!) {
-    get_run(_id: $_id) {
-         _id
+    get_run(_id: $_id){
+        _id
+        userId
         objective
         runNumber
+        organisationId
+        instituteId
+        createdOn
         dueDate
         status
         isActive
         isDeleted
-        assignedBy
-        assignedTo
         createdAt
         updatedAt
-         departmentId {
+        assignedTo {
             _id
-            name
-          
-        }
-        laboratoryId {
-            _id
-            name
-            
+            firstName
+            email
+            role
         }
         procedureId {
             _id
             name
             procedureNumber
             procedureDetials
-            assetId{
-                _id
-                name
-            }
-            
+            organisationId
+            departmentId
+            laboratoryId
+            userId
+            isActive
+            isDeleted
+            createdAt
+            createdOn
+            updatedAt
         }
+        departmentId {
+            _id
+            name
+            departmentNumber
+        }
+        laboratoryId {
+            _id
+            name
+        }
+    
     }
 }
 `;

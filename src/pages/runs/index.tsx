@@ -14,6 +14,7 @@ import {
   Typography,
   Badge,
   TextField,
+  Autocomplete,
 } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -691,9 +692,9 @@ console.log("userDataRuns",userData)
                             const data: any = [];
                             runsSliceData.Runs.forEach((element) => {
                               data.push({
+                                label: element.procedureId?.name,
+                                value: element.procedureId?.name,
                                 id: element.procedureId?._id,
-                                name: element.procedureId?.name,
-                                value: element.procedureId?._id,
                               });
                             });
                             setFilterOptions(data);
@@ -764,7 +765,25 @@ console.log("userDataRuns",userData)
                             />
                           </LocalizationProvider>
                         </Box>
-                      ) : (
+                      ):filterType === 'autocomplete'?
+                      <Autocomplete
+                      className='autocompleteFilter'
+                      style={{borderRadius: '15px !importnant'}}
+                      limitTags={3}
+                      options={filterOptions !== undefined ? filterOptions: []}
+                      getOptionLabel={(option:any) => option?.value}
+                      // defaultValue={[
+                      //   top100Films[13],
+                      //   top100Films[12],
+                      //   top100Films[11],
+                      // ]}
+                      renderInput={(params) => (
+                        <TextField  {...params} placeholder="Procedure name" style={{marginTop: "-8px"}}/>
+                      )}
+                      // value={filterSearchValue}
+                      onChange={(_, selectedOptions: any) => { setFilterSearchValue(selectedOptions) }}
+                    />
+                      : (
                         <Select
                         MenuProps={{                   
                           disableScrollLock: true,                   
