@@ -114,6 +114,7 @@ export default function Runs() {
   const [runsRow, setRunsRow] = React.useState<any>([])
   const dispatch: any = useDispatch();
   const [filter, setFilter] = React.useState<any>(false);
+  const [valuesName,setValuesName]=React.useState(null)
   console.log("runsRow", rowId, runsRow);
 
   const [pageInfo, setPageInfo] = React.useState({
@@ -200,6 +201,7 @@ console.log("userDataRuns",userData)
     handleFilterPopoverClose();
     setFilterKey(null);
     setFilter(false)
+    setValuesName(null)
   };
   // React.useEffect(() => {
   //   setTimeout(() => {
@@ -780,8 +782,8 @@ console.log("userDataRuns",userData)
                       renderInput={(params) => (
                         <TextField  {...params} placeholder="Procedure name" style={{marginTop: "-8px"}}/>
                       )}
-                      // value={filterSearchValue}
-                      onChange={(_, selectedOptions: any) => { setFilterSearchValue(selectedOptions) }}
+                      value={valuesName}
+                      onChange={(_, selectedOptions: any) => { setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}
                     />
                       : (
                         <Select

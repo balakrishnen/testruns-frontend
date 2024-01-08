@@ -949,11 +949,16 @@ export default function RunsDetails() {
   };
  const resultSave=async()=>{
   console.log("JSON",result);
+  console.log(userRunzResult);
+  
   
   if(runzValue.status == 'Created'){
+    console.log(result);
+    console.log(userRunzResult);
+    
     const payload: any = {
       runId: runzValue._id,
-      results:result
+      results:JSON.stringify(result),
       
     }
     if(!JSON.stringify(result).includes("No calculations") && (result!=="" && result!==null)){
@@ -980,6 +985,9 @@ export default function RunsDetails() {
     }
   }
   else{
+    console.log(result);
+    console.log(userRunzResult);
+    
     const payload2: any = {
     _id: userRunzID?._id,
     results:JSON.stringify(result),
