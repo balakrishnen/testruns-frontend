@@ -520,10 +520,13 @@ export default function RealtimeChart() {
         tension: 0.5,
       },
     },
+    events: [],
+    tooltips: {enabled: false},
+    hover: {mode: null},
     plugins: {
       streaming: {
         duration: 10000,
-        refresh: 5000,
+        refresh: 2000,
         delay: 2000,
         onRefresh: onRefresh,
       },
