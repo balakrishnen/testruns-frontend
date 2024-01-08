@@ -136,6 +136,12 @@ query Get_run($_id: String!) {
             email
             role
         }
+        assignedBy {
+            _id
+            firstName
+            email
+            role
+        }
         procedureId {
             _id
             name

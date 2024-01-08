@@ -1623,7 +1623,7 @@ export default function RunsDetails() {
                           marginTop: '0.4rem',
                         }}
                       >
-                        Teacher A
+                        {runzValue?.assignedTo?.firstName}
                       </Typography>
                     </Box>
                   </Grid>
