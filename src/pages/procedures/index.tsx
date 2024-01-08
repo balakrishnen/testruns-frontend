@@ -517,7 +517,7 @@ export default function Procedures() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  let SelectedRow: [] = [];
+                  let SelectedRow: any = [];
                   rowId.forEach((ri: any) => {
                     SelectedRow = procedureData.filter(
                       (item: any) => item._id === ri,
@@ -526,7 +526,8 @@ export default function Procedures() {
                   formPopupRef.current.open(true, SelectedRow[0], rowId[0]);
                 }}
               >
-                Duplicate
+                <AddIcon sx={{ mr: 1 }} />
+                Duplicate 
               </Button>
             ) : (
               <Button
