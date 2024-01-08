@@ -687,6 +687,17 @@ console.log("userDataRuns",userData)
                             });
                             setFilterOptions(data);
                           }
+                          if (event.target?.value === 'procedureId') {
+                            const data: any = [];
+                            runsSliceData.Runs.forEach((element) => {
+                              data.push({
+                                id: element.procedureId?._id,
+                                name: element.procedureId?.name,
+                                value: element.procedureId?._id,
+                              });
+                            });
+                            setFilterOptions(data);
+                          }
                           if (event.target?.value === 'status') {
                             setFilterOptions(RunsStatusList);
                           }

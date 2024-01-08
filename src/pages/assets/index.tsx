@@ -366,16 +366,18 @@ getAllassets();
 
   const handleDeleteConfirmation = async(state: any) => {
     if (state === 1) {
-      await dispatch(deleteAssetsData(assetVal));
-      await reload();
-      toast(`Assets deleted !`, {
-        style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
-      });
-     
-      setTableHeaderVisible(false);
+      await dispatch(deleteAssetsData(assetVal)).then((res)=>{
+        toast(`Assets deleted !`, {
+          style: {
+            background: '#00bf70',
+            color: '#fff',
+          },
+        });
+        reload();
+        setTableHeaderVisible(false);
+      })
+      
+   
     }
     deletePopupRef.current.open(false);
   };
@@ -725,17 +727,17 @@ getAllassets();
 
               {loader ? (
                 <TableBody>
-                    <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%" , display: "flex", justifyContent: "center",alignItems: "center" }}>
+                    {/* <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%" , display: "flex", justifyContent: "center",alignItems: "center" }}> */}
                     {/* <SpinerLoader isLoader={loader} /> */}
-                     <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
+                     {/* <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
       <CircularProgress color="inherit" />
       </Stack>
-      </Box>
-                  {/* <TableSkeleton
+      </Box> */}
+                  <TableSkeleton
                     columns={headers}
                     image={true}
                     rows={queryStrings.perPage}
-                  /> */}
+                  />
                 </TableBody>
               ) :!assetsData || assetsData?.length === 0 && loader==false ? (
                 <TableBody>

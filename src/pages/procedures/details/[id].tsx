@@ -31,7 +31,7 @@ import SpinerLoader from '../../../components/SpinnerLoader';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().trim().required('name is required').max(50, 'Must be 50 characters or less'),
-  asset_Name: Yup.array().required('asset_Name is required'),
+  asset_Name: Yup.array().required('Asset Name is required'),
   procedure: Yup.string().required().max(50, 'Must be 50 characters or less'),
 });
 
@@ -155,6 +155,7 @@ export default function ProcedureDetails() {
   // console.log('assetName',assetName);
   const [state, setState] = React.useState({ content:"" });
   const [isLoader, setIsLoader] = React.useState(true);
+  const [errors, setErrors] = React.useState("");
   const onSubmit = (values: any) => {
 
     // debugger
@@ -278,6 +279,7 @@ console.log(inputEl);
   };
   console.log(htmlInput);
   const handleSave = (e:any) => {
+    if(assetNamepatch.length!==0){
   //  console.log(state);
   var assetIds: any = []
   assetNamepatch?.map((item: any) => (assetIds.push(item?.id)))
@@ -391,7 +393,10 @@ console.log(inputEl);
   })
 
  
-// }
+}
+else{
+ setErrors("Asset Name is required")
+}
 }
   // console.log(state);
   React.useEffect(() => {
@@ -589,6 +594,7 @@ const handleEditorInit = (editor) => {
                     fullWidth
                     placeholder="asset_Name"
                     size="medium"
+                    onFocus={()=>setErrors("")}
                     renderOption={(props, option: any, { selected }) => (
                       <React.Fragment>
                         <li {...props}>
@@ -606,9 +612,9 @@ const handleEditorInit = (editor) => {
                     }
                     }
                   />
-                  {formik.touched.asset_Name && formik.errors.asset_Name && (
+                  {errors!==""&& (
                     <Typography className="error-field">
-                      {formik.errors.asset_Name}
+                      {errors}
                     </Typography>
                   )}
                 </Box>

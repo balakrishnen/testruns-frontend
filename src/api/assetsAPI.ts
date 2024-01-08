@@ -42,6 +42,7 @@ export const deleteAssetsData = (payload: any) => async () => {
       variables: payload,
     });
     console.log(response);
+    return response.data
   } catch (error: any) {
     console.log(error);
   }

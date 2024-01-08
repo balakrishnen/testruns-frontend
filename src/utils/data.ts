@@ -936,19 +936,19 @@ export const RunsHeaders: any = [
     type: 'select',
   },
   {
-    id: 'objective',
+    id: 'procedureId',
     label: 'Procedure name',
     filters: [
       {
         id: 'search',
-        type: 'textfield',
-        label: 'Search',
+        type: 'autocomplete',
+        label: 'Procedure name',
         options: [],
       },
     ],
     sort: 'desc',
     is_show: true,
-    type: 'text',
+    type: 'select',
   },
   {
     id: 'departmentId',

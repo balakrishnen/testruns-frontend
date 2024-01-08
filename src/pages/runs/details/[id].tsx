@@ -1564,7 +1564,7 @@ export default function RunsDetails() {
                           marginTop: '0.4rem',
                         }}
                       >
-                        Super Admin
+                        {runzValue?.assignedBy.firstName}
                       </Typography>
                     </Box>
                   </Grid>
