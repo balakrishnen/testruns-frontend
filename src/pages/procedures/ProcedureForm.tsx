@@ -212,8 +212,12 @@ const ProcedureForm = React.forwardRef(
           }));
           formik.setFieldValue('departmentId', department);
           formik.setFieldValue('laboratoryId', laboratory);
+          formik.setFieldValue('procedureDetials', row.procedureDetials);
+          formik.setFieldValue('createdBy', row.createdBy);
+          // formik.setFieldValue('name', row.name);
           setDepartments(department);
           setLaboratory(laboratory);
+
         }
         setFormOpen(state);
       },

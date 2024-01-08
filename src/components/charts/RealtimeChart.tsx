@@ -526,8 +526,8 @@ export default function RealtimeChart() {
     plugins: {
       streaming: {
         duration: 10000,
-        refresh: 2000,
-        delay: 2000,
+        refresh: 1000,
+        delay: 1000,
         onRefresh: onRefresh,
       },
     },
