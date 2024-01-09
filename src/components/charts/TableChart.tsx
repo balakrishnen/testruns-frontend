@@ -230,6 +230,7 @@ export default function TableChart({ staticChartData }: any) {
             : 0,
         });
       } else {
+        delete charts[position][`Xplot${channels.xDataKey.slice(5)}`];
         charts[position][`Xplot${channelIndex + 1}`] = element.data[
           channelIndex
         ]
@@ -248,7 +249,7 @@ export default function TableChart({ staticChartData }: any) {
     setChartData(data);
   };
 
-  const handleYAxisChange = (event, index, key) => {
+  const handleYAxisChange = (event: any, index, key) => {
     const data = [...chartData];
     const channels: any = { ...data[index] };
     channels.channelOptions[key].yAxisValue = event.target.value;
@@ -273,7 +274,7 @@ export default function TableChart({ staticChartData }: any) {
       color: '#000',
       yAxisId: 'left1',
       orientation: 'left',
-      dataKey: `plot${stringLen}`,
+      dataKey: `plot${newChannelIndex + 1}`,
     };
     // data[index].channelOptions[0].data.forEach((item) => {
     //   plot1.push({
@@ -302,7 +303,6 @@ export default function TableChart({ staticChartData }: any) {
     //   data: plot1,
     //   value: yAxisOptions[0].value,
     // };
-    // debugger
     setChartData(data);
   };
 
