@@ -102,7 +102,7 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
       // assignedTo:  ,
       assignedBy: userSliceData?._id ,
       dueDate: formValue?.dueDate ,
-      status: formValue?.status ,
+      status: "Created" ,
       }]
       const output1 = output?.flatMap((aItem:any) =>
       allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
