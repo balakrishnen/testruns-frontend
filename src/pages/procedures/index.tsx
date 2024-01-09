@@ -771,6 +771,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
                         color: '#181818',
                         textTransform: 'capitalize',
                       }}
+                      disabled={(filterKey!==null && filterSearchValue!==null)?false:true}
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);

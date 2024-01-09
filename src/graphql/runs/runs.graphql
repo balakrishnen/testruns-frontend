@@ -10,8 +10,8 @@
     }
 `
 export const GET_RUNS = gql`
- query Get_all_runs($page: Int!, $perPage: Int!, $sortBy: String, $assignedTo:String, $assignedBy:String, $sortOrder: String, $searchBy: String, $search: String) {
-    get_all_runs(page: $page, perPage: $perPage, sortBy: $sortBy, assignedTo:$assignedTo, assignedBy:$assignedBy,sortOrder: $sortOrder, searchBy: $searchBy, search: $search){
+ query Get_all_runs($page: Int!, $perPage: Int!, $sortBy: String, $assignedTo:String, $assignedBy:String, $sortOrder: String, $searchBy: String, $search: String, $userId:String) {
+    get_all_runs(page: $page, perPage: $perPage, sortBy: $sortBy, assignedTo:$assignedTo, assignedBy:$assignedBy,sortOrder: $sortOrder, searchBy: $searchBy, search: $search, userId: $userId){
          Runs {
             _id
             objective

@@ -252,8 +252,8 @@ export default function MyPage() {
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 10,
-    assignedTo: loginUserSliceData?.verifyToken?._id,
-    assignedBy: loginUserSliceData?.verifyToken?._id,
+    // assignedTo: loginUserSliceData?.verifyToken?._id,
+    // assignedBy: loginUserSliceData?.verifyToken?._id,
     searchBy: null,
     search: null,
     sortBy: null,
@@ -396,6 +396,20 @@ export default function MyPage() {
     setRunzData(runzData);
   }, [runzData]);
 
+  React.useEffect(()=>{
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+      setQueryString(queryStrings)
+      
+    }
+    //requester 65741c069d53d19df8321e6e
+    else if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+      setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
+    }
+    //tester 65741c069d53d19df8321e6c
+    else{
+      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+    }
+  },[])
   React.useEffect(() => {
     setLoader(true);
     dispatch(fetchMyPageRunsData(queryStrings));

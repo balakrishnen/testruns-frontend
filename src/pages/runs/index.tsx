@@ -153,8 +153,6 @@ export default function Runs() {
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 10,
-    assignedTo:loginUserSliceData?.verifyToken?._id,
-    assignedBy:loginUserSliceData?.verifyToken?._id,
     searchBy: null,
     search: null,
     sortBy: null,
@@ -240,7 +238,23 @@ console.log("userDataRuns",userData)
       
     })
   }
+  console.log(loginUserSliceData?.verifyToken?.role[0]?._id);
+  
   React.useEffect(() => {
+    //admin 65741c069d53d19df8321e6d
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+      setQueryString(queryStrings)
+      
+    }
+    //requester 65741c069d53d19df8321e6e
+    else if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+      setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
+    }
+    //tester 65741c069d53d19df8321e6c
+    else{
+      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+    }
+    
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
@@ -842,6 +856,7 @@ console.log("userDataRuns",userData)
                         color: '#181818',
                         textTransform: 'capitalize',
                       }}
+                      disabled={(filterKey!==null && filterSearchValue!==null)?false:true}
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);

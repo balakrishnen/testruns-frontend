@@ -680,6 +680,7 @@ getAllassets();
                         color: '#181818',
                         textTransform: 'capitalize',
                       }}
+                      disabled={(filterKey!==null && filterSearchValue!==null)?false:true}
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);

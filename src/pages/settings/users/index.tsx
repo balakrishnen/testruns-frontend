@@ -630,7 +630,8 @@ console.log("userSliceData",userSliceData);
                       color: '#181818',
                       textTransform: 'capitalize',
                     }}
-                    onClick={() => {
+                      disabled={(filterKey!==null && filterSearchValue!==null)?false:true}
+                      onClick={() => {
                       handleFilterPopoverClose();
                       applyFilters(filterKey, filterSearchValue);
                     }}

@@ -75,7 +75,9 @@ export default function HistoryTable() {
     //     setCurrentPage(page);
     // };
     const [runzData, setRunzData] = React.useState<any>([]);
-
+    const loginUserSliceData = useSelector(
+      (state: any) => state.userLogin.data,
+    );
     const RunsSliceData = useSelector(
         (state: any) => state.runs.data?.get_all_runs,
     );
@@ -124,6 +126,19 @@ export default function HistoryTable() {
       }, [RunsSliceData]);
       
       React.useEffect(() => {
+        //admin 65741c069d53d19df8321e6d
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+      setQueryString(queryStrings)
+      
+    }
+    //requester 65741c069d53d19df8321e6e
+    else if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+      setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
+    }
+    //tester 65741c069d53d19df8321e6c
+    else{
+      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+    }
         return () => {
           const headersList: any = [...headers];
           headersList.map((item) => {
