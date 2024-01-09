@@ -405,7 +405,7 @@ export default function RunsDetails() {
         // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks)
-        setResult(res?.get_userRun?.results!==undefined && JSON.parse(res?.get_userRun?.results))
+        setUserRunzResult(res?.get_userRun?.results!==undefined && res?.get_userRun?.results)
         
       });
     }
@@ -449,7 +449,7 @@ export default function RunsDetails() {
     dispatch(fetchSingleUserRunzData(runz)).then((res) => {
       // console.log(res?.get_userRun?._id);
       setUserRunzID(res?.get_userRun);
-      setResult(res?.get_userRun?.results!==undefined && JSON.parse(res?.get_userRun?.results))
+      setUserRunzResult(res?.get_userRun?.results!==undefined && res?.get_userRun?.results)
     });
     // setRunzValue(procedureSliceData.get_run)
   };
@@ -466,21 +466,21 @@ export default function RunsDetails() {
 
   React.useEffect(()=>{
     let text: any = '';
-    if(result!==null && result!=="")
-    {
-      setResult(result)
-      Object.entries(result).forEach(([key, value]) => {
-        text =
-          text +
-          `<div>
-          <div>
-          <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
-          </div>
-        </div>`;
-      });
-    }
-    else{
-      setResult(userRunzResult)
+    // if(result!==null && result!=="")
+    // {
+    //   setResult(result)
+    //   Object.entries(result).forEach(([key, value]) => {
+    //     text =
+    //       text +
+    //       `<div>
+    //       <div>
+    //       <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+    //       </div>
+    //     </div>`;
+    //   });
+    // }
+    // else{
+      setUserRunzResult(userRunzResult)
       Object.entries(userRunzResult).forEach(([key, value]) => {
         text =
           text +
@@ -490,10 +490,10 @@ export default function RunsDetails() {
           </div>
         </div>`;
       });
-    }
+    // }
     // console.log('####', text);
     setUserRunzResult(text + '</ul>');
-  },[userRunzResult])
+  },[userProcedure])
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
     const timerId = setTimeout(() => {
@@ -914,7 +914,7 @@ export default function RunsDetails() {
           // console.log(res[newarray][0]);
           const data = res!==undefined ?res[newarray][0]:"";
           console.log("JSON",JSON.stringify(data),);
-          setResult(data)
+          setUserRunzResult(data)
           let text: any = '';
           Object.entries(data).forEach(([key, value]) => {
             text =
@@ -943,6 +943,10 @@ export default function RunsDetails() {
   //   console.log( e.target.getContent());
   //   console.log("Content was updated:", e.target.getContent());
   // };
+  const handleChanged1 = (content:any) => {
+    // console.log(content);
+    setUserRunzResult(content)
+  };
   const handleChanged = (content:any) => {
     // console.log(content);
     setRemarks(content)
@@ -958,10 +962,10 @@ export default function RunsDetails() {
     
     const payload: any = {
       runId: runzValue._id,
-      results:JSON.stringify(result),
+      results:JSON.stringify(userRunzResult),
       
     }
-    if(!JSON.stringify(result).includes("No calculations") && (result!=="" && result!==null)){
+    if(!JSON.stringify(userRunzResult).includes("No calculations") && (userRunzResult!=="" && userRunzResult!==null)){
       await  dispatch(postUserRunsData(payload));
       let payload1 = {
         _id: runzValue._id,
@@ -990,11 +994,11 @@ export default function RunsDetails() {
     
     const payload2: any = {
     _id: userRunzID?._id,
-    results:JSON.stringify(result),
+    results:userRunzResult,
    
     }
     // console.log(payload2);
-    if(!JSON.stringify(result).includes("No calculations") && (result!=="" && result!==null)){
+    if(!JSON.stringify(userRunzResult).includes("No calculations") && (userRunzResult!=="" && userRunzResult!==null)){
     await  dispatch(UpdateUserRunsData(payload2));
       let payload1 = {
         _id: runzValue._id,
@@ -2006,6 +2010,7 @@ export default function RunsDetails() {
                         content_style:
                           'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                       }}
+                      onEditorChange={handleChanged1}
                     />
                   </CustomTabPanel>
 

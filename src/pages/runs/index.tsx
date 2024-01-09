@@ -977,7 +977,7 @@ console.log("userDataRuns",userData)
                                 />
                               </Box>
                               <Box sx={{ ml: 1 }}>
-                                <Box>{row.runNumber}</Box>
+                                <Box>{row.runNumber}</Box>{row.shared && <span style={{color:row?.status == 'Created'?"#8d8d8d":row?.status == 'Started'?"#faaa49":row?.status == 'Stopped'?"red":row?.status == 'Complete'?"#00bf70":"#a01fb1"}}>shared</span>}
                               </Box>
                             </Box>
 

@@ -34,6 +34,7 @@ export const GET_RUNS = gql`
             isDeleted
             createdAt
             updatedAt
+            shared
             procedureId {
                 _id
                 name
