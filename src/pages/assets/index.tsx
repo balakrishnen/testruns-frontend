@@ -117,6 +117,9 @@ export default function Assets() {
     hasNextPage: false,
     hasPreviousPage: false,
   });
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
     perPage: 10,
@@ -124,6 +127,7 @@ export default function Assets() {
     search: null,
     sortBy: "assetNumber",
     sortOrder: 'desc',
+    
   });
   const assetsSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets,
@@ -137,11 +141,10 @@ export default function Assets() {
   const assetsIdSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets,
   );
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
+
  
   const credencial =  loginUserSliceData?.verifyToken?.role[0]
+console.log(loginUserSliceData?.verifyToken?.role[0]?._id);
 
   // React.useEffect(() => {
   //   setTimeout(() => {
@@ -151,12 +154,16 @@ export default function Assets() {
   // }, [assetsData]);
 
   React.useEffect(() => {
+    if(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df8321e6d"){
+      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+    }
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
         return (item.sort = 'asc');
       });
       setHeaders(headersList);
+     
     };
   }, []);
 

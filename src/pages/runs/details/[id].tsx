@@ -466,8 +466,8 @@ export default function RunsDetails() {
 
   React.useEffect(()=>{
     let text: any = '';
-    // if(result!==null && result!=="")
-    // {
+    if(userRunzResult!==null && userRunzResult!=="")
+    {
     //   setResult(result)
     //   Object.entries(result).forEach(([key, value]) => {
     //     text =
@@ -490,7 +490,7 @@ export default function RunsDetails() {
           </div>
         </div>`;
       });
-    // }
+    }
     // console.log('####', text);
     setUserRunzResult(text + '</ul>');
   },[userProcedure])

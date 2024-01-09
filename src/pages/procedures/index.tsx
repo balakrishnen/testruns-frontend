@@ -112,15 +112,7 @@ export default function Procedures() {
     hasNextPage: false,
     hasPreviousPage: false,
   });
-  const [queryStrings, setQueryString] = React.useState({
-    page: 1,
-    perPage: 10,
-    searchBy: null,
-    search: null,
-    sortBy: null,
-    sortOrder: 'desc',
-  });
-
+  
   const procedureSliceData = useSelector(
     (state: any) => state.procedure.data?.get_all_procedures,
   );
@@ -142,6 +134,16 @@ export default function Procedures() {
   const [procedureData, setProcedureData] = React.useState<any>([]);
 
   const [rowId, setRowId] = React.useState<any>([]);
+  const [queryStrings, setQueryString] = React.useState({
+    page: 1,
+    perPage: 10,
+    searchBy: null,
+    search: null,
+    sortBy: null,
+    sortOrder: 'desc',
+    // userId:loginUserSliceData?.verifyToken?._id
+  });
+
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
   };
@@ -182,8 +184,12 @@ export default function Procedures() {
     // setTableHeaderVisible(false);
     // setRowId([]);
   }, [queryStrings]);
+console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df8321e6d");
 
   React.useEffect(() => {
+    if(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df8321e6d"){
+      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+    }
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {

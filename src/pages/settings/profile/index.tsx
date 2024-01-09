@@ -176,9 +176,7 @@ console.log(singleUserData);
             isSucess.get_user?.departmentId?.map(
               (item: any) => departmentData?.find((obj) => obj.id == item),
             ) || [],
-          );
-          console.log("isSucess.get_user?.laboratoryId",isSucess.get_user?.departmentId);
-          
+          );          
           formikProfile.setFieldValue(
             'laboratoryId',
             isSucess.get_user?.laboratoryId?.map(
@@ -900,7 +898,7 @@ console.log(singleUserData);
                           <label>Labs assigned <span style={{ color: '#E2445C' }}>*</span></label>
                           <Autocomplete
                             multiple
-                            id="departmentId"
+                            id="laboratoryId"
                             value={formikProfile.values.laboratoryId}
                             options={labData !== undefined ? labData : []}
                             getOptionLabel={(option: any) => option?.label}
