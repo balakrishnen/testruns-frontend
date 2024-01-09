@@ -230,7 +230,8 @@ export default function TableChart({ staticChartData }: any) {
             : 0,
         });
       } else {
-        delete charts[position][`Xplot${channels.xDataKey.slice(5)}`];
+        channels.xDataKey &&
+          delete charts[position][`Xplot${channels.xDataKey.slice(5)}`];
         charts[position][`Xplot${channelIndex + 1}`] = element.data[
           channelIndex
         ]
