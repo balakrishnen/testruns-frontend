@@ -27,6 +27,7 @@ import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
 import SpinerLoader from '../../../components/SpinnerLoader';
+import AWS from 'aws-sdk';
 // import ProceduresRichText from './Editor';
 
 const validationSchema = Yup.object().shape({
@@ -469,6 +470,13 @@ const handleEditorInit = (editor) => {
   });
 };
 
+const s3 = new AWS.S3({
+  // params: { Bucket: S3_BUCKET, folderName: "profile" },
+  region: 'us-east-1',
+  accessKeyId: 'AKIAUVVYVBYI2GJ3ENMQ',
+  secretAccessKey: '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',
+});
+
 
   return (
     <PrivateRoute>
@@ -636,10 +644,12 @@ const handleEditorInit = (editor) => {
                       // value={editorData}
                       init={{
                         height: 500,
+                        paste_data_images: false,
                         menubar: true,
                         selector: 'textarea',
                         plugins: [
                           'advlist',
+                          "paste",
                           'autolink',
                           'lists',
                           'link',
@@ -679,16 +689,28 @@ const handleEditorInit = (editor) => {
                       input.setAttribute("accept", "image/jpg, image/jpeg, image/png");
                       input.onchange = function () {
                         var file = this.files[0];
-          
                         var reader = new FileReader();
                         reader.onload = function () {
-                          var id = "blobid" + new Date().getTime();
-                          var blobCache =
-                            window?.tinymce?.activeEditor.editorUpload.blobCache;
-                          var base64 = reader?.result.split(",")[1];
-                          var blobInfo = blobCache.create(id, file, base64);
-                          blobCache.add(blobInfo);
-                          cb(blobInfo.blobUri(), { title: file.name });
+                          const keyPath = `profile/${Date.now()}`;
+                          const params = {
+                            Bucket: 'test-run-v2',
+                            Key: keyPath,
+                            Body: file,
+                            ACL: 'public-read',
+                            // ContentType: selectedFile.type
+                          };
+
+                          s3.upload(params, function (err:any, data:any) {
+                            if (err) {
+                              console.error('Error uploading image to AWS S3:', err);
+                            } else {
+                              const id = "blobid" + new Date().getTime();
+                              const blobCache = window?.tinymce?.activeEditor.editorUpload.blobCache;
+                              const blobInfo = blobCache.create(id, file, data.Location);
+                              blobCache.add(blobInfo);
+                              cb(data.Location,{ alt: file.name });
+                            }
+                          });
                         };
                         reader.readAsDataURL(file);
                       };
