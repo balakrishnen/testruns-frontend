@@ -305,6 +305,7 @@ const RunsForm = React.forwardRef(
       formik.resetForm();
       setDepartment([]);
       setLab([]);
+      setAssignUser("")
       formik.dirty=false
       // setOrganization([]);
     };
