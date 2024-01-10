@@ -222,7 +222,7 @@ export default function RealtimeChart() {
   // }, []);
 
   React.useEffect(() => {
-    // influxQuery();
+    dispatch(fetchAssetsName());
   }, []);
 
   React.useEffect(() => {
@@ -274,7 +274,10 @@ export default function RealtimeChart() {
 
   React.useEffect(() => {
     if (assetsSliceData) {
-      setAssetsOptions(assetsSliceData);
+      let assetsFilterData = assetsSliceData.filter((item: any) =>
+        item.name.includes('_connect'),
+      );
+      setAssetsOptions(assetsFilterData);
     }
   }, [assetsSliceData]);
 
@@ -354,65 +357,55 @@ export default function RealtimeChart() {
   const onRefresh = React.useCallback(
     async (values: any) => {
       if (channelTemp.length !== 0) {
-        try{
+        try {
           const fields = channelTemp
-          .map((item: any) => `r._field == "${item}"`)
-          .join(' or ');
-        const query1: any = `from(bucket: "${bucket}")
+            .map((item: any) => `r._field == "${item}"`)
+            .join(' or ');
+          const query1: any = `from(bucket: "${bucket}")
     |> range(start: -duration(v: 1s))
     |> filter(fn: (r) => r["_measurement"] == "sensor_data" and ${fields})
     |> aggregateWindow(every: 1s, fn: mean, createEmpty: false)
     |> yield(name: "mean")`;
-        const chart: any = { ...chartData };
-        const result = await queryApi.collectRows(query1); 
+          const chart: any = { ...chartData };
+          const result = await queryApi.collectRows(query1);
 
-        if (result.length !== 0 && channelTemp.length === result.length ) {
-          result.forEach((dataset: any, index) => {
-            const sets = chart.datasets[index] ;
-            console.log('SETS', sets);
-            console.log('DATASETS', dataset);
-            if(dataset._value!==undefined && dataset._value!==null){
-              sets.data.push({
-                x: moment(dataset._stop),
-                y: dataset._value,
-              });
-            }
-          });
-        }
+          if (result.length !== 0 && channelTemp.length === result.length) {
+            result.forEach((dataset: any, index) => {
+              const sets = chart.datasets[index];
+              console.log('SETS', sets);
+              console.log('DATASETS', dataset);
+              if (dataset._value !== undefined && dataset._value !== null) {
+                sets.data.push({
+                  x: moment(dataset._stop),
+                  y: dataset._value,
+                });
+              }
+            });
+          }
 
-        console.log('result2', result);
-        // chart.data.datasets.forEach((_, index) => {
-        //   chart.data.datasets[index].data.push({
-        //     x: moment(),
-        //     y: Math.random(),
-        //   });
-        // });
-        }
-        catch(error){
-          console.log("handle Error list",error)
+          console.log('result2', result);
+          // chart.data.datasets.forEach((_, index) => {
+          //   chart.data.datasets[index].data.push({
+          //     x: moment(),
+          //     y: Math.random(),
+          //   });
+          // });
+        } catch (error) {
+          console.log('handle Error list', error);
         }
       }
     },
     [channelTemp],
   );
 
-  const handleAddChannel = (dataIndex) => {
-    const data = [...charts];
-    data[dataIndex].tableChartOptionsList.push({
+  const handleAddChannel = () => {
+    const data: any = [...channelList];
+    data.push({
       color: '#000',
-      axisY: 'Y1',
-      channelName: null,
-      value: 'Y1',
-      channelValue: null,
-      yAxisId: 'left1',
-      dataKey: `plot${charts[dataIndex].tableChartOptionsList.length + 1}`,
-      name: null,
-      yAxis: `Y1`,
-      orientation: dataIndex % 2 === 0 ? 'left' : 'right',
-      xValue: null,
-      yValue: `Y1`,
+      sensor: null,
+      axis: 'Y1',
     });
-    setCharts(data);
+    setChannelList(data);
   };
 
   const handleRemoveChannel = (dataIndex) => {
@@ -521,8 +514,8 @@ export default function RealtimeChart() {
       },
     },
     events: [],
-    tooltips: {enabled: false},
-    hover: {mode: null},
+    tooltips: { enabled: false },
+    hover: { mode: null },
     plugins: {
       streaming: {
         duration: 10000,
@@ -748,7 +741,7 @@ export default function RealtimeChart() {
                     variant="contained"
                     className="add-chart"
                     sx={{ mr: 2 }}
-                    // onClick={() => handleAddChannel(dataIndex)}
+                    onClick={() => handleAddChannel()}
                   >
                     <AddIcon />
                   </Button>

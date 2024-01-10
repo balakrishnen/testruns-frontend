@@ -240,7 +240,7 @@ export default function RunsDetails() {
   const [state, setState] = React.useState({ content: '' });
   const formRef: any = React.useRef(null);
   const [typePopup, settypePopup] = React.useState('');
-  const [staticChartData, setStaticChartData] = React.useState("")
+  const [staticChartData, setStaticChartData] = React.useState('');
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -267,11 +267,8 @@ export default function RunsDetails() {
     { name: 'Time', value: 'Time' },
   ]);
 
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
- 
-  const credencial =  loginUserSliceData?.verifyToken?.role[0]
+  const loginUserSliceData = useSelector((state: any) => state.userLogin.data);
+  const credencial = loginUserSliceData?.verifyToken?.role[0];
 
   const [charts, setCharts] = React.useState<any>([]);
 
@@ -376,15 +373,16 @@ export default function RunsDetails() {
 
   const location: any = useLocation();
   // const runzValue = location.state?.props;
-  // console.log(runzValue);
   const [runzValue, setRunzValue] = React.useState<any>(location.state?.props);
+  const [disableStart, setDisableStart] = React.useState<any>(
+    runzValue?.status === 'Stopped',
+  );
   const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
   const [userRunzID, setUserRunzID] = React.useState<any>({});
-  const [result,setResult]=React.useState<any>({})
-  const [remarks,setRemarks]=React.useState<any>("")
-  console.log("JSON",result);
-  
+  const [result, setResult] = React.useState<any>({});
+  const [remarks, setRemarks] = React.useState<any>('');
+
   const procedureSliceData = useSelector((state: any) => state.runs.data);
 
   var runzId: any = [];
@@ -404,9 +402,10 @@ export default function RunsDetails() {
       dispatch(fetchSingleUserRunzData(runz)).then((res) => {
         // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
-        setRemarks(res?.get_userRun?.remarks)
-        setUserRunzResult(res?.get_userRun?.results!==undefined && res?.get_userRun?.results)
-        
+        setRemarks(res?.get_userRun?.remarks);
+        setUserRunzResult(
+          res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
+        );
       });
     }
   }, [value]);
@@ -449,38 +448,38 @@ export default function RunsDetails() {
     dispatch(fetchSingleUserRunzData(runz)).then((res) => {
       // console.log(res?.get_userRun?._id);
       setUserRunzID(res?.get_userRun);
-      setUserRunzResult(res?.get_userRun?.results!==undefined && res?.get_userRun?.results)
+      setUserRunzResult(
+        res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
+      );
     });
     // setRunzValue(procedureSliceData.get_run)
   };
   // console.log(procedureSliceData);
-  
+
   React.useEffect(() => {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
     setState({ content: userProcedure });
-  
-  
-    // setResult(result)
-  }, [runzValue, userProcedure,value,]);
 
-  React.useEffect(()=>{
+    // setResult(result)
+  }, [runzValue, userProcedure, value]);
+
+  React.useEffect(() => {
     let text: any = '';
-    if(userRunzResult!==null && userRunzResult!=="")
-    {
-    //   setResult(result)
-    //   Object.entries(result).forEach(([key, value]) => {
-    //     text =
-    //       text +
-    //       `<div>
-    //       <div>
-    //       <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
-    //       </div>
-    //     </div>`;
-    //   });
-    // }
-    // else{
-      setUserRunzResult(userRunzResult)
+    if (userRunzResult !== null && userRunzResult !== '') {
+      //   setResult(result)
+      //   Object.entries(result).forEach(([key, value]) => {
+      //     text =
+      //       text +
+      //       `<div>
+      //       <div>
+      //       <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
+      //       </div>
+      //     </div>`;
+      //   });
+      // }
+      // else{
+      setUserRunzResult(userRunzResult);
       Object.entries(userRunzResult).forEach(([key, value]) => {
         text =
           text +
@@ -493,7 +492,7 @@ export default function RunsDetails() {
     }
     // console.log('####', text);
     setUserRunzResult(text + '</ul>');
-  },[userProcedure])
+  }, [userProcedure]);
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
     const timerId = setTimeout(() => {
@@ -506,7 +505,7 @@ export default function RunsDetails() {
 
     // Clean up the timer on component unmount or if procedureSliceData changes
     return () => clearTimeout(timerId);
-  }, [procedureSliceData,value]);
+  }, [procedureSliceData, value]);
 
   React.useEffect(() => {
     const filtered =
@@ -526,12 +525,12 @@ export default function RunsDetails() {
       }
     }
     // console.log(userRunzID?.userProcedure);
-  }, [userRunzID?.userProcedure, state,value]);
+  }, [userRunzID?.userProcedure, state, value]);
   // console.log(runzValue?.userProcedure);
 
   React.useEffect(() => {
     handleHtmlInput();
-  }, [state?.content, userRunzID?.userProcedure,value]);
+  }, [state?.content, userRunzID?.userProcedure, value]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -547,7 +546,6 @@ export default function RunsDetails() {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-
   };
   const editorRef: any = React.useRef(null);
   // const log = () => {
@@ -717,26 +715,25 @@ export default function RunsDetails() {
     handleHtmlInput();
 
     const tablesEles: any = document
-      ?.getElementById("content")
-      ?.querySelectorAll("table");
+      ?.getElementById('content')
+      ?.querySelectorAll('table');
     let finalTableTitleResult: any;
     // console.log(tablesEles);
-    
     if (tablesEles) {
       const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
-        const headerCells = tablesInstance?.querySelectorAll("[data-column]");
+        const headerCells = tablesInstance?.querySelectorAll('[data-column]');
         const headerNames = Array.from(headerCells).map((header: any) => ({
-          key: header.getAttribute("data-column"),
+          key: header.getAttribute('data-column'),
           value: header.textContent.trim(),
         }));
-        const tableDataRows: any = tablesInstance.querySelectorAll("tbody tr");
+        const tableDataRows: any = tablesInstance.querySelectorAll('tbody tr');
         const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
-          const tableCells = tableDataRow.querySelectorAll("td[data-column]");
+          const tableCells = tableDataRow.querySelectorAll('td[data-column]');
           return Array.from(tableCells).map((cell: any) => {
             const inputCntext = cell.querySelector("input[type='text']");
             if (inputCntext) {
               return {
-                key: cell.getAttribute("data-column"),
+                key: cell.getAttribute('data-column'),
                 value: htmlInput[inputCntext.id],
               };
             }
@@ -763,11 +760,12 @@ export default function RunsDetails() {
         return mergedData;
       });
       // console.log("mergedDatasets",mergedDatasets);
-      let filteredData = mergedDatasets?.filter((sublist) =>
-        sublist?.some((obj: any) => Object?.keys(obj).length > 0)
+      let filteredData = mergedDatasets?.filter(
+        (sublist) => sublist?.some((obj: any) => Object?.keys(obj).length > 0),
       );
-      filteredData = filteredData?.map((sublist) =>
-        sublist?.filter((obj: any) => Object?.keys(obj).length > 0)
+      filteredData = filteredData?.map(
+        (sublist) =>
+          sublist?.filter((obj: any) => Object?.keys(obj).length > 0),
       );
       // console.log("filteredData",filteredData);
       const results = filteredData?.map((dataset, index) => {
@@ -787,8 +785,8 @@ export default function RunsDetails() {
       });
 
       const tablesin = document
-        ?.getElementById("content")
-        ?.querySelectorAll("[data-table]");
+        ?.getElementById('content')
+        ?.querySelectorAll('[data-table]');
       const getTitle: any = [];
 
       tablesin?.forEach((element, index) => {
@@ -801,8 +799,8 @@ export default function RunsDetails() {
     }
     let vals = Object.values(htmlInput);
     // console.log(htmlInput);
-    
-    const empty = vals.filter((item) => item == "");
+
+    const empty = vals.filter((item) => item == '');
     // console.log('**finalTableTitleResult**', empty);
 
     if (empty.length !== 0) {
@@ -838,18 +836,17 @@ export default function RunsDetails() {
       } else {
         let payload2 = {
           _id: userRunzID?._id,
-          organisationId:process.env.ORGANIZATION_ID,
+          organisationId: process.env.ORGANIZATION_ID,
           userProcedure: JSON.stringify(htmlInput),
           static_chart_data: JSON.stringify(finalTableTitleResult),
         };
         dispatch(UpdateUserRunsData(payload2));
-        
 
         const staticData =
-          "[{\"label\":\"TABULAR COLUMN:\",\"value\":\"TABULAR COLUMN:\",\"data\":[{\"label\":\"Initial temperature ◦C\",\"values\":[21,78]},{\"label\":\"Time (Sec)\",\"values\":[65,32]}]}]";
+          '[{"label":"TABULAR COLUMN:","value":"TABULAR COLUMN:","data":[{"label":"Initial temperature ◦C","values":[21,78]},{"label":"Time (Sec)","values":[65,32]}]}]';
 
         setStaticChartData(finalTableTitleResult);
-        
+
         toast(`Run User Procedure updated !`, {
           style: {
             background: '#00bf70',
@@ -858,11 +855,11 @@ export default function RunsDetails() {
         });
       }
       const data = {
-        "value_1ZyZJXD": "0",
+        value_1ZyZJXD: '0',
         // ... (other key-value pairs)
-        "value_jouUqbl": "33"
+        value_jouUqbl: '33',
       };
-      
+
       // Add "title" property to the last object
       data['title'] = 'Vibrational_magnetometer_acet';
 
@@ -898,44 +895,41 @@ export default function RunsDetails() {
       fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython', {
         method: 'POST', // or 'PUT'
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(htmlInput),
-      }).then((res) => {
-        // console.log(res)
-        fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython')
-        .then((res) => res.json())
+      })
         .then((res) => {
-          // console.log(res);
-          var newarray:any=[]
-          newarray=Object.keys(res)
-          // console.log(newarray[0]);
-          
-          // console.log(res[newarray][0]);
-          const data = res!==undefined ?res[newarray][0]:"";
-          console.log("JSON",JSON.stringify(data),);
-          setUserRunzResult(data)
-          let text: any = '';
-          Object.entries(data).forEach(([key, value]) => {
-            text =
-              text +
-              `<div>
+          // console.log(res)
+          fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython')
+            .then((res) => res.json())
+            .then((res) => {
+              // console.log(res);
+              var newarray: any = [];
+              newarray = Object.keys(res);
+              // console.log(newarray[0]);
+
+              // console.log(res[newarray][0]);
+              const data = res !== undefined ? res[newarray][0] : '';
+              console.log('JSON', JSON.stringify(data));
+              setUserRunzResult(data);
+              let text: any = '';
+              Object.entries(data).forEach(([key, value]) => {
+                text =
+                  text +
+                  `<div>
               <div>
               <span style="font-size: 18px; line-height: 3">${key}</span> <span style="font-size: 18px; font-weight: 600">${value}</span>
               </div>
             </div>`;
-          });
-          // console.log('####', text);
-          setUserRunzResult(text + '</ul>');
+              });
+              // console.log('####', text);
+              setUserRunzResult(text + '</ul>');
+            });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      }
-     
-      
-      )
-      .catch((err)=>{
-        console.log(err);
-        
-      })
     }
   };
 
@@ -943,167 +937,162 @@ export default function RunsDetails() {
   //   console.log( e.target.getContent());
   //   console.log("Content was updated:", e.target.getContent());
   // };
-  const handleChanged1 = (content:any) => {
+  const handleChanged1 = (content: any) => {
     // console.log(content);
-    setUserRunzResult(content)
+    setUserRunzResult(content);
   };
-  const handleChanged = (content:any) => {
+  const handleChanged = (content: any) => {
     // console.log(content);
-    setRemarks(content)
+    setRemarks(content);
   };
- const resultSave=async()=>{
-  console.log("JSON",result);
-  console.log(userRunzResult);
-  
-  
-  if(runzValue.status == 'Created'){
-    console.log(result);
+  const resultSave = async () => {
+    console.log('JSON', result);
     console.log(userRunzResult);
-    
-    const payload: any = {
-      runId: runzValue._id,
-      results:JSON.stringify(userRunzResult),
-      
-    }
-    if(!JSON.stringify(userRunzResult).includes("No calculations") && (userRunzResult!=="" && userRunzResult!==null)){
-      await  dispatch(postUserRunsData(payload));
-      let payload1 = {
-        _id: runzValue._id,
-        status: 'Submitted',
-      };
-      await toast(`Result saved successfully !`, {
-        style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
-      });
-      await dispatch(fetchUpdateRunsData(payload1));
-    }
-    else{
-      toast('Result must be filled', {
-        style: {
-          background: '#d92828',
-          color: '#fff',
-        },
-      });
-    }
-  }
-  else{
-    console.log(result);
-    console.log(userRunzResult);
-    
-    const payload2: any = {
-    _id: userRunzID?._id,
-    results:userRunzResult,
-   
-    }
-    // console.log(payload2);
-    if(!JSON.stringify(userRunzResult).includes("No calculations") && (userRunzResult!=="" && userRunzResult!==null)){
-    await  dispatch(UpdateUserRunsData(payload2));
-      let payload1 = {
-        _id: runzValue._id,
-        status: 'Submitted',
-      };
-      await toast(`Result saved successfully !`, {
-        style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
-      });
-    await  dispatch(fetchUpdateRunsData(payload1));
-    // }
-    // else if(!JSON.stringify(userRunzResult).includes("No calculations") && (userRunzResult!=="" && userRunzResult!==null)){
-    //   const payload2: any = {
-    //     _id: userRunzID?._id,
-    //     results:userRunzResult,
-       
-    //     }
-    //   await  dispatch(UpdateUserRunsData(payload2));
-    //   let payload1 = {
-    //     _id: runzValue._id,
-    //     status: 'Submitted',
-    //   };
-    //   await toast(`Result saved successfully !`, {
-    //     style: {
-    //       background: '#00bf70',
-    //       color: '#fff',
-    //     },
-    //   });
-    // await  dispatch(fetchUpdateRunsData(payload1));
-    }
-    else{
-      toast('Result must be filled', {
-        style: {
-          background: '#d92828',
-          color: '#fff',
-        },
-      });
-    }
-  }
- }
 
- const remarkSave=async()=>{
- 
-  if(runzValue.status == 'Created'){
-    const payload: any = {
-      runId: runzValue._id,
-      remarks:remarks,
-    
+    if (runzValue.status == 'Created') {
+      console.log(result);
+      console.log(userRunzResult);
+
+      const payload: any = {
+        runId: runzValue._id,
+        results: JSON.stringify(userRunzResult),
+      };
+      if (
+        !JSON.stringify(userRunzResult).includes('No calculations') &&
+        userRunzResult !== '' &&
+        userRunzResult !== null
+      ) {
+        await dispatch(postUserRunsData(payload));
+        let payload1 = {
+          _id: runzValue._id,
+          status: 'Submitted',
+        };
+        await toast(`Result saved successfully !`, {
+          style: {
+            background: '#00bf70',
+            color: '#fff',
+          },
+        });
+        await dispatch(fetchUpdateRunsData(payload1));
+      } else {
+        toast('Result must be filled', {
+          style: {
+            background: '#d92828',
+            color: '#fff',
+          },
+        });
+      }
+    } else {
+      console.log(result);
+      console.log(userRunzResult);
+
+      const payload2: any = {
+        _id: userRunzID?._id,
+        results: userRunzResult,
+      };
+      // console.log(payload2);
+      if (
+        !JSON.stringify(userRunzResult).includes('No calculations') &&
+        userRunzResult !== '' &&
+        userRunzResult !== null
+      ) {
+        await dispatch(UpdateUserRunsData(payload2));
+        let payload1 = {
+          _id: runzValue._id,
+          status: 'Submitted',
+        };
+        await toast(`Result saved successfully !`, {
+          style: {
+            background: '#00bf70',
+            color: '#fff',
+          },
+        });
+        await dispatch(fetchUpdateRunsData(payload1));
+        // }
+        // else if(!JSON.stringify(userRunzResult).includes("No calculations") && (userRunzResult!=="" && userRunzResult!==null)){
+        //   const payload2: any = {
+        //     _id: userRunzID?._id,
+        //     results:userRunzResult,
+
+        //     }
+        //   await  dispatch(UpdateUserRunsData(payload2));
+        //   let payload1 = {
+        //     _id: runzValue._id,
+        //     status: 'Submitted',
+        //   };
+        //   await toast(`Result saved successfully !`, {
+        //     style: {
+        //       background: '#00bf70',
+        //       color: '#fff',
+        //     },
+        //   });
+        // await  dispatch(fetchUpdateRunsData(payload1));
+      } else {
+        toast('Result must be filled', {
+          style: {
+            background: '#d92828',
+            color: '#fff',
+          },
+        });
+      }
     }
-    let payload1 = {
-      _id: runzValue._id,
-      status: 'Complete',
-    };
-    if(remarks!=="" &&  remarks!==null){
-      await dispatch(postUserRunsData(payload));
-      await  dispatch(fetchUpdateRunsData(payload1));
-      await toast(`Remarks saved successfully !`, {
-        style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
-      });
+  };
+
+  const remarkSave = async () => {
+    if (runzValue.status == 'Created') {
+      const payload: any = {
+        runId: runzValue._id,
+        remarks: remarks,
+      };
+      let payload1 = {
+        _id: runzValue._id,
+        status: 'Complete',
+      };
+      if (remarks !== '' && remarks !== null) {
+        await dispatch(postUserRunsData(payload));
+        await dispatch(fetchUpdateRunsData(payload1));
+        await toast(`Remarks saved successfully !`, {
+          style: {
+            background: '#00bf70',
+            color: '#fff',
+          },
+        });
+      } else {
+        toast('Remarks must be filled', {
+          style: {
+            background: '#d92828',
+            color: '#fff',
+          },
+        });
+      }
+    } else {
+      const payload2: any = {
+        _id: userRunzID?._id,
+        remarks: remarks,
+      };
+      let payload1 = {
+        _id: runzValue._id,
+        status: 'Complete',
+      };
+      if (remarks !== '' && remarks !== null) {
+        await dispatch(UpdateUserRunsData(payload2));
+        await dispatch(fetchUpdateRunsData(payload1));
+        await toast(`Remarks saved successfully !`, {
+          style: {
+            background: '#00bf70',
+            color: '#fff',
+          },
+        });
+      } else {
+        toast('Remarks must be filled', {
+          style: {
+            background: '#d92828',
+            color: '#fff',
+          },
+        });
+      }
     }
-    else{
-      toast('Remarks must be filled', {
-        style: {
-          background: '#d92828',
-          color: '#fff',
-        },
-      });
-    }
-  
-  }
-  else{
-    const payload2: any = {
-    _id: userRunzID?._id,
-    remarks:remarks,
-    
-    }
-    let payload1 = {
-      _id: runzValue._id,
-      status: 'Complete',
-    };
-    if(remarks!=="" &&  remarks!==null){
-      await dispatch(UpdateUserRunsData(payload2));
-      await  dispatch(fetchUpdateRunsData(payload1));
-      await toast(`Remarks saved successfully !`, {
-        style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
-      });
-    }
-    else{
-      toast('Remarks must be filled', {
-        style: {
-          background: '#d92828',
-          color: '#fff',
-        },
-      });
-    }
-  }
- }
+  };
 
   // if (empty.length > 0) {
   //   toast('Must fill all Required Readings', {
@@ -1202,7 +1191,7 @@ export default function RunsDetails() {
     values.tableChartOptionsList[keyIndex].color = event.target.value;
     setCharts(data);
   };
-// console.log(userRunzResult);
+  // console.log(userRunzResult);
 
   const handleAddChart = () => {
     const data = [...charts];
@@ -1323,7 +1312,7 @@ export default function RunsDetails() {
   const htmlData: any = state?.content ? state?.content : '';
   const [htmlInput, setHtmlInput] = React.useState<any>({});
   const htmlToJSON: any = html2json?.html2json(htmlData);
-// console.log(htmlInput,"htmlInput");
+  // console.log(htmlInput,"htmlInput");
 
   const uses = htmlToJSON?.child.map((ele: any) => ele);
   const handleHtmlInput = () => {
@@ -1366,15 +1355,14 @@ export default function RunsDetails() {
       const videoUrl = URL.createObjectURL(file);
       if (videoUrl) {
         const editor = editorRef.current.editor;
-      // console.log('videoUrl',videoUrl);
-  
+        // console.log('videoUrl',videoUrl);
         editorRef.current?.insertContent(
-          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`
+          `<video controls><source src="${videoUrl}" type="video/mp4"></video>`,
         );
       }
     }
   };
-  
+
   const handleEditorInit = (editor: any) => {
     editor.ui.registry.addButton('uploadvideo', {
       text: 'Upload Video',
@@ -1387,10 +1375,27 @@ export default function RunsDetails() {
       },
     });
   };
+
   const handleAssignClick = (val: string) => {
     setRunsOpen(true);
     settypePopup(val);
   };
+
+  const handleStatusChange = async (status: any) => {
+    setDisableStart(!disableStart);
+    var runsChange: any = {
+      _id: runzValue._id,
+    };
+    runsChange['status'] = status;
+    await dispatch(fetchUpdateRunsData(runsChange));
+    await toast('Runs status updated !', {
+      style: {
+        background: '#00bf70',
+        color: '#fff',
+      },
+    });
+  };
+
   return (
     <PrivateRoute>
       {!isLoader ? (
@@ -1419,6 +1424,39 @@ export default function RunsDetails() {
                         justifyContent: 'end',
                       }}
                     >
+                      <Button
+                        disabled={disableStart}
+                        variant="contained"
+                        style={{
+                          boxShadow: 'none',
+                          backgroundColor: '#ffc60b',
+                          padding: '4px 6px',
+                          justifyContent: 'center',
+                        }}
+                        sx={{ m: 2 }}
+                        // onClick={() => {
+                        //   handleStatusChange('Started');
+                        // }}
+                      >
+                        Start
+                      </Button>
+                      <Button
+                        disabled={!disableStart}
+                        variant="contained"
+                        style={{
+                          boxShadow: 'none',
+                          backgroundColor: '#ffc60b',
+                          padding: '4px 6px',
+                          justifyContent: 'center',
+                          marginRight: '2rem',
+                        }}
+                        sx={{ m: 2 }}
+                        // onClick={() => {
+                        //   handleStatusChange('Stopped');
+                        // }}
+                      >
+                        Stop
+                      </Button>
                       <Button
                         type="submit"
                         variant="contained"
@@ -1515,8 +1553,44 @@ export default function RunsDetails() {
                         anchorEl={anchorEl}
                         open={open}
                         onClose={handleClose}
-                        disableScrollLock={true}  
+                        disableScrollLock={true}
                       >
+                        <MenuItem onClick={handleClose}>
+                          <Button
+                            disabled={disableStart}
+                            variant="contained"
+                            style={{
+                              boxShadow: 'none',
+                              backgroundColor: '#ffc60b',
+                              padding: '4px 6px',
+                              justifyContent: 'center',
+                            }}
+                            // sx={{ m: 1 }}
+                            // onClick={() => {
+                            //   handleStatusChange('Started');
+                            // }}
+                          >
+                            Start
+                          </Button>
+                        </MenuItem>
+                        <MenuItem onClick={handleClose}>
+                          <Button
+                            disabled={!disableStart}
+                            variant="contained"
+                            style={{
+                              boxShadow: 'none',
+                              backgroundColor: '#ffc60b',
+                              padding: '4px 6px',
+                              justifyContent: 'center',
+                            }}
+                            // sx={{ m: 1 }}
+                            // onClick={() => {
+                            //   handleStatusChange('Started');
+                            // }}
+                          >
+                            Stop
+                          </Button>
+                        </MenuItem>
                         <MenuItem onClick={handleClose}>
                           <Button
                             type="submit"
@@ -1686,22 +1760,22 @@ export default function RunsDetails() {
                         // }}
                       >
                         <Select
-                         MenuProps={{                   
-                          disableScrollLock: true,                   
-                          marginThreshold: null
-                        }}
+                          MenuProps={{
+                            disableScrollLock: true,
+                            marginThreshold: null,
+                          }}
                           name="status"
                           style={{ borderRadius: '11px', color: 'white' }}
                           className={
                             runzValue?.status === 'Created'
                               ? 'create-select td-select'
                               : runzValue?.status === 'Started'
-                                ? 'start-select td-select'
-                                : runzValue?.status === 'Submitted'
-                                  ? 'submit-select td-select'
-                                  : runzValue?.status === 'Complete'
-                                    ? 'active-select td-select'
-                                    : 'inactive-select td-select'
+                              ? 'start-select td-select'
+                              : runzValue?.status === 'Submitted'
+                              ? 'submit-select td-select'
+                              : runzValue?.status === 'Complete'
+                              ? 'active-select td-select'
+                              : 'inactive-select td-select'
                           }
                           value={
                             runzValue?.status ? runzValue?.status : 'Stopped'
@@ -1905,12 +1979,12 @@ export default function RunsDetails() {
                             <FormControlLabel
                               value="Realtime_Chart"
                               control={<Radio />}
-                              label="Realtime Chart"
+                              label="Connected Chart"
                               sx={{
                                 px: 2,
                               }}
                             />
-                            <FormControlLabel
+                            {/* <FormControlLabel
                               value="Archived_Chart"
                               disabled
                               control={<Radio />}
@@ -1918,7 +1992,7 @@ export default function RunsDetails() {
                               sx={{
                                 px: 2,
                               }}
-                            />
+                            /> */}
                           </RadioGroup>
                         </FormControl>
                       </Box>
@@ -2093,7 +2167,6 @@ export default function RunsDetails() {
                         },
                         content_style:
                           'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                          
                       }}
                       value={remarks}
                       // onChange={handleEditorChange}
@@ -2123,9 +2196,14 @@ export default function RunsDetails() {
                     type="submit"
                     variant="contained"
                     className="add-btn"
-                    style={{ position: 'sticky',display:value == 1?"none":"block"}}
+                    style={{
+                      position: 'sticky',
+                      display: value == 1 ? 'none' : 'block',
+                    }}
                     onClick={() => {
-                      value == 0 && onSubmit() || value == 2 && resultSave() || value == 3 && remarkSave() ;
+                      (value == 0 && onSubmit()) ||
+                        (value == 2 && resultSave()) ||
+                        (value == 3 && remarkSave());
                     }}
                   >
                     Save
