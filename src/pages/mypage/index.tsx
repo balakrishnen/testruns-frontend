@@ -480,7 +480,9 @@ export default function MyPage() {
       const daysDifference: number = Math.floor(hoursDifference / 24);
       return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
     }
-
+    if(Math.floor(minutesDifference)==0){
+      return `Just now`;
+    }
     return `${Math.floor(minutesDifference)}min ago`;
   };
   React.useEffect(() => {

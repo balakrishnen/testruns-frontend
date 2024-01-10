@@ -1121,11 +1121,12 @@ console.log("userDataRuns",userData)
                       )}
                       {headers[4].is_show && (
                         <TableCell>
-                          {row.createdAt === null
+                          {row.createdOn === null
                             ? '-'
-                            : moment(row.createdAt).isValid()
-                              ? moment(row.createdAt).local().format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                            : moment(row.createdOn).isValid()
+                              ? moment(row.createdOn).local().format('MM/DD/YYYY')
+                              : moment().format('MM/DD/YYYY')
+                            }
                         </TableCell>
                       )}
                       {headers[5].is_show && (
@@ -1174,7 +1175,7 @@ console.log("userDataRuns",userData)
                         </TableCell>
                       )}
                       {headers[7].is_show && (
-                        <TableCell align="center">{row.assignedBy.firstName}</TableCell>
+                        <TableCell align="center">{row?.assignedBy?.firstName}</TableCell>
                         //</TableRow>{/* <Select
                         //   className={
                         //     row.availability === 'AVAILABLE'
