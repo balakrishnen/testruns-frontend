@@ -194,7 +194,7 @@ const RunsForm = React.forwardRef(
             delete runsValues.createdOn
             console.log(runsValues);
             
-            await dispatch(fetchbulkRunz(runsValues))
+            await dispatch(fetchbulkRunz({runs:[runsValues]}))
             await reload()
           }
           else{
