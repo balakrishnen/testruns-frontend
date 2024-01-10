@@ -187,9 +187,6 @@ export default function Procedures() {
 console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df8321e6d");
 
   React.useEffect(() => {
-    if(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df8321e6d"){
-      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
-    }
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
@@ -209,10 +206,22 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
   //   setProcedureData(procedureSliceData?.Procedures);
   //   setPageInfo(page);
   // }, [procedureSliceData]);
-
+  const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
+  console.log("singleUserData",singleUserData?.laboratoryId);
   const getAllProcedures = () => {
     setLoader(true);
-    dispatch(fetchProcedureData(queryStrings))
+    const payload:any={
+      page:queryStrings.page ,
+    perPage:queryStrings.perPage ,
+    searchBy:queryStrings.searchBy ,
+    search:queryStrings.search ,
+    sortBy:queryStrings.sortBy ,
+    sortOrder:queryStrings.sortOrder ,
+    }
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+      payload["laboratoryId"]=singleUserData?.laboratoryId
+    }
+    dispatch(fetchProcedureData(payload))
       .then((res: any) => {
         const page: any = { ...pageInfo };
         page['currentPage'] = res?.get_all_procedures?.pageInfo.currentPage;

@@ -41,8 +41,8 @@ mutation Create_procedure(
 
 
 export const GET_PROCEDURE = gql`
-query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String, $userId: String) {
-    get_all_procedures(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search, userId:$userId) {
+query Get_all_procedures($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String, $laboratoryId: [String]) {
+    get_all_procedures(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search, laboratoryId:$laboratoryId) {
          Procedures {
             _id
             name

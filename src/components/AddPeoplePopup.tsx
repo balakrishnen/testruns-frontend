@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
 import { fetchShareRunz, fetchbulkRunz } from '../api/bulkRunz';
 import { toast } from 'react-toastify';
 
-const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue}: any) => {
+const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssign}: any) => {
   const dispatch : any =useDispatch()
   const [allUserData, setAlluserData] = React.useState<any>([]);
   const [userList, setuserList]=React.useState<any>([])
@@ -54,12 +54,8 @@ React.useEffect(()=>{
   const userSliceData = useSelector(
     (state: any) => state.userLogin?.data?.verifyToken,
   );
-console.log(allUserData,"allUserData");
+console.log(userList,"userList");
 
-  React.useEffect(()=>{
-
-       
-  },[])
   // console.log("newArray",allUser);
   const handleSave=async()=>{
     console.log("save",runzRow);
@@ -80,40 +76,44 @@ console.log(allUserData,"allUserData");
 console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.procedureId:formValue?.procedureId[0],formValue?.procedureId._id==undefined?formValue?.procedureId[0]==undefined?formValue?.procedureId:formValue?.procedureId[0]?._id :formValue?.procedureId._id,);
 
     if(typePopup!=='share'){
-      if(newArray!==undefined){
-      const output = newArray?.flatMap((aItem:any) =>
-      allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
-      );
+      //single asign
+      handleAssign(userList)
+      // for multiple assign
+
+    //   if(newArray!==undefined){
+    //   const output = newArray?.flatMap((aItem:any) =>
+    //   allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
+    //   );
   
-      let payload={
-        runs:output
-      }
-      await dispatch(fetchbulkRunz(payload))
-    }
-    else{
-      console.log(formValue?.departmentId?.map(((item:any)=>item?.id)));
+    //   let payload={
+    //     runs:output
+    //   }
+    //   await dispatch(fetchbulkRunz(payload))
+    // }
+    // else{
+    //   console.log(formValue?.departmentId?.map(((item:any)=>item?.id)));
       
-      let output=[{
-        objective: formValue?.objective,
-      shared: typePopup=='share'?true:false,
-      procedureId: formValue?.procedureId,
-      departmentId: formValue?.departmentId?.map(((item:any)=>item?.id)) ,
-      laboratoryId:  formValue?.laboratoryId?.map(((item:any)=>item?.id)) ,
-      // assignedTo:  ,
-      assignedBy: userSliceData?._id ,
-      dueDate: formValue?.dueDate ,
-      status: "Created" ,
-      }]
-      const output1 = output?.flatMap((aItem:any) =>
-      allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
-      );
-      let payload={
-        runs:output1
-      }
-      console.log(payload);
+    //   let output=[{
+    //     objective: formValue?.objective,
+    //   shared: typePopup=='share'?true:false,
+    //   procedureId: formValue?.procedureId,
+    //   departmentId: formValue?.departmentId?.map(((item:any)=>item?.id)) ,
+    //   laboratoryId:  formValue?.laboratoryId?.map(((item:any)=>item?.id)) ,
+    //   // assignedTo:  ,
+    //   assignedBy: userSliceData?._id ,
+    //   dueDate: formValue?.dueDate ,
+    //   status: "Created" ,
+    //   }]
+    //   const output1 = output?.flatMap((aItem:any) =>
+    //   allIds.map((bItem:any) => ({ ...aItem, "userId": bItem , assignedTo: bItem ,}))
+    //   );
+    //   let payload={
+    //     runs:output1
+    //   }
+    //   console.log(payload);
       
-      await dispatch(fetchbulkRunz(payload))
-    }
+    //   await dispatch(fetchbulkRunz(payload))
+    // }
     }
     else{
       const allIds = userList.map((item:any) => item.id);
@@ -125,16 +125,17 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
         runId: newArray,
       }
        await dispatch(fetchShareRunz(payload1))
+       await toast(`Runs ${typePopup === "assign" ? "Assigned" : "shared"} successfully !`, {
+        style: {
+          background: '#00bf70',
+          color: '#fff',
+        },
+      });
     }
    await close()
    setuserList([])
      //  Assigned
-   await toast(`Runs ${typePopup === "assign" ? "Assigned" : "shared"} successfully !`, {
-    style: {
-      background: '#00bf70',
-      color: '#fff',
-    },
-  });
+  
 }
   
   return (
@@ -174,7 +175,6 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
 
             <Box sx={{ mt: 3 }}>
               <Autocomplete
-                multiple
                 style={{borderRadius: '15px !importnant'}}
                 limitTags={3}
                 options={allUserData !== undefined ? allUserData: []}
@@ -187,8 +187,8 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
                 renderInput={(params) => (
                   <TextField  {...params} placeholder="Assignee" />
                 )}
-                value={userList}
-                onChange={(_, selectedOptions: any) => {setuserList(selectedOptions) }}
+                value={userList[0]}
+                onChange={(_, selectedOptions: any) => {setuserList([selectedOptions]) }}
               />
             </Box>
           </Box>
@@ -214,7 +214,7 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
             onClick={()=>handleSave()}
             variant="contained"
             className="add-btn"
-            disabled={userList.length > 0? false : true}
+            disabled={userList?.length > 0? false : true}
           >
             Save
           </Button>
