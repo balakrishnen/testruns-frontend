@@ -37,7 +37,6 @@ import search from '../../assets/images/search.svg';
 import Addnewpopup from './AssetsForm';
 import { navigate } from 'gatsby';
 import TableHeader from '../../components/table/TableHeader';
-import image_holder from '../../assets/images/image-holder.svg';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -48,7 +47,6 @@ import {
   StatusList,
   AvailabilityList,
 } from '../../utils/data';
-import { AssetsRowData } from '../../modals/assets.modal';
 import TableFilters from '../../components/table/TableFilters';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
@@ -59,8 +57,6 @@ import {
 } from '../../api/assetsAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteSuccessPopup from '../../components/DeleteSuccessPopup';
-import { Value } from 'sass';
-import { bool } from 'yup';
 import moment from 'moment';
 import TablePopup from '../../components/table/TablePopup';
 import test from '../../assets/images/Noimage.png';
@@ -70,15 +66,12 @@ import { toast } from 'react-toastify';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
-import Stack from '@mui/material/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
-import SpinerLoader from '../../components/SpinnerLoader';
+
 
 const assetsStatus = StatusList;
 const assetsAvailability = AvailabilityList;
 
 export default function Assets() {
-  const [openDlg1Dialog, setDialog1Open] = React.useState(false);
   const [headers, setHeaders] = React.useState<any>(AssetsHeaders);
   const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
   const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
@@ -146,17 +139,7 @@ export default function Assets() {
   const credencial =  loginUserSliceData?.verifyToken?.role[0]
 console.log(loginUserSliceData?.verifyToken?.role[0]?._id);
 
-  // React.useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoader(false);
-  //   }, 1000);
-  //   setAssetsData(assetsData);
-  // }, [assetsData]);
-
   React.useEffect(() => {
-    if(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df8321e6d"){
-      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
-    }
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
@@ -169,36 +152,31 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id);
 
   React.useEffect(() => {
     getAllassets()
-    // setLoader(true);
-    // dispatch(fetchAssetsData(queryStrings))
-    // setTableHeaderVisible(false);
-    // setRowId([]);
-    // setTimeout(() => {
-    //   setLoader(false);
-    // }, 1000);
+    setTableHeaderVisible(false);
+    setRowId([]);
   }, [queryStrings]);
 
-  // React.useEffect(() => {
-  //   const page: any = { ...pageInfo };
-  //   page['currentPage'] = assetsSliceData?.pageInfo.currentPage;
-  //   page['totalPages'] = assetsSliceData?.pageInfo.totalPages;
-  //   page['hasNextPage'] = assetsSliceData?.pageInfo.hasNextPage;
-  //   page['hasPreviousPage'] = assetsSliceData?.pageInfo.hasPreviousPage;
-  //   page['totalCount'] = assetsSliceData?.pageInfo.totalCount;
-  //   setAssetsData(assetsSliceData?.Assets);
-  //   setPageInfo(page);
-  //   setTimeout(() => {
-  //     setLoader(false);
-  //   }, 1000);
-  // }, [assetsSliceData]);
 
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
   };  
-
+  const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
+  console.log("singleUserData",singleUserData?.laboratoryId);
+  
 const getAllassets=()=>{
   setLoader(true);
-  dispatch(fetchAssetsData(queryStrings)).then((res:any)=>{
+  const payload:any={
+    page:queryStrings.page ,
+  perPage:queryStrings.perPage ,
+  searchBy:queryStrings.searchBy ,
+  search:queryStrings.search ,
+  sortBy:queryStrings.sortBy ,
+  sortOrder:queryStrings.sortOrder ,
+  }
+  if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+    payload["laboratoryId"]=singleUserData?.laboratoryId
+  }
+  dispatch(fetchAssetsData(payload)).then((res:any)=>{
   console.log(res?.Assets);
   setAssetsData(res?.get_all_assets?.Assets);
   const page: any = { ...pageInfo };
@@ -216,7 +194,6 @@ const getAllassets=()=>{
     
   }) 
 }
-
 
   React.useEffect(() => {
     return () => {
@@ -240,7 +217,6 @@ const getAllassets=()=>{
     setFilterSearchValue((prevState) => null);
     setFilterOptions([]);
     setFilterType(null);
-    // applyFilters(null, null);
     applyFilters('', '');
     handleFilterPopoverClose();
     setFilterKey(null);
@@ -413,8 +389,6 @@ getAllassets();
   };
 
   const applyFilters = (key: any, value: any) => {
-    console.log('====================================1',key);
-    console.log('====================================2',value);
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
     payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');
@@ -735,12 +709,6 @@ getAllassets();
 
               {loader ? (
                 <TableBody>
-                    {/* <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%" , display: "flex", justifyContent: "center",alignItems: "center" }}> */}
-                    {/* <SpinerLoader isLoader={loader} /> */}
-                     {/* <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
-      <CircularProgress color="inherit" />
-      </Stack>
-      </Box> */}
                   <TableSkeleton
                     columns={headers}
                     image={true}
@@ -749,14 +717,12 @@ getAllassets();
                 </TableBody>
               ) :!assetsData || assetsData?.length === 0 && loader==false ? (
                 <TableBody>
-                 {/* <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}> */}
                  <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%"  }}>
                       <img src={Emptystate} alt="" />
                       <Typography className="no-remainder">
                         Assets not found.
                       </Typography>
                     </Box>
-                    {/* </p> */}
                 </TableBody>
               ) : (
                 <TableBody>

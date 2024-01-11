@@ -201,28 +201,37 @@ console.log("userDataRuns",userData)
     setFilter(false)
     setValuesName(null)
   };
-  // React.useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoader(false);
-  //   }, 1000);
-  //   setRunsData(runsData);
-  // }, [runsData]);
-
-  React.useEffect(() => {
+   React.useEffect(() => {
     getAllAsset()
-    // setLoader(true);
-    // dispatch(fetchRunsData(queryStrings));
-    // setTableHeaderVisible(false);
-    // setRowId([]);
-    // setRunsRow([]);
-    // setTimeout(() => {
-    //   setLoader(false);
-    // }, 1000);
+    setTableHeaderVisible(false);
+    setRowId([]);
+    setRunsRow([]);
   }, [queryStrings]);
 
   const getAllAsset=()=>{
+    const payload:any={
+      page:queryStrings.page ,
+    perPage:queryStrings.perPage ,
+    searchBy:queryStrings.searchBy ,
+    search:queryStrings.search ,
+    sortBy:queryStrings.sortBy ,
+    sortOrder:queryStrings.sortOrder ,
+    }
     setLoader(true)
-    dispatch(fetchRunsData(queryStrings)).then((res:any)=>{
+    
+    //requester 65741c069d53d19df8321e6e
+     if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+      // setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
+      payload["assignedTo"]=loginUserSliceData?.verifyToken?._id
+      payload["assignedBy"]=loginUserSliceData?.verifyToken?._id
+    }
+    //tester 65741c069d53d19df8321e6c
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"){
+      payload["userId"]=loginUserSliceData?.verifyToken?._id
+      // setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+    }
+   
+    dispatch(fetchRunsData(payload)).then((res:any)=>{
       const page: any = { ...pageInfo };
       page['currentPage'] = res?.get_all_runs?.pageInfo.currentPage;
       page['totalPages'] = res?.get_all_runs?.pageInfo.totalPages;
@@ -242,19 +251,6 @@ console.log("userDataRuns",userData)
   
   React.useEffect(() => {
     //admin 65741c069d53d19df8321e6d
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
-      setQueryString(queryStrings)
-      
-    }
-    //requester 65741c069d53d19df8321e6e
-    else if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
-      setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
-    }
-    //tester 65741c069d53d19df8321e6c
-    else{
-      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
-    }
-    
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
@@ -263,20 +259,6 @@ console.log("userDataRuns",userData)
       setHeaders(headersList);
     };
   }, []);
-
-  // React.useEffect(() => {
-  //   const page: any = { ...pageInfo };
-  //   page['currentPage'] = runsSliceData?.pageInfo.currentPage;
-  //   page['totalPages'] = runsSliceData?.pageInfo.totalPages;
-  //   page['hasNextPage'] = runsSliceData?.pageInfo.hasNextPage;
-  //   page['hasPreviousPage'] = runsSliceData?.pageInfo.hasPreviousPage;
-  //   page['totalCount'] = runsSliceData?.pageInfo.totalCount;
-  //   setRunsData(runsSliceData?.Runs);
-  //   setPageInfo(page);
-  //   setTimeout(() => {
-  //     setLoader(false);
-  //   }, 2000);
-  // }, [runsSliceData]);
 
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
@@ -311,31 +293,6 @@ console.log("userDataRuns",userData)
     reload();
   };
 
-  // const handleOnChange = async (e: any, row: any, index:number) => {
-  //   const data = JSON.parse(JSON.stringify(runsData))
-  //   data[index].status = e.target.value
-  //   console.log("runsData",runsData)
-  //   console.log(e.target.value);
-
-  //   console.log('change', row.departmentId, row.laboratoryId);
-  //   var runsChange: any = {
-  //     _id: row._id,
-  //   };
-  //   if (e.target.name == 'status') {
-  //     runsChange['status'] = e.target.value;
-  //   }
-  //   // console.log(runsChange);
-  //   // setLoader(true)
-  //   await dispatch(fetchUpdateRunsData(runsChange)).then(()=>{
-  //     setRunsData(data)
-  //     toast('Runs status updated !', {
-  //       style: {
-  //         background: '#00bf70',
-  //         color: '#fff',
-  //       },
-  //     });
-  //   })
-  // };
 
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
@@ -416,18 +373,6 @@ console.log("userDataRuns",userData)
     setIsDeselectAllChecked(true);
     setIsselectAllChecked(false);
   };
-  // const handleDeleteConfirmation = (state: any) => {
-  //   if (state === 1) {
-  //     // deletePopupRef.current.open(false);
-  //     // dispatch(deleteAssetsData(assetVal));
-  //     deleteSuccessPopupRef.current.open(true);
-  //     setTimeout(() => {
-  //       deleteSuccessPopupRef.current.open(false);
-  //     }, 3000);
-  //     reload()
-  //   }
-  //   deletePopupRef.current.open(false);
-  // };
 
   const handleOpenDeletePopup = () => {
     deletePopupRef.current.open(true, 'Runs');
@@ -437,20 +382,11 @@ console.log("userDataRuns",userData)
     e.stopPropagation();
   };
 
-  const filters = () => {
-    dispatch(fetchRunsData(queryStrings));
-  };
   const reload = () => {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
     setPageInfo(page);
     setQueryString(payload);
-    // getAllAsset()
-    // const payload: any = { ...queryStrings };
-    // const page: any = { ...pageInfo };
-    // // setPageInfo(page);
-    // // setQueryString(payload);
-    // dispatch(fetchRunsData(payload));
   };
   const handleTableSorting = (_event: any, _data: any, _index: any) => {
     const payload: any = { ...queryStrings };
@@ -466,7 +402,6 @@ console.log("userDataRuns",userData)
   const runVal: any = { _id: rowId };
   const handleDeleteConfirmation = (state: any) => {
     if (state === 1) {
-      // deletePopupRef.current.open(false);
       dispatch(deleteRunsData(runVal));
       toast(`Runs deleted !`, {
         style: {
@@ -474,10 +409,6 @@ console.log("userDataRuns",userData)
           color: '#fff',
         },
       });
-      // deleteSuccessPopupRef.current.open(true);
-      // setTimeout(() => {
-      //   deleteSuccessPopupRef.current.open(false);
-      // }, 3000);
       reload();
       setTableHeaderVisible(false);
     }
@@ -527,18 +458,6 @@ console.log("userDataRuns",userData)
   };
   console.log("arr", runsRow);
 
-  // const handleChangePage = (event: unknown, newPage: number) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
-
-  // page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
   const emptyRows = 0 > 0 ? Math.max(0, (1 + 0) * 5 - 12) : 0;
   console.log(emptyRows);
 
@@ -632,35 +551,6 @@ console.log("userDataRuns",userData)
                     />
                   </Box>
                   <Box sx={{ padding: '0rem 1rem 1rem 1rem' }}>
-                    {/* <Box sx={{ my: 1 }}>
-                      <Typography variant="body2" paddingY={1}>
-                        Status
-                      </Typography>
-
-                      <Select
-                        labelId="table-select-label"
-                        id="table-select"
-                        value={filterStatus}
-                        displayEmpty
-                        fullWidth
-                        size="small"
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        onChange={(event: any) =>
-                          setFilterStatus(event.target.value)
-                        }
-                        renderValue={
-                          filterStatus !== null
-                            ? undefined
-                            : () => <Placeholder>Select Status</Placeholder>
-                        }
-                      >
-                        {runsStatus?.map((element: any) => (
-                          <MenuItem value={element.value} key={element.value}>
-                            {element.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Box> */}
                     <Box sx={{ my: 1 }}>
                       <Typography variant="body2" paddingY={1}>
                         Search by
@@ -788,11 +678,6 @@ console.log("userDataRuns",userData)
                       limitTags={3}
                       options={filterOptions !== undefined ? filterOptions: []}
                       getOptionLabel={(option:any) => option?.value}
-                      // defaultValue={[
-                      //   top100Films[13],
-                      //   top100Films[12],
-                      //   top100Films[11],
-                      // ]}
                       renderInput={(params) => (
                         <TextField  {...params} placeholder="Procedure name" style={{marginTop: "-8px"}}/>
                       )}
@@ -909,7 +794,6 @@ console.log("userDataRuns",userData)
                 orderBy={''}
                 rowCount={0}
                 columns={headers}
-                filters={filters}
                 handleTableSorting={handleTableSorting}
               />
               {loader ? (
@@ -922,7 +806,6 @@ console.log("userDataRuns",userData)
                 </TableBody> 
               ) :!runsData || runsData?.length === 0 && loader==false? (
                 <TableBody>
-                  {/* <p style={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem' }}> */}
                     <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%"  }}>
                       <img src={Emptystate} alt="" />
                       <Typography className="no-remainder">
@@ -936,18 +819,13 @@ console.log("userDataRuns",userData)
                   {runsData?.map((row: any, index: number) => (
                     <TableRow
                       hover
-                      // onClick={(event) => handleClick(event, row.name)}
-                      // aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={index}
-                      // selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
                       onClick={(e: any) => {
-                        //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" &&
                         navigate(`/runs/details/${row._id}`, {
                           state: { props: row },
                         });
-                        // console.log(e.target.tagName)
                       }}
                     >
                       {headers[0].is_show && (
@@ -1176,22 +1054,6 @@ console.log("userDataRuns",userData)
                       )}
                       {headers[7].is_show && (
                         <TableCell align="center">{row?.assignedBy?.firstName}</TableCell>
-                        //</TableRow>{/* <Select
-                        //   className={
-                        //     row.availability === 'AVAILABLE'
-                        //       ? ' td-select'
-                        //       : 'in td-select'
-                        //   }
-                        //   value={row.availability}
-                        //   displayEmpty
-                        //   IconComponent={ExpandMoreOutlinedIcon}
-                        // >
-                        //   <MenuItem value={'AVAILABLE'}>Available</MenuItem>
-                        //   <MenuItem value={'NOTAVAILABLE'}>
-                        //     Not available
-                        //   </MenuItem>
-                        // </Select> */}
-                        // </TableCell>
                       )}
                     </TableRow>
                   ))}

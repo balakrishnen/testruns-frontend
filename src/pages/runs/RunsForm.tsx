@@ -43,6 +43,7 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { navigate } from 'gatsby';
+import { fetchbulkRunz } from '../../api/bulkRunz';
 
 const validationSchema = Yup.object().shape({
   procedureId: Yup.string().required("Procedure name is required" ),
@@ -64,6 +65,7 @@ const RunsForm = React.forwardRef(
     console.log('formData', formData)
     const [answers, setAnswers] = React.useState('');
     const [procedureData, setprocedureData] = React.useState('');
+    const [assignUser, setAssignUser] = React.useState('');
     const [departmentData, setDepartmentData] = React.useState([]);
 
     let DepartmentData = formData?.departmentId?.map((item: any) => ({
@@ -181,8 +183,24 @@ const RunsForm = React.forwardRef(
          await  reload()
         }
         else {
-        await dispatch(postRunsData(runsValues)); 
-        await  reload()
+          console.log(assignUser);
+          
+          if(assignUser!==undefined && assignUser!=="" && assignUser!==null){
+            runsValues["shared"]=true
+            runsValues["assignedTo"]=loginUserSliceData?.verifyToken?._id
+            runsValues["assignedBy"]=loginUserSliceData?.verifyToken?._id
+            runsValues["userId"]=assignUser
+            delete runsValues.organisationId
+            delete runsValues.createdOn
+            console.log(runsValues);
+            
+            await dispatch(fetchbulkRunz({runs:[runsValues]}))
+            await reload()
+          }
+          else{
+            await dispatch(postRunsData(runsValues))
+            await reload()
+          }
         }
         submitFormPopup();
           // reload()
@@ -287,6 +305,7 @@ const RunsForm = React.forwardRef(
       formik.resetForm();
       setDepartment([]);
       setLab([]);
+      setAssignUser("")
       formik.dirty=false
       // setOrganization([]);
     };
@@ -308,6 +327,13 @@ const handleClose=()=>{
 
   setRunsCreate(false);
 }
+
+const handleAssign=(userList:any)=>{
+  console.log(userList);
+  
+  setAssignUser(userList[0].id)
+}
+
     return (
       <div>
         <Dialog
@@ -693,7 +719,7 @@ const handleClose=()=>{
             </Box>
           </form>
         </Dialog>
-        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)}  typePopup={"assign"} formValue={formik.values}
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)}  typePopup={"assign"} formValue={formik.values} handleAssign={handleAssign}
         // runzId={runzId}
         //         runzRow={runzRow}
         //         typePopup={typePopup}
