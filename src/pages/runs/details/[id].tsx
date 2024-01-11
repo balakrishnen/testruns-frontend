@@ -1606,7 +1606,7 @@ export default function RunsDetails() {
                         }}
                         onClick={() => setMoreInfo(!moreInfo)}
                       >
-                        More Info &nbsp;
+                        More Info
                         {/* <img
                       src={KeyboardArrowDownIcon}
                       alt="KeyboardArrowDownIcon"
@@ -1740,7 +1740,7 @@ export default function RunsDetails() {
                               marginRight: '0rem',
                             }}
                           >
-                            More Info{' '}
+                            More Info
                             <img
                               src={KeyboardArrowDownIcon}
                               alt="KeyboardArrowDownIcon"
@@ -1970,7 +1970,7 @@ export default function RunsDetails() {
                 <Box sx={{ paddingBottom: '6rem' }}>
                   <CustomTabPanel value={value} index={0}>
                     {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
-                    <div id="content" style={{ overflowY: 'scroll' }}>
+                    <div id="content" className='run-editor-width' style={{ overflowY: 'scroll' }}>
                       <form ref={formRef} onChange={handleHtmlInput}>
                         {uses.map((el: any) =>
                           parse(htmlToJSON && html2json.json2html(el)),
