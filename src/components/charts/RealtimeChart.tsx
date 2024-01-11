@@ -90,8 +90,7 @@ export default function RealtimeChart() {
   const [assetsOptions, setAssetsOptions] = React.useState<any>([]);
   const [streamingData, setStreamingData] = React.useState<any>([]);
   const [chartSeries, setChartSeries] = React.useState<any>([]);
-  const [disableStart, setDisableStart] = React.useState<any>(true);
-  const [disableStop, setDisableStop] = React.useState<any>(false);
+  const [isChartPause, setIsChartPause] = React.useState<any>(true);
   const [data, setData] = React.useState([]);
   const [currentTime, setCurrentTime] = React.useState(new Date());
   const [show, setShow] = React.useState(false);
@@ -124,7 +123,7 @@ export default function RealtimeChart() {
     },
   ]);
   const tableChartSlice = useSelector(
-    (state) => state.tableChart.data?.static_chart,
+    (state: any) => state.tableChart.data?.static_chart,
   );
   const assetsSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets_name,
@@ -413,12 +412,12 @@ export default function RealtimeChart() {
     setChannelList(data);
   };
 
-  const handleRemoveChannel = (dataIndex) => {
-    const data = [...charts];
-    const values = { ...data[dataIndex] };
-    const spliceData = values.tableChartOptionsList.splice(4, 1);
-    setCharts(data);
-  };
+  // const handleRemoveChannel = (dataIndex) => {
+  //   const data = [...charts];
+  //   const values = { ...data[dataIndex] };
+  //   const spliceData = values.tableChartOptionsList.splice(4, 1);
+  //   setCharts(data);
+  // };
 
   const handleChannelChange = (event: any, index: any) => {
     const channels = [...channelList];
@@ -438,10 +437,11 @@ export default function RealtimeChart() {
       data: [],
     };
 
-    setChannelTemp((oldArray) => {
+    setChannelTemp((oldArray: any) => {
       clearInterval(influxInterval);
       return [...oldArray, event.target.value];
     });
+    setIsChartPause(false);
     // const socket = io('https://api.dev.testrunz.com');
     // socket.emit('joinRoom', 'sensor_data');
     // socket.emit('sendMessageToRoom', {
@@ -454,7 +454,7 @@ export default function RealtimeChart() {
     // });
   };
 
-  const handleYAxisChange = (event: any, keyIndex) => {
+  const handleYAxisChange = (event: any, keyIndex: number) => {
     const data = [...charts];
     const values = { ...data[keyIndex] };
     values.tableChartOptionsList[keyIndex].value = event.target.value;
@@ -474,7 +474,7 @@ export default function RealtimeChart() {
 
     const result = await queryApi.collectRows(query2);
     const sensors: any = [];
-    result.forEach((element) => {
+    result.forEach((element: any) => {
       sensors.push({
         name: element._field,
       });
@@ -523,6 +523,7 @@ export default function RealtimeChart() {
     hover: { mode: null },
     plugins: {
       streaming: {
+        pause: isChartPause,
         duration: 10000,
         refresh: 1000,
         delay: 1000,
@@ -614,7 +615,7 @@ export default function RealtimeChart() {
                       borderRadius: '10px',
                     }}
                   >
-                    {assetsOptions.map((item, index) => (
+                    {assetsOptions.map((item: any, index: number) => (
                       <MenuItem key={index} value={item.name}>
                         {item.name}
                       </MenuItem>
@@ -632,7 +633,6 @@ export default function RealtimeChart() {
                 ></Grid>
               </Grid>
               <Box sx={{ mt: 4 }}>
-                {/* {JSON.stringify(chartData)} */}
                 <Line data={chartData} options={options} />
                 {/* <Chart
                   options={chartData.options}
@@ -750,24 +750,13 @@ export default function RealtimeChart() {
                   >
                     <AddIcon />
                   </Button>
-                  <Button
-                    variant="contained"
-                    // className={
-                    //   chartData?.tableChartOptionsList?.length < 5
-                    //     ? 'remove-chart'
-                    //     : 'add-chart'
-                    // }
-                    className="remove-chart"
-                    // onClick={() => handleRemoveChannel(dataIndex)}
-                    // disabled={chartData?.tableChartOptionsList?.length < 5}
-                    disabled
-                  >
+                  <Button variant="contained" className="remove-chart" disabled>
                     <RemoveIcon />
                   </Button>
                 </Grid>
               </Grid>
               <Box sx={{ mt: 2 }}>
-                {channelList?.map((element, key) => (
+                {channelList?.map((element: any, key: number) => (
                   <Box key={key}>
                     <Grid container>
                       <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
@@ -798,14 +787,16 @@ export default function RealtimeChart() {
                                     ? undefined
                                     : () => <Placeholder>Select</Placeholder>
                                 }
+                                disabled={assets === null}
                                 style={{ width: '90%' }}
-                                // style={{ width: '220px' }}
                               >
-                                {channelOptions.map((item, index) => (
-                                  <MenuItem key={index} value={item.name}>
-                                    {item.name}
-                                  </MenuItem>
-                                ))}
+                                {channelOptions.map(
+                                  (item: any, index: number) => (
+                                    <MenuItem key={index} value={item.name}>
+                                      {item.name}
+                                    </MenuItem>
+                                  ),
+                                )}
                               </Select>
                             </Box>
                             <Box className="color-picker">
@@ -848,7 +839,7 @@ export default function RealtimeChart() {
                                 style={{ width: '100px' }}
                                 fullWidth
                               >
-                                {axisList.map((item, index) => (
+                                {axisList.map((item: any, index: any) => (
                                   <MenuItem key={index} value={item.value}>
                                     {item.name}
                                   </MenuItem>
