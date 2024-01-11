@@ -99,6 +99,7 @@ export default function TableChart({ staticChartData }: any) {
   const [chartData, setChartData] = React.useState<any>(
     staticChartData === '' ? [] : staticChartData,
   );
+  
   // const [chartData, setChartData] = React.useState<any>(TableChartStaticData);
   const [tableList, setTableList] = React.useState<any>([]);
   const [channelsList, setChannelsList] = React.useState<any>([]);
@@ -108,13 +109,13 @@ export default function TableChart({ staticChartData }: any) {
     const data: any = [];
     const tableList: any = [];
     const channels: any = [];
-    chartData?.forEach((element, index) => {
+    chartData?.forEach((element: any, index: number) => {
       tableList.push({
         name: element.label,
         value: element.value,
       });
 
-      element?.data?.forEach((channel) => {
+      element?.data?.forEach((channel: any) => {
         channels.push({
           name: channel.label,
           value: channel.label,
@@ -122,14 +123,14 @@ export default function TableChart({ staticChartData }: any) {
           data: channel.values,
         });
       });
-      data.push({
-        selectedTable: null,
-        channelOptions: channelOptions,
-        channelsList: [],
-        xAxisValue: null,
-        yAxisOptions: yAxisOptions,
-        charts: [],
-      });
+    });
+    data.push({
+      selectedTable: null,
+      channelOptions: channelOptions,
+      channelsList: [],
+      xAxisValue: null,
+      yAxisOptions: yAxisOptions,
+      charts: [],
     });
     setTableList(tableList);
     setChartData(data);
@@ -137,37 +138,34 @@ export default function TableChart({ staticChartData }: any) {
     // setCData(charts)
   }, []);
 
-  const handleTableChange = (event, index) => {
+  const handleTableChange = (event: any, index: number) => {
     const data: any = [...chartData];
     const activeTable = tableList.findIndex(
       (item: any) => item.name === event.target.value,
     );
     if (activeTable !== -1) {
       const activeChannel = channelsList.filter(
-        (item) => item.index === activeTable,
+        (item: any) => item.index === activeTable,
       );
       data[index].selectedTable = event.target.value;
       data[index].channelsList = activeChannel;
       // data[index].xAxisValue = activeChannel[0].name;
 
       data[index].charts = [];
-      data[index].channelOptions.forEach((element) => {
+      data[index].channelOptions.forEach((element: any) => {
         element.channel = null;
       });
       setChartData(data);
     } else {
-      const charts: any = [];
-      chartData.forEach((element: any) => {
-        charts.push({
-          selectedTable: null,
-          channelOptions: channelOptions,
-          channelsList: [],
-          xAxisValue: null,
-          yAxisOptions: yAxisOptions,
-          charts: [],
-        });
-      });
-      setChartData(charts);
+      data[index] = {
+        selectedTable: null,
+        channelOptions: channelOptions,
+        channelsList: [],
+        xAxisValue: null,
+        yAxisOptions: yAxisOptions,
+        charts: [],
+      };
+      setChartData(data);
     }
   };
 
@@ -206,7 +204,8 @@ export default function TableChart({ staticChartData }: any) {
       setChartData(data);
     } else {
       channels.channelOptions[keys].channel = event.target.value;
-      channels.channelOptions[keys].color = colorList[axisPosition];
+      channels.channelOptions[keys].color =
+        colorList[axisPosition > 4 ? 4 : axisPosition];
       channels.charts.forEach((element: any, position: number) => {
         delete channels.charts[position][`plot${axisPosition + 1}`];
       });
@@ -264,7 +263,7 @@ export default function TableChart({ staticChartData }: any) {
     setChartData(data);
   };
 
-  const handleAddChannel = (index) => {
+  const handleAddChannel = (index: any) => {
     const data: any = [...chartData];
     const newChannelIndex = data[index].channelOptions.length;
     const stringLen =
@@ -624,11 +623,13 @@ export default function TableChart({ staticChartData }: any) {
                                   // style={{ width: '220px' }}
                                 >
                                   <MenuItem value={null}>Null</MenuItem>
-                                  {data.channelsList?.map((item, index) => (
-                                    <MenuItem key={index} value={item.name}>
-                                      {item.name}
-                                    </MenuItem>
-                                  ))}
+                                  {data.channelsList?.map(
+                                    (item: any, index: number) => (
+                                      <MenuItem key={index} value={item.name}>
+                                        {item.name}
+                                      </MenuItem>
+                                    ),
+                                  )}
                                 </Select>
                               </Box>
                               <Box className="color-picker">
@@ -669,11 +670,13 @@ export default function TableChart({ staticChartData }: any) {
                                   // style={{ width: '100px' }}
                                   fullWidth
                                 >
-                                  {data.yAxisOptions.map((item, index) => (
-                                    <MenuItem key={index} value={item.value}>
-                                      {item.name}
-                                    </MenuItem>
-                                  ))}
+                                  {data.yAxisOptions.map(
+                                    (item: any, index: number) => (
+                                      <MenuItem key={index} value={item.value}>
+                                        {item.name}
+                                      </MenuItem>
+                                    ),
+                                  )}
                                 </Select>
                               </Box>
                               <Box className="color-picker">

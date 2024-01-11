@@ -232,6 +232,7 @@ export default function RunsDetails() {
   const [disableStart, setDisableStart] = React.useState<any>(
     runzValue?.status === 'Stopped',
   );
+  const [statusTime, setStatusTime] = React.useState<any>({});
   const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
   const [userRunzID, setUserRunzID] = React.useState<any>({});
@@ -241,18 +242,19 @@ export default function RunsDetails() {
   const [answers, setAnswers] = React.useState('');
   const [runsOpen, setRunsOpen] = React.useState(false);
   const [moreInfo, setMoreInfo] = React.useState(false);
-  const runsPopupRef: any = React.useRef(null);
-  const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
   const [userProcedure, setuserProcedure] = React.useState(editorData);
   const runsStatus = RunsStatusList;
   const [isLoader, setIsLoader] = React.useState<any>(true);
-  const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content: '' });
-  const formRef: any = React.useRef(null);
   const [typePopup, settypePopup] = React.useState('');
   const [staticChartData, setStaticChartData] = React.useState('');
+
+  const formRef: any = React.useRef(null);
+  const inputRefs = React.useRef<any>({});
+  const runsPopupRef: any = React.useRef(null);
+  const successPopupRef: any = React.useRef(null);
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -1463,6 +1465,8 @@ export default function RunsDetails() {
     var runsChange: any = {
       _id: runzValue._id,
     };
+    statusTime[status] = new Date();
+    setStatusTime(statusTime);
     runsChange['status'] = status;
     await dispatch(fetchUpdateRunsData(runsChange));
     await toast('Runs status updated !', {
