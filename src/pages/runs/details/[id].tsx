@@ -712,69 +712,86 @@ export default function RunsDetails() {
   const mergedData: any = [];
 
   const getSateicDate = () => {
-    const tablesEles = document
-      .getElementById('content')
+    const tablesEles: any = document
+      ?.getElementById('content')
       ?.querySelectorAll('table');
-
-    if (!tablesEles) return;
-
-    const finalTableTitleResult = Array.from(tablesEles).map(
-      (tablesInstance) => {
-        const headerNames = Array.from(
-          tablesInstance?.querySelectorAll('[data-column]'),
-        ).map((header) => ({
+    let finalTableTitleResult: any;
+    if (tablesEles) {
+      const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
+        const headerCells = tablesInstance?.querySelectorAll('[data-column]');
+        const headerNames = Array.from(headerCells).map((header: any) => ({
           key: header.getAttribute('data-column'),
-          value: header?.textContent.trim(),
+          value: header.textContent.trim(),
         }));
-
-        const rowData = Array.from(
-          tablesInstance.querySelectorAll('tbody tr'),
-        ).map((tableDataRow) =>
-          Array.from(tableDataRow.querySelectorAll('td[data-column]')).map(
-            (cell) => {
-              const inputContext = cell.querySelector("input[type='text']");
-              return inputContext
-                ? {
-                    key: cell.getAttribute('data-column'),
-                    value: htmlInput[inputContext.id],
-                  }
-                : null;
-            },
-          ),
-        );
-
-        const mergedDatasets = rowData.map((row) =>
-          Object.fromEntries(row.filter(Boolean)),
-        );
-        const filteredData = mergedDatasets.filter(
-          (sublist) => Object.keys(sublist).length > 0,
-        );
-
-        const results = filteredData.map((dataset) => {
-          const subResult = [];
-          for (const key in dataset) {
-            const label = key;
-            const values = filteredData
-              .map((item) => parseInt(item[key]))
-              .filter((value) => !isNaN(value));
-            subResult.push({ label, values });
-          }
-          return subResult;
+        const tableDataRows: any = tablesInstance.querySelectorAll('tbody tr');
+        const rowData = Array.from(tableDataRows)?.map((tableDataRow: any) => {
+          const tableCells = tableDataRow.querySelectorAll('td[data-column]');
+          return Array.from(tableCells).map((cell: any) => {
+            const inputCntext = cell.querySelector("input[type='text']");
+            if (inputCntext) {
+              return {
+                key: cell.getAttribute('data-column'),
+                value: htmlInput[inputCntext.id],
+              };
+            }
+          });
         });
+        return {
+          headerNames: headerNames,
+          rowData: rowData,
+        };
+      });
+      const mergedDatasets = result.map((dataset) => {
+        const mergedData: any = [];
+        for (let i = 0; i < dataset.rowData.length; i++) {
+          const rowData = dataset.rowData[i];
+          const mergedRow: any = {};
+          for (let j = 0; j < rowData?.length; j++) {
+            const header = dataset.headerNames[j];
+            const value: any = rowData[j];
+            mergedRow[header?.value] = value?.value;
+          }
+          mergedData.push(mergedRow);
+        }
+        return mergedData;
+      });
+      let filteredData = mergedDatasets?.filter(
+        (sublist) => sublist?.some((obj: any) => Object?.keys(obj).length > 0),
+      );
+      filteredData = filteredData?.map(
+        (sublist) =>
+          sublist?.filter((obj: any) => Object?.keys(obj).length > 0),
+      );
+      const results = filteredData?.map((dataset, index) => {
+        const subResult = [];
+        const firstDataItem = dataset[index];
+        for (const key in firstDataItem) {
+          const label = key;
+          const values: any = [];
+          dataset?.forEach((item: any) => {
+            if (item[key]) {
+              values.push(parseInt(item[key]));
+            }
+          });
+          subResult.push({ label, values });
+        }
+        return subResult;
+      });
 
-        const finalTableTitles = Array.from(
-          document?.getElementById('content')?.querySelectorAll('[data-table]'),
-        ).map((element) => element.textContent);
+      const tablesin = document
+        ?.getElementById('content')
+        ?.querySelectorAll('[data-table]');
+      const getTitle: any = [];
 
-        return finalTableTitles.map((list, index) => ({
-          label: list,
-          value: list,
-          data: results[index],
-        }));
-      },
-    );
+      tablesin?.forEach((element, index) => {
+        getTitle.push(element.textContent);
+      });
 
-    setStaticChartData(finalTableTitleResult.flat());
+      finalTableTitleResult = getTitle?.map((list: any, index: any) => {
+        return { label: list, value: list, data: results[index] };
+      });
+      setStaticChartData(finalTableTitleResult);
+    }
   };
 
   const onSubmit = () => {
