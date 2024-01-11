@@ -2545,8 +2545,11 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
 // .tox.tox-silver-sink.tox-tinymce-aux {
 //   z-index: 9 !important;
 // }
-.MuiDialog-root.popup-outer {
-  z-index: 9999;
+// .MuiDialog-root.popup-outer {
+//   z-index: 9999;
+// }
+body .tox-tinymce-aux{
+  z-index: 9;
 }
 @media(min-width:900px){
   .wide-class .run-editor-width{

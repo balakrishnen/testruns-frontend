@@ -295,6 +295,7 @@ console.log("userSliceData",userSliceData);
           color: '#fff',
         },
       });
+      setRowId([])
       // deleteSuccessPopupRef.current.open(true);
       // setTimeout(() => {
       //   deleteSuccessPopupRef.current.open(false);
