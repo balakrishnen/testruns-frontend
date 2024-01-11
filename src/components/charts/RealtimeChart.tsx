@@ -587,7 +587,7 @@ export default function RealtimeChart() {
               sm={12}
               md={12}
               lg={9}
-              xl={9}
+              xl={10}
               // sx={{ pr: 4 }}
               style={{ borderRight: '1px solid #e4e5e7' }}
             >
@@ -730,7 +730,7 @@ export default function RealtimeChart() {
               sm={12}
               md={12}
               lg={3}
-              xl={3}
+              xl={2}
               style={{
                 overflowY: 'scroll',
               }}
@@ -755,7 +755,10 @@ export default function RealtimeChart() {
                   </Button>
                 </Grid>
               </Grid>
-              <Box sx={{ mt: 2 }}>
+              <Box
+                sx={{ mt: 2, pr: 2 }}
+                style={{ overflowY: 'scroll', height: '550px' }}
+              >
                 {channelList?.map((element: any, key: number) => (
                   <Box key={key}>
                     <Grid container>
@@ -836,7 +839,6 @@ export default function RealtimeChart() {
                                     ? undefined
                                     : () => <Placeholder>Axis</Placeholder>
                                 }
-                                style={{ width: '100px' }}
                                 fullWidth
                               >
                                 {axisList.map((item: any, index: any) => (

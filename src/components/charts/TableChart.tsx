@@ -28,7 +28,7 @@ import moment from 'moment';
 // import { TableChartStaticData } from '../../utils/data';
 
 export default function TableChart({ staticChartData }: any) {
-  const colorList = ['#e22828', '#90239f', '#111fdf', '#38e907'];
+  const colorList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
   const channelOptions = [
     {
       channel: null,
@@ -171,7 +171,7 @@ export default function TableChart({ staticChartData }: any) {
     }
   };
 
-  const handleChannelChange = (event, index, keys) => {
+  const handleChannelChange = (event: any, index: number, keys: number) => {
     const data: any = [...chartData];
     const channels: any = { ...data[index] };
     const charts: any = [...channels.charts];
@@ -184,8 +184,8 @@ export default function TableChart({ staticChartData }: any) {
     );
     if (channelPosition !== -1) {
       channels.channelOptions[keys].channel = event.target.value;
-      channels.channelOptions[keys].color = colorList[keys];
-      channels.channelsList?.forEach((element, position) => {
+      channels.channelOptions[keys].color = colorList[keys > 4 ? 4 : keys];
+      channels.channelsList?.forEach((element: any, position: number) => {
         if (channels.charts.length === 0) {
           charts.push({
             [`plot${keys + 1}`]: element.data[channelPosition]
@@ -207,7 +207,7 @@ export default function TableChart({ staticChartData }: any) {
     } else {
       channels.channelOptions[keys].channel = event.target.value;
       channels.channelOptions[keys].color = colorList[axisPosition];
-      channels.charts.forEach((element, position) => {
+      channels.charts.forEach((element: any, position: number) => {
         delete channels.charts[position][`plot${axisPosition + 1}`];
       });
       setChartData(data);
@@ -272,7 +272,7 @@ export default function TableChart({ staticChartData }: any) {
     data[index].channelOptions[newChannelIndex] = {
       channel: null,
       yAxisValue: 'Y1',
-      color: '#000',
+      color: colorList[4],
       yAxisId: 'left1',
       orientation: 'left',
       dataKey: `plot${newChannelIndex + 1}`,
@@ -354,7 +354,6 @@ export default function TableChart({ staticChartData }: any) {
       <>
         {chartData.slice(0, displayCount).map((data: any, index: any) => (
           <>
-            {/* {JSON.stringify(data.charts)} */}
             <Grid container key={index} sx={{ my: 2 }} spacing={2}>
               <Grid
                 item
