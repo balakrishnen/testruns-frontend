@@ -21,7 +21,7 @@ export default function TableHeader(props: any) {
     rowCount,
     onRequestSort,
     columns,
-    filters,
+    // filters,
     handleTableSorting,
   } = props;
   const createSortHandler =

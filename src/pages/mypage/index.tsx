@@ -226,6 +226,7 @@ import moment from 'moment';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import { RunsHeaders } from '../../utils/data';
 import SpinerLoader from '../../components/SpinnerLoader';
+import { fetchRunsData } from '../../api/RunsAPI';
 
 // function createData(
 //   name: string,
@@ -389,50 +390,97 @@ export default function MyPage() {
     });
   }
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-    setRunzData(runzData);
-  }, [runzData]);
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoader(false);
+  //   }, 1000);
+  //   setRunzData(runzData);
+  // }, [runzData]);
 
-  React.useEffect(()=>{
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
-      setQueryString(queryStrings)
+  // React.useEffect(()=>{
+  //   if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+  //     setQueryString(queryStrings)
       
-    }
-    //requester 65741c069d53d19df8321e6e
-    else if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
-      setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
-    }
-    //tester 65741c069d53d19df8321e6c
-    else{
-      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
-    }
-  },[])
+  //   }
+  //   //requester 65741c069d53d19df8321e6e
+  //   else if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+  //     setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
+  //   }
+  //   //tester 65741c069d53d19df8321e6c
+  //   else{
+  //     setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+  //   }
+  // },[])
+  // React.useEffect(() => {
+  //   setLoader(true);
+  //   dispatch(fetchMyPageRunsData(queryStrings));
+  //   setTimeout(() => {
+  //     setLoader(false);
+  //   }, 1000);
+  // }, [queryStrings]);
+
+  // React.useEffect(() => {
+  //   const page: any = { ...pageInfo };
+  //   page['currentPage'] = MyPageRunsData?.pageInfo?.currentPage;
+  //   page['totalPages'] = MyPageRunsData?.pageInfo?.totalPages;
+  //   page['hasNextPage'] = MyPageRunsData?.pageInfo?.hasNextPage;
+  //   page['hasPreviousPage'] = MyPageRunsData?.pageInfo?.hasPreviousPage;
+  //   page['totalCount'] = MyPageRunsData?.pageInfo?.totalCount;
+  //   setRunzData(MyPageRunsData?.Runs);
+  //   console.log('MyPageRunsData', MyPageRunsData);
+
+  //   setPageInfo(page);
+  //   setTimeout(() => {
+  //     setLoader(false);
+  //   }, 1000);
+  // }, [MyPageRunsData]);
   React.useEffect(() => {
-    setLoader(true);
-    dispatch(fetchMyPageRunsData(queryStrings));
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
+    getAllAsset()
   }, [queryStrings]);
 
-  React.useEffect(() => {
-    const page: any = { ...pageInfo };
-    page['currentPage'] = MyPageRunsData?.pageInfo?.currentPage;
-    page['totalPages'] = MyPageRunsData?.pageInfo?.totalPages;
-    page['hasNextPage'] = MyPageRunsData?.pageInfo?.hasNextPage;
-    page['hasPreviousPage'] = MyPageRunsData?.pageInfo?.hasPreviousPage;
-    page['totalCount'] = MyPageRunsData?.pageInfo?.totalCount;
-    setRunzData(MyPageRunsData?.Runs);
-    console.log('MyPageRunsData', MyPageRunsData);
+  const getAllAsset=()=>{
+    const payload:any={
+      page:queryStrings.page ,
+    perPage:queryStrings.perPage ,
+    searchBy:queryStrings.searchBy ,
+    search:queryStrings.search ,
+    sortBy:queryStrings.sortBy ,
+    sortOrder:queryStrings.sortOrder ,
+    }
+    setLoader(true)
+    
+    //requester 65741c069d53d19df8321e6e
+     if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+      // setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
+      payload["assignedTo"]=loginUserSliceData?.verifyToken?._id
+      payload["assignedBy"]=loginUserSliceData?.verifyToken?._id
+    }
+    //tester 65741c069d53d19df8321e6c
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"){
+      payload["userId"]=loginUserSliceData?.verifyToken?._id
+      // setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+    }
+   
+    dispatch(fetchRunsData(payload)).then((res:any)=>{
+      console.log(res);
+      
+      const page: any = { ...pageInfo };
+      page['currentPage'] = res?.get_all_runs?.pageInfo.currentPage;
+      page['totalPages'] = res?.get_all_runs?.pageInfo.totalPages;
+      page['hasNextPage'] = res?.get_all_runs?.pageInfo.hasNextPage;
+      page['hasPreviousPage'] = res?.get_all_runs?.pageInfo.hasPreviousPage;
+      page['totalCount'] = res?.get_all_runs?.pageInfo.totalCount;
+      setRunzData(res?.get_all_runs?.Runs);
+      setPageInfo(page);
+      setLoader(false)
 
-    setPageInfo(page);
-    setTimeout(() => {
-      setLoader(false);
-    }, 1000);
-  }, [MyPageRunsData]);
+    }).catch((err:any)=>{
+      console.log(err);
+      
+    })
+  }
+  console.log(runzData);
+  
   React.useEffect(() => {
     setLoader1(true)
     const calendarMarkSet = new Set();
@@ -740,10 +788,10 @@ export default function MyPage() {
                       <TableCell align="center">Super Admin</TableCell>
                       <TableCell component="th" scope="row">
                         <Box>
-                          {row.createdAt === null
+                          {row.createdOn === null
                             ? '-'
-                            : moment(row.createdAt).isValid()
-                              ? moment(row.createdAt).local().format('MM/DD/YYYY')
+                            : moment(row.createdOn).isValid()
+                              ? moment(row.createdOn).local().format('MM/DD/YYYY')
                               : moment().format('MM/DD/YYYY')}
                         </Box>
                       </TableCell>
