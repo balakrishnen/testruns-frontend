@@ -225,6 +225,18 @@ function a11yProps(index: number) {
 // },
 
 export default function RunsDetails() {
+  const dispatch: any = useDispatch();
+  const location: any = useLocation();
+
+  const [runzValue, setRunzValue] = React.useState<any>(location.state?.props);
+  const [disableStart, setDisableStart] = React.useState<any>(
+    runzValue?.status === 'Stopped',
+  );
+  const [value, setValue] = React.useState(0);
+  const [userRunzResult, setUserRunzResult] = React.useState('');
+  const [userRunzID, setUserRunzID] = React.useState<any>({});
+  const [result, setResult] = React.useState<any>({});
+  const [remarks, setRemarks] = React.useState<any>('');
   const [openDlg2Dialog, setDialog2Open] = React.useState(false);
   const [answers, setAnswers] = React.useState('');
   const [runsOpen, setRunsOpen] = React.useState(false);
@@ -234,7 +246,7 @@ export default function RunsDetails() {
   const [chartTable, setChartTable] = React.useState(null);
   const [userProcedure, setuserProcedure] = React.useState(editorData);
   const runsStatus = RunsStatusList;
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = React.useState<any>(true);
   const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content: '' });
@@ -371,18 +383,6 @@ export default function RunsDetails() {
     },
   ]);
 
-  const location: any = useLocation();
-  // const runzValue = location.state?.props;
-  const [runzValue, setRunzValue] = React.useState<any>(location.state?.props);
-  const [disableStart, setDisableStart] = React.useState<any>(
-    runzValue?.status === 'Stopped',
-  );
-  const [value, setValue] = React.useState(0);
-  const [userRunzResult, setUserRunzResult] = React.useState('');
-  const [userRunzID, setUserRunzID] = React.useState<any>({});
-  const [result, setResult] = React.useState<any>({});
-  const [remarks, setRemarks] = React.useState<any>('');
-
   const procedureSliceData = useSelector((state: any) => state.runs.data);
 
   var runzId: any = [];
@@ -399,7 +399,7 @@ export default function RunsDetails() {
       const runz = {
         runId: window.location.pathname.split('/')[3],
       };
-      dispatch(fetchSingleUserRunzData(runz)).then((res) => {
+      dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
         // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks);
@@ -445,7 +445,7 @@ export default function RunsDetails() {
     const runz = {
       runId: window.location.pathname.split('/')[3],
     };
-    dispatch(fetchSingleUserRunzData(runz)).then((res) => {
+    dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
       // console.log(res?.get_userRun?._id);
       setUserRunzID(res?.get_userRun);
       setUserRunzResult(
@@ -530,6 +530,7 @@ export default function RunsDetails() {
 
   React.useEffect(() => {
     handleHtmlInput();
+    getSateicDate();
   }, [state?.content, userRunzID?.userProcedure, value]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -541,7 +542,7 @@ export default function RunsDetails() {
     setAnchorEl(null);
   };
   const tableChartSlice = useSelector(
-    (state) => state.tableChart.data?.static_chart,
+    (state: any) => state.tableChart.data?.static_chart,
   );
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -564,13 +565,13 @@ export default function RunsDetails() {
     const data: any = [];
     const tableList: any = [];
     if (tableChartSlice) {
-      tableChartSlice.forEach((element, index) => {
+      tableChartSlice.forEach((element: any) => {
         const tableChartOptionsList: any = [];
         const tableChartValues: any = [];
         const tableChannelsList: any = [];
         const tableChartData: any = [];
 
-        element.rows.forEach((rows) => {
+        element.rows.forEach((rows: any) => {
           tableChartData.push(rows.values);
         });
 
@@ -609,8 +610,8 @@ export default function RunsDetails() {
           value: element.tableName[0],
         });
 
-        element.rows.forEach((row, rowIndex) => {
-          row.values.forEach((value, valueIndex) => {
+        element.rows.forEach((row: any, rowIndex: number) => {
+          row.values.forEach((value: any) => {
             tableChartValues.push({
               [`plot${rowIndex + 1}`]: value,
               name: value,
@@ -648,7 +649,7 @@ export default function RunsDetails() {
     setCharts(data);
   };
 
-  const handleYAxisChange = (event: any, dataIndex: any, keyIndex) => {
+  const handleYAxisChange = (event: any, dataIndex: any, keyIndex: any) => {
     const data = [...charts];
     const values = { ...data[dataIndex] };
     values.tableChartOptionsList[keyIndex].value = event.target.value;
@@ -660,13 +661,13 @@ export default function RunsDetails() {
     const data = [...charts];
     data[dataIndex].selectedTable = event.target.value;
     const removedOptions = charts[dataIndex].tableChartOptionsList.filter(
-      (item) => item.name !== null,
+      (item: any) => item.name !== null,
     );
     data[dataIndex].activeChannelOptions = removedOptions;
     setCharts(data);
   };
 
-  const handleChannelChange = (event: any, dataIndex: any, keyIndex) => {
+  const handleChannelChange = (event: any, dataIndex: any, keyIndex: any) => {
     const data = [...charts];
     const values = { ...data[dataIndex] };
     const newIndex = values.activeChannelOptions.length + 1;
@@ -674,7 +675,7 @@ export default function RunsDetails() {
     if (values.activeChannelOptions[keyIndex]) {
       if (values.activeTableChartValues.length === 0) {
         values.activeChannelOptions[keyIndex].tableChartData.forEach(
-          (val, vi) => {
+          (val: any, vi: number) => {
             values.activeTableChartValues[vi] = {
               name: val[0],
               [`plot${keyIndex + 1}`]: val[0],
@@ -683,7 +684,7 @@ export default function RunsDetails() {
         );
       } else {
         values.activeChannelOptions[keyIndex].tableChartData.forEach(
-          (val, vi) => {
+          (val: any, vi: number) => {
             values.activeTableChartValues[vi] = {
               ...values.activeTableChartValues[vi],
               name: val[0],
@@ -707,18 +708,81 @@ export default function RunsDetails() {
 
     setState({ content });
   };
-  // console.log(state);
   const [arr, setArr] = React.useState<any>([]);
-  // console.log(arr);
   const mergedData: any = [];
+
+  const getSateicDate = () => {
+    const tablesEles = document
+      .getElementById('content')
+      ?.querySelectorAll('table');
+
+    if (!tablesEles) return;
+
+    const finalTableTitleResult = Array.from(tablesEles).map(
+      (tablesInstance) => {
+        const headerNames = Array.from(
+          tablesInstance?.querySelectorAll('[data-column]'),
+        ).map((header) => ({
+          key: header.getAttribute('data-column'),
+          value: header?.textContent.trim(),
+        }));
+
+        const rowData = Array.from(
+          tablesInstance.querySelectorAll('tbody tr'),
+        ).map((tableDataRow) =>
+          Array.from(tableDataRow.querySelectorAll('td[data-column]')).map(
+            (cell) => {
+              const inputContext = cell.querySelector("input[type='text']");
+              return inputContext
+                ? {
+                    key: cell.getAttribute('data-column'),
+                    value: htmlInput[inputContext.id],
+                  }
+                : null;
+            },
+          ),
+        );
+
+        const mergedDatasets = rowData.map((row) =>
+          Object.fromEntries(row.filter(Boolean)),
+        );
+        const filteredData = mergedDatasets.filter(
+          (sublist) => Object.keys(sublist).length > 0,
+        );
+
+        const results = filteredData.map((dataset) => {
+          const subResult = [];
+          for (const key in dataset) {
+            const label = key;
+            const values = filteredData
+              .map((item) => parseInt(item[key]))
+              .filter((value) => !isNaN(value));
+            subResult.push({ label, values });
+          }
+          return subResult;
+        });
+
+        const finalTableTitles = Array.from(
+          document?.getElementById('content')?.querySelectorAll('[data-table]'),
+        ).map((element) => element.textContent);
+
+        return finalTableTitles.map((list, index) => ({
+          label: list,
+          value: list,
+          data: results[index],
+        }));
+      },
+    );
+
+    setStaticChartData(finalTableTitleResult.flat());
+  };
+
   const onSubmit = () => {
     handleHtmlInput();
-
     const tablesEles: any = document
       ?.getElementById('content')
       ?.querySelectorAll('table');
     let finalTableTitleResult: any;
-    // console.log(tablesEles);
     if (tablesEles) {
       const result = Array?.from(tablesEles)?.map((tablesInstance: any) => {
         const headerCells = tablesInstance?.querySelectorAll('[data-column]');
@@ -744,7 +808,6 @@ export default function RunsDetails() {
           rowData: rowData,
         };
       });
-      // console.log("result",result);
       const mergedDatasets = result.map((dataset) => {
         const mergedData: any = [];
         for (let i = 0; i < dataset.rowData.length; i++) {
@@ -801,7 +864,6 @@ export default function RunsDetails() {
     // console.log(htmlInput);
 
     const empty = vals.filter((item) => item == '');
-    // console.log('**finalTableTitleResult**', empty);
 
     if (empty.length !== 0) {
       toast('Must fill all Required Readings', {
@@ -842,8 +904,8 @@ export default function RunsDetails() {
         };
         dispatch(UpdateUserRunsData(payload2));
 
-        const staticData =
-          '[{"label":"TABULAR COLUMN:","value":"TABULAR COLUMN:","data":[{"label":"Initial temperature ◦C","values":[21,78]},{"label":"Time (Sec)","values":[65,32]}]}]';
+        // const staticData =
+        //   '[{"label":"TABULAR COLUMN:","value":"TABULAR COLUMN:","data":[{"label":"Initial temperature ◦C","values":[21,78]},{"label":"Time (Sec)","values":[65,32]}]}]';
 
         setStaticChartData(finalTableTitleResult);
 
@@ -854,7 +916,7 @@ export default function RunsDetails() {
           },
         });
       }
-      const data = {
+      const data: any = {
         value_1ZyZJXD: '0',
         // ... (other key-value pairs)
         value_jouUqbl: '33',
@@ -889,8 +951,6 @@ export default function RunsDetails() {
       //   value_eq0aRh1: '4777.7',
       //   title: 'EDTA Water_acet',
       // };
-
-      // debugger
 
       fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython', {
         method: 'POST', // or 'PUT'
@@ -1259,6 +1319,7 @@ export default function RunsDetails() {
     const spliceData = values.tableChartOptionsList.splice(4, 1);
     setCharts(data);
   };
+
   const printDocument = () => {
     const input: any = document.getElementById('divToPrint');
     // Set the desired PDF size (A4 or A3)
@@ -1268,10 +1329,10 @@ export default function RunsDetails() {
     html2canvas(input, { scale: 2 })
       .then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
-
-        const pdf = new jsPDF({
+        let formateArray: [any, any] = [pdfWidth, pdfHeight];
+        const pdf: any = new jsPDF({
           orientation: 'portrait',
-          format: [pdfWidth, pdfHeight],
+          format: formateArray,
         });
 
         pdf.addImage(imgData, 'JPEG', 0, 0);
@@ -1281,7 +1342,6 @@ export default function RunsDetails() {
         console.log(err);
       });
   };
-  const dispatch: any = useDispatch();
   // console.log(value, 'value');
 
   const handleOnChange = (e: any, row: any) => {
@@ -1349,7 +1409,7 @@ export default function RunsDetails() {
     // console.log('inputEl', objects);
   };
   // console.log('htmlInput', htmlInput);
-  const uploadVideo = async (e) => {
+  const uploadVideo = async (e: any) => {
     const file = e.target.files[0];
     if (file) {
       const videoUrl = URL.createObjectURL(file);
@@ -1424,39 +1484,44 @@ export default function RunsDetails() {
                         justifyContent: 'end',
                       }}
                     >
-                      <Button
-                        disabled={disableStart}
-                        variant="contained"
-                        style={{
-                          boxShadow: 'none',
-                          backgroundColor: '#ffc60b',
-                          padding: '4px 6px',
-                          justifyContent: 'center',
-                        }}
-                        sx={{ m: 2 }}
-                        // onClick={() => {
-                        //   handleStatusChange('Started');
-                        // }}
-                      >
-                        Start
-                      </Button>
-                      <Button
-                        disabled={!disableStart}
-                        variant="contained"
-                        style={{
-                          boxShadow: 'none',
-                          backgroundColor: '#ffc60b',
-                          padding: '4px 6px',
-                          justifyContent: 'center',
-                          marginRight: '2rem',
-                        }}
-                        sx={{ m: 2 }}
-                        // onClick={() => {
-                        //   handleStatusChange('Stopped');
-                        // }}
-                      >
-                        Stop
-                      </Button>
+                      {loginUserSliceData.verifyToken._id ===
+                        runzValue?.assignedTo._id && (
+                        <>
+                          <Button
+                            disabled={disableStart}
+                            variant="contained"
+                            style={{
+                              boxShadow: 'none',
+                              backgroundColor: '#ffc60b',
+                              padding: '4px 6px',
+                              justifyContent: 'center',
+                            }}
+                            sx={{ m: 2 }}
+                            onClick={() => {
+                              handleStatusChange('Started');
+                            }}
+                          >
+                            Start
+                          </Button>
+                          <Button
+                            disabled={!disableStart}
+                            variant="contained"
+                            style={{
+                              boxShadow: 'none',
+                              backgroundColor: '#ffc60b',
+                              padding: '4px 6px',
+                              justifyContent: 'center',
+                              marginRight: '2rem',
+                            }}
+                            sx={{ m: 2 }}
+                            onClick={() => {
+                              handleStatusChange('Stopped');
+                            }}
+                          >
+                            Stop
+                          </Button>
+                        </>
+                      )}
                       <Button
                         type="submit"
                         variant="contained"
@@ -1555,42 +1620,45 @@ export default function RunsDetails() {
                         onClose={handleClose}
                         disableScrollLock={true}
                       >
-                        <MenuItem onClick={handleClose}>
-                          <Button
-                            disabled={disableStart}
-                            variant="contained"
-                            style={{
-                              boxShadow: 'none',
-                              backgroundColor: '#ffc60b',
-                              padding: '4px 6px',
-                              justifyContent: 'center',
-                            }}
-                            // sx={{ m: 1 }}
-                            // onClick={() => {
-                            //   handleStatusChange('Started');
-                            // }}
-                          >
-                            Start
-                          </Button>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
-                          <Button
-                            disabled={!disableStart}
-                            variant="contained"
-                            style={{
-                              boxShadow: 'none',
-                              backgroundColor: '#ffc60b',
-                              padding: '4px 6px',
-                              justifyContent: 'center',
-                            }}
-                            // sx={{ m: 1 }}
-                            // onClick={() => {
-                            //   handleStatusChange('Started');
-                            // }}
-                          >
-                            Stop
-                          </Button>
-                        </MenuItem>
+                        {loginUserSliceData.verifyToken._id ==
+                          runzValue?.assignedTo._id && (
+                          <>
+                            <MenuItem onClick={handleClose}>
+                              <Button
+                                disabled={disableStart}
+                                variant="contained"
+                                style={{
+                                  boxShadow: 'none',
+                                  backgroundColor: '#ffc60b',
+                                  padding: '4px 6px',
+                                  justifyContent: 'center',
+                                }}
+                                onClick={() => {
+                                  handleStatusChange('Started');
+                                }}
+                              >
+                                Start
+                              </Button>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                              <Button
+                                disabled={!disableStart}
+                                variant="contained"
+                                style={{
+                                  boxShadow: 'none',
+                                  backgroundColor: '#ffc60b',
+                                  padding: '4px 6px',
+                                  justifyContent: 'center',
+                                }}
+                                onClick={() => {
+                                  handleStatusChange('Started');
+                                }}
+                              >
+                                Stop
+                              </Button>
+                            </MenuItem>
+                          </>
+                        )}
                         <MenuItem onClick={handleClose}>
                           <Button
                             type="submit"
@@ -1884,7 +1952,6 @@ export default function RunsDetails() {
                         )}
                       </form>
                     </div>
-
                     {/* <Editor
                   apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   onInit={(evt, editor) => (editorRef.current = editor)}

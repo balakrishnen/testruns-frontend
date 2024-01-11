@@ -358,7 +358,12 @@ export default function RealtimeChart() {
     async (values: any) => {
       if (channelTemp.length !== 0) {
         try {
-          const fields = channelTemp
+          let selectedChannel = channelTemp.filter(
+            (item: any, index: number, inputArray: any) => {
+              return inputArray.indexOf(item) == index;
+            },
+          );
+          const fields = selectedChannel
             .map((item: any) => `r._field == "${item}"`)
             .join(' or ');
           const query1: any = `from(bucket: "${bucket}")
