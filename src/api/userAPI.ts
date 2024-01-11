@@ -50,6 +50,7 @@ export const postUserData = (payload: any) => async (dispatch: any) => {
       sortOrder: 'desc',
     };
     dispatch(fetchUserData(queryStrings));
+    return response.data
   } catch (error: any) {
     console.log(error);
   }

@@ -826,7 +826,7 @@ console.log("userSliceData",userSliceData);
                               Active
                             </MenuItem>
                             <MenuItem value={"Inactive"} key={"Inactive"}>
-                              In-active
+                              In-Active
                             </MenuItem>
                           </Select>
                         </TableCell>

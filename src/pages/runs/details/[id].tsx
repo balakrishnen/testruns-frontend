@@ -403,9 +403,13 @@ export default function RunsDetails() {
         // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks);
+        if(res?.get_userRun?.results!==null&&res?.get_userRun?.results!=="")
         setUserRunzResult(
           res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
         );
+        else{
+          setUserRunzResult(userRunzResult)
+        }
       });
     }
   }, [value]);
@@ -481,6 +485,8 @@ export default function RunsDetails() {
       // else{
       setUserRunzResult(userRunzResult);
       Object.entries(userRunzResult).forEach(([key, value]) => {
+        console.log(text);
+        
         text =
           text +
           `<div>
@@ -491,7 +497,8 @@ export default function RunsDetails() {
       });
     }
     // console.log('####', text);
-    setUserRunzResult(text + '</ul>');
+    if(text!==''){
+    setUserRunzResult(text + '</ul>');}
   }, [userProcedure]);
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
@@ -1001,7 +1008,8 @@ export default function RunsDetails() {
             </div>`;
               });
               // console.log('####', text);
-              setUserRunzResult(text + '</ul>');
+              if(text!==''){
+                setUserRunzResult(text + '</ul>');}
             });
         })
         .catch((err) => {
