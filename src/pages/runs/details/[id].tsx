@@ -250,6 +250,8 @@ export default function RunsDetails() {
   const [state, setState] = React.useState({ content: '' });
   const [typePopup, settypePopup] = React.useState('');
   const [staticChartData, setStaticChartData] = React.useState('');
+  const [savedChartData, setSavedChartData] = React.useState(null);
+  const [savedConnectData, setSavedConnectData] = React.useState(null);
 
   const formRef: any = React.useRef(null);
   const inputRefs = React.useRef<any>({});
@@ -927,7 +929,7 @@ export default function RunsDetails() {
         //   '[{"label":"TABULAR COLUMN:","value":"TABULAR COLUMN:","data":[{"label":"Initial temperature ◦C","values":[21,78]},{"label":"Time (Sec)","values":[65,32]}]}]';
 
         setStaticChartData(finalTableTitleResult);
-
+        setSavedChartData(null);
         toast(`Run User Procedure updated !`, {
           style: {
             background: '#00bf70',
@@ -1475,6 +1477,10 @@ export default function RunsDetails() {
         color: '#fff',
       },
     });
+  };
+
+  const handleDateChartRetrieve = (data: any, type: string) => {
+    type == 'table' ? setSavedChartData(data) : setSavedConnectData(data);
   };
 
   return (
@@ -2085,9 +2091,16 @@ export default function RunsDetails() {
                         </FormControl>
                       </Box>
                       {selectedChart === 'Table_Chart' ? (
-                        <TableChart staticChartData={staticChartData} />
+                        <TableChart
+                          staticChartData={staticChartData}
+                          handleDateChartRetrieve={handleDateChartRetrieve}
+                          savedChartData={savedChartData}
+                        />
                       ) : selectedChart === 'Realtime_Chart' ? (
-                        <RealtimeChart />
+                        <RealtimeChart
+                          handleDateChartRetrieve={handleDateChartRetrieve}
+                          savedConnectData={savedConnectData}
+                        />
                       ) : (
                         <Box>Archived Chart</Box>
                       )}

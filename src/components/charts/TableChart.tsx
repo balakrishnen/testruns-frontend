@@ -27,7 +27,11 @@ import moment from 'moment';
 // import { fetchTableChartData } from '../../api/RunsAPI';
 // import { TableChartStaticData } from '../../utils/data';
 
-export default function TableChart({ staticChartData }: any) {
+export default function TableChart({
+  staticChartData,
+  handleDateChartRetrieve,
+  savedChartData,
+}: any) {
   const colorList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
   const channelOptions = [
     {
@@ -97,9 +101,13 @@ export default function TableChart({ staticChartData }: any) {
   // ];
 
   const [chartData, setChartData] = React.useState<any>(
-    staticChartData === '' ? [] : staticChartData,
+    savedChartData === null
+      ? staticChartData === ''
+        ? []
+        : staticChartData
+      : savedChartData,
   );
-  
+
   // const [chartData, setChartData] = React.useState<any>(TableChartStaticData);
   const [tableList, setTableList] = React.useState<any>([]);
   const [channelsList, setChannelsList] = React.useState<any>([]);
@@ -109,21 +117,39 @@ export default function TableChart({ staticChartData }: any) {
     const data: any = [];
     const tableList: any = [];
     const channels: any = [];
-    chartData?.forEach((element: any, index: number) => {
-      tableList.push({
-        name: element.label,
-        value: element.value,
-      });
+    if (savedChartData === null) {
+      chartData?.forEach((element: any, index: number) => {
+        tableList.push({
+          name: element.label,
+          value: element.value,
+        });
 
-      element?.data?.forEach((channel: any) => {
-        channels.push({
-          name: channel.label,
-          value: channel.label,
-          index: index,
-          data: channel.values,
+        element?.data?.forEach((channel: any) => {
+          channels.push({
+            name: channel.label,
+            value: channel.label,
+            index: index,
+            data: channel.values,
+          });
         });
       });
-    });
+    } else {
+      staticChartData?.forEach((element: any, index: number) => {
+        tableList.push({
+          name: element.label,
+          value: element.value,
+        });
+
+        element?.data?.forEach((channel: any) => {
+          channels.push({
+            name: channel.label,
+            value: channel.label,
+            index: index,
+            data: channel.values,
+          });
+        });
+      });
+    }
     data.push({
       selectedTable: null,
       channelOptions: channelOptions,
@@ -133,7 +159,9 @@ export default function TableChart({ staticChartData }: any) {
       charts: [],
     });
     setTableList(tableList);
-    setChartData(data);
+    if (savedChartData === null) {
+      setChartData(data);
+    }
     setChannelsList(channels);
     // setCData(charts)
   }, []);
@@ -149,8 +177,7 @@ export default function TableChart({ staticChartData }: any) {
       );
       data[index].selectedTable = event.target.value;
       data[index].channelsList = activeChannel;
-      // data[index].xAxisValue = activeChannel[0].name;
-
+      data[index].xAxisValue = null;
       data[index].charts = [];
       data[index].channelOptions.forEach((element: any) => {
         element.channel = null;
@@ -348,10 +375,16 @@ export default function TableChart({ staticChartData }: any) {
     return <div style={{ color: 'lightgrey' }}>{children}</div>;
   };
 
+  React.useEffect(() => {
+    return () => {
+      handleDateChartRetrieve(chartData, 'table');
+    };
+  }, [chartData]);
+
   return (
     <Box>
       <>
-        {chartData.slice(0, displayCount).map((data: any, index: any) => (
+        {chartData.map((data: any, index: any) => (
           <>
             <Grid container key={index} sx={{ my: 2 }} spacing={2}>
               <Grid

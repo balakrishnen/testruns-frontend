@@ -83,10 +83,15 @@ const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
 
 const tempChannels = [];
 
-export default function RealtimeChart() {
+export default function RealtimeChart({
+  handleDateChartRetrieve,
+  savedConnectData,
+}: any) {
   // const socket = io('https://api.dev.testrunz.com');
   const [charts, setCharts] = React.useState<any>([]);
-  const [assets, setAssets] = React.useState(null);
+  const [assets, setAssets] = React.useState(
+    savedConnectData === null ? null : savedConnectData.assets,
+  );
   const [assetsOptions, setAssetsOptions] = React.useState<any>([]);
   const [streamingData, setStreamingData] = React.useState<any>([]);
   const [chartSeries, setChartSeries] = React.useState<any>([]);
@@ -366,24 +371,29 @@ export default function RealtimeChart() {
             .map((item: any) => `r._field == "${item}"`)
             .join(' or ');
           const query1: any = `from(bucket: "${bucket}")
-    |> range(start: -duration(v: 1s))
-    |> filter(fn: (r) => r["_measurement"] == "sensor_data" and ${fields})
-    |> aggregateWindow(every: 1s, fn: mean, createEmpty: false)
-    |> yield(name: "mean")`;
+          |> range(start: -duration(v: 1s))
+          |> filter(fn: (r) => r["_measurement"] == "sensor_data" and ${fields})
+          |> aggregateWindow(every: 1s, fn: mean, createEmpty: false)
+          |> yield(name: "mean")`;
           const chart: any = { ...chartData };
           const result = await queryApi.collectRows(query1);
-
-          if (result.length !== 0 && channelTemp.length === result.length) {
-            result.forEach((dataset: any, index) => {
-              const sets = chart.datasets[index];
-              console.log('SETS', sets);
-              console.log('DATASETS', dataset);
-              if (dataset._value !== undefined && dataset._value !== null) {
-                sets.data.push({
-                  x: moment(dataset._stop),
-                  y: dataset._value,
-                });
-              }
+          if (result.length !== 0 && selectedChannel.length === result.length) {
+            channelTemp.forEach((channal: any, index: number) => {
+              result.forEach((dataset: any) => {
+                const sets = chart.datasets[index];
+                console.log('SETS', sets);
+                console.log('DATASETS', dataset);
+                if (
+                  dataset._value !== undefined &&
+                  dataset._value !== null &&
+                  channal === dataset._field
+                ) {
+                  sets.data.push({
+                    x: moment(dataset._stop),
+                    y: dataset._value,
+                  });
+                }
+              });
             });
           }
 
@@ -405,7 +415,7 @@ export default function RealtimeChart() {
   const handleAddChannel = () => {
     const data: any = [...channelList];
     data.push({
-      color: '#000',
+      color: '#00000',
       sensor: null,
       axis: 'Y1',
     });
@@ -437,10 +447,15 @@ export default function RealtimeChart() {
       data: [],
     };
 
-    setChannelTemp((oldArray: any) => {
-      clearInterval(influxInterval);
-      return [...oldArray, event.target.value];
+    let temp: [] = [];
+    data.datasets.map((item: any) => {
+      temp.push(item.label);
     });
+    setChannelTemp(temp);
+    // setChannelTemp((oldArray: any) => {
+    //   clearInterval(influxInterval);
+    //   return [...oldArray, event.target.value];
+    // });
     setIsChartPause(false);
     // const socket = io('https://api.dev.testrunz.com');
     // socket.emit('joinRoom', 'sensor_data');
@@ -454,7 +469,7 @@ export default function RealtimeChart() {
     // });
   };
 
-  const handleYAxisChange = (event: any, keyIndex: number) => {
+  const handleYAxisChange = (event: any, keyIndex: any) => {
     const data = [...charts];
     const values = { ...data[keyIndex] };
     values.tableChartOptionsList[keyIndex].value = event.target.value;
@@ -480,7 +495,7 @@ export default function RealtimeChart() {
       });
     });
 
-    console.log('result1', result);
+    console.log('sensors', result);
     setAssets(event.target.value);
     setChannelOptions(sensors);
 
@@ -575,6 +590,17 @@ export default function RealtimeChart() {
     },
     height: 300,
   };
+
+  React.useEffect(() => {
+    return () => {
+      let temp = {
+        assets,
+        chartData,
+        channelList,
+      };
+      handleDateChartRetrieve(temp);
+    };
+  }, [chartData, assets, channelList]);
 
   return (
     <>
@@ -834,6 +860,7 @@ export default function RealtimeChart() {
                                 onChange={(event) =>
                                   handleYAxisChange(event, key)
                                 }
+                                disabled={assets === null}
                                 renderValue={
                                   element.axis !== null
                                     ? undefined
