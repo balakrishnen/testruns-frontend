@@ -123,6 +123,7 @@ query Get_run($_id: String!) {
         userId
         objective
         runNumber
+        runId
         organisationId
         instituteId
         createdOn
@@ -131,6 +132,7 @@ query Get_run($_id: String!) {
         isActive
         isDeleted
         createdAt
+        shared
         updatedAt
         assignedTo {
             _id

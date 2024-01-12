@@ -99,8 +99,8 @@ const userSliceData = useSelector(
               organisationId: process.env.ORGANIZATION_ID,
               role: process.env.ROLE_ID,
               // phoneNumber:'9876543210',
-              departmentId: [],
-              laboratoryId: [],
+              departmentId: [process.env.DEPARTMENT_ID],
+              laboratoryId: [process.env.LABORATORY_ID],
               instituteId: process.env.INSTITUTION_ID,
               createdOn:moment(new Date()).format("MM/DD/YYY"),
               createdBy: "Self"

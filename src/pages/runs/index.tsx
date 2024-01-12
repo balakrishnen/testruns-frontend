@@ -674,7 +674,7 @@ console.log("userDataRuns",userData)
                       ):filterType === 'autocomplete'?
                       <Autocomplete
                       className='autocompleteFilter'
-                      style={{borderRadius: '15px !importnant'}}
+                      style={{borderRadius: '15px !importnant',paddingTop:"12px"}}
                       limitTags={3}
                       options={filterOptions !== undefined ? filterOptions: []}
                       getOptionLabel={(option:any) => option?.value}

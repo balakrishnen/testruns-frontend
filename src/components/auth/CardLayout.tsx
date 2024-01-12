@@ -57,8 +57,8 @@ export const CardLayout = ({ children }: any, props: any) => {
         uid: result.user.uid,
         organisationId: process.env.ORGANIZATION_ID,
         role: process.env.ROLE_ID,
-        departmentId: [],
-        laboratoryId: [],
+        departmentId: [process.env.DEPARTMENT_ID],
+        laboratoryId: [process.env.LABORATORY_ID],
         instituteId: process.env.INSTITUTION_ID,
         createdOn:moment(new Date()).format("MM/DD/YYY"),
         createdBy: "Self"
@@ -123,8 +123,8 @@ export const CardLayout = ({ children }: any, props: any) => {
         uid: result.user.uid,
         organisationId: process.env.ORGANIZATION_ID,
         role: process.env.ROLE_ID,
-        departmentId: [],
-        laboratoryId: [],
+        departmentId: [process.env.DEPARTMENT_ID],
+        laboratoryId: [process.env.LABORATORY_ID],
         instituteId:process.env.INSTITUTION_ID,
         createdOn: moment(new Date()).format("MM/DD/YYY"),
         createdBy: "Self"

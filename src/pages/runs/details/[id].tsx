@@ -390,14 +390,22 @@ export default function RunsDetails() {
   // console.log('runsRow', runzId, runzValue);
   var runzRow: any = [];
   runzRow.push(runzValue);
-
+console.log("runzValue",runzValue);
+React.useEffect(()=>{
+  if (typeof window !== 'undefined') {
+    // console.log(window.location.pathname.split('/'));
+    const procedureId = { _id: window.location.pathname.split('/')[3] };
+    dispatch(fetchSingleRunsData(procedureId));
+  }
+},[value])
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       // console.log(window.location.pathname.split('/'));
-      const procedureId = { _id: window.location.pathname.split('/')[3] };
-      dispatch(fetchSingleRunsData(procedureId));
+      // const procedureId = { _id: window.location.pathname.split('/')[3] };
+      // dispatch(fetchSingleRunsData(procedureId));
       const runz = {
-        runId: window.location.pathname.split('/')[3],
+        runId: runzValue?.shared==true?runzValue.runId:window.location.pathname.split('/')[3],
+        // runId: window.location.pathname.split('/')[3],
       };
       dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
         // console.log(res?.get_userRun?._id);
@@ -412,7 +420,7 @@ export default function RunsDetails() {
         }
       });
     }
-  }, [value]);
+  }, [value,runzValue]);
 
   // React.useEffect(() => {
   //   fetch('http://18.221.90.180:5000/runPython/')
@@ -447,7 +455,7 @@ export default function RunsDetails() {
     const procedureId = { _id: runzValue?._id };
     dispatch(fetchSingleRunsData(procedureId));
     const runz = {
-      runId: window.location.pathname.split('/')[3],
+      runId: runzValue?.shared?runzValue.runId:window.location.pathname.split('/')[3],
     };
     dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
       // console.log(res?.get_userRun?._id);
