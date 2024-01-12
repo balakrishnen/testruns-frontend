@@ -27,8 +27,12 @@ import moment from 'moment';
 // import { fetchTableChartData } from '../../api/RunsAPI';
 // import { TableChartStaticData } from '../../utils/data';
 
-export default function TableChart({ staticChartData }: any) {
-  const colorList = ['#e22828', '#90239f', '#111fdf', '#38e907'];
+export default function TableChart({
+  staticChartData,
+  handleDateChartRetrieve,
+  savedChartData,
+}: any) {
+  const colorList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
   const channelOptions = [
     {
       channel: null,
@@ -97,8 +101,13 @@ export default function TableChart({ staticChartData }: any) {
   // ];
 
   const [chartData, setChartData] = React.useState<any>(
-    staticChartData === '' ? [] : staticChartData,
+    savedChartData === null
+      ? staticChartData === ''
+        ? []
+        : staticChartData
+      : savedChartData,
   );
+
   // const [chartData, setChartData] = React.useState<any>(TableChartStaticData);
   const [tableList, setTableList] = React.useState<any>([]);
   const [channelsList, setChannelsList] = React.useState<any>([]);
@@ -108,70 +117,86 @@ export default function TableChart({ staticChartData }: any) {
     const data: any = [];
     const tableList: any = [];
     const channels: any = [];
-    chartData?.forEach((element, index) => {
-      tableList.push({
-        name: element.label,
-        value: element.value,
-      });
+    if (savedChartData === null) {
+      chartData?.forEach((element: any, index: number) => {
+        tableList.push({
+          name: element.label,
+          value: element.value,
+        });
 
-      element?.data?.forEach((channel) => {
-        channels.push({
-          name: channel.label,
-          value: channel.label,
-          index: index,
-          data: channel.values,
+        element?.data?.forEach((channel: any) => {
+          channels.push({
+            name: channel.label,
+            value: channel.label,
+            index: index,
+            data: channel.values,
+          });
         });
       });
-      data.push({
-        selectedTable: null,
-        channelOptions: channelOptions,
-        channelsList: [],
-        xAxisValue: null,
-        yAxisOptions: yAxisOptions,
-        charts: [],
+    } else {
+      staticChartData?.forEach((element: any, index: number) => {
+        tableList.push({
+          name: element.label,
+          value: element.value,
+        });
+
+        element?.data?.forEach((channel: any) => {
+          channels.push({
+            name: channel.label,
+            value: channel.label,
+            index: index,
+            data: channel.values,
+          });
+        });
       });
+    }
+    data.push({
+      selectedTable: null,
+      channelOptions: channelOptions,
+      channelsList: [],
+      xAxisValue: null,
+      yAxisOptions: yAxisOptions,
+      charts: [],
     });
     setTableList(tableList);
-    setChartData(data);
+    if (savedChartData === null) {
+      setChartData(data);
+    }
     setChannelsList(channels);
     // setCData(charts)
   }, []);
 
-  const handleTableChange = (event, index) => {
+  const handleTableChange = (event: any, index: number) => {
     const data: any = [...chartData];
     const activeTable = tableList.findIndex(
       (item: any) => item.name === event.target.value,
     );
     if (activeTable !== -1) {
       const activeChannel = channelsList.filter(
-        (item) => item.index === activeTable,
+        (item: any) => item.index === activeTable,
       );
       data[index].selectedTable = event.target.value;
       data[index].channelsList = activeChannel;
-      // data[index].xAxisValue = activeChannel[0].name;
-
+      data[index].xAxisValue = null;
       data[index].charts = [];
-      data[index].channelOptions.forEach((element) => {
+      data[index].channelOptions.forEach((element: any) => {
         element.channel = null;
       });
       setChartData(data);
     } else {
-      const charts: any = [];
-      chartData.forEach((element: any) => {
-        charts.push({
-          selectedTable: null,
-          channelOptions: channelOptions,
-          channelsList: [],
-          xAxisValue: null,
-          yAxisOptions: yAxisOptions,
-          charts: [],
-        });
-      });
-      setChartData(charts);
+      data[index] = {
+        selectedTable: null,
+        channelOptions: channelOptions,
+        channelsList: [],
+        xAxisValue: null,
+        yAxisOptions: yAxisOptions,
+        charts: [],
+      };
+      setChartData(data);
     }
   };
 
-  const handleChannelChange = (event, index, keys) => {
+  const handleChannelChange = (event: any, index: number, keys: number) => {
     const data: any = [...chartData];
     const channels: any = { ...data[index] };
     const charts: any = [...channels.charts];
@@ -184,8 +209,8 @@ export default function TableChart({ staticChartData }: any) {
     );
     if (channelPosition !== -1) {
       channels.channelOptions[keys].channel = event.target.value;
-      channels.channelOptions[keys].color = colorList[keys];
-      channels.channelsList?.forEach((element, position) => {
+      channels.channelOptions[keys].color = colorList[keys > 4 ? 4 : keys];
+      channels.channelsList?.forEach((element: any, position: number) => {
         if (channels.charts.length === 0) {
           charts.push({
             [`plot${keys + 1}`]: element.data[channelPosition]
@@ -206,8 +231,9 @@ export default function TableChart({ staticChartData }: any) {
       setChartData(data);
     } else {
       channels.channelOptions[keys].channel = event.target.value;
-      channels.channelOptions[keys].color = colorList[axisPosition];
-      channels.charts.forEach((element, position) => {
+      channels.channelOptions[keys].color =
+        colorList[axisPosition > 4 ? 4 : axisPosition];
+      channels.charts.forEach((element: any, position: number) => {
         delete channels.charts[position][`plot${axisPosition + 1}`];
       });
       setChartData(data);
@@ -264,7 +290,7 @@ export default function TableChart({ staticChartData }: any) {
     setChartData(data);
   };
 
-  const handleAddChannel = (index) => {
+  const handleAddChannel = (index: any) => {
     const data: any = [...chartData];
     const newChannelIndex = data[index].channelOptions.length;
     const stringLen =
@@ -272,7 +298,7 @@ export default function TableChart({ staticChartData }: any) {
     data[index].channelOptions[newChannelIndex] = {
       channel: null,
       yAxisValue: 'Y1',
-      color: '#000',
+      color: colorList[4],
       yAxisId: 'left1',
       orientation: 'left',
       dataKey: `plot${newChannelIndex + 1}`,
@@ -349,12 +375,17 @@ export default function TableChart({ staticChartData }: any) {
     return <div style={{ color: 'lightgrey' }}>{children}</div>;
   };
 
+  React.useEffect(() => {
+    return () => {
+      handleDateChartRetrieve(chartData, 'table');
+    };
+  }, [chartData]);
+
   return (
     <Box>
       <>
-        {chartData.slice(0, displayCount).map((data: any, index: any) => (
+        {chartData.map((data: any, index: any) => (
           <>
-            {/* {JSON.stringify(data.charts)} */}
             <Grid container key={index} sx={{ my: 2 }} spacing={2}>
               <Grid
                 item
@@ -625,11 +656,13 @@ export default function TableChart({ staticChartData }: any) {
                                   // style={{ width: '220px' }}
                                 >
                                   <MenuItem value={null}>Null</MenuItem>
-                                  {data.channelsList?.map((item, index) => (
-                                    <MenuItem key={index} value={item.name}>
-                                      {item.name}
-                                    </MenuItem>
-                                  ))}
+                                  {data.channelsList?.map(
+                                    (item: any, index: number) => (
+                                      <MenuItem key={index} value={item.name}>
+                                        {item.name}
+                                      </MenuItem>
+                                    ),
+                                  )}
                                 </Select>
                               </Box>
                               <Box className="color-picker">
@@ -670,11 +703,13 @@ export default function TableChart({ staticChartData }: any) {
                                   // style={{ width: '100px' }}
                                   fullWidth
                                 >
-                                  {data.yAxisOptions.map((item, index) => (
-                                    <MenuItem key={index} value={item.value}>
-                                      {item.name}
-                                    </MenuItem>
-                                  ))}
+                                  {data.yAxisOptions.map(
+                                    (item: any, index: number) => (
+                                      <MenuItem key={index} value={item.value}>
+                                        {item.name}
+                                      </MenuItem>
+                                    ),
+                                  )}
                                 </Select>
                               </Box>
                               <Box className="color-picker">
