@@ -295,6 +295,7 @@ console.log("userSliceData",userSliceData);
           color: '#fff',
         },
       });
+      setRowId([])
       // deleteSuccessPopupRef.current.open(true);
       // setTimeout(() => {
       //   deleteSuccessPopupRef.current.open(false);
@@ -826,7 +827,7 @@ console.log("userSliceData",userSliceData);
                               Active
                             </MenuItem>
                             <MenuItem value={"Inactive"} key={"Inactive"}>
-                              In-active
+                              In-Active
                             </MenuItem>
                           </Select>
                         </TableCell>

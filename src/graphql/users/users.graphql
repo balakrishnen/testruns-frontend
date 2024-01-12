@@ -96,6 +96,7 @@ mutation Create_user(
             createdOn
             updatedAt
         }
+        message
     }
 }
 `;

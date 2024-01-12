@@ -407,9 +407,13 @@ export default function RunsDetails() {
         // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks);
+        if(res?.get_userRun?.results!==null&&res?.get_userRun?.results!=="")
         setUserRunzResult(
           res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
         );
+        else{
+          setUserRunzResult(userRunzResult)
+        }
       });
     }
   }, [value]);
@@ -485,6 +489,8 @@ export default function RunsDetails() {
       // else{
       setUserRunzResult(userRunzResult);
       Object.entries(userRunzResult).forEach(([key, value]) => {
+        console.log(text);
+        
         text =
           text +
           `<div>
@@ -495,7 +501,8 @@ export default function RunsDetails() {
       });
     }
     // console.log('####', text);
-    setUserRunzResult(text + '</ul>');
+    if(text!==''){
+    setUserRunzResult(text + '</ul>');}
   }, [userProcedure]);
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
@@ -1005,7 +1012,8 @@ export default function RunsDetails() {
             </div>`;
               });
               // console.log('####', text);
-              setUserRunzResult(text + '</ul>');
+              if(text!==''){
+                setUserRunzResult(text + '</ul>');}
             });
         })
         .catch((err) => {
@@ -1608,7 +1616,7 @@ export default function RunsDetails() {
                         }}
                         onClick={() => setMoreInfo(!moreInfo)}
                       >
-                        More Info &nbsp;
+                        More Info
                         {/* <img
                       src={KeyboardArrowDownIcon}
                       alt="KeyboardArrowDownIcon"
@@ -1742,7 +1750,7 @@ export default function RunsDetails() {
                               marginRight: '0rem',
                             }}
                           >
-                            More Info{' '}
+                            More Info
                             <img
                               src={KeyboardArrowDownIcon}
                               alt="KeyboardArrowDownIcon"
@@ -1972,7 +1980,7 @@ export default function RunsDetails() {
                 <Box sx={{ paddingBottom: '6rem' }}>
                   <CustomTabPanel value={value} index={0}>
                     {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
-                    <div id="content" style={{ overflowY: 'scroll' }}>
+                    <div id="content" className='run-editor-width' style={{ overflowY: 'scroll' }}>
                       <form ref={formRef} onChange={handleHtmlInput}>
                         {uses.map((el: any) =>
                           parse(htmlToJSON && html2json.json2html(el)),

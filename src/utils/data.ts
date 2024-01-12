@@ -9,7 +9,7 @@ import { ProceduresHead } from '../modals/Procedures.modal';
 
 export const StatusList = [
   { id: 1, name: 'Active', value: 'Active' },
-  { id: 2, name: 'In Active', value: 'Inactive' },
+  { id: 2, name: 'In-Active', value: 'Inactive' },
 ];
 
 export const AvailabilityList = [

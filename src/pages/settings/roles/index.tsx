@@ -80,7 +80,7 @@ const Roles = () => {
     "procedure_management":{
       assign : true,
       create : true,
-      delete : true,
+      delete : false,
       edit   : true,
       share  : true,
       view   : true,
@@ -95,14 +95,14 @@ const Roles = () => {
     },
     "profile_management":{
       changePassword : true,
-      editContact    : true,
-      editDepartment : true,
-      editLab   : true,
-      editOrganisation : true,
+      editContact    : false,
+      editDepartment : false,
+      editLab   : false,
+      editOrganisation : false,
       editUserName     : true,
     },
     "role_management":{
-      edit : true
+      edit : false
     },
     "runs_management":{
       assign : true,
@@ -114,21 +114,21 @@ const Roles = () => {
     },
     "user_management":{
 
-      create  : true,
-      delete  : true,
-      edit    : true,
-      view    :true
+      create  : false,
+      delete  : false,
+      edit    : false,
+      view    :false
     },
   }
   var initailState2 : any={
     name:"tester",
     type:"3",
     "procedure_management":{
-      assign : true,
+      assign : false,
       create : true,
-      delete : true,
-      edit   : true,
-      share  : true,
+      delete : false,
+      edit   : false,
+      share  : false,
       view   : true,
     },
     "asset_management":{
@@ -141,14 +141,14 @@ const Roles = () => {
     },
     "profile_management":{
       changePassword : true,
-      editContact    : true,
-      editDepartment : true,
-      editLab   : true,
-      editOrganisation : true,
+      editContact    : false,
+      editDepartment : false,
+      editLab   : false,
+      editOrganisation : false,
       editUserName     : true,
     },
     "role_management":{
-      edit : true
+      edit : false
     },
     "runs_management":{
       assign : true,
@@ -160,10 +160,10 @@ const Roles = () => {
     },
     "user_management":{
 
-      create  : true,
-      delete  : true,
-      edit    : true,
-      view    :true
+      create  : false,
+      delete  : false,
+      edit    : false,
+      view    :false
     },
   }
 

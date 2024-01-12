@@ -1628,7 +1628,7 @@ p.follow-people {
 
 .runzdetails-page {
   button.edit-btn {
-    margin-right: 2rem;
+    margin-right: 1rem;
     padding-left: 0px;
   }
 
@@ -2536,9 +2536,31 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
     z-index: 999;
   }
 }
-.tox.tox-silver-sink.tox-tinymce-aux {
+.tox.tox-tinymce {
+  z-index: auto !important;
+}
+.tox-shadowhost.tox-fullscreen, .tox.tox-tinymce.tox-fullscreen {
+  z-index: 1200 !important;
+}
+// .tox.tox-silver-sink.tox-tinymce-aux {
+//   z-index: 9 !important;
+// }
+// .MuiDialog-root.popup-outer {
+//   z-index: 9999;
+// }
+body .tox-tinymce-aux{
   z-index: 9;
 }
+@media(min-width:900px){
+  .wide-class .run-editor-width{
+    width: calc(100vw - 360px);
+  }
+  .narrow-class .run-editor-width {
+    width: calc(100vw - 160px);
+  }
+}
+
+
 .autocompleteFilter{
 .MuiInputBase-formControl{
   height: 40px;

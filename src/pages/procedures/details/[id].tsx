@@ -643,7 +643,7 @@ const s3 = new AWS.S3({
                       onInit={(evt, editor) => (editorRef.current = editor)}
                       // value={editorData}
                       init={{
-                        height: 500,
+                        height: 650,
                         paste_data_images: false,
                         menubar: true,
                         selector: 'textarea',

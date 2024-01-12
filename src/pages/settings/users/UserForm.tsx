@@ -166,7 +166,11 @@ updateProfile(auths?.currentUser, {
   displayName: values.firstName
 }).then((res) => {
   console.log(res);
-  
+  toast(`User ${type=='edit'?"updated" : "created"}  !`, {
+    style: {
+      background: '#00bf70', color: '#fff'
+    }
+  });
   // Profile updated!
   // ...
 }).catch((error) => {
@@ -180,8 +184,15 @@ updateProfile(auths?.currentUser, {
         //   try {
         //  createUserWithEmailAndPassword(auth, values.email?.toLowerCase(), "Test@123").then((res)=>{
           // userValues['uid'] = res.user.uid,
-          dispatch(postUserData(userValues));
-          submitFormPopup();
+          dispatch(postUserData(userValues)).then((res:any)=>{
+            toast(res?.create_user?.message, {
+              style: {
+                background: res?.create_user?.message=="user already exits"?"red":'#00bf70', color: '#fff'
+              }
+            });
+            submitFormPopup();
+          })
+          
         // }).catch((err)=>{
         //   toast(`This user email is already exists!`, {
         //     style: {
@@ -203,11 +214,11 @@ updateProfile(auths?.currentUser, {
     };
     const submitFormPopup = () => {
       setFormPopup(false);
-      toast(`User ${type=='edit'?"updated" : "created"}  !`, {
-        style: {
-          background: '#00bf70', color: '#fff'
-        }
-      });
+      // toast(`User ${type=='edit'?"updated" : "created"}  !`, {
+      //   style: {
+      //     background: '#00bf70', color: '#fff'
+      //   }
+      // });
       // successPopupRef.current.open(true, 'User');
       // setTimeout(() => {
       //   successPopupRef.current.open(false, 'User');
