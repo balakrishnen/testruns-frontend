@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React from 'react';
+import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import {
   Box,
@@ -109,6 +109,30 @@ const RunsForm = React.forwardRef(
     const runzSliceData = useSelector(
       (state: any) => state.runs.data
     );
+    const [options, setOptions] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [inputValue,setInputValue] = useState(null)
+
+  //   const fetchProcedureSuggestions = async (inputValue) => {
+  //   setLoading(true);
+  //   try {
+  //     // Call your API here to fetch procedure suggestions based on inputValue
+  //     // Replace the following line with your API call
+      
+  //     const response = await fetch(`your-api-endpoint?q=${inputValue}`);
+  //     const data = await response.json();
+  //     setOptions(data);
+  //   } catch (error) {
+  //     console.error('Error fetching procedure suggestions:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleInputChange = (event, newInputValue) => {
+    // Fetch suggestions when the user types
+    setInputValue(newInputValue);
+  };
   
     React.useEffect(()=>{
       console.log("procedureId",runzSliceData?.get_run?.procedureId._id);
@@ -313,11 +337,14 @@ const RunsForm = React.forwardRef(
       (state: any) => state.procedure.data?.get_all_procedures,
     );
     React.useEffect(() => {
+      setLoading(true);
       dispatch(fetchProcedureData({
         page: 1,
-        perPage: 25
+        perPage: 10,
+        searchBy: 'name',
+        search: inputValue
       }));
-    }, []);
+    }, [inputValue]);
 const handleClose=()=>{
   if (type !== 'edit') {
     formik.resetForm();
@@ -333,6 +360,8 @@ const handleAssign=(userList:any)=>{
   
   setAssignUser(userList[0].id)
 }
+
+const opt = procedureSliceData?.Procedures;
 
     return (
       <div>
@@ -356,10 +385,63 @@ const handleAssign=(userList:any)=>{
               </Box>
               <Box>
                 <Grid container className="asset-popup" spacing={0}>
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+  <Box style={{ position: 'relative' }}>
+    <label style={{ display: 'block' }}>Procedure name<span style={{ color: "#E2445C" }}>*</span></label>
+    <Autocomplete
+      options = {opt}
+      loading={loading}
+      getOptionLabel={(option:any) => option.name}
+      onChange={(event, value) => {
+        // Handle selection
+        console.log('Selected Procedure:', value);
+        let LabData = value?.laboratoryId?.map((item: any) => ({
+          label: item.name,
+          value: item.name,
+          id: item._id,
+        }))
+
+        console.log("LabData", LabData)
+        formik.setFieldValue('laboratoryId', LabData || '');
+        setLaboratory(
+          LabData
+        );
+        let DepartmentData = value?.departmentId?.map((item: any) => ({
+          label: item.name,
+          value: item.name,
+          id: item._id,
+        }))
+        setDepartments(DepartmentData)
+
+        formik.setFieldValue('procedureId', value?._id || '');
+        formik.setFieldValue('departmentId', DepartmentData || '');
+        formik.setFieldValue('procedureNumber', value?.procedureNumber || "")
+
+        setDepartment(DepartmentData)
+        setLab(LabData)
+
+      }}
+      onInputChange={handleInputChange}
+      renderInput={(procedureNames) => (
+        <TextField
+          {...procedureNames}
+          margin="none"
+        />
+      )}
+    />
+    {formik.touched.procedureId &&
+                        formik.errors.procedureId && (
+                          <Typography className="error-field">
+                            {formik.errors.procedureId}
+                          </Typography>
+                        )}
+                    </Box>
+                    </Grid>
+
+                  {/* <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Procedure name<span style={{ color: "#E2445C" }}>*</span></label>
-                      <Select
+            <Select
                       MenuProps={{                   
                         disableScrollLock: true,                   
                         marginThreshold: null
@@ -430,7 +512,7 @@ const handleAssign=(userList:any)=>{
                             {item.name}
                           </MenuItem>
                         ))}
-                      </Select>
+                      </Select> 
                       {formik.touched.procedureId &&
                         formik.errors.procedureId && (
                           <Typography className="error-field">
@@ -438,7 +520,7 @@ const handleAssign=(userList:any)=>{
                           </Typography>
                         )}
                     </Box>
-                  </Grid>
+                  </Grid> */}
                   <Grid
                     item
                     xs={12}
