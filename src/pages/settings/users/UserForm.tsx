@@ -98,7 +98,7 @@ const UserForm = React.forwardRef(
     );
     React.useImperativeHandle(ref, () => ({
       open(state: any, type: any,row: any) {
-        setFormPopup(state);
+        
         setType(type);
         let temp = { '_id': row?._id }
         if (row?._id) {
@@ -121,6 +121,7 @@ const UserForm = React.forwardRef(
               // setRowValue(isSucess.get_uesr)
               setFormPopup(state);
             }
+            // setFormPopup(state);
           })
             .catch((err) => {
               console.log(err);

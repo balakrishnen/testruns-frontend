@@ -1547,7 +1547,7 @@ export default function RunsDetails() {
                           </Button>
                         </>
                       )}
-                      <Button
+                      {/* <Button
                         type="submit"
                         variant="contained"
                         className="edit-btn"
@@ -1562,7 +1562,7 @@ export default function RunsDetails() {
                           style={{ marginRight: '8px' }}
                         />
                         Assign
-                      </Button>
+                      </Button> */}
                       <Button
                         type="submit"
                         variant="contained"
@@ -1780,6 +1780,20 @@ export default function RunsDetails() {
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
                     <Box>
+                      <Typography className="id-detail">Run by</Typography>
+                      <Typography
+                        className="id-detail"
+                        style={{
+                          fontSize: '16px',
+                          marginTop: '0.4rem',
+                        }}
+                      >
+                        {runzValue?.assignedTo?.firstName}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                    <Box>
                       <Typography className="id-detail">Assigned by</Typography>
                       <Typography
                         className="id-detail"
@@ -1789,20 +1803,6 @@ export default function RunsDetails() {
                         }}
                       >
                         {runzValue?.assignedBy?.firstName}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                    <Box>
-                      <Typography className="id-detail">Created by</Typography>
-                      <Typography
-                        className="id-detail"
-                        style={{
-                          fontSize: '16px',
-                          marginTop: '0.4rem',
-                        }}
-                      >
-                        {runzValue?.assignedTo?.firstName}
                       </Typography>
                     </Box>
                   </Grid>
