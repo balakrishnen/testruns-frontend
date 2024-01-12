@@ -384,7 +384,7 @@ export default function TableChart({
   return (
     <Box>
       <>
-        {chartData.map((data: any, index: any) => (
+        {chartData?.map((data: any, index: any) => (
           <>
             <Grid container key={index} sx={{ my: 2 }} spacing={2}>
               <Grid

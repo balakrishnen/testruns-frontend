@@ -210,7 +210,7 @@ const RunsForm = React.forwardRef(
           console.log(assignUser);
           
           if(assignUser!==undefined && assignUser!=="" && assignUser!==null){
-            runsValues["shared"]=true
+            runsValues["shared"]=false
             runsValues["assignedTo"]=loginUserSliceData?.verifyToken?._id
             runsValues["assignedBy"]=loginUserSliceData?.verifyToken?._id
             runsValues["userId"]=assignUser

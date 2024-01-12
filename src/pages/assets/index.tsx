@@ -233,11 +233,10 @@ const getAllassets=()=>{
     setCurrentPage(page_no);
   };
   const reload = () => {
-    const payload: any = {...queryStrings};
-    payload['page']=1
-    payload['perPage']=10
-    payload['sortOrder']= 'desc'
-getAllassets();
+    const payload: any = { ...queryStrings };
+    const page: any = { ...pageInfo };
+    setPageInfo(page);
+    setQueryString(payload);
   };
 
   const handleOnChange = (e: any, row: any) => {
