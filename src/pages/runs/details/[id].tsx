@@ -287,7 +287,8 @@ export default function RunsDetails() {
   const credencial = loginUserSliceData?.verifyToken?.role[0];
 
   const [charts, setCharts] = React.useState<any>([]);
-
+  const [startDate, setStartDate] = React.useState<any>(null)
+  const [endDate, setEndDate] = React.useState<any>(null)
   const [chartLines, setChartLines] = React.useState([
     {
       dataKey: 'plot1',
@@ -1534,6 +1535,7 @@ export default function RunsDetails() {
                             sx={{ m: 2 }}
                             onClick={() => {
                               handleStatusChange('Started');
+                              setStartDate(new Date())
                             }}
                           >
                             Start
@@ -1551,6 +1553,7 @@ export default function RunsDetails() {
                             sx={{ m: 2 }}
                             onClick={() => {
                               handleStatusChange('Stopped');
+                              setEndDate(new Date())
                             }}
                           >
                             Stop
@@ -2108,6 +2111,8 @@ export default function RunsDetails() {
                         <RealtimeChart
                           handleDateChartRetrieve={handleDateChartRetrieve}
                           savedConnectData={savedConnectData}
+                          startDate={startDate}
+                          endDate={endDate}
                         />
                       ) : (
                         <Box>Archived Chart</Box>

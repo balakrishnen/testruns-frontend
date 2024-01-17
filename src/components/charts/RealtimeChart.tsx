@@ -86,6 +86,8 @@ const tempChannels = [];
 export default function RealtimeChart({
   handleDateChartRetrieve,
   savedConnectData,
+  startDate,
+  endDate,
 }: any) {
   // const socket = io('https://api.dev.testrunz.com');
   const [charts, setCharts] = React.useState<any>([]);
@@ -105,6 +107,10 @@ export default function RealtimeChart({
   const [chartData, setChartData] = React.useState<any>({
     datasets: [],
   });
+  const [chartData2, setChartData2] = React.useState<any>({
+    datasets: [],
+  });
+  const [showArchivedChart, setShowArchivedChart] = React.useState<any>(false);
   const [channelList, setChannelList] = React.useState<any>([
     {
       sensor: null,
@@ -230,139 +236,49 @@ export default function RealtimeChart({
   }, []);
 
   React.useEffect(() => {
-    // if (channelTemp !== null) {
-    // const fetchMyAPI = async () => {
-    //   console.log('result', channelTemp);
-    //   const field = channelTemp
-    //     .map((item) => `r._field == "${item}"`)
-    //     .join(' or ');
-    //   let query1 = `from(bucket: "${bucket}")
-    // |> range(start: -duration(v: 1s))
-    // |> filter(fn: (r) => r["_measurement"] == "sensor_data" and ${field})
-    // |> aggregateWindow(every: 1s, fn: mean, createEmpty: false)
-    // |> yield(name: "mean")`;
-    //   const chart = { ...chartData };
-    //   const result = await queryApi.collectRows(query1);
-    //   const series: any = [];
-
-    //   result.forEach((element: any) => {
-    //     series.push(element._value);
-    //   });
-
-    //   if (chart.series[0] && chart.series[0].data) {
-    //     chart.series[0] = {
-    //       name: 'XYZ',
-    //       data: chartOpt.series[0].data,
-    //     };
-    //   } else {
-    //     chart.series[0] = {
-    //       name: 'XYZ',
-    //       data: result.map((element: any) => element._value),
-    //     };
-    //   }
-
-    //   chartData.series = series;
-    //   chartData.options['xaxis'].categories.push(Math.ceil(Math.random() * 10));
-
-    //   setChartData(chart);
-
-    //   console.log('result2', result);
-    // };
-    // }
-    if (channelTemp.length !== 0) {
-      // influxInterval = setInterval(() => {
-      // fetchMyAPI();
-      // }, 3000);
+    if (endDate !== null && assets !== null) {
+      setShowArchivedChart(true);
+      getTimeRangeData();
     }
-  }, []);
+  }, [endDate]);
 
   React.useEffect(() => {
     if (assetsSliceData) {
-      let assetsFilterData = assetsSliceData.filter((item: any) =>
+      const assetsFilterData: any = assetsSliceData.filter((item: any) =>
         item.name.includes('_connect'),
       );
       setAssetsOptions(assetsFilterData);
     }
   }, [assetsSliceData]);
 
-  const influxQuery = async () => {
-    let res = [];
-
-    console.log('queryApi', queryApi);
-    console.log('query', query);
-
-    const result = await queryApi.collectRows(query);
-    console.log('result##', result);
-    // queryApi.queryRows(query, {
-    //   next(row, tableMeta) {
-    //     console.log("row", row);
-    //     console.log("tableMeta", tableMeta);
-    //     const o = tableMeta.toObject(row);
-    //     //push rows from query into an array object
-    //     res.push(o);
-    //     //push rows from query into an array object
-    //   },
-    //   complete() {
-    //     console.log("hiksdfjk", res);
-    //   },
-    //   error(error) {
-    //     console.log("query failed- ", error);
-    //   }
-    // })
-  };
-
-  // React.useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     const newDataPoint = {
-  //       time: new Date(),
-  //       value: Math.random() * 30,
-  //     };
-
-  //     setData((prevData: any) => [...prevData, newDataPoint]);
-  //     setCurrentTime(new Date());
-  //   }, 1000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  // const getAssetsList = () => {
-  //   dispatch(fetchAssetsName());
-  // };
-
-  const startStreaming = () => {
-    // const socket = io('https://api.dev.testrunz.com');
-    // setDisableStart(true);
-    // setDisableStop(false);
-    // const data: any = [];
-    // socket.emit('joinRoom', 'sensor_data');
-    // socket.emit('sendMessageToRoom', {
-    //   room: 'sensor_data',
-    //   message: 'value',
-    // });
-    // socket.on('message', (message) => {
-    //   console.log('##', message);
-    //   const mergedData = message.concat(message);
-    //   mergedData.forEach((element) => {
-    //     data.push({
-    //       name: new Date().toLocaleTimeString(),
-    //       [element._measurement]: element._value,
-    //     });
-    //   });
-    //   console.log(`HARDWARE STREAMING --- ${data.length}`, data);
-    //   setChartSeries(data);
-    //   setStreamingData(mergedData);
-    // });
-    // return () => {
-    //   socket.emit('leaveRoom', 'charts');
-    //   socket.disconnect();
-    // };
+  const getTimeRangeData = async () => {
+    try {
+      const selectedChannel: any = channelTemp.filter(
+        (item: any, index: number, inputArray: any) => {
+          return inputArray.indexOf(item) == index;
+        },
+      );
+      const fields = selectedChannel
+        .map((item: any) => `r._field == "${item}"`)
+        .join(' or ');
+      const query2: any = `from(bucket: "${bucket}")
+        |> range(start: ${startDate.toISOString()}, stop: ${endDate.toISOString()})
+        |> filter(fn: (r) => r["_measurement"] == "sensor_data" and ${fields})
+        |> yield(name: "mean")`;
+      const chart2: any = { ...chartData2 };
+      const result = await queryApi.collectRows(query2);
+      console.log('DATASETS2--------------', result);
+       
+    } catch (error) {
+      console.log('handle Error list', error);
+    }
   };
 
   const onRefresh = React.useCallback(
     async (values: any) => {
       if (channelTemp.length !== 0) {
         try {
-          let selectedChannel = channelTemp.filter(
+          const selectedChannel: any = channelTemp.filter(
             (item: any, index: number, inputArray: any) => {
               return inputArray.indexOf(item) == index;
             },
@@ -447,7 +363,7 @@ export default function RealtimeChart({
       data: [],
     };
 
-    let temp: [] = [];
+    let temp: any = [];
     data.datasets.map((item: any) => {
       temp.push(item.label);
     });
@@ -605,7 +521,7 @@ export default function RealtimeChart({
   return (
     <>
       <Box>
-        <>
+        <> 
           <Grid container sx={{ my: 2 }} spacing={2}>
             <Grid
               item
@@ -659,7 +575,11 @@ export default function RealtimeChart({
                 ></Grid>
               </Grid>
               <Box sx={{ mt: 4 }}>
-                <Line data={chartData} options={options} />
+                {showArchivedChart ? (
+                  <Line data={chartData2} options={options} />
+                ) : (
+                  <Line data={chartData} options={options} />
+                )}
                 {/* <Chart
                   options={chartData.options}
                   series={chartData.series}
