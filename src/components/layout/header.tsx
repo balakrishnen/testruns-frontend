@@ -34,6 +34,8 @@ function AppHeader(props: any) {
   const handleMobileMenuOpen = (event: any) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+const userProfileDetails= localStorage.getItem("userProfileDetails")
+console.log("userProfileDetails",JSON.parse(userProfileDetails));
 
   // const NotificationMessageSliceData = useSelector(
 
@@ -128,6 +130,7 @@ function AppHeader(props: any) {
     dispatch(fetchSingleUserData(temp))
       .then((isSucess:any) => {
         setUserData(isSucess?.get_user)
+        localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
         })
       
       .catch((err:any) => {
@@ -285,10 +288,10 @@ function AppHeader(props: any) {
               onClick={openEditProfile}
             >
               <Typography variant="inherit" className="app-bar-username">
-                Hi {userData?.firstName}
+                Hi {JSON.parse(userProfileDetails)?.firstName}
               </Typography>
               <div >
-              <img style={{cursor:'pointer'}} src={(userData?.imageUrl!=="" && userData?.imageUrl!==null)?userData?.imageUrl:account} className="app-bar-images" style={{borderRadius: "13px"}}/>
+              <img style={{cursor:'pointer'}} src={(JSON.parse(userProfileDetails)?.imageUrl!=="" && JSON.parse(userProfileDetails)?.imageUrl!==null)?JSON.parse(userProfileDetails)?.imageUrl:account} className="app-bar-images" style={{borderRadius: "13px"}}/>
               </div>
             </IconButton>
             {/* <IconButton

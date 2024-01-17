@@ -283,7 +283,8 @@ export default function RunsDetails() {
   const credencial = loginUserSliceData?.verifyToken?.role[0];
 
   const [charts, setCharts] = React.useState<any>([]);
-
+  const [startDate, setStartDate] = React.useState<any>(null)
+  const [endDate, setEndDate] = React.useState<any>(null)
   const [chartLines, setChartLines] = React.useState([
     {
       dataKey: 'plot1',
@@ -1532,6 +1533,7 @@ React.useEffect(()=>{
                             sx={{ m: 2 }}
                             onClick={() => {
                               handleStatusChange('Started');
+                              setStartDate(new Date())
                             }}
                           >
                             Start
@@ -1549,6 +1551,7 @@ React.useEffect(()=>{
                             sx={{ m: 2 }}
                             onClick={() => {
                               handleStatusChange('Stopped');
+                              setEndDate(new Date())
                             }}
                           >
                             Stop
@@ -2099,7 +2102,12 @@ React.useEffect(()=>{
                       {selectedChart === 'Table_Chart' ? (
                         <TableChart staticChartData={staticChartData} />
                       ) : selectedChart === 'Realtime_Chart' ? (
-                        <RealtimeChart />
+                        <RealtimeChart
+                          handleDateChartRetrieve={handleDateChartRetrieve}
+                          savedConnectData={savedConnectData}
+                          startDate={startDate}
+                          endDate={endDate}
+                        />
                       ) : (
                         <Box>Archived Chart</Box>
                       )}

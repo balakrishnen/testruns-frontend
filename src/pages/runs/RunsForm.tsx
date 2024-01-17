@@ -54,7 +54,8 @@ const validationSchema = Yup.object().shape({
   // dueDate: Yup.date().required('Due Date is required'),
   dueDate: Yup.string().required('Due Date is required').matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/, 'Invalid date'),
   assignedTo: Yup.string().notRequired(),
-  organisationId:Yup.string().required('Procedure Name is required')
+  organisationId:Yup.string().required('Procedure Name is required'),
+  userId:Yup.string().notRequired()
 });
 
 const RunsForm = React.forwardRef(
@@ -252,7 +253,8 @@ const RunsForm = React.forwardRef(
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo:loginUserSliceData?.verifyToken?._id,
         status: "Created",
-        procedureNumber:""
+        procedureNumber:"",
+        userId:""
         // procedureDetials:""
       },
       validationSchema: validationSchema,
@@ -758,6 +760,12 @@ const opt = procedureSliceData?.Procedures;
                       >
                         Assign to
                       </label>
+                      {formik.touched.userId &&
+                        formik.errors.userId && (
+                          <Typography className="error-field">
+                            {formik.errors.userId}
+                          </Typography>
+                        )}
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <img src={Avatars} alt="Avatars" />
                         <Button
