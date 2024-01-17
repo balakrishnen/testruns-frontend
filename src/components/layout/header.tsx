@@ -34,8 +34,8 @@ function AppHeader(props: any) {
   const handleMobileMenuOpen = (event: any) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-const userProfileDetails= localStorage.getItem("userProfileDetails")
-console.log("userProfileDetails",JSON.parse(userProfileDetails));
+const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.localStorage.getItem("userProfileDetails")):{}
+// console.log("userProfileDetails",JSON.parse(userProfileDetails));
 
   // const NotificationMessageSliceData = useSelector(
 
@@ -130,7 +130,9 @@ console.log("userProfileDetails",JSON.parse(userProfileDetails));
     dispatch(fetchSingleUserData(temp))
       .then((isSucess:any) => {
         setUserData(isSucess?.get_user)
-        localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
+        if(typeof window !== 'undefined'){
+        window.localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
+        }
         })
       
       .catch((err:any) => {
@@ -288,10 +290,10 @@ console.log("userProfileDetails",JSON.parse(userProfileDetails));
               onClick={openEditProfile}
             >
               <Typography variant="inherit" className="app-bar-username">
-                Hi {JSON.parse(userProfileDetails)?.firstName}
+                Hi {userProfileDetails?.firstName}
               </Typography>
               <div >
-              <img style={{cursor:'pointer'}} src={(JSON.parse(userProfileDetails)?.imageUrl!=="" && JSON.parse(userProfileDetails)?.imageUrl!==null)?JSON.parse(userProfileDetails)?.imageUrl:account} className="app-bar-images" style={{borderRadius: "13px"}}/>
+              <img style={{cursor:'pointer'}} src={(userProfileDetails?.imageUrl!=="" && userProfileDetails?.imageUrl!==null)?userProfileDetails?.imageUrl:account} className="app-bar-images" style={{borderRadius: "13px"}}/>
               </div>
             </IconButton>
             {/* <IconButton

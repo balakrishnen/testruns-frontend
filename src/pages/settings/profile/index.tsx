@@ -328,7 +328,7 @@ console.log(singleUserData);
       // debugger
       // userValues['_id'] = userData?._id
       await dispatch(fetchUpdateUserData(userValues));
-     await localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
+     await window.localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
       await toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70',

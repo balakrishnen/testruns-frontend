@@ -227,7 +227,7 @@ export default function AppProfileDrawer({
       console.log(userValues);
       
       await dispatch(fetchUpdateUserData(userValues))
-      localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
+      window.localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
      await toggleProfileDrawer()
      await setEdit(true) 
       await toast(`User Details updated successful !`, {

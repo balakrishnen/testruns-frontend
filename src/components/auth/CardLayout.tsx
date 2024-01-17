@@ -77,7 +77,7 @@ export const CardLayout = ({ children }: any, props: any) => {
         const temp = { _id: res?.verifyToken?._id };
          dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
           const data = isSuccess?.get_user ?? {};
-          localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
+          window.localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
           if (data.status!=='Active') {
             toast(`The user is inactive !`, {
               style: {
@@ -154,7 +154,7 @@ export const CardLayout = ({ children }: any, props: any) => {
           const temp = { _id: res?.verifyToken?._id };
            dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
             const data = isSuccess?.get_user ?? {};
-            localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
+            window.localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
             if (data.status!=="Active") {
               toast(`The user is inactive !`, {
                 style: {

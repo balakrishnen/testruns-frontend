@@ -232,6 +232,7 @@ export default function RunsDetails() {
   const [disableStart, setDisableStart] = React.useState<any>(
     runzValue?.status === 'Stopped',
   );
+  const [statusTime, setStatusTime] = React.useState<any>({});
   const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
   const [userRunzID, setUserRunzID] = React.useState<any>({});
@@ -241,18 +242,21 @@ export default function RunsDetails() {
   const [answers, setAnswers] = React.useState('');
   const [runsOpen, setRunsOpen] = React.useState(false);
   const [moreInfo, setMoreInfo] = React.useState(false);
-  const runsPopupRef: any = React.useRef(null);
-  const successPopupRef: any = React.useRef(null);
   const [chartTable, setChartTable] = React.useState(null);
   const [userProcedure, setuserProcedure] = React.useState(editorData);
   const runsStatus = RunsStatusList;
   const [isLoader, setIsLoader] = React.useState<any>(true);
-  const inputRefs = React.useRef<any>({});
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content: '' });
-  const formRef: any = React.useRef(null);
   const [typePopup, settypePopup] = React.useState('');
   const [staticChartData, setStaticChartData] = React.useState('');
+  const [savedChartData, setSavedChartData] = React.useState(null);
+  const [savedConnectData, setSavedConnectData] = React.useState(null);
+
+  const formRef: any = React.useRef(null);
+  const inputRefs = React.useRef<any>({});
+  const runsPopupRef: any = React.useRef(null);
+  const successPopupRef: any = React.useRef(null);
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -941,7 +945,7 @@ React.useEffect(()=>{
         //   '[{"label":"TABULAR COLUMN:","value":"TABULAR COLUMN:","data":[{"label":"Initial temperature ◦C","values":[21,78]},{"label":"Time (Sec)","values":[65,32]}]}]';
 
         setStaticChartData(finalTableTitleResult);
-
+        setSavedChartData(null);
         toast(`Run User Procedure updated !`, {
           style: {
             background: '#00bf70',
@@ -1480,6 +1484,8 @@ React.useEffect(()=>{
     var runsChange: any = {
       _id: runzValue._id,
     };
+    statusTime[status] = new Date();
+    setStatusTime(statusTime);
     runsChange['status'] = status;
     await dispatch(fetchUpdateRunsData(runsChange));
     await toast('Runs status updated !', {
@@ -1488,6 +1494,10 @@ React.useEffect(()=>{
         color: '#fff',
       },
     });
+  };
+
+  const handleDateChartRetrieve = (data: any, type: string) => {
+    type == 'table' ? setSavedChartData(data) : setSavedConnectData(data);
   };
 
   return (
@@ -2100,7 +2110,11 @@ React.useEffect(()=>{
                         </FormControl>
                       </Box>
                       {selectedChart === 'Table_Chart' ? (
-                        <TableChart staticChartData={staticChartData} />
+                        <TableChart
+                          staticChartData={staticChartData}
+                          handleDateChartRetrieve={handleDateChartRetrieve}
+                          savedChartData={savedChartData}
+                        />
                       ) : selectedChart === 'Realtime_Chart' ? (
                         <RealtimeChart
                           handleDateChartRetrieve={handleDateChartRetrieve}
