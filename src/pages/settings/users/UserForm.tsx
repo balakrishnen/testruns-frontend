@@ -54,7 +54,7 @@ const validationSchema = Yup.object().shape({
   // .min(10, "Enter valid number")
   // .max(10, "too long").required("Mobile number is required"),
   organisationId: Yup.string().required("Organistation is required"),
-  institution: Yup.string().required("Institution is required"),
+  instituteId: Yup.string().required("Institution is required"),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
   laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
   // user_id: Yup.string().required(),
@@ -112,7 +112,7 @@ const UserForm = React.forwardRef(
               formik.setFieldValue('email', isSucess.get_user.email || '');
               formik.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
               formik.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
-              formik.setFieldValue('institution', isSucess.get_user.instituteId || '');
+              formik.setFieldValue('instituteId', isSucess.get_user.instituteId || '');
               formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
               formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
               formik.setFieldValue('user_id', isSucess.get_user.user_id || '');
@@ -150,7 +150,7 @@ const UserForm = React.forwardRef(
           email: values.email?.toLowerCase(),
           phoneNumber: values.phoneNumber.toString(),
           organisationId: values.organisationId,
-          instituteId: process.env.INSTITUTION_ID,
+          instituteId: values.instituteId,
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,
@@ -244,7 +244,7 @@ updateProfile(auths?.currentUser, {
         email: rowVal?.email ? rowVal?.email : '',
         phoneNumber: rowVal?.phoneNumber ? rowVal?.phoneNumber : '',
         organisationId: rowVal?.organisationId ? rowVal?.organisationId : '',
-        institution: rowVal?.instituteId ? rowVal?.instituteId : '',
+        instituteId: process.env.INSTITUTION_ID,
         departmentId: rowVal?.departmentId ? rowVal?.departmentId : [],
         laboratoryId: rowVal?.laboratoryId ? rowVal?.laboratoryId : [],
         user_id: 'USER_12345678',
@@ -615,16 +615,16 @@ updateProfile(auths?.currentUser, {
                         margin="none"
                         fullWidth
                         id="institution"
-                        name="institution"
+                        name="instituteId"
                         autoComplete="off"
                         placeholder="Institution"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.institution}
+                        value={formik.values.instituteId}
                         size="small"
                         error={
-                          formik.touched.institution &&
-                          Boolean(formik.errors.institution)
+                          formik.touched.instituteId &&
+                          Boolean(formik.errors.instituteId)
                         }
                       >
                         {institutionSliceData?.map((item:any) => (

@@ -319,7 +319,7 @@ console.log(singleUserData);
         phoneNumber: values.phoneNumber.toString(),
         organisationId: values.organisationId,
         imageUrl:uploadedFile,
-        instituteId: process.env.ORGANIZATION_ID,
+        instituteId: values.instituteId,
         departmentId: deptArray,
         laboratoryId: labArray,
         role: values.role,

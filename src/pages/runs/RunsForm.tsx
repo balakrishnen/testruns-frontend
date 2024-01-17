@@ -141,7 +141,7 @@ const RunsForm = React.forwardRef(
       formik.setFieldValue('objective',runzSliceData?.get_run?.objective)
       formik.setFieldValue('laboratoryId',runzSliceData?.get_run?.laboratoryId)
       formik.setFieldValue('departmentId',runzSliceData?.get_run?.departmentId)
-      // formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId[0]?._id)
+      formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId)
       formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
 
       
@@ -159,7 +159,7 @@ const RunsForm = React.forwardRef(
         dispatch(fetchSingleRunsData(payload))
         formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId?._id)
         formik.setFieldValue('objective',runzSliceData?.get_run?.objective)
-        // console.log("procedureId",runzSliceData?.get_run?.procedureId[0]?._id);
+        formik.setFieldValue( "procedureId",runzSliceData?.get_run?.procedureId);
         }
         else{
           formik.setFieldValue('objective',"")
@@ -171,6 +171,7 @@ const RunsForm = React.forwardRef(
     const checkCredentials = (values: any) => {
       return true;
     };
+    const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
     const onSubmit = async(values: any) => {
       const isMatch = checkCredentials(values.name);
       console.log('values.createdOn', values.createdOn);
@@ -191,10 +192,10 @@ const RunsForm = React.forwardRef(
           createdOn: moment(values.createdOn.$d).format('MM/DD/YYYY'),
           status: values.status,
           organisationId: values.organisationId,
+          userId:singleUserData?._id
           // procedureDetials:values.procedureDetials
 
         };
- console.log('type',type);
  
         if (type == 'edit') {
           runsValues['_id'] = formData._id
@@ -423,6 +424,7 @@ const opt = procedureSliceData?.Procedures;
         setLab(LabData)
 
       }}
+      value={formik.values.procedureId}
       onInputChange={handleInputChange}
       renderInput={(procedureNames) => (
         <TextField
