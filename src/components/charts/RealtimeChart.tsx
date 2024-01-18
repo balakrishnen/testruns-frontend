@@ -77,7 +77,7 @@ const tableList = [
   },
 ];
 
-const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907'];
+const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
 
 const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
 
@@ -268,7 +268,6 @@ export default function RealtimeChart({
       const chart2: any = { ...chartData2 };
       const result = await queryApi.collectRows(query2);
       console.log('DATASETS2--------------', result);
-       
     } catch (error) {
       console.log('handle Error list', error);
     }
@@ -297,8 +296,8 @@ export default function RealtimeChart({
             channelTemp.forEach((channal: any, index: number) => {
               result.forEach((dataset: any) => {
                 const sets = chart.datasets[index];
-                console.log('SETS', sets);
-                console.log('DATASETS', dataset);
+                // console.log('SETS', chart.datasets);
+                // console.log('DATASETS', dataset);
                 if (
                   dataset._value !== undefined &&
                   dataset._value !== null &&
@@ -331,7 +330,7 @@ export default function RealtimeChart({
   const handleAddChannel = () => {
     const data: any = [...channelList];
     data.push({
-      color: '#00000',
+      color: colorsList[4],
       sensor: null,
       axis: 'Y1',
     });
@@ -365,7 +364,7 @@ export default function RealtimeChart({
 
     let temp: any = [];
     data.datasets.map((item: any) => {
-      temp.push(item.label);
+      !['Y1', 'Y2', 'Y3', 'Y4'].includes(item.label) && temp.push(item.label);
     });
     setChannelTemp(temp);
     // setChannelTemp((oldArray: any) => {
@@ -405,6 +404,7 @@ export default function RealtimeChart({
 
     const result = await queryApi.collectRows(query2);
     const sensors: any = [];
+    const data = { ...chartData };
     result.forEach((element: any) => {
       sensors.push({
         name: element._field,
@@ -414,6 +414,18 @@ export default function RealtimeChart({
     console.log('sensors', result);
     setAssets(event.target.value);
     setChannelOptions(sensors);
+
+    channelList.forEach((item: any, index: any) => {
+      data.datasets[index] = {
+        label: `Y${index + 1}`,
+        backgroundColor: colorsList[index > 3 ? 4 : index],
+        borderColor: colorsList[index > 3 ? 4 : index],
+        fill: false,
+        lineTension: 0,
+        borderDash: [8, 4],
+        data: [],
+      };
+    });
 
     // const socket = io('https://api.dev.testrunz.com');
     // setAssets(event.target.value);
@@ -457,7 +469,7 @@ export default function RealtimeChart({
         pause: isChartPause,
         duration: 10000,
         refresh: 1000,
-        delay: 1000,
+        delay: 5000,
         onRefresh: onRefresh,
       },
     },
@@ -521,7 +533,7 @@ export default function RealtimeChart({
   return (
     <>
       <Box>
-        <> 
+        <>
           <Grid container sx={{ my: 2 }} spacing={2}>
             <Grid
               item
@@ -728,9 +740,9 @@ export default function RealtimeChart({
                                 value={element.sensor}
                                 displayEmpty
                                 IconComponent={ExpandMoreOutlinedIcon}
-                                onChange={(event) =>
-                                  handleChannelChange(event, key)
-                                }
+                                onChange={(event) => {
+                                  handleChannelChange(event, key);
+                                }}
                                 renderValue={
                                   element.sensor !== null
                                     ? undefined
