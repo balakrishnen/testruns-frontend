@@ -91,7 +91,7 @@ export const CardLayout = ({ children }: any, props: any) => {
             },2000)
           }
           else{
-            window.sessionStorage.setItem("isLoggedIn", "true");
+            window.localStorage.setItem("isLoggedIn", "true");
             toast(`Google Login successful !`, {
               style: {
                 background: "#00bf70",
@@ -168,7 +168,7 @@ export const CardLayout = ({ children }: any, props: any) => {
               },2000)
             }
             else{
-              window.sessionStorage.setItem("isLoggedIn", "true");
+              window.localStorage.setItem("isLoggedIn", "true");
               toast(`Microsoft Login successful !`, {
                 style: {
                   background: "#00bf70",

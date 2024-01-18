@@ -262,7 +262,7 @@ export default function AppProfileDrawer({
     signOut(auth).then(() => {
       // dispatch(fetchLogoutUser())
         if (typeof window !== 'undefined') {
-          window.sessionStorage.setItem('isLoggedIn', 'false');
+          window.localStorage.setItem('isLoggedIn', 'false');
           toast(`User logout successfully !`, {
             style: {
               background: '#00bf70',

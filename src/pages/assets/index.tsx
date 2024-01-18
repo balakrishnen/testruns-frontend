@@ -118,7 +118,7 @@ export default function Assets() {
     perPage: 10,
     searchBy: null,
     search: null,
-    sortBy: "assetNumber",
+    sortBy: "_id",
     sortOrder: 'desc',
     
   });
