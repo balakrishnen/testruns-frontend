@@ -99,6 +99,7 @@ export default function TableChart({
   //     yAxisOptions: [],
   //   },
   // ];
+console.log(staticChartData,"staticChartData");
 
   const [chartData, setChartData] = React.useState<any>(
     savedChartData === null

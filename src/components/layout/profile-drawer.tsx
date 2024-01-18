@@ -83,6 +83,8 @@ export default function AppProfileDrawer({
   const roleSliceData = useSelector(
     (state: any) => state.role.data?.find_roles,
   );
+  console.log("roleSliceData",userSliceData);
+  
   React.useEffect(() => {
     setDepartmentData(departmentSliceData?.map((item: any) => ({
       label: item.name,
@@ -725,7 +727,7 @@ export default function AppProfileDrawer({
                       }
                       margin="none"
                       className={edit ? "bg-gray-input" : ""}
-                      disabled={edit}
+                      disabled={(userSliceData?.role||formik.values.role)!=="65741c069d53d19df8321e6d"?true:edit}
                       fullWidth
                       id="role"
                       name="role"

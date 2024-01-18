@@ -1015,7 +1015,7 @@ export default function MyPage() {
                               className="id-detail"
                               style={{ textDecoration: 'underline' }}
                             >
-                              {item.runNumber}/{item.createdAt}
+                              {item.runNumber}/&nbsp;{item.dueDate}
                             </Typography>
                             <Typography className="id-detail-title">
                               {item.objective}{' '}

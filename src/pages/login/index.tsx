@@ -321,7 +321,7 @@ const Login = () => {
           className="forgot-pass1"
 
         >
-          version 2. 3. 3
+          version 2. 3. 4
         </Typography>
       </Box>
       <Box sx={{ mt: "2rem" }}>
