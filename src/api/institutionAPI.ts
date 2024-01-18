@@ -4,12 +4,11 @@
   import {GET_ALL_INSTITUTIONS} from '../graphql/institution/institution.graphql'
   import { client } from '../utils/config';
   
-  export const fetchinstitutionData = (payload:any) => async (dispatch: any) => {
+  export const fetchinstitutionData = () => async (dispatch: any) => {
     dispatch(fetchinstitutionStart());
     try {
       const response = await client.query({
         query: GET_ALL_INSTITUTIONS,
-        variables: payload,
         fetchPolicy: 'network-only',
       });
       dispatch(fetchinstitutionSuccess(response.data));

@@ -108,7 +108,7 @@ const UserForm = React.forwardRef(
             if (isSucess.get_user) {
               console.log("departmentData",departmentData)
               setUserData(isSucess.get_user)
-              // setDepartments(isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item)))))
+              setDepartments(isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item)))))
               formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
               formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
               formik.setFieldValue('email', isSucess.get_user.email || '');
@@ -349,6 +349,9 @@ console.log(DepartmentList);
 
 React.useEffect(() => {
   dispatch(fetchinstitutionData())
+  // dispatch(fetchOrganizationData())
+  // dispatch(fetchDepartmentData())
+  // dispatch(fetchLabData());
 
 }, []);
 

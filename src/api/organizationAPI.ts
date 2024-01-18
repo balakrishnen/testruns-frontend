@@ -11,6 +11,7 @@ import {GET_ORGANIZATION} from '../graphql/organization/organization.graphql'
         fetchPolicy: 'network-only',
       });
       dispatch(fetchOrganizationSuccess(response.data));
+      return response.data
     } catch (error: any) {
       dispatch(fetchOrganizationFailure(error.message));
     }
