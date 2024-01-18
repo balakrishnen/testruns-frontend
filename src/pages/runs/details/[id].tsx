@@ -232,7 +232,6 @@ export default function RunsDetails() {
   const [disableStart, setDisableStart] = React.useState<any>(
     runzValue?.status === 'Stopped',
   );
-  const [statusTime, setStatusTime] = React.useState<any>({});
   const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
   const [userRunzID, setUserRunzID] = React.useState<any>({});
@@ -252,11 +251,16 @@ export default function RunsDetails() {
   const [staticChartData, setStaticChartData] = React.useState('');
   const [savedChartData, setSavedChartData] = React.useState(null);
   const [savedConnectData, setSavedConnectData] = React.useState(null);
+  const htmlData: any = state?.content ? state?.content : '';
+  const [htmlInput, setHtmlInput] = React.useState<any>({});
+  const htmlToJSON: any = html2json?.html2json(htmlData);
 
+  const uses = htmlToJSON?.child.map((ele: any) => ele);
   const formRef: any = React.useRef(null);
   const inputRefs = React.useRef<any>({});
   const runsPopupRef: any = React.useRef(null);
   const successPopupRef: any = React.useRef(null);
+  const prevStateRef = React.useRef(htmlToJSON);
 
   // React.useEffect(() => {
   //   console.log('userProcedure', userProcedure);
@@ -287,8 +291,8 @@ export default function RunsDetails() {
   const credencial = loginUserSliceData?.verifyToken?.role[0];
 
   const [charts, setCharts] = React.useState<any>([]);
-  const [startDate, setStartDate] = React.useState<any>(null)
-  const [endDate, setEndDate] = React.useState<any>(null)
+  const [startDate, setStartDate] = React.useState<any>(null);
+  const [endDate, setEndDate] = React.useState<any>(null);
   const [chartLines, setChartLines] = React.useState([
     {
       dataKey: 'plot1',
@@ -395,37 +399,44 @@ export default function RunsDetails() {
   // console.log('runsRow', runzId, runzValue);
   var runzRow: any = [];
   runzRow.push(runzValue);
-console.log("runzValue",runzValue);
-React.useEffect(()=>{
-  if (typeof window !== 'undefined') {
-    // console.log(window.location.pathname.split('/'));
-    const procedureId = { _id: window.location.pathname.split('/')[3] };
-    dispatch(fetchSingleRunsData(procedureId));
-  }
-},[value])
+  console.log('runzValue', runzValue);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // console.log(window.location.pathname.split('/'));
+      const procedureId = { _id: window.location.pathname.split('/')[3] };
+      dispatch(fetchSingleRunsData(procedureId));
+    }
+  }, [value]);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       // console.log(window.location.pathname.split('/'));
       // const procedureId = { _id: window.location.pathname.split('/')[3] };
       // dispatch(fetchSingleRunsData(procedureId));
       const runz = {
-        runId: runzValue?.shared==true?runzValue.runId:window.location.pathname.split('/')[3],
+        runId:
+          runzValue?.shared == true
+            ? runzValue.runId
+            : window.location.pathname.split('/')[3],
         // runId: window.location.pathname.split('/')[3],
       };
       dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
         // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks);
-        if(res?.get_userRun?.results!==null&&res?.get_userRun?.results!=="")
-        setUserRunzResult(
-          res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
-        );
-        else{
-          setUserRunzResult(userRunzResult)
+        if (
+          res?.get_userRun?.results !== null &&
+          res?.get_userRun?.results !== ''
+        )
+          setUserRunzResult(
+            res?.get_userRun?.results !== undefined &&
+              res?.get_userRun?.results,
+          );
+        else {
+          setUserRunzResult(userRunzResult);
         }
       });
     }
-  }, [value,runzValue]);
+  }, [value, runzValue]);
 
   // React.useEffect(() => {
   //   fetch('http://18.221.90.180:5000/runPython/')
@@ -460,7 +471,9 @@ React.useEffect(()=>{
     const procedureId = { _id: runzValue?._id };
     dispatch(fetchSingleRunsData(procedureId));
     const runz = {
-      runId: runzValue?.shared?runzValue.runId:window.location.pathname.split('/')[3],
+      runId: runzValue?.shared
+        ? runzValue.runId
+        : window.location.pathname.split('/')[3],
     };
     dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
       // console.log(res?.get_userRun?._id);
@@ -499,7 +512,6 @@ React.useEffect(()=>{
       setUserRunzResult(userRunzResult);
       Object.entries(userRunzResult).forEach(([key, value]) => {
         console.log(text);
-        
         text =
           text +
           `<div>
@@ -510,8 +522,9 @@ React.useEffect(()=>{
       });
     }
     // console.log('####', text);
-    if(text!==''){
-    setUserRunzResult(text + '</ul>');}
+    if (text !== '') {
+      setUserRunzResult(text + '</ul>');
+    }
   }, [userProcedure]);
   React.useEffect(() => {
     // Set a timer for 1 second (1000 milliseconds)
@@ -550,8 +563,15 @@ React.useEffect(()=>{
 
   React.useEffect(() => {
     handleHtmlInput();
-    getSateicDate();
   }, [state?.content, userRunzID?.userProcedure, value]);
+
+  React.useEffect(() => {
+    if (htmlToJSON.child && htmlToJSON.child !== prevStateRef.current.child) {
+      // debugger;
+      getSateicDate();
+      prevStateRef.current = htmlToJSON;
+    }
+  }, [htmlToJSON]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -1021,8 +1041,9 @@ React.useEffect(()=>{
             </div>`;
               });
               // console.log('####', text);
-              if(text!==''){
-                setUserRunzResult(text + '</ul>');}
+              if (text !== '') {
+                setUserRunzResult(text + '</ul>');
+              }
             });
         })
         .catch((err) => {
@@ -1407,17 +1428,11 @@ React.useEffect(()=>{
   const handleChartChange = (event: any) => {
     setSelectedChart(event.target.value);
   };
-  const htmlData: any = state?.content ? state?.content : '';
-  const [htmlInput, setHtmlInput] = React.useState<any>({});
-  const htmlToJSON: any = html2json?.html2json(htmlData);
-  // console.log(htmlInput,"htmlInput");
 
-  const uses = htmlToJSON?.child.map((ele: any) => ele);
   const handleHtmlInput = () => {
     let objects = {};
     // @ts-ignore
     // console.log(document?.getElementById('content')?.querySelectorAll('td'));
-
     let inputEl: any = document
       ?.getElementById('content')
       ?.querySelectorAll('input');
@@ -1484,8 +1499,6 @@ React.useEffect(()=>{
     var runsChange: any = {
       _id: runzValue._id,
     };
-    statusTime[status] = new Date();
-    setStatusTime(statusTime);
     runsChange['status'] = status;
     await dispatch(fetchUpdateRunsData(runsChange));
     await toast('Runs status updated !', {
@@ -1543,7 +1556,7 @@ React.useEffect(()=>{
                             sx={{ m: 2 }}
                             onClick={() => {
                               handleStatusChange('Started');
-                              setStartDate(new Date())
+                              setStartDate(new Date());
                             }}
                           >
                             Start
@@ -1561,7 +1574,7 @@ React.useEffect(()=>{
                             sx={{ m: 2 }}
                             onClick={() => {
                               handleStatusChange('Stopped');
-                              setEndDate(new Date())
+                              setEndDate(new Date());
                             }}
                           >
                             Stop
@@ -1991,7 +2004,11 @@ React.useEffect(()=>{
                 <Box sx={{ paddingBottom: '6rem' }}>
                   <CustomTabPanel value={value} index={0}>
                     {/* <div dangerouslySetInnerHTML={{ __html: userProcedure }} /> */}
-                    <div id="content" className='run-editor-width' style={{ overflowY: 'scroll' }}>
+                    <div
+                      id="content"
+                      className="run-editor-width"
+                      style={{ overflowY: 'scroll' }}
+                    >
                       <form ref={formRef} onChange={handleHtmlInput}>
                         {uses.map((el: any) =>
                           parse(htmlToJSON && html2json.json2html(el)),
