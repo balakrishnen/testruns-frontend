@@ -128,6 +128,7 @@ query Get_procedure($_id: String!) {
             name }
         isDeleted
         createdAt
+        createdBy
         createdOn
         updatedAt
     }

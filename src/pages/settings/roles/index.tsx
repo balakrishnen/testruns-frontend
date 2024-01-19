@@ -54,6 +54,7 @@ const Roles = () => {
       editLab   : true,
       editOrganisation : true,
       editUserName     : true,
+      editRole: true
     },
     "role_management":{
       edit : true
@@ -100,6 +101,7 @@ const Roles = () => {
       editLab   : false,
       editOrganisation : false,
       editUserName     : true,
+      editRole: false
     },
     "role_management":{
       edit : false
@@ -146,6 +148,7 @@ const Roles = () => {
       editLab   : false,
       editOrganisation : false,
       editUserName     : true,
+      editRole: false
     },
     "role_management":{
       edit : false
@@ -2357,6 +2360,87 @@ console.log(formValues);
                             checked={formValues2?.profile_management.editContact}
                             onChange={(e)=>handleChange2("profile_management","editContact",!formValues2?.profile_management.editContact)}
                             name="editContact"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>Can change designation </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues?.profile_management.editRole}
+                            onChange={(e)=>handleChange("profile_management","editRole",!formValues?.profile_management.editRole)}
+                            name="editRole"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues1?.profile_management.editRole}
+                            onChange={(e)=>handleChange1("profile_management","editRole",!formValues1?.profile_management.editRole)}
+                            name="editRole"
+                            checkedIcon={< RadioButtonCheckedOutlinedIcon />}
+                            icon={< RadioButtonUncheckedOutlinedIcon />}
+                          />
+                        }
+                        label=""
+                        className="common-radio"
+                        style={{ margin: "0rem" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value="remember"
+                            color="primary"
+                            sx={{
+                              color: "#9F9F9F",
+                              "&.Mui-checked": {
+                                color: "#FFC60B",
+                              },
+                              width: '30px',
+                              height: '30px'
+                            }}
+                            checked={formValues2?.profile_management.editRole}
+                            onChange={(e)=>handleChange2("profile_management","editRole",!formValues2?.profile_management.editRole)}
+                            name="editRole"
                             checkedIcon={< RadioButtonCheckedOutlinedIcon />}
                             icon={< RadioButtonUncheckedOutlinedIcon />}
                           />

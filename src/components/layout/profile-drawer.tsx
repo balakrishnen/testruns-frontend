@@ -727,7 +727,7 @@ export default function AppProfileDrawer({
                       }
                       margin="none"
                       className={edit ? "bg-gray-input" : ""}
-                      disabled={edit}
+                      disabled={edit?true:credencial?.profile_management?.editRole==true?false:true}
                       fullWidth
                       id="role"
                       name="role"

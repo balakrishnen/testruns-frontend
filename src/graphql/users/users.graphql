@@ -236,6 +236,7 @@ mutation VerifyToken($idToken:String!) {
                 editLab
                 editOrganisation
                 editContact
+                editRole
             }
             user_management {
                 create

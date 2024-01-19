@@ -506,7 +506,7 @@ const s3 = new AWS.S3({
                       marginTop: '0.4rem',
                     }}
                   >
-                    Super Admin
+                    {procedureData?.createdBy}
                   </Typography>
                 </Box>
               </Grid>

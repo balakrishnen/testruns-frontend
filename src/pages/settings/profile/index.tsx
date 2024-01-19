@@ -973,6 +973,7 @@ console.log(singleUserData);
                             className="placeholder-color"
                             style={{ marginTop: '10px', color: 'black' }}
                             displayEmpty
+                            disabled= {!credencial?.profile_management?.editRole}
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={
                               formik.values.role !== ''
