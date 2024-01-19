@@ -230,7 +230,10 @@ export default function RunsDetails() {
 
   const [runzValue, setRunzValue] = React.useState<any>(location.state?.props);
   const [disableStart, setDisableStart] = React.useState<any>(
-    runzValue?.status === 'Stopped',
+    runzValue?.status !== 'Created',
+  );
+  const [disableStop, setDisableStop] = React.useState<any>(
+    runzValue?.status === 'Created' && runzValue?.status !== 'Started',
   );
   const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
@@ -251,6 +254,7 @@ export default function RunsDetails() {
   const [staticChartData, setStaticChartData] = React.useState('');
   const [savedChartData, setSavedChartData] = React.useState(null);
   const [savedConnectData, setSavedConnectData] = React.useState(null);
+  const [isChartPause, setIsChartPause] = React.useState<any>(true);
   const htmlData: any = state?.content ? state?.content : '';
   const [htmlInput, setHtmlInput] = React.useState<any>({});
   const htmlToJSON: any = html2json?.html2json(htmlData);
@@ -399,14 +403,13 @@ export default function RunsDetails() {
   // console.log('runsRow', runzId, runzValue);
   var runzRow: any = [];
   runzRow.push(runzValue);
-  console.log('runzValue', runzValue);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       // console.log(window.location.pathname.split('/'));
       const procedureId = { _id: window.location.pathname.split('/')[3] };
       dispatch(fetchSingleRunsData(procedureId));
     }
-  }, [value]);
+  }, [value, disableStop, disableStart]);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       // console.log(window.location.pathname.split('/'));
@@ -490,8 +493,18 @@ export default function RunsDetails() {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
     setState({ content: userProcedure });
-
-    // setResult(result)
+    if (runzValue?.status === 'Stopped') {
+      setDisableStart(true);
+      setDisableStop(true);
+    } else if (runzValue?.status === 'Started') {
+      setDisableStart(true);
+      setDisableStop(false);
+    } else if (runzValue?.status === 'Started') {
+      setDisableStart(false);
+    } else if (runzValue?.status === 'Created') {
+      setDisableStart(false);
+      setDisableStop(true);
+    } // setResult(result)
   }, [runzValue, userProcedure, value]);
 
   React.useEffect(() => {
@@ -511,7 +524,7 @@ export default function RunsDetails() {
       // else{
       setUserRunzResult(userRunzResult);
       Object.entries(userRunzResult).forEach(([key, value]) => {
-        console.log(text);
+        // console.log(text);
         text =
           text +
           `<div>
@@ -538,7 +551,7 @@ export default function RunsDetails() {
 
     // Clean up the timer on component unmount or if procedureSliceData changes
     return () => clearTimeout(timerId);
-  }, [procedureSliceData, value]);
+  }, [procedureSliceData, disableStart, disableStop, value]);
 
   React.useEffect(() => {
     const filtered =
@@ -752,6 +765,7 @@ export default function RunsDetails() {
   const mergedData: any = [];
 
   const getSateicDate = () => {
+    handleHtmlInput();
     const tablesEles: any = document
       ?.getElementById('content')
       ?.querySelectorAll('table');
@@ -918,7 +932,6 @@ export default function RunsDetails() {
       });
     }
     let vals = Object.values(htmlInput);
-    // console.log(htmlInput);
 
     const empty = vals.filter((item) => item == '');
 
@@ -1495,11 +1508,13 @@ export default function RunsDetails() {
   };
 
   const handleStatusChange = async (status: any) => {
-    setDisableStart(!disableStart);
+    setDisableStart(true);
+    setDisableStop(status !== 'Started');
     var runsChange: any = {
       _id: runzValue._id,
     };
     runsChange['status'] = status;
+    status === 'Stopped' && setIsChartPause(true);
     await dispatch(fetchUpdateRunsData(runsChange));
     await toast('Runs status updated !', {
       style: {
@@ -1562,7 +1577,7 @@ export default function RunsDetails() {
                             Start
                           </Button>
                           <Button
-                            disabled={!disableStart}
+                            disabled={disableStop}
                             variant="contained"
                             style={{
                               boxShadow: 'none',
@@ -1701,7 +1716,7 @@ export default function RunsDetails() {
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
                               <Button
-                                disabled={!disableStart}
+                                disabled={disableStop}
                                 variant="contained"
                                 style={{
                                   boxShadow: 'none',
@@ -2138,6 +2153,7 @@ export default function RunsDetails() {
                           savedConnectData={savedConnectData}
                           startDate={startDate}
                           endDate={endDate}
+                          isPause={isChartPause}
                         />
                       ) : (
                         <Box>Archived Chart</Box>

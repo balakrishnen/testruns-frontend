@@ -88,6 +88,7 @@ export default function RealtimeChart({
   savedConnectData,
   startDate,
   endDate,
+  isPause,
 }: any) {
   // const socket = io('https://api.dev.testrunz.com');
   const [charts, setCharts] = React.useState<any>([]);
@@ -97,7 +98,7 @@ export default function RealtimeChart({
   const [assetsOptions, setAssetsOptions] = React.useState<any>([]);
   const [streamingData, setStreamingData] = React.useState<any>([]);
   const [chartSeries, setChartSeries] = React.useState<any>([]);
-  const [isChartPause, setIsChartPause] = React.useState<any>(true);
+  const [isChartPause, setIsChartPause] = React.useState<any>(isPause);
   const [data, setData] = React.useState([]);
   const [currentTime, setCurrentTime] = React.useState(new Date());
   const [show, setShow] = React.useState(false);
@@ -253,11 +254,10 @@ export default function RealtimeChart({
 
   const getTimeRangeData = async () => {
     try {
-      const selectedChannel: any = channelTemp.filter(
-        (item: any, index: number, inputArray: any) => {
-          return inputArray.indexOf(item) == index;
-        },
-      );
+      const selectedChannel: any = [];
+      channelOptions.forEach((element: any) => {
+        selectedChannel.push(element.name);
+      });
       const fields = selectedChannel
         .map((item: any) => `r._field == "${item}"`)
         .join(' or ');
@@ -268,6 +268,21 @@ export default function RealtimeChart({
       const chart2: any = { ...chartData2 };
       const result = await queryApi.collectRows(query2);
       console.log('DATASETS2--------------', result);
+      result.forEach((dataset: any) => {
+        selectedChannel.forEach((channal: any, index: number) => {
+          const sets = chart2.datasets[index];
+          if (
+            dataset._value !== undefined &&
+            dataset._value !== null &&
+            channal === dataset._field
+          ) {
+            sets.data.push({
+              x: moment(dataset._stop),
+              y: dataset._value,
+            });
+          }
+        });
+      });
     } catch (error) {
       console.log('handle Error list', error);
     }
@@ -405,6 +420,7 @@ export default function RealtimeChart({
     const result = await queryApi.collectRows(query2);
     const sensors: any = [];
     const data = { ...chartData };
+    const data2 = { ...chartData2 };
     result.forEach((element: any) => {
       sensors.push({
         name: element._field,
@@ -417,6 +433,15 @@ export default function RealtimeChart({
 
     channelList.forEach((item: any, index: any) => {
       data.datasets[index] = {
+        label: `Y${index + 1}`,
+        backgroundColor: colorsList[index > 3 ? 4 : index],
+        borderColor: colorsList[index > 3 ? 4 : index],
+        fill: false,
+        lineTension: 0,
+        borderDash: [8, 4],
+        data: [],
+      };
+      data2.datasets[index] = {
         label: `Y${index + 1}`,
         backgroundColor: colorsList[index > 3 ? 4 : index],
         borderColor: colorsList[index > 3 ? 4 : index],
