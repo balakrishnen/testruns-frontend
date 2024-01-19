@@ -115,6 +115,7 @@ const RunsForm = React.forwardRef(
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState(null)
+    const [isAssigned,setIsAssigned]=React.useState(false)
 
     //   const fetchProcedureSuggestions = async (inputValue) => {
     //   setLoading(true);
@@ -177,7 +178,11 @@ const RunsForm = React.forwardRef(
     // const departments: any = [];
     // const laboratory: any = [];
     const checkCredentials = (values: any) => {
-      return true;
+      if(isAssigned){
+      return true;}
+      else{
+        setIsAssigned(false)
+      }
     };
     const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
     const onSubmit = async (values: any) => {
@@ -222,6 +227,7 @@ const RunsForm = React.forwardRef(
           if (assignUser !== undefined && assignUser !== "" && assignUser !== null) {
             runsValues["shared"] = false
             runsValues["assignedTo"] = loginUserSliceData?.verifyToken?._id
+            runsValues["createdOn"] = dayjs(moment(new Date()).format('MM/DD/YYYY')),
             runsValues["assignedBy"] = loginUserSliceData?.verifyToken?._id
             runsValues["userId"] = assignUser
             delete runsValues.organisationId
@@ -241,9 +247,10 @@ const RunsForm = React.forwardRef(
         clearForm()
 
 
-      } else {
-        formik.setFieldError('name', '');
       }
+      //  else {
+      //   formik.setFieldError('name', '');
+      // }
     };
     const createdDate = type === 'edit' ? dayjs(moment(formData?.createdOn).format('MM/DD/YYYY')) : dayjs(moment(new Date()).format('MM/DD/YYYY'));
 
@@ -369,7 +376,7 @@ const RunsForm = React.forwardRef(
 
     const handleAssign = (userList: any) => {
       console.log(userList);
-
+      setIsAssigned(true)
       setAssignUser(userList[0].id)
     }
 
@@ -778,7 +785,7 @@ const RunsForm = React.forwardRef(
                       <label
                         style={{ display: 'block', marginBottom: '0.8rem' }}
                       >
-                        Assign to
+                        Assign to<span style={{ color: "#E2445C" }}>*</span>
                       </label>
                       {formik.touched.userId &&
                         formik.errors.userId && (
@@ -799,7 +806,13 @@ const RunsForm = React.forwardRef(
                           <AddIcon sx={{ mr: 1 }} />
                           Add
                         </Button>
+                        {/* {isAssigned &&<img src={Avatars} alt="Avatars" style={{paddingLeft:"10px"}} />} */}
                       </Box>
+                      {/* {JSON.stringify(Object.keys(formik.errors).length == 0 )} */}
+                      {Object.keys(formik.errors).length == 0 && !isAssigned &&
+                        <Typography className="error-field">
+                        Please assign at least one people
+                        </Typography>}
                     </Box>
                   </Grid>
                 </Grid>
