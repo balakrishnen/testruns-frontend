@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_LABS = gql`
-  query Get_all_labs($departmentId :[String]) {
-    get_all_labs(departmentId: $departmentId) {
+  query Get_all_labs {
+    get_all_labs {
         _id
         name
         organisationID
