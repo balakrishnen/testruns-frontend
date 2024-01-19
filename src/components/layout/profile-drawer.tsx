@@ -727,7 +727,7 @@ export default function AppProfileDrawer({
                       }
                       margin="none"
                       className={edit ? "bg-gray-input" : ""}
-                      disabled={(userSliceData?.role||formik.values.role)!=="65741c069d53d19df8321e6d"?true:edit}
+                      disabled={true}
                       fullWidth
                       id="role"
                       name="role"

@@ -989,7 +989,7 @@ console.log(singleUserData);
                             onBlur={formikProfile.handleBlur}
                             value={formikProfile.values.role}
                             size="small"
-                            disabled={(userData?.role || formikProfile.values.role)!=="65741c069d53d19df8321e6d"?true:false}
+                            disabled={true}
                             error={
                               formikProfile.touched.role &&
                               Boolean(formikProfile.errors.role)
