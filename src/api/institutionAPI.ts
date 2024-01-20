@@ -8,10 +8,11 @@ export const fetchinstitutionData = () => async (dispatch: any) => {
   dispatch(fetchinstitutionStart());
   try {
     const response = await client.query({
-      query: GET_ALL_INSTITUTIONS
+      query: GET_ALL_INSTITUTIONS,
+      fetchPolicy: 'network-only',
     });
     dispatch(fetchinstitutionSuccess(response.data));
   } catch (error: any) {
     dispatch(fetchinstitutionFailure(error.message));
   }
-};
+};  

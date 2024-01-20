@@ -221,6 +221,9 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
     if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
       payload["laboratoryId"]=singleUserData?.laboratoryId
     }
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+      payload["organisationId"]=singleUserData?.organisationId
+    }
     dispatch(fetchProcedureData(payload))
       .then((res: any) => {
         const page: any = { ...pageInfo };

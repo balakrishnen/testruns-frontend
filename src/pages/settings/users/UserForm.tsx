@@ -41,6 +41,7 @@ import { auth } from '../../../firebase.config';
 import { toast } from 'react-toastify';
 import { fetchinstitutionData } from '../../../api/institutionAPI';
 import moment from 'moment';
+import { fetchOrganizationData } from '../../../api/organizationAPI';
 
 const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -64,20 +65,20 @@ const validationSchema = Yup.object().shape({
 
 const UserForm = React.forwardRef(
   ({ closeFormPopup, openConfirmationPopup, reload, rowVal}: any, ref) => {
-    const [departments, setDepartments] = React.useState(
-      rowVal?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj._id == item) ?{
-        label: item?.name,
-        value: item?.name,
-        id: item?._id,
-      }:"")),
-    ));
-    const [laboratory, setLaboratory] = React.useState(
-      rowVal?.laboratoryId?.map((item: any) => ({
-        label: item?.name,
-        value: item?.name,
-        id: item?._id,
-      })),
-    );
+    const [departments, setDepartments] = React.useState()
+    //   rowVal?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj._id == item) ?{
+    //     label: item?.name,
+    //     value: item?.name,
+    //     id: item?._id,
+    //   }:"")),
+    // ));
+    const [laboratory, setLaboratory] = React.useState()
+    //   rowVal?.laboratoryId?.map((item: any) => ({
+    //     label: item?.name,
+    //     value: item?.name,
+    //     id: item?._id,
+    //   })),
+    // );
     const [formPopup, setFormPopup] = React.useState(false);
     const [departmentData, setDepartmentData] = React.useState([]);
     const [roleData, setRoleData] = React.useState([]);
@@ -96,42 +97,64 @@ const UserForm = React.forwardRef(
     const loginUserSliceData=  useSelector(
       (state: any) => state.userLogin?.data?.verifyToken, 
     );
+    const userSliceData=  useSelector(
+      (state: any) => state.userLogin.data, 
+    );
+      console.log(userSliceData);
     React.useImperativeHandle(ref, () => ({
       open(state: any, type: any,row: any) {
         
         setType(type);
         let temp = { '_id': row?._id }
         if (row?._id) {
-          dispatch(fetchSingleUserData(temp)).then((isSucess) => {
-            if (isSucess.get_user) {
-              console.log(row, 'isSucess', isSucess.get_user)
-              setUserData(isSucess.get_user)
-              setDepartments(  isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))))
-              formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
-              formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
-              formik.setFieldValue('email', isSucess.get_user.email || '');
-              formik.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
-              formik.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
-              formik.setFieldValue('instituteId', isSucess.get_user.instituteId || '');
-              formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
-              formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
-              formik.setFieldValue('user_id', isSucess.get_user.user_id || '');
-              formik.setFieldValue('role', isSucess.get_user.role || '');
-              formik.setFieldValue('status', isSucess.get_user.status || '');
-              // setRowValue(isSucess.get_uesr)
+          // dispatch(fetchSingleUserData(temp)).then((isSucess) => {
+            if (row) {
+              console.log(row, 'isSucess', row)
+              setUserData(row)
+              
+              formik.setFieldValue('firstName', row?.firstName || '');
+              formik.setFieldValue('lastName', row?.lastName || '');
+              formik.setFieldValue('email', row?.email || '');
+              formik.setFieldValue('phoneNumber', row?.phoneNumber || '');
+              formik.setFieldValue('organisationId', row?.organisationId || '');
+              formik.setFieldValue('instituteId', row?.instituteId || '');
+              formik.setFieldValue('departmentId', row?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
+              // formik.setFieldValue('departmentId', departmentSliceData);
+              formik.setFieldValue('laboratoryId', row?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
+              formik.setFieldValue('user_id', row?.user_id || '');
+              formik.setFieldValue('role', row?.role || '');
+              formik.setFieldValue('status', row?.status || '');
+              // setRowValue(row?.get_uesr)
               setFormPopup(state);
             }
             // setFormPopup(state);
-          })
-            .catch((err) => {
-              console.log(err);
-            });
+          // })
+          //   .catch((err) => {
+          //     console.log(err);
+          //   });
         } else {
           setFormPopup(state);
         }
       },
     }));
-
+React.useEffect(()=>{
+  // setDepartments(  userData?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj.id == item) ))))
+  // setLaboratory(  userData?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj.id == item) ))))
+  if(type=='edit'){
+  formik.setFieldValue('firstName', userData?.firstName || '');
+  formik.setFieldValue('lastName', userData?.lastName || '');
+  formik.setFieldValue('email', userData?.email || '');
+  formik.setFieldValue('phoneNumber', userData?.phoneNumber || '');
+  formik.setFieldValue('organisationId', userData?.organisationId || '');
+  formik.setFieldValue('instituteId', userData?.instituteId || '');
+  formik.setFieldValue('departmentId', userData?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
+  // formik.setFieldValue('departmentId', departmentSliceData);
+  formik.setFieldValue('laboratoryId', userData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
+  formik.setFieldValue('user_id', userData?.user_id || '');
+  formik.setFieldValue('role', userData?.role || '');
+  formik.setFieldValue('status', userData?.status || '');
+  }
+},[departmentData,labData,userData])
     const checkCredentials = (first_name: any) => {
       return true;
     };
@@ -244,7 +267,7 @@ updateProfile(auths?.currentUser, {
         email: rowVal?.email ? rowVal?.email : '',
         phoneNumber: rowVal?.phoneNumber ? rowVal?.phoneNumber : '',
         organisationId: rowVal?.organisationId ? rowVal?.organisationId : '',
-        instituteId: process.env.INSTITUTION_ID,
+        instituteId: rowVal?.instituteId ? rowVal?.instituteId:"",
         departmentId: rowVal?.departmentId ? rowVal?.departmentId : [],
         laboratoryId: rowVal?.laboratoryId ? rowVal?.laboratoryId : [],
         user_id: 'USER_12345678',
@@ -317,8 +340,42 @@ updateProfile(auths?.currentUser, {
       
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
-      dispatch(fetchinstitutionData())
+    //   dispatch(fetchinstitutionData())
     }, []);
+    React.useEffect(() => {
+      const payload = {
+        instituteId  : formik.values.instituteId
+    }
+    dispatch(fetchOrganizationData(payload))
+    // formik.setFieldValue("organisationId","")
+    // formik.setFieldValue("departmentId",[])
+    // formik.setFieldValue("laboratoryId",[])
+
+    }, [formik.values.instituteId])
+
+    React.useEffect(() => {
+      const payload = {
+        organisationId  : formik.values.organisationId
+    }
+        dispatch(fetchDepartmentData(payload))
+        // formik.setFieldValue("organisationId","")
+        // formik.setFieldValue("departmentId",[])
+        // formik.setFieldValue("laboratoryId",[])
+    
+    }, [formik.values.organisationId])
+
+    React.useEffect(() => {
+      var dept: any = []
+      formik.values.departmentId?.map((item: any) => (dept.push(item?.id)))
+      let payload = {
+        departmentId : dept
+    }
+      dispatch(fetchLabData(payload));
+      // formik.setFieldValue("organisationId","")
+      // formik.setFieldValue("departmentId",[])
+      // formik.setFieldValue("laboratoryId",[])
+  
+      }, [formik.values.departmentId])
 
     React.useEffect(()=>{
       let payload2={
@@ -522,291 +579,7 @@ updateProfile(auths?.currentUser, {
                   </Grid>
                 </Grid>
                 <Grid container spacing={2} className="asset-popup">
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{ paddingRight: { sm: '1rem !important' } }}
-                  >
-                    <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Organisation<span style={{ color: "#E2445C" }}>*</span></label>
-
-                      <Select
-                      MenuProps={{                   
-                        disableScrollLock: true,                   
-                        marginThreshold: null
-                      }}
-                        className="placeholder-color"
-                        displayEmpty
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        renderValue={
-                          formik.values.organisationId !== ''
-                            ? undefined
-                            : () => (
-                              <Placeholder>
-                                Select Organization
-                              </Placeholder>
-                            )
-                        }
-                        margin="none"
-                        fullWidth
-                        id="organisationId"
-                        name="organisationId"
-                        autoComplete="off"
-                        placeholder="Organization"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.organisationId}
-                        size="small"
-                        error={
-                          formik.touched.organisationId &&
-                          Boolean(formik.errors.organisationId)
-                        }
-                      >
-                        {organizationData?.map((item: any, index) => (
-                          <MenuItem key={index} value={item.id}>
-                            {item.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-
-                      {formik.touched.organisationId &&
-                        formik.errors.organisationId && (
-                          <Typography className="error-field">
-                            {formik.errors.organisationId}
-                          </Typography>
-                        )}
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{
-                      paddingLeft: { sm: '1rem !important' },
-                      paddingTop: {
-                        xs: '0rem !important',
-                        sm: '1rem !important',
-                      },
-                    }}
-                  >
-                    <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Institution<span style={{ color: "#E2445C" }}>*</span></label>
-
-                      <Select
-                      MenuProps={{                   
-                        disableScrollLock: true,                   
-                        marginThreshold: null
-                      }}
-                        className="placeholder-color"
-                        displayEmpty
-                        IconComponent={ExpandMoreOutlinedIcon}
-                        renderValue={
-                          formik.values.institution !== ''
-                            ? undefined
-                            : () => (
-                              <Placeholder>Select Institution</Placeholder>
-                            )
-                        }
-                        margin="none"
-                        fullWidth
-                        id="institution"
-                        name="instituteId"
-                        autoComplete="off"
-                        placeholder="Institution"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.instituteId}
-                        size="small"
-                        error={
-                          formik.touched.instituteId &&
-                          Boolean(formik.errors.instituteId)
-                        }
-                      >
-                        {institutionSliceData?.map((item:any) => (
-                          <MenuItem key={item._id} value={item._id}>
-                            {item.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-
-                      {formik.touched.institution &&
-                        formik.errors.institution && (
-                          <Typography className="error-field">
-                            {formik.errors.institution}
-                          </Typography>
-                        )}
-                    </Box>
-                  </Grid>
-                </Grid>
                 <Grid
-                  container
-                  spacing={2}
-                  className="asset-popup multi-selection"
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{ paddingRight: { sm: '1rem !important' } }}
-                  >
-                    <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Department/s<span style={{ color: "#E2445C" }}>*</span></label>
-                      {console.log(formik.values.departmentId)}
-                      <Autocomplete
-                              multiple
-                              id="departmentId"
-                              disableCloseOnSelect
-                              value={formik.values.departmentId}
-                              options={
-                                departmentData !== undefined
-                                  ? departmentData
-                                  : []
-                              }
-                              getOptionLabel={(option: any) =>option.label }
-                              isOptionEqualToValue={(option: any, value: any) =>
-                              value.id == option.id
-                              }
-                              renderInput={(params) => (
-                                <TextField {...params} placeholder={formik.values.departmentId?.length==0?"Department/s":""} />
-                              )}
-                              fullWidth
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(
-                                props,
-                                option: any,
-                                
-                                { selected },
-                                
-                              ) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option.value}
-                                  </li>
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) =>{
-                                setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
-                              }
-                            />
-                      {formik.touched.departmentId &&
-                        formik.errors.departmentId && (
-                          <Typography className="error-field">
-                            {formik.errors.departmentId}
-                          </Typography>
-                        )}
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{
-                      paddingLeft: { sm: '1rem !important' },
-                      paddingTop: {
-                        xs: '0rem !important',
-                        sm: '1rem !important',
-                      },
-                    }}
-                  >
-                    <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Laboratory/ies<span style={{ color: "#E2445C" }}>*</span></label>
-
-                      <Autocomplete
-                                multiple
-                                id="departmentId"
-                                value={formik.values.laboratoryId}
-                                options={labData !== undefined ? labData : []}
-                                getOptionLabel={(option: any) => option?.label}
-                                isOptionEqualToValue={(option: any, value: any) =>
-                                  value?.id == option?.id
-                                }
-                                disableCloseOnSelect
-                               
-                                renderInput={(params) => <TextField {...params} placeholder={formik.values.laboratoryId?.length==0?"Laboratory/ies":""}/>}
-                                fullWidth
-                                placeholder="Laboratory"
-                                size="medium"
-                                renderOption={(
-                                  props,
-                                  option: any,
-                                  { selected },
-                                ) => (
-                                  <React.Fragment>
-                                    <li {...props}>
-                                      <Checkbox
-                                        style={{ marginRight: 0 }}
-                                        checked={selected}
-                                      />
-                                      {option.value}
-                                    </li>
-                                  </React.Fragment>
-                                )}
-                                onChange={(_, selectedOptions: any) =>{
-                                  setLaboratory(selectedOptions);formik.setValues({...formik.values,'laboratoryId':selectedOptions}) }
-                                }
-                              />
-                      {formik.touched.laboratoryId &&
-                        formik.errors.laboratoryId && (
-                          <Typography className="error-field">
-                            {formik.errors.laboratoryId}
-                          </Typography>
-                        )}
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} className="asset-popup">
-                  {/* <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{ paddingRight: { sm: '1rem !important' } }}
-                  >
-                    <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>
-                        User ID (autogenerated)
-                      </label>
-                      <TextField
-                        margin="none"
-                        fullWidth
-                        id="user_id"
-                        name="user_id"
-                        autoComplete="user_id"
-                        InputLabelProps={{ shrink: false }}
-                        placeholder="User ID"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.user_id}
-                        size="small"
-                        error={
-                          formik.touched.user_id &&
-                          Boolean(formik.errors.user_id)
-                        }
-                        disabled
-                      />
-                      {formik.touched.user_id && formik.errors.user_id && (
-                        <Typography className="error-field">
-                          {formik.errors.user_id}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Grid> */}
-                  <Grid
                     item
                     xs={12}
                     sm={6}
@@ -865,6 +638,305 @@ updateProfile(auths?.currentUser, {
                       )}
                     </Box>
                   </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    sx={{
+                      paddingLeft: { sm: '1rem !important' },
+                      paddingTop: {
+                        xs: '0rem !important',
+                        sm: '1rem !important',
+                      },
+                    }}
+                  >
+                    <Box style={{ position: 'relative' }}>
+                      <label style={{ display: 'block' }}>Institution<span style={{ color: "#E2445C" }}>*</span></label>
+
+                      <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
+                        className="placeholder-color"
+                        displayEmpty
+                        disabled={formik.values.role !== ''?false:true}
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        renderValue={
+                          formik.values.instituteId !== ''
+                            ? undefined
+                            : () => (
+                              <Placeholder>Select Institution</Placeholder>
+                            )
+                        }
+                        margin="none"
+                        fullWidth
+                        id="instituteId"
+                        name="instituteId"
+                        autoComplete="off"
+                        placeholder="Institution"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.instituteId}
+                        size="small"
+                        error={
+                          formik.touched.instituteId &&
+                          Boolean(formik.errors.instituteId)
+                        }
+                      >
+                        {institutionSliceData?.map((item:any) => (
+                          <MenuItem key={item._id} value={item._id}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+
+                      {formik.touched.instituteId &&
+                        formik.errors.instituteId && (
+                          <Typography className="error-field">
+                            {formik.errors.instituteId}
+                          </Typography>
+                        )}
+                    </Box>
+                  </Grid>
+                 
+                </Grid>
+                <Grid
+                  container
+                  spacing={2}
+                  className="asset-popup multi-selection"
+                >
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    sx={{ paddingRight: { sm: '1rem !important' } }}
+                  >
+                    <Box style={{ position: 'relative' }}>
+                      <label style={{ display: 'block' }}>Organisation<span style={{ color: "#E2445C" }}>*</span></label>
+
+                      <Select
+                      MenuProps={{                   
+                        disableScrollLock: true,                   
+                        marginThreshold: null
+                      }}
+                        className="placeholder-color"
+                        displayEmpty
+                        IconComponent={ExpandMoreOutlinedIcon}
+                        disabled={formik.values.instituteId !== ''?false:true}
+                        renderValue={
+                          formik.values.organisationId !== ''
+                            ? undefined
+                            : () => (
+                              <Placeholder>
+                                Select Organization
+                              </Placeholder>
+                            )
+                        }
+                        margin="none"
+                        fullWidth
+                        id="organisationId"
+                        name="organisationId"
+                        autoComplete="off"
+                        placeholder="Organization"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.organisationId}
+                        size="small"
+                        error={
+                          formik.touched.organisationId &&
+                          Boolean(formik.errors.organisationId)
+                        }
+                      >
+                        {organizationData?.map((item: any, index) => (
+                          <MenuItem key={index} value={item.id}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+
+                      {formik.touched.organisationId &&
+                        formik.errors.organisationId && (
+                          <Typography className="error-field">
+                            {formik.errors.organisationId}
+                          </Typography>
+                        )}
+                    </Box>
+                  </Grid>
+                  {formik.values.role !== '65741c069d53d19df8321e6c' &&
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    sx={{
+                      paddingLeft: { sm: '1rem !important' },
+                      paddingTop: {
+                        xs: '0rem !important',
+                        sm: '1rem !important',
+                      },
+                    }}
+                  >
+                    <Box style={{ position: 'relative' }}>
+                      <label style={{ display: 'block' }}>Department/s<span style={{ color: "#E2445C" }}>*</span></label>
+                      {/* {JSON.stringify(formik.values.departmentId)} */}
+                      <Autocomplete
+                              multiple
+                              id="departmentId"
+                              disableCloseOnSelect
+                              value={formik.values.departmentId}
+                              disabled={formik.values.organisationId !== ''?false:true}
+                              options={
+                                departmentData !== undefined
+                                  ? departmentData
+                                  : []
+                              }
+                              getOptionLabel={(option: any) =>option?.label }
+                              isOptionEqualToValue={(option: any, value: any) =>
+                              value?.id == option?.id
+                              }
+                              renderInput={(params) => (
+                                <TextField {...params} placeholder={formik.values.departmentId?.length==0?"Department/s":""} />
+                              )}
+                              fullWidth
+                              placeholder="Department"
+                              size="medium"
+                              renderOption={(
+                                props,
+                                option: any,
+                                
+                                { selected },
+                                
+                              ) => (
+                                <React.Fragment>
+                                  <li {...props}>
+                                    <Checkbox
+                                      style={{ marginRight: 0 }}
+                                      checked={selected}
+                                    />
+                                    {option.value}
+                                  </li>
+                                </React.Fragment>
+                              )}
+                              onChange={(_, selectedOptions: any) =>{
+                                setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
+                              }
+                            />
+                      {formik.touched.departmentId &&
+                        formik.errors.departmentId && (
+                          <Typography className="error-field">
+                            {formik.errors.departmentId}
+                          </Typography>
+                        )}
+                    </Box>
+                  </Grid>
+  }
+                </Grid>
+                <Grid container spacing={2} className="asset-popup">
+                {formik.values.role !== '65741c069d53d19df8321e6c' && <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    sx={{
+                      paddingLeft: { sm: '1rem !important' },
+                      paddingTop: {
+                        xs: '0rem !important',
+                        sm: '1rem !important',
+                      },
+                    }}
+                  >
+                    <Box style={{ position: 'relative' }}>
+                      <label style={{ display: 'block' }}>Laboratory/ies<span style={{ color: "#E2445C" }}>*</span></label>
+
+                      <Autocomplete
+                                multiple
+                                id="departmentId"
+                                value={formik.values.laboratoryId}
+                                options={labData !== undefined ? labData : []}
+                                disabled={formik.values.departmentId?.length!==0?false:true}
+                                getOptionLabel={(option: any) => option?.label}
+                                isOptionEqualToValue={(option: any, value: any) =>
+                                  value?.id == option?.id
+                                }
+                                disableCloseOnSelect
+                               
+                                renderInput={(params) => <TextField {...params} placeholder={formik.values.laboratoryId?.length==0?"Laboratory/ies":""}/>}
+                                fullWidth
+                                placeholder="Laboratory"
+                                size="medium"
+                                renderOption={(
+                                  props,
+                                  option: any,
+                                  { selected },
+                                ) => (
+                                  <React.Fragment>
+                                    <li {...props}>
+                                      <Checkbox
+                                        style={{ marginRight: 0 }}
+                                        checked={selected}
+                                      />
+                                      {option.value}
+                                    </li>
+                                  </React.Fragment>
+                                )}
+                                onChange={(_, selectedOptions: any) =>{
+                                  setLaboratory(selectedOptions);formik.setValues({...formik.values,'laboratoryId':selectedOptions}) }
+                                }
+                              />
+                      {formik.touched.laboratoryId &&
+                        formik.errors.laboratoryId && (
+                          <Typography className="error-field">
+                            {formik.errors.laboratoryId}
+                          </Typography>
+                        )}
+                    </Box>
+                  </Grid>
+                        }
+                  {/* <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    sx={{ paddingRight: { sm: '1rem !important' } }}
+                  >
+                    <Box style={{ position: 'relative' }}>
+                      <label style={{ display: 'block' }}>
+                        User ID (autogenerated)
+                      </label>
+                      <TextField
+                        margin="none"
+                        fullWidth
+                        id="user_id"
+                        name="user_id"
+                        autoComplete="user_id"
+                        InputLabelProps={{ shrink: false }}
+                        placeholder="User ID"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.user_id}
+                        size="small"
+                        error={
+                          formik.touched.user_id &&
+                          Boolean(formik.errors.user_id)
+                        }
+                        disabled
+                      />
+                      {formik.touched.user_id && formik.errors.user_id && (
+                        <Typography className="error-field">
+                          {formik.errors.user_id}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Grid> */}
+                  
                 </Grid>
                 <Grid container spacing={2} className="asset-popup">
                   {/* <Grid

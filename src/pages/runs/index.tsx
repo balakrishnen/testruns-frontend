@@ -67,7 +67,7 @@ import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
 import dayjs from 'dayjs';
-import { fetchSingleUserData } from '../../api/userAPI';
+import { fetchSingleUserData, fetchUserData } from '../../api/userAPI';
 
 // table start
 
@@ -116,14 +116,16 @@ export default function Runs() {
   const [filter, setFilter] = React.useState<any>(false);
   const [valuesName,setValuesName]=React.useState(null)
   console.log("runsRow", rowId, runsRow);
-
+  const [inputValue, setInputValue] = React.useState(null)
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
     hasNextPage: false,
     hasPreviousPage: false,
   });
-
+  const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
+  console.log("singleUserData",singleUserData?.laboratoryId);
+  
   const runsSliceData = useSelector(
     (state: any) => state.runs.data?.get_all_runs,
   );
@@ -131,8 +133,9 @@ export default function Runs() {
     (state: any) => state.userLogin.data,
   );
   const[userData, setUserData]=React.useState<any>({})
-
+  const [getUser, setGetUser]=React.useState([])
   const credencial = loginUserSliceData?.verifyToken?.role[0]?.runs_management
+console.log(filterOptions,"filterOptions");
 
 
   // React.useEffect(()=> {
@@ -174,7 +177,40 @@ console.log("userDataRuns",userData)
     (state: any) => state.runs.data?.get_all_runs_name,
   );
 
+  const userSliceData = useSelector((state: any) => state.userData.data);
+  console.log("userSliceData",userSliceData);
   const Data = Rows.slice(startIndex, endIndex);
+  
+
+  React.useEffect(()=>{
+    setGetUser(getUser)
+    let opt=[]
+    getUser?.map((element:any) => {
+        console.log(element?.firstName,'element');
+        
+        opt.push({
+          label: element?.firstName,
+          value: element?.firstName,
+          id: element?._id,
+          email:element?.firstName
+        });
+      });
+      setFilterOptions(opt)
+  },[getUser])
+
+  React.useEffect(()=>{
+    setGetUser(userSliceData?.get_all_users?.Identity)
+  },[userSliceData])
+
+  React.useEffect(() => {
+    // setLoading(true);
+    dispatch(fetchUserData({
+      page: 1,
+      perPage: 10,
+      searchBy: 'firstName',
+      search: inputValue
+    }));
+  }, [inputValue]);
 
   const handleFilterPopoverClose = () => {
     setFilterPopoverEl(null);
@@ -230,6 +266,9 @@ console.log("userDataRuns",userData)
       payload["userId"]=loginUserSliceData?.verifyToken?._id
       // setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
     }
+    // if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+    //   payload["organisationId"]=singleUserData?.organisationId
+    // }
    
     dispatch(fetchRunsData(payload)).then((res:any)=>{
       const page: any = { ...pageInfo };
@@ -251,6 +290,12 @@ console.log("userDataRuns",userData)
   
   React.useEffect(() => {
     //admin 65741c069d53d19df8321e6d
+    const payload: any = {
+      page: 1,
+      perPage: 10,
+      sortOrder: 'desc',
+    };
+    dispatch(fetchUserData(payload));
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
@@ -259,6 +304,11 @@ console.log("userDataRuns",userData)
       setHeaders(headersList);
     };
   }, []);
+
+  const handleInputChange = (event, newInputValue) => {
+    // Fetch suggestions when the user types
+    setInputValue(newInputValue);
+  };
 
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
@@ -608,6 +658,22 @@ console.log("userDataRuns",userData)
                           if (event.target?.value === 'status') {
                             setFilterOptions(RunsStatusList);
                           }
+                          if (event.target?.value === 'assignedBy') {
+                            const data: any = [];
+                            console.log("userSliceData?.get_all_users?.Identity",getUser);
+                            
+                            getUser?.map((element:any) => {
+                              console.log(element?.firstName,'element');
+                              
+                              data.push({
+                                label: element?.firstName,
+                                value: element?.firstName,
+                                id: element?._id,
+                                email:element?.firstName
+                              });
+                            });
+                            setFilterOptions(data);
+                          }
                         }}
                         renderValue={
                           filterSearchBy !== null
@@ -677,12 +743,14 @@ console.log("userDataRuns",userData)
                       style={{borderRadius: '15px !importnant',paddingTop:"12px"}}
                       limitTags={3}
                       options={filterOptions !== undefined ? filterOptions: []}
-                      getOptionLabel={(option:any) => option?.value}
+                      getOptionLabel={(option:any) => {console.log("option?.value",option?.value);
+                      return(option?.value)}}
                       renderInput={(params) => (
-                        <TextField  {...params} placeholder="Procedure name" style={{marginTop: "-8px"}}/>
+                        <TextField  {...params} placeholder="Search by name" style={{marginTop: "-8px"}}/>
                       )}
                       value={valuesName}
-                      onChange={(_, selectedOptions: any) => { setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}
+                      onChange={(_, selectedOptions: any) => {setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}
+                      onInputChange={handleInputChange}
                     />
                       : (
                         <Select

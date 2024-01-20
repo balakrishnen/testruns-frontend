@@ -6,11 +6,13 @@ import {
 import { GET_DEPARTMENT } from '../graphql/department/department.graphql';
 import { client } from '../utils/config';
 
-export const fetchDepartmentData = () => async (dispatch: any) => {
+export const fetchDepartmentData = (payload:any) => async (dispatch: any) => {
   dispatch(fetchDepartmentStart());
   try {
     const response = await client.query({
-      query: GET_DEPARTMENT
+      query: GET_DEPARTMENT,
+      variables: payload,
+      fetchPolicy: 'network-only',
     });
     dispatch(fetchDepartmentSuccess(response.data));
   } catch (error: any) {

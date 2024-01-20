@@ -30,6 +30,8 @@ query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
             instituteId
             phoneNumber
             status
+             departmentId
+            laboratoryId
             createdOn
             isDeleted
             createdAt

@@ -176,6 +176,9 @@ const getAllassets=()=>{
   if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
     payload["laboratoryId"]=singleUserData?.laboratoryId
   }
+  if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+    payload["organisationId"]=singleUserData?.organisationId
+  }
   dispatch(fetchAssetsData(payload)).then((res:any)=>{
   console.log(res?.Assets);
   setAssetsData(res?.get_all_assets?.Assets);
