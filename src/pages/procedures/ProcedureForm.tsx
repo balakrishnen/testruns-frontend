@@ -238,6 +238,7 @@ const ProcedureForm = React.forwardRef(
     const procedureSliceData = useSelector(
       (state: any) => state.procedure.data?.get_procedure,
     );
+    const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
 
     // React.useEffect(() => {
     //  console.log(procedureSliceData?.name);
@@ -263,7 +264,7 @@ const ProcedureForm = React.forwardRef(
         createdBy: userSliceData?.firstName + userSliceData?.lastName,
         departmentId: formData?formData.departmentId:"",
         laboratoryId: formData?formData.laboratoryId:"",
-        organisationId: formData?formData.organisationId:process.env.ORGANIZATION_ID,
+        organisationId: formData?formData.organisationId:singleUserData?.organisationId,
         procedureDetials:''
       },
       validationSchema: validationSchema,

@@ -218,10 +218,10 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
     sortBy:queryStrings.sortBy ,
     sortOrder:queryStrings.sortOrder ,
     }
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
       payload["laboratoryId"]=singleUserData?.laboratoryId
     }
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
       payload["organisationId"]=singleUserData?.organisationId
     }
     dispatch(fetchProcedureData(payload))

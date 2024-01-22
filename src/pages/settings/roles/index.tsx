@@ -29,7 +29,7 @@ const Roles = () => {
   
   console.log(roleSliceData);
   var initailState : any={
-    name:"admin",
+    name:"Admin",
     type:"1",
     "procedure_management":{
       assign : true,
@@ -76,7 +76,7 @@ const Roles = () => {
     },
   }
   var initailState1 : any={
-   name: "requester",
+   name: "Requester",
    type:"2",
     "procedure_management":{
       assign : true,
@@ -123,7 +123,7 @@ const Roles = () => {
     },
   }
   var initailState2 : any={
-    name:"tester",
+    name:"Tester",
     type:"3",
     "procedure_management":{
       assign : false,

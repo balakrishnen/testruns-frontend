@@ -450,13 +450,13 @@ export default function MyPage() {
     setLoader(true)
     
     //requester 65741c069d53d19df8321e6e
-     if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+     if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
       // setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
       payload["assignedTo"]=loginUserSliceData?.verifyToken?._id
       payload["assignedBy"]=loginUserSliceData?.verifyToken?._id
     }
     //tester 65741c069d53d19df8321e6c
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"){
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"){
       payload["userId"]=loginUserSliceData?.verifyToken?._id
       // setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
     }

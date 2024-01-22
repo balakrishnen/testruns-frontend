@@ -933,7 +933,7 @@ export default function RunsDetails() {
       handleHtmlInput();
       var payload: any = {
         runId: runzValue._id,
-        organisationId: process.env.ORGANIZATION_ID,
+        organisationId: procedureSliceData?.get_run?.organisationId,
         userProcedure: JSON.stringify(htmlInput),
         static_chart_data: JSON.stringify(finalTableTitleResult),
       };
@@ -955,7 +955,7 @@ export default function RunsDetails() {
       } else {
         let payload2 = {
           _id: userRunzID?._id,
-          organisationId: process.env.ORGANIZATION_ID,
+          organisationId: procedureSliceData?.get_run?.organisationId,
           userProcedure: JSON.stringify(htmlInput),
           static_chart_data: JSON.stringify(finalTableTitleResult),
         };
@@ -1719,7 +1719,7 @@ export default function RunsDetails() {
                             </MenuItem>
                            </div>
                         )}
-                        <MenuItem onClick={handleClose}>
+                        {/* <MenuItem onClick={handleClose}>
                           <Button
                             type="submit"
                             variant="contained"
@@ -1732,12 +1732,16 @@ export default function RunsDetails() {
                             />
                             Assign
                           </Button>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        </MenuItem> */}
+                        <MenuItem onClick={() => {
+                          handleAssignClick('share');handleClose()
+                        }}
+                        >
                           <Button
                             type="submit"
                             variant="contained"
                             className="edit-btn"
+                            disabled={!credencial?.runs_management?.share}
                           >
                             <img
                               src={shareimg}
@@ -1747,15 +1751,17 @@ export default function RunsDetails() {
                             Share
                           </Button>
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={() => {
+                              // setDialog2Open(true);
+                              runsPopupRef.current.open(true);handleClose()
+                            }}
+                            >
                           <Button
                             type="submit"
                             variant="contained"
                             className="edit-btn"
-                            onClick={() => {
-                              // setDialog2Open(true);
-                              runsPopupRef.current.open(true);
-                            }}
+                            disabled={!credencial?.runs_management?.edit}
+                            
                           >
                             <img
                               src={edit}
@@ -1765,7 +1771,7 @@ export default function RunsDetails() {
                             Edit
                           </Button>
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={() => {setMoreInfo(!moreInfo),handleClose()}}>
                           <Button
                             className="edit-btn"
                             style={{

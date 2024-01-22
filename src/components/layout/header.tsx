@@ -299,7 +299,7 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
               color="inherit"
               onClick={openEditProfile}
             >
-              <Typography variant="inherit" className="app-bar-username">
+              <Typography variant="inherit" className="app-bar-username" style={{textTransform: "capitalize"}}>
                 Hi {userProfileDetails?.firstName}
               </Typography>
               <div >
