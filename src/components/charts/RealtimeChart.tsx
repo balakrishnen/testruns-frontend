@@ -27,7 +27,8 @@ const url = 'https://us-east-1-1.aws.cloud2.influxdata.com';
 const token =
   'UvFb5MGj_jaqi9JTTNlVpKQIvNdoZF3-EilZhxCgESAdlbmNgVmJeXagVj12LomLF7-liSxePRlfio9k1r8fbA==';
 const org = '63cd6a63187aa056';
-const bucket = 'Pasco Codenode';
+// const bucket = 'Pasco Codenode';
+const bucket = 'Codenode1_connect';
 
 const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
 
@@ -126,8 +127,8 @@ export default function RealtimeChart({
       const fields = selectedChannel
         .map((item: any) => `r._field == "${item}"`)
         .join(' or ');
-      let temp: any = moment('2024-01-19T08:52:19.634Z');
-      let stemp: any = moment('2024-01-20T08:51:51.694Z');
+      let temp: any = moment('2024-01-22T12:00:19.634Z');
+      let stemp: any = moment('2024-01-22T12:54:51.694Z');
       const query2: any = `from(bucket: "${bucket}")
         |> range(start: ${temp.toISOString()}, stop: ${stemp.toISOString()})
         |> filter(fn: (r) => r["_measurement"] == "sensor_data" and ${fields})
@@ -251,20 +252,26 @@ export default function RealtimeChart({
   `;
 
     const result = await queryApi.collectRows(query2);
-    const sensors: any = [{ name: null }];
+    const sensors: any = [];
     const data = { ...chartData };
     const data2 = { ...chartData2 };
-    let temp = {
-      name: 'brightness',
-    };
+    // let temp = {
+    //   name: 'brightness',
+    // };
 
-    result.length === 0
-      ? sensors.push(temp)
-      : result.forEach((element: any) => {
-          sensors.push({
-            name: element._field,
-          });
-        });
+    // result.length === 0
+    //   ? sensors.push(temp)
+    //   : result.forEach((element: any) => {
+    //       sensors.push({
+    //         name: element._field,
+    //       });
+    //     });
+
+    result.forEach((element: any) => {
+      sensors.push({
+        name: element._field,
+      });
+    });
 
     setAssets(event.target.value);
     setChannelOptions(sensors);
