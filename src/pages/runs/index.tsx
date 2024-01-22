@@ -266,9 +266,9 @@ console.log("userDataRuns",userData)
       payload["userId"]=loginUserSliceData?.verifyToken?._id
       // setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
     }
-    // if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
-    //   payload["organisationId"]=singleUserData?.organisationId
-    // }
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+      payload["organisationId"]=singleUserData?.organisationId
+    }
    
     dispatch(fetchRunsData(payload)).then((res:any)=>{
       const page: any = { ...pageInfo };

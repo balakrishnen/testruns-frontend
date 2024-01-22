@@ -230,8 +230,8 @@ const RunsForm = React.forwardRef(
             runsValues["createdOn"] = dayjs(moment(new Date()).format('MM/DD/YYYY')),
             runsValues["assignedBy"] = loginUserSliceData?.verifyToken?._id
             runsValues["userId"] = assignUser
-            delete runsValues.organisationId
-            delete runsValues.createdOn
+            // delete runsValues.organisationId
+            // delete runsValues.createdOn
             console.log(runsValues);
 
             await dispatch(fetchbulkRunz({ runs: [runsValues] }))
