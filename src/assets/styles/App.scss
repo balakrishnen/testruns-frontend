@@ -146,6 +146,7 @@ input[type=number] {
   ul {
     li {
       margin-bottom: 0.5rem;
+      min-height: auto;
 
       button {
         padding: 0px 10px 0px 0px !important;
@@ -2568,4 +2569,9 @@ body .tox-tinymce-aux{
 .MuiAutocomplete-input {
   margin-top: -8px;
 }
+}
+@media(max-width:899px){
+  div#primary-search-account-menu-mobile {
+    z-index: 999;
+  }
 }
