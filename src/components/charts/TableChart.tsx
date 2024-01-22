@@ -542,6 +542,14 @@ console.log(staticChartData,"staticChartData");
                           MenuProps={{
                             disableScrollLock: true,
                             marginThreshold: null,
+                            anchorOrigin: {
+                              vertical: "top",
+                              horizontal: "left"
+                            },
+                            transformOrigin: {
+                              vertical: "top",
+                              horizontal: "left"
+                            },
                           }}
                           labelId="view-all-label2"
                           size="small"

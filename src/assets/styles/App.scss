@@ -1650,11 +1650,11 @@ p.follow-people {
     }
   }
 
-  @media (min-width: 1200px) {
-    .runz-height {
-      height: calc(100vh - 177px);
-    }
-  }
+  // @media (min-width: 1200px) {
+  //   .runz-height {
+  //     height: calc(100vh - 177px);
+  //   }
+  // }
 
   .leftside-runz::-webkit-scrollbar {
     width: 10px;
@@ -1742,10 +1742,10 @@ p.follow-people {
     margin-right: 0.5rem;
   }
 
-  div#simple-tabpanel-1 {
-    overflow-y: auto;
-    height: calc(100vh - 300px);
-  }
+  // div#simple-tabpanel-1 {
+  //   overflow-y: auto;
+  //   height: calc(100vh - 300px);
+  // }
 
   .recharts-wrapper {
     width: 100% !important;
