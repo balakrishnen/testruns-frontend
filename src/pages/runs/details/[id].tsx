@@ -1542,7 +1542,7 @@ export default function RunsDetails() {
                       }}
                     >
                       {loginUserSliceData.verifyToken._id ===
-                        runzValue?.assignedTo._id && (
+                        runzValue?.assignedTo?._id && (
                         <>
                           <Button
                             disabled={disableStart}
@@ -1680,7 +1680,7 @@ export default function RunsDetails() {
                         disableScrollLock={true}
                       >
                         {loginUserSliceData.verifyToken._id ==
-                          runzValue?.assignedTo._id && (
+                          runzValue?.assignedTo?._id && (
                           <div>
                           {/* // <Fragment> */}
                             <MenuItem onClick={handleClose}>
