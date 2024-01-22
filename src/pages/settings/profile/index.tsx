@@ -521,7 +521,7 @@ console.log(singleUserData);
           <Box className="profile-camera">
             <div style={{width:"200px", height:'200px'}}>
               <img
-                src={uploadedFile == null ? profile : uploadedFile}
+                src={(uploadedFile == null || uploadedFile == "" ) ? profile : uploadedFile}
                 alt="profiles"
                 style={{
                   width: '100%',

@@ -340,7 +340,7 @@ updateProfile(auths?.currentUser, {
       
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
-    //   dispatch(fetchinstitutionData())
+      dispatch(fetchinstitutionData())
     }, []);
     React.useEffect(() => {
       const payload = {

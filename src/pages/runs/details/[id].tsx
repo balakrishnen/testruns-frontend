@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-import React from 'react';
+import React, { Fragment } from 'react';
 import PrivateRoute from '../../../components/PrivateRoute';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -242,7 +242,7 @@ export default function RunsDetails() {
   const [runsOpen, setRunsOpen] = React.useState(false);
   const [moreInfo, setMoreInfo] = React.useState(false);
   const [chartTable, setChartTable] = React.useState(null);
-  const [userProcedure, setuserProcedure] = React.useState(editorData);
+  const [userProcedure, setuserProcedure] = React.useState('');
   const runsStatus = RunsStatusList;
   const [isLoader, setIsLoader] = React.useState<any>(true);
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
@@ -946,7 +946,7 @@ export default function RunsDetails() {
           status: 'Started',
         };
         dispatch(fetchUpdateRunsData(payload1));
-        toast(`Run User Procedure Created !`, {
+        toast(`Runs table readings created successfully !`, {
           style: {
             background: '#00bf70',
             color: '#fff',
@@ -966,7 +966,7 @@ export default function RunsDetails() {
 
         setStaticChartData(finalTableTitleResult);
         setSavedChartData(null);
-        toast(`Run User Procedure updated !`, {
+        toast(`Runs table readings updated successfully !`, {
           style: {
             background: '#00bf70',
             color: '#fff',
@@ -1681,7 +1681,8 @@ export default function RunsDetails() {
                       >
                         {loginUserSliceData.verifyToken._id ==
                           runzValue?.assignedTo._id && (
-                          <>
+                          <div>
+                          {/* // <Fragment> */}
                             <MenuItem onClick={handleClose}>
                               <Button
                                 disabled={disableStart}
@@ -1716,7 +1717,7 @@ export default function RunsDetails() {
                                 Stop
                               </Button>
                             </MenuItem>
-                          </>
+                           </div>
                         )}
                         <MenuItem onClick={handleClose}>
                           <Button

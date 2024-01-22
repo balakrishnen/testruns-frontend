@@ -63,7 +63,6 @@ const RunsForm = React.forwardRef(
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
 
-    console.log('formData', formData)
     const [answers, setAnswers] = React.useState('');
     const [procedureData, setprocedureData] = React.useState('');
     const [assignUser, setAssignUser] = React.useState('');
@@ -74,7 +73,6 @@ const RunsForm = React.forwardRef(
       value: item.name,
       id: item._id,
     }))
-    console.log('DepartmentData', DepartmentData)
 
     let LabData = formData?.laboratoryId?.map((item: any) => ({
       label: item.name,
@@ -98,7 +96,6 @@ const RunsForm = React.forwardRef(
         id: item?._id,
       })),
     );
-    console.log("lab,department", lab, department);
 
     const [labData, setLabData] = React.useState([]);
     const dispatch: any = useDispatch();
@@ -139,16 +136,11 @@ const RunsForm = React.forwardRef(
     };
 
     React.useEffect(() => {
-      console.log("procedureId", runzSliceData?.get_run?.procedureId._id);
-
       formik.setFieldValue('objective', runzSliceData?.get_run?.objective)
       formik.setFieldValue('laboratoryId', runzSliceData?.get_run?.laboratoryId)
       formik.setFieldValue('departmentId', runzSliceData?.get_run?.departmentId)
       formik.setFieldValue('procedureId', runzSliceData?.get_run?.procedureId)
       formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
-
-
-      console.log("runzSliceData", runzSliceData);
 
     }, [runzSliceData])
     React.useImperativeHandle(ref, () => ({
@@ -187,7 +179,6 @@ const RunsForm = React.forwardRef(
     const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
     const onSubmit = async (values: any) => {
       const isMatch = checkCredentials(values.name);
-      console.log('values.createdOn', values.createdOn);
 
       if (isMatch) {
         var deptArray: any = []
@@ -222,8 +213,6 @@ const RunsForm = React.forwardRef(
           await reload()
         }
         else {
-          console.log(assignUser);
-
           if (assignUser !== undefined && assignUser !== "" && assignUser !== null) {
             runsValues["shared"] = false
             runsValues["assignedTo"] = loginUserSliceData?.verifyToken?._id
@@ -232,7 +221,6 @@ const RunsForm = React.forwardRef(
             runsValues["userId"] = assignUser
             // delete runsValues.organisationId
             // delete runsValues.createdOn
-            console.log(runsValues);
 
             await dispatch(fetchbulkRunz({ runs: [runsValues] }))
             await reload()
@@ -255,8 +243,6 @@ const RunsForm = React.forwardRef(
     const createdDate = type === 'edit' ? dayjs(moment(formData?.createdOn).format('MM/DD/YYYY')) : dayjs(moment(new Date()).format('MM/DD/YYYY'));
 
     var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
-    console.log("date", moment(new Date()).format('MM/DD/YYYY'));
-    console.log("type", type);
     const formik = useFormik({
       initialValues: {
         departmentId: "",
@@ -277,7 +263,6 @@ const RunsForm = React.forwardRef(
       onSubmit: onSubmit,
     });
 
-    console.log("formik", formik);
 
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -302,9 +287,6 @@ const RunsForm = React.forwardRef(
       );
     }, [departmentSliceData, labSliceData]);
 
-    console.log(departmentData);
-
-    console.log(DepartmentList);
 
     React.useEffect(() => {
       dispatch(fetchDepartmentData());
@@ -375,7 +357,6 @@ const RunsForm = React.forwardRef(
     }
 
     const handleAssign = (userList: any) => {
-      console.log(userList);
       setIsAssigned(true)
       setAssignUser(userList[0].id)
     }
@@ -414,11 +395,11 @@ const RunsForm = React.forwardRef(
                         value={formik.values.procedureId}
                         disableClearable={true}
                         getOptionLabel={(option: any) => option.name}
-                        isOptionEqualToValue={(option: any, value: any) => {
-                          console.log("value?._id == option?._id", value, option?._id);
+                        isOptionEqualToValue={(option: any, value: any) => 
+                          // console.log("value?._id == option?._id", value, option?._id);
 
-                          return (value == option?._id)
-                        }
+                         value == option?._id
+                        
                         }
                         onChange={(event, value) => {
                           formik.setFieldValue('procedureId', value || '');
@@ -649,7 +630,7 @@ const RunsForm = React.forwardRef(
                         }
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
-                        isOptionEqualToValue={(option: any, value: any) => value.id == option.id}
+                        isOptionEqualToValue={(option: any, value: any) => value?.id == option?.id}
                         renderOption={(props, option: any, { selected }) => (
                           <React.Fragment>
                             <li {...props}>
@@ -691,7 +672,7 @@ const RunsForm = React.forwardRef(
                         options={labData !== undefined ? labData : []}
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
-
+                        isOptionEqualToValue={(option: any, value: any) => value?.id == option?.id}
                         renderInput={(params) => <TextField {...params} placeholder={lab?.length == 0 ? "Laboratory/ies" : ""} />}
                         fullWidth
 

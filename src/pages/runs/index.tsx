@@ -743,8 +743,7 @@ console.log("userDataRuns",userData)
                       style={{borderRadius: '15px !importnant',paddingTop:"12px"}}
                       limitTags={3}
                       options={filterOptions !== undefined ? filterOptions: []}
-                      getOptionLabel={(option:any) => {console.log("option?.value",option?.value);
-                      return(option?.value)}}
+                      getOptionLabel={(option:any) => option?.value}
                       renderInput={(params) => (
                         <TextField  {...params} placeholder="Search by name" style={{marginTop: "-8px"}}/>
                       )}
