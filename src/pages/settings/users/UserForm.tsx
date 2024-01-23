@@ -31,9 +31,9 @@ import {
   StatusList,
 } from '../../../utils/data';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDepartmentData } from '../../../api/departmentAPI';
+import { fetchDepartmentById, fetchDepartmentData } from '../../../api/departmentAPI';
 import { fetchSingleRoleData } from '../../../api/roleApi';
-import { fetchLabData } from '../../../api/labAPI';
+import { fetchLabById, fetchLabData } from '../../../api/labAPI';
 import SuccessPopup from '../../../components/SuccessPopup';
 import Confirmationpopup from '../../../components/ConfirmationPopup';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -41,7 +41,7 @@ import { auth } from '../../../firebase.config';
 import { toast } from 'react-toastify';
 import { fetchinstitutionData } from '../../../api/institutionAPI';
 import moment from 'moment';
-import { fetchOrganizationData } from '../../../api/organizationAPI';
+import { fetchOrganizationById, fetchOrganizationData } from '../../../api/organizationAPI';
 
 const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -154,7 +154,7 @@ React.useEffect(()=>{
   formik.setFieldValue('role', userData?.role || '');
   formik.setFieldValue('status', userData?.status || '');
   }
-},[departmentData,labData,userData])
+},[institutionData,userData])
     const checkCredentials = (first_name: any) => {
       return true;
     };
@@ -296,26 +296,59 @@ updateProfile(auths?.currentUser, {
     );
 
     React.useEffect(() => {
-      setDepartmentData(
-        departmentSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
-      setLabData(
-        labSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
+      // setDepartmentData(
+      //   departmentSliceData?.map((item: any) => ({
+      //     label: item.name,
+      //     value: item.name,
+      //     id: item._id,
+      //   })),
+      // );
+      // setLabData(
+      //   labSliceData?.map((item: any) => ({
+      //     label: item.name,
+      //     value: item.name,
+      //     id: item._id,
+      //   })),
+      // );
       setRoleData(
         roleSliceData?.map((item: any) => ({
           label: item.name,
           value: item._id,
         })),
       );
+      const mappedDepartments = (userData?.departmentId || []).map((id: string) => {
+        var department = departmentSliceData?.find(obj => obj._id === id);
+      
+        if (department) {
+            return {
+                label: department.name,
+                value: department.name,
+                id: department._id,
+            };
+        }
+      
+        return null; // Handle the case where the department with the specified ID is not found
+    }).filter((department) => department !== null) 
+
+      const mappedDLabs = userData?.laboratoryId?.map((id: string) => {
+        var lab = labSliceData?.find(obj => obj._id === id);
+      
+        if (lab) {
+          return {
+            label: lab.name,
+            value: lab.name,
+            id: lab._id,
+          };
+        }
+     
+        return null // Handle the case where the department with the specified ID is not found
+      }).filter((lab) => lab !== null) 
+
+      console.log("mappedDepartments",mappedDepartments);
+      console.log("mappedDepartments",mappedDLabs);
+  formik.setFieldValue('departmentId', mappedDepartments!==undefined && mappedDepartments);
+  formik.setFieldValue('laboratoryId', mappedDLabs!==undefined && mappedDLabs);
+  
       setOrganizationData(
         organizationSliceData?.map((item: any) => ({
           label: item.name,
@@ -336,46 +369,48 @@ updateProfile(auths?.currentUser, {
 
     console.log(DepartmentList);
     
-    React.useEffect(() => {
-      
-      dispatch(fetchDepartmentData());
-      dispatch(fetchLabData());
-      dispatch(fetchinstitutionData())
+    React.useEffect(async() => {
+     await dispatch(fetchinstitutionData())
+     await dispatch(fetchOrganizationById())
+     await dispatch(fetchDepartmentById());
+     await   dispatch(fetchLabById());
+     
     }, []);
-    React.useEffect(() => {
-      const payload = {
-        instituteId  : formik.values.instituteId
-    }
-    dispatch(fetchOrganizationData(payload))
-    // formik.setFieldValue("organisationId","")
-    // formik.setFieldValue("departmentId",[])
-    // formik.setFieldValue("laboratoryId",[])
 
-    }, [formik.values.instituteId])
+    // React.useEffect(() => {
+    //   const payload = {
+    //     instituteId  : formik.values.instituteId
+    // }
+    // dispatch(fetchOrganizationData(payload))
+    // // formik.setFieldValue("organisationId","")
+    // // formik.setFieldValue("departmentId",[])
+    // // formik.setFieldValue("laboratoryId",[])
 
-    React.useEffect(() => {
-      const payload = {
-        organisationId  : formik.values.organisationId
-    }
-        dispatch(fetchDepartmentData(payload))
-        // formik.setFieldValue("organisationId","")
-        // formik.setFieldValue("departmentId",[])
-        // formik.setFieldValue("laboratoryId",[])
+    // }, [formik.values.instituteId])
+
+    // React.useEffect(() => {
+    //   const payload = {
+    //     organisationId  : formik.values.organisationId
+    // }
+    //     dispatch(fetchDepartmentData(payload))
+    //     // formik.setFieldValue("organisationId","")
+    //     // formik.setFieldValue("departmentId",[])
+    //     // formik.setFieldValue("laboratoryId",[])
     
-    }, [formik.values.organisationId])
+    // }, [formik.values.organisationId])
 
-    React.useEffect(() => {
-      var dept: any = []
-      formik.values.departmentId?.map((item: any) => (dept.push(item?.id)))
-      let payload = {
-        departmentId : dept
-    }
-      dispatch(fetchLabData(payload));
-      // formik.setFieldValue("organisationId","")
-      // formik.setFieldValue("departmentId",[])
-      // formik.setFieldValue("laboratoryId",[])
+    // React.useEffect(() => {
+    //   var dept: any = []
+    //   formik.values.departmentId?.map((item: any) => (dept.push(item?.id)))
+    //   let payload = {
+    //     departmentId : dept
+    // }
+    //   dispatch(fetchLabData(payload));
+    //   // formik.setFieldValue("organisationId","")
+    //   // formik.setFieldValue("departmentId",[])
+    //   // formik.setFieldValue("laboratoryId",[])
   
-      }, [formik.values.departmentId])
+    //   }, [formik.values.departmentId])
 
     React.useEffect(()=>{
       let payload2={
@@ -678,7 +713,7 @@ updateProfile(auths?.currentUser, {
                         autoComplete="off"
                         placeholder="Institution"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        onBlur={()=>{formik.handleBlur,dispatch(fetchOrganizationById({"instituteId"  : formik.values.instituteId}))}}
                         value={formik.values.instituteId}
                         size="small"
                         error={
@@ -744,7 +779,7 @@ updateProfile(auths?.currentUser, {
                         autoComplete="off"
                         placeholder="Organization"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        onBlur={()=>{formik.handleBlur,dispatch(fetchDepartmentById({"organisationId"  : formik.values.organisationId}))}}
                         value={formik.values.organisationId}
                         size="small"
                         error={
@@ -819,13 +854,20 @@ updateProfile(auths?.currentUser, {
                                       style={{ marginRight: 0 }}
                                       checked={selected}
                                     />
-                                    {option.value}
+                                    {option?.value}
                                   </li>
                                 </React.Fragment>
                               )}
                               onChange={(_, selectedOptions: any) =>{
                                 setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
                               }
+                              onBlur={()=>{
+                                var dept: any = []
+                                  formik.values.departmentId?.map((item: any) => (dept.push(item?.id)))
+                                  let payload:any = {
+                                    departmentId : dept
+                                }
+                                dispatch(fetchLabById(payload));}}
                             />
                       {formik.touched.departmentId &&
                         formik.errors.departmentId && (
@@ -882,7 +924,7 @@ updateProfile(auths?.currentUser, {
                                         style={{ marginRight: 0 }}
                                         checked={selected}
                                       />
-                                      {option.value}
+                                      {option?.value}
                                     </li>
                                   </React.Fragment>
                                 )}
