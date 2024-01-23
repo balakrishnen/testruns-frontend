@@ -230,7 +230,10 @@ export default function RunsDetails() {
 
   const [runzValue, setRunzValue] = React.useState<any>(location.state?.props);
   const [disableStart, setDisableStart] = React.useState<any>(
-    runzValue?.status === 'Stopped',
+    runzValue?.status !== 'Created',
+  );
+  const [disableStop, setDisableStop] = React.useState<any>(
+    runzValue?.status === 'Created' && runzValue?.status !== 'Started',
   );
   const [value, setValue] = React.useState(0);
   const [userRunzResult, setUserRunzResult] = React.useState('');
@@ -244,13 +247,14 @@ export default function RunsDetails() {
   const [chartTable, setChartTable] = React.useState(null);
   const [userProcedure, setuserProcedure] = React.useState('');
   const runsStatus = RunsStatusList;
-  const [isLoader, setIsLoader] = React.useState<any>(true);
+  const [isLoader, setIsLoader] = React.useState<boolean>(true);
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content: '' });
   const [typePopup, settypePopup] = React.useState('');
   const [staticChartData, setStaticChartData] = React.useState('');
   const [savedChartData, setSavedChartData] = React.useState(null);
   const [savedConnectData, setSavedConnectData] = React.useState(null);
+  const [isChartPause, setIsChartPause] = React.useState<any>(true);
   const htmlData: any = state?.content ? state?.content : '';
   const [htmlInput, setHtmlInput] = React.useState<any>({});
   const htmlToJSON: any = html2json?.html2json(htmlData);
@@ -399,14 +403,13 @@ export default function RunsDetails() {
   // console.log('runsRow', runzId, runzValue);
   var runzRow: any = [];
   runzRow.push(runzValue);
-  console.log('runzValue', runzValue);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       // console.log(window.location.pathname.split('/'));
       const procedureId = { _id: window.location.pathname.split('/')[3] };
       dispatch(fetchSingleRunsData(procedureId));
     }
-  }, [value]);
+  }, [value, disableStop, disableStart]);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       // console.log(window.location.pathname.split('/'));
@@ -420,7 +423,6 @@ export default function RunsDetails() {
         // runId: window.location.pathname.split('/')[3],
       };
       dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
-        // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks);
         if (
@@ -490,8 +492,18 @@ export default function RunsDetails() {
     setRunzValue(runzValue);
     setuserProcedure(userProcedure);
     setState({ content: userProcedure });
-
-    // setResult(result)
+    if (runzValue?.status === 'Stopped') {
+      setDisableStart(true);
+      setDisableStop(true);
+    } else if (runzValue?.status === 'Started') {
+      setDisableStart(true);
+      setDisableStop(false);
+    } else if (runzValue?.status === 'Started') {
+      setDisableStart(false);
+    } else if (runzValue?.status === 'Created') {
+      setDisableStart(false);
+      setDisableStop(true);
+    } // setResult(result)
   }, [runzValue, userProcedure, value]);
 
   React.useEffect(() => {
@@ -511,7 +523,7 @@ export default function RunsDetails() {
       // else{
       setUserRunzResult(userRunzResult);
       Object.entries(userRunzResult).forEach(([key, value]) => {
-        console.log(text);
+        // console.log(text);
         text =
           text +
           `<div>
@@ -538,7 +550,7 @@ export default function RunsDetails() {
 
     // Clean up the timer on component unmount or if procedureSliceData changes
     return () => clearTimeout(timerId);
-  }, [procedureSliceData, value]);
+  }, [procedureSliceData, disableStart, disableStop, value]);
 
   React.useEffect(() => {
     const filtered =
@@ -752,6 +764,7 @@ export default function RunsDetails() {
   const mergedData: any = [];
 
   const getSateicDate = () => {
+    handleHtmlInput();
     const tablesEles: any = document
       ?.getElementById('content')
       ?.querySelectorAll('table');
@@ -918,7 +931,6 @@ export default function RunsDetails() {
       });
     }
     let vals = Object.values(htmlInput);
-    // console.log(htmlInput);
 
     const empty = vals.filter((item) => item == '');
 
@@ -1343,42 +1355,6 @@ export default function RunsDetails() {
     setCharts(data);
   };
 
-  const handleAddChannel = (dataIndex) => {
-    const data = [...charts];
-    data[dataIndex].tableChartOptionsList.push({
-      color: '#000',
-      axisY: 'Y1',
-      channelName: null,
-      value: 'Y1',
-      channelValue: null,
-      yAxisId: 'left1',
-      dataKey: `plot${charts[dataIndex].tableChartOptionsList.length + 1}`,
-      name: null,
-      yAxis: `Y1`,
-      orientation: dataIndex % 2 === 0 ? 'left' : 'right',
-      xValue: null,
-      yValue: `Y1`,
-      tableChartData:
-        charts[dataIndex].tableChartOptionsList.length >= 4
-          ? charts[dataIndex].tableChartOptionsList[0].tableChartData
-          : [],
-    });
-    setCharts(data);
-  };
-
-  const handleRemoveChart = (dataIndex) => {
-    const data = [...charts];
-    const spliceData = data.splice(dataIndex, 1);
-    setCharts(data);
-  };
-
-  const handleRemoveChannel = (dataIndex) => {
-    const data = [...charts];
-    const values = { ...data[dataIndex] };
-    const spliceData = values.tableChartOptionsList.splice(4, 1);
-    setCharts(data);
-  };
-
   const printDocument = () => {
     const input: any = document.getElementById('divToPrint');
     // Set the desired PDF size (A4 or A3)
@@ -1404,16 +1380,12 @@ export default function RunsDetails() {
   // console.log(value, 'value');
 
   const handleOnChange = (e: any, row: any) => {
-    // console.log(e.target.value);
-
-    // console.log('change', row.departmentId, row.laboratoryId);
     var runsChange: any = {
       _id: row._id,
     };
     if (e.target.name == 'status') {
       runsChange['status'] = e.target.value;
     }
-    // console.log(runsChange);
     dispatch(fetchUpdateRunsData(runsChange));
     toast('Runs status updated !', {
       style: {
@@ -1442,7 +1414,6 @@ export default function RunsDetails() {
       const { id, value } = ele;
       let temp = { [id]: value };
       objects = { ...objects, temp };
-      // console.log(id);
 
       setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
       // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
@@ -1495,11 +1466,13 @@ export default function RunsDetails() {
   };
 
   const handleStatusChange = async (status: any) => {
-    setDisableStart(!disableStart);
+    setDisableStart(true);
+    setDisableStop(status !== 'Started');
     var runsChange: any = {
       _id: runzValue._id,
     };
     runsChange['status'] = status;
+    status === 'Stopped' && setIsChartPause(true);
     await dispatch(fetchUpdateRunsData(runsChange));
     await toast('Runs status updated !', {
       style: {
@@ -1562,7 +1535,7 @@ export default function RunsDetails() {
                             Start
                           </Button>
                           <Button
-                            disabled={!disableStart}
+                            disabled={disableStop}
                             variant="contained"
                             style={{
                               boxShadow: 'none',
@@ -1702,7 +1675,7 @@ export default function RunsDetails() {
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
                               <Button
-                                disabled={!disableStart}
+                                disabled={disableStop}
                                 variant="contained"
                                 style={{
                                   boxShadow: 'none',
@@ -2145,6 +2118,7 @@ export default function RunsDetails() {
                           savedConnectData={savedConnectData}
                           startDate={startDate}
                           endDate={endDate}
+                          isPause={isChartPause}
                         />
                       ) : (
                         <Box>Archived Chart</Box>
