@@ -394,12 +394,13 @@ console.log(staticChartData,"staticChartData");
                 sm={12}
                 md={12}
                 lg={9}
-                xl={10}
+                xl={9}
                 // sx={{ pr: 4 }}
                 style={{ borderRight: '1px solid #e4e5e7' }}
+                className='chart-left'
               >
-                <Grid container sx={{ px: 4 }}>
-                  <Grid item xs={12} sm={8} md={6} lg={2} xl={2}>
+                <Grid container sx={{ pr: 4 }}>
+                  <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
                     <Select
                       labelId="view-all-label"
                       id="time-sec"
@@ -429,17 +430,56 @@ console.log(staticChartData,"staticChartData");
                           {item.name}
                         </MenuItem>
                       ))}
-                    </Select>
+                    </Select>       
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={4}
-                    md={6}
-                    lg={10}
-                    xl={10}
-                    textAlign={'end'}
-                  >
+                  <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
+                    <Box className="color-chart" sx={{marginLeft:'1rem'}}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          width: '100%',
+                        }}
+                      >
+                        <Typography className="xy-sec">X</Typography>
+                        <Select
+                          MenuProps={{
+                            disableScrollLock: true,
+                            marginThreshold: null,
+                            anchorOrigin: {
+                              vertical: "top",
+                              horizontal: "left"
+                            },
+                            transformOrigin: {
+                              vertical: "top",
+                              horizontal: "left"
+                            },
+                          }}
+                          labelId="view-all-label2"
+                          size="small"
+                          value={data.xAxisValue}
+                          displayEmpty
+                          IconComponent={ExpandMoreOutlinedIcon}
+                          onChange={(event) => handleXAxisChange(event, index)}
+                          renderValue={
+                            data.xAxisValue !== null
+                              ? undefined
+                              : () => <Placeholder>Channel</Placeholder>
+                          }
+                          disabled={data.selectedTable === null}
+                          style={{ width: '100%' }}
+                        >
+                          <MenuItem value={null}>Null</MenuItem>
+                          {data.channelsList?.map((item, index) => (
+                            <MenuItem key={index} value={item.name}>
+                              {item.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Box>
+                    </Box>  
+                  </Grid>
+                  <Grid item  xs={12} sm={12} md={6} lg={6} xl={6} textAlign={'end'}>
                     <>
                       <Button
                         variant="contained"
@@ -522,59 +562,7 @@ console.log(staticChartData,"staticChartData");
                       ))}
                     </LineChart>
                   </ResponsiveContainer>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      marginTop: '30px',
-                    }}
-                  >
-                    <Box className="color-chart">
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          width: '100%',
-                        }}
-                      >
-                        <Typography className="xy-sec">X</Typography>
-                        <Select
-                          MenuProps={{
-                            disableScrollLock: true,
-                            marginThreshold: null,
-                            anchorOrigin: {
-                              vertical: "top",
-                              horizontal: "left"
-                            },
-                            transformOrigin: {
-                              vertical: "top",
-                              horizontal: "left"
-                            },
-                          }}
-                          labelId="view-all-label2"
-                          size="small"
-                          value={data.xAxisValue}
-                          displayEmpty
-                          IconComponent={ExpandMoreOutlinedIcon}
-                          onChange={(event) => handleXAxisChange(event, index)}
-                          renderValue={
-                            data.xAxisValue !== null
-                              ? undefined
-                              : () => <Placeholder>Channel</Placeholder>
-                          }
-                          disabled={data.selectedTable === null}
-                          style={{ width: '250px' }}
-                        >
-                          <MenuItem value={null}>Null</MenuItem>
-                          {data.channelsList?.map((item, index) => (
-                            <MenuItem key={index} value={item.name}>
-                              {item.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Box>
-                    </Box>
-                  </Box>
+                  
                 </Box>
               </Grid>
 
@@ -584,8 +572,9 @@ console.log(staticChartData,"staticChartData");
                 sm={12}
                 md={12}
                 lg={3}
-                xl={2}
+                xl={3}
                 style={{ overflowY: 'scroll' }}
+                className='chart-right'
               >
                 <Grid container alignItems={'center'}>
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
@@ -626,8 +615,8 @@ console.log(staticChartData,"staticChartData");
                   </Grid>
                 </Grid>
                 <Box
-                  sx={{ mt: 2, pr: 2 }}
-                  style={{ overflowY: 'scroll', height: '550px' }}
+                  sx={{ mt: 2}}
+                  style={{ overflowY: 'auto', height: '550px'}}
                 >
                   {data.channelOptions?.map((element, key) => (
                     <Box key={key}>
