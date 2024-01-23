@@ -28,7 +28,7 @@ const token =
   'UvFb5MGj_jaqi9JTTNlVpKQIvNdoZF3-EilZhxCgESAdlbmNgVmJeXagVj12LomLF7-liSxePRlfio9k1r8fbA==';
 const org = '63cd6a63187aa056';
 // const bucket = 'Pasco Codenode';
-const bucket = 'Codenode1_connect';
+// const bucket = 'Codenode1_connect';
 
 const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
 
@@ -47,6 +47,7 @@ export default function RealtimeChart({
     savedConnectData === null ? null : savedConnectData.assets,
   );
   const [assetsOptions, setAssetsOptions] = React.useState<any>([]);
+  const [bucket, setBucket] = React.useState<any>('Codenode1_connect');
   const [isChartPause, setIsChartPause] = React.useState<any>(isPause);
   const dispatch: any = useDispatch();
   const [channelOptions, setChannelOptions] = React.useState<any>([]);
@@ -244,7 +245,8 @@ export default function RealtimeChart({
   const handleColorPickerChange = (event: any, key: any) => {};
 
   const handleAssetsChange = async (event: any) => {
-    let query2 = `from(bucket: "${bucket}")
+    setBucket(event.target.value)
+    let query2 = `from(bucket: "${event.target.value}")
     |> range(start: -duration(v: 1s))
     |> filter(fn: (r) => r._measurement == "sensor_data")
     |> group(columns: ["_field"]) // Group by fiel	d to get all fields
