@@ -86,6 +86,8 @@ input[type=number] {
   }
 
   .header-right-side {
+    position: fixed;
+    right: 0px;
     button {
       // padding: 2px 23px 1px 1px
       margin: 2px 23px 1px 1px;
@@ -2573,5 +2575,28 @@ body .tox-tinymce-aux{
 @media(max-width:899px){
   div#primary-search-account-menu-mobile {
     z-index: 999;
+  }
+}
+@media(min-width:1200px) and (max-width:1400px){
+  .MuiGrid-root.chart-left {
+    max-width: 70%;
+    flex-basis: 70%;
+  }
+  .MuiGrid-root.chart-right {
+    max-width: 30%;
+    flex-basis: 30%;
+  }
+  main.wide-class .MuiGrid-root.chart-left {
+    max-width: 65%;
+    flex-basis: 65%;
+  }
+  main.wide-class .MuiGrid-root.chart-right {
+    max-width: 35%;
+    flex-basis: 35%;
+  }
+}
+@media(max-width:599px){
+  .color-chart{
+    margin-left: 0rem !important;
   }
 }

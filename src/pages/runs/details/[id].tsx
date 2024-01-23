@@ -2069,7 +2069,7 @@ export default function RunsDetails() {
                   </CustomTabPanel>
                   <CustomTabPanel value={value} index={1}>
                     <Box id="divToPrint">
-                      <Box sx={{ px: 4, mb: 2 }}>
+                      <Box sx={{ mb: 2 }}>
                         <FormControl>
                           <RadioGroup
                             row
@@ -2082,16 +2082,16 @@ export default function RunsDetails() {
                               value="Table_Chart"
                               control={<Radio />}
                               label="Table Chart"
-                              sx={{
-                                px: 2,
+                              style={{
+                                paddingLeft:'10px'
                               }}
                             />
                             <FormControlLabel
                               value="Realtime_Chart"
                               control={<Radio />}
                               label="Connected Chart"
-                              sx={{
-                                px: 2,
+                              style={{
+                                paddingLeft:'10px'
                               }}
                             />
                             {/* <FormControlLabel
