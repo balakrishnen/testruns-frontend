@@ -422,6 +422,7 @@ console.log(staticChartData,"staticChartData");
                         width: '100%',
                         borderRadius: '10px',
                         marginBottom: '15px',
+                        marginRight:'2rem'
                       }}
                     >
                       <MenuItem value={null}>Null</MenuItem>
@@ -433,7 +434,7 @@ console.log(staticChartData,"staticChartData");
                     </Select>       
                   </Grid>
                   <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
-                    <Box className="color-chart" sx={{marginLeft:'1rem'}}>
+                    <Box className="color-chart" sx={{marginLeft:'2rem'}}>
                       <Box
                         sx={{
                           display: 'flex',
@@ -443,6 +444,7 @@ console.log(staticChartData,"staticChartData");
                       >
                         <Typography className="xy-sec">X</Typography>
                         <Select
+                          id="x-sec"
                           MenuProps={{
                             disableScrollLock: true,
                             marginThreshold: null,

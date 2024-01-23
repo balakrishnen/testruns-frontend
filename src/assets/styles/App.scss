@@ -912,7 +912,7 @@ button.Delete-btn {
   padding: 24px;  
 }
 .narrow-class , .wide-class{
-  overflow-y: scroll;
+  overflow-y: auto;
   height: calc(100vh - 80px)
 }
 
@@ -2582,6 +2582,9 @@ body .tox-tinymce-aux{
 .main-proceduredetails .MuiInputBase-root.MuiAutocomplete-inputRoot {
   padding: 9px !important;
 }
+#x-sec {
+  height: 25px;
+}
 @media(max-width:899px){
   div#primary-search-account-menu-mobile {
     z-index: 999;
@@ -2608,5 +2611,8 @@ body .tox-tinymce-aux{
 @media(max-width:599px){
   .color-chart{
     margin-left: 0rem !important;
+  }
+  #time-sec{
+    margin-right: 0rem !important;
   }
 }
