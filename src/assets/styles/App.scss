@@ -229,6 +229,7 @@ html body {
   background-color: $white;
   // overflow-y: auto !important;
   // padding-right: 0px !important;
+  overflow: hidden;
 }
 body{
   position: relative;
@@ -908,7 +909,11 @@ button.Delete-btn {
   transform: rotate(180deg) !important;
 }
 .main-padding {
-  padding: 24px;
+  padding: 24px;  
+}
+.narrow-class , .wide-class{
+  overflow-y: scroll;
+  height: calc(100vh - 80px)
 }
 
 /* width */
@@ -1643,13 +1648,14 @@ p.follow-people {
   .main-runzdetails {
     .edit-details {
       background: $white;
-      box-shadow: -3px 0px 16px 0px rgba(0, 0, 0, 0.1);
+      // box-shadow: -3px 0px 16px 0px rgba(0, 0, 0, 0.1);
       border: 0px;
       margin-top: 0px;
       position: fixed;
       bottom: 0px;
       width: 100%;
       z-index: 9 !important;
+      border-top: 3px solid #f3f3f3;
     }
   }
 
@@ -2257,7 +2263,7 @@ input[type='color' i]::-webkit-color-swatch {
   }
 }
 
-.multi-selection button.MuiAutocomplete-popupIndicator svg {
+.multi-selection button.MuiAutocomplete-popupIndicator svg , button.MuiAutocomplete-popupIndicator svg {
   background-image: url('../images/chevrondown.svg');
   background-size: 18px;
   background-repeat: no-repeat;
@@ -2562,15 +2568,19 @@ body .tox-tinymce-aux{
     width: calc(100vw - 160px);
   }
 }
-
-
 .autocompleteFilter{
-.MuiInputBase-formControl{
-  height: 40px;
+  .MuiInputBase-formControl{
+    height: 40px;
+  }
+  .MuiAutocomplete-input {
+    margin-top: -8px;
+  }
 }
-.MuiAutocomplete-input {
-  margin-top: -8px;
+.MuiInputBase-root.MuiAutocomplete-inputRoot{
+  padding: 5px 12px !important;
 }
+.main-proceduredetails .MuiInputBase-root.MuiAutocomplete-inputRoot {
+  padding: 9px !important;
 }
 @media(max-width:899px){
   div#primary-search-account-menu-mobile {

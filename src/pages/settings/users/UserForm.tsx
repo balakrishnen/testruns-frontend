@@ -635,7 +635,7 @@ updateProfile(auths?.currentUser, {
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
-                        xs: '0rem !important',
+                        xs: '1rem !important',
                         sm: '1rem !important',
                       },
                       paddingRight: { sm: '1rem !important' }
@@ -891,7 +891,7 @@ updateProfile(auths?.currentUser, {
                   </Grid>
   }
                 </Grid>
-                <Grid container spacing={2} className="asset-popup">
+                <Grid container spacing={2} className="asset-popup prod-input-auto prod-multi">
                 {formik.values.role !== '65741c069d53d19df8321e6c' && <Grid
                     item
                     xs={12}
@@ -901,9 +901,10 @@ updateProfile(auths?.currentUser, {
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
-                        xs: '0rem !important',
+                        xs: '1rem !important',
                         sm: '1rem !important',
                       },
+                      paddingRight: { sm: '1rem !important' }
                     }}
                   >
                     <Box style={{ position: 'relative' }}>

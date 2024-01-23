@@ -563,7 +563,7 @@ const Addnewpopup = React.forwardRef(
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
                         <Box style={{ position: 'relative' }}>
-                          <label style={{marginBottom:'1em'}}>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
+                          <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}  name='perchasedDate'>
                             <DatePicker 
                               format='MM/DD/YYYY'
@@ -596,7 +596,7 @@ const Addnewpopup = React.forwardRef(
                         }}
                       >
                         <Box>
-                          <label style={{marginBottom:'1em'}}>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
+                          <label style={{whiteSpace:'nowrap'}}>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker disablePast
                               format='MM/DD/YYYY'
