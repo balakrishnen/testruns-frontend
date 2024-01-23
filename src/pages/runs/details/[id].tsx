@@ -247,7 +247,7 @@ export default function RunsDetails() {
   const [chartTable, setChartTable] = React.useState(null);
   const [userProcedure, setuserProcedure] = React.useState(editorData);
   const runsStatus = RunsStatusList;
-  const [isLoader, setIsLoader] = React.useState<any>(true);
+  const [isLoader, setIsLoader] = React.useState<boolean>(true);
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
   const [state, setState] = React.useState({ content: '' });
   const [typePopup, settypePopup] = React.useState('');
@@ -423,7 +423,6 @@ export default function RunsDetails() {
         // runId: window.location.pathname.split('/')[3],
       };
       dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
-        // console.log(res?.get_userRun?._id);
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks);
         if (
@@ -1356,42 +1355,6 @@ export default function RunsDetails() {
     setCharts(data);
   };
 
-  const handleAddChannel = (dataIndex) => {
-    const data = [...charts];
-    data[dataIndex].tableChartOptionsList.push({
-      color: '#000',
-      axisY: 'Y1',
-      channelName: null,
-      value: 'Y1',
-      channelValue: null,
-      yAxisId: 'left1',
-      dataKey: `plot${charts[dataIndex].tableChartOptionsList.length + 1}`,
-      name: null,
-      yAxis: `Y1`,
-      orientation: dataIndex % 2 === 0 ? 'left' : 'right',
-      xValue: null,
-      yValue: `Y1`,
-      tableChartData:
-        charts[dataIndex].tableChartOptionsList.length >= 4
-          ? charts[dataIndex].tableChartOptionsList[0].tableChartData
-          : [],
-    });
-    setCharts(data);
-  };
-
-  const handleRemoveChart = (dataIndex) => {
-    const data = [...charts];
-    const spliceData = data.splice(dataIndex, 1);
-    setCharts(data);
-  };
-
-  const handleRemoveChannel = (dataIndex) => {
-    const data = [...charts];
-    const values = { ...data[dataIndex] };
-    const spliceData = values.tableChartOptionsList.splice(4, 1);
-    setCharts(data);
-  };
-
   const printDocument = () => {
     const input: any = document.getElementById('divToPrint');
     // Set the desired PDF size (A4 or A3)
@@ -1417,16 +1380,12 @@ export default function RunsDetails() {
   // console.log(value, 'value');
 
   const handleOnChange = (e: any, row: any) => {
-    // console.log(e.target.value);
-
-    // console.log('change', row.departmentId, row.laboratoryId);
     var runsChange: any = {
       _id: row._id,
     };
     if (e.target.name == 'status') {
       runsChange['status'] = e.target.value;
     }
-    // console.log(runsChange);
     dispatch(fetchUpdateRunsData(runsChange));
     toast('Runs status updated !', {
       style: {
@@ -1455,7 +1414,6 @@ export default function RunsDetails() {
       const { id, value } = ele;
       let temp = { [id]: value };
       objects = { ...objects, temp };
-      // console.log(id);
 
       setHtmlInput((prev: any) => ({ ...prev, [id]: value }));
       // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));

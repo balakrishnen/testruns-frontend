@@ -493,9 +493,10 @@ export default function RealtimeChart({
                             disabled={assets === null}
                             style={{ width: '90%' }}
                           >
+                            <MenuItem value={null}>Null</MenuItem>
                             {channelOptions.map((item: any, index: number) => (
                               <MenuItem key={index} value={item.name}>
-                                {item.name === null ? 'Null' : item.name}
+                                {item.name}
                               </MenuItem>
                             ))}
                           </Select>
