@@ -20,6 +20,7 @@ import { fetchAssetsName } from '../../api/assetsAPI';
 import { InfluxDB } from '@influxdata/influxdb-client';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-plugin-streaming';
+import { toast } from 'react-toastify';
 
 const Chart = require('react-chartjs-2').Chart;
 
@@ -245,62 +246,74 @@ export default function RealtimeChart({
   const handleColorPickerChange = (event: any, key: any) => {};
 
   const handleAssetsChange = async (event: any) => {
-    setBucket(event.target.value)
-    let query2 = `from(bucket: "${event.target.value}")
+    if (event.target.value == null) {
+      setAssets(event.target.value);
+    } else {
+      try {
+        setBucket(event.target.value);
+        let query2 = `from(bucket: "${event.target.value}")
     |> range(start: -duration(v: 1s))
     |> filter(fn: (r) => r._measurement == "sensor_data")
     |> group(columns: ["_field"]) // Group by fiel	d to get all fields
-    |> limit(n: 1) // Limit to 1 row (optional, you can adjust as needed)
-  `;
+    |> limit(n: 1) // Limit to 1 row (optional, you can adjust as needed)`;
 
-    const result = await queryApi.collectRows(query2);
-    const sensors: any = [];
-    const data = { ...chartData };
-    const data2 = { ...chartData2 };
-    // let temp = {
-    //   name: 'brightness',
-    // };
+        const result = await queryApi.collectRows(query2);
+        const sensors: any = [];
+        const data = { ...chartData };
+        const data2 = { ...chartData2 };
+        // let temp = {
+        //   name: 'brightness',
+        // };
 
-    // result.length === 0
-    //   ? sensors.push(temp)
-    //   : result.forEach((element: any) => {
-    //       sensors.push({
-    //         name: element._field,
-    //       });
-    //     });
+        // result.length === 0
+        //   ? sensors.push(temp)
+        //   : result.forEach((element: any) => {
+        //       sensors.push({
+        //         name: element._field,
+        //       });
+        //     });
 
-    result.forEach((element: any) => {
-      sensors.push({
-        name: element._field,
-      });
-    });
+        result.forEach((element: any) => {
+          sensors.push({
+            name: element._field,
+          });
+        });
 
-    setAssets(event.target.value);
-    setChannelOptions(sensors);
+        setAssets(event.target.value);
+        setChannelOptions(sensors);
 
-    channelList.forEach((item: any, index: any) => {
-      data.datasets[index] = {
-        label: `Y${index + 1}`,
-        backgroundColor: colorsList[index > 3 ? 4 : index],
-        borderColor: colorsList[index > 3 ? 4 : index],
-        fill: false,
-        lineTension: 0,
-        borderDash: [8, 4],
-        data: [],
-      };
-    });
+        channelList.forEach((item: any, index: any) => {
+          data.datasets[index] = {
+            label: `Y${index + 1}`,
+            backgroundColor: colorsList[index > 3 ? 4 : index],
+            borderColor: colorsList[index > 3 ? 4 : index],
+            fill: false,
+            lineTension: 0,
+            borderDash: [8, 4],
+            data: [],
+          };
+        });
 
-    sensors.forEach((item: any, index: any) => {
-      data2.datasets[index] = {
-        label: item.name,
-        backgroundColor: colorsList[index > 3 ? 4 : index],
-        borderColor: colorsList[index > 3 ? 4 : index],
-        fill: false,
-        lineTension: 0,
-        borderDash: [8, 4],
-        data: [],
-      };
-    });
+        sensors.forEach((item: any, index: any) => {
+          data2.datasets[index] = {
+            label: item.name,
+            backgroundColor: colorsList[index > 3 ? 4 : index],
+            borderColor: colorsList[index > 3 ? 4 : index],
+            fill: false,
+            lineTension: 0,
+            borderDash: [8, 4],
+            data: [],
+          };
+        });
+      } catch (error) {
+        toast(`Device not found !`, {
+          style: {
+            background: '#e2445c',
+            color: '#fff',
+          },
+        });
+      }
+    }
   };
 
   const options: any = {
