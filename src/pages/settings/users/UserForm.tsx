@@ -623,7 +623,7 @@ updateProfile(auths?.currentUser, {
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
-                        xs: '0rem !important',
+                        xs: '1rem !important',
                         sm: '1rem !important',
                       },
                       paddingRight: { sm: '1rem !important' }
@@ -889,9 +889,10 @@ updateProfile(auths?.currentUser, {
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
-                        xs: '0rem !important',
+                        xs: '1rem !important',
                         sm: '1rem !important',
                       },
+                      paddingRight: { sm: '1rem !important' }
                     }}
                   >
                     <Box style={{ position: 'relative' }}>

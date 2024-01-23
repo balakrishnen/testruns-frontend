@@ -529,7 +529,7 @@ console.log(singleUserData);
                   border: '5px solid #F3F3F3',
                   borderRadius: '200px',
                   objectFit:'cover',
-                  padding: uploadedFile === null ? '0px' : '16px',
+                  padding: uploadedFile === null ? '0px' : '0px',
                 }}
               />
             </div>
@@ -1031,8 +1031,8 @@ console.log(singleUserData);
               </AccordionSummary>
               <AccordionDetails>
                 <form onSubmit={formik.handleSubmit} autoComplete="off">
-                  <Box className="auth-inner">
-                    <Box style={{ position: 'relative' }}>
+                  <Box className="setting-section2">
+                    <Box className="profile-inner" style={{ position: 'relative' }}>
                       <InputLabel>Enter old password</InputLabel>
                       <TextField
                         type={initalStatus.password ? 'text' : 'password'}
@@ -1079,7 +1079,7 @@ console.log(singleUserData);
                         </Typography>
                       )}
                     </Box>
-                    <Box style={{ position: 'relative' }}>
+                    <Box className="profile-inner" style={{ position: 'relative' }}>
                       <InputLabel>Enter new Password</InputLabel>
                       <TextField
                         type={initalStatus.newpassword ? 'text' : 'password'}
@@ -1134,7 +1134,7 @@ console.log(singleUserData);
                           </Typography>
                         )}
                     </Box>
-                    <Box style={{ position: 'relative' }}>
+                    <Box className="profile-inner" style={{ position: 'relative' }}>
                       <InputLabel>Confirm new password</InputLabel>
                       <TextField
                         type={
