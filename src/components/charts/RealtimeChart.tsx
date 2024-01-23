@@ -29,7 +29,7 @@ const token =
   'UvFb5MGj_jaqi9JTTNlVpKQIvNdoZF3-EilZhxCgESAdlbmNgVmJeXagVj12LomLF7-liSxePRlfio9k1r8fbA==';
 const org = '63cd6a63187aa056';
 // const bucket = 'Pasco Codenode';
-// const bucket = 'Codenode1_connect';
+const bucket = 'Codenode';
 
 const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
 
@@ -48,7 +48,7 @@ export default function RealtimeChart({
     savedConnectData === null ? null : savedConnectData.assets,
   );
   const [assetsOptions, setAssetsOptions] = React.useState<any>([]);
-  const [bucket, setBucket] = React.useState<any>('Codenode1_connect');
+  const [measure, setMeasure] = React.useState<any>('Codenode1_connect');
   const [isChartPause, setIsChartPause] = React.useState<any>(isPause);
   const dispatch: any = useDispatch();
   const [channelOptions, setChannelOptions] = React.useState<any>([]);
@@ -104,6 +104,10 @@ export default function RealtimeChart({
   }, []);
 
   React.useEffect(() => {
+    setIsChartPause(isPause);
+  }, [isPause]);
+
+  React.useEffect(() => {
     if (endDate !== null && assets !== null) {
       setShowArchivedChart(true);
       getTimeRangeData();
@@ -129,11 +133,11 @@ export default function RealtimeChart({
       const fields = selectedChannel
         .map((item: any) => `r._field == "${item}"`)
         .join(' or ');
-      let temp: any = moment('2024-01-22T12:00:19.634Z');
-      let stemp: any = moment('2024-01-22T12:54:51.694Z');
+      let etemp: any = moment('2024-01-23T13:58:54.037Z');
+      let stemp: any = moment('2024-01-23T13:53:55.637Z');
       const query2: any = `from(bucket: "${bucket}")
-        |> range(start: ${temp.toISOString()}, stop: ${stemp.toISOString()})
-        |> filter(fn: (r) => r["_measurement"] == "sensor_data" and ${fields})
+        |> range(start: ${startDate.toISOString()}, stop: ${endDate.toISOString()})
+        |> filter(fn: (r) => r["_measurement"] == "${measure}" and ${fields})
         |> yield(name: "mean")`;
       const chart2: any = { ...chartData2 };
       const channels = [...channelList];
@@ -173,7 +177,7 @@ export default function RealtimeChart({
             .join(' or ');
           const query1: any = `from(bucket: "${bucket}")
           |> range(start: -duration(v: 1s))
-          |> filter(fn: (r) => r["_measurement"] == "sensor_data" and ${fields})
+          |> filter(fn: (r) => r["_measurement"] == "${measure}" and ${fields})
           |> aggregateWindow(every: 1s, fn: mean, createEmpty: false)
           |> yield(name: "mean")`;
           const chart: any = { ...chartData };
@@ -250,10 +254,10 @@ export default function RealtimeChart({
       setAssets(event.target.value);
     } else {
       try {
-        setBucket(event.target.value);
-        let query2 = `from(bucket: "${event.target.value}")
+        setMeasure(event.target.value);
+        let query2 = `from(bucket: "${bucket}")
     |> range(start: -duration(v: 1s))
-    |> filter(fn: (r) => r._measurement == "sensor_data")
+    |> filter(fn: (r) => r._measurement == "${event.target.value}")
     |> group(columns: ["_field"]) // Group by fiel	d to get all fields
     |> limit(n: 1) // Limit to 1 row (optional, you can adjust as needed)`;
 
@@ -262,7 +266,7 @@ export default function RealtimeChart({
         const data = { ...chartData };
         const data2 = { ...chartData2 };
         // let temp = {
-        //   name: 'brightness',
+        //   name: 'temperature_data',
         // };
 
         // result.length === 0

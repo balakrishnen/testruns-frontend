@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-import React, { Fragment } from 'react';
+import React from 'react';
 import PrivateRoute from '../../../components/PrivateRoute';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -258,6 +258,7 @@ export default function RunsDetails() {
   const htmlData: any = state?.content ? state?.content : '';
   const [htmlInput, setHtmlInput] = React.useState<any>({});
   const htmlToJSON: any = html2json?.html2json(htmlData);
+  const [usedAsset, setUsedAsset] = React.useState<any>(null);
 
   const uses = htmlToJSON?.child.map((ele: any) => ele);
   const formRef: any = React.useRef(null);
@@ -425,6 +426,9 @@ export default function RunsDetails() {
       dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
         setUserRunzID(res?.get_userRun);
         setRemarks(res?.get_userRun?.remarks);
+        setStartDate(res?.get_userRun?.startTime);
+        setEndDate(res?.get_userRun?.endTime);
+        setUsedAsset(res?.get_userRun?.used_Asset);
         if (
           res?.get_userRun?.results !== null &&
           res?.get_userRun?.results !== ''
@@ -478,7 +482,6 @@ export default function RunsDetails() {
         : window.location.pathname.split('/')[3],
     };
     dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
-      // console.log(res?.get_userRun?._id);
       setUserRunzID(res?.get_userRun);
       setUserRunzResult(
         res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
@@ -579,7 +582,6 @@ export default function RunsDetails() {
 
   React.useEffect(() => {
     if (htmlToJSON.child && htmlToJSON.child !== prevStateRef.current.child) {
-      // debugger;
       getSateicDate();
       prevStateRef.current = htmlToJSON;
     }
@@ -693,12 +695,6 @@ export default function RunsDetails() {
     setTimeout(() => {
       successPopupRef.current.open(false, 'Runs');
     }, 3000);
-  };
-
-  const handleXAxisChange = (event: any, dataIndex: any) => {
-    const data = [...charts];
-    data[dataIndex].xValue = event.target.value;
-    setCharts(data);
   };
 
   const handleYAxisChange = (event: any, dataIndex: any, keyIndex: any) => {
@@ -948,10 +944,22 @@ export default function RunsDetails() {
         organisationId: procedureSliceData?.get_run?.organisationId,
         userProcedure: JSON.stringify(htmlInput),
         static_chart_data: JSON.stringify(finalTableTitleResult),
+        startTime: new Date(),
       };
-      // console.log(runzValue.status);
-
       if (runzValue.status == 'Created') {
+        // dispatch(postUserRunsData(payload)).then((res: any) => {
+        //   let payload1 = {
+        //     _id: runzValue._id,
+        //     status: 'Started',
+        //   };
+        //   dispatch(fetchUpdateRunsData(payload1));
+        //   toast(`Runs table readings created successfully !`, {
+        //     style: {
+        //       background: '#00bf70',
+        //       color: '#fff',
+        //     },
+        //   });
+        // });
         dispatch(postUserRunsData(payload));
         let payload1 = {
           _id: runzValue._id,
@@ -1473,6 +1481,21 @@ export default function RunsDetails() {
     };
     runsChange['status'] = status;
     status === 'Stopped' && setIsChartPause(true);
+    var payload: any = {};
+    if (status == 'Started') {
+      payload['runId'] = runzValue._id;
+      payload['startTime'] = new Date();
+      setStartDate(new Date());
+    } else {
+      payload['runId'] = runzValue._id;
+      setEndDate(new Date());
+      payload['endTime'] = new Date();
+    }
+    if (userRunzID?._id) {
+      await dispatch(UpdateUserRunsData(payload));
+    } else {
+      await dispatch(postUserRunsData(payload));
+    }
     await dispatch(fetchUpdateRunsData(runsChange));
     await toast('Runs status updated !', {
       style: {
@@ -1529,7 +1552,6 @@ export default function RunsDetails() {
                             sx={{ m: 2 }}
                             onClick={() => {
                               handleStatusChange('Started');
-                              setStartDate(new Date());
                             }}
                           >
                             Start
@@ -1547,7 +1569,6 @@ export default function RunsDetails() {
                             sx={{ m: 2 }}
                             onClick={() => {
                               handleStatusChange('Stopped');
-                              setEndDate(new Date());
                             }}
                           >
                             Stop
@@ -1654,8 +1675,7 @@ export default function RunsDetails() {
                       >
                         {loginUserSliceData.verifyToken._id ==
                           runzValue?.assignedTo?._id && (
-                          <div>
-                          {/* // <Fragment> */}
+                          <>
                             <MenuItem onClick={handleClose}>
                               <Button
                                 disabled={disableStart}
@@ -1690,7 +1710,7 @@ export default function RunsDetails() {
                                 Stop
                               </Button>
                             </MenuItem>
-                           </div>
+                          </>
                         )}
                         {/* <MenuItem onClick={handleClose}>
                           <Button
@@ -1706,9 +1726,11 @@ export default function RunsDetails() {
                             Assign
                           </Button>
                         </MenuItem> */}
-                        <MenuItem onClick={() => {
-                          handleAssignClick('share');handleClose()
-                        }}
+                        <MenuItem
+                          onClick={() => {
+                            handleAssignClick('share');
+                            handleClose();
+                          }}
                         >
                           <Button
                             type="submit"
@@ -1724,17 +1746,18 @@ export default function RunsDetails() {
                             Share
                           </Button>
                         </MenuItem>
-                        <MenuItem onClick={() => {
-                              // setDialog2Open(true);
-                              runsPopupRef.current.open(true);handleClose()
-                            }}
-                            >
+                        <MenuItem
+                          onClick={() => {
+                            // setDialog2Open(true);
+                            runsPopupRef.current.open(true);
+                            handleClose();
+                          }}
+                        >
                           <Button
                             type="submit"
                             variant="contained"
                             className="edit-btn"
                             disabled={!credencial?.runs_management?.edit}
-                            
                           >
                             <img
                               src={edit}
@@ -1744,7 +1767,12 @@ export default function RunsDetails() {
                             Edit
                           </Button>
                         </MenuItem>
-                        <MenuItem onClick={() => {setMoreInfo(!moreInfo),handleClose()}}>
+                        <MenuItem
+                          onClick={() => {
+                            setMoreInfo(!moreInfo);
+                            handleClose();
+                          }}
+                        >
                           <Button
                             className="edit-btn"
                             style={{
@@ -2083,7 +2111,7 @@ export default function RunsDetails() {
                               control={<Radio />}
                               label="Table Chart"
                               style={{
-                                paddingLeft:'10px'
+                                paddingLeft: '10px',
                               }}
                             />
                             <FormControlLabel
@@ -2091,7 +2119,7 @@ export default function RunsDetails() {
                               control={<Radio />}
                               label="Connected Chart"
                               style={{
-                                paddingLeft:'10px'
+                                paddingLeft: '10px',
                               }}
                             />
                             {/* <FormControlLabel
@@ -2118,6 +2146,7 @@ export default function RunsDetails() {
                           savedConnectData={savedConnectData}
                           startDate={startDate}
                           endDate={endDate}
+                          usedAsset={usedAsset}
                           isPause={isChartPause}
                         />
                       ) : (

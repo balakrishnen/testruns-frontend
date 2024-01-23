@@ -8,8 +8,11 @@ mutation Create_userRunz(
     $static_chart_data: String
     $remarks: String
     $results : String
+    $used_Asset: [String]
+    $endTime:String
+    $startTime:String
 ) {
-    create_userRunz(runId: $runId, organisationId: $organisationId, userProcedure: $userProcedure, static_chart_data:$static_chart_data, remarks:$remarks, results:$results) {
+    create_userRunz(runId: $runId, organisationId: $organisationId, userProcedure: $userProcedure, static_chart_data:$static_chart_data, remarks:$remarks, used_Asset:$used_Asset,endTime:$endTime,startTime:$startTime, results:$results) {
         _id
         runId
         organisationId
@@ -32,8 +35,11 @@ mutation Update_userRun(
     $static_chart_data: String
     $remarks: String
     $results : String
+    $used_Asset: [String]
+    $endTime:String
+    $startTime:String
 ) {
-    update_userRun(_id: $_id, userProcedure: $userProcedure, static_chart_data: $static_chart_data, remarks:$remarks, results:$results) {
+    update_userRun(_id: $_id, userProcedure: $userProcedure, static_chart_data: $static_chart_data, remarks:$remarks, used_Asset:$used_Asset, endTime:$endTime, startTime:$startTime, results:$results) {
         _id
         runId
         organisationId
@@ -65,5 +71,8 @@ query Get_userRun(
         isDeleted
         createdAt
         updatedAt
+        endTime
+        startTime
+        used_Asset
     }
 }`;
