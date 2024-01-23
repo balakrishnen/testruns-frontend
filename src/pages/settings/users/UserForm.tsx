@@ -310,6 +310,8 @@ updateProfile(auths?.currentUser, {
       //     id: item._id,
       //   })),
       // );
+      console.log("departmentSliceData",departmentSliceData);
+      
       setRoleData(
         roleSliceData?.map((item: any) => ({
           label: item.name,
@@ -318,7 +320,7 @@ updateProfile(auths?.currentUser, {
       );
       const mappedDepartments = (userData?.departmentId || []).map((id: string) => {
         var department = departmentSliceData?.find(obj => obj._id === id);
-      
+        console.log("department",department);
         if (department) {
             return {
                 label: department.name,
@@ -327,7 +329,13 @@ updateProfile(auths?.currentUser, {
             };
         }
       
-        return null; // Handle the case where the department with the specified ID is not found
+        return departmentSliceData?.map((item: any) => ({
+          label: item.name,
+          value: item.name,
+          id: item._id,
+        }))
+        
+        // Handle the case where the department with the specified ID is not found
     }).filter((department) => department !== null) 
 
       const mappedDLabs = userData?.laboratoryId?.map((id: string) => {
@@ -341,21 +349,26 @@ updateProfile(auths?.currentUser, {
           };
         }
      
-        return null // Handle the case where the department with the specified ID is not found
+        return labSliceData?.map((item: any) => ({
+          label: item.name,
+          value: item.name,
+          id: item._id,
+        })) // Handle the case where the department with the specified ID is not found
       }).filter((lab) => lab !== null) 
 
       console.log("mappedDepartments",mappedDepartments);
       console.log("mappedDepartments",mappedDLabs);
+      
       if(type=="edit"){
   formik.setFieldValue('departmentId', mappedDepartments!==undefined && mappedDepartments);
   formik.setFieldValue('laboratoryId', mappedDLabs!==undefined && mappedDLabs);
       }
-  setDepartmentData(type=="edit"?mappedDepartments:departmentSliceData?.map((item: any) => ({
+  setDepartmentData(type=="edit"?mappedDepartments?.length!==0 && mappedDepartments!==undefined && mappedDepartments:departmentSliceData?.map((item: any) => ({
         label: item.name,
         value: item.name,
         id: item._id,
       })),)
-  setLabData(type=="edit"?mappedDLabs:labSliceData?.map((item: any) => ({
+  setLabData(type=="edit"? mappedDLabs?.length!==0 && mappedDLabs!==undefined  && mappedDLabs:labSliceData?.map((item: any) => ({
     label: item.name,
     value: item.name,
     id: item._id,
