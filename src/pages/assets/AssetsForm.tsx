@@ -44,8 +44,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { postAssetsData } from '../../api/assetsAPI';
-import { fetchDepartmentData } from '../../api/departmentAPI';
-import { fetchLabData } from '../../api/labAPI';
+import { fetchDepartmentById, fetchDepartmentData } from '../../api/departmentAPI';
+import { fetchLabById, fetchLabData } from '../../api/labAPI';
 import { fetchOrganizationData } from '../../api/organizationAPI';
 import SuccessPopup from '../../components/SuccessPopup';
 import Confirmationpopup from '../../components/ConfirmationPopup';
@@ -92,12 +92,35 @@ const Addnewpopup = React.forwardRef(
     const fileUploadField = React.useRef<any>(null);
     const [uploadedFile, setUploadedFile] = React.useState(null);
     const [loader,setLoader]=React.useState(false)
+    const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
+
+    const departmentSliceData = useSelector(
+      (state: any) => state.department.data?.get_all_departments,
+    );
+    const labSliceData = useSelector(
+      (state: any) => state.lab.data?.get_all_labs,
+    );
+    const organizationSliceData = useSelector(
+      (state: any) => state.organization.data?.get_all_organisations,
+    );
+    console.log(organizationData);
 
     React.useImperativeHandle(ref, () => ({
       open(state: any) {
         setFormPopup(state);
+        formik.setFieldValue("organisationId",singleUserData?.organisationId)
+        formik.setFieldValue("departmentId",singleUserData?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj?.id == item) ))) || []);
+        formik.setFieldValue("laboratoryId",singleUserData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj?.id == item) ))) || []);
+
       },
+
     }));
+    
+    React.useEffect(()=>{
+      formik.setFieldValue('departmentId', singleUserData?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj?.id == item) ))) || []);
+      formik.setFieldValue('laboratoryId', singleUserData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj?.id == item) ))) || []);
+     
+    },[organizationSliceData])
 
     const checkCredentials = (name: any) => {
       return true;
@@ -106,9 +129,9 @@ const Addnewpopup = React.forwardRef(
       const isMatch = checkCredentials(values.name);
       if (isMatch) {
         var deptArray:any=[]
-        departments.map((item:any)=>(deptArray.push(item?.id)))
+        values.departmentId.map((item:any)=>(deptArray.push(item?.id)))
         var labArray:any=[]
-        laboratory.map((item:any)=>(labArray.push(item?.id)))
+        values.laboratoryId.map((item:any)=>(labArray.push(item?.id)))
         
         let assetValues:any={
         name: values.name,
@@ -121,7 +144,7 @@ const Addnewpopup = React.forwardRef(
         departmentId: deptArray,
         laboratoryId: labArray,
         status: values.status,
-        instituteId:process.env.INSTITUTION_ID
+        instituteId:singleUserData?.instituteId
         }
         console.log(values.organisationId);
         if(uploadedFile!==null){
@@ -179,32 +202,58 @@ const Addnewpopup = React.forwardRef(
       validationSchema: validationSchema,
       onSubmit: onSubmit,
     });
-    const departmentSliceData = useSelector(
-      (state: any) => state.department.data?.get_all_departments,
-    );
-    const labSliceData = useSelector(
-      (state: any) => state.lab.data?.get_all_labs,
-    );
-    const organizationSliceData = useSelector(
-      (state: any) => state.organization.data?.get_all_organisations,
-    );
-    console.log(organizationData);
 
     React.useEffect(() => {
-      setDepartmentData(
-        departmentSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
-      setLabData(
-        labSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
+      // setDepartmentData(
+      //   departmentSliceData?.map((item: any) => ({
+      //     label: item.name,
+      //     value: item.name,
+      //     id: item._id,
+      //   })),
+      // );
+      // setLabData(
+      //   labSliceData?.map((item: any) => ({
+      //     label: item.name,
+      //     value: item.name,
+      //     id: item._id,
+      //   })),
+      // );
+      const mappedDepartments = (singleUserData?.departmentId || []).map((id: string) => {
+        var department = departmentSliceData?.find(obj => obj._id === id);
+      
+        if (department) {
+            return {
+                label: department.name,
+                value: department.name,
+                id: department._id,
+            };
+        }
+      
+        return null; // Handle the case where the department with the specified ID is not found
+    }).filter((department) => department !== null) 
+
+      const mappedDLabs = singleUserData?.laboratoryId?.map((id: string) => {
+        var lab = labSliceData?.find(obj => obj._id === id);
+      
+        if (lab) {
+          return {
+            label: lab.name,
+            value: lab.name,
+            id: lab._id,
+          };
+        }
+     
+        return null // Handle the case where the department with the specified ID is not found
+      }).filter((lab) => lab !== null) 
+      
+      
+      console.log("mappedDepartments",mappedDepartments);
+      console.log("mappedDepartments",mappedDLabs);
+      
+      setDepartmentData(mappedDepartments)
+      setLabData(mappedDLabs)
+      formik.setFieldValue("laboratoryId",mappedDLabs)
+      // formik.setFieldValue('laboratoryId', singleUserData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj?.id == item) ))) || []);
       setOrganizationData(
         organizationSliceData?.map((item: any) => ({
           label: item.name,
@@ -214,12 +263,47 @@ const Addnewpopup = React.forwardRef(
       );
     }, [departmentSliceData, labSliceData, organizationSliceData]);
 
+//     React.useEffect(() => {
+//       dispatch(fetchDepartmentData()).then((res)=>{
+// setDepartmentData(res?.data?.get_all_departments)
+
+//       }).catch((err)=>{
+//         console.log(err);
+        
+//       })
+
+//       dispatch(fetchLabData()).then((res)=>{
+//         setLabData(res?.data?.get_all_labs)
+        
+//               }).catch((err)=>{
+//                 console.log(err);
+                
+//               })
+//       dispatch(fetchOrganizationData());
+//     }, []);
+
     React.useEffect(() => {
-      dispatch(fetchDepartmentData());
+      dispatch(fetchDepartmentData())
       dispatch(fetchLabData());
       dispatch(fetchOrganizationData());
     }, []);
 
+    // React.useEffect(() => {
+    //   const payload = {
+    //     organisationId  : formik.values.organisationId
+    // }
+    //     dispatch(fetchDepartmentById(payload))
+    // }, [formik.values.organisationId])
+
+    // React.useEffect(() => {
+    //   var dept: any = []
+    //   formik.values.departmentId?.map((item: any) => (dept.push(item?.id)))
+    //   let payload = {
+    //     departmentId : dept
+    // }
+    //   dispatch(fetchLabById(payload));
+    //   }, [formik.values.departmentId])
+      
     const handleConfirmationState = (state: any) => {
       if (state === 0) {
         confirmationPopupRef.current.open(false);
@@ -556,6 +640,7 @@ const Addnewpopup = React.forwardRef(
                             }
                             margin="none"
                             fullWidth
+                            disabled={true}
                             id="organisationId"
                             name="organisationId"
                             // autoComplete="organisationId"
@@ -600,13 +685,13 @@ const Addnewpopup = React.forwardRef(
                             id="departmentId"
                             // name="laboratoryId"
                             disableCloseOnSelect
-                            value={departments}
+                            value={formik.values.departmentId}
                             options={
                               departmentData !== undefined ? departmentData : []
                             }
-                            getOptionLabel={(option: any) => option.label}
+                            getOptionLabel={(option: any) => option?.label}
                             isOptionEqualToValue={(option: any, value: any) =>
-                              value.id == option.id
+                              value?.id == option?.id
                             }
                             renderInput={(params) => (
                               <TextField {...params} placeholder={departments.length==0?"Department/s":""} />
@@ -631,6 +716,10 @@ const Addnewpopup = React.forwardRef(
                             )}
                             onChange={(_, selectedOptions: any) =>{
                               setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
+                            }
+                            onBlur={()=>{
+                              var dept:any=[];
+                              formik.values.departmentId?.map((item: any) => (dept.push(item?.id))); dispatch(fetchLabById({departmentId : dept}))}
                             }
                           />
                           {formik.touched.departmentId &&
@@ -657,13 +746,13 @@ const Addnewpopup = React.forwardRef(
                             multiple
                             id="laboratoryId"
                             options={labData !== undefined ? labData : []}
-                            getOptionLabel={(option: any) => option.label}
+                            getOptionLabel={(option: any) => option?.label}
                             // onFocus={()=>handleLabList()}
-                            isOptionEqualToValue={(option: any, value: any) =>
-                              value.id == option.id
-                            }
+                            isOptionEqualToValue={(option: any, value: any) =>value?.id == option?.id} 
+                             
+                            
                             disableCloseOnSelect
-                            value={laboratory}
+                            value={formik.values.laboratoryId}
                             renderInput={(params) => (
                               <TextField {...params} placeholder={laboratory.length==0?"Laboratory/ies":""}/>
                             )}
@@ -681,7 +770,7 @@ const Addnewpopup = React.forwardRef(
                                     style={{ marginRight: 0 }}
                                     checked={selected}
                                   />
-                                  {option.value}
+                                  {option?.value}
                                 </li>
                               </React.Fragment>
                             )}

@@ -295,10 +295,10 @@ const[organizationSliceData,setorganizationSliceData]=React.useState<any>([])
   };
   const assetVal: any = { _id: rowId };
 
-  const handleDeleteConfirmation = (state: any) => {
+  const handleDeleteConfirmation = async(state: any) => {
     if (state === 1) {
       // deletePopupRef.current.open(false);
-      dispatch(deleteUserData(assetVal));
+     await dispatch(deleteUserData(assetVal));
       toast(`User deleted !`, {
         style: {
           background: '#00bf70',
@@ -310,7 +310,7 @@ const[organizationSliceData,setorganizationSliceData]=React.useState<any>([])
       // setTimeout(() => {
       //   deleteSuccessPopupRef.current.open(false);
       // }, 3000);
-      reload();
+      await reload();
       setTableHeaderVisible(false);
     }
     deletePopupRef.current.open(false);

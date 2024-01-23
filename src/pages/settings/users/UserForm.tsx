@@ -346,8 +346,20 @@ updateProfile(auths?.currentUser, {
 
       console.log("mappedDepartments",mappedDepartments);
       console.log("mappedDepartments",mappedDLabs);
+      if(type=="edit"){
   formik.setFieldValue('departmentId', mappedDepartments!==undefined && mappedDepartments);
   formik.setFieldValue('laboratoryId', mappedDLabs!==undefined && mappedDLabs);
+      }
+  setDepartmentData(type=="edit"?mappedDepartments:departmentSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })),)
+  setLabData(type=="edit"?mappedDLabs:labSliceData?.map((item: any) => ({
+    label: item.name,
+    value: item.name,
+    id: item._id,
+  })),)
   
       setOrganizationData(
         organizationSliceData?.map((item: any) => ({
@@ -365,15 +377,15 @@ updateProfile(auths?.currentUser, {
 
 
 
-    console.log(departmentData);
+    console.log("departmentData",departmentData);
 
     console.log(DepartmentList);
     
-    React.useEffect(async() => {
-     await dispatch(fetchinstitutionData())
-     await dispatch(fetchOrganizationById())
-     await dispatch(fetchDepartmentById());
-     await   dispatch(fetchLabById());
+    React.useEffect(() => {
+      dispatch(fetchinstitutionData())
+      dispatch(fetchOrganizationById())
+      dispatch(fetchDepartmentById());
+      dispatch(fetchLabById());
      
     }, []);
 
@@ -623,7 +635,7 @@ updateProfile(auths?.currentUser, {
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
-                        xs: '1rem !important',
+                        xs: '0rem !important',
                         sm: '1rem !important',
                       },
                       paddingRight: { sm: '1rem !important' }
@@ -889,10 +901,9 @@ updateProfile(auths?.currentUser, {
                     sx={{
                       paddingLeft: { sm: '1rem !important' },
                       paddingTop: {
-                        xs: '1rem !important',
+                        xs: '0rem !important',
                         sm: '1rem !important',
                       },
-                      paddingRight: { sm: '1rem !important' }
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
