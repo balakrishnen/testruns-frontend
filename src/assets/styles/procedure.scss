@@ -51,7 +51,8 @@ $width1: 200px;
         top: 65px; 
     }
     .edit-details{       
-        bottom: 0px;      
+        bottom: 0px;  
+        z-index: 99 !important;    
     }    
     .main-proceduredetails{
         padding: 8rem 1.5rem;

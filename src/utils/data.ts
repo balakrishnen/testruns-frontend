@@ -1044,14 +1044,14 @@ export const RunsHeaders: any = [
     filters: [
       {
         id: 'search',
-        type: 'textfield',
+        type: 'autocomplete',
         label: 'Search',
         options: [],
       },
     ],
     sort: 'desc',
     is_show: true,
-    type: 'text',
+    type: 'autocomplete',
   },
   // {
   //   id: 'extraDate',

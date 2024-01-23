@@ -50,6 +50,7 @@ import userr from '../../../assets/images/profile/profile.svg';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import Emptystate from '../../../assets/images/Emptystate.svg';
+import { fetchOrganizationData } from '../../../api/organizationAPI';
 
 const users: UserRowData[] = UserRows;
 const userStatus = StatusList;
@@ -116,10 +117,10 @@ console.log("userSliceData",userSliceData);
   const roleSliceData = useSelector(
     (state: any) => state.role.data?.find_roles,
   );
-  const organizationSliceData = useSelector(
-    (state: any) => state.organization.data?.get_all_organisations,
-  );
-
+  // const organizationSliceData = useSelector(
+  //   (state: any) => state.organization.data?.get_all_organisations,
+  // );
+const[organizationSliceData,setorganizationSliceData]=React.useState<any>([])
   React.useEffect(() => {
     // setTimeout(() => {
     //   setLoader(false);
@@ -128,6 +129,15 @@ console.log("userSliceData",userSliceData);
   }, [userData]);
 
   React.useEffect(() => {
+    dispatch(fetchOrganizationData()).then((res)=>{
+      setorganizationSliceData(res?.get_all_organisations)
+      console.log("get_all_organisations",res?.get_all_organisations);
+      
+    })
+    .catch((err)=>{
+      console.log(err);
+      
+    })
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {

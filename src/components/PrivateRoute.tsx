@@ -20,7 +20,7 @@ const PrivateRoute = ({ children }: any) => {
   //   isLoggedIn = sessionStorage.getItem('isLoggedIn');
   // }
   if (typeof window !== 'undefined') {
-  const storedData = sessionStorage.getItem("isLoggedIn");
+  const storedData = localStorage.getItem("isLoggedIn");
   console.log(storedData);
   
   if (!storedData) {

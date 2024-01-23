@@ -238,12 +238,12 @@ export default function TableFilters({
                   </Button>
                 )
               }
-              {module == 'runs' && (
+              {/* {module == 'runs' && (
                 <Button className="delete-actions" onClick={()=>handleAssignClick("assign")} >
                   <img src={assign} alt="assign" className="Image-actions" />
                   Assign 
                 </Button>
-              )}  
+              )}   */}
               <AddPeoplePopup
                 open={runsOpen}
                 close={() => setRunsOpen(false)}

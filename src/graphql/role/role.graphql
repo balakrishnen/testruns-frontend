@@ -25,6 +25,7 @@ query Get_all_roles {
             editLab
             editOrganisation
             editContact
+            editRole
         }
         user_management {
             create
@@ -65,6 +66,7 @@ query Get_role($instituteId :String!) {
             editLab
             editOrganisation
             editContact
+            editRole
         }
         runs_management {
             create
@@ -136,6 +138,7 @@ query Find_roles($instituteId: String!) {
             editLab
             editOrganisation
             editContact
+            editRole
         }
         user_management {
             create
@@ -197,6 +200,7 @@ input ProcedureManagement {
   editLab: Boolean
   editOrganisation: Boolean
   editContact: Boolean
+  editRole:Boolean
 }
   input BulkUserManagement {
   create: Boolean

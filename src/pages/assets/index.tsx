@@ -118,7 +118,7 @@ export default function Assets() {
     perPage: 10,
     searchBy: null,
     search: null,
-    sortBy: "assetNumber",
+    sortBy: "_id",
     sortOrder: 'desc',
     
   });
@@ -173,8 +173,11 @@ const getAllassets=()=>{
   sortBy:queryStrings.sortBy ,
   sortOrder:queryStrings.sortOrder ,
   }
-  if(loginUserSliceData?.verifyToken?.role[0]?.name=="tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+  if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
     payload["laboratoryId"]=singleUserData?.laboratoryId
+  }
+  if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
+    payload["organisationId"]=singleUserData?.organisationId
   }
   dispatch(fetchAssetsData(payload)).then((res:any)=>{
   console.log(res?.Assets);

@@ -53,7 +53,7 @@ const Login = () => {
   let isLoggedIn :any= null;
 
   if (typeof window !== 'undefined') {
-    isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    isLoggedIn = localStorage.getItem('isLoggedIn');
   }
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
@@ -103,7 +103,7 @@ const Login = () => {
                   },2000)
                 }
                 else{
-                  window.sessionStorage.setItem("isLoggedIn", "true");
+                  window.localStorage.setItem("isLoggedIn", "true");
                  
                   toast(` Login successfully !`, {
                     style: {
@@ -321,7 +321,7 @@ const Login = () => {
           className="forgot-pass1"
 
         >
-          version 2. 3. 3
+          version 2. 3. 8
         </Typography>
       </Box>
       <Box sx={{ mt: "2rem" }}>

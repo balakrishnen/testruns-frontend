@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-import React from 'react';
+import React, { Fragment } from 'react';
 import PrivateRoute from '../../../components/PrivateRoute';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -245,7 +245,7 @@ export default function RunsDetails() {
   const [runsOpen, setRunsOpen] = React.useState(false);
   const [moreInfo, setMoreInfo] = React.useState(false);
   const [chartTable, setChartTable] = React.useState(null);
-  const [userProcedure, setuserProcedure] = React.useState(editorData);
+  const [userProcedure, setuserProcedure] = React.useState('');
   const runsStatus = RunsStatusList;
   const [isLoader, setIsLoader] = React.useState<boolean>(true);
   const [selectedChart, setSelectedChart] = React.useState<any>('Table_Chart');
@@ -945,7 +945,7 @@ export default function RunsDetails() {
       handleHtmlInput();
       var payload: any = {
         runId: runzValue._id,
-        organisationId: process.env.ORGANIZATION_ID,
+        organisationId: procedureSliceData?.get_run?.organisationId,
         userProcedure: JSON.stringify(htmlInput),
         static_chart_data: JSON.stringify(finalTableTitleResult),
       };
@@ -958,7 +958,7 @@ export default function RunsDetails() {
           status: 'Started',
         };
         dispatch(fetchUpdateRunsData(payload1));
-        toast(`Run User Procedure Created !`, {
+        toast(`Runs table readings created successfully !`, {
           style: {
             background: '#00bf70',
             color: '#fff',
@@ -967,7 +967,7 @@ export default function RunsDetails() {
       } else {
         let payload2 = {
           _id: userRunzID?._id,
-          organisationId: process.env.ORGANIZATION_ID,
+          organisationId: procedureSliceData?.get_run?.organisationId,
           userProcedure: JSON.stringify(htmlInput),
           static_chart_data: JSON.stringify(finalTableTitleResult),
         };
@@ -978,7 +978,7 @@ export default function RunsDetails() {
 
         setStaticChartData(finalTableTitleResult);
         setSavedChartData(null);
-        toast(`Run User Procedure updated !`, {
+        toast(`Runs table readings updated successfully !`, {
           style: {
             background: '#00bf70',
             color: '#fff',
@@ -1515,7 +1515,7 @@ export default function RunsDetails() {
                       }}
                     >
                       {loginUserSliceData.verifyToken._id ===
-                        runzValue?.assignedTo._id && (
+                        runzValue?.assignedTo?._id && (
                         <>
                           <Button
                             disabled={disableStart}
@@ -1653,8 +1653,9 @@ export default function RunsDetails() {
                         disableScrollLock={true}
                       >
                         {loginUserSliceData.verifyToken._id ==
-                          runzValue?.assignedTo._id && (
-                          <>
+                          runzValue?.assignedTo?._id && (
+                          <div>
+                          {/* // <Fragment> */}
                             <MenuItem onClick={handleClose}>
                               <Button
                                 disabled={disableStart}
@@ -1689,9 +1690,9 @@ export default function RunsDetails() {
                                 Stop
                               </Button>
                             </MenuItem>
-                          </>
+                           </div>
                         )}
-                        <MenuItem onClick={handleClose}>
+                        {/* <MenuItem onClick={handleClose}>
                           <Button
                             type="submit"
                             variant="contained"
@@ -1704,12 +1705,16 @@ export default function RunsDetails() {
                             />
                             Assign
                           </Button>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        </MenuItem> */}
+                        <MenuItem onClick={() => {
+                          handleAssignClick('share');handleClose()
+                        }}
+                        >
                           <Button
                             type="submit"
                             variant="contained"
                             className="edit-btn"
+                            disabled={!credencial?.runs_management?.share}
                           >
                             <img
                               src={shareimg}
@@ -1719,15 +1724,17 @@ export default function RunsDetails() {
                             Share
                           </Button>
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={() => {
+                              // setDialog2Open(true);
+                              runsPopupRef.current.open(true);handleClose()
+                            }}
+                            >
                           <Button
                             type="submit"
                             variant="contained"
                             className="edit-btn"
-                            onClick={() => {
-                              // setDialog2Open(true);
-                              runsPopupRef.current.open(true);
-                            }}
+                            disabled={!credencial?.runs_management?.edit}
+                            
                           >
                             <img
                               src={edit}
@@ -1737,7 +1744,7 @@ export default function RunsDetails() {
                             Edit
                           </Button>
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={() => {setMoreInfo(!moreInfo),handleClose()}}>
                           <Button
                             className="edit-btn"
                             style={{

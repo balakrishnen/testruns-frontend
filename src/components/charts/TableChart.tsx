@@ -99,6 +99,7 @@ export default function TableChart({
   //     yAxisOptions: [],
   //   },
   // ];
+console.log(staticChartData,"staticChartData");
 
   const [chartData, setChartData] = React.useState<any>(
     savedChartData === null
@@ -541,6 +542,14 @@ export default function TableChart({
                           MenuProps={{
                             disableScrollLock: true,
                             marginThreshold: null,
+                            anchorOrigin: {
+                              vertical: "top",
+                              horizontal: "left"
+                            },
+                            transformOrigin: {
+                              vertical: "top",
+                              horizontal: "left"
+                            },
                           }}
                           labelId="view-all-label2"
                           size="small"

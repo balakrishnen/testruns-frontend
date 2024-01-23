@@ -48,62 +48,7 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
   // let data = NotificationMessageSliceData?.message?.some((item) => !item.isRead)
   // console.log(data);
   
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="help icon" color="inherit">
-          <img src={help} alt="help_icon" className="app-bar-images" />
-        </IconButton>
-        <p>Help</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton size="large" aria-label="notification icon" color="inherit">
-          <img
-            src={notification}
-            alt="notification_icon"
-            className="app-bar-images"
-          />
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="account"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <img src={account} alt="account_icon" className="app-bar-images" />
-        </IconButton>
-        <p>Account</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="dark"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <img src={dark} alt="dark_icon" className="app-bar-images" />
-        </IconButton>
-        <p>Dark Mode</p>
-      </MenuItem>
-    </Menu>
-  );
+  
 
   const openEditProfile = () => {
     props.toggleProfileDrawer();
@@ -131,7 +76,7 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
       .then((isSucess:any) => {
         setUserData(isSucess?.get_user)
         if(typeof window !== 'undefined'){
-        window.localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
+        window.localStorage.setItem("userProfileDetails",JSON.stringify(isSucess?.get_user))
         }
         })
       
@@ -209,6 +154,71 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
     });
   }, [NotificationMessageSliceData]);
   console.log("isAnyRead2",isAnyRead);
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id={mobileMenuId}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem>
+        <IconButton size="large" aria-label="help icon" color="inherit">
+          <img src={help} alt="help_icon" className="app-bar-images" />
+        </IconButton>
+        <p>Help</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton size="large" aria-label="notification icon" color="inherit" onClick={openNotificationList}>
+        <Badge
+                color="secondary"
+                // variant={isAnyRead==true?"dot":"standard"}
+                variant={isAnyRead==true?"dot":"standard"}
+                // invisible={isAnyRead==true?false:true}
+                className="red-badge"
+              >
+          <img
+            src={notification}
+            alt="notification_icon"
+            className="app-bar-images"
+          />
+          </Badge>
+        </IconButton>
+        <p onClick={openNotificationList} >Notifications</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="account"
+          aria-haspopup="true"
+          color="inherit"
+          onClick={openEditProfile}
+        >
+          <img className="app-bar-images" src={(userProfileDetails?.imageUrl!=="" && userProfileDetails?.imageUrl!==null)?userProfileDetails?.imageUrl:account} alt="account_icon" style={{width: "25px", height: "25px",borderRadius: "16px"}}/>
+        </IconButton>
+        <p onClick={openEditProfile}>{userProfileDetails?.firstName}</p>
+      </MenuItem>
+      {/* <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="dark"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <img src={dark} alt="dark_icon" className="app-bar-images" />
+        </IconButton>
+        <p>Dark Mode</p>
+      </MenuItem> */}
+    </Menu>
+  );
   return (
     <Box className="app-bar-block">
       <AppBar
@@ -289,7 +299,7 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
               color="inherit"
               onClick={openEditProfile}
             >
-              <Typography variant="inherit" className="app-bar-username">
+              <Typography variant="inherit" className="app-bar-username" style={{textTransform: "capitalize"}}>
                 Hi {userProfileDetails?.firstName}
               </Typography>
               <div >

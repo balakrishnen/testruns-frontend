@@ -521,7 +521,7 @@ console.log(singleUserData);
           <Box className="profile-camera">
             <div style={{width:"200px", height:'200px'}}>
               <img
-                src={uploadedFile == null ? profile : uploadedFile}
+                src={(uploadedFile == null || uploadedFile == "" ) ? profile : uploadedFile}
                 alt="profiles"
                 style={{
                   width: '100%',
@@ -973,6 +973,7 @@ console.log(singleUserData);
                             className="placeholder-color"
                             style={{ marginTop: '10px', color: 'black' }}
                             displayEmpty
+                            disabled= {!credencial?.profile_management?.editRole}
                             IconComponent={ExpandMoreOutlinedIcon}
                             renderValue={
                               formik.values.role !== ''
@@ -989,6 +990,7 @@ console.log(singleUserData);
                             onBlur={formikProfile.handleBlur}
                             value={formikProfile.values.role}
                             size="small"
+                            // disabled={true}
                             error={
                               formikProfile.touched.role &&
                               Boolean(formikProfile.errors.role)

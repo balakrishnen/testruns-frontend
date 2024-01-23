@@ -127,12 +127,12 @@ export default function HistoryTable() {
       
       React.useEffect(() => {
         //admin 65741c069d53d19df8321e6d
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="admin"){
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
       setQueryString(queryStrings)
       
     }
     //requester 65741c069d53d19df8321e6e
-    else if(loginUserSliceData?.verifyToken?.role[0]?.name=="requester"){
+    else if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
       setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
     }
     //tester 65741c069d53d19df8321e6c

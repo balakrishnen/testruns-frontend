@@ -238,6 +238,7 @@ const ProcedureForm = React.forwardRef(
     const procedureSliceData = useSelector(
       (state: any) => state.procedure.data?.get_procedure,
     );
+    const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
 
     // React.useEffect(() => {
     //  console.log(procedureSliceData?.name);
@@ -263,7 +264,7 @@ const ProcedureForm = React.forwardRef(
         createdBy: userSliceData?.firstName + userSliceData?.lastName,
         departmentId: formData?formData.departmentId:"",
         laboratoryId: formData?formData.laboratoryId:"",
-        organisationId: formData?formData.organisationId:process.env.ORGANIZATION_ID,
+        organisationId: formData?formData.organisationId:singleUserData?.organisationId,
         procedureDetials:''
       },
       validationSchema: validationSchema,
@@ -480,9 +481,9 @@ const ProcedureForm = React.forwardRef(
                             departmentData !== undefined ? departmentData : []
                           }
                           getOptionLabel={(option: any) => option.label}
-                          isOptionEqualToValue={(option: any, value: any) => {
-                            value.id == option.id;
-                          }}
+                          isOptionEqualToValue={(option: any, value: any) => 
+                            value.id == option.id
+                          }
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -523,9 +524,9 @@ const ProcedureForm = React.forwardRef(
                             departmentData !== undefined ? departmentData : []
                           }
                           getOptionLabel={(option: any) => option.label}
-                          isOptionEqualToValue={(option: any, value: any) => {
-                            value.id == option.id;
-                          }}
+                          isOptionEqualToValue={(option: any, value: any) => 
+                            value.id == option.id
+                          }
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -620,45 +621,45 @@ const ProcedureForm = React.forwardRef(
                       </label>
                       {type == 'edit' && laboratory && laboratory.length > 0 ? (
                         <Autocomplete
-                          multiple
-                          id="departmentId"
-                          options={labData !== undefined ? labData : []}
-                          getOptionLabel={(option: any) => option.label}
-                          isOptionEqualToValue={(option: any, value: any) =>
-                            value.id == option.id
-                          }
-                          disableCloseOnSelect
-                          value={laboratory}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              placeholder={
-                                laboratory?.length == 0 ? 'Laboratory/ies' : ''
-                              }
-                            />
-                          )}
-                          fullWidth
-                          placeholder="Laboratory"
-                          size="medium"
-                          renderOption={(props, option: any, { selected }) => (
-                            <React.Fragment>
-                              <li {...props}>
-                                <Checkbox
-                                  style={{ marginRight: 0 }}
-                                  checked={selected}
-                                />
-                                {option.value}
-                              </li>
-                            </React.Fragment>
-                          )}
-                          onChange={(_, selectedOptions: any) => {
-                            setLaboratory(selectedOptions);
-                            formik.setValues({
-                              ...formik.values,
-                              laboratoryId: selectedOptions,
-                            });
-                          }}
-                        />
+                        multiple
+                        id="departmentId"
+                        options={labData !== undefined ? labData : []}
+                        getOptionLabel={(option: any) => option.label}
+                        isOptionEqualToValue={(option: any, value: any) =>
+                          value.id == option.id
+                        }
+                        disableCloseOnSelect
+                        value={laboratory}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder={
+                              laboratory?.length == 0 ? 'Laboratory/ies' : ''
+                            }
+                          />
+                        )}
+                        fullWidth
+                        placeholder="Laboratory"
+                        size="medium"
+                        renderOption={(props, option: any, { selected }) => (
+                          <React.Fragment>
+                            <li {...props}>
+                              <Checkbox
+                                style={{ marginRight: 0 }}
+                                checked={selected}
+                              />
+                              {option.value}
+                            </li>
+                          </React.Fragment>
+                        )}
+                        onChange={(_, selectedOptions: any) => {
+                          setLaboratory(selectedOptions);
+                          formik.setValues({
+                            ...formik.values,
+                            laboratoryId: selectedOptions,
+                          });
+                        }}
+                      />
                       ) : (
                         <Autocomplete
                           multiple

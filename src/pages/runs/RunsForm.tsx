@@ -35,11 +35,7 @@ import {
 } from '../../utils/data';
 import { fetchDepartmentData } from '../../api/departmentAPI';
 
-import {
-  fetchSingleRunsData,
-  fetchUpdateRunsData,
-  postRunsData,
-} from '../../api/RunsAPI';
+import { fetchSingleRunsData, fetchUpdateRunsData, postRunsData } from '../../api/RunsAPI';
 import { fetchLabData } from '../../api/labAPI';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import SuccessPopup from '../../components/SuccessPopup';
@@ -50,41 +46,20 @@ import { navigate } from 'gatsby';
 import { fetchbulkRunz } from '../../api/bulkRunz';
 
 const validationSchema = Yup.object().shape({
-  procedureId: Yup.string().required('Procedure name is required'),
+  procedureId: Yup.object().required("Procedure name is required"),
   createdOn: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
-  objective: Yup.string()
-    .trim()
-    .required('Test Objective is required')
-    .max(35, 'Label must be at most 35 characters')
-    .matches(
-      /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/,
-      'Label cannot have empty spaces',
-    ),
+  objective: Yup.string().trim().required('Test Objective is required').max(35, 'Label must be at most 35 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
   // dueDate: Yup.date().required('Due Date is required'),
-  dueDate: Yup.string()
-    .required('Due Date is required')
-    .matches(
-      /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/,
-      'Invalid date',
-    ),
+  dueDate: Yup.string().required('Due Date is required').matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/, 'Invalid date'),
   assignedTo: Yup.string().notRequired(),
   organisationId: Yup.string().required('Procedure Name is required'),
-  userId: Yup.string().notRequired(),
+  userId: Yup.string().notRequired()
 });
 
 const RunsForm = React.forwardRef(
-  (
-    {
-      openConfirmationPopup,
-      type,
-      formData,
-      reload,
-      handleReloadSingleData,
-    }: any,
-    ref,
-  ) => {
+  ({ openConfirmationPopup, type, formData, reload, handleReloadSingleData }: any, ref) => {
     // const [openDlg2Dialog, setDialog2Open] = React.useState(false);
     // const [openSuccess, setSuccessOpen] = React.useState(false);
 
@@ -97,23 +72,23 @@ const RunsForm = React.forwardRef(
       label: item.name,
       value: item.name,
       id: item._id,
-    }));
+    }))
 
     let LabData = formData?.laboratoryId?.map((item: any) => ({
       label: item.name,
       value: item.name,
       id: item._id,
-    }));
+    }))
     const loginUserSliceData = useSelector(
       (state: any) => state.userLogin.data,
     );
-    const [lab, setLab] = React.useState(LabData ? LabData : []);
+    const [lab, setLab] = React.useState(LabData ? LabData : [])
 
-    const [department, setDepartment] = React.useState(
-      DepartmentData ? DepartmentData : [],
+    const [department, setDepartment] = React.useState(DepartmentData ? DepartmentData : [])
+
+    const [departments, setDepartments] = React.useState(
+      DepartmentData
     );
-
-    const [departments, setDepartments] = React.useState(DepartmentData);
     const [laboratory, setLaboratory] = React.useState(
       formData?.laboratoryId?.map((item: any) => ({
         label: item?.name,
@@ -121,6 +96,7 @@ const RunsForm = React.forwardRef(
         id: item?._id,
       })),
     );
+
     const [labData, setLabData] = React.useState([]);
     const dispatch: any = useDispatch();
     const confirmationPopupRef: any = React.useRef();
@@ -130,10 +106,13 @@ const RunsForm = React.forwardRef(
     };
     const [runsOpen, setRunsOpen] = React.useState(false);
     const [runCreate, setRunsCreate] = React.useState(false);
-    const runzSliceData = useSelector((state: any) => state.runs.data);
+    const runzSliceData = useSelector(
+      (state: any) => state.runs.data
+    );
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [inputValue, setInputValue] = useState(null);
+    const [inputValue, setInputValue] = useState(null)
+    const [isAssigned,setIsAssigned]=React.useState(false)
 
     //   const fetchProcedureSuggestions = async (inputValue) => {
     //   setLoading(true);
@@ -151,73 +130,64 @@ const RunsForm = React.forwardRef(
     //   }
     // };
 
-    const handleInputChange = (event: any, newInputValue: any) => {
+    const handleInputChange = (event, newInputValue) => {
       // Fetch suggestions when the user types
       setInputValue(newInputValue);
     };
 
     React.useEffect(() => {
-      console.log('procedureId', runzSliceData?.get_run?.procedureId._id);
+      formik.setFieldValue('objective', runzSliceData?.get_run?.objective)
+      formik.setFieldValue('laboratoryId', runzSliceData?.get_run?.laboratoryId)
+      formik.setFieldValue('departmentId', runzSliceData?.get_run?.departmentId)
+      formik.setFieldValue('procedureId', runzSliceData?.get_run?.procedureId)
+      formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
 
-      formik.setFieldValue('objective', runzSliceData?.get_run?.objective);
-      formik.setFieldValue(
-        'laboratoryId',
-        runzSliceData?.get_run?.laboratoryId,
-      );
-      formik.setFieldValue(
-        'departmentId',
-        runzSliceData?.get_run?.departmentId,
-      );
-      formik.setFieldValue('procedureId', runzSliceData?.get_run?.procedureId);
-      formik.setFieldValue(
-        'dueDate',
-        type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null,
-      );
-
-      console.log('runzSliceData', runzSliceData);
-    }, [runzSliceData]);
+    }, [runzSliceData])
     React.useImperativeHandle(ref, () => ({
       open(state: any, row: any) {
-        setRunsCreate(state);
-        if (row?._id) {
-          let payload = {
-            _id: row?._id,
-          };
-          dispatch(fetchSingleRunsData(payload));
-          formik.setFieldValue(
-            'procedureId',
-            runzSliceData?.get_run?.procedureId?._id,
-          );
-          formik.setFieldValue('objective', runzSliceData?.get_run?.objective);
-          formik.setFieldValue(
-            'procedureId',
-            runzSliceData?.get_run?.procedureId,
-          );
-        } else {
-          formik.setFieldValue('objective', '');
+        setRunsCreate(state)
+        if (type == 'edit') {
+          if (row?._id) {
+
+            let payload = {
+              _id: row?._id
+            }
+            dispatch(fetchSingleRunsData(payload))
+            // formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId?._id)
+            formik.setFieldValue('objective', runzSliceData?.get_run?.objective)
+            formik.setFieldValue("procedureId", runzSliceData?.get_run?.procedureId);
+            formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
+            setDepartment(DepartmentData ? DepartmentData : [])
+            setLab(LabData ? LabData : [])
+          }
+        }
+        else {
+          formik.setFieldValue('objective', "")
+          formik.setFieldValue("procedureId", null);
         }
       },
     }));
     // const departments: any = [];
     // const laboratory: any = [];
     const checkCredentials = (values: any) => {
-      return true;
+      if(isAssigned){
+      return true;}
+      else{
+        setIsAssigned(false)
+      }
     };
-    const singleUserData = useSelector(
-      (state: any) => state.user?.data?.get_user,
-    );
+    const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
     const onSubmit = async (values: any) => {
       const isMatch = checkCredentials(values.name);
-      console.log('values.createdOn', values.createdOn);
 
       if (isMatch) {
-        var deptArray: any = [];
-        departments.map((item: any) => deptArray.push(item?.id));
-        var labArray: any = [];
-        laboratory.map((item: any) => labArray.push(item?.id));
+        var deptArray: any = []
+        departments.map((item: any) => (deptArray.push(item?.id)))
+        var labArray: any = []
+        laboratory.map((item: any) => (labArray.push(item?.id)))
         let runsValues: any = {
           objective: values.objective,
-          procedureId: values.procedureId,
+          procedureId: values.procedureId?._id,
           departmentId: deptArray,
           laboratoryId: labArray,
           assignedTo: values.assignedTo,
@@ -226,82 +196,73 @@ const RunsForm = React.forwardRef(
           createdOn: moment(values.createdOn.$d).format('MM/DD/YYYY'),
           status: values.status,
           organisationId: values.organisationId,
-          userId: singleUserData?._id,
+          userId: singleUserData?._id
           // procedureDetials:values.procedureDetials
+
         };
 
         if (type == 'edit') {
-          runsValues['_id'] = formData._id;
+          runsValues['_id'] = formData._id
         }
         if (type == 'edit') {
-          await dispatch(fetchUpdateRunsData(runsValues));
+          await dispatch(fetchUpdateRunsData(runsValues))
           setTimeout(() => {
-            handleReloadSingleData();
-          }, 2000);
+            handleReloadSingleData()
+          }, 2000)
           submitFormPopup();
-          await reload();
-        } else {
-          console.log(assignUser);
+          await reload()
+        }
+        else {
+          if (assignUser !== undefined && assignUser !== "" && assignUser !== null) {
+            runsValues["shared"] = false
+            runsValues["assignedTo"] = loginUserSliceData?.verifyToken?._id
+            runsValues["createdOn"] = dayjs(moment(new Date()).format('MM/DD/YYYY')),
+            runsValues["assignedBy"] = loginUserSliceData?.verifyToken?._id
+            runsValues["userId"] = assignUser
+            // delete runsValues.organisationId
+            // delete runsValues.createdOn
 
-          if (
-            assignUser !== undefined &&
-            assignUser !== '' &&
-            assignUser !== null
-          ) {
-            runsValues['shared'] = false;
-            runsValues['assignedTo'] = loginUserSliceData?.verifyToken?._id;
-            runsValues['assignedBy'] = loginUserSliceData?.verifyToken?._id;
-            runsValues['userId'] = assignUser;
-            delete runsValues.organisationId;
-            delete runsValues.createdOn;
-            console.log(runsValues);
-
-            await dispatch(fetchbulkRunz({ runs: [runsValues] }));
-            await reload();
-          } else {
-            await dispatch(postRunsData(runsValues));
-            await reload();
+            await dispatch(fetchbulkRunz({ runs: [runsValues] }))
+            await reload()
+          }
+          else {
+            await dispatch(postRunsData(runsValues))
+            await reload()
           }
         }
         submitFormPopup();
         // reload()
-        clearForm();
-      } else {
-        formik.setFieldError('name', '');
-      }
-    };
-    const createdDate =
-      type === 'edit'
-        ? dayjs(moment(formData?.createdOn).format('MM/DD/YYYY'))
-        : dayjs(moment(new Date()).format('MM/DD/YYYY'));
+        clearForm()
 
-    var dateDue = type == 'edit' ? dayjs(formData?.dueDate) : null;
-    console.log('date', moment(new Date()).format('MM/DD/YYYY'));
-    console.log('type', type);
+
+      }
+      //  else {
+      //   formik.setFieldError('name', '');
+      // }
+    };
+    const createdDate = type === 'edit' ? dayjs(moment(formData?.createdOn).format('MM/DD/YYYY')) : dayjs(moment(new Date()).format('MM/DD/YYYY'));
+
+    var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
     const formik = useFormik({
       initialValues: {
-        departmentId: '',
-        laboratoryId: '',
+        departmentId: "",
+        laboratoryId: "",
         organisationId: process.env.ORGANIZATION_ID,
-        procedureId: '',
-        objective: '',
+        procedureId: "",
+        objective: "",
         dueDate: dateDue,
-        createdOn:
-          type == 'edit'
-            ? createdDate
-            : dayjs(moment(new Date()).format('MM/DD/YYYY')),
+        createdOn: type == 'edit' ? createdDate : dayjs(moment(new Date()).format('MM/DD/YYYY')),
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo: loginUserSliceData?.verifyToken?._id,
-        status: 'Created',
-        procedureNumber: '',
-        userId: '',
+        status: "Created",
+        procedureNumber: "",
+        userId: ""
         // procedureDetials:""
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
     });
 
-    console.log('formik', formik);
 
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
@@ -326,9 +287,6 @@ const RunsForm = React.forwardRef(
       );
     }, [departmentSliceData, labSliceData]);
 
-    console.log(departmentData);
-
-    console.log(DepartmentList);
 
     React.useEffect(() => {
       dispatch(fetchDepartmentData());
@@ -338,7 +296,7 @@ const RunsForm = React.forwardRef(
     const handleDateChanges = (selectedDate: any, name: any) => {
       const formattedDate = moment(selectedDate?.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
-    };
+    }
     const handleConfirmationState = (state: number) => {
       if (state === 0) {
         confirmationPopupRef.current.open(false);
@@ -346,7 +304,7 @@ const RunsForm = React.forwardRef(
         confirmationPopupRef.current.open(false);
         // setRunsCreate(false);
         // clearForm()
-        handleClose();
+        handleClose()
       }
     };
 
@@ -354,15 +312,14 @@ const RunsForm = React.forwardRef(
       setRunsCreate(false);
       toast(`Runs ${type == 'edit' ? 'updated' : 'created'} !`, {
         style: {
-          background: '#00bf70',
-          color: '#fff',
-        },
+          background: '#00bf70', color: '#fff'
+        }
       });
       // if(type=='edit'){
 
       // }
       // clearForm()
-      handleClose();
+      handleClose()
       // successPopupRef.current.open(true, 'Run');
       // setTimeout(() => {
       //   successPopupRef.current.open(false, 'Run');
@@ -372,8 +329,8 @@ const RunsForm = React.forwardRef(
       formik.resetForm();
       setDepartment([]);
       setLab([]);
-      setAssignUser('');
-      formik.dirty = false;
+      setAssignUser("")
+      formik.dirty = false
       // setOrganization([]);
     };
     const procedureSliceData = useSelector(
@@ -381,30 +338,28 @@ const RunsForm = React.forwardRef(
     );
     React.useEffect(() => {
       setLoading(true);
-      dispatch(
-        fetchProcedureData({
-          page: 1,
-          perPage: 10,
-          searchBy: 'name',
-          search: inputValue,
-        }),
-      );
+      dispatch(fetchProcedureData({
+        page: 1,
+        perPage: 10,
+        searchBy: 'name',
+        search: inputValue
+      }));
     }, [inputValue]);
     const handleClose = () => {
       if (type !== 'edit') {
         formik.resetForm();
         setDepartment([]);
         setLab([]);
+        formik.setFieldValue('procedureId', "")
       }
 
       setRunsCreate(false);
-    };
+    }
 
     const handleAssign = (userList: any) => {
-      console.log(userList);
-
-      setAssignUser(userList[0].id);
-    };
+      setIsAssigned(true)
+      setAssignUser(userList[0].id)
+    }
 
     const opt = procedureSliceData?.Procedures;
 
@@ -424,72 +379,72 @@ const RunsForm = React.forwardRef(
             <Box className="popup-section">
               <Box className="title-popup">
                 <Typography>{type} Run</Typography>
-                <CloseIcon
-                  onClick={() => {
-                    handleClose();
-                  }}
-                />
+                <CloseIcon onClick={() => {
+                  handleClose()
+                }} />
               </Box>
               <Box>
                 <Grid container className="asset-popup" spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>
-                        Procedure name
-                        <span style={{ color: '#E2445C' }}>*</span>
-                      </label>
+                      {/* {formik.values.procedureId} */}
+                      <label style={{ display: 'block' }}>Procedure name<span style={{ color: "#E2445C" }}>*</span></label>
                       <Autocomplete
                         options={opt}
                         loading={loading}
-                        getOptionLabel={(option: any) => option.name}
-                        onChange={(event, value) => {
-                          // Handle selection
-                          console.log('Selected Procedure:', value);
-                          let LabData = value?.laboratoryId?.map(
-                            (item: any) => ({
-                              label: item.name,
-                              value: item.name,
-                              id: item._id,
-                            }),
-                          );
-
-                          console.log('LabData', LabData);
-                          formik.setFieldValue('laboratoryId', LabData || '');
-                          setLaboratory(LabData);
-                          let DepartmentData = value?.departmentId?.map(
-                            (item: any) => ({
-                              label: item.name,
-                              value: item.name,
-                              id: item._id,
-                            }),
-                          );
-                          setDepartments(DepartmentData);
-
-                          formik.setFieldValue('procedureId', value?._id || '');
-                          formik.setFieldValue(
-                            'departmentId',
-                            DepartmentData || '',
-                          );
-                          formik.setFieldValue(
-                            'procedureNumber',
-                            value?.procedureNumber || '',
-                          );
-
-                          setDepartment(DepartmentData);
-                          setLab(LabData);
-                        }}
                         value={formik.values.procedureId}
+                        disableClearable={true}
+                        getOptionLabel={(option: any) => option.name}
+                        isOptionEqualToValue={(option: any, value: any) => 
+                          // console.log("value?._id == option?._id", value, option?._id);
+
+                         value == option?._id
+                        
+                        }
+                        onChange={(event, value) => {
+                          formik.setFieldValue('procedureId', value || '');
+                          // Handle selection
+                          // console.log('Selected Procedure:', value);
+                          let LabData = value?.laboratoryId?.map((item: any) => ({
+                            label: item.name,
+                            value: item.name,
+                            id: item._id,
+                          }))
+
+                          formik.setFieldValue('laboratoryId', LabData || '');
+                          setLaboratory(
+                            LabData
+                          );
+
+                          let DepartmentData = value?.departmentId?.map((item: any) => ({
+                            label: item.name,
+                            value: item.name,
+                            id: item._id,
+                          }))
+                          setDepartments(DepartmentData)
+
+                          formik.setFieldValue('departmentId', DepartmentData || '');
+                          formik.setFieldValue('procedureNumber', value?.procedureNumber || "")
+
+                          setDepartment(DepartmentData)
+                          setLab(LabData)
+
+                        }}
+
                         onInputChange={handleInputChange}
                         renderInput={(procedureNames) => (
-                          <TextField {...procedureNames} margin="none" />
+                          <TextField
+                            {...procedureNames}
+                            margin="none"
+                          />
                         )}
                       />
-                      {formik.touched.procedureId &&
+                      {/* {formik.touched.procedureId &&
                         formik.errors.procedureId && (
                           <Typography className="error-field">
                             {formik.errors.procedureId}
                           </Typography>
-                        )}
+                        )} */}
                     </Box>
                   </Grid>
 
@@ -584,7 +539,7 @@ const RunsForm = React.forwardRef(
                     lg={6}
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
-                    {type == 'edit' ? (
+                    {type == 'edit' ?
                       <Box style={{ position: 'relative' }}>
                         <label style={{ display: 'block' }}>
                           Run Id(autogenerated)
@@ -608,7 +563,7 @@ const RunsForm = React.forwardRef(
                           disabled
                         />
                       </Box>
-                    ) : (
+                      :
                       <Box style={{ position: 'relative' }}>
                         <label style={{ display: 'block' }}>
                           Procedure Id (autogenerated)
@@ -632,7 +587,7 @@ const RunsForm = React.forwardRef(
                           disabled
                         />
                       </Box>
-                    )}
+                    }
                   </Grid>
                   <Grid
                     item
@@ -645,12 +600,7 @@ const RunsForm = React.forwardRef(
                     <Box style={{ position: 'relative' }}>
                       <label>Created on</label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          format="MM/DD/YYYY"
-                          value={formik.values.createdOn}
-                          disabled
-                          disablePast
-                        />
+                        <DatePicker format="MM/DD/YYYY" value={formik.values.createdOn} disabled disablePast />
                       </LocalizationProvider>
                       {formik.touched.createdOn && formik.errors.createdOn && (
                         <Typography className="error-field">
@@ -680,9 +630,7 @@ const RunsForm = React.forwardRef(
                         }
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
-                        isOptionEqualToValue={(option: any, value: any) =>
-                          value.id == option.id
-                        }
+                        isOptionEqualToValue={(option: any, value: any) => value?.id == option?.id}
                         renderOption={(props, option: any, { selected }) => (
                           <React.Fragment>
                             <li {...props}>
@@ -692,24 +640,17 @@ const RunsForm = React.forwardRef(
                               />
                               {option.value}
                             </li>
+
                           </React.Fragment>
                         )}
-                        onChange={(_, selectedOptions: any) =>
-                          setDepartment(selectedOptions)
-                        }
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            value={params.value}
-                            placeholder={
-                              department?.length == 0 ? 'Department/s' : ''
-                            }
-                          />
-                        )}
+                        onChange={(_, selectedOptions: any) => setDepartment(selectedOptions)}
+                        renderInput={(params) => <TextField {...params} value={params.value} placeholder={department?.length == 0 ? "Department/s" : ""} />}
                         fullWidth
                         placeholder="Department"
                         size="medium"
+
                         disabled
+
                       />
                       {/* {formik.touched.departmentId &&
                         formik.errors.departmentId && (
@@ -720,14 +661,7 @@ const RunsForm = React.forwardRef(
                     </Box>
                   </Grid>
 
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    className="multi-selection"
-                  >
+                  <Grid item xs={12} sm={6} md={6} lg={6} className="multi-selection">
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Laboratory/ies</label>
 
@@ -738,15 +672,10 @@ const RunsForm = React.forwardRef(
                         options={labData !== undefined ? labData : []}
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            placeholder={
-                              lab?.length == 0 ? 'Laboratory/ies' : ''
-                            }
-                          />
-                        )}
+                        isOptionEqualToValue={(option: any, value: any) => value?.id == option?.id}
+                        renderInput={(params) => <TextField {...params} placeholder={lab?.length == 0 ? "Laboratory/ies" : ""} />}
                         fullWidth
+
                         placeholder="Laboratory"
                         size="medium"
                         renderOption={(props, option: any, { selected }) => (
@@ -758,11 +687,11 @@ const RunsForm = React.forwardRef(
                               />
                               {option.value}
                             </li>
+
                           </React.Fragment>
                         )}
-                        onChange={(_, selectedOptions: any) => {
-                          setLaboratory(selectedOptions);
-                        }}
+                        onChange={(_, selectedOptions: any) => { setLaboratory(selectedOptions) }}
+
                         disabled
                       />
                       {/* {formik.touched.laboratoryId &&
@@ -775,10 +704,7 @@ const RunsForm = React.forwardRef(
                   </Grid>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block', marginBottom: '8px' }}>
-                        Test objective
-                        <span style={{ color: '#E2445C' }}>*</span>
-                      </label>
+                      <label style={{ display: 'block', marginBottom: '8px' }}>Test objective<span style={{ color: "#E2445C" }}>*</span></label>
                       <TextField
                         margin="none"
                         fullWidth
@@ -797,11 +723,12 @@ const RunsForm = React.forwardRef(
                           Boolean(formik.errors.objective)
                         }
                       />
-                      {formik.touched.objective && formik.errors.objective && (
-                        <Typography className="error-field">
-                          {formik.errors.objective}
-                        </Typography>
-                      )}
+                      {formik.touched.objective &&
+                        formik.errors.objective && (
+                          <Typography className="error-field">
+                            {formik.errors.objective}
+                          </Typography>
+                        )}
                     </Box>
                   </Grid>
                   <Grid
@@ -814,18 +741,9 @@ const RunsForm = React.forwardRef(
                     className="asset-popup calender-sec"
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label>
-                        Due date<span style={{ color: '#E2445C' }}>*</span>
-                      </label>
+                      <label>Due date<span style={{ color: "#E2445C" }}>*</span></label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          format="MM/DD/YYYY"
-                          disablePast
-                          onChange={(selectedDate: any) =>
-                            handleDateChanges(selectedDate, 'dueDate')
-                          }
-                          value={formik.values.dueDate}
-                        />
+                        <DatePicker format="MM/DD/YYYY" disablePast onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
                       </LocalizationProvider>
                       {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">
@@ -848,21 +766,18 @@ const RunsForm = React.forwardRef(
                       <label
                         style={{ display: 'block', marginBottom: '0.8rem' }}
                       >
-                        Assign to
+                        Assign to<span style={{ color: "#E2445C" }}>*</span>
                       </label>
-                      {formik.touched.userId && formik.errors.userId && (
-                        <Typography className="error-field">
-                          {formik.errors.userId}
-                        </Typography>
-                      )}
+                      {formik.touched.userId &&
+                        formik.errors.userId && (
+                          <Typography className="error-field">
+                            {formik.errors.userId}
+                          </Typography>
+                        )}
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <img src={Avatars} alt="Avatars" />
                         <Button
-                          disabled={
-                            Object.keys(formik.errors).length == 0
-                              ? false
-                              : true
-                          }
+                          disabled={Object.keys(formik.errors).length == 0 ? false : true}
                           variant="contained"
                           className="avatar-add"
                           onClick={() => {
@@ -872,10 +787,17 @@ const RunsForm = React.forwardRef(
                           <AddIcon sx={{ mr: 1 }} />
                           Add
                         </Button>
+                        {/* {isAssigned &&<img src={Avatars} alt="Avatars" style={{paddingLeft:"10px"}} />} */}
                       </Box>
+                      {/* {JSON.stringify(Object.keys(formik.errors).length == 0 )} */}
+                      {Object.keys(formik.errors).length == 0 && !isAssigned &&
+                        <Typography className="error-field">
+                        Please assign at least one people
+                        </Typography>}
                     </Box>
                   </Grid>
                 </Grid>
+
               </Box>
 
               <Box
@@ -894,27 +816,17 @@ const RunsForm = React.forwardRef(
                 >
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={type == 'edit' ? !formik.dirty : false}
-                  className="add-btn"
-                >
+                <Button type="submit" variant="contained" disabled={type == 'edit' ? !formik.dirty : false} className="add-btn">
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
             </Box>
           </form>
         </Dialog>
-        <AddPeoplePopup
-          open={runsOpen}
-          close={() => setRunsOpen(false)}
-          typePopup={'assign'}
-          formValue={formik.values}
-          handleAssign={handleAssign}
-          // runzId={runzId}
-          //         runzRow={runzRow}
-          //         typePopup={typePopup}
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} typePopup={"assign"} formValue={formik.values} handleAssign={handleAssign}
+        // runzId={runzId}
+        //         runzRow={runzRow}
+        //         typePopup={typePopup}
         />
         <Confirmationpopup
           ref={confirmationPopupRef}

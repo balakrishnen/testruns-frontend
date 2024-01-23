@@ -83,6 +83,8 @@ export default function AppProfileDrawer({
   const roleSliceData = useSelector(
     (state: any) => state.role.data?.find_roles,
   );
+  console.log("roleSliceData",userSliceData);
+  
   React.useEffect(() => {
     setDepartmentData(departmentSliceData?.map((item: any) => ({
       label: item.name,
@@ -262,7 +264,7 @@ export default function AppProfileDrawer({
     signOut(auth).then(() => {
       // dispatch(fetchLogoutUser())
         if (typeof window !== 'undefined') {
-          window.sessionStorage.setItem('isLoggedIn', 'false');
+          window.localStorage.setItem('isLoggedIn', 'false');
           toast(`User logout successfully !`, {
             style: {
               background: '#00bf70',
@@ -373,7 +375,7 @@ export default function AppProfileDrawer({
               </Box>
             </Box>
             <Box className="profile-camera">
-              <img src={uploadedFile == null ? profile : uploadedFile} alt="profile" className="profile-user" style={{width:"200px", height:"200px",objectFit:"cover",padding: uploadedFile == null ? '0px' : '16px',}} />
+              <img src={(uploadedFile == null || uploadedFile == "") ? profile : uploadedFile} alt="profile" className="profile-user" style={{width:"200px", height:"200px",objectFit:"cover",padding: uploadedFile == null ? '0px' : '16px',}} />
               <img src={camera} alt="camera" className="upload-img" onClick={triggerFileUploadField} />
               <input
             style={{ display: 'none' }}
@@ -725,7 +727,7 @@ export default function AppProfileDrawer({
                       }
                       margin="none"
                       className={edit ? "bg-gray-input" : ""}
-                      disabled={edit}
+                      disabled={edit?true:credencial?.profile_management?.editRole==true?false:true}
                       fullWidth
                       id="role"
                       name="role"

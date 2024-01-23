@@ -25,7 +25,12 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssig
   const [allUserData, setAlluserData] = React.useState<any>([]);
   const [userList, setuserList]=React.useState<any>([])
   console.log('userList',userList);
-  
+  const runzSliceData = useSelector(
+    (state: any) => state.runs.data
+  );
+  React.useEffect(()=>{
+    setuserList([])
+  },[runzSliceData])
   // const allUser=  useSelector(
   //   (state: any) => state.user.data?.find_users, 
   // );
@@ -188,6 +193,7 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
                 renderInput={(params) => (
                   <TextField  {...params} placeholder="Assignee" />
                 )}
+                disableClearable={true}
                 value={userList[0]}
                 onChange={(_, selectedOptions: any) => {setuserList([selectedOptions]) }}
               />
