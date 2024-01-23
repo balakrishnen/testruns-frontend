@@ -34,6 +34,8 @@ function AppHeader(props: any) {
   const handleMobileMenuOpen = (event: any) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  console.log("mobileMoreAnchorEl",mobileMoreAnchorEl);
+  
 const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.localStorage.getItem("userProfileDetails")):{}
 // console.log("userProfileDetails",JSON.parse(userProfileDetails));
 
@@ -177,7 +179,7 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
         <p>Help</p>
       </MenuItem>
       <MenuItem>
-        <IconButton size="large" aria-label="notification icon" color="inherit" onClick={openNotificationList}>
+        <IconButton size="large" aria-label="notification icon" color="inherit" onClick={()=>{handleMobileMenuClose();openNotificationList()}}>
         <Badge
                 color="secondary"
                 // variant={isAnyRead==true?"dot":"standard"}
@@ -192,7 +194,7 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
           />
           </Badge>
         </IconButton>
-        <p onClick={openNotificationList} >Notifications</p>
+        <p onClick={()=>{handleMobileMenuClose();openNotificationList()}} >Notifications</p>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -200,11 +202,11 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
           aria-label="account"
           aria-haspopup="true"
           color="inherit"
-          onClick={openEditProfile}
+          onClick={()=>{handleMobileMenuClose();openEditProfile}}
         >
           <img className="app-bar-images" src={(userProfileDetails?.imageUrl!=="" && userProfileDetails?.imageUrl!==null)?userProfileDetails?.imageUrl:account} alt="account_icon" style={{width: "25px", height: "25px",borderRadius: "16px"}}/>
         </IconButton>
-        <p onClick={openEditProfile}>{userProfileDetails?.firstName}</p>
+        <p onClick={()=>{handleMobileMenuClose();openEditProfile}}>{userProfileDetails?.firstName}</p>
       </MenuItem>
       {/* <MenuItem>
         <IconButton

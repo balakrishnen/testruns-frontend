@@ -694,7 +694,7 @@ const Addnewpopup = React.forwardRef(
                               value?.id == option?.id
                             }
                             renderInput={(params) => (
-                              <TextField {...params} placeholder={departments.length==0?"Department/s":""} />
+                              <TextField {...params} placeholder={formik.values.departmentId.length==0?"Department/s":""} />
                             )}
                             fullWidth
                             placeholder="Department"
@@ -754,7 +754,7 @@ const Addnewpopup = React.forwardRef(
                             disableCloseOnSelect
                             value={formik.values.laboratoryId}
                             renderInput={(params) => (
-                              <TextField {...params} placeholder={laboratory.length==0?"Laboratory/ies":""}/>
+                              <TextField {...params} placeholder={formik.values.laboratoryId.length==0?"Laboratory/ies":""}/>
                             )}
                             fullWidth
                             placeholder="Laboratory"

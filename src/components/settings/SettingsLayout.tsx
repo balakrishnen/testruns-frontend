@@ -174,6 +174,7 @@ export const SettingsLayout = ({ children }: any, props: any) => {
           sx={{ flexGrow: 20 }}
           >
             <ArrowBackIosNewOutlinedIcon
+             onClick={() => setShow(!show)}
               className="mobile-arrow"
               // onClick={() => setIsMobile(!isMobile)}
             />

@@ -591,7 +591,7 @@ const getAllassets=()=>{
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                              format="DD/MM/YYYY"
+                              format="MM/DD/YYYY"
                               value={dayjs(filterSearchValue)}
                               onChange={(event: any) =>
                                 setFilterSearchValue(new Date(event.$d))

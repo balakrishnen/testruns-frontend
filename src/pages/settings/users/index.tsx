@@ -809,10 +809,9 @@ const[organizationSliceData,setorganizationSliceData]=React.useState<any>([])
                       )}
                       {headers[4].is_show && (
                         <TableCell align="center">
-                          {
-                            roleSliceData?.find((obj:any) => obj._id == row.role)
-                              ?.name
-                          }
+                        {roleSliceData?.find((obj) => 
+   obj._id == row.role
+)?.name || "Tester"}
                         </TableCell>
                       )}
                       {headers[5].is_show && (
