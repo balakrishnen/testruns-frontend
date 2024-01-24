@@ -319,56 +319,75 @@ updateProfile(auths?.currentUser, {
         })),
       );
       const mappedDepartments = (userData?.departmentId || []).map((id: string) => {
-        var department = departmentSliceData?.find(obj => obj._id === id);
-        console.log("department",department);
-        if (department) {
+        var department = departmentSliceData?.find(obj => obj._id == id && id!=="657421c1c63327a74f3c756b")
+        // var dept1=department?.filter((department) => department !== null && department!==undefined)
+        console.log("departments1",department==undefined);
+        console.log("departments1",department);
+        if (department!==undefined) {
+          console.log("departments1",department);
+          
             return {
                 label: department.name,
                 value: department.name,
                 id: department._id,
             };
         }
-      
-        return departmentSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        }))
+        else {
+          console.log("departments1",departmentSliceData);
+          
+          // Handle the case where the laboratory with the specified ID is not found
+          departmentSliceData.map((item)=>{
+          return {
+            label: item.name,
+            value: item.name,
+            id: item._id,
+      }})
+      }
         
         // Handle the case where the department with the specified ID is not found
-    }).filter((department) => department !== null) 
+    })
 
-      const mappedDLabs = userData?.laboratoryId?.map((id: string) => {
-        var lab = labSliceData?.find(obj => obj._id === id);
-      
-        if (lab) {
+    const mappedDLabs = userData?.laboratoryId?.map((id: string) => {
+      var lab = labSliceData?.find(obj => obj._id === id);
+  
+      if (lab!==undefined) {
           return {
-            label: lab.name,
-            value: lab.name,
-            id: lab._id,
+              label: lab.name,
+              value: lab.name,
+              id: lab._id,
           };
-        }
-     
-        return labSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })) // Handle the case where the department with the specified ID is not found
-      }).filter((lab) => lab !== null) 
+      } else {
+          // Handle the case where the laboratory with the specified ID is not found
+          labSliceData.map((item)=>{
+          return {
+            label: item.name,
+            value: item.name,
+            id: item._id,
+      }})
+      }
+  }).filter((lab) => lab !== null);
 
       console.log("mappedDepartments",mappedDepartments);
       console.log("mappedDepartments",mappedDLabs);
       
       if(type=="edit"){
-  formik.setFieldValue('departmentId', mappedDepartments!==undefined && mappedDepartments);
-  formik.setFieldValue('laboratoryId', mappedDLabs!==undefined && mappedDLabs);
+  formik.setFieldValue('departmentId', (mappedDepartments[0]!==undefined&&mappedDepartments[0]!==null) ? mappedDepartments:[]);
+  formik.setFieldValue('laboratoryId', (mappedDLabs[0]!==undefined &&mappedDLabs[0]!==null)? mappedDLabs:[]);
       }
-  setDepartmentData(type=="edit"?mappedDepartments?.length!==0 && mappedDepartments!==undefined && mappedDepartments:departmentSliceData?.map((item: any) => ({
+  setDepartmentData(type=="edit"?mappedDepartments?.length!==0 && mappedDepartments[0]!==undefined ?mappedDepartments:departmentSliceData?.map((item: any) => ({
+        label: item.name,
+        value: item.name,
+        id: item._id,
+      })):departmentSliceData?.map((item: any) => ({
         label: item.name,
         value: item.name,
         id: item._id,
       })),)
-  setLabData(type=="edit"? mappedDLabs?.length!==0 && mappedDLabs!==undefined  && mappedDLabs:labSliceData?.map((item: any) => ({
+  setLabData(type=="edit"? mappedDLabs?.length!==0 && mappedDLabs[0]!==undefined ? mappedDLabs:labSliceData?.map((item: any) => ({
+    label: item.name,
+    value: item.name,
+    id: item._id,
+  })):labSliceData?.map((item: any) => ({
     label: item.name,
     value: item.name,
     id: item._id,
