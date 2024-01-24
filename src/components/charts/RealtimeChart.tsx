@@ -31,7 +31,7 @@ const org = '63cd6a63187aa056';
 // const bucket = 'Pasco Codenode';
 const bucket = 'Codenode';
 
-const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
+const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#252525'];
 
 const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
 
@@ -40,7 +40,9 @@ export default function RealtimeChart({
   savedConnectData,
   startDate,
   endDate,
+  usedAsset,
   isPause,
+  getsetUsedAsset,
 }: any) {
   // const socket = io('https://api.dev.testrunz.com');
   const [charts, setCharts] = React.useState<any>([]);
@@ -112,7 +114,7 @@ export default function RealtimeChart({
       setShowArchivedChart(true);
       getTimeRangeData();
     }
-  }, [endDate]);
+  }, [assets, endDate]);
 
   React.useEffect(() => {
     if (assetsSliceData) {
@@ -121,8 +123,13 @@ export default function RealtimeChart({
       );
       assetsFilterData.push({ name: null });
       setAssetsOptions(assetsFilterData);
+      if (usedAsset !== null) {
+        let temp = assetsSliceData.filter((item: any) => item._id == usedAsset);
+        let atemp = temp.length > 0 ? temp[0].name : null;
+        setAssets(atemp);
+      }
     }
-  }, [assetsSliceData]);
+  }, [assetsSliceData, usedAsset]);
 
   const getTimeRangeData = async () => {
     try {
@@ -133,10 +140,14 @@ export default function RealtimeChart({
       const fields = selectedChannel
         .map((item: any) => `r._field == "${item}"`)
         .join(' or ');
+      // let stemp: any = moment(startDate);
+      // let etemp: any = moment(endDate);
       let etemp: any = moment('2024-01-23T13:58:54.037Z');
       let stemp: any = moment('2024-01-23T13:53:55.637Z');
+      console.log('startDate', startDate, stemp.toISOString());
+      console.log('endDate', endDate, etemp.toISOString());
       const query2: any = `from(bucket: "${bucket}")
-        |> range(start: ${startDate.toISOString()}, stop: ${endDate.toISOString()})
+        |> range(start: ${stemp.toISOString()}, stop: ${etemp.toISOString()})
         |> filter(fn: (r) => r["_measurement"] == "${measure}" and ${fields})
         |> yield(name: "mean")`;
       const chart2: any = { ...chartData2 };
@@ -145,19 +156,20 @@ export default function RealtimeChart({
       result.forEach((dataset: any) => {
         selectedChannel.forEach((channal: any, index: number) => {
           const sets = chart2.datasets[index];
-          const lable = chart2['labels'];
+          const labels = chart2['labels'];
           if (
             dataset._value !== undefined &&
             dataset._value !== null &&
             channal === dataset._field
           ) {
             channels[index].sensor = channal;
-            lable.push(moment(dataset._time, 'HH:mm:ss').format('hh:mm:ss'));
+            labels.push(moment(dataset._time, 'HH:mm:ss').format('hh:mm:ss'));
             sets.data.push(dataset._value);
           }
         });
       });
       setChannelList(channels);
+      setChartData2(chart2);
     } catch (error) {
       console.error(error);
     }
@@ -250,9 +262,13 @@ export default function RealtimeChart({
   const handleColorPickerChange = (event: any, key: any) => {};
 
   const handleAssetsChange = async (event: any) => {
-    if (event.target.value == null) {
+    if (event.target.value !== null) {
       setAssets(event.target.value);
-    } else {
+      const temp: any = assetsSliceData.filter(
+        (item: any) => item.name == event.target.value,
+      );
+      console.log(temp[0]);
+      getsetUsedAsset(temp[0]._id);
       try {
         setMeasure(event.target.value);
         let query2 = `from(bucket: "${bucket}")
@@ -265,23 +281,23 @@ export default function RealtimeChart({
         const sensors: any = [];
         const data = { ...chartData };
         const data2 = { ...chartData2 };
-        // let temp = {
-        //   name: 'temperature_data',
-        // };
+        let temp = {
+          name: 'temperature_data',
+        };
 
-        // result.length === 0
-        //   ? sensors.push(temp)
-        //   : result.forEach((element: any) => {
-        //       sensors.push({
-        //         name: element._field,
-        //       });
-        //     });
+        result.length === 0
+          ? sensors.push(temp)
+          : result.forEach((element: any) => {
+              sensors.push({
+                name: element._field,
+              });
+            });
 
-        result.forEach((element: any) => {
-          sensors.push({
-            name: element._field,
-          });
-        });
+        // result.forEach((element: any) => {
+        //   sensors.push({
+        //     name: element._field,
+        //   });
+        // });
 
         setAssets(event.target.value);
         setChannelOptions(sensors);
@@ -436,7 +452,12 @@ export default function RealtimeChart({
           </Grid>
           <Box sx={{ mt: 4 }}>
             {showArchivedChart ? (
-              <Line data={chartData2} />
+              chartData2 && (
+                <>
+                  {console.log('chartData2', chartData2)}
+                  <Line data={chartData2} />{' '}
+                </>
+              )
             ) : (
               <Line data={chartData} options={options} />
             )}

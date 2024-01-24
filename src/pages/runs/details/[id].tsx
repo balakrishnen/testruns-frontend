@@ -428,7 +428,12 @@ export default function RunsDetails() {
         setRemarks(res?.get_userRun?.remarks);
         setStartDate(res?.get_userRun?.startTime);
         setEndDate(res?.get_userRun?.endTime);
-        setUsedAsset(res?.get_userRun?.used_Asset);
+        if (
+          res?.get_userRun?.used_Asset &&
+          res?.get_userRun?.used_Asset.length > 0
+        ) {
+          setUsedAsset(res?.get_userRun?.used_Asset[0]);
+        }
         if (
           res?.get_userRun?.results !== null &&
           res?.get_userRun?.results !== ''
@@ -609,7 +614,7 @@ export default function RunsDetails() {
   //   }
   // };
 
-  const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907'];
+  const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#252525'];
 
   React.useEffect(() => {
     dispatch(fetchTableChartData('655b261e7e26fb0012425184'));
@@ -1481,20 +1486,34 @@ export default function RunsDetails() {
     };
     runsChange['status'] = status;
     status === 'Stopped' && setIsChartPause(true);
-    var payload: any = {};
+    var createPayload: any = {
+      runId: runzValue._id,
+      organisationId: procedureSliceData?.get_run?.organisationId,
+      userProcedure: JSON.stringify(htmlInput),
+      static_chart_data: JSON.stringify(staticChartData),
+    };
+    var updatePayload: any = {
+      _id: userRunzID?._id,
+      organisationId: procedureSliceData?.get_run?.organisationId,
+      userProcedure: JSON.stringify(htmlInput),
+      static_chart_data: JSON.stringify(staticChartData),
+      used_Asset: [usedAsset],
+    };
     if (status == 'Started') {
-      payload['runId'] = runzValue._id;
-      payload['startTime'] = new Date();
-      setStartDate(new Date());
+      if (userRunzID?._id) {
+        updatePayload['startTime'] = moment(new Date()).toISOString();
+      } else {
+        createPayload['startTime'] = moment(new Date()).toISOString();
+      }
+      setStartDate(moment(new Date()).toISOString());
     } else {
-      payload['runId'] = runzValue._id;
-      setEndDate(new Date());
-      payload['endTime'] = new Date();
+      setEndDate(moment(new Date()).toISOString());
+      updatePayload['endTime'] = moment(new Date()).toISOString();
     }
     if (userRunzID?._id) {
-      await dispatch(UpdateUserRunsData(payload));
+      await dispatch(UpdateUserRunsData(updatePayload));
     } else {
-      await dispatch(postUserRunsData(payload));
+      await dispatch(postUserRunsData(createPayload));
     }
     await dispatch(fetchUpdateRunsData(runsChange));
     await toast('Runs status updated !', {
@@ -1509,6 +1528,9 @@ export default function RunsDetails() {
     type == 'table' ? setSavedChartData(data) : setSavedConnectData(data);
   };
 
+  const getsetUsedAsset = (data: any) => {
+    setUsedAsset(data);
+  };
   return (
     <PrivateRoute>
       {!isLoader ? (
@@ -2148,6 +2170,7 @@ export default function RunsDetails() {
                           endDate={endDate}
                           usedAsset={usedAsset}
                           isPause={isChartPause}
+                          getsetUsedAsset={getsetUsedAsset}
                         />
                       ) : (
                         <Box>Archived Chart</Box>
