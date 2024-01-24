@@ -246,7 +246,7 @@ export default function TableFilters({
               )}   */}
               <AddPeoplePopup
                 open={runsOpen}
-                close={() => setRunsOpen(false)}
+                close={() => {setRunsOpen(false);handleDeCheckboxChange(false)}}
                 runzId={runzId}
                 runzRow={runzRow}
                 typePopup={typePopup}

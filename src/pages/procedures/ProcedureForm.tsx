@@ -23,7 +23,7 @@ import { LaboratoryList, DepartmentList } from '../../utils/data';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchDepartmentData } from '../../api/departmentAPI';
-import { fetchLabData } from '../../api/labAPI';
+import { fetchLabById, fetchLabData } from '../../api/labAPI';
 import {
   fetchProcedure,
   fetchSingleProcedureData,
@@ -279,21 +279,62 @@ const ProcedureForm = React.forwardRef(
     const labSliceData = useSelector(
       (state: any) => state.lab.data?.get_all_labs,
     );
+
+    React.useEffect(()=>{
+      formik.setFieldValue("departmentId",singleUserData?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj?.id == item) ))) || []);
+      formik.setFieldValue("laboratoryId",singleUserData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj?.id == item) ))) || []);
+
+    },[departmentSliceData])
+
     React.useEffect(() => {
-      setDepartmentData(
-        departmentSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
-      setLabData(
-        labSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
+      const mappedDepartments = (singleUserData?.departmentId || []).map((id: string) => {
+        var department = departmentSliceData?.find(obj => obj._id === id);
+      
+        if (department) {
+            return {
+                label: department.name,
+                value: department.name,
+                id: department._id,
+            };
+        }
+      
+        return null; // Handle the case where the department with the specified ID is not found
+    }).filter((department) => department !== null) 
+
+      const mappedDLabs = singleUserData?.laboratoryId?.map((id: string) => {
+        var lab = labSliceData?.find(obj => obj._id === id);
+      
+        if (lab) {
+          return {
+            label: lab.name,
+            value: lab.name,
+            id: lab._id,
+          };
+        }
+     
+        return null // Handle the case where the department with the specified ID is not found
+      }).filter((lab) => lab !== null) 
+      
+      
+      console.log("mappedDepartments",mappedDepartments);
+      console.log("mappedDepartments",mappedDLabs);
+      
+      setDepartmentData(mappedDepartments)
+      setLabData(mappedDLabs)
+      // setDepartmentData(
+      //   departmentSliceData?.map((item: any) => ({
+      //     label: item.name,
+      //     value: item.name,
+      //     id: item._id,
+      //   })),
+      // );
+      // setLabData(
+      //   labSliceData?.map((item: any) => ({
+      //     label: item.name,
+      //     value: item.name,
+      //     id: item._id,
+      //   })),
+      // );
     }, [departmentSliceData, labSliceData, userSliceData]);
 
     console.log(departmentData);
@@ -301,6 +342,9 @@ const ProcedureForm = React.forwardRef(
     console.log(laboratory);
 
     React.useEffect(() => {
+      let payload={
+        
+      }
       dispatch(fetchDepartmentData());
       dispatch(fetchLabData());
     }, []);
@@ -549,6 +593,10 @@ const ProcedureForm = React.forwardRef(
                               </li>
                             </React.Fragment>
                           )}
+                          onBlur={()=>{
+                            var dept:any=[];
+                            formik.values.departmentId?.map((item: any) => (dept.push(item?.id))); dispatch(fetchLabById({departmentId : dept}))}
+                          }
                           onChange={(_, selectedOptions: any) => {
                             setDepartments(selectedOptions);
                             formik.setValues({

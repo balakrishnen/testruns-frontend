@@ -849,7 +849,7 @@ console.log(singleUserData);
                             renderInput={(params) => (
                               <TextField
                                 {...params}
-                                placeholder="Department/s"
+                                placeholder={formikProfile.values.departmentId?.length == 0 ? 'Department/s' : ''}
                               />
                             )}
                             fullWidth
@@ -910,7 +910,7 @@ console.log(singleUserData);
                             renderInput={(params) => (
                               <TextField
                                 {...params}
-                                placeholder="Laboratory/ies"
+                                placeholder={formikProfile.values.laboratoryId?.length == 0 ? 'Laboratory/ies' : ''}
                               />
                             )}
                             fullWidth

@@ -51,7 +51,7 @@ export const CardLayout = ({ children }: any, props: any) => {
 
       
       let payload = {
-        firstName: result.user.displayName !== null ? result.user.displayName : result.user.email.split("@")[0],
+        firstName: result.user.displayName !== null ? result.user.displayName : result.user.email.split("@")[0].includes(".")?result.user.email.split("@")[0].split('.')[0]:result.user.email.split("@")[0],
         lastName: "",
         email: result.user.email,
         uid: result.user.uid,
