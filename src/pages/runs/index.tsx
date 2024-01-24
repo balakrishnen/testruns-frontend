@@ -260,6 +260,7 @@ console.log("userDataRuns",userData)
       // setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
       payload["assignedTo"]=loginUserSliceData?.verifyToken?._id
       payload["assignedBy"]=loginUserSliceData?.verifyToken?._id
+      payload["userId"]=loginUserSliceData?.verifyToken?._id  
     }
     //tester 65741c069d53d19df8321e6c
     if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"){

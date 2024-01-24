@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  Checkbox,
   Chip,
   Divider,
   InputAdornment,
@@ -173,25 +174,36 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
             }}
           >
             <Box>
-              {userList?.map((item:any, index:any) => (
+              {/* {userList?.map((item:any, index:any) => (
                 <Chip key={index} label={item.value} sx={{ m: 0.5 }} />
-              ))}
+              ))} */}
             </Box>
             <Box sx={{ mt: 3 }}>
                <Autocomplete
-              // multiple={false}
+              multiple={typePopup == "assign"?false:true}
                 style={{borderRadius: '15px !importnant'}}
                 limitTags={3}
                 options={allUserData !== undefined ? allUserData: []}
                 getOptionLabel={(option:any) => option?.value}
-                // disableCloseOnSelect
+                disableCloseOnSelect={typePopup == "assign"?false:true}
                 // defaultValue={[
                 //   top100Films[13],
                 //   top100Films[12],
                 //   top100Films[11],
                 // ]}
                 renderInput={(params) => (
-                  <TextField  {...params} placeholder="Assignee" />
+                  <TextField  {...params} placeholder="Select Email" />
+                )}
+                renderOption={(props, option: any, { selected }) => (
+                  <React.Fragment>
+                    <li {...props}>
+                      <Checkbox
+                        style={{ marginRight: 0 }}
+                        checked={selected}
+                      />
+                      {option.value}
+                    </li>
+                  </React.Fragment>
                 )}
                 disableClearable={true}
                 value={userList[0]}
