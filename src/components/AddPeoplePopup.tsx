@@ -122,7 +122,7 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
     // }
     }
     else{
-      const allIds = userList.map((item:any) => item.id);
+      const allIds = userList[0].map((item:any) => item.id);
       const newArray = runzRow?.map((item:any) => item._id)
       console.log(allIds);
       

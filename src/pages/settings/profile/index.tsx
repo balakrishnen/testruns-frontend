@@ -1016,6 +1016,7 @@ console.log(singleUserData);
                 </form>
               </AccordionDetails>
             </Accordion>
+            {credencial?.profile_management?.changePassword &&
             <Accordion
               expanded={expanded === 'panel2'}
               onChange={handleChange('panel2')}
@@ -1199,6 +1200,7 @@ console.log(singleUserData);
                 </form>
               </AccordionDetails>
             </Accordion>
+}
           </Box>
         </Box>
       </Box>
