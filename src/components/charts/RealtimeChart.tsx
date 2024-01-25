@@ -112,6 +112,7 @@ export default function RealtimeChart({
   React.useEffect(() => {
     if (endDate !== null && assets !== null) {
       setShowArchivedChart(true);
+      setIsChartPause(true);
       getTimeRangeData();
     }
   }, [assets, endDate]);
@@ -126,7 +127,7 @@ export default function RealtimeChart({
       if (usedAsset !== null) {
         let temp = assetsSliceData.filter((item: any) => item._id == usedAsset);
         let atemp = temp.length > 0 ? temp[0].name : null;
-        setAssets(atemp);
+        handleAssetsChange({ target: { value: atemp } });
       }
     }
   }, [assetsSliceData, usedAsset]);
@@ -140,10 +141,10 @@ export default function RealtimeChart({
       const fields = selectedChannel
         .map((item: any) => `r._field == "${item}"`)
         .join(' or ');
-      // let stemp: any = moment(startDate);
-      // let etemp: any = moment(endDate);
-      let etemp: any = moment('2024-01-23T13:58:54.037Z');
-      let stemp: any = moment('2024-01-23T13:53:55.637Z');
+      let stemp: any = moment(startDate);
+      let etemp: any = moment(endDate);
+      // let etemp: any = moment('2024-01-23T13:58:54.037Z');
+      // let stemp: any = moment('2024-01-23T13:53:55.637Z');
       console.log('startDate', startDate, stemp.toISOString());
       console.log('endDate', endDate, etemp.toISOString());
       const query2: any = `from(bucket: "${bucket}")
@@ -263,12 +264,6 @@ export default function RealtimeChart({
 
   const handleAssetsChange = async (event: any) => {
     if (event.target.value !== null) {
-      setAssets(event.target.value);
-      const temp: any = assetsSliceData.filter(
-        (item: any) => item.name == event.target.value,
-      );
-      console.log(temp[0]);
-      getsetUsedAsset(temp[0]._id);
       try {
         setMeasure(event.target.value);
         let query2 = `from(bucket: "${bucket}")
@@ -281,27 +276,31 @@ export default function RealtimeChart({
         const sensors: any = [];
         const data = { ...chartData };
         const data2 = { ...chartData2 };
-        let temp = {
-          name: 'temperature_data',
-        };
+        // let temp = {
+        //   name: 'temperature_data',
+        // };
 
-        result.length === 0
-          ? sensors.push(temp)
-          : result.forEach((element: any) => {
-              sensors.push({
-                name: element._field,
-              });
-            });
+        // result.length === 0
+        //   ? sensors.push(temp)
+        //   : result.forEach((element: any) => {
+        //       sensors.push({
+        //         name: element._field,
+        //       });
+        //     });
 
-        // result.forEach((element: any) => {
-        //   sensors.push({
-        //     name: element._field,
-        //   });
-        // });
+        result.forEach((element: any) => {
+          sensors.push({
+            name: element._field,
+          });
+        });
 
         setAssets(event.target.value);
         setChannelOptions(sensors);
-
+        setAssets(event.target.value);
+        const atemp: any = assetsSliceData.filter(
+          (item: any) => item.name == event.target.value,
+        );
+        getsetUsedAsset(atemp[0]._id);
         channelList.forEach((item: any, index: any) => {
           data.datasets[index] = {
             label: `Y${index + 1}`,
@@ -333,6 +332,8 @@ export default function RealtimeChart({
           },
         });
       }
+    } else {
+      setAssets(event.target.value);
     }
   };
 
@@ -384,6 +385,29 @@ export default function RealtimeChart({
       ],
     },
     height: 300,
+  };
+
+  const options2: any = {
+    tooltips: { enabled: false },
+    hover: { mode: null },
+
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            autoSkip: true,
+            autoSkipPadding: 3,
+          },
+        },
+      ],
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
   };
 
   React.useEffect(() => {
@@ -451,13 +475,11 @@ export default function RealtimeChart({
             ></Grid>
           </Grid>
           <Box sx={{ mt: 4 }}>
-            {showArchivedChart ? (
-              chartData2 && (
-                <>
-                  {console.log('chartData2', chartData2)}
-                  <Line data={chartData2} />{' '}
-                </>
-              )
+            {chartData2 && showArchivedChart ? (
+              <>
+                {console.log('chartData2', chartData2)}
+                <Line data={chartData2} options={options2} />
+              </>
             ) : (
               <Line data={chartData} options={options} />
             )}
