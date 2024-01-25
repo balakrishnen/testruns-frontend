@@ -122,13 +122,13 @@ export const SettingsLayout = ({ children }: any, props: any) => {
               boxShadow: "3px 4px 4px 0px rgba(0, 0, 0, 0.10)",
             }}
             className={`${
-              show ? "side-hide show-common" : "side-show show-common"
+              show ? "side-show show-common" : "side-hide show-common"
             }`}
             style={{width:"240px"}}
           >
             <Box className="setting-sidebar">
               <Box className="close-mobile" onClick={() => setShow(!show)}>
-                <CloseIcon />
+                <CloseIcon style={{cursor: 'pointer'}}/>
               </Box>
               <Typography className="setting-title">Settings</Typography>
               <List style={{ padding: "0px" }}>
@@ -177,6 +177,7 @@ export const SettingsLayout = ({ children }: any, props: any) => {
              onClick={() => setShow(!show)}
               className="mobile-arrow"
               // onClick={() => setIsMobile(!isMobile)}
+              style={{cursor: 'pointer'}}
             />
             {/* <Notificationpage></Notificationpage> */}
             {/* <Profilepage></Profilepage> */}

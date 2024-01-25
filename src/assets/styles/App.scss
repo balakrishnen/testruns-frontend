@@ -2468,7 +2468,7 @@ span.react-calendar__navigation__label__labelText.react-calendar__navigation__la
   letter-spacing: 0.24px;
 }
 @media (max-width:899px){
-  .side-hide-left.show-right {
+  .side-hide-left.show-right , .show-right{
     padding-left: 0px;
   }
 }
