@@ -141,7 +141,7 @@ const RunsForm = React.forwardRef(
       formik.setFieldValue('departmentId', runzSliceData?.get_run?.departmentId)
       formik.setFieldValue('procedureId', runzSliceData?.get_run?.procedureId)
       formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
-
+      // console.log("dayjs(runzSliceData?.get_run?.dueDate",dayjs(runzSliceData?.get_run?.dueDate))
     }, [runzSliceData])
     React.useImperativeHandle(ref, () => ({
       open(state: any, row: any) {
@@ -156,7 +156,9 @@ const RunsForm = React.forwardRef(
             // formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId?._id)
             formik.setFieldValue('objective', runzSliceData?.get_run?.objective)
             formik.setFieldValue("procedureId", runzSliceData?.get_run?.procedureId);
-            formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
+            console.log("dayjs(runzSliceData?.get_run?.dueDate",dayjs(runzSliceData?.get_run?.dueDate))
+            
+            formik.setFieldValue('dueDate',dayjs(runzSliceData?.get_run?.dueDate) )
             setDepartment(DepartmentData ? DepartmentData : [])
             setLab(LabData ? LabData : [])
           }
@@ -170,14 +172,28 @@ const RunsForm = React.forwardRef(
     // const departments: any = [];
     // const laboratory: any = [];
     const checkCredentials = (values: any) => {
-      if(isAssigned){
-      return true;}
-      else{
-        setIsAssigned(false)
+      if(type!=='edit'){
+        if(isAssigned){
+          return true;}
+          else{
+            setIsAssigned(false)
+          }
       }
+      else{
+        return true
+      }
+     
     };
     const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
     const onSubmit = async (values: any) => {
+      console.log("submit");
+      
+      // if(dueDate==null){
+      //   setDueDateError("Due Date is required")
+      // }
+      // else{
+      //   setDueDateError("")
+      // }
       const isMatch = checkCredentials(values.name);
 
       if (isMatch) {
@@ -216,7 +232,7 @@ const RunsForm = React.forwardRef(
           if (assignUser !== undefined && assignUser !== "" && assignUser !== null) {
             runsValues["shared"] = false
             runsValues["assignedTo"] = loginUserSliceData?.verifyToken?._id
-            runsValues["createdOn"] = dayjs(moment(new Date()).format('MM/DD/YYYY')),
+            runsValues["createdOn"] = moment(new Date()).format('MM/DD/YYYY'),
             runsValues["assignedBy"] = loginUserSliceData?.verifyToken?._id
             runsValues["userId"] = assignUser
             // delete runsValues.organisationId
@@ -263,7 +279,8 @@ const RunsForm = React.forwardRef(
       onSubmit: onSubmit,
     });
 
-
+    // console.log("createdDate",type == 'edit' ? "1"+createdDate : "3"+moment(new Date()).format('MM/DD/YYYY')  );
+    
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
     );
@@ -754,6 +771,7 @@ const RunsForm = React.forwardRef(
                   </Grid>
 
                   <Grid item xs={0} sm={6} md={6} lg={6} />
+                  {type!=='edit' &&
                   <Grid
                     item
                     xs={12}
@@ -796,6 +814,7 @@ const RunsForm = React.forwardRef(
                         </Typography>}
                     </Box>
                   </Grid>
+  }
                 </Grid>
 
               </Box>
@@ -816,7 +835,7 @@ const RunsForm = React.forwardRef(
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" disabled={type == 'edit' ? !formik.dirty : false} className="add-btn">
+                <Button type="submit" variant="contained" disabled={type == 'edit' ? !formik.dirty : formik.errors?.length==0?false:true} className="add-btn">
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>

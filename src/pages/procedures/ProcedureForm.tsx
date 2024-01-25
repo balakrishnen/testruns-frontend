@@ -280,11 +280,11 @@ const ProcedureForm = React.forwardRef(
       (state: any) => state.lab.data?.get_all_labs,
     );
 
-    React.useEffect(()=>{
-      formik.setFieldValue("departmentId",singleUserData?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj?.id == item) ))) || []);
-      formik.setFieldValue("laboratoryId",singleUserData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj?.id == item) ))) || []);
+    // React.useEffect(()=>{
+    //   formik.setFieldValue("departmentId",singleUserData?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj?.id == item) ))) || []);
+    //   formik.setFieldValue("laboratoryId",singleUserData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj?.id == item) ))) || []);
 
-    },[departmentSliceData])
+    // },[departmentSliceData])
 
     React.useEffect(() => {
       const mappedDepartments = (singleUserData?.departmentId || []).map((id: string) => {
@@ -382,6 +382,8 @@ const ProcedureForm = React.forwardRef(
           )
         : dayjs(moment().format('MM/DD/YYYY'));
 
+        console.log(formik.errors);
+        
     return (
       <div>
         {/* <Confirmationpopup
