@@ -535,10 +535,10 @@ console.log(singleUserData);
             </div>
             <div
               style={{
-                position: 'relative',
-                bottom: '60px',
-                left: '155px',
-                cursor: 'pointer',
+                position: "absolute",
+                bottom: "0",
+                cursor: "pointer",
+                right: "0"
               }}
               onClick={triggerFileUploadField}
             >

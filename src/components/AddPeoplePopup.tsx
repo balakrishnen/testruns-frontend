@@ -178,7 +178,7 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
                 <Chip key={index} label={item.value} sx={{ m: 0.5 }} />
               ))} */}
             </Box>
-            <Box sx={{ mt: 3 }}>
+            <Box>
                <Autocomplete
               multiple={typePopup == "assign"?false:true}
                 style={{borderRadius: '15px !importnant'}}
