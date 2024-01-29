@@ -379,6 +379,7 @@ const RunsForm = React.forwardRef(
     }
 
     const opt = procedureSliceData?.Procedures;
+console.log(formik,'formik');
 
     return (
       <div>
@@ -835,7 +836,7 @@ const RunsForm = React.forwardRef(
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" disabled={type == 'edit' ? !formik.dirty : formik.errors?.length==0?false:true} className="add-btn">
+                <Button type="submit" variant="contained" disabled={type == 'edit' ? !formik.dirty : (Object.keys(formik.errors).length==0 && isAssigned)?false:true} className="add-btn">
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
