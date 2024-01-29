@@ -1094,7 +1094,7 @@ updateProfile(auths?.currentUser, {
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={type=='edit'?!formik.dirty:!formik.isValid}
+                  disabled={type=='edit'?!formik.dirty:Object.keys(formik.errors).length==0 ?false:true}
                   // onClick={submitFormPopup}
                   className="add-btn"
                 >

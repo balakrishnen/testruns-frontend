@@ -393,6 +393,7 @@ const getAllassets=()=>{
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
+    payload['page'] = 1;
     payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
     setFilter(true);

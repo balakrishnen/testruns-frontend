@@ -57,7 +57,7 @@ import AWS from 'aws-sdk';
 
 const validationSchema = Yup.object().shape({
   // name: Yup.string().required('Asset Name is required'),
-  name: Yup.string().trim().required('Asset Name is required').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces').max(20, 'Must be 20 characters'),
+  name: Yup.string().trim().required('Asset Name is required').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces').max(25, 'Must be 25 characters'),
   perchasedDate: Yup.string().required('Purchase date is required'),
   expiryDate: Yup.string().required('Expiry date is required'),
   departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),

@@ -497,6 +497,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
   const applyFilters = (key: any, value: any) => {
     const payload: any = { ...queryStrings };
     payload['searchBy'] = key;
+    payload['page'] = 1;
     console.log('key', key);
     console.log('filterSearchValue', filterSearchValue);
     payload['search'] =

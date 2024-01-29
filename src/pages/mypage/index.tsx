@@ -785,7 +785,7 @@ export default function MyPage() {
                           <span style={{ textAlign: 'center' }}>-</span>
                         )}
                       </TableCell>
-                      <TableCell align="center">Super Admin</TableCell>
+                      <TableCell align="center">{row?.assignedBy?.firstName}</TableCell>
                       <TableCell component="th" scope="row">
                         <Box>
                           {row.createdOn === null

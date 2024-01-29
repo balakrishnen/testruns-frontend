@@ -53,10 +53,10 @@ const validationSchema = Yup.object().shape({
     .trim()
     .required('Procedure name is required')
     .max(50, 'Must be 50 characters or less')
-    .matches(
-      /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/,
-      'Label cannot have empty spaces',
-    ),
+    // .matches(
+    //   /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/,
+    //   'Label cannot have empty spaces',
+    // ),
 });
 
 const ProcedureForm = React.forwardRef(

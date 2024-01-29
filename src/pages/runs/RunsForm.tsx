@@ -355,12 +355,19 @@ const RunsForm = React.forwardRef(
     );
     React.useEffect(() => {
       setLoading(true);
-      dispatch(fetchProcedureData({
+      let payload:any={
         page: 1,
         perPage: 10,
         searchBy: 'name',
         search: inputValue
-      }));
+      }
+      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
+        payload["laboratoryId"]=singleUserData?.laboratoryId
+      }
+      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
+        payload["organisationId"]=singleUserData?.organisationId
+      }
+      dispatch(fetchProcedureData(payload));
     }, [inputValue]);
     const handleClose = () => {
       if (type !== 'edit') {
