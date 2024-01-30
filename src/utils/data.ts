@@ -58,7 +58,7 @@ export const AssetsHeaders: any = [
     ],
     sort: 'desc',
     is_show: true,
-    type: 'select',
+    type: 'autocomplete',
   },
   {
     id: 'name',
@@ -624,7 +624,7 @@ export const ProceduresHeaders: readonly ProceduresHead[] = [
     ],
     sort: 'desc',
     is_show: true,
-    type: 'select',
+    type: 'autocomplete',
   },
   {
     id: 'name',
@@ -933,7 +933,7 @@ export const RunsHeaders: any = [
     ],
     sort: 'desc',
     is_show: true,
-    type: 'select',
+    type: 'autocomplete',
   },
   {
     id: 'procedureId',

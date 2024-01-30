@@ -346,7 +346,7 @@ export default function HistoryTable() {
                         // <TableCell align="center">{row.userId}</TableCell>
                       )} */}
                                         {headers[5].is_show && (
-                                            <TableCell align="center">User Name</TableCell>
+                                            <TableCell align="center">{row?.assignedTo?.firstName}</TableCell>
 
                                         )}
                                         {headers[6].is_show && (

@@ -68,6 +68,7 @@ import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
 import dayjs from 'dayjs';
 import { fetchSingleUserData, fetchUserData } from '../../api/userAPI';
+import { fetchProcedureData } from '../../api/procedureAPI';
 
 // table start
 
@@ -138,20 +139,18 @@ export default function Runs() {
 console.log(filterOptions,"filterOptions");
 
 
-  // React.useEffect(()=> {
-  //   let temp = { _id: loginUserSliceData?.verifyToken?._id };
-  //   // if (row?._id) {
-  //   dispatch(fetchSingleUserData(temp))
-  //     .then((isSucess: any) => {
-  //       setUserData(isSucess?.get_user)
-  //     })
-
-  //     .catch((err: any) => {
-  //       console.log(err);
-  //     })
-
-  //   // }
-  // }, [loginUserSliceData,runsSliceData]);
+  React.useEffect(()=> {
+    let opt=[]
+    console.log("options",options);
+    runsSliceData?.Runs.map((element) => {
+      opt.push({
+        id: element.runNumber,
+        name: element.runNumber,
+        value: element.runNumber,
+      });
+    })
+    setFilterOptions(opt)
+  }, [runsSliceData]);
 
   const [queryStrings, setQueryString] = React.useState({
     page: 1,
@@ -176,6 +175,32 @@ console.log("userDataRuns",userData)
   const runsIdSliceData = useSelector(
     (state: any) => state.runs.data?.get_all_runs_name,
   );
+  const procedureSliceData = useSelector(
+    (state: any) => state.procedure.data?.get_all_procedures,
+  );
+
+const [options, setOptions]=React.useState([])
+const [loading, setLoading] = React.useState(false);
+
+React.useEffect(()=>{
+  setOptions(procedureSliceData?.Procedures)
+  console.log("options",options);
+},[procedureSliceData])
+
+React.useEffect(()=>{
+  setOptions(options)
+  let opt=[]
+  console.log("options",options);
+  
+  options?.map((element:any) => {
+  opt.push({
+    label: element?.name,
+    value: element?.name,
+    id: element?._id,
+  })
+});
+  setFilterOptions(opt)
+},[options])
 
   const userSliceData = useSelector((state: any) => state.userData.data);
   console.log("userSliceData",userSliceData);
@@ -203,13 +228,35 @@ console.log("userDataRuns",userData)
   },[userSliceData])
 
   React.useEffect(() => {
-    // setLoading(true);
+    if(filterFieldName=="Assigned by"){
+      setLoading(true);
     dispatch(fetchUserData({
       page: 1,
       perPage: 10,
       searchBy: 'firstName',
       search: inputValue
     }));
+  }
+  if(filterFieldName=="Procedure name"){
+    setLoading(true);
+    console.log(inputValue,"inputValue");
+    
+    dispatch(fetchProcedureData({
+      page: 1,
+      perPage: 10,
+      searchBy: 'name',
+      search: inputValue
+    }));
+  }
+  if(filterFieldName=="Runs ID"){
+    setLoading(true);
+    dispatch(fetchRunsData({
+      page: 1,
+      perPage: 10,
+      searchBy: 'runNumber',
+      search: inputValue
+    }));
+  }
   }, [inputValue]);
 
   const handleFilterPopoverClose = () => {
@@ -308,6 +355,8 @@ console.log("userDataRuns",userData)
 
   const handleInputChange = (event, newInputValue) => {
     // Fetch suggestions when the user types
+    console.log("filterFieldName",filterFieldName);
+    
     setInputValue(newInputValue);
   };
 
@@ -626,6 +675,7 @@ console.log("userDataRuns",userData)
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
+                          setValuesName(null)
 
                           if (event.target?.value === 'laboratoryId') {
                             setFilterOptions(getFilterOptions(labSliceData));
@@ -648,13 +698,17 @@ console.log("userDataRuns",userData)
                           }
                           if (event.target?.value === 'procedureId') {
                             const data: any = [];
-                            runsSliceData.Runs.forEach((element) => {
+                            console.log("procedureSliceData?.Procedures",options);
+                            
+                            options.map((element) => {
                               data.push({
-                                label: element.procedureId?.name,
-                                value: element.procedureId?.name,
-                                id: element.procedureId?._id,
+                                label: element?.name,
+                                value: element?.name,
+                                id: element?._id,
                               });
                             });
+                            console.log("data",data);
+                            
                             setFilterOptions(data);
                           }
                           if (event.target?.value === 'status') {
@@ -688,7 +742,7 @@ console.log("userDataRuns",userData)
                             value={element.id}
                             key={element.id}
                             onClick={() => {
-                              {console.log('elementtype',element.type)}
+                              {console.log('elementtype',element.id)}
                               setFilterType(element.type);
                               setFilterOptions(element.filters[0]?.options);
                               setFilterKey(element.id);
@@ -744,10 +798,12 @@ console.log("userDataRuns",userData)
                       className='autocompleteFilter'
                       style={{borderRadius: '15px !importnant',paddingTop:"12px"}}
                       limitTags={3}
+                      loading={loading}
+                      disableClearable={true}
                       options={filterOptions !== undefined ? filterOptions: []}
                       getOptionLabel={(option:any) => option?.value}
                       renderInput={(params) => (
-                        <TextField  {...params} placeholder="Search by name" style={{marginTop: "-8px"}}/>
+                        <TextField  {...params} placeholder="Search..." style={{marginTop: "-8px"}} className='place-top'/>
                       )}
                       value={valuesName}
                       onChange={(_, selectedOptions: any) => {setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}

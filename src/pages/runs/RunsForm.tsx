@@ -51,8 +51,8 @@ const validationSchema = Yup.object().shape({
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
   objective: Yup.string().trim().required('Test Objective is required').max(35, 'Label must be at most 35 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
-  // dueDate: Yup.date().required('Due Date is required'),
-  dueDate: Yup.string().required('Due Date is required').matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/, 'Invalid date'),
+  dueDate: Yup.date().required('Due Date is required'),
+  // dueDate: Yup.string().required('Due Date is required').matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/, 'Invalid date'),
   assignedTo: Yup.string().notRequired(),
   organisationId: Yup.string().required('Procedure Name is required'),
   userId: Yup.string().notRequired()
@@ -113,6 +113,7 @@ const RunsForm = React.forwardRef(
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState(null)
     const [isAssigned,setIsAssigned]=React.useState(false)
+    const [dueDate, setDueDate] = useState('');
 
     //   const fetchProcedureSuggestions = async (inputValue) => {
     //   setLoading(true);
@@ -159,8 +160,17 @@ const RunsForm = React.forwardRef(
             console.log("dayjs(runzSliceData?.get_run?.dueDate",dayjs(runzSliceData?.get_run?.dueDate))
             
             formik.setFieldValue('dueDate',dayjs(runzSliceData?.get_run?.dueDate) )
-            setDepartment(DepartmentData ? DepartmentData : [])
-            setLab(LabData ? LabData : [])
+            setDepartment(runzSliceData?.get_run?.departmentId?.map((item: any) => ({
+              label: item.name,
+              value: item.name,
+              id: item._id,
+            })))
+            setLab(runzSliceData?.get_run?.laboratoryId?.map((item: any) => ({
+              label: item.name,
+              value: item.name,
+              id: item._id,
+            })))
+            setDueDate(dayjs(runzSliceData?.get_run?.dueDate, 'MM/DD/YYYY'))
           }
         }
         else {
@@ -195,6 +205,7 @@ const RunsForm = React.forwardRef(
       //   setDueDateError("")
       // }
       const isMatch = checkCredentials(values.name);
+     console.log("isMatch",isMatch);
 
       if (isMatch) {
         var deptArray: any = []
@@ -261,12 +272,12 @@ const RunsForm = React.forwardRef(
     var dateDue = (type == 'edit' ? dayjs(formData?.dueDate) : null);
     const formik = useFormik({
       initialValues: {
-        departmentId: "",
-        laboratoryId: "",
+        departmentId: '',
+        laboratoryId: '',
         organisationId: singleUserData?.organisationId,
         procedureId: "",
         objective: "",
-        dueDate: dateDue,
+        dueDate: dueDate,
         createdOn: type == 'edit' ? createdDate : dayjs(moment(new Date()).format('MM/DD/YYYY')),
         assignedBy: loginUserSliceData?.verifyToken?._id,
         assignedTo: loginUserSliceData?.verifyToken?._id,
@@ -313,6 +324,7 @@ const RunsForm = React.forwardRef(
     const handleDateChanges = (selectedDate: any, name: any) => {
       const formattedDate = moment(selectedDate?.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
+      setDueDate(formattedDate);
     }
     const handleConfirmationState = (state: number) => {
       if (state === 0) {
@@ -386,7 +398,7 @@ const RunsForm = React.forwardRef(
     }
 
     const opt = procedureSliceData?.Procedures;
-console.log(formik,'formik');
+console.log(formik,'dueDate');
 
     return (
       <div>
@@ -768,13 +780,22 @@ console.log(formik,'formik');
                     <Box style={{ position: 'relative' }}>
                       <label>Due date<span style={{ color: "#E2445C" }}>*</span></label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+          renderInput={(props) => <TextField {...props} label="Due Date" />}
+          format="MM/DD/YYYY"
+          disablePast
+          onChange={(selectedDate) => handleDateChanges(selectedDate,'dueDate')}
+          value={dueDate}
+        />
+          </LocalizationProvider>
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" disablePast onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
-                      </LocalizationProvider>
-                      {formik.touched.dueDate && formik.errors.dueDate && (
+                      </LocalizationProvider> */}
+                      {/* {formik.touched.dueDate && formik.errors.dueDate && (
                         <Typography className="error-field">
                           Due Date is required
                         </Typography>
-                      )}
+                      )} */}
                     </Box>
                   </Grid>
 

@@ -29,6 +29,7 @@ import {
   TextField,
   Typography,
   Checkbox,
+  Autocomplete,
   Badge,
 } from '@mui/material';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
@@ -104,6 +105,9 @@ export default function Assets() {
   const [visibleRow, setVisibleRow] = React.useState<any>(assetsData);
   const [loader, setLoader] = React.useState(false);
   const [filter, setFilter] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState(null)
+  const [valuesName,setValuesName]=React.useState(null)
+  const [loading, setLoading] = React.useState(false);
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -224,8 +228,39 @@ const getAllassets=()=>{
     handleFilterPopoverClose();
     setFilterKey(null);
     setFilter(false);
+    setValuesName(null)
   };
 
+  React.useEffect(()=> {
+    let opt=[]
+    // console.log("options",options);
+    assetsIdSliceData.Assets.map((element) => {
+      opt.push({
+        id: element.assetNumber,
+        name: element.assetNumber,
+        value: element.assetNumber,
+      });
+    })
+    setFilterOptions(opt)
+  }, [assetsIdSliceData]);
+
+  React.useEffect(()=>{
+    setLoading(true);
+    dispatch(fetchAssetsData({
+      page: 1,
+      perPage: 10,
+      searchBy: 'assetNumber',
+      search: inputValue
+    }));
+  
+  },[inputValue])
+
+  const handleInputChange = (event, newInputValue) => {
+    // Fetch suggestions when the user types
+    console.log("filterFieldName",filterFieldName);
+    
+    setInputValue(newInputValue);
+  };
   const handlePageChange = (even: any, page_no: number) => {
     const payload: any = { ...queryStrings };
     const page: any = { ...pageInfo };
@@ -513,6 +548,7 @@ const getAllassets=()=>{
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
+                          setValuesName(null)
                           if (event.target?.value === 'laboratoryId') {
                             setFilterOptions(getFilterOptions(labSliceData));
                           }
@@ -526,7 +562,7 @@ const getAllassets=()=>{
                             assetsIdSliceData.Assets.forEach((element) => {
                               data.push({
                                 id: element.assetNumber,
-                                name: element.assetNumber,
+                                label: element.assetNumber,
                                 value: element.assetNumber,
                               });
                             });
@@ -600,7 +636,22 @@ const getAllassets=()=>{
                             />
                           </LocalizationProvider>
                         </Box>
-                      ) : (
+                      ):filterType === 'autocomplete'?
+                      <Autocomplete
+                      className='autocompleteFilter'
+                      style={{borderRadius: '15px !importnant',paddingTop:"12px"}}
+                      limitTags={3}
+                      loading={loading}
+                      disableClearable={true}
+                      options={filterOptions !== undefined ? filterOptions: []}
+                      getOptionLabel={(option:any) => option?.value}
+                      renderInput={(params) => (
+                        <TextField  {...params} placeholder="Search..." style={{marginTop: "-8px"}}  className='place-top'/>
+                      )}
+                      value={valuesName}
+                      onChange={(_, selectedOptions: any) => {setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}
+                      onInputChange={handleInputChange}
+                    />  : (
                         <Select
                         MenuProps={{                   
                           disableScrollLock: true,                   
