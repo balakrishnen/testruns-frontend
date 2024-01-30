@@ -115,7 +115,7 @@ export default function RealtimeChart({
       setIsChartPause(true);
       getTimeRangeData();
     }
-  }, [assets, endDate]);
+  }, [endDate]);
 
   React.useEffect(() => {
     if (assetsSliceData) {
@@ -276,23 +276,23 @@ export default function RealtimeChart({
         const sensors: any = [];
         const data = { ...chartData };
         const data2 = { ...chartData2 };
-        let temp = {
-          name: 'temperature_data',
-        };
+        // let temp = {
+        //   name: 'temperature_data',
+        // };
 
-        result.length === 0
-          ? sensors.push(temp)
-          : result.forEach((element: any) => {
-              sensors.push({
-                name: element._field,
-              });
-            });
+        // result.length === 0
+        //   ? sensors.push(temp)
+        //   : result.forEach((element: any) => {
+        //       sensors.push({
+        //         name: element._field,
+        //       });
+        //     });
 
-        // result.forEach((element: any) => {
-        //   sensors.push({
-        //     name: element._field,
-        //   });
-        // });
+        result.forEach((element: any) => {
+          sensors.push({
+            name: element._field,
+          });
+        });
 
         setAssets(event.target.value);
         setChannelOptions(sensors);
@@ -476,7 +476,7 @@ export default function RealtimeChart({
             ></Grid>
           </Grid>
           <Box sx={{ mt: 4 }}>
-            { showArchivedChart ? (
+            {showArchivedChart ? (
               <>
                 {console.log('chartData2', chartData2)}
                 <Line data={chartData2} options={options2} />

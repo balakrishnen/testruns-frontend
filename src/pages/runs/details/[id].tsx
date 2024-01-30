@@ -298,122 +298,21 @@ export default function RunsDetails() {
   const [charts, setCharts] = React.useState<any>([]);
   const [startDate, setStartDate] = React.useState<any>(null);
   const [endDate, setEndDate] = React.useState<any>(null);
-  const [chartLines, setChartLines] = React.useState([
-    {
-      dataKey: 'plot1',
-      stroke: '#e22828',
-      yAxisId: 'left1',
-      dot: {
-        r: 1,
-        fill: '#e22828',
-      },
-    },
-    {
-      dataKey: 'plot2',
-      stroke: '#90239f',
-      yAxisId: 'right1',
-      dot: {
-        r: 1,
-        fill: '#90239f',
-      },
-    },
-    {
-      dataKey: 'plot3',
-      stroke: '#111fdf',
-      yAxisId: 'left2',
-      dot: {
-        r: 1,
-        fill: '#111fdf',
-      },
-    },
-    {
-      dataKey: 'plot4',
-      stroke: '#38e907',
-      yAxisId: 'right2',
-      dot: {
-        r: 1,
-        fill: '#38e907',
-      },
-    },
-  ]);
-
-  const [ddData, setData] = React.useState([
-    { name: 'Jan', uv: 4000 },
-    { name: 'Jan', uv: 2000 },
-  ]);
-
-  const [yAxis, setYAxis] = React.useState([
-    {
-      yAxisId: 'left1',
-      orientation: 'left',
-      label: {
-        value: 'Y1',
-        angle: -90,
-        position: 'insideBottom',
-        fill: '#e22828',
-      },
-      tick: {
-        fontSize: 12,
-      },
-    },
-    {
-      yAxisId: 'left2',
-      orientation: 'left',
-      label: {
-        value: 'Y3',
-        angle: -90,
-        position: 'insideBottom',
-        fill: '#111fdf',
-      },
-      tick: {
-        fontSize: 12,
-      },
-    },
-    {
-      yAxisId: 'right1',
-      orientation: 'right',
-      label: {
-        value: 'Y2',
-        angle: -90,
-        position: 'insideBottom',
-        fill: '#90239f',
-      },
-      tick: {
-        fontSize: 12,
-      },
-    },
-    {
-      yAxisId: 'right2',
-      orientation: 'right',
-      label: {
-        value: 'Y4',
-        angle: -90,
-        position: 'insideBottom',
-        fill: '#38e907',
-      },
-      tick: {
-        fontSize: 12,
-      },
-    },
-  ]);
 
   const procedureSliceData = useSelector((state: any) => state.runs.data);
 
   var runzId: any = [];
   runzId.push(runzValue?._id);
-  // console.log('runsRow', runzId, runzValue);
   var runzRow: any = [];
   runzRow.push(runzValue);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      // console.log(window.location.pathname.split('/'));
       const procedureId = { _id: window.location.pathname.split('/')[3] };
       dispatch(fetchSingleRunsData(procedureId));
     }
   }, [value, disableStop, disableStart]);
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      // console.log(window.location.pathname.split('/'));
       // const procedureId = { _id: window.location.pathname.split('/')[3] };
       // dispatch(fetchSingleRunsData(procedureId));
       const runz = {
@@ -464,7 +363,6 @@ export default function RunsDetails() {
   //           </div>
   //         </div>`;
   //       });
-  //       console.log('####', text);
   //       setUserRunzResult(text + '</ul>');
   //     });
   // }, [userRunzResult]);
@@ -494,7 +392,6 @@ export default function RunsDetails() {
     });
     // setRunzValue(procedureSliceData.get_run)
   };
-  // console.log(procedureSliceData);
 
   React.useEffect(() => {
     setRunzValue(runzValue);
@@ -531,7 +428,6 @@ export default function RunsDetails() {
       // else{
       setUserRunzResult(userRunzResult);
       Object.entries(userRunzResult).forEach(([key, value]) => {
-        // console.log(text);
         text =
           text +
           `<div>
@@ -541,7 +437,6 @@ export default function RunsDetails() {
         </div>`;
       });
     }
-    // console.log('####', text);
     if (text !== '') {
       setUserRunzResult(text + '</ul>');
     }
@@ -566,7 +461,6 @@ export default function RunsDetails() {
       Object.entries(JSON.parse(userRunzID?.userProcedure)).filter(
         ([key]) => key,
       );
-    // console.log(userProcedure);
 
     const obj = filtered && Object.fromEntries(filtered);
     if (!isEmptyObject(obj && userProcedure)) {
@@ -577,9 +471,7 @@ export default function RunsDetails() {
         }
       }
     }
-    // console.log(userRunzID?.userProcedure);
   }, [userRunzID?.userProcedure, state, value]);
-  // console.log(runzValue?.userProcedure);
 
   React.useEffect(() => {
     handleHtmlInput();
@@ -608,11 +500,6 @@ export default function RunsDetails() {
     setValue(newValue);
   };
   const editorRef: any = React.useRef(null);
-  // const log = () => {
-  //   if (editorRef.current) {
-  //     console.log(editorRef.current.getContent());
-  //   }
-  // };
 
   const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#252525'];
 
@@ -689,7 +576,6 @@ export default function RunsDetails() {
           xValue: null,
         });
       });
-      // console.log('######', data);
       setCharts(data);
     }
   }, [tableChartSlice]);
@@ -757,8 +643,6 @@ export default function RunsDetails() {
     setCharts(data);
   };
   const handleChanges = (content: any) => {
-    // console.log('content', content.querySelectorAll('input'));
-
     setState({ content });
   };
   const [arr, setArr] = React.useState<any>([]);
@@ -893,7 +777,6 @@ export default function RunsDetails() {
         }
         return mergedData;
       });
-      // console.log("mergedDatasets",mergedDatasets);
       let filteredData = mergedDatasets?.filter(
         (sublist) => sublist?.some((obj: any) => Object?.keys(obj).length > 0),
       );
@@ -901,7 +784,6 @@ export default function RunsDetails() {
         (sublist) =>
           sublist?.filter((obj: any) => Object?.keys(obj).length > 0),
       );
-      // console.log("filteredData",filteredData);
       const results = filteredData?.map((dataset, index) => {
         const subResult = [];
         const firstDataItem = dataset[index];
@@ -951,31 +833,28 @@ export default function RunsDetails() {
         static_chart_data: JSON.stringify(finalTableTitleResult),
         startTime: new Date(),
       };
-      if (runzValue.status == 'Created') {
-        // dispatch(postUserRunsData(payload)).then((res: any) => {
-        //   let payload1 = {
-        //     _id: runzValue._id,
-        //     status: 'Started',
-        //   };
-        //   dispatch(fetchUpdateRunsData(payload1));
-        //   toast(`Runs table readings created successfully !`, {
-        //     style: {
-        //       background: '#00bf70',
-        //       color: '#fff',
-        //     },
-        //   });
-        // });
-        dispatch(postUserRunsData(payload));
-        let payload1 = {
-          _id: runzValue._id,
-          status: 'Started',
-        };
-        dispatch(fetchUpdateRunsData(payload1));
-        toast(`Runs table readings created successfully !`, {
-          style: {
-            background: '#00bf70',
-            color: '#fff',
-          },
+      if (!userRunzID?._id) {
+        dispatch(postUserRunsData(payload)).then((res: any) => {
+          if (res.create_userRunz._id) {
+            let payload1 = {
+              _id: runzValue._id,
+              status: 'Started',
+            };
+            dispatch(fetchUpdateRunsData(payload1));
+            toast(`Runs table readings created successfully !`, {
+              style: {
+                background: '#00bf70',
+                color: '#fff',
+              },
+            });
+          } else {
+            toast('Something went wrong', {
+              style: {
+                background: '#d92828',
+                color: '#fff',
+              },
+            });
+          }
         });
       } else {
         let payload2 = {
@@ -984,18 +863,15 @@ export default function RunsDetails() {
           userProcedure: JSON.stringify(htmlInput),
           static_chart_data: JSON.stringify(finalTableTitleResult),
         };
-        dispatch(UpdateUserRunsData(payload2));
-
-        // const staticData =
-        //   '[{"label":"TABULAR COLUMN:","value":"TABULAR COLUMN:","data":[{"label":"Initial temperature ◦C","values":[21,78]},{"label":"Time (Sec)","values":[65,32]}]}]';
-
-        setStaticChartData(finalTableTitleResult);
-        setSavedChartData(null);
-        toast(`Runs table readings updated successfully !`, {
-          style: {
-            background: '#00bf70',
-            color: '#fff',
-          },
+        dispatch(UpdateUserRunsData(payload2)).then((res: any) => {
+          setStaticChartData(finalTableTitleResult);
+          setSavedChartData(null);
+          toast(`Runs table readings updated successfully !`, {
+            style: {
+              background: '#00bf70',
+              color: '#fff',
+            },
+          });
         });
       }
       const data: any = {
@@ -1042,18 +918,13 @@ export default function RunsDetails() {
         body: JSON.stringify(htmlInput),
       })
         .then((res) => {
-          // console.log(res)
           fetch('https://vyxeuzxdui.us-east-1.awsapprunner.com/runPython')
             .then((res) => res.json())
             .then((res) => {
-              // console.log(res);
               var newarray: any = [];
               newarray = Object.keys(res);
-              // console.log(newarray[0]);
 
-              // console.log(res[newarray][0]);
               const data = res !== undefined ? res[newarray][0] : '';
-              console.log('JSON', JSON.stringify(data));
               setUserRunzResult(data);
               let text: any = '';
               Object.entries(data).forEach(([key, value]) => {
@@ -1065,7 +936,6 @@ export default function RunsDetails() {
               </div>
             </div>`;
               });
-              // console.log('####', text);
               if (text !== '') {
                 setUserRunzResult(text + '</ul>');
               }
@@ -1077,26 +947,14 @@ export default function RunsDetails() {
     }
   };
 
-  // const handleEditorChange = (e:any) => {
-  //   console.log( e.target.getContent());
-  //   console.log("Content was updated:", e.target.getContent());
-  // };
   const handleChanged1 = (content: any) => {
-    // console.log(content);
     setUserRunzResult(content);
   };
   const handleChanged = (content: any) => {
-    // console.log(content);
     setRemarks(content);
   };
   const resultSave = async () => {
-    console.log('JSON', result);
-    console.log(userRunzResult);
-
     if (runzValue.status == 'Created') {
-      console.log(result);
-      console.log(userRunzResult);
-
       const payload: any = {
         runId: runzValue._id,
         results: JSON.stringify(userRunzResult),
@@ -1127,14 +985,10 @@ export default function RunsDetails() {
         });
       }
     } else {
-      console.log(result);
-      console.log(userRunzResult);
-
       const payload2: any = {
         _id: userRunzID?._id,
         results: userRunzResult,
       };
-      // console.log(payload2);
       if (
         !JSON.stringify(userRunzResult).includes('No calculations') &&
         userRunzResult !== '' &&
@@ -1335,7 +1189,6 @@ export default function RunsDetails() {
     values.tableChartOptionsList[keyIndex].color = event.target.value;
     setCharts(data);
   };
-  // console.log(userRunzResult);
 
   const handleAddChart = () => {
     const data = [...charts];
@@ -1390,7 +1243,6 @@ export default function RunsDetails() {
         console.log(err);
       });
   };
-  // console.log(value, 'value');
 
   const handleOnChange = (e: any, row: any) => {
     var runsChange: any = {
@@ -1406,7 +1258,6 @@ export default function RunsDetails() {
         color: '#fff',
       },
     });
-    // reload();
     handleReloadSingleData();
   };
 
@@ -1417,11 +1268,9 @@ export default function RunsDetails() {
   const handleHtmlInput = () => {
     let objects = {};
     // @ts-ignore
-    // console.log(document?.getElementById('content')?.querySelectorAll('td'));
     let inputEl: any = document
       ?.getElementById('content')
       ?.querySelectorAll('input');
-    // console.log('inputEl', inputEl);
 
     inputEl?.forEach((ele: any) => {
       const { id, value } = ele;
@@ -1442,17 +1291,13 @@ export default function RunsDetails() {
       };
     });
     // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
-
-    // console.log('inputEl', objects);
   };
-  // console.log('htmlInput', htmlInput);
   const uploadVideo = async (e: any) => {
     const file = e.target.files[0];
     if (file) {
       const videoUrl = URL.createObjectURL(file);
       if (videoUrl) {
         const editor = editorRef.current.editor;
-        // console.log('videoUrl',videoUrl);
         editorRef.current?.insertContent(
           `<video controls><source src="${videoUrl}" type="video/mp4"></video>`,
         );

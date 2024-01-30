@@ -99,7 +99,6 @@ export default function TableChart({
   //     yAxisOptions: [],
   //   },
   // ];
-console.log(staticChartData,"staticChartData");
 
   const [chartData, setChartData] = React.useState<any>(
     savedChartData === null
@@ -241,15 +240,15 @@ console.log(staticChartData,"staticChartData");
     }
   };
 
-  const handleXAxisChange = (event, index) => {
+  const handleXAxisChange = (event: any, index: number) => {
     const data = [...chartData];
     data[index].xAxisValue = event.target.value;
     const channels: any = { ...data[index] };
     const charts: any = [...channels.charts];
     const channelIndex = channelsList.findIndex(
-      (item) => item.name === event.target.value,
+      (item: any) => item.name === event.target.value,
     );
-    channels.channelsList.forEach((element, position) => {
+    channels.channelsList.forEach((element: any, position: number) => {
       if (channels.charts.length === 0) {
         charts.push({
           [`Xplot${channelIndex + 1}`]: element.data[channelIndex]
@@ -269,7 +268,7 @@ console.log(staticChartData,"staticChartData");
     if (channelIndex !== -1) {
       data[index].xDataKey = `Xplot${channelIndex + 1}`;
     } else {
-      charts.forEach((element, position) => {
+      charts.forEach((element: any, position: number) => {
         delete charts[position][`Xplot${index + 1}`];
       });
     }
@@ -277,14 +276,14 @@ console.log(staticChartData,"staticChartData");
     setChartData(data);
   };
 
-  const handleYAxisChange = (event: any, index, key) => {
+  const handleYAxisChange = (event: any, index: number, key: any) => {
     const data = [...chartData];
     const channels: any = { ...data[index] };
     channels.channelOptions[key].yAxisValue = event.target.value;
     setChartData(data);
   };
 
-  const handleColorPickerChange = (event: any, dataIndex: any, key) => {
+  const handleColorPickerChange = (event: any, dataIndex: any, key: any) => {
     const data = [...chartData];
     const values = { ...data[dataIndex] };
     values.channelOptions[key].color = event.target.value;
@@ -334,7 +333,7 @@ console.log(staticChartData,"staticChartData");
     setChartData(data);
   };
 
-  const handleRemoveChannel = (index) => {
+  const handleRemoveChannel = (index: any) => {
     const data: any = [...chartData];
     data[index].channelOptions.pop();
     setChartData(data);
@@ -362,7 +361,7 @@ console.log(staticChartData,"staticChartData");
     }
   };
 
-  const handleRemoveChart = (index) => {
+  const handleRemoveChart = (index: number) => {
     // setChartData((prevData) => {
     //   const newArray = prevData.filter((item, key) => key !== index);
     //   return newArray;
@@ -397,7 +396,7 @@ console.log(staticChartData,"staticChartData");
                 xl={9}
                 // sx={{ pr: 4 }}
                 style={{ borderRight: '1px solid #e4e5e7' }}
-                className='chart-left'
+                className="chart-left"
               >
                 <Grid container sx={{ pr: 4 }}>
                   <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
@@ -422,19 +421,19 @@ console.log(staticChartData,"staticChartData");
                         width: '100%',
                         borderRadius: '10px',
                         marginBottom: '15px',
-                        marginRight:'2rem'
+                        marginRight: '2rem',
                       }}
                     >
                       <MenuItem value={null}>Null</MenuItem>
-                      {tableList?.map((item, index) => (
+                      {tableList?.map((item: any, index: number) => (
                         <MenuItem key={index} value={item.value}>
                           {item.name}
                         </MenuItem>
                       ))}
-                    </Select>       
+                    </Select>
                   </Grid>
                   <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
-                    <Box className="color-chart" sx={{marginLeft:'2rem'}}>
+                    <Box className="color-chart" sx={{ marginLeft: '2rem' }}>
                       <Box
                         sx={{
                           display: 'flex',
@@ -449,12 +448,12 @@ console.log(staticChartData,"staticChartData");
                             disableScrollLock: true,
                             marginThreshold: null,
                             anchorOrigin: {
-                              vertical: "top",
-                              horizontal: "left"
+                              vertical: 'top',
+                              horizontal: 'left',
                             },
                             transformOrigin: {
-                              vertical: "top",
-                              horizontal: "left"
+                              vertical: 'top',
+                              horizontal: 'left',
                             },
                           }}
                           labelId="view-all-label2"
@@ -472,16 +471,26 @@ console.log(staticChartData,"staticChartData");
                           style={{ width: '100%' }}
                         >
                           <MenuItem value={null}>Null</MenuItem>
-                          {data.channelsList?.map((item, index) => (
-                            <MenuItem key={index} value={item.name}>
-                              {item.name}
-                            </MenuItem>
-                          ))}
+                          {data.channelsList?.map(
+                            (item: any, index: number) => (
+                              <MenuItem key={index} value={item.name}>
+                                {item.name}
+                              </MenuItem>
+                            ),
+                          )}
                         </Select>
                       </Box>
-                    </Box>  
+                    </Box>
                   </Grid>
-                  <Grid item  xs={12} sm={12} md={6} lg={6} xl={6} textAlign={'end'}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    md={6}
+                    lg={6}
+                    xl={6}
+                    textAlign={'end'}
+                  >
                     <>
                       <Button
                         variant="contained"
@@ -523,24 +532,26 @@ console.log(staticChartData,"staticChartData");
                         type="number"
                         name={data.xAxisValue}
                       />
-                      {data.channelOptions?.map((axis, axisIndex) => (
-                        <YAxis
-                          key={axisIndex}
-                          yAxisId={axis.yAxisId}
-                          orientation={axis.orientation}
-                          label={{
-                            value: axis.name,
-                            angle: -90,
-                            position: 'insideBottom',
-                            fill: axis.color,
-                          }}
-                          tick={{
-                            fontSize: 12,
-                          }}
-                          domain={['auto', 'auto']}
-                          name={data.xAxisValue}
-                        />
-                      ))}
+                      {data.channelOptions?.map(
+                        (axis: any, axisIndex: number) => (
+                          <YAxis
+                            key={axisIndex}
+                            yAxisId={axis.yAxisId}
+                            orientation={axis.orientation}
+                            label={{
+                              value: axis.name,
+                              angle: -90,
+                              position: 'insideBottom',
+                              fill: axis.color,
+                            }}
+                            tick={{
+                              fontSize: 12,
+                            }}
+                            domain={['auto', 'auto']}
+                            name={data.xAxisValue}
+                          />
+                        ),
+                      )}
                       <Tooltip />
                       <CartesianGrid
                         stroke="#f5f5f5"
@@ -548,23 +559,24 @@ console.log(staticChartData,"staticChartData");
                         strokeWidth={2}
                       />
 
-                      {data.channelOptions?.map((line, lineIndex) => (
-                        <Line
-                          key={lineIndex}
-                          type="linear"
-                          dataKey={line.dataKey}
-                          stroke={line.color}
-                          strokeWidth={2}
-                          yAxisId={line.yAxisId}
-                          dot={{
-                            r: 2,
-                            fill: line.color,
-                          }}
-                        />
-                      ))}
+                      {data.channelOptions?.map(
+                        (line: any, lineIndex: number) => (
+                          <Line
+                            key={lineIndex}
+                            type="linear"
+                            dataKey={line.dataKey}
+                            stroke={line.color}
+                            strokeWidth={2}
+                            yAxisId={line.yAxisId}
+                            dot={{
+                              r: 2,
+                              fill: line.color,
+                            }}
+                          />
+                        ),
+                      )}
                     </LineChart>
                   </ResponsiveContainer>
-                  
                 </Box>
               </Grid>
 
@@ -576,7 +588,7 @@ console.log(staticChartData,"staticChartData");
                 lg={3}
                 xl={3}
                 style={{ overflowY: 'scroll' }}
-                className='chart-right'
+                className="chart-right"
               >
                 <Grid container alignItems={'center'}>
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
@@ -617,10 +629,10 @@ console.log(staticChartData,"staticChartData");
                   </Grid>
                 </Grid>
                 <Box
-                  sx={{ mt: 2}}
-                  style={{ overflowY: 'auto', height: '550px'}}
+                  sx={{ mt: 2 }}
+                  style={{ overflowY: 'auto', height: '550px' }}
                 >
-                  {data.channelOptions?.map((element, key) => (
+                  {data.channelOptions?.map((element: any, key: number) => (
                     <Box key={key}>
                       <Grid container>
                         <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
