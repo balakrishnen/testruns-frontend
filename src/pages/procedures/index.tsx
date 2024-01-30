@@ -11,6 +11,7 @@ import {
   Typography,
   Badge,
   TextField,
+  Autocomplete,
 } from '@mui/material';
 import Table from '@mui/material/Table';
 import TablePagination from '../../components/table/TablePagination';
@@ -87,7 +88,9 @@ export default function Procedures() {
   const [filterOptions, setFilterOptions] = React.useState([]);
   const [loader, setLoader] = React.useState(false);
   const [filter, setFilter] = React.useState(false);
-
+  const [inputValue, setInputValue] = React.useState(null)
+  const [valuesName,setValuesName]=React.useState(null)
+  const [loading, setLoading] = React.useState(false);
   const handleRequestSort = () => {
     // event: React.MouseEvent<unknown>,
     //   property: keyof ProceduresRowData,
@@ -168,6 +171,7 @@ export default function Procedures() {
     handleFilterPopoverClose();
     setFilterKey(null);
     setFilter(false);
+    setValuesName(null)
   };
 
   // React.useEffect(() => {
@@ -250,7 +254,36 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
     setQueryString(payload);
     setCurrentPage(page_no);
   };
+  React.useEffect(()=> {
+    let opt=[]
+    // console.log("options",options);
+    proceduresIdSliceData.Procedures.map((element) => {
+      opt.push({
+        id: element.procedureNumber,
+        name: element.procedureNumber,
+        value: element.procedureNumber,
+      });
+    })
+    setFilterOptions(opt)
+  }, [proceduresIdSliceData]);
 
+  React.useEffect(()=>{
+    setLoading(true);
+    dispatch(fetchProcedureData({
+      page: 1,
+      perPage: 10,
+      searchBy: 'procedureNumber',
+      search: inputValue
+    }));
+  
+  },[inputValue])
+
+  const handleInputChange = (event, newInputValue) => {
+    // Fetch suggestions when the user types
+    console.log("filterFieldName",filterFieldName);
+    
+    setInputValue(newInputValue);
+  };
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
@@ -658,7 +691,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
                               (element) => {
                                 result.push({
                                   id: element.procedureNumber,
-                                  name: element.procedureNumber,
+                                  label: element.procedureNumber,
                                   value: element.procedureNumber,
                                 });
                               },
@@ -727,7 +760,22 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
                             />
                           </LocalizationProvider>
                         </Box>
-                      ) : (
+                      ):filterType === 'autocomplete'?
+                      <Autocomplete
+                      className='autocompleteFilter'
+                      style={{borderRadius: '15px !importnant',paddingTop:"12px"}}
+                      limitTags={3}
+                      loading={loading}
+                      disableClearable={true}
+                      options={filterOptions !== undefined ? filterOptions: []}
+                      getOptionLabel={(option:any) => option?.value}
+                      renderInput={(params) => (
+                        <TextField  {...params} placeholder="Search..." style={{marginTop: "-8px"}}/>
+                      )}
+                      value={valuesName}
+                      onChange={(_, selectedOptions: any) => {setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}
+                      onInputChange={handleInputChange}
+                    /> : (
                         <Select
                           MenuProps={{
                             disableScrollLock: true,

@@ -178,8 +178,8 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
         </IconButton>
         <p>Help</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton size="large" aria-label="notification icon" color="inherit" onClick={()=>{handleMobileMenuClose();openNotificationList()}}>
+      <MenuItem onClick={()=>{handleMobileMenuClose();openNotificationList()}} >
+        <IconButton size="large" aria-label="notification icon" color="inherit">
         <Badge
                 color="secondary"
                 // variant={isAnyRead==true?"dot":"standard"}
@@ -194,19 +194,19 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
           />
           </Badge>
         </IconButton>
-        <p onClick={()=>{handleMobileMenuClose();openNotificationList()}} >Notifications</p>
+        <p>Notifications</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem  onClick={()=>{handleMobileMenuClose();openEditProfile()}}>
         <IconButton
           size="large"
           aria-label="account"
           aria-haspopup="true"
           color="inherit"
-          onClick={()=>{handleMobileMenuClose();openEditProfile}}
+         
         >
           <img className="app-bar-images" src={(userProfileDetails?.imageUrl!=="" && userProfileDetails?.imageUrl!==null)?userProfileDetails?.imageUrl:account} alt="account_icon" style={{width: "25px", height: "25px",borderRadius: "16px"}}/>
         </IconButton>
-        <p onClick={()=>{handleMobileMenuClose();openEditProfile}}>{userProfileDetails?.firstName}</p>
+        <p>{userProfileDetails?.firstName}</p>
       </MenuItem>
       {/* <MenuItem>
         <IconButton

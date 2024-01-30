@@ -119,7 +119,7 @@ const Profile = () => {
   const [roleData, setRoleData] = React.useState([]);
   const [uploadedFile, setUploadedFile] = React.useState(null);
   const[userData, setUserData]=React.useState({})
-
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
   const Placeholder = ({ children }: any) => {
     return <div>{children}</div>;
   };
@@ -212,7 +212,6 @@ console.log(singleUserData);
       // TODO(you): prompt the user to re-provide their sign-in credentials
       const  credential :any= EmailAuthProvider.credential(auths.currentUser?.email, values.password);
       console.log(credential);
-      
       await reauthenticateWithCredential(user, credential).then((res) => {
         // User re-authenticated.
          updatePassword(auth.currentUser, values.newpassword)
@@ -327,6 +326,7 @@ console.log(singleUserData);
       };
       // debugger
       // userValues['_id'] = userData?._id
+      setIsSubmitted(true)
       await dispatch(fetchUpdateUserData(userValues));
      await window.localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
       await toast(`User Details updated successful !`, {
@@ -335,6 +335,9 @@ console.log(singleUserData);
           color: '#fff',
         },
       });
+      setTimeout(()=>{
+        setIsSubmitted(false)
+      },3000)
       // alert("User Details updated successful!");
     }
   };
@@ -1222,6 +1225,7 @@ console.log(singleUserData);
           }}
           variant="contained"
           className="add-btn"
+          disabled={isSubmitted}
         >
           Save
         </Button>
