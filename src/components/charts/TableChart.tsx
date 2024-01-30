@@ -111,7 +111,6 @@ export default function TableChart({
   // const [chartData, setChartData] = React.useState<any>(TableChartStaticData);
   const [tableList, setTableList] = React.useState<any>([]);
   const [channelsList, setChannelsList] = React.useState<any>([]);
-  const [displayCount, setDisplayCount] = React.useState(1);
 
   React.useEffect(() => {
     const data: any = [];
@@ -207,26 +206,40 @@ export default function TableChart({
     const channelPosition = channels.channelsList.findIndex(
       (item: any) => item.name === event.target.value,
     );
+    const channelCount = channels.channelsList.length;
+    const currentPlotData = channels.channelsList.find(
+      (item: any) => item.name === event.target.value,
+    );
     if (channelPosition !== -1) {
       channels.channelOptions[keys].channel = event.target.value;
       channels.channelOptions[keys].color = colorList[keys > 4 ? 4 : keys];
-      channels.channelsList?.forEach((element: any, position: number) => {
+      // channels.channelsList?.forEach((element: any, position: number) => {
+      //   if (channels.charts.length === 0) {
+      //     charts.push({
+      //       [`plot${keys + 1}`]: element.data[channelPosition]
+      //         ? element.data[channelPosition]
+      //         : 0,
+      //     });
+      //   } else {
+      //     charts[position][`plot${keys + 1}`] = element.data[channelPosition]
+      //       ? element.data[channelPosition]
+      //       : 0;
+      //   }
+      // });
+
+      for (let i = 0; i < channelCount; i++) {
         if (channels.charts.length === 0) {
           charts.push({
-            [`plot${keys + 1}`]: element.data[channelPosition]
-              ? element.data[channelPosition]
+            [`plot${keys + 1}`]: currentPlotData.data[i]
+              ? currentPlotData.data[i]
               : 0,
           });
         } else {
-          charts[position][`plot${keys + 1}`] = element.data[channelPosition]
-            ? element.data[channelPosition]
+          charts[i][`plot${keys + 1}`] = currentPlotData.data[i]
+            ? currentPlotData.data[i]
             : 0;
         }
-      });
-      // const ordered = charts.sort(
-      //   (a: any, b: any) =>
-      //     a[`plot${channelPosition + 1}`] - b[`plot${channelPosition + 1}`],
-      // );
+      }
       data[index].charts = charts;
       setChartData(data);
     } else {
@@ -248,23 +261,23 @@ export default function TableChart({
     const channelIndex = channelsList.findIndex(
       (item: any) => item.name === event.target.value,
     );
-    channels.channelsList.forEach((element: any, position: number) => {
+    const channelCount = channels.channelsList.length;
+    const currentPlotData = channels.channelsList.find(
+      (item: any) => item.name === event.target.value,
+    );
+    for (let i = 0; i < channelCount; i++) {
       if (channels.charts.length === 0) {
         charts.push({
-          [`Xplot${channelIndex + 1}`]: element.data[channelIndex]
-            ? element.data[channelIndex]
+          [`Xplot${channelIndex + 1}`]: currentPlotData.data[i]
+            ? currentPlotData.data[i]
             : 0,
         });
       } else {
-        channels.xDataKey &&
-          delete charts[position][`Xplot${channels.xDataKey.slice(5)}`];
-        charts[position][`Xplot${channelIndex + 1}`] = element.data[
-          channelIndex
-        ]
-          ? element.data[channelIndex]
+        charts[i][`Xplot${channelIndex + 1}`] = currentPlotData.data[i]
+          ? currentPlotData.data[i]
           : 0;
       }
-    });
+    }
     if (channelIndex !== -1) {
       data[index].xDataKey = `Xplot${channelIndex + 1}`;
     } else {
@@ -356,19 +369,15 @@ export default function TableChart({
       charts: [],
     };
     setChartData(data);
-    if (displayCount < data.length) {
-      setDisplayCount(displayCount + 1);
-    }
   };
 
   const handleRemoveChart = (index: number) => {
-    // setChartData((prevData) => {
-    //   const newArray = prevData.filter((item, key) => key !== index);
-    //   return newArray;
-    // });
-    if (displayCount > 0) {
-      setDisplayCount(displayCount - 1);
-    }
+    setChartData((prevData: any) => {
+      const newArray = prevData.filter(
+        (item: any, key: number) => key !== index,
+      );
+      return newArray;
+    });
   };
 
   const Placeholder = ({ children }: any) => {
@@ -788,6 +797,6 @@ const StaticData = [
   },
 ];
 
-const customTickFormatter = (value) => {
+const customTickFormatter = (value: any) => {
   return `${value}`;
 };
