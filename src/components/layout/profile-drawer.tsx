@@ -16,11 +16,11 @@ import profile2 from '../../assets/images/profile/profile2.svg';
 import '../../assets/styles/profile.scss';
 import { navigate } from 'gatsby';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDepartmentData } from '../../api/departmentAPI';
-import { fetchLabData } from '../../api/labAPI';
+import { fetchDepartmentById, fetchDepartmentData } from '../../api/departmentAPI';
+import { fetchLabById, fetchLabData } from '../../api/labAPI';
 import { OrganizationList } from '../../utils/data';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-import { fetchOrganizationData } from '../../api/organizationAPI';
+import { fetchOrganizationById, fetchOrganizationData } from '../../api/organizationAPI';
 import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData } from '../../api/userAPI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -128,19 +128,13 @@ export default function AppProfileDrawer({
     instituteId:loginUserSliceData?.instituteId
   }
   const credencial =  loginUserSliceData?.role[0]
-  // React.useEffect(() => {
-  //   let payload = {
-  //     _id:  loginUserSliceData?._id
-  //   }
-  //   dispatch(fetchDepartmentData());
-  //   dispatch(fetchLabData());
-  //   dispatch(fetchOrganizationData());
-    
-  //   dispatch(fetchSingleRoleData(payload2))
-  //   dispatch(fetchSingleUserData(payload))
-  //   setEdit(true)
-  //   // setUploadedFile(null)
-  // }, []);
+
+  React.useEffect(() => {
+    dispatch(fetchOrganizationById({"instituteId":loginUserSliceData?.instituteId}))
+    dispatch(fetchDepartmentById({ "organisationId":loginUserSliceData?.organisationId}))
+    dispatch(fetchLabById({"departmentId":loginUserSliceData?.departmentId}))
+  }, [loginUserSliceData]);
+
   React.useEffect(() => {
     if (openDrawer) {
       
@@ -149,9 +143,9 @@ export default function AppProfileDrawer({
       };
 
       // Dispatch API calls only when the profile drawer is open
-      dispatch(fetchDepartmentData());
-      dispatch(fetchLabData());
-      dispatch(fetchOrganizationData());
+      // dispatch(fetchDepartmentData({"organisationId":loginUserSliceData?.organisationId}));
+      // dispatch(fetchLabData());
+      // dispatch(fetchOrganizationData());
 
       dispatch(fetchSingleRoleData(payload2));
       dispatch(fetchSingleUserData(payload));
@@ -168,14 +162,14 @@ export default function AppProfileDrawer({
     
     dispatch(fetchSingleUserData(temp)).then((isSucess: { get_user: { firstName: any; lastName: any; email: any; phoneNumber: any; organisationId: any; departmentId: any[]; role: any; }; }) => {
       if (isSucess.get_user) {
-        console.log(isSucess.get_user.role);
+        console.log("isSucess",isSucess.get_user);
         formik.setFieldValue('firstName', isSucess.get_user.firstName || '');
         formik.setFieldValue('lastName', isSucess.get_user.lastName || '');
         formik.setFieldValue('email', isSucess.get_user.email || '');
         formik.setFieldValue('phoneNumber', isSucess.get_user.phoneNumber || '');
         formik.setFieldValue('organisationId', isSucess.get_user.organisationId || '');
         formik.setFieldValue('departmentId', isSucess.get_user?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item)))) || []);
-        // formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
+        formik.setFieldValue('laboratoryId', isSucess.get_user?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
         formik.setFieldValue('role', isSucess.get_user.role || '');
         formik.setFieldValue('institution', isSucess.get_user.instituteId || "");
         setUploadedFile(isSucess.get_user.imageUrl)

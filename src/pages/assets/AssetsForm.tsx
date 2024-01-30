@@ -282,11 +282,11 @@ const Addnewpopup = React.forwardRef(
 //       dispatch(fetchOrganizationData());
 //     }, []);
 
-    React.useEffect(() => {
-      dispatch(fetchDepartmentData())
-      dispatch(fetchLabData());
-      dispatch(fetchOrganizationData());
-    }, []);
+    // React.useEffect(() => {
+    //   dispatch(fetchDepartmentData())
+    //   dispatch(fetchLabData());
+    //   dispatch(fetchOrganizationData());
+    // }, []);
 
     // React.useEffect(() => {
     //   const payload = {
@@ -684,6 +684,7 @@ const Addnewpopup = React.forwardRef(
                             multiple
                             id="departmentId"
                             // name="laboratoryId"
+                            // disabled={formik.values.departmentId==process.env.LABORATORY_ID?true:false}
                             disableCloseOnSelect
                             value={formik.values.departmentId}
                             options={
@@ -744,6 +745,7 @@ const Addnewpopup = React.forwardRef(
 
                           <Autocomplete
                             multiple
+                            // disabled={true}
                             id="laboratoryId"
                             options={labData !== undefined ? labData : []}
                             getOptionLabel={(option: any) => option?.label}

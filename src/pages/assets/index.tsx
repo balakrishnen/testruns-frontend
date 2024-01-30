@@ -234,14 +234,15 @@ const getAllassets=()=>{
   React.useEffect(()=> {
     let opt=[]
     // console.log("options",options);
-    assetsIdSliceData.Assets.map((element) => {
+    if(filterFieldName=="Assets ID"){
+    assetsIdSliceData?.Assets?.map((element) => {
       opt.push({
         id: element.assetNumber,
         name: element.assetNumber,
         value: element.assetNumber,
       });
     })
-    setFilterOptions(opt)
+    setFilterOptions(opt)}
   }, [assetsIdSliceData]);
 
   React.useEffect(()=>{
@@ -559,7 +560,7 @@ const getAllassets=()=>{
                           }
                           if (event.target?.value === 'assetNumber') {
                             const data: any = [];
-                            assetsIdSliceData.Assets.forEach((element) => {
+                            assetsIdSliceData?.Assets?.forEach((element) => {
                               data.push({
                                 id: element.assetNumber,
                                 label: element.assetNumber,

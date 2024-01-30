@@ -35,7 +35,8 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssig
   // const allUser=  useSelector(
   //   (state: any) => state.user.data?.find_users, 
   // );
-
+  const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
+  console.log("singleUserData",singleUserData?.laboratoryId);
   
 console.log("formValue",formValue);
 React.useEffect(()=>{
@@ -44,8 +45,10 @@ React.useEffect(()=>{
 
  React.useEffect(() => {
   if (typePopup === 'assign' || typePopup==="share") {
-    
-    dispatch(fetchAllUser()).then((res)=>{
+    let payload={
+      organisationId:singleUserData?.organisationId
+    }
+    dispatch(fetchAllUser(payload)).then((res)=>{
       setAlluserData(res?.find_users.map((item: any) => ({
         label: item.email,
         value: item.email,

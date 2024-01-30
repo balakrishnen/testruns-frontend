@@ -31,8 +31,8 @@ import * as Yup from 'yup';
 import { navigate } from 'gatsby';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDepartmentData } from '../../../api/departmentAPI';
-import { fetchLabData } from '../../../api/labAPI';
+import { fetchDepartmentById, fetchDepartmentData } from '../../../api/departmentAPI';
+import { fetchLabById, fetchLabData } from '../../../api/labAPI';
 
 import {
   DepartmentList,
@@ -47,6 +47,7 @@ import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 
 import { auth } from '../../../firebase.config';
 import { log } from 'console';
 import AWS from 'aws-sdk';
+import { fetchOrganizationById } from '../../../api/organizationAPI';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -195,6 +196,12 @@ console.log(singleUserData);
       });
     // }
   }, [departmentData, labData,loginUserSliceData,singleUserData]);
+
+  React.useEffect(()=>{
+    dispatch(fetchOrganizationById({"instituteId":singleUserData?.instituteId}))
+    dispatch(fetchDepartmentById({ "organisationId":singleUserData?.organisationId}))
+    dispatch(fetchLabById({"departmentId":singleUserData?.departmentId}))
+  },[singleUserData])
 
   const onSubmit = async (values: any) => {
     const isMatch = checkCredentials(
@@ -420,8 +427,8 @@ console.log(singleUserData);
     let payload2={
       instituteId:loginUserSliceData?.instituteId
     }
-    dispatch(fetchDepartmentData());
-    dispatch(fetchLabData());
+    // dispatch(fetchDepartmentData());
+    // dispatch(fetchLabData());
     dispatch(fetchSingleRoleData(payload2));
   }, [loginUserSliceData]);
   console.log(formikProfile);
@@ -804,7 +811,7 @@ console.log(singleUserData);
                             autoComplete="off"
                             placeholder="Organization"
                             onChange={formikProfile.handleChange}
-                            onBlur={formikProfile.handleBlur}
+                            onBlur={()=>{dispatch(fetchDepartmentById({"organisationId":formikProfile.values.organisationId}))}}
                             value={formikProfile.values.organisationId}
                             size="small"
                             error={
@@ -858,6 +865,11 @@ console.log(singleUserData);
                             fullWidth
                             placeholder="Department"
                             size="medium"
+                            onBlur={()=>{
+                              var arr=[]
+                              formikProfile.values.departmentId.map(
+                                (item: any) => arr.push(item?.id))
+                              dispatch(fetchLabById({"departmentId":arr}))}}
                             disabled= {!credencial?.profile_management?.editDepartment}
                             renderOption={(
                               props,

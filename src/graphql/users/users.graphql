@@ -255,8 +255,8 @@ mutation VerifyToken($idToken:String!) {
 `;
 
 export const GET_USER_DATA = gql`
-query Find_users {
-    find_users {
+query Find_users($organisationId:String) {
+    find_users(organisationId:$organisationId) {
         _id
         uid
         firstName

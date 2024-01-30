@@ -257,7 +257,8 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
   React.useEffect(()=> {
     let opt=[]
     // console.log("options",options);
-    proceduresIdSliceData.Procedures.map((element) => {
+    if(filterFieldName=="Procedure ID"){
+    proceduresIdSliceData?.Procedures?.map((element) => {
       opt.push({
         id: element.procedureNumber,
         name: element.procedureNumber,
@@ -265,6 +266,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
       });
     })
     setFilterOptions(opt)
+  }
   }, [proceduresIdSliceData]);
 
   React.useEffect(()=>{

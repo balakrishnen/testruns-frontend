@@ -460,7 +460,10 @@ export default function MyPage() {
       payload["userId"]=loginUserSliceData?.verifyToken?._id
       // setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
     }
-   
+    if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
+      payload["organisationId"]=loginUserSliceData?.verifyToken?.organisationId
+    }
+
     dispatch(fetchRunsData(payload)).then((res:any)=>{
       console.log(res);
       

@@ -134,12 +134,13 @@ export const fetchLoginUser = (payload: any) => async (dispatch: any) => {
 //   dispatch(fetchLoginUserLogout());
 // }
 
-export const fetchAllUser = () => async (dispatch: any) => {
+export const fetchAllUser = (payload:any) => async (dispatch: any) => {
   dispatch(fetchUserStart());
   try {
     const response = await client.query({
       query: GET_USER_DATA,
       fetchPolicy: 'network-only',
+      variables:payload
     });
     console.log(response.data);
     dispatch(fetchUserSuccess(response.data));

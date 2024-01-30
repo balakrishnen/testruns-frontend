@@ -119,7 +119,7 @@ const ForgotPassword = () => {
       </Typography>
       <Box sx={{ pt: 3 }}>
         <Typography className="reg-text">
-          We will send you an OTP on your registered email-ID.
+          We will send you an reset link on your registered email-ID.
         </Typography>
       </Box>
       <form onSubmit={formik.handleSubmit}>

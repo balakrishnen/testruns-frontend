@@ -117,10 +117,10 @@ console.log("userSliceData",userSliceData);
   const roleSliceData = useSelector(
     (state: any) => state.role.data?.find_roles,
   );
-  // const organizationSliceData = useSelector(
-  //   (state: any) => state.organization.data?.get_all_organisations,
-  // );
-const[organizationSliceData,setorganizationSliceData]=React.useState<any>([])
+  const organizationSliceData = useSelector(
+    (state: any) => state.organization.data?.get_all_organisations,
+  );
+// const[organizationSliceData,setorganizationSliceData]=React.useState<any>([])
   React.useEffect(() => {
     // setTimeout(() => {
     //   setLoader(false);
@@ -129,15 +129,15 @@ const[organizationSliceData,setorganizationSliceData]=React.useState<any>([])
   }, [userData]);
 
   React.useEffect(() => {
-    dispatch(fetchOrganizationData()).then((res)=>{
-      setorganizationSliceData(res?.get_all_organisations)
-      console.log("get_all_organisations",res?.get_all_organisations);
+    // dispatch(fetchOrganizationData()).then((res)=>{
+      // setorganizationSliceData(organizationSliceData?.get_all_organisations)
+    //   console.log("get_all_organisations",res?.get_all_organisations);
       
-    })
-    .catch((err)=>{
-      console.log(err);
+    // })
+    // .catch((err)=>{
+    //   console.log(err);
       
-    })
+    // })
     return () => {
       const headersList: any = [...headers];
       headersList.map((item) => {
@@ -798,7 +798,7 @@ const[organizationSliceData,setorganizationSliceData]=React.useState<any>([])
                           {
                             organizationSliceData?.find(
                               (obj:any) => obj._id == row.organisationId,
-                            )?.name
+                            )?.name || "Default organisation"
                           }
                         </TableCell>
                       )}

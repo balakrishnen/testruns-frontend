@@ -141,7 +141,7 @@ console.log(filterOptions,"filterOptions");
 
   React.useEffect(()=> {
     let opt=[]
-    console.log("options",options);
+    if(filterFieldName=="Runs ID"){
     runsSliceData?.Runs.map((element) => {
       opt.push({
         id: element.runNumber,
@@ -150,6 +150,7 @@ console.log(filterOptions,"filterOptions");
       });
     })
     setFilterOptions(opt)
+  }
   }, [runsSliceData]);
 
   const [queryStrings, setQueryString] = React.useState({
@@ -179,20 +180,13 @@ console.log("userDataRuns",userData)
     (state: any) => state.procedure.data?.get_all_procedures,
   );
 
-const [options, setOptions]=React.useState([])
 const [loading, setLoading] = React.useState(false);
 
 React.useEffect(()=>{
-  setOptions(procedureSliceData?.Procedures)
-  console.log("options",options);
-},[procedureSliceData])
-
-React.useEffect(()=>{
-  setOptions(options)
+  // setOptions(options)
   let opt=[]
-  console.log("options",options);
   
-  options?.map((element:any) => {
+  procedureSliceData?.Procedures?.map((element:any) => {
   opt.push({
     label: element?.name,
     value: element?.name,
@@ -200,7 +194,7 @@ React.useEffect(()=>{
   })
 });
   setFilterOptions(opt)
-},[options])
+},[procedureSliceData])
 
   const userSliceData = useSelector((state: any) => state.userData.data);
   console.log("userSliceData",userSliceData);
@@ -698,9 +692,8 @@ React.useEffect(()=>{
                           }
                           if (event.target?.value === 'procedureId') {
                             const data: any = [];
-                            console.log("procedureSliceData?.Procedures",options);
                             
-                            options.map((element) => {
+                            procedureSliceData?.Procedures?.map((element) => {
                               data.push({
                                 label: element?.name,
                                 value: element?.name,

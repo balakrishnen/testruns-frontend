@@ -317,8 +317,8 @@ const RunsForm = React.forwardRef(
 
 
     React.useEffect(() => {
-      dispatch(fetchDepartmentData());
-      dispatch(fetchLabData());
+      // dispatch(fetchDepartmentData());
+      // dispatch(fetchLabData());
     }, []);
 
     const handleDateChanges = (selectedDate: any, name: any) => {

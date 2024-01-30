@@ -30,38 +30,38 @@ export default function TableHeader(props: any) {
       onRequestSort(event, property);
     };
 
-  const [departmentData, setDepartmentData] = React.useState([]);
-  const [labData, setLabData] = React.useState([]);
+//   const [departmentData, setDepartmentData] = React.useState([]);
+//   const [labData, setLabData] = React.useState([]);
 
-  const dispatch: any = useDispatch();
+//   const dispatch: any = useDispatch();
 
-  const departmentSliceData = useSelector(
-    (state: any) => state.department.data?.get_all_departments,
-  );
-  const labSliceData = useSelector(
-    (state: any) => state.lab.data?.get_all_labs,
-  );
+//   const departmentSliceData = useSelector(
+//     (state: any) => state.department.data?.get_all_departments,
+//   );
+//   const labSliceData = useSelector(
+//     (state: any) => state.lab.data?.get_all_labs,
+//   );
 
-  React.useEffect(() => {
-    dispatch(fetchDepartmentData());
-    dispatch(fetchLabData());
-  }, []);
+//   React.useEffect(() => {
+//     dispatch(fetchDepartmentData());
+//     dispatch(fetchLabData());
+//   }, []);
 
-  React.useEffect(() => {
-    setDepartmentData(
-      departmentSliceData?.map((item: any) => ({
-        label: item.name,
-        value: item._id,
-      })),
-    );
-    setLabData(
-      labSliceData?.map((item: any) => ({
-        label: item.name,
-        value: item._id,
-      })),
-    );
-  }, [departmentSliceData, labSliceData]);
-console.log(columns)
+//   React.useEffect(() => {
+//     setDepartmentData(
+//       departmentSliceData?.map((item: any) => ({
+//         label: item.name,
+//         value: item._id,
+//       })),
+//     );
+//     setLabData(
+//       labSliceData?.map((item: any) => ({
+//         label: item.name,
+//         value: item._id,
+//       })),
+//     );
+//   }, [departmentSliceData, labSliceData]);
+// console.log(columns)
   return (
     <TableHead>
       <TableRow>

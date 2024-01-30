@@ -341,13 +341,13 @@ const ProcedureForm = React.forwardRef(
 
     console.log(laboratory);
 
-    React.useEffect(() => {
-      let payload={
+    // React.useEffect(() => {
+    //   let payload={
         
-      }
-      dispatch(fetchDepartmentData());
-      dispatch(fetchLabData());
-    }, []);
+    //   }
+    //   dispatch(fetchDepartmentData());
+    //   dispatch(fetchLabData());
+    // }, []);
 
     const handleConfirmationState = (state: any) => {
       if (state === 0) {
