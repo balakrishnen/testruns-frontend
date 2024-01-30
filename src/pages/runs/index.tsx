@@ -802,7 +802,7 @@ React.useEffect(()=>{
                       options={filterOptions !== undefined ? filterOptions: []}
                       getOptionLabel={(option:any) => option?.value}
                       renderInput={(params) => (
-                        <TextField  {...params} placeholder="Search..." style={{marginTop: "-8px"}}/>
+                        <TextField  {...params} placeholder="Search by name" style={{marginTop: "-8px"}} className='place-top'/>
                       )}
                       value={valuesName}
                       onChange={(_, selectedOptions: any) => {setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}

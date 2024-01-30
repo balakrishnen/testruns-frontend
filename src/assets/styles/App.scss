@@ -777,6 +777,21 @@ p.reg-text {
   }
 }
 
+.profile-page {
+  .error-field {
+    top: 3px !important;  
+    @media (min-width: 900px) and (max-width: 1000px) {
+      top: 5px !important;  
+    }  
+    @media (max-width: 630px) {
+      position: relative;
+      top: 5px !important;  
+    }
+  }
+}
+.place-top input {
+  padding-top: 11px !important;
+}
 .captiontext {
   user-select: none !important;
 }
