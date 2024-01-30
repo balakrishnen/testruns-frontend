@@ -142,7 +142,7 @@ console.log(filterOptions,"filterOptions");
   React.useEffect(()=> {
     let opt=[]
     console.log("options",options);
-    runsSliceData.Runs.map((element) => {
+    runsSliceData?.Runs.map((element) => {
       opt.push({
         id: element.runNumber,
         name: element.runNumber,
@@ -675,6 +675,7 @@ React.useEffect(()=>{
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
+                          setValuesName(null)
 
                           if (event.target?.value === 'laboratoryId') {
                             setFilterOptions(getFilterOptions(labSliceData));
@@ -802,7 +803,7 @@ React.useEffect(()=>{
                       options={filterOptions !== undefined ? filterOptions: []}
                       getOptionLabel={(option:any) => option?.value}
                       renderInput={(params) => (
-                        <TextField  {...params} placeholder="Search by name" style={{marginTop: "-8px"}} className='place-top'/>
+                        <TextField  {...params} placeholder="Search..." style={{marginTop: "-8px"}} className='place-top'/>
                       )}
                       value={valuesName}
                       onChange={(_, selectedOptions: any) => {setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}

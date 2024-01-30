@@ -548,6 +548,7 @@ const getAllassets=()=>{
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
+                          setValuesName(null)
                           if (event.target?.value === 'laboratoryId') {
                             setFilterOptions(getFilterOptions(labSliceData));
                           }
@@ -645,7 +646,7 @@ const getAllassets=()=>{
                       options={filterOptions !== undefined ? filterOptions: []}
                       getOptionLabel={(option:any) => option?.value}
                       renderInput={(params) => (
-                        <TextField  {...params} placeholder="Search..." style={{marginTop: "-8px"}}/>
+                        <TextField  {...params} placeholder="Search..." style={{marginTop: "-8px"}}  className='place-top'/>
                       )}
                       value={valuesName}
                       onChange={(_, selectedOptions: any) => {setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}
