@@ -766,20 +766,23 @@ p.reg-text {
   right: 0px;
   font-size: $font-small !important;
 
-  @media (min-width: 900px) and (max-width: 1000px) {
-    position: relative;
-    top: -17px;
+  @media (min-width: 769px){
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 120px);
+    text-align: right;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 768px) {
     position: relative;
-    top: -17px;
+    top: -7px;
   }
 }
 
-.profile-page {
+.profile-page , .setting-section2{
   .error-field {
-    top: 3px !important;  
+    top: 3px !important;     
     @media (min-width: 900px) and (max-width: 1000px) {
       top: 5px !important;  
     }  
@@ -787,6 +790,11 @@ p.reg-text {
       position: relative;
       top: 5px !important;  
     }
+  }
+}
+.profile-page{
+  .error-field {
+    width:100%;
   }
 }
 .place-top input {

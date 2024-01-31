@@ -12,6 +12,7 @@
 
     .MuiTextField-root {
         margin-top: 10px;
+        margin-bottom: 0px;
     }
 
     .MuiInputBase-root {
@@ -57,6 +58,11 @@
                 padding-left: 5px;
             }
         }
+    }
+}
+@media (max-width: 599px){
+    #panel2bh-content .setting-section2 .profile-inner {
+        padding-bottom: 1rem;
     }
 }
 
