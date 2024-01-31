@@ -252,7 +252,7 @@ const Addnewpopup = React.forwardRef(
       
       setDepartmentData(mappedDepartments)
       setLabData(mappedDLabs)
-      formik.setFieldValue("laboratoryId",mappedDLabs)
+      // formik.setFieldValue("laboratoryId",mappedDLabs)
       // formik.setFieldValue('laboratoryId', singleUserData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj?.id == item) ))) || []);
       setOrganizationData(
         organizationSliceData?.map((item: any) => ({
@@ -564,9 +564,9 @@ const Addnewpopup = React.forwardRef(
                       >
                         <Box style={{ position: 'relative' }}>
                           <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}  name='perchasedDate'>
+                          <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker 
-                              format='MM/DD/YYYY'
+                              format="MM/DD/YYYY"
                               onChange={(selectedDate: any) =>
                                 handleDateChanges(selectedDate, 'perchasedDate')
                               }
@@ -688,14 +688,14 @@ const Addnewpopup = React.forwardRef(
                             disableCloseOnSelect
                             value={formik.values.departmentId}
                             options={
-                              departmentData !== undefined ? departmentData : []
+                             ( departmentData!== undefined && departmentData?.length!==0  )? departmentData : []
                             }
                             getOptionLabel={(option: any) => option?.label}
                             isOptionEqualToValue={(option: any, value: any) =>
                               value?.id == option?.id
                             }
                             renderInput={(params) => (
-                              <TextField {...params} placeholder={formik.values.departmentId.length==0?"Department/s":""} />
+                              <TextField {...params} placeholder={formik.values.departmentId?.length==0?"Department/s":""} />
                             )}
                             fullWidth
                             placeholder="Department"
@@ -747,16 +747,16 @@ const Addnewpopup = React.forwardRef(
                             multiple
                             // disabled={true}
                             id="laboratoryId"
-                            options={labData !== undefined ? labData : []}
+                            value={formik.values.laboratoryId}
+                            options={(labData!== undefined && labData?.length!==0) ? labData : []}
                             getOptionLabel={(option: any) => option?.label}
                             // onFocus={()=>handleLabList()}
                             isOptionEqualToValue={(option: any, value: any) =>value?.id == option?.id} 
                              
                             
                             disableCloseOnSelect
-                            value={formik.values.laboratoryId}
                             renderInput={(params) => (
-                              <TextField {...params} placeholder={formik.values.laboratoryId.length==0?"Laboratory/ies":""}/>
+                              <TextField {...params} placeholder={formik.values.laboratoryId?.length==0?"Laboratory/ies":""}/>
                             )}
                             fullWidth
                             placeholder="Laboratory"

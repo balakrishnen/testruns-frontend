@@ -77,7 +77,7 @@ export default function TableHeader(props: any) {
               >
                  {headCell.label}
                 {(headCell.id !== 'departmentId' && 
-                headCell.id !== 'laboratoryId' && headCell.id !== "perchasedDate" && headCell.id !== "lastUsedDate" && headCell.id !== "addedOn" && headCell.id !== "createdOn" && headCell.id !== "dueDate") && (
+                headCell.id !== 'laboratoryId' && headCell.id !== "perchasedDate" && headCell.id !== "lastUsedDate" && headCell.id !== "createdOn" && headCell.id !== "createdOn" && headCell.id !== "dueDate") && (
                 //   <TableSortLabel hideSortIcon>{headCell.label}</TableSortLabel>
                 // ) : (
                   

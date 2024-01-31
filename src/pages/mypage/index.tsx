@@ -623,7 +623,9 @@ export default function MyPage() {
     await dispatch(fetchReadSingleMessageData(payload2));
     await notificationMessageList()
   };
+  const filteredData = arr.filter(item => item.is_show !== false);
 
+  console.log("filteredData",filteredData);
   return (
     <PrivateRoute>
       <Box className="main-padding mypage-page">
@@ -650,7 +652,7 @@ export default function MyPage() {
               {loader ? (
                 <TableBody>
                   <TableSkeleton
-                    columns={arr}
+                    columns={filteredData}
                     image={true}
                     rows={queryStrings.perPage}
                   />

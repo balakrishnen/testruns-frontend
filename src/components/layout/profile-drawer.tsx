@@ -640,11 +640,10 @@ export default function AppProfileDrawer({
                       multiple
                       id="department"
                       className={edit ? "bg-gray-input" : ""}
-                      disabled={edit}
                       disableCloseOnSelect
                       value={formik.values.departmentId}
                       options={
-                        departmentData !== undefined
+                        (departmentData !== undefined && departmentData?.length!==0)
                           ? departmentData
                           : []
                       }
@@ -734,8 +733,8 @@ export default function AppProfileDrawer({
                       error={
                         formik.touched.role && Boolean(formik.errors.role)
                       }
-                    >  {roleData &&
-                      roleData.map((item: any) => (
+                    >  {roleData?.length!==0 &&
+                      roleData?.map((item: any) => (
                         <MenuItem key={item.value} value={item.value}>
                           {item.label}
                         </MenuItem>

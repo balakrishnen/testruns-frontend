@@ -560,7 +560,9 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
     });
     return result;
   };
+  const filteredData = headers.filter(item => item.is_show !== false);
 
+  console.log("filteredData",filteredData);
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -893,7 +895,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
               {loader ? (
                 <TableBody>
                   <TableSkeleton
-                    columns={headers}
+                    columns={filteredData}
                     image={false}
                     rows={queryStrings.perPage}
                   />

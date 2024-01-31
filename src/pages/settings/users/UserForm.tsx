@@ -413,13 +413,13 @@ updateProfile(auths?.currentUser, {
 
     console.log(DepartmentList);
     
-    // React.useEffect(() => {
-    //   dispatch(fetchinstitutionData())
-    //   dispatch(fetchOrganizationById())
-    //   dispatch(fetchDepartmentById());
-    //   dispatch(fetchLabById());
+    React.useEffect(() => {
+      dispatch(fetchinstitutionData())
+      // dispatch(fetchOrganizationById())
+      // dispatch(fetchDepartmentById());
+      // dispatch(fetchLabById());
      
-    // }, []);
+    }, []);
 
     // React.useEffect(() => {
     //   const payload = {

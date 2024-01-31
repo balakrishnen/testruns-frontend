@@ -307,7 +307,7 @@ export default function AssetDetails() {
       newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
+    } else if (selectedIndex === selected?.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
@@ -334,7 +334,7 @@ export default function AssetDetails() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows?.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
@@ -600,12 +600,12 @@ export default function AssetDetails() {
                   size={dense ? "small" : "medium"}
                 >
                   <EnhancedTableHead
-                    numSelected={selected.length}
+                    numSelected={selected?.length}
                     order={order}
                     orderBy={orderBy}
                     onSelectAllClick={handleSelectAllClick}
                     onRequestSort={handleRequestSort}
-                    rowCount={rows.length}
+                    rowCount={rows?.length}
                   />
                   <TableBody>
                     {visibleRows.map((row, index) => {

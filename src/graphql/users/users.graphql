@@ -11,8 +11,8 @@ gql`
  }   
     `
 export const GET_USER = gql`
-query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String) {
-    get_all_users(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search) {
+query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String, $organisationId:String) {
+    get_all_users(page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search, organisationId :$organisationId) {
         pageInfo {
             currentPage
             totalPages

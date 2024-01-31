@@ -681,7 +681,7 @@ console.log(formik,'dueDate');
                           </React.Fragment>
                         )}
                         onChange={(_, selectedOptions: any) => setDepartment(selectedOptions)}
-                        renderInput={(params) => <TextField {...params} value={params.value} placeholder={department?.length == 0 ? "Department/s" : ""} />}
+                        renderInput={(params) => <TextField {...params} value={params} placeholder={department?.length == 0 ? "Department/s" : ""} />}
                         fullWidth
                         placeholder="Department"
                         size="medium"
@@ -706,7 +706,7 @@ console.log(formik,'dueDate');
                         multiple
                         id="laboratoryId"
                         value={lab}
-                        options={labData !== undefined ? labData : []}
+                        options={(labData !== undefined && labData?.length!==0) ? labData : []}
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
                         isOptionEqualToValue={(option: any, value: any) => value?.id == option?.id}

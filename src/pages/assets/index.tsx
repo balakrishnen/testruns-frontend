@@ -451,6 +451,9 @@ const getAllassets=()=>{
     return result;
   };
 
+  const filteredData = headers.filter(item => item.is_show !== false);
+
+console.log("filteredData",filteredData);
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -765,7 +768,7 @@ const getAllassets=()=>{
               {loader ? (
                 <TableBody>
                   <TableSkeleton
-                    columns={headers}
+                    columns={filteredData}
                     image={true}
                     rows={queryStrings.perPage}
                   />
@@ -873,7 +876,7 @@ const getAllassets=()=>{
                                         );
                                       }}
                                     />
-                                    {row.departmentId.length > 1 && (
+                                    {row.departmentId?.length > 1 && (
                                       <span
                                         style={{
                                           fontWeight: 500,
@@ -882,7 +885,7 @@ const getAllassets=()=>{
                                           whiteSpace: 'nowrap',
                                         }}
                                       >
-                                        +{row.departmentId.length - 1} More
+                                        +{row.departmentId?.length - 1} More
                                       </span>
                                     )}
                                   </>
@@ -925,7 +928,7 @@ const getAllassets=()=>{
                                         );
                                       }}
                                     />
-                                    {row.laboratoryId.length > 1 && (
+                                    {row.laboratoryId?.length > 1 && (
                                       <span
                                         style={{
                                           fontWeight: 500,
@@ -934,7 +937,7 @@ const getAllassets=()=>{
                                           whiteSpace: 'nowrap',
                                         }}
                                       >
-                                        +{row.laboratoryId.length - 1} More
+                                        +{row.laboratoryId?.length - 1} More
                                       </span>
                                     )}
                                   </>

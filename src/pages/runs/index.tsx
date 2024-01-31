@@ -567,6 +567,9 @@ React.useEffect(()=>{
     });
     return result;
   };
+  const filteredData = headers.filter(item => item.is_show !== false);
+
+  console.log("filteredData",filteredData);
 
   return (
     <PrivateRoute>
@@ -917,7 +920,7 @@ React.useEffect(()=>{
               {loader ? (
                 <TableBody>
                   <TableSkeleton
-                    columns={headers}
+                    columns={filteredData}
                     image={true}
                     rows={queryStrings.perPage}
                   />

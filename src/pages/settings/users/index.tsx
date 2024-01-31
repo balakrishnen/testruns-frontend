@@ -86,7 +86,11 @@ const Users = () => {
   const [filterAvailability, setFilterAvailability] = React.useState(null);
   const [filterKey, setFilterKey] = React.useState<any>(null);
   const [filter, setFilter] = React.useState<any>(false);
-
+    
+  const loginUserSliceData = useSelector(
+    (state: any) => state.userLogin.data,
+  );
+ 
   const [columnAnchorEl, setColumnAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const [filterPopoverEl, setFilterPopoverEl] =
@@ -99,7 +103,10 @@ const Users = () => {
     search: null,
     sortBy: null,
     sortOrder: 'desc',
+    organisationId:loginUserSliceData?.verifyToken?.organisationId
   });
+  console.log("loginUserSliceData?.verifyToken?.organizationId",loginUserSliceData?.verifyToken?.organisationId);
+  
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
@@ -146,11 +153,7 @@ console.log("userSliceData",userSliceData);
       setHeaders(headersList);
     };
   }, []);
-  
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
- 
+
   const credencial =  loginUserSliceData?.verifyToken?.role[0]
 
   React.useEffect(() => {
@@ -257,6 +260,7 @@ console.log("userSliceData",userSliceData);
       page: 1,
       perPage: 10,
       sortOrder: 'desc',
+      organizationId:loginUserSliceData?.verifyToken?.organizationId
     };
     dispatch(fetchUserData(payload));
   };
@@ -395,6 +399,10 @@ console.log("userSliceData",userSliceData);
     });
     return result;
   };
+console.log("headers",headers);
+const filteredData = headers.filter(item => item.is_show !== false);
+
+console.log("filteredData",filteredData);
 
   // table end
   return (
@@ -696,7 +704,7 @@ console.log("userSliceData",userSliceData);
             {loader ? (
               <TableBody>
                 <TableSkeleton
-                  columns={headers}
+                  columns={filteredData}
                   image={true}
                   rows={queryStrings.perPage}
                 />
