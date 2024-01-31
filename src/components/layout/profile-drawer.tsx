@@ -407,7 +407,6 @@ export default function AppProfileDrawer({
                     </label>
                     <TextField
                       className={edit ? "bg-gray-input" : ""}
-                      disabled={edit}
                       margin="none"
                       fullWidth
                       id="firstName"
@@ -449,7 +448,7 @@ export default function AppProfileDrawer({
                     </label>
                     <TextField
                       className={edit ? "bg-gray-input" : ""}
-                      disabled={edit}
+                      // disabled={edit}
                       margin="normal"
                       fullWidth
                       id="lastName"
@@ -540,7 +539,7 @@ export default function AppProfileDrawer({
                       }}
                       className={edit ? "bg-gray-input" : ""}
                       inputProps={{ maxLength: 10 }}
-                      disabled={edit}
+                      // disabled={edit}
                       margin="none"
                       fullWidth
                       id="phoneNumber"
@@ -586,7 +585,7 @@ export default function AppProfileDrawer({
                       marginThreshold: null
                     }}
                       className={edit ? "bg-gray-input" : ""}
-                      disabled={edit}
+                      // disabled={edit}
                       style={{ color: "black", backgroundColor: edit ? '#f3f3f3' : 'white' }}
                       displayEmpty
                       IconComponent={ExpandMoreOutlinedIcon}
