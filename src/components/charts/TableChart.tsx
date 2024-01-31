@@ -213,20 +213,6 @@ export default function TableChart({
     if (channelPosition !== -1) {
       channels.channelOptions[keys].channel = event.target.value;
       channels.channelOptions[keys].color = colorList[keys > 4 ? 4 : keys];
-      // channels.channelsList?.forEach((element: any, position: number) => {
-      //   if (channels.charts.length === 0) {
-      //     charts.push({
-      //       [`plot${keys + 1}`]: element.data[channelPosition]
-      //         ? element.data[channelPosition]
-      //         : 0,
-      //     });
-      //   } else {
-      //     charts[position][`plot${keys + 1}`] = element.data[channelPosition]
-      //       ? element.data[channelPosition]
-      //       : 0;
-      //   }
-      // });
-
       for (let i = 0; i < channelCount; i++) {
         if (channels.charts.length === 0) {
           charts.push({
@@ -246,7 +232,7 @@ export default function TableChart({
       channels.channelOptions[keys].channel = event.target.value;
       channels.channelOptions[keys].color =
         colorList[axisPosition > 4 ? 4 : axisPosition];
-      channels.charts.forEach((element: any, position: number) => {
+      channels.charts.forEach((_element: any, position: number) => {
         delete channels.charts[position][`plot${axisPosition + 1}`];
       });
       setChartData(data);
@@ -265,19 +251,20 @@ export default function TableChart({
     const currentPlotData = channels.channelsList.find(
       (item: any) => item.name === event.target.value,
     );
-    for (let i = 0; i < channelCount; i++) {
-      if (channels.charts.length === 0) {
-        charts.push({
-          [`Xplot${channelIndex + 1}`]: currentPlotData.data[i]
+    if (currentPlotData)
+      for (let i = 0; i < channelCount; i++) {
+        if (channels.charts.length === 0) {
+          charts.push({
+            [`Xplot${channelIndex + 1}`]: currentPlotData.data[i]
+              ? currentPlotData.data[i]
+              : 0,
+          });
+        } else {
+          charts[i][`Xplot${channelIndex + 1}`] = currentPlotData.data[i]
             ? currentPlotData.data[i]
-            : 0,
-        });
-      } else {
-        charts[i][`Xplot${channelIndex + 1}`] = currentPlotData.data[i]
-          ? currentPlotData.data[i]
-          : 0;
+            : 0;
+        }
       }
-    }
     if (channelIndex !== -1) {
       data[index].xDataKey = `Xplot${channelIndex + 1}`;
     } else {
@@ -292,7 +279,29 @@ export default function TableChart({
   const handleYAxisChange = (event: any, index: number, key: any) => {
     const data = [...chartData];
     const channels: any = { ...data[index] };
-    channels.channelOptions[key].yAxisValue = event.target.value;
+    const channelOptions: any = { ...channels.channelOptions[key] };
+    let yAxisId =
+      event.target.value === 'Y4'
+        ? 'right2'
+        : event.target.value === 'Y2'
+        ? 'right1'
+        : event.target.value === 'Y1'
+        ? 'left1'
+        : 'left2';
+    let orientation =
+      event.target.value === 'Y4' || event.target.value === 'Y2'
+        ? 'right'
+        : 'left';
+    const newChannelIndex = data[index].channelOptions.length;
+    channels.channelOptions[key] = {
+      channel: channelOptions.channel,
+      yAxisValue: event.target.value,
+      color: channelOptions.color ? channelOptions.color : '#222222',
+      yAxisId: yAxisId,
+      orientation: orientation,
+      dataKey: channelOptions.dataKey,
+      name: event.target.value,
+    };
     setChartData(data);
   };
 
@@ -348,7 +357,13 @@ export default function TableChart({
 
   const handleRemoveChannel = (index: any) => {
     const data: any = [...chartData];
-    data[index].channelOptions.pop();
+    const channels: any = { ...data[index] };
+    const charts: any = [...channels.charts];
+    const channelCount = channels.channelOptions.length;
+    channels.channelOptions.pop();
+    charts.forEach((_element: any, position: number) => {
+      delete charts[position][`plot${channelCount}`];
+    });
     setChartData(data);
     // setChartData((prevData) => {
     //     const data = [...prevData];
