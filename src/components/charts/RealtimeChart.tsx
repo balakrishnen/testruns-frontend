@@ -86,16 +86,28 @@ export default function RealtimeChart({
     },
   ]);
 
+  const axisList: any = [
+    {
+      name: 'Y1',
+      value: 'Y1',
+    },
+    {
+      name: 'Y2',
+      value: 'Y2',
+    },
+    {
+      name: 'Y3',
+      value: 'Y3',
+    },
+    {
+      name: 'Y4',
+      value: 'Y4',
+    },
+  ];
+
   const assetsSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets_name,
   );
-
-  const [axisList, setAxisList] = React.useState<any>([
-    { name: 'Y1', value: 'Y1' },
-    { name: 'Y2', value: 'Y2' },
-    { name: 'Y3', value: 'Y3' },
-    { name: 'Y4', value: 'Y4' },
-  ]);
 
   const Placeholder = ({ children }: any) => {
     return <div style={{ color: 'lightgrey' }}>{children}</div>;
@@ -431,7 +443,7 @@ export default function RealtimeChart({
           sm={12}
           md={12}
           lg={9}
-          xl={10}
+          xl={9}
           style={{ borderRight: '1px solid #e4e5e7' }}
         >
           <Grid container sx={{ px: 4 }}>
@@ -478,7 +490,6 @@ export default function RealtimeChart({
           <Box sx={{ mt: 4 }}>
             {showArchivedChart ? (
               <>
-                {console.log('chartData2', chartData2)}
                 <Line data={chartData2} options={options2} />
               </>
             ) : (
@@ -493,7 +504,7 @@ export default function RealtimeChart({
           sm={12}
           md={12}
           lg={3}
-          xl={2}
+          xl={3}
           style={{
             overflowY: 'scroll',
           }}
