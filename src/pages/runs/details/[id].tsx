@@ -2213,6 +2213,7 @@ export default function RunsDetails() {
                     type="submit"
                     variant="contained"
                     className="add-btn"
+                    disabled={Object.keys(htmlInput).length==0?true:false}
                     style={{
                       position: 'sticky',
                       display: value == 1 ? 'none' : 'block',

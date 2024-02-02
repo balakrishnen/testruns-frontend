@@ -103,15 +103,16 @@ const UserForm = React.forwardRef(
       console.log(userSliceData);
     React.useImperativeHandle(ref, () => ({
       open(state: any, type: any,row: any) {
-        
+        formik.setFieldValue("instituteId",loginUserSliceData?.instituteId)
         setType(type);
+            
         let temp = { '_id': row?._id }
         if (row?._id) {
           // dispatch(fetchSingleUserData(temp)).then((isSucess) => {
             if (row) {
               console.log(row, 'isSucess', row)
               setUserData(row)
-              
+
               formik.setFieldValue('firstName', row?.firstName || '');
               formik.setFieldValue('lastName', row?.lastName || '');
               formik.setFieldValue('email', row?.email || '');
@@ -138,9 +139,14 @@ const UserForm = React.forwardRef(
       },
     }));
 React.useEffect(()=>{
+
   // setDepartments(  userData?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj.id == item) ))))
   // setLaboratory(  userData?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj.id == item) ))))
   if(type=='edit'){
+    dispatch(fetchOrganizationById({"instituteId":userData?.instituteId}))
+    dispatch(fetchDepartmentById({"organisationId":userData?.organisationId}));
+    dispatch(fetchLabById({'departmentId': userData?.departmentId}));
+
   formik.setFieldValue('firstName', userData?.firstName || '');
   formik.setFieldValue('lastName', userData?.lastName || '');
   formik.setFieldValue('email', userData?.email || '');
@@ -159,7 +165,7 @@ React.useEffect(()=>{
       return true;
     };
 
-    const onSubmit = (values: any) => {
+    const onSubmit = async(values: any) => {
       const isMatch = checkCredentials(values.firstName);
       if (isMatch) {
         var deptArray: any = []
@@ -184,9 +190,9 @@ React.useEffect(()=>{
         
         if (type == 'edit') {
           userValues['_id'] = userData?._id
-          dispatch(fetchUpdateUserData(userValues))
+          await  dispatch(fetchUpdateUserData(userValues))
           const auths:any = auth;
-updateProfile(auths?.currentUser, {
+          await updateProfile(auths?.currentUser, {
   displayName: values.firstName
 }).then((res) => {
   console.log(res);
@@ -201,20 +207,20 @@ updateProfile(auths?.currentUser, {
   // An error occurred
   // ...
 });
-          submitFormPopup();    
+await submitFormPopup();    
         }
         else {
         //   console.log(userValues);
         //   try {
         //  createUserWithEmailAndPassword(auth, values.email?.toLowerCase(), "Test@123").then((res)=>{
           // userValues['uid'] = res.user.uid,
-          dispatch(postUserData(userValues)).then((res:any)=>{
+          await dispatch(postUserData(userValues)).then((res:any)=>{
             toast(res?.create_user?.message, {
               style: {
                 background: res?.create_user?.message=="user already exits"?"red":'#00bf70', color: '#fff'
               }
             });
-            submitFormPopup();
+             submitFormPopup();
           })
           
         // }).catch((err)=>{
@@ -238,6 +244,7 @@ updateProfile(auths?.currentUser, {
     };
     const submitFormPopup = () => {
       setFormPopup(false);
+      reload()
       // toast(`User ${type=='edit'?"updated" : "created"}  !`, {
       //   style: {
       //     background: '#00bf70', color: '#fff'
@@ -461,6 +468,7 @@ updateProfile(auths?.currentUser, {
         instituteId:loginUserSliceData?.instituteId
       }
       dispatch(fetchSingleRoleData(payload2));
+      formik.setFieldValue("instituteId",loginUserSliceData?.instituteId)
     },[loginUserSliceData])
 
     
@@ -708,9 +716,6 @@ updateProfile(auths?.currentUser, {
                               {item.label}
                             </MenuItem>
                           ))}
-                           <MenuItem  value={process.env.ROLE_ID}>
-                              Tester
-                            </MenuItem>
                       </Select>
 
                       {formik.touched.role && formik.errors.role && (
@@ -744,7 +749,7 @@ updateProfile(auths?.currentUser, {
                       }}
                         className="placeholder-color"
                         displayEmpty
-                        disabled={formik.values.role !== ''?false:true}
+                        disabled={true}
                         IconComponent={ExpandMoreOutlinedIcon}
                         renderValue={
                           formik.values.instituteId !== ''
