@@ -21,7 +21,7 @@ import { fetchLabById, fetchLabData } from '../../api/labAPI';
 import { OrganizationList } from '../../utils/data';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { fetchOrganizationById, fetchOrganizationData } from '../../api/organizationAPI';
-import { fetchGetUser, fetchSingleUserData, fetchUpdateUserData, fetchUserData } from '../../api/userAPI';
+import { fetchSingleUserData, fetchUpdateUserData, fetchUserData } from '../../api/userAPI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';

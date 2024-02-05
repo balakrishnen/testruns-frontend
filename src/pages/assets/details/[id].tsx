@@ -83,8 +83,8 @@ const validationSchema = Yup.object().shape({
   organisationId: Yup.string().required('Organisation is required'),
   status: Yup.string().required('Status is required'),
   availability: Yup.string().required('Availability is required'),
-  perchasedDate: Yup.string().required('Purchase date is required'),
-  expiryDate: Yup.string().required('Expiry date is required'),
+  perchasedDate: Yup.string().required('Purchase date is required').nullable(),
+  expiryDate: Yup.string().required('Expiry date is required').nullable(),
   assetImageUrl:Yup.string().notRequired()
  
   // lastUsedDate: Yup.string().required(),

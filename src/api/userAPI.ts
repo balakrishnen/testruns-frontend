@@ -44,12 +44,12 @@ export const postUserData = (payload: any) => async (dispatch: any) => {
       variables: payload,
     });
     console.log(response);
-    const queryStrings: any = {
-      page: 1,
-      perPage: 10,
-      sortOrder: 'desc',
-    };
-    dispatch(fetchUserData(queryStrings));
+    // const queryStrings: any = {
+    //   page: 1,
+    //   perPage: 10,
+    //   sortOrder: 'desc',
+    // };
+    // dispatch(fetchUserData(queryStrings));
     return response.data
   } catch (error: any) {
     console.log(error);
@@ -91,12 +91,7 @@ export const fetchUpdateUserData = (payload: any) => async (dispatch: any) => {
       variables: payload,
     });
     console.log(response);
-    const queryStrings: any = {
-      page: 1,
-      perPage: 10,
-      sortOrder: 'desc',
-    };
-    dispatch(fetchUserData(queryStrings));
+
   } catch (error: any) {
     console.log(error);
   }
