@@ -695,7 +695,7 @@ export default function MyPage() {
                           <Box>{row.runNumber}</Box>
                         </Box>
                       </TableCell>
-                      <TableCell>{row.objective}</TableCell>
+                      <TableCell>{row?.procedureId?.name}</TableCell>
                       <TableCell>
                         {row.departmentId[0] !== null ? (
                           <Box
@@ -803,7 +803,7 @@ export default function MyPage() {
                             ? '-'
                             : moment(row.createdOn).isValid()
                               ? moment(row.createdOn).local().format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                              : "-"}
                         </Box>
                       </TableCell>
                       <TableCell>

@@ -239,7 +239,8 @@ React.useEffect(()=>{
       page: 1,
       perPage: 10,
       searchBy: 'name',
-      search: inputValue
+      search: inputValue,
+      organisationId:singleUserData?.organisationId
     }));
   }
   if(filterFieldName=="Runs ID"){
@@ -1124,7 +1125,7 @@ React.useEffect(()=>{
                             ? '-'
                             : moment(row.createdOn).isValid()
                               ? moment(row.createdOn).local().format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')
+                              : "-"
                             }
                         </TableCell>
                       )}
@@ -1134,7 +1135,7 @@ React.useEffect(()=>{
                             ? '-'
                             : moment(row.dueDate).isValid()
                               ? moment(row.dueDate).local().format('MM/DD/YYYY')
-                              : moment().format('MM/DD/YYYY')}
+                              : "-"}
                         </TableCell>
                       )}
                       {headers[6].is_show && (

@@ -956,7 +956,7 @@ console.log("filteredData",filteredData);
                                 ? moment(row.perchasedDate)
                                     .local()
                                     .format('MM/DD/YYYY')
-                                : moment().format('MM/DD/YYYY')}
+                                :'-'}
                             </TableCell>
                           )}
                           {headers[5].is_show && (
@@ -967,7 +967,7 @@ console.log("filteredData",filteredData);
                                 ? moment(row.lastUsedDate)
                                     .local()
                                     .format('MM/DD/YYYY')
-                                : moment().format('MM/DD/YYYY')}
+                                : "-"}
                             </TableCell>
                           )}
                           {headers[6].is_show && (

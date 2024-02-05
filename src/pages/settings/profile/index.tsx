@@ -261,6 +261,7 @@ console.log(singleUserData);
     }
   };
 
+
   const checkCredentials = (
     password: any,
     newpassword: any,
@@ -335,7 +336,7 @@ console.log(singleUserData);
       // userValues['_id'] = userData?._id
       setIsSubmitted(true)
       await dispatch(fetchUpdateUserData(userValues));
-     await window.localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
+      await window.localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
       await toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70',
@@ -386,7 +387,7 @@ console.log(singleUserData);
   const organizationSliceData = useSelector(
     (state: any) => state.organization.data?.get_all_organisations,
   );
-
+  console.log('formikProfile',formikProfile);
   React.useEffect(() => {
     setDepartmentData(
       departmentSliceData?.map((item: any) => ({
@@ -1237,7 +1238,7 @@ console.log(singleUserData);
           }}
           variant="contained"
           className="add-btn"
-          disabled={isSubmitted}
+          disabled={Object.keys(userData).length==0 ?true:isSubmitted}
         >
           Save
         </Button>
