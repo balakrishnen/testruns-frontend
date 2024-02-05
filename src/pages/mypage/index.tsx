@@ -272,10 +272,10 @@ export default function MyPage() {
   const [notificationMesssage, setNotificationMesssage] = React.useState([]);
   const [clickedDate, setClickedDate] = useState(null);
   const [selectedDate, setSelectedDate] = useState(
-    moment(new Date()).format('MM-DD-YYYY'),
+    moment(new Date()).format('MM/DD/YYYY'),
   );
   const [value, onChange] = useState<Value>(
-    moment(new Date()).format('MM-DD-YYYY'),
+    moment(new Date()).format('MM/DD/YYYY'),
   );
   const [viewAll, setViewAll] = useState(false);
   const [viewAlls, setViewAlls] = useState(false);
@@ -493,10 +493,12 @@ export default function MyPage() {
     const calendarMarkSet = new Set();
     const calendar = calendar_eventData?.runs_calender_data.map((item) => {
       const date = new Date(selectedDate);
+      console.log("date1",date);
+      
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const day = date.getDate().toString().padStart(2, '0');
       const year = date.getFullYear();
-      const formattedDate = `${month}-${day}-${year}`;
+      const formattedDate = `${month}/${day}/${year}`;
       // const temp = { ...item, "dueDate": formattedDate };
       calendarMarkSet.add(formattedDate);
       return item;
@@ -544,8 +546,8 @@ export default function MyPage() {
     // console.log("selectedDate",selectedDate === moment(new Date()).format('MM-DD-YYYY'));
 
     if (
-      moment(selectedDate).format('MM-DD-YYYY') ==
-      moment(new Date()).format('MM-DD-YYYY')
+      moment(selectedDate).format('MM/DD/YYYY') ==
+      moment(new Date()).format('MM/DD/YYYY')
     ) {
       // const filCalendarContent = calendarEventData.filter(
 
@@ -555,8 +557,8 @@ export default function MyPage() {
 
       calendarEventData?.map((item: any) => {
         if (
-          moment(item?.dueDate).format('MM-DD-YYYY') ==
-          moment(new Date()).format('MM-DD-YYYY')
+          moment(item?.dueDate).format('MM/DD/YYYY') ==
+          moment(new Date()).format('MM/DD/YYYY')
         ) {
           arr.push(item);
           return item;
@@ -583,11 +585,11 @@ export default function MyPage() {
     // setLoader1(true)
     const filCalendarContent = calendarEventData.filter(
       (item) =>
-        moment(item?.dueDate).format('MM-DD-YYYY') ==
-        moment(date).format('MM-DD-YYYY'),
+        moment(item?.dueDate).format('MM/DD/YYYY') ==
+        moment(date).format('MM/DD/YYYY'),
     );
     setCalendarContent(filCalendarContent);
-    setSelectedDate(moment(date).format('MM-DD-YYYY'));
+    setSelectedDate(moment(date).format('MM/DD/YYYY'));
     // setLoader1(false)
   };
   const Placeholder = ({ children }: any) => {
@@ -983,8 +985,8 @@ export default function MyPage() {
                   if (
                     calendarEventData?.length!==0 && calendarEventData?.find(
                       (item) =>
-                        moment(item?.dueDate).format('MM-DD-YYYY') ==
-                        moment(date).format('MM-DD-YYYY'),
+                        moment(item?.dueDate).format('MM/DD/YYYY') ==
+                        moment(date).format('MM/DD/YYYY'),
                     )
                   ) {
                     return 'events';
