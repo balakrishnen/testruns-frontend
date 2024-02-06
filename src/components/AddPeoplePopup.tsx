@@ -35,11 +35,12 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssig
   // const allUser=  useSelector(
   //   (state: any) => state.user.data?.find_users, 
   // );
-  React.useEffect(()=>{
-  if(assigned){
-    setuserList([])
-  }
-},[])
+//   React.useEffect(()=>{
+//     if(typePopup!=="share"){
+//   if(assigned){
+//     setuserList([])
+//   }}
+// },[])
 
   const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
   console.log("singleUserData",singleUserData?.laboratoryId);
@@ -216,7 +217,7 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
                   </React.Fragment>
                 )}
                 disableClearable={true}
-                value={assigned?userList[0]:[]}
+                value={userList[0]}
                 onChange={(_, selectedOptions: any) => {setuserList([selectedOptions]) }}
               />
             </Box>
