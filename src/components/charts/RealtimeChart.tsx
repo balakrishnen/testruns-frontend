@@ -21,6 +21,8 @@ import { InfluxDB } from '@influxdata/influxdb-client';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-plugin-streaming';
 import { toast } from 'react-toastify';
+import ReactApexChart from 'react-apexcharts';
+import SpinerLoader from '../SpinnerLoader';
 
 const Chart = require('react-chartjs-2').Chart;
 
@@ -58,10 +60,13 @@ export default function RealtimeChart({
   const [chartData, setChartData] = React.useState<any>({
     datasets: [],
   });
-  const [chartData2, setChartData2] = React.useState<any>({
-    labels: [],
-    datasets: [],
-  });
+  // const [chartData2, setChartData2] = React.useState<any>({
+  //   labels: [],
+  //   datasets: [],
+  // });
+
+  const [series, setSeries] = React.useState<any>([]);
+  const [isSets, setIsSets] = React.useState(false);
   const [showArchivedChart, setShowArchivedChart] = React.useState<any>(false);
   const [channelList, setChannelList] = React.useState<any>([
     {
@@ -86,16 +91,28 @@ export default function RealtimeChart({
     },
   ]);
 
+  const axisList: any = [
+    {
+      name: 'Y1',
+      value: 'Y1',
+    },
+    {
+      name: 'Y2',
+      value: 'Y2',
+    },
+    {
+      name: 'Y3',
+      value: 'Y3',
+    },
+    {
+      name: 'Y4',
+      value: 'Y4',
+    },
+  ];
+
   const assetsSliceData = useSelector(
     (state: any) => state.assets.data?.get_all_assets_name,
   );
-
-  const [axisList, setAxisList] = React.useState<any>([
-    { name: 'Y1', value: 'Y1' },
-    { name: 'Y2', value: 'Y2' },
-    { name: 'Y3', value: 'Y3' },
-    { name: 'Y4', value: 'Y4' },
-  ]);
 
   const Placeholder = ({ children }: any) => {
     return <div style={{ color: 'lightgrey' }}>{children}</div>;
@@ -110,12 +127,12 @@ export default function RealtimeChart({
   }, [isPause]);
 
   React.useEffect(() => {
-    if (endDate !== null && assets !== null) {
+    if (endDate && endDate !== null && assets && assets !== null) {
       setShowArchivedChart(true);
       setIsChartPause(true);
       getTimeRangeData();
     }
-  }, [endDate]);
+  }, [endDate, isSets]);
 
   React.useEffect(() => {
     if (assetsSliceData) {
@@ -143,34 +160,53 @@ export default function RealtimeChart({
         .join(' or ');
       let stemp: any = moment(startDate);
       let etemp: any = moment(endDate);
-      // let etemp: any = moment('2024-01-23T13:58:54.037Z');
-      // let stemp: any = moment('2024-01-23T13:53:55.637Z');
+      // let etemp: any = moment('2024-01-31T13:58:54.037Z');
+      // let stemp: any = moment('2024-01-30T21:53:55.637Z');
       console.log('startDate', startDate, stemp.toISOString());
       console.log('endDate', endDate, etemp.toISOString());
       const query2: any = `from(bucket: "${bucket}")
         |> range(start: ${stemp.toISOString()}, stop: ${etemp.toISOString()})
         |> filter(fn: (r) => r["_measurement"] == "${measure}" and ${fields})
         |> yield(name: "mean")`;
-      const chart2: any = { ...chartData2 };
+      // const chart2: any = { ...chartData2 };
       const channels = [...channelList];
+      let seriesData: any = {};
+      let seriesList: any = [];
+      selectedChannel.forEach((channal: any, index: number) => {
+        let dataObj: any = { [`${channal}`]: [] };
+        Object.assign(seriesData, dataObj);
+      });
+
       const result = await queryApi.collectRows(query2);
       result.forEach((dataset: any) => {
         selectedChannel.forEach((channal: any, index: number) => {
-          const sets = chart2.datasets[index];
-          const labels = chart2['labels'];
+          // const sets = chart2.datasets[index];
+          // const labels = chart2['labels'];
           if (
             dataset._value !== undefined &&
             dataset._value !== null &&
             channal === dataset._field
           ) {
             channels[index].sensor = channal;
-            labels.push(moment(dataset._time, 'HH:mm:ss').format('hh:mm:ss'));
-            sets.data.push(dataset._value);
+            // labels.push(moment(dataset._time, 'HH:mm:ss').format('hh:mm:ss'));
+            // sets.data.push(dataset._value);
+            seriesData[`${dataset._field}`].push([
+              new Date(dataset._time).getTime(),
+              dataset._value,
+            ]);
           }
         });
       });
+
+      Object.entries(seriesData).forEach(([key, value]) => {
+        seriesList.push({
+          name: key,
+          data: value,
+        });
+      });
+      setSeries(seriesList);
       setChannelList(channels);
-      setChartData2(chart2);
+      // setChartData2(chart2);
     } catch (error) {
       console.error(error);
     }
@@ -275,7 +311,7 @@ export default function RealtimeChart({
         const result = await queryApi.collectRows(query2);
         const sensors: any = [];
         const data = { ...chartData };
-        const data2 = { ...chartData2 };
+        // const data2 = { ...chartData2 };
         // let temp = {
         //   name: 'temperature_data',
         // };
@@ -293,8 +329,7 @@ export default function RealtimeChart({
             name: element._field,
           });
         });
-
-        setAssets(event.target.value);
+        endDate && endDate !== null && setIsSets(true);
         setChannelOptions(sensors);
         setAssets(event.target.value);
         const atemp: any = assetsSliceData.filter(
@@ -313,17 +348,17 @@ export default function RealtimeChart({
           };
         });
 
-        sensors.forEach((item: any, index: any) => {
-          data2.datasets[index] = {
-            label: item.name,
-            backgroundColor: colorsList[index > 3 ? 4 : index],
-            borderColor: colorsList[index > 3 ? 4 : index],
-            fill: false,
-            lineTension: 0,
-            borderDash: [8, 4],
-            data: [],
-          };
-        });
+        // sensors.forEach((item: any, index: any) => {
+        //   data2.datasets[index] = {
+        //     label: item.name,
+        //     backgroundColor: colorsList[index > 3 ? 4 : index],
+        //     borderColor: colorsList[index > 3 ? 4 : index],
+        //     fill: false,
+        //     lineTension: 0,
+        //     borderDash: [8, 4],
+        //     data: [],
+        //   };
+        // });
       } catch (error) {
         toast(`Device not found !`, {
           style: {
@@ -386,28 +421,71 @@ export default function RealtimeChart({
     },
     height: 300,
   };
+  const optionsapex: any = {
+    chart: {
+      id: 'chart2',
+      type: 'line',
+      height: 230,
+      toolbar: {
+        autoSelected: 'pan',
+        show: false,
+      },
+    },
 
-  const options2: any = {
-    tooltips: { enabled: false },
-    hover: { mode: null },
+    colors: colorsList,
+    stroke: {
+      colors: colorsList,
+      curve: 'straight',
+      dashArray: 5,
+      width: 3,
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    fill: {
+      opacity: 1,
+    },
+    markers: {
+      size: 5,
+    },
+    xaxis: {
+      type: 'datetime',
+    },
+  };
 
-    scales: {
-      xAxes: [
-        {
-          ticks: {
-            autoSkip: true,
-            autoSkipPadding: 3,
-            maxTicksLimit: 30,
-          },
+  const optionsLine: any = {
+    chart: {
+      id: 'chart1',
+      height: 130,
+      type: 'area',
+      brush: {
+        target: 'chart2',
+        enabled: true,
+      },
+      selection: {
+        enabled: true,
+        xaxis: {
+          min: new Date(startDate).getTime(),
+          max: new Date(endDate).getTime(),
         },
-      ],
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
+      },
+    },
+    colors: colorsList,
+    fill: {
+      type: 'gradient',
+      gradient: {
+        opacityFrom: 0.91,
+        opacityTo: 0.1,
+      },
+    },
+    xaxis: {
+      type: 'datetime',
+      tooltip: {
+        enabled: false,
+      },
+    },
+    yaxis: {
+      tickAmount: 2,
     },
   };
 
@@ -448,6 +526,7 @@ export default function RealtimeChart({
                   marginThreshold: null,
                 }}
                 onChange={(event) => handleAssetsChange(event)}
+                disabled={isSets}
                 renderValue={
                   assets !== null
                     ? undefined
@@ -479,8 +558,28 @@ export default function RealtimeChart({
           <Box sx={{ mt: 4 }}>
             {showArchivedChart ? (
               <>
-                {console.log('chartData2', chartData2)}
-                <Line data={chartData2} options={options2} />
+                {series.length !== 0 ? (
+                  <>
+                    <div id="chart-line2">
+                      <ReactApexChart
+                        options={optionsapex}
+                        series={series}
+                        type="line"
+                        height={480}
+                      />
+                    </div>
+                    <div id="chart-line">
+                      <ReactApexChart
+                        options={optionsLine}
+                        series={series}
+                        type="area"
+                        height={180}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <SpinerLoader isLoader={series.length === 0} />
+                )}
               </>
             ) : (
               <Line data={chartData} options={options} />
@@ -553,7 +652,7 @@ export default function RealtimeChart({
                                 ? undefined
                                 : () => <Placeholder>Select</Placeholder>
                             }
-                            disabled={assets === null}
+                            disabled={assets === null || isSets}
                             style={{ width: '90%' }}
                           >
                             <MenuItem value={null}>Null</MenuItem>
@@ -591,7 +690,7 @@ export default function RealtimeChart({
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
                             onChange={(event) => handleYAxisChange(event, key)}
-                            disabled={assets === null}
+                            disabled={assets === null || isSets}
                             renderValue={
                               element.axis !== null
                                 ? undefined
