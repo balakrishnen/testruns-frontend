@@ -50,8 +50,8 @@ const validationSchema = Yup.object().shape({
   createdOn: Yup.string().required('Created date is required'),
   departmentId: Yup.array().notRequired(),
   laboratoryId: Yup.array().notRequired(),
-  objective: Yup.string().trim().required('Test Objective is required').max(35, 'Label must be at most 35 characters').matches(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/, 'Label cannot have empty spaces'),
-  dueDate: Yup.date().required('Due Date is required'),
+  objective: Yup.string().trim().required('Test Objective is required').max(35, 'Label must be at most 35 characters'),
+  // dueDate: Yup.date().required('Due Date is required'),
   // dueDate: Yup.string().required('Due Date is required').matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/, 'Invalid date'),
   assignedTo: Yup.string().notRequired(),
   organisationId: Yup.string().required('Procedure Name is required'),
@@ -87,7 +87,11 @@ const RunsForm = React.forwardRef(
     const [department, setDepartment] = React.useState(DepartmentData ? DepartmentData : [])
 
     const [departments, setDepartments] = React.useState(
-      DepartmentData
+      formData?.departmentId?.map((item: any) => ({
+        label: item?.name,
+        value: item?.name,
+        id: item?._id,
+      })),
     );
     const [laboratory, setLaboratory] = React.useState(
       formData?.laboratoryId?.map((item: any) => ({
@@ -114,6 +118,7 @@ const RunsForm = React.forwardRef(
     const [inputValue, setInputValue] = useState(null)
     const [isAssigned,setIsAssigned]=React.useState(false)
     const [dueDate, setDueDate] = useState('');
+    const [error, setError]=React.useState("")
 
     //   const fetchProcedureSuggestions = async (inputValue) => {
     //   setLoading(true);
@@ -157,8 +162,9 @@ const RunsForm = React.forwardRef(
             // formik.setFieldValue('procedureId',runzSliceData?.get_run?.procedureId?._id)
             formik.setFieldValue('objective', runzSliceData?.get_run?.objective)
             formik.setFieldValue("procedureId", runzSliceData?.get_run?.procedureId);
+            formik.setFieldValue('laboratoryId', runzSliceData?.get_run?.laboratoryId)
+            formik.setFieldValue('departmentId', runzSliceData?.get_run?.departmentId)
             console.log("dayjs(runzSliceData?.get_run?.dueDate",dayjs(runzSliceData?.get_run?.dueDate))
-            
             formik.setFieldValue('dueDate',dayjs(runzSliceData?.get_run?.dueDate) )
             setDepartment(runzSliceData?.get_run?.departmentId?.map((item: any) => ({
               label: item.name,
@@ -181,7 +187,8 @@ const RunsForm = React.forwardRef(
     }));
     // const departments: any = [];
     // const laboratory: any = [];
-    const checkCredentials = (values: any) => {
+    // console.log("isMatch",type);
+    const checkCredentials = () => {
       if(type!=='edit'){
         if(isAssigned){
           return true;}
@@ -190,11 +197,14 @@ const RunsForm = React.forwardRef(
           }
       }
       else{
+         setIsAssigned(true)
         return true
       }
      
     };
     const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
+    var deptArray: any = []
+    var labArray: any = []
     const onSubmit = async (values: any) => {
       console.log("submit");
       
@@ -204,14 +214,17 @@ const RunsForm = React.forwardRef(
       // else{
       //   setDueDateError("")
       // }
-      const isMatch = checkCredentials(values.name);
+      const isMatch = checkCredentials();
+     console.log("isMatch",values);
      console.log("isMatch",isMatch);
-
-      if (isMatch) {
-        var deptArray: any = []
-        departments.map((item: any) => (deptArray.push(item?.id)))
-        var labArray: any = []
-        laboratory.map((item: any) => (labArray.push(item?.id)))
+      if (isMatch==true) {
+        console.log("isMatch",type);
+        
+        department?.map((item: any) => (deptArray.push(item?.id)))
+        
+        lab?.map((item: any) => (labArray.push(item?.id)))
+        console.log("deptArray",deptArray,labArray);
+        
         let runsValues: any = {
           objective: values.objective,
           procedureId: values.procedureId?._id,
@@ -227,16 +240,15 @@ const RunsForm = React.forwardRef(
           // procedureDetials:values.procedureDetials
 
         };
-
+        console.log("isMatch",runsValues);
+        console.log("isMatch",type);
+        
         if (type == 'edit') {
+          console.log("isMatch",runsValues);
           runsValues['_id'] = formData._id
-        }
-        if (type == 'edit') {
           await dispatch(fetchUpdateRunsData(runsValues))
-          setTimeout(() => {
-            handleReloadSingleData()
-          }, 2000)
-          submitFormPopup();
+          await handleReloadSingleData()
+          await submitFormPopup();
           await reload()
         }
         else {
@@ -325,6 +337,9 @@ const RunsForm = React.forwardRef(
       const formattedDate = moment(selectedDate?.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
       setDueDate(formattedDate);
+      if(!moment(formattedDate).isValid()){
+        setError("Invaild Date")}
+        else{setError("")}
     }
     const handleConfirmationState = (state: number) => {
       if (state === 0) {
@@ -386,6 +401,8 @@ const RunsForm = React.forwardRef(
         formik.resetForm();
         setDepartment([]);
         setLab([]);
+        setDueDate("")
+        setError("")
         formik.setFieldValue('procedureId', "")
       }
 
@@ -427,9 +444,9 @@ console.log(formik,'dueDate');
                       {/* {formik.values.procedureId} */}
                       <label style={{ display: 'block' }}>Procedure name<span style={{ color: "#E2445C" }}>*</span></label>
                       <Autocomplete
-                        options={opt}
                         loading={loading}
                         value={formik.values.procedureId}
+                        options={opt}
                         disableClearable={true}
                         getOptionLabel={(option: any) => option.name}
                         isOptionEqualToValue={(option: any, value: any) => 
@@ -781,21 +798,25 @@ console.log(formik,'dueDate');
                       <label>Due date<span style={{ color: "#E2445C" }}>*</span></label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-          renderInput={(props) => <TextField {...props} label="Due Date" />}
+       
           format="MM/DD/YYYY"
           disablePast
-          onChange={(selectedDate) => handleDateChanges(selectedDate,'dueDate')}
           value={dueDate}
+          onChange={(selectedDate) => handleDateChanges(selectedDate,'dueDate')}
+          renderInput={(props) => (
+            <TextField {...props} label="Select Date" inputProps={{ readOnly: true }} />
+          )}
+          
         />
           </LocalizationProvider>
                       {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" disablePast onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
                       </LocalizationProvider> */}
-                      {/* {formik.touched.dueDate && formik.errors.dueDate && (
+                      {/* {formik.touched.dueDate && formik.errors.dueDate && ( */}
                         <Typography className="error-field">
-                          Due Date is required
+                         {error}
                         </Typography>
-                      )} */}
+                      {/* )} */}
                     </Box>
                   </Grid>
 
@@ -824,7 +845,7 @@ console.log(formik,'dueDate');
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <img src={Avatars} alt="Avatars" />
                         <Button
-                          disabled={Object.keys(formik.errors).length == 0 ? false : true}
+                          disabled={(Object.keys(formik.errors).length == 0 &&  moment(dueDate).isValid())? false : true}
                           variant="contained"
                           className="avatar-add"
                           onClick={() => {
@@ -837,7 +858,7 @@ console.log(formik,'dueDate');
                         {/* {isAssigned &&<img src={Avatars} alt="Avatars" style={{paddingLeft:"10px"}} />} */}
                       </Box>
                       {/* {JSON.stringify(Object.keys(formik.errors).length == 0 )} */}
-                      {Object.keys(formik.errors).length == 0 && !isAssigned &&
+                      {Object.keys(formik.errors).length == 0 &&  moment(dueDate).isValid() && !isAssigned &&
                         <Typography className="error-field">
                         Please assign at least one people
                         </Typography>}
@@ -864,7 +885,7 @@ console.log(formik,'dueDate');
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" disabled={type == 'edit' ? !formik.dirty : (Object.keys(formik.errors).length==0 && isAssigned)?false:true} className="add-btn">
+                <Button type="submit" variant="contained" disabled={type === 'edit' ? !formik.dirty : (Object.keys(formik.errors).length==0 && moment(dueDate).isValid() &&isAssigned)?false:true} className="add-btn">
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>

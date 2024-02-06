@@ -66,9 +66,9 @@ const validationSchema = Yup.object().shape({
 });
 const validationSchemaProfile = Yup.object().shape({
   // firstName: Yup.string().required('First name is required'),
-  firstName: Yup.string().trim().required('First name is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(50, 'Must be 50 characters or less'),
+  firstName: Yup.string().trim().required('First name is required').max(50, 'Must be 50 characters or less'),
   // lastName: Yup.string().required('Lase name is required'),
-  lastName: Yup.string().trim().required('Last name is required').matches(/^\S*$/, 'Label cannot have empty spaces').max(50, 'Must be 50 characters or less'),
+  lastName: Yup.string().trim().required('Last name is required').max(50, 'Must be 50 characters or less'),
   email: Yup.string()
     .required('Email is required')
     .email('Invalid email')
@@ -261,6 +261,7 @@ console.log(singleUserData);
     }
   };
 
+
   const checkCredentials = (
     password: any,
     newpassword: any,
@@ -335,7 +336,7 @@ console.log(singleUserData);
       // userValues['_id'] = userData?._id
       setIsSubmitted(true)
       await dispatch(fetchUpdateUserData(userValues));
-     await window.localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
+      await window.localStorage.setItem("userProfileDetails",JSON.stringify(userValues))
       await toast(`User Details updated successful !`, {
         style: {
           background: '#00bf70',
@@ -386,7 +387,7 @@ console.log(singleUserData);
   const organizationSliceData = useSelector(
     (state: any) => state.organization.data?.get_all_organisations,
   );
-
+  console.log('formikProfile',formikProfile);
   React.useEffect(() => {
     setDepartmentData(
       departmentSliceData?.map((item: any) => ({
@@ -1237,7 +1238,7 @@ console.log(singleUserData);
           }}
           variant="contained"
           className="add-btn"
-          disabled={isSubmitted}
+          disabled={Object.keys(userData).length==0 ?true:isSubmitted}
         >
           Save
         </Button>

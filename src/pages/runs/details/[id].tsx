@@ -831,7 +831,7 @@ export default function RunsDetails() {
         organisationId: procedureSliceData?.get_run?.organisationId,
         userProcedure: JSON.stringify(htmlInput),
         static_chart_data: JSON.stringify(finalTableTitleResult),
-        startTime: new Date(),
+        startTime: moment(new Date()).toISOString(),
       };
       if (!userRunzID?._id) {
         dispatch(postUserRunsData(payload)).then((res: any) => {
@@ -2213,6 +2213,7 @@ export default function RunsDetails() {
                     type="submit"
                     variant="contained"
                     className="add-btn"
+                    disabled={Object.keys(htmlInput).length == 0 ? true : false}
                     style={{
                       position: 'sticky',
                       display: value == 1 ? 'none' : 'block',

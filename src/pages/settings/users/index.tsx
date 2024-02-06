@@ -103,7 +103,8 @@ const Users = () => {
     search: null,
     sortBy: null,
     sortOrder: 'desc',
-    organisationId:loginUserSliceData?.verifyToken?.organisationId
+    // organisationId:loginUserSliceData?.verifyToken?.organisationId,
+    instituteId:loginUserSliceData?.verifyToken?.instituteId,
   });
   console.log("loginUserSliceData?.verifyToken?.organizationId",loginUserSliceData?.verifyToken?.organisationId);
   
@@ -260,7 +261,8 @@ console.log("userSliceData",userSliceData);
       page: 1,
       perPage: 10,
       sortOrder: 'desc',
-      organizationId:loginUserSliceData?.verifyToken?.organizationId
+      // organizationId:loginUserSliceData?.verifyToken?.organizationId
+      instituteId:loginUserSliceData?.verifyToken?.instituteId,
     };
     dispatch(fetchUserData(payload));
   };

@@ -31,10 +31,11 @@ export const GET_RUNS = gql`
             dueDate
             status
             isActive
+            runId
             isDeleted
-            createdAt
+            #createdAt
             createdOn
-            updatedAt
+            #updatedAt
             shared
             procedureId {
                 _id
