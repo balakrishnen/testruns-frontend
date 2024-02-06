@@ -654,7 +654,7 @@ export default function TableChart({
                 </Grid>
                 <Box
                   sx={{ mt: 2 }}
-                  style={{ overflowY: 'auto', height: '550px' }}
+                  style={{ overflowY: 'auto', height: '420px' }}
                 >
                   {data.channelOptions?.map((element: any, key: number) => (
                     <Box key={key}>

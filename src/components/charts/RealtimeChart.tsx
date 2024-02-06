@@ -431,8 +431,9 @@ export default function RealtimeChart({
           sm={12}
           md={12}
           lg={9}
-          xl={10}
+          xl={9}
           style={{ borderRight: '1px solid #e4e5e7' }}
+          className="chart-left"
         >
           <Grid container sx={{ px: 4 }}>
             <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -493,10 +494,9 @@ export default function RealtimeChart({
           sm={12}
           md={12}
           lg={3}
-          xl={2}
-          style={{
-            overflowY: 'scroll',
-          }}
+          xl={3}
+          style={{ overflowY: 'scroll' }}
+          className="chart-right"
         >
           <Grid container alignItems={'center'}>
             <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
@@ -519,8 +519,8 @@ export default function RealtimeChart({
             </Grid>
           </Grid>
           <Box
-            sx={{ mt: 2, pr: 2 }}
-            style={{ overflowY: 'scroll', height: '550px' }}
+            sx={{ mt: 2}}
+            style={{ overflowY: 'auto', height: '420px' }}
           >
             {channelList?.map((element: any, key: number) => (
               <Box key={key}>
