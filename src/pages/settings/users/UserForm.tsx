@@ -348,7 +348,7 @@ await submitFormPopup();
 
 React.useEffect(()=>{
   const mappedDepartments = (userData?.departmentId || []).map((id: string) => {
-    var department = departmentSliceData?.find(obj => obj._id == id && id!=="657421c1c63327a74f3c756b")
+    var department = departmentSliceData?.find(obj => obj._id == id )
     // var dept1=department?.filter((department) => department !== null && department!==undefined)
     console.log("departments1",department==undefined);
     console.log("departments1",department);

@@ -23,7 +23,7 @@ interface HeaderId {
   is_checked:boolean;
     id: string;
     objective: string;
-    assetNumber: string;
+    runNumber: string;
     status: number;
     availability: string;
     userId: string;
