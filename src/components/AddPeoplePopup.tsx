@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { fetchShareRunz, fetchbulkRunz } from '../api/bulkRunz';
 import { toast } from 'react-toastify';
 
-const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssign}: any) => {
+const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssign,assigned}: any) => {
   const dispatch : any =useDispatch()
   const [allUserData, setAlluserData] = React.useState<any>([]);
   const [userList, setuserList]=React.useState<any>([])
@@ -35,10 +35,16 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssig
   // const allUser=  useSelector(
   //   (state: any) => state.user.data?.find_users, 
   // );
+  React.useEffect(()=>{
+  if(assigned){
+    setuserList([])
+  }
+},[])
+
   const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
   console.log("singleUserData",singleUserData?.laboratoryId);
   
-console.log("formValue",formValue);
+console.log("userList",userList);
 React.useEffect(()=>{
   setAlluserData(allUserData)
  },[allUserData])
@@ -48,6 +54,7 @@ React.useEffect(()=>{
     let payload={
       organisationId:singleUserData?.organisationId
     }
+
     dispatch(fetchAllUser(payload)).then((res)=>{
       setAlluserData(res?.find_users.map((item: any) => ({
         label: item.email,
@@ -200,16 +207,16 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
                 renderOption={(props, option: any, { selected }) => (
                   <React.Fragment>
                     <li {...props}>
-                      <Checkbox
+                    {typePopup == "share" && <Checkbox
                         style={{ marginRight: 0 }}
                         checked={selected}
-                      />
+                      />}
                       {option.value}
                     </li>
                   </React.Fragment>
                 )}
                 disableClearable={true}
-                value={userList[0]}
+                value={assigned?userList[0]:[]}
                 onChange={(_, selectedOptions: any) => {setuserList([selectedOptions]) }}
               />
             </Box>

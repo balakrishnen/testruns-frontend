@@ -403,9 +403,10 @@ const RunsForm = React.forwardRef(
         setLab([]);
         setDueDate("")
         setError("")
+        setAssignUser("")
         formik.setFieldValue('procedureId', "")
       }
-
+      setIsAssigned(false)
       setRunsCreate(false);
     }
 
@@ -892,7 +893,7 @@ console.log(formik,'dueDate');
             </Box>
           </form>
         </Dialog>
-        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} typePopup={"assign"} formValue={formik.values} handleAssign={handleAssign}
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} typePopup={"assign"} formValue={formik.values} handleAssign={handleAssign} assigned={(Object.keys(formik.errors).length == 0 &&  moment(dueDate).isValid() && !isAssigned )}
         // runzId={runzId}
         //         runzRow={runzRow}
         //         typePopup={typePopup}

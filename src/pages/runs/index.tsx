@@ -385,7 +385,7 @@ React.useEffect(()=>{
         color: '#fff',
       },
     });
-    reload();
+    await reload();
   };
 
 
@@ -495,17 +495,17 @@ React.useEffect(()=>{
   };
 
   const runVal: any = { _id: rowId };
-  const handleDeleteConfirmation = (state: any) => {
+  const handleDeleteConfirmation = async(state: any) => {
     if (state === 1) {
-      dispatch(deleteRunsData(runVal));
-      toast(`Runs deleted !`, {
+      await dispatch(deleteRunsData(runVal));
+      await toast(`Runs deleted !`, {
         style: {
           background: '#00bf70',
           color: '#fff',
         },
       });
-      reload();
-      setTableHeaderVisible(false);
+      await reload();
+      await setTableHeaderVisible(false);
     }
     deletePopupRef.current.open(false);
   };
