@@ -32,14 +32,7 @@ export default function TableChart({
   handleDateChartRetrieve,
   savedChartData,
 }: any) {
-  const [colorList, setColorList] = React.useState<any>([
-    '#e22828',
-    '#90239f',
-    '#111fdf',
-    '#38e907',
-    '#222222',
-  ]);
-
+  const colorList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#000000'];
   const channelOptions = [
     {
       channel: null,
@@ -219,7 +212,7 @@ export default function TableChart({
     );
     if (channelPosition !== -1) {
       channels.channelOptions[keys].channel = event.target.value;
-      channels.channelOptions[keys].color = colorList[keys];
+      channels.channelOptions[keys].color = colorList[keys > 4 ? 4 : keys];
       for (let i = 0; i < channelCount; i++) {
         if (channels.charts.length === 0) {
           charts.push({
@@ -237,7 +230,8 @@ export default function TableChart({
       setChartData(data);
     } else {
       channels.channelOptions[keys].channel = event.target.value;
-      channels.channelOptions[keys].color = colorList[axisPosition];
+      channels.channelOptions[keys].color =
+        colorList[axisPosition > 4 ? 4 : axisPosition];
       channels.charts.forEach((_element: any, position: number) => {
         delete channels.charts[position][`plot${axisPosition + 1}`];
       });
@@ -314,26 +308,13 @@ export default function TableChart({
   const handleColorPickerChange = (event: any, dataIndex: any, key: any) => {
     const data = [...chartData];
     const values = { ...data[dataIndex] };
-    handleAddChannelColor(event.target.value, key);
     values.channelOptions[key].color = event.target.value;
     setChartData(data);
-  };
-
-  const handleAddChannelColor = (value: string, key: any) => {
-    let colorLists = [...colorList];
-    debugger;
-    if (colorLists > key) {
-      colorLists = [...colorLists, value];
-    } else {
-      colorLists[key] = value;
-    }
-    setColorList(colorLists);
   };
 
   const handleAddChannel = (index: any) => {
     const data: any = [...chartData];
     const newChannelIndex = data[index].channelOptions.length;
-    handleAddChannelColor('#222222', newChannelIndex);
     const stringLen =
       data[index].channelOptions[newChannelIndex - 1].dataKey.length;
     data[index].channelOptions[newChannelIndex] = {
@@ -342,7 +323,6 @@ export default function TableChart({
       color: colorList[4],
       yAxisId: 'left1',
       orientation: 'left',
-      name: 'Y1',
       dataKey: `plot${newChannelIndex + 1}`,
     };
     // data[index].channelOptions[0].data.forEach((item) => {
@@ -379,14 +359,11 @@ export default function TableChart({
     const data: any = [...chartData];
     const channels: any = { ...data[index] };
     const charts: any = [...channels.charts];
-    let colorLists = [...colorList];
     const channelCount = channels.channelOptions.length;
     channels.channelOptions.pop();
     charts.forEach((_element: any, position: number) => {
       delete charts[position][`plot${channelCount}`];
     });
-    colorLists.pop();
-    setColorList(colorLists);
     setChartData(data);
     // setChartData((prevData) => {
     //     const data = [...prevData];
