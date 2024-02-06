@@ -336,53 +336,7 @@ await submitFormPopup();
           value: item._id,
         })),
       );
-      const mappedDepartments = (userData?.departmentId || []).map((id: string) => {
-        var department = departmentSliceData?.find(obj => obj._id == id && id!=="657421c1c63327a74f3c756b")
-        // var dept1=department?.filter((department) => department !== null && department!==undefined)
-        console.log("departments1",department==undefined);
-        console.log("departments1",department);
-        if (department!==undefined) {
-          console.log("departments1",department);
-          
-            return {
-                label: department.name,
-                value: department.name,
-                id: department._id,
-            };
-        }
-        else {
-          console.log("departments1",departmentSliceData);
-          
-          // Handle the case where the laboratory with the specified ID is not found
-          departmentSliceData.map((item)=>{
-          return {
-            label: item.name,
-            value: item.name,
-            id: item._id,
-      }})
-      }
-        
-        // Handle the case where the department with the specified ID is not found
-    })
-
-
-      console.log("mappedDepartments",mappedDepartments);
-      
-      if(type=="edit"){
-  formik.setFieldValue('departmentId', (mappedDepartments[0]!==undefined&&mappedDepartments[0]!==null) ? mappedDepartments:[]);
- 
-      }
-  setDepartmentData(type=="edit"?mappedDepartments?.length!==0 && mappedDepartments[0]!==undefined ?mappedDepartments:departmentSliceData?.map((item: any) => ({
-        label: item.name,
-        value: item.name,
-        id: item._id,
-      })):departmentSliceData?.map((item: any) => ({
-        label: item.name,
-        value: item.name,
-        id: item._id,
-      })),)
-
-  
+     
       setOrganizationData(
         organizationSliceData?.map((item: any) => ({
           label: item.name,
@@ -391,6 +345,56 @@ await submitFormPopup();
         })),
       );
     }, [departmentSliceData, , roleSliceData, organizationSliceData,institutionSliceData]);
+
+React.useEffect(()=>{
+  const mappedDepartments = (userData?.departmentId || []).map((id: string) => {
+    var department = departmentSliceData?.find(obj => obj._id == id && id!=="657421c1c63327a74f3c756b")
+    // var dept1=department?.filter((department) => department !== null && department!==undefined)
+    console.log("departments1",department==undefined);
+    console.log("departments1",department);
+    if (department!==undefined) {
+      console.log("departments1",department);
+      
+        return {
+            label: department.name,
+            value: department.name,
+            id: department._id,
+        };
+    }
+    else {
+      console.log("departments1",departmentSliceData);
+      
+      // Handle the case where the laboratory with the specified ID is not found
+      departmentSliceData.map((item)=>{
+      return {
+        label: item.name,
+        value: item.name,
+        id: item._id,
+  }})
+  }
+    
+    // Handle the case where the department with the specified ID is not found
+})
+
+
+  console.log("mappedDepartments",mappedDepartments);
+  
+  if(type=="edit"){
+formik.setFieldValue('departmentId', (mappedDepartments[0]!==undefined&&mappedDepartments[0]!==null) ? mappedDepartments:[]);
+
+  }
+setDepartmentData(type=="edit"?mappedDepartments?.length!==0 && mappedDepartments[0]!==undefined ?mappedDepartments:departmentSliceData?.map((item: any) => ({
+    label: item.name,
+    value: item.name,
+    id: item._id,
+  })):departmentSliceData?.map((item: any) => ({
+    label: item.name,
+    value: item.name,
+    id: item._id,
+  })),)
+
+
+},[departmentSliceData])
 
 React.useEffect(()=>{
 
