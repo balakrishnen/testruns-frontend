@@ -273,25 +273,26 @@ const userSliceData = useSelector(
             <TextField
               type={initalStatus.confirmpassword ? "text" : "password"}
               fullWidth
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle confirm password visibility"
-                      onClick={(e) => handleClickShowPassword("confirmpassword", !initalStatus.confirmpassword)}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                      sx={{ mr: 0 }}
-                    >
-                      {!initalStatus.confirmpassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
+              // InputProps={{
+              //   endAdornment: (
+              //     <InputAdornment position="end">
+              //       <IconButton
+              //         aria-label="toggle confirm password visibility"
+              //         onClick={(e) => handleClickShowPassword("confirmpassword", !initalStatus.confirmpassword)}
+              //         onMouseDown={handleMouseDownPassword}
+              //         edge="end"
+              //         sx={{ mr: 0 }}
+              //       >
+              //         {!initalStatus.confirmpassword ? <VisibilityOff /> : <Visibility />}
+              //       </IconButton>
+              //     </InputAdornment>
+              //   ),
+              // }}
               name="confirm_password"
               onPaste={(event) => {
                 event.preventDefault()}}
               id="confirm_password"
+              inputProps={{ maxLength: 24 }}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.confirm_password}

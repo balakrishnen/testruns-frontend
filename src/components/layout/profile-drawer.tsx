@@ -289,8 +289,8 @@ export default function AppProfileDrawer({
     const s3 = new AWS.S3({
       // params: { Bucket: S3_BUCKET, folderName: "profile" },
       region: 'us-east-1',
-      accessKeyId: 'AKIAUVVYVBYI2GJ3ENMQ',
-      secretAccessKey: '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',
+      accessKeyId: process.env.ACCESSKEYID,
+      secretAccessKey: process.env.SECRETACCESSKEYID,
     });
     const keyPath = `profile/${Date.now()}`;
     const params = {

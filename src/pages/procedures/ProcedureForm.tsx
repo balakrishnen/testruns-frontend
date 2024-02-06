@@ -597,7 +597,7 @@ const ProcedureForm = React.forwardRef(
                           )}
                           onBlur={()=>{
                             var dept:any=[];
-                            formik.values.departmentId?.map((item: any) => (dept.push(item?.id))); dispatch(fetchLabById({departmentId : dept}))}
+                            formik.values.departmentId?.map((item: any) => (dept.push(item?.id))); dispatch(fetchLabById({departmentId : dept}));setLaboratory([])}
                           }
                           onChange={(_, selectedOptions: any) => {
                             setDepartments(selectedOptions);
@@ -732,6 +732,7 @@ const ProcedureForm = React.forwardRef(
                           fullWidth
                           placeholder="Laboratory"
                           size="medium"
+                          disabled={departments.length==0?true:false}
                           renderOption={(props, option: any, { selected }) => (
                             <React.Fragment>
                               <li {...props}>

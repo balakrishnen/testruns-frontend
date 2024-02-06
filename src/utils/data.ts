@@ -919,7 +919,7 @@ export const RunsHeaders: any = [
     label: 'Runs ID',
     filters: [
       {
-        id: 'assetNumber',
+        id: 'runNumber',
         type: 'autocomplete',
         label: 'Runs ID',
         options: [
@@ -1152,11 +1152,11 @@ export const RunsRows = [
 ];
 export const HistoryHeaders: readonly HistoryHead[] = [
   {
-    id: 'assetNumber',
+    id: 'runNumber',
     label: 'Runs ID',
     filters: [
       {
-        id: 'assetNumber',
+        id: 'runNumber',
         type: 'autocomplete',
         label: 'Assest ID',
         options: [

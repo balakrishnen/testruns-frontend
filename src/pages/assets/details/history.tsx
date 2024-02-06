@@ -1,46 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-// import PrivateRoute from '../../components/PrivateRoute';
-import TableFilters from '../../../components/table/TableFilters';
 import TablePagination from '../../../components/table/TablePagination';
 import {
     Box,
-    Button,
-    Checkbox,
-    MenuItem,
-    Select,Chip,
-    Typography,
+    Chip,
 } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRunsData } from '../../../api/RunsAPI';
-import search from '../../../assets/images/search.svg';
 import {
-    DepartmentList,
     HistoryHeaders,
     HistoryRows,
-    LaboratoryList,
-    RunsHeaders,
-    RunsRows,
 } from '../../../utils/data';
 import TableHeader from '../../../components/table/TableHeader';
-import { HistoryRowData } from '../../../modals/history.modal';
-import { RunsRowData } from '../../../modals/runs.modal';
-import {
-    handleCheckboxChange,
-    handleDeCheckboxChange,
-    handledAllSelected,
-} from '../../../utils/common-services';
-import DeletePopup from '../../../components/DeletePopup';
-import { navigate } from 'gatsby';
-import Confirmationpopup from '../../../components/ConfirmationPopup';
-import SuccessPopup from '../../../components/SuccessPopup';
 import TablePopup from '../../../components/table/TablePopup';
 // import RunsForm from './RunsForm';
 
@@ -50,30 +26,15 @@ const rows = HistoryRows;
 
 export default function HistoryTable() {
 
-    const [runsOpen, setRunsOpen] = React.useState(false);
     const [headers, setHeaders] = React.useState<any>(HistoryHeaders);
     const [Rows, setSelectedRows] = React.useState(rows);
-    const [isDeselectAllChecked, setIsDeselectAllChecked] = React.useState(false);
-    const [isselectAllChecked, setIsselectAllChecked] = React.useState(false);
-    const [isTableHeaderVisible, setTableHeaderVisible] = React.useState(false);
-    const formPopupRef: any = React.useRef(null);
-    const confirmationPopupRef: any = React.useRef(null);
-    const successPopupRef: any = React.useRef(null);
-    // const [deletePopup, setDeletePopup] = React.useState(false);
-    const deletePopupRef: any = React.useRef(null);
     const [currentPage, setCurrentPage] = React.useState(1);
     const tablePopupRef: any = React.useRef(null);
 
     const itemsPerPage = 5;
-    const totalPages = Math.ceil(Rows.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    const Data = Rows.slice(startIndex, endIndex);
-
-    // const handlePageChange = (even: any, page: number) => {
-    //     setCurrentPage(page);
-    // };
     const [runzData, setRunzData] = React.useState<any>([]);
     const loginUserSliceData = useSelector(
       (state: any) => state.userLogin.data,
@@ -81,6 +42,7 @@ export default function HistoryTable() {
     const RunsSliceData = useSelector(
         (state: any) => state.runs.data?.get_all_runs,
     );
+    const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
     const dispatch: any = useDispatch();
     React.useEffect(() => {
         setRunzData(runzData);
@@ -92,13 +54,13 @@ export default function HistoryTable() {
         hasNextPage: false,
         hasPreviousPage: false,
       });
-      const [queryStrings, setQueryString] = React.useState({
+      const [queryStrings, setQueryString] = React.useState<any>({
         page: 1,
         perPage: 5,
         searchBy: null,
         search: null,
-        sortBy: "assetNumber",
-        sortOrder: "asc",
+        sortBy: null,
+        sortOrder: "desc",
       });
       const filters = () => {
         dispatch(fetchRunsData(queryStrings));
@@ -106,10 +68,28 @@ export default function HistoryTable() {
   const handleRequestSort = () => {};
 
     React.useEffect(() => {
-        // console.log("runSliceData before dispatch:", RunsSliceData);
-        dispatch(fetchRunsData(queryStrings)).then((res)=>{
+      let payload:any={
+        page:queryStrings.page ,
+        perPage:queryStrings.perPage ,
+        searchBy:queryStrings.searchBy ,
+        search:queryStrings.search ,
+        sortBy:queryStrings.sortBy ,
+        sortOrder:queryStrings.sortOrder ,
+      }
+      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
+        payload["assignedTo"]=loginUserSliceData?.verifyToken?._id
+        payload["assignedBy"]=loginUserSliceData?.verifyToken?._id
+        payload["userId"]=loginUserSliceData?.verifyToken?._id  
+      }
+      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"){
+        payload["userId"]=loginUserSliceData?.verifyToken?._id
+      }
+      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
+        payload["organisationId"]=singleUserData?.organisationId
+      }
+        dispatch(fetchRunsData(payload)).then((res:any)=>{
           setRunzData(res?.get_all_runs?.Runs);
-        }).catch((err)=>{
+        }).catch((err:any)=>{
           console.log(err);
         })
     }, [pageInfo, queryStrings]);
@@ -126,22 +106,19 @@ export default function HistoryTable() {
       }, [RunsSliceData]);
       
       React.useEffect(() => {
-        //admin 65741c069d53d19df8321e6d
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
-      setQueryString(queryStrings)
-      
-    }
-    //requester 65741c069d53d19df8321e6e
-    else if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
-      setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
-    }
-    //tester 65741c069d53d19df8321e6c
-    else{
-      setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
-    }
+        if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
+          setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id,["userId"]:loginUserSliceData?.verifyToken?._id})
+        }
+        if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"){
+          setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+        }
+        if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
+          setQueryString({...queryStrings,["organisationId"]:singleUserData?.organisationId})
+        }
+        
         return () => {
           const headersList: any = [...headers];
-          headersList.map((item) => {
+          headersList.map((item:any) => {
             return (item.sort = 'asc');
           });
           setHeaders(headersList);
@@ -169,18 +146,14 @@ export default function HistoryTable() {
         setQueryString(payload);
       };
     
-    // console.log("runSliceData after dispatch:", RunsSliceData);
     return (
 
         <Box className="runz-page" sx={{ padding: '24px 0px' }}>
-
-
             <Box className="table-outer" sx={{ width: '100%' }}>
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
                         aria-labelledby="tableTitle"
-                    // size={dense ? "small" : "medium"}
                     >
                         <TableHeader
                 numSelected={0}
@@ -199,42 +172,17 @@ export default function HistoryTable() {
               />
                         <TableBody>
                             {runzData?.map((row: any, index: number) => {
-
-                                // console.log('row', row.laboratoryId)
                                 return (
                                     <TableRow
                                         hover
-                                        // onClick={(event) => handleClick(event, row.name)}
-                                        // aria-checked={isItemSelected}
                                         tabIndex={-1}
                                         key={index}
-                                        // selected={isItemSelected}
                                         sx={{ cursor: 'pointer' }}
-                                        // onClick={(e: any) => {
-                                        //     //  (e.target.tagName!=="INPUT" && e.target.tagName!=="LI" && 
-                                        //     navigate(`/runs/details/${row.runNumber}`)
-                                        //     // console.log(e.target.tagName)
-
-                                        // }
-                                        // }
                                     >
                                         {headers[0].is_show && (
                                             <TableCell scope="row">
                                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-
-                                                    {/* <Box 
-                              onClick={() =>
-                                navigate(`/runs/details/${row.runNumber}`)
-                              }
-                            >
-                              {row.runNumber}
-                            </Box> */}
-                                                    {/* <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <Box>
-                              <img src={image_holder} alt="no_image" />
-                            </Box>
-                          </Box> */}
-                                                    <Box    >
+                                                    <Box>
                                                         <Box>{row.runNumber}</Box>
                                                     </Box>
 
