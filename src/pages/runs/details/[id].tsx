@@ -708,13 +708,19 @@ export default function RunsDetails() {
           const values: any = [];
           dataset?.forEach((item: any) => {
             if (item[key]) {
+              if(!Number.isInteger(parseFloat(item[key]))){
+                values.push(parseFloat(item[key]));
+              }
+             else{           
               values.push(parseInt(item[key]));
             }
+          }
           });
           subResult.push({ label, values });
         }
         return subResult;
       });
+      console.log("results",results);
 
       const tablesin = document
         ?.getElementById('content')
@@ -728,6 +734,8 @@ export default function RunsDetails() {
       finalTableTitleResult = getTitle?.map((list: any, index: any) => {
         return { label: list, value: list, data: results[index] };
       });
+      console.log("finalTableTitleResult",finalTableTitleResult);
+      
       setStaticChartData(finalTableTitleResult);
     }
   };
@@ -792,8 +800,13 @@ export default function RunsDetails() {
           const values: any = [];
           dataset?.forEach((item: any) => {
             if (item[key]) {
+              if(!Number.isInteger(parseFloat(item[key]))){
+                values.push(parseFloat(item[key]));
+              }
+             else{           
               values.push(parseInt(item[key]));
             }
+          }
           });
           subResult.push({ label, values });
         }

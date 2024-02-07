@@ -388,7 +388,7 @@ const getAllassets=()=>{
   const handleDeleteConfirmation = async(state: any) => {
     if (state === 1) {
       await dispatch(deleteAssetsData(assetVal)).then((res)=>{
-        toast(`Assets deleted !`, {
+        toast(`Assets become In-active !`, {
           style: {
             background: '#00bf70',
             color: '#fff',

@@ -24,6 +24,8 @@ import moment from 'moment';
 import test from '../../../assets/images/Noimage.png';
 import HistoryTable from "../details/history";
 import {
+  fetchProcedureByAssetsName,
+  fetchRunsByProcedure,
   fetchSingleAssetsData,
   fetchUpdateAssetsData,
   postAssetsData,
@@ -85,8 +87,8 @@ const validationSchema = Yup.object().shape({
   availability: Yup.string().required('Availability is required'),
   perchasedDate: Yup.string().required('Purchase date is required').nullable(),
   expiryDate: Yup.string().required('Expiry date is required').nullable(),
-  assetImageUrl:Yup.string().notRequired()
- 
+  assetImageUrl: Yup.string().notRequired()
+
   // lastUsedDate: Yup.string().required(),
 });
 export default function AssetDetails() {
@@ -98,14 +100,14 @@ export default function AssetDetails() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const today=moment().format('MM/DD/YYYY')
+  const today = moment().format('MM/DD/YYYY')
 
   const location: any = useLocation();
   const assetValue = location.state?.props;
   const getFunction = location.state?.func;
   const fileUploadField = React.useRef<any>(null);
-  
-  console.log("assetValue",assetValue?.assetImageUrl);
+
+  console.log("assetValue", assetValue?.assetImageUrl);
   const [uploadedFile, setUploadedFile] = React.useState<any>(assetValue?.assetImageUrl);
   const triggerFileUploadField = () => {
     fileUploadField.current?.click();
@@ -118,9 +120,13 @@ export default function AssetDetails() {
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
   const [organizationData, setOrganizationData] = React.useState([]);
+  const assetId = assetValue?._id
+  const [procedureId, setProcedureId] = React.useState([])
   // const [assetValue, setAssetValue] = React.useState({})
-  const [organization, setOrganization] = React.useState([{ label:'',
-    value: '',id:assetValue?.organisationId}])
+  const [organization, setOrganization] = React.useState([{
+    label: '',
+    value: '', id: assetValue?.organisationId
+  }])
   const [departments, setDepartments] = React.useState(
     assetValue?.departmentId?.map((item: any) => ({
       label: item?.name,
@@ -142,11 +148,33 @@ export default function AssetDetails() {
   const loginUserSliceData = useSelector(
     (state: any) => state.userLogin.data,
   );
- 
-  React.useEffect(() =>{
- 
-  seteditAcces(loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit)
-},[])
+
+  React.useEffect(() => {
+    console.log(assetValue._id, "assetValue._id");
+
+    seteditAcces(loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit)
+    let payload = {
+      assetId: [assetId]
+    }
+    dispatch(fetchProcedureByAssetsName(payload)).then((res: any) => {
+      if (res?.get_all_procedures_by_asset?.length !== 0) {
+        var procedrueList: any = []
+
+        res?.get_all_procedures_by_asset.map((item) => {
+          procedrueList.push(item._id)
+        })
+        console.log("procedrueList", procedrueList);
+        setProcedureId(procedrueList)
+      }
+      else {
+        setProcedureId([])
+      }
+    }).catch((err: any) => {
+      console.log(err);
+
+    })
+
+  }, [])
   // const departments: any =
   // // []
   // assetValue.departmentId?.map((item: any) => ({
@@ -207,7 +235,7 @@ export default function AssetDetails() {
   //    }
   // }, []);
   // console.log(assetValue?.name,'assetValue');
-  
+
   // const onSubmit = (values: any) => {
   // console.log(values);
 
@@ -244,19 +272,19 @@ export default function AssetDetails() {
         organisationId: values?.organisationId,
         perchasedDate: values?.perchasedDate,
         lastUsedDate: values.lastUsedDate,
-        assetImageUrl:values.assetImageUrl,
+        assetImageUrl: values.assetImageUrl,
         availability: values.availability,
         expiryDate: values?.expiryDate,
         departmentId: deptArray,
         laboratoryId: labArray,
         status: values.status,
       }
-      console.log(organization,laboratory,departments);
-      
+      console.log(organization, laboratory, departments);
+
       console.log('labArray', assetValues);
-   
+
       dispatch(fetchUpdateAssetsData(assetValues));
-    
+
       submitFormPopup();
       getFunction
     } else {
@@ -265,10 +293,10 @@ export default function AssetDetails() {
   };
   console.log(departments);
   console.log(organization);
-  
-  const handleDateChanges = (selectedDate:any,name:any) => {
+
+  const handleDateChanges = (selectedDate: any, name: any) => {
     console.log(selectedDate);
-    if(selectedDate!==null){
+    if (selectedDate !== null) {
       const formattedDate = moment(selectedDate?.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
     }
@@ -328,9 +356,9 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(AssetId));
   //    }
   // }, []);
-  const purchaseDate=moment(assetValue?.perchasedDate).local().format('MM/DD/YYYY')
-  const expireDate=moment(assetValue?.expiryDate).local().format('MM/DD/YYYY')
-console.log(assetValue?.organisationId,);
+  const purchaseDate = moment(assetValue?.perchasedDate).local().format('MM/DD/YYYY')
+  const expireDate = moment(assetValue?.expiryDate).local().format('MM/DD/YYYY')
+  console.log(assetValue?.organisationId,);
 
   const formik = useFormik({
     initialValues: {
@@ -342,10 +370,10 @@ console.log(assetValue?.organisationId,);
       // userId: 'USER_1001', 
       status: assetValue?.status,
       availability: assetValue?.availability,
-      assetImageUrl:uploadedFile,
+      assetImageUrl: uploadedFile,
       // assets_id: assetValue.assets_id,
       lastUsedDate: assetValue?.lastUsedDate,
-      perchasedDate:dayjs(purchaseDate),
+      perchasedDate: dayjs(purchaseDate),
       expiryDate: dayjs(expireDate)
       // perchasedDate:dayjs(today),
       // expiryDate: dayjs(today)
@@ -402,8 +430,8 @@ console.log(assetValue?.organisationId,);
     });
   };
 
-  console.log("formik",formik);
-  
+  console.log("formik", formik);
+
   return (
     <PrivateRoute>
       <Box className="main-padding">
@@ -454,7 +482,7 @@ console.log(assetValue?.organisationId,);
                 >
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img"  style={{height:"250px", objectFit: "contain"}}
+                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img" style={{ height: "250px", objectFit: "contain" }}
                       />
                     </Box>
 
@@ -463,13 +491,13 @@ console.log(assetValue?.organisationId,);
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
                       <Button onClick={triggerFileUploadField}>Upload photo</Button>
-                        <input
+                      <input
                         style={{ display: 'none' }}
                         type="file"
                         ref={fileUploadField}
                         accept="image/jpg, image/jpeg, image/png"
                         onChange={handleImageUpload}
-                        />
+                      />
                     </Box>
                   </Box>
                 </Grid>
@@ -562,7 +590,7 @@ console.log(assetValue?.organisationId,);
                         <Box style={{ position: 'relative' }}>
                           <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="MM/DD/YYYY"  onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'perchasedDate')} value={formik.values.perchasedDate}/>
+                            <DatePicker format="MM/DD/YYYY" onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'perchasedDate')} value={formik.values.perchasedDate} />
                           </LocalizationProvider>
                           {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
@@ -589,9 +617,9 @@ console.log(assetValue?.organisationId,);
                         <Box style={{ position: 'relative' }}>
                           <label>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker disablePast format="MM/DD/YYYY" onChange={(selectedDate:any)=>handleDateChanges(selectedDate,'expiryDate')} value={formik.values.expiryDate}/>
+                            <DatePicker disablePast format="MM/DD/YYYY" onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'expiryDate')} value={formik.values.expiryDate} />
                           </LocalizationProvider>
-                           {formik.touched.expiryDate &&
+                          {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (
                               <Typography className="error-field">
                                 required
@@ -607,51 +635,51 @@ console.log(assetValue?.organisationId,);
                             Organisation<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           {/* <FormControl sx={{ width: '100%' }}> */}
-                            <Select
-                            MenuProps={{                   
-                              disableScrollLock: true,                   
+                          <Select
+                            MenuProps={{
+                              disableScrollLock: true,
                               marginThreshold: null
                             }}
-                              className="placeholder-color"
-                              displayEmpty
-                              IconComponent={ExpandMoreOutlinedIcon}
-                              renderValue={
-                                formik.values.organisationId !== ''
-                                  ? undefined
-                                  : () => (
-                                    <Placeholder>
-                                      Select Organization
-                                    </Placeholder>
-                                  )
-                              }
-                              margin="none"
-                              fullWidth
-                              id="organisationId"
-                              name="organisationId"
-                              autoComplete="organisationId"
-                              placeholder="Organization"
-                              onChange={formik.handleChange}
-                              onBlur={formik.handleBlur}
-                              value={formik.values.organisationId}
-                              size="small"
-                              error={
-                                formik.touched.organisationId &&
-                                Boolean(formik.errors.organisationId)
-                              }
-                            >
-                              {organizationData?.map((item:any, index) => (
-                                <MenuItem key={index} value={item.id}>
-                                  {item.label}
-                                </MenuItem>
-                               ))}
-                            </Select>
-                             {formik.touched.organisationId &&
-                              formik.errors.organisationId && (
-                                <Typography className="error-field">
-                                  {formik.errors.organisationId}
-                                </Typography>
-                              )}
-                               {/* </FormControl> */}
+                            className="placeholder-color"
+                            displayEmpty
+                            IconComponent={ExpandMoreOutlinedIcon}
+                            renderValue={
+                              formik.values.organisationId !== ''
+                                ? undefined
+                                : () => (
+                                  <Placeholder>
+                                    Select Organization
+                                  </Placeholder>
+                                )
+                            }
+                            margin="none"
+                            fullWidth
+                            id="organisationId"
+                            name="organisationId"
+                            autoComplete="organisationId"
+                            placeholder="Organization"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.organisationId}
+                            size="small"
+                            error={
+                              formik.touched.organisationId &&
+                              Boolean(formik.errors.organisationId)
+                            }
+                          >
+                            {organizationData?.map((item: any, index) => (
+                              <MenuItem key={index} value={item.id}>
+                                {item.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          {formik.touched.organisationId &&
+                            formik.errors.organisationId && (
+                              <Typography className="error-field">
+                                {formik.errors.organisationId}
+                              </Typography>
+                            )}
+                          {/* </FormControl> */}
                         </Box>
                       </Grid>
                     </Grid>
@@ -666,51 +694,52 @@ console.log(assetValue?.organisationId,);
                             Department/s<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           {/* <FormControl sx={{ width: '100%' }}> */}
-                            <Autocomplete
-                              multiple
-                              id="departmentId"
-                              disableCloseOnSelect
-                              value={departments}
-                              options={
-                                departmentData !== undefined
-                                  ? departmentData
-                                  : []
-                              }
-                              getOptionLabel={(option: any) => option.label}
-                              isOptionEqualToValue={(option: any, value: any) =>
-                                value.id == option.id
-                              }
-                              renderInput={(params) => (
-                                <TextField {...params} placeholder={departments?.length==0?"Department/s":""} />
-                              )}
-                              fullWidth
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(
-                                props,
-                                option: any,
-                                { selected },
-                              ) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option.value}
-                                  </li>
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) =>{
-                                setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
-                              }
-                            />   {formik.touched.departmentId &&
-                              formik.errors.departmentId && (
-                                <Typography className="error-field">
-                                  {formik.errors.departmentId}
-                                </Typography>
-                              )}
-                            {/* <Autocomplete
+                          <Autocomplete
+                            multiple
+                            id="departmentId"
+                            disableCloseOnSelect
+                            value={departments}
+                            options={
+                              departmentData !== undefined
+                                ? departmentData
+                                : []
+                            }
+                            getOptionLabel={(option: any) => option.label}
+                            isOptionEqualToValue={(option: any, value: any) =>
+                              value.id == option.id
+                            }
+                            renderInput={(params) => (
+                              <TextField {...params} placeholder={departments?.length == 0 ? "Department/s" : ""} />
+                            )}
+                            fullWidth
+                            placeholder="Department"
+                            size="medium"
+                            renderOption={(
+                              props,
+                              option: any,
+                              { selected },
+                            ) => (
+                              <React.Fragment>
+                                <li {...props}>
+                                  <Checkbox
+                                    style={{ marginRight: 0 }}
+                                    checked={selected}
+                                  />
+                                  {option.value}
+                                </li>
+                              </React.Fragment>
+                            )}
+                            onChange={(_, selectedOptions: any) => {
+                              setDepartments(selectedOptions); formik.setValues({ ...formik.values, 'departmentId': selectedOptions })
+                            }
+                            }
+                          />   {formik.touched.departmentId &&
+                            formik.errors.departmentId && (
+                              <Typography className="error-field">
+                                {formik.errors.departmentId}
+                              </Typography>
+                            )}
+                          {/* <Autocomplete
                               multiple
                               id="departmentId"
                               options={
@@ -742,7 +771,7 @@ console.log(assetValue?.organisationId,);
                                 formik.setFieldValue('departmentId', departments);
                               }}
                             />*/}
-                            {/* {formik.touched.departmentId &&
+                          {/* {formik.touched.departmentId &&
                               formik.errors.departmentId && (
                                 <Typography
                                   style={{
@@ -780,7 +809,7 @@ console.log(assetValue?.organisationId,);
                             }
                             disableCloseOnSelect
                             value={laboratory}
-                            renderInput={(params) => <TextField {...params} placeholder={laboratory?.length==0?"Laboratory/ies":""}/>}
+                            renderInput={(params) => <TextField {...params} placeholder={laboratory?.length == 0 ? "Laboratory/ies" : ""} />}
                             fullWidth
                             placeholder="Laboratory"
                             size="medium"
@@ -799,8 +828,9 @@ console.log(assetValue?.organisationId,);
                                 </li>
                               </React.Fragment>
                             )}
-                            onChange={(_, selectedOptions: any) =>{
-                              setLaboratory(selectedOptions);formik.setValues({...formik.values,'laboratoryId':selectedOptions}) }
+                            onChange={(_, selectedOptions: any) => {
+                              setLaboratory(selectedOptions); formik.setValues({ ...formik.values, 'laboratoryId': selectedOptions })
+                            }
                             }
                           />
                           {formik.touched.laboratoryId &&
@@ -824,10 +854,10 @@ console.log(assetValue?.organisationId,);
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>Status<span style={{ color: "#E2445C" }}>*</span></label>
                           <Select
-                          MenuProps={{                   
-                            disableScrollLock: true,                   
-                            marginThreshold: null
-                          }}
+                            MenuProps={{
+                              disableScrollLock: true,
+                              marginThreshold: null
+                            }}
                             className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
@@ -887,10 +917,10 @@ console.log(assetValue?.organisationId,);
                             Availability<span style={{ color: "#E2445C" }}>*</span>
                           </label>
                           <Select
-                          MenuProps={{                   
-                            disableScrollLock: true,                   
-                            marginThreshold: null
-                          }}
+                            MenuProps={{
+                              disableScrollLock: true,
+                              marginThreshold: null
+                            }}
                             className="placeholder-color"
                             displayEmpty
                             IconComponent={ExpandMoreOutlinedIcon}
@@ -942,10 +972,10 @@ console.log(assetValue?.organisationId,);
                 </Grid>
               </Grid>
               <Box className="edit-details">
-                <Button variant="contained" className="cancel-btn" onClick={()=>navigate('/assets')}>
+                <Button variant="contained" className="cancel-btn" onClick={() => navigate('/assets')}>
                   Back
                 </Button>
-                <Button type="submit" variant="contained"  disabled={!formik.dirty} className="add-btn">
+                <Button type="submit" variant="contained" disabled={!formik.dirty} className="add-btn">
                   Save
                 </Button>
               </Box>
@@ -960,7 +990,7 @@ console.log(assetValue?.organisationId,);
               </Box>
             </Box>
             <Box>
-              <HistoryTable/>
+              <HistoryTable procedureId={procedureId} />
             </Box>
           </CustomTabPanel>
           <SuccessPopup ref={successPopupRef} type={'edit'} />

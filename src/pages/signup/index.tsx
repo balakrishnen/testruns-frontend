@@ -195,6 +195,7 @@ const userSliceData = useSelector(
               id="fullname"
               InputLabelProps={{ shrink: false }}
               placeholder="Fullname"
+              inputProps={{ maxLength: 50 }}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.fullname}

@@ -147,6 +147,9 @@ const RunsForm = React.forwardRef(
       formik.setFieldValue('departmentId', runzSliceData?.get_run?.departmentId)
       formik.setFieldValue('procedureId', runzSliceData?.get_run?.procedureId)
       formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
+      if(type == 'edit'){
+      setDueDate(dayjs(runzSliceData?.get_run?.dueDate, 'MM/DD/YYYY'))
+      }
       // console.log("dayjs(runzSliceData?.get_run?.dueDate",dayjs(runzSliceData?.get_run?.dueDate))
     }, [runzSliceData])
     React.useImperativeHandle(ref, () => ({

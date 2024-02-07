@@ -24,10 +24,16 @@ import store, {  persistor } from '../utils/store';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '../utils/config';
 import { PersistGate } from 'redux-persist/integration/react';
+import { Helmet } from 'react-helmet';
+import favicon from '../assets/images/common/favicon.svg';
 
 const IndexPage: React.FC = () => {
   return (
     <Provider store={store}>
+      <Helmet>
+        <title>Test Runs</title>
+        <link rel="icon" href={favicon} type="image/x-icon" />
+      </Helmet>
       <PersistGate loading={null} persistor={persistor}>
         <ApolloProvider client={client}>
           <Router basepath="/">

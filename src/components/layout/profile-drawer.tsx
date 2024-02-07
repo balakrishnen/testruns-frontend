@@ -29,6 +29,7 @@ import { fetchSingleRoleData } from '../../api/roleApi';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase.config';
 import AWS from 'aws-sdk';
+import LogoutConfirmationpopup from '../LogoutConfirmatiomPopup';
 
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -66,7 +67,7 @@ export default function AppProfileDrawer({
   const triggerFileUploadField = () => {
     fileUploadField.current?.click();
   };
-
+  const confirmationPopupRef: any = React.useRef(null);
   const dispatch: any = useDispatch();
   const departmentSliceData = useSelector(
     (state: any) => state.department.data?.get_all_departments,
@@ -180,7 +181,13 @@ export default function AppProfileDrawer({
       });
     // }    
   }, [departmentData, labData, loginUserSliceData,roleSliceData])
- 
+
+  const handleConfirmationDone = (state: any) => {
+    if (state === 1) {
+      handleLogout()
+    }
+    confirmationPopupRef.current.open(false);
+  };
   const checkCredentialsProfile = (
     firstName: any,
   ) => {
@@ -362,7 +369,10 @@ export default function AppProfileDrawer({
                   alignItems: 'center',
                   cursor: 'pointer',
                 }}
-                onClick={handleLogout}
+                // onClick={handleLogout}
+                onClick={() => {
+                  confirmationPopupRef.current.open(true);
+                }}
               >
                 <Typography className="logout-text">Logout</Typography>
                 <img src={logout} alt="logout" />
@@ -807,6 +817,10 @@ export default function AppProfileDrawer({
             </Box>
           </form>
         </Box>
+        <LogoutConfirmationpopup
+        ref={confirmationPopupRef}
+        confirmationDone={handleConfirmationDone}
+      />
       </Box>
     </Drawer>
     </>

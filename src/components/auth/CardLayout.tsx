@@ -25,6 +25,8 @@ import { fetchLoginUser, fetchSingleUserData, postUserData } from "../../api/use
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { Helmet } from 'react-helmet';
+import favicon from '../../assets/images/common/favicon.svg';
 
 export const CardLayout = ({ children }: any, props: any) => {
   const [answer, setAnswer] = React.useState<any>(10);
@@ -190,6 +192,11 @@ export const CardLayout = ({ children }: any, props: any) => {
     }
   };
   return (
+    <>
+    <Helmet>
+    <title>Test Runs</title>
+    <link rel="icon" href={favicon} type="image/x-icon" />
+  </Helmet>
     <Box
       className="main-center"
       style={{
@@ -493,5 +500,6 @@ export const CardLayout = ({ children }: any, props: any) => {
         </Grid>
       </Grid>
     </Box>
+    </>
   );
 };

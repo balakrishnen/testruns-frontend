@@ -4,6 +4,7 @@ import TablePagination from '../../../components/table/TablePagination';
 import {
     Box,
     Chip,
+    Typography,
 } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,13 +19,16 @@ import {
 } from '../../../utils/data';
 import TableHeader from '../../../components/table/TableHeader';
 import TablePopup from '../../../components/table/TablePopup';
+import { fetchRunsByProcedure } from '../../../api/assetsAPI';
+import TableSkeleton from '../../../components/table/TableSkeleton';
+import Emptystate from '../../../assets/images/Emptystate.svg';
 // import RunsForm from './RunsForm';
 
 // table start
 
 const rows = HistoryRows;
 
-export default function HistoryTable() {
+export default function HistoryTable({procedureId}) {
 
     const [headers, setHeaders] = React.useState<any>(HistoryHeaders);
     const [Rows, setSelectedRows] = React.useState(rows);
@@ -34,7 +38,7 @@ export default function HistoryTable() {
     const itemsPerPage = 5;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-
+    const [loader, setLoader] = React.useState(false);
     const [runzData, setRunzData] = React.useState<any>([]);
     const loginUserSliceData = useSelector(
       (state: any) => state.userLogin.data,
@@ -54,6 +58,7 @@ export default function HistoryTable() {
         hasNextPage: false,
         hasPreviousPage: false,
       });
+      const [pagesInfo, setPagesInfo]= React.useState({})
       const [queryStrings, setQueryString] = React.useState<any>({
         page: 1,
         perPage: 5,
@@ -69,6 +74,7 @@ export default function HistoryTable() {
 
     React.useEffect(() => {
       let payload:any={
+        procedureId:procedureId,
         page:queryStrings.page ,
         perPage:queryStrings.perPage ,
         searchBy:queryStrings.searchBy ,
@@ -76,45 +82,40 @@ export default function HistoryTable() {
         sortBy:queryStrings.sortBy ,
         sortOrder:queryStrings.sortOrder ,
       }
-      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
-        payload["assignedTo"]=loginUserSliceData?.verifyToken?._id
-        payload["assignedBy"]=loginUserSliceData?.verifyToken?._id
-        payload["userId"]=loginUserSliceData?.verifyToken?._id  
-      }
-      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"){
-        payload["userId"]=loginUserSliceData?.verifyToken?._id
-      }
-      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
-        payload["organisationId"]=singleUserData?.organisationId
-      }
-        dispatch(fetchRunsData(payload)).then((res:any)=>{
-          setRunzData(res?.get_all_runs?.Runs);
+      setLoader(true)
+        dispatch(fetchRunsByProcedure(payload)).then((res:any)=>{
+          console.log("res",res?.get_all_runs_by_procedure);
+          
+          setRunzData(res?.get_all_runs_by_procedure?.Runs);
+          setPageInfo(res?.get_all_runs_by_procedure?.pageInfo)
+          setLoader(false)
         }).catch((err:any)=>{
           console.log(err);
+          setLoader(false)
         })
     }, [pageInfo, queryStrings]);
 
       React.useEffect(() => {
         const page: any = { ...pageInfo };
-        page['currentPage'] = RunsSliceData?.pageInfo.currentPage;
-        page['totalPages'] = RunsSliceData?.pageInfo.totalPages;
-        page['hasNextPage'] = RunsSliceData?.pageInfo.hasNextPage;
-        page['hasPreviousPage'] = RunsSliceData?.pageInfo.hasPreviousPage;
-        page['totalCount'] = RunsSliceData?.pageInfo.totalCount;
-        setRunzData(RunsSliceData?.Runs);
+        page['currentPage'] = pagesInfo?.currentPage;
+        page['totalPages'] = pagesInfo?.totalPages;
+        page['hasNextPage'] = pagesInfo?.hasNextPage;
+        page['hasPreviousPage'] = pagesInfo?.hasPreviousPage;
+        page['totalCount'] = pagesInfo?.totalCount;
+        setRunzData(runzData?.Runs);
         setPageInfo(page);
-      }, [RunsSliceData]);
+      }, [pagesInfo]);
       
       React.useEffect(() => {
-        if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
-          setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id,["userId"]:loginUserSliceData?.verifyToken?._id})
-        }
-        if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"){
-          setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
-        }
-        if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
-          setQueryString({...queryStrings,["organisationId"]:singleUserData?.organisationId})
-        }
+        // if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
+        //   setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id,["userId"]:loginUserSliceData?.verifyToken?._id})
+        // }
+        // if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"){
+        //   setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
+        // }
+        // if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
+        //   setQueryString({...queryStrings,["organisationId"]:singleUserData?.organisationId})
+        // }
         
         return () => {
           const headersList: any = [...headers];
@@ -145,15 +146,18 @@ export default function HistoryTable() {
         setHeaders(headersList);
         setQueryString(payload);
       };
-    
+      const filteredData = headers.filter(item => item.is_show !== false);
+
+  console.log("filteredData",filteredData);
     return (
 
         <Box className="runz-page" sx={{ padding: '24px 0px' }}>
             <Box className="table-outer" sx={{ width: '100%' }}>
-                <TableContainer>
+                <TableContainer className="tableHeight3">
                     <Table
-                        sx={{ minWidth: 750 }}
+                        sx={{ minWidth: 500 , position: 'relative' }}
                         aria-labelledby="tableTitle"
+                        stickyHeader
                     >
                         <TableHeader
                 numSelected={0}
@@ -170,6 +174,25 @@ export default function HistoryTable() {
                 filters={filters}
                 handleTableSorting={handleTableSorting}
               />
+            {loader ? (
+               <TableBody>
+                  <TableSkeleton
+                    columns={filteredData}
+                    image={false}
+                    rows={5}
+                  />
+                </TableBody>
+                ) :!runzData || runzData?.length === 0 && loader==false? (
+                  <TableBody>
+                  <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "5%", width: "100%"  }}>
+                    <img src={Emptystate} alt="" />
+                    <Typography className="no-remainder">
+                      Runs not found.
+                    </Typography>
+                  </Box>
+                  {/* </p> */}
+              </TableBody>
+            ) : (
                         <TableBody>
                             {runzData?.map((row: any, index: number) => {
                                 return (
@@ -341,6 +364,7 @@ export default function HistoryTable() {
                                 );
                             })}
                         </TableBody>
+                         )}
                     </Table>
                 </TableContainer>
                 <TablePagination
