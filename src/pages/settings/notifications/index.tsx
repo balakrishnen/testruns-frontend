@@ -96,6 +96,9 @@ const Notification = () => {
       console.log(res);
       setIsLoader(false);
       setNotificationList(res?.get_notification)
+    }).catch((err)=>{
+      console.log(err);
+      
     })
   }
 

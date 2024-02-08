@@ -153,7 +153,10 @@ const userProfileDetails:any= typeof window !== 'undefined'? JSON.parse(window.l
     //  setisAnyRead(notifications?.some((notification:any) => {console.log("isAnyRead",notification.isRead === false);
     //  (notification.isRead === false)}))
       
-    });
+    }).catch((err)=>{
+      console.log(err);
+      
+    })
   }, [NotificationMessageSliceData]);
   console.log("isAnyRead2",isAnyRead);
   const renderMobileMenu = (

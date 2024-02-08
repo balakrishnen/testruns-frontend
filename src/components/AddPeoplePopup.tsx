@@ -25,6 +25,7 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssig
   const dispatch : any =useDispatch()
   const [allUserData, setAlluserData] = React.useState<any>([]);
   const [userList, setuserList]=React.useState<any>([])
+const [selectedUser, setSelectedUser] = useState(null); // State to hold the selected user
   console.log('userList',userList);
   const runzSliceData = useSelector(
     (state: any) => state.runs.data
@@ -35,12 +36,13 @@ const AddPeople = ({ open, close,runzId,runzRow,typePopup ,formValue,handleAssig
   // const allUser=  useSelector(
   //   (state: any) => state.user.data?.find_users, 
   // );
-//   React.useEffect(()=>{
-//     if(typePopup!=="share"){
-//   if(assigned){
-//     setuserList([])
-//   }}
-// },[])
+  React.useEffect(()=>{
+  if(assigned){
+    setuserList([])
+    setSelectedUser(null)
+  }
+},[])
+console.log("assigned",assigned);
 
   const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
   console.log("singleUserData",singleUserData?.laboratoryId);
@@ -89,12 +91,9 @@ console.log(userList,"userList");
       status: item?.status ,
     }));
     
-    
-console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.procedureId:formValue?.procedureId[0],formValue?.procedureId._id==undefined?formValue?.procedureId[0]==undefined?formValue?.procedureId:formValue?.procedureId[0]?._id :formValue?.procedureId._id,);
-
     if(typePopup!=='share'){
       //single asign
-      handleAssign(userList)
+      handleAssign(selectedUser)
       // for multiple assign
 
     //   if(newArray!==undefined){
@@ -151,10 +150,12 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
     }
    await close()
    setuserList([])
+  //  setSelectedUser(null)
      //  Assigned
   
 }
-  
+console.log(selectedUser);
+
   return (
     <Dialog
       open={open}
@@ -190,13 +191,34 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
               ))} */}
             </Box>
             <Box>
+            {typePopup == "assign" ?
+            <Autocomplete
+      value={assigned==true?selectedUser:null} // Pass the selected user to the value prop
+      options={allUserData !== undefined ? allUserData: []}
+      getOptionLabel={(option) => option?.label}
+      renderInput={(params) => <TextField {...params} placeholder="Select Email" />}
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+        {typePopup == "share" && <Checkbox
+            style={{ marginRight: 0 }}
+            checked={selected}
+          />}
+          {option?.value}
+        </li>
+      )}
+      // disableClearable={true}
+      onChange={(event, newValue) => {
+        setSelectedUser(newValue); // Update the selected user when the value changes
+      }}
+    />:
                <Autocomplete
-              multiple={typePopup == "assign"?false:true}
+              multiple
                 style={{borderRadius: '15px !importnant'}}
                 limitTags={3}
+                value={userList[0]}
                 options={allUserData !== undefined ? allUserData: []}
-                getOptionLabel={(option:any) => option?.value}
-                disableCloseOnSelect={typePopup == "assign"?false:true}
+                getOptionLabel={(option:any) => option?.value}          
+                disableCloseOnSelect={true}
                 // defaultValue={[
                 //   top100Films[13],
                 //   top100Films[12],
@@ -217,9 +239,9 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
                   </React.Fragment>
                 )}
                 disableClearable={true}
-                value={userList[0]}
-                onChange={(_, selectedOptions: any) => {setuserList([selectedOptions]) }}
-              />
+
+                onChange={(_, selectedOptions: any) => {setuserList([selectedOptions])}}
+              />}
             </Box>
           </Box>
         </Box>
@@ -244,7 +266,7 @@ console.log("procedureId",formValue?.procedureId[0]==undefined?formValue?.proced
             onClick={()=>handleSave()}
             variant="contained"
             className="add-btn"
-            disabled={userList?.length > 0? false : true}
+            // disabled={userList?.length > 0? false : true}
           >
             Save
           </Button>

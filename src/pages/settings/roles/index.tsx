@@ -300,7 +300,10 @@ console.log(formValues);
         background: '#00bf70', color: '#fff'
       }
     });
-   })
+   }).catch((err)=>{
+    console.log(err);
+    
+  })
    let payload1={
     instituteId:loginUserSliceData?.instituteId
   }
@@ -325,7 +328,10 @@ console.log(formValues);
           background: '#00bf70', color: '#fff'
         }
       });
-     })
+     }).catch((err)=>{
+      console.log(err);
+      
+    })
      let payload1={
       instituteId:loginUserSliceData?.instituteId
     }

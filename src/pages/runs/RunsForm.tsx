@@ -66,6 +66,8 @@ const RunsForm = React.forwardRef(
     const [answers, setAnswers] = React.useState('');
     const [procedureData, setprocedureData] = React.useState('');
     const [assignUser, setAssignUser] = React.useState('');
+    console.log("assignUser",assignUser);
+    
     const [departmentData, setDepartmentData] = React.useState([]);
 
     let DepartmentData = formData?.departmentId?.map((item: any) => ({
@@ -414,8 +416,10 @@ const RunsForm = React.forwardRef(
     }
 
     const handleAssign = (userList: any) => {
+      console.log("userList1",userList);
+      
       setIsAssigned(true)
-      setAssignUser(userList[0].id)
+      setAssignUser(userList?.id)
     }
 
     const opt = procedureSliceData?.Procedures;
@@ -680,12 +684,13 @@ console.log(formik,'dueDate');
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Department/s</label>
                       <Autocomplete
-                        multiple
-                        id="departmentId"
+                        
                         value={department}
                         options={
                           departmentData !== undefined ? departmentData : []
                         }
+                        multiple
+                        id="departmentId"
                         disableCloseOnSelect
                         getOptionLabel={(option: any) => option.label}
                         isOptionEqualToValue={(option: any, value: any) => value?.id == option?.id}
@@ -724,11 +729,11 @@ console.log(formik,'dueDate');
                       <label style={{ display: 'block' }}>Laboratory/ies</label>
 
                       <Autocomplete
-                        multiple
-                        id="laboratoryId"
                         value={lab}
                         options={(labData !== undefined && labData?.length!==0) ? labData : []}
                         disableCloseOnSelect
+                        multiple
+                        id="laboratoryId"
                         getOptionLabel={(option: any) => option.label}
                         isOptionEqualToValue={(option: any, value: any) => value?.id == option?.id}
                         renderInput={(params) => <TextField {...params} placeholder={lab?.length == 0 ? "Laboratory/ies" : ""} />}
@@ -896,7 +901,7 @@ console.log(formik,'dueDate');
             </Box>
           </form>
         </Dialog>
-        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} typePopup={"assign"} formValue={formik.values} handleAssign={handleAssign} assigned={(Object.keys(formik.errors).length == 0 &&  moment(dueDate).isValid() && !isAssigned )}
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} typePopup={"assign"} formValue={formik.values} handleAssign={handleAssign} assigned={(Object.keys(formik.errors).length == 0 &&  moment(dueDate).isValid() && isAssigned )}
         // runzId={runzId}
         //         runzRow={runzRow}
         //         typePopup={typePopup}
