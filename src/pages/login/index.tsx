@@ -32,7 +32,7 @@ import { auth } from '../../firebase.config';
 import { useDispatch } from 'react-redux';
 import { fetchLoginUser, fetchSingleUserData } from '../../api/userAPI';
 import { client } from '../../utils/config';
-import { LOGIN_USER } from '../../graphql/users/users.graphql'
+import { LOGIN_USER } from '../../graphql/users/users.graphql';
 
 import { useSelector } from 'react-redux';
 
@@ -43,14 +43,17 @@ const validUser = {
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required('Email is required').email('Invalid email').matches(emailRegex, "In-correct email"),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Invalid email')
+    .matches(emailRegex, 'In-correct email'),
   password: Yup.string()
     .required('Password is required')
     .min(8, 'Wrong password'),
 });
 
 const Login = () => {
-  let isLoggedIn :any= null;
+  let isLoggedIn: any = null;
 
   if (typeof window !== 'undefined') {
     isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -64,10 +67,8 @@ const Login = () => {
   ) => {
     event.preventDefault();
   };
-  const dispatch: any = useDispatch()
-  const userSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
+  const dispatch: any = useDispatch();
+  const userSliceData = useSelector((state: any) => state.userLogin.data);
   console.log(userSliceData);
 
   const onSubmit = (values: any) => {
@@ -80,60 +81,60 @@ const Login = () => {
           .then((userCredential: any) => {
             console.log(userCredential.user?.accessToken);
             let payload = {
-              idToken: userCredential.user?.accessToken
-            }
+              idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUzZWFiMDBhNzc5MTk3Yzc0MWQ2NjJmY2EzODE1OGJkN2JlNGEyY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiRGV2YSIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS90ZXN0cnVuc3Byb2QiLCJhdWQiOiJ0ZXN0cnVuc3Byb2QiLCJhdXRoX3RpbWUiOjE3MDc0MDg0NzUsInVzZXJfaWQiOiJpQjZuYzhJdUtkVHVxRWNab09HMGZ3VHNETjQzIiwic3ViIjoiaUI2bmM4SXVLZFR1cUVjWm9PRzBmd1RzRE40MyIsImlhdCI6MTcwNzQwODQ3NSwiZXhwIjoxNzA3NDEyMDc1LCJlbWFpbCI6ImFkbWlub25lQHlvcG1haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWlub25lQHlvcG1haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.M10P98qvAAbM4kjQUPXo9cRJr0V-2yMc81ukGyJhSBVmRywDBwTc89o_6dXK6QY8xNCLeMuNO_O8nqAuDHiKWO0Bl-6Vr0dVxIxJdA8nXbDt4NIloIn4wsn2h0vEcq7-nxqqmxK34c-qOeoqH9bTCbZr6aPW2Pl9gdGR2mKCiMHRwsUJYaOgd2uqAWOo8i6pn9t0z3Cflw7cFmXS6XgqG4GpVFV_BNF7xUl2OBpWtwK_YtlyM-faLZN_jE1XNAsQkkIH3i3_YwpucK0SklbSUCv_hnNzXm6ob4YAe_iyyVBdLDVl7CRbS1bcpvp3IqPq628GWtQLfV_d76NwGW61Kw",
+            };
             // let temp = { _id: userSliceData?.verifyToken?._id };
+            window.localStorage.setItem(
+              'accessToken',
+              userCredential.user?.accessToken,
+            );
+            dispatch(fetchLoginUser(payload))
+              .then((res) => {
+                const temp = { _id: res?.verifyToken?._id };
+                dispatch(fetchSingleUserData(temp))
+                  .then((isSuccess: any) => {
+                    const data = isSuccess?.get_user ?? {};
+                    window.localStorage.setItem(
+                      'userProfileDetails',
+                      JSON.stringify(isSuccess?.get_user),
+                    );
+                    if (data.status !== 'Active') {
+                      toast(`The user is inactive !`, {
+                        style: {
+                          background: '#d92828',
+                          color: '#fff',
+                        },
+                      });
+                      setTimeout(() => {
+                        navigate('/login');
+                        setIsSubmitted(isSubmitted);
+                      }, 2000);
+                    } else {
+                      window.localStorage.setItem('isLoggedIn', 'true');
 
-             dispatch(fetchLoginUser(payload)).then((res)=>{
-              const temp = { _id: res?.verifyToken?._id };
-               dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
-                const data = isSuccess?.get_user ?? {};
-                window.localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
-                if (data.status!=="Active") {
-                 
-                  toast(`The user is inactive !`, {
-                    style: {
-                      background: '#d92828',
-                      color: '#fff',
-                    } 
+                      toast(` Login successfully !`, {
+                        style: {
+                          background: '#00bf70',
+                          color: '#fff',
+                        },
+                      });
+                      setTimeout(() => {
+                        navigate('/mypage');
+                      }, 2000);
+                    }
+
+                    // }
+                  })
+                  .catch((err) => {
+                    console.log(err);
                   });
-                  setTimeout(()=>{
-                    navigate("/login");
-                    setIsSubmitted(isSubmitted);
-                  },2000)
-                }
-                else{
-                  window.localStorage.setItem("isLoggedIn", "true");
-                 
-                  toast(` Login successfully !`, {
-                    style: {
-                      background: "#00bf70",
-                      color: "#fff",
-                    },
-                  });
-                  setTimeout(()=>{
-                    navigate("/mypage");
-
-                  },2000)
-                }
-             
-            // }
-          }).catch((err)=>{
-            console.log(err);
-            
-          })
-             }).catch((err)=>{
-              console.log(err);
-              
-            })
-
-          }).catch((err)=>{
-            console.log(err);
-            
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           })
 
-
-          // Signed in 
+          // Signed in
           // const user = userCredential.user;
           // ...
           // })
@@ -142,15 +143,14 @@ const Login = () => {
             const errorMessage = error.message;
             toast(`Invalid Credentials !`, {
               style: {
-                background: 'red', color: '#fff'
-              }
+                background: 'red',
+                color: '#fff',
+              },
             });
             setTimeout(() => {
               setIsSubmitted(isSubmitted);
-              console.log("isSubmitted",isSubmitted);
-              
+              console.log('isSubmitted', isSubmitted);
             }, 2000);
-
           });
 
         // },1000)
@@ -182,7 +182,6 @@ const Login = () => {
     validationSchema: validationSchema,
     onSubmit: onSubmit,
   });
-
 
   // if (isLoggedIn === 'true') {
   //   console.log("false");
@@ -305,7 +304,6 @@ const Login = () => {
             </Box>
           </Box>
 
-
           <Box>
             <Button
               type="submit"
@@ -322,18 +320,12 @@ const Login = () => {
               Log in
             </Button>
           </Box>
-
         </Box>
       </form>
       <Box sx={{ marginTop: { xs: '1rem', sm: '2rem' } }}>
-        <Typography
-          className="forgot-pass1"
-
-        >
-          version 2. 4. 9
-        </Typography>
+        <Typography className="forgot-pass1">version 2. 4. 9</Typography>
       </Box>
-      <Box sx={{ mt: "2rem" }}>
+      <Box sx={{ mt: '2rem' }}>
         <Typography className="read-text">
           Don't have an account yet?{' '}
           <span
@@ -344,7 +336,6 @@ const Login = () => {
           </span>
         </Typography>
       </Box>
-
     </>
   );
 };

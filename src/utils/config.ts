@@ -1,12 +1,12 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_URL,
 });
 
 const customHeaders = {
-  Authorization: "Bearer YOUR_AUTH_TOKEN",
+  Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
 };
 
 const authorizedLink: any = setContext((_, { headers }) => {
