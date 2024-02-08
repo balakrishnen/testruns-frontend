@@ -69,6 +69,9 @@ import Emptystate from '../../assets/images/Emptystate.svg';
 import dayjs from 'dayjs';
 import { fetchSingleUserData, fetchUserData } from '../../api/userAPI';
 import { fetchProcedureData } from '../../api/procedureAPI';
+import { fetchOrganizationById } from '../../api/organizationAPI';
+import { fetchDepartmentById } from '../../api/departmentAPI';
+import { fetchLabById } from '../../api/labAPI';
 
 // table start
 
@@ -348,6 +351,12 @@ React.useEffect(()=>{
     };
   }, []);
 
+  React.useEffect(() => {
+    dispatch(fetchOrganizationById({"instituteId":singleUserData?.instituteId}))
+    dispatch(fetchDepartmentById({ "organisationId":singleUserData?.organisationId}))
+    dispatch(fetchLabById({"departmentId":singleUserData?.departmentId}))
+  }, []);
+  
   const handleInputChange = (event, newInputValue) => {
     // Fetch suggestions when the user types
     console.log("filterFieldName",filterFieldName);
@@ -1033,7 +1042,7 @@ React.useEffect(()=>{
                               <>
                                 <Chip
                                   key={index}
-                                  label={row.departmentId[0].name}
+                                  label={row.departmentId[0]?.name}
                                   sx={{
                                     m: 0.5,
                                     padding: '0px 3px',
@@ -1085,7 +1094,7 @@ React.useEffect(()=>{
                               <>
                                 <Chip
                                   key={index}
-                                  label={row.laboratoryId[0].name}
+                                  label={row.laboratoryId[0]?.name}
                                   sx={{
                                     m: 0.5,
                                     padding: '0px 3px',
@@ -1140,38 +1149,40 @@ React.useEffect(()=>{
                       )}
                       {headers[6].is_show && (
                         <TableCell>
-                          <Select
-                          MenuProps={{                   
-                            disableScrollLock: true,                   
-                            marginThreshold: null
-                          }}
-                            name="status"
-                            className={
-                              row.status === 'Created'
-                                ? 'create-select td-select'
-                                : row.status === 'Started'
-                                  ? 'start-select td-select'
+                          <Box
+                          className={
+                            row.status === 'Created'
+                              ? 'create-select td-select'
+                              : row.status === 'Started'
+                                ? 'start-select td-select'
+                                : row.status === 'Complete'
+                                  ? 'active-select td-select'
                                   : row.status === 'Submitted'
                                     ? 'submit-select td-select'
-                                    : row.status === 'Complete'
-                                      ? 'active-select td-select'
-                                      : 'inactive-select td-select'
-                            }
-                            value={row.status ? row.status : 'Stopped'}
-                            displayEmpty
-                            onClick={(e: any) => clickHandler(e)}
-                            onChange={(e) => handleOnChange(e, row, index)}
-                            IconComponent={ExpandMoreOutlinedIcon}
-                          >
-                            {runsStatus.map((element: any) => (
-                              <MenuItem
-                                value={element.value}
-                                key={element.value}
-                              >
-                                {element.name}
-                              </MenuItem>
-                            ))}
-                          </Select>
+                                    : 'inactive-select td-select'
+                          }
+                          style={{
+                            background:
+                              row.status === 'Created'
+                                ? '#8d8d8d'
+                                : row.status === 'Started'
+                                  ? '#faaa49'
+                                  : row.status === 'Stopped'
+                                    ? '#e2445c'
+                                    : row?.status == 'Submitted'
+                                      ? '#a01fb1'
+                                      : '#00bf70',
+                            padding: '6px',
+                            width: '140px',
+                            borderRadius: '20px',
+                            height: '26px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          {row?.status}
+                        </Box>
                         </TableCell>
                       )}
                       {headers[7].is_show && (

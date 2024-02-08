@@ -716,7 +716,7 @@ export default function MyPage() {
                             <>
                               <Chip
                                 key={index}
-                                label={row.departmentId[0].name}
+                                label={row.departmentId[0]?.name}
                                 sx={{
                                   m: 0.5,
                                   padding: '0px 3px',
@@ -766,7 +766,7 @@ export default function MyPage() {
                             <>
                               <Chip
                                 key={index}
-                                label={row.laboratoryId[0].name}
+                                label={row.laboratoryId[0]?.name}
                                 sx={{
                                   m: 0.5,
                                   padding: '0px 3px',

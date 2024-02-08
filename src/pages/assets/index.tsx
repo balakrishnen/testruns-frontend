@@ -67,6 +67,9 @@ import { toast } from 'react-toastify';
 import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
+import { fetchOrganizationById } from '../../api/organizationAPI';
+import { fetchDepartmentById } from '../../api/departmentAPI';
+import { fetchLabById } from '../../api/labAPI';
 
 
 const assetsStatus = StatusList;
@@ -309,6 +312,13 @@ const getAllassets=()=>{
  
     seteditAcces(loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit)
   },[])
+
+  React.useEffect(() => {
+    dispatch(fetchOrganizationById({"instituteId":singleUserData?.instituteId}))
+    dispatch(fetchDepartmentById({ "organisationId":singleUserData?.organisationId}))
+    dispatch(fetchLabById({"departmentId":singleUserData?.departmentId}))
+  }, []);
+
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       assetsData,
