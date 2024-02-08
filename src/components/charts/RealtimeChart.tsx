@@ -33,8 +33,6 @@ const org = '63cd6a63187aa056';
 // const bucket = 'Pasco Codenode';
 const bucket = 'Codenode';
 
-const colorsList = ['#e22828', '#90239f', '#111fdf', '#38e907', '#252525'];
-
 const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
 
 export default function RealtimeChart({
@@ -51,6 +49,14 @@ export default function RealtimeChart({
   const [assets, setAssets] = React.useState(
     savedConnectData === null ? null : savedConnectData.assets,
   );
+  const [colorsList, setColorsList] = React.useState<any>([
+    '#e22828',
+    '#90239f',
+    '#111fdf',
+    '#38e907',
+    '#252525',
+  ]);
+
   const [assetsOptions, setAssetsOptions] = React.useState<any>([]);
   const [measure, setMeasure] = React.useState<any>('Codenode1_connect');
   const [isChartPause, setIsChartPause] = React.useState<any>(isPause);
@@ -60,12 +66,18 @@ export default function RealtimeChart({
   const [chartData, setChartData] = React.useState<any>({
     datasets: [],
   });
+
+  const [realTimeData, setRealTimeData] = React.useState<any>([]);
+
   // const [chartData2, setChartData2] = React.useState<any>({
   //   labels: [],
   //   datasets: [],
   // });
 
   const [series, setSeries] = React.useState<any>([]);
+  const [realTimeSeries, setRealTimeSeries] = React.useState<any>([]);
+  const [realTimeSeriesList, setRealTimeSeriesList] = React.useState<any>({});
+
   const [isSets, setIsSets] = React.useState(false);
   const [showArchivedChart, setShowArchivedChart] = React.useState<any>(false);
   const [channelList, setChannelList] = React.useState<any>([
@@ -90,7 +102,60 @@ export default function RealtimeChart({
       color: colorsList[3],
     },
   ]);
+  const RealTimeOptions: any = {
+    elements: {
+      line: {
+        tension: 0.5,
+      },
+    },
+    chart: {
+      id: 'realtime',
+      height: 350,
+      type: 'line',
+      animations: {
+        enabled: true,
+        easing: 'linear',
+        dynamicAnimation: {
+          speed: 1100,
+        },
+      },
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    colors: [],
+    stroke: {
+      colors: [],
+      curve: 'straight',
+      width: 3,
+    },
 
+    xaxis: {
+      title: {
+        text: 'Data',
+      },
+      distribution: 'linear',
+      type: 'datetime',
+      range: 1000 * 10,
+      tickAmount: 15, // Specifies the number of ticks on the y-axis
+      categories: [],
+    },
+    yaxis: {
+      title: {
+        text: 'Time',
+      },
+      tickAmount: 15, // Specifies the number of ticks on the y-axis
+    },
+    legend: {
+      show: false,
+    },
+  };
   const axisList: any = [
     {
       name: 'Y1',
@@ -139,7 +204,6 @@ export default function RealtimeChart({
       const assetsFilterData: any = assetsSliceData.filter((item: any) =>
         item.name.includes('_connect'),
       );
-      assetsFilterData.push({ name: null });
       setAssetsOptions(assetsFilterData);
       if (usedAsset !== null) {
         let temp = assetsSliceData.filter((item: any) => item._id == usedAsset);
@@ -256,22 +320,92 @@ export default function RealtimeChart({
     [channelTemp],
   );
 
+  const getRealTimeChartDate = async () => {
+    try {
+      const selectedChannel: any = channelTemp.filter(
+        (item: any, index: number, inputArray: any) => {
+          return inputArray.indexOf(item) == index;
+        },
+      );
+
+      const fields = selectedChannel
+        .map((item: any) => `r._field == "${item}"`)
+        .join(' or ');
+      const query1: any = `from(bucket: "${bucket}")
+          |> range(start: -duration(v: 1s))
+          |> filter(fn: (r) => r["_measurement"] == "${measure}" and ${fields})
+          |> aggregateWindow(every: 1s, fn: mean, createEmpty: false)
+          |> yield(name: "mean")`;
+      const chart: any = { ...chartData };
+      const result = await queryApi.collectRows(query1);
+      const channels = [...channelList];
+      let seriesData: any = realTimeSeriesList;
+      let RealTimeData: any = [...realTimeData];
+      let seriesList: any = [];
+      if (result.length !== 0 && selectedChannel.length === result.length) {
+        channelTemp.forEach((channal: any, index: number) => {
+          result.forEach((dataset: any) => {
+            const sets = chart.datasets[index];
+            if (
+              dataset._value !== undefined &&
+              dataset._value !== null &&
+              channal === dataset._field
+            ) {
+              RealTimeData.push(dataset._value.toFixed(2));
+              seriesData[`${dataset._field}`].push({
+                x: new Date(dataset._stop).getTime(),
+                y: dataset._value.toFixed(2),
+              });
+            }
+          });
+        });
+      }
+
+      Object.entries(seriesData).forEach(([key, value]) => {
+        seriesList.push({
+          name: key,
+          data: value,
+        });
+      });
+      setRealTimeSeriesList(seriesData);
+      setRealTimeData(RealTimeData);
+      setRealTimeSeries(seriesList);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleAddChannel = () => {
     const data: any = [...channelList];
-    data.push({
-      color: colorsList[4],
-      sensor: null,
-      axis: 'Y1',
-    });
+    handleAddChannelColor('#222222', data.length + 1);
+    data.length < 10
+      ? data.push({
+          color: colorsList[4],
+          sensor: null,
+          axis: 'Y1',
+        })
+      : toast('Please select add blow 10 chennals !', {
+          style: {
+            background: '#d92828',
+            color: '#fff',
+          },
+        });
     setChannelList(data);
   };
 
   const handleChannelChange = (event: any, index: any) => {
     const channels = [...channelList];
     const data = { ...chartData };
+    let realTimeSeries = realTimeSeriesList;
+    let prevChannel = channels[index].sensor;
     channels[index].sensor = event.target.value;
     setChannelList(channels);
-
+    if (event.target.value !== null) {
+      let dataObj: any = { [`${event.target.value}`]: [] };
+      Object.assign(realTimeSeries, dataObj);
+    } else {
+      delete realTimeSeries[`${prevChannel}`];
+    }
     data.datasets[index] = {
       label: event.target.value === null ? `Y${index + 1}` : event.target.value,
       backgroundColor: colorsList[index],
@@ -286,18 +420,30 @@ export default function RealtimeChart({
     data.datasets.map((item: any) => {
       !['Y1', 'Y2', 'Y3', 'Y4'].includes(item.label) && temp.push(item.label);
     });
+    setRealTimeSeriesList(realTimeSeries);
     setChannelTemp(temp);
     setIsChartPause(false);
   };
 
-  const handleYAxisChange = (event: any, keyIndex: any) => {
-    const channels = [...channelList];
-    channels[keyIndex].axis = event.target.value;
-    setChannelList(channels);
+  // const handleYAxisChange = (event: any, keyIndex: any) => {
+  //   const channels = [...channelList];
+  //   channels[keyIndex].axis = event.target.value;
+  //   setChannelList(channels);
+  // };
+
+  const handleColorPickerChange = (event: any, key: any) => {
+    handleAddChannelColor(event.target.value, key);
   };
 
-  const handleColorPickerChange = (event: any, key: any) => {};
-
+  const handleAddChannelColor = (value: string, key: any) => {
+    let colorLists = [...colorsList];
+    if (colorLists > key) {
+      colorLists = [...colorLists, value];
+    } else {
+      colorLists[key] = value;
+    }
+    setColorsList(colorLists);
+  };
   const handleAssetsChange = async (event: any) => {
     if (event.target.value !== null) {
       try {
@@ -339,8 +485,8 @@ export default function RealtimeChart({
         channelList.forEach((item: any, index: any) => {
           data.datasets[index] = {
             label: `Y${index + 1}`,
-            backgroundColor: colorsList[index > 3 ? 4 : index],
-            borderColor: colorsList[index > 3 ? 4 : index],
+            backgroundColor: colorsList[index],
+            borderColor: colorsList[index],
             fill: false,
             lineTension: 0,
             borderDash: [8, 4],
@@ -490,6 +636,26 @@ export default function RealtimeChart({
   };
 
   React.useEffect(() => {
+    if (realTimeData.length !== 0) {
+      const RealTimeOptionsChage: any = [...RealTimeOptions];
+      RealTimeOptionsChage.xaxis.categories = realTimeData.map(
+        (_item: any, index: number) =>
+          new Date().getTime() - (realTimeData.length - index),
+      );
+    }
+  }, [realTimeData]);
+
+  React.useEffect(() => {
+    let interval: any = 0;
+    if (channelTemp.length !== 0) {
+      interval = setInterval(() => {
+        getRealTimeChartDate();
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [channelTemp]);
+
+  React.useEffect(() => {
     return () => {
       let temp = {
         assets,
@@ -508,8 +674,8 @@ export default function RealtimeChart({
           xs={12}
           sm={12}
           md={12}
-          lg={9}
-          xl={9}
+          lg={10}
+          xl={10}
           style={{ borderRight: '1px solid #e4e5e7' }}
           className="chart-left"
         >
@@ -538,6 +704,7 @@ export default function RealtimeChart({
                   borderRadius: '10px',
                 }}
               >
+                <MenuItem value={null}>Null</MenuItem>
                 {assetsOptions.map((item: any, index: number) => (
                   <MenuItem key={index} value={item.name}>
                     {item.name === null ? 'Null' : item.name}
@@ -582,7 +749,12 @@ export default function RealtimeChart({
                 )}
               </>
             ) : (
-              <Line data={chartData} options={options} />
+              <ReactApexChart
+                options={RealTimeOptions}
+                series={realTimeSeries}
+                type="line"
+                height={540}
+              />
             )}
           </Box>
         </Grid>
@@ -592,8 +764,8 @@ export default function RealtimeChart({
           xs={12}
           sm={12}
           md={12}
-          lg={3}
-          xl={3}
+          lg={2}
+          xl={2}
           style={{ overflowY: 'scroll' }}
           className="chart-right"
         >
@@ -617,14 +789,11 @@ export default function RealtimeChart({
               </Button>
             </Grid>
           </Grid>
-          <Box
-            sx={{ mt: 2}}
-            style={{ overflowY: 'auto', height: '420px' }}
-          >
+          <Box sx={{ mt: 2 }} style={{ overflowY: 'auto', height: '420px' }}>
             {channelList?.map((element: any, key: number) => (
               <Box key={key}>
                 <Grid container>
-                  <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
+                  <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
                     <Box>
                       <Box className="color-chart">
                         <Box
@@ -663,16 +832,13 @@ export default function RealtimeChart({
                             ))}
                           </Select>
                         </Box>
-                        <Box className="color-picker">
-                          <Box />
-                        </Box>
                       </Box>
                     </Box>
                   </Grid>
-                  <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
+                  <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                     <Box>
                       <Box className="color-chart">
-                        <Box
+                        {/* <Box
                           sx={{
                             display: 'flex',
                             alignItems: 'center',
@@ -704,7 +870,7 @@ export default function RealtimeChart({
                               </MenuItem>
                             ))}
                           </Select>
-                        </Box>
+                        </Box> */}
                         <Box className="color-picker">
                           <input
                             style={{

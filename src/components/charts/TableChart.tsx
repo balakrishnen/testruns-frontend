@@ -220,7 +220,7 @@ export default function TableChart({
     if (channelPosition !== -1) {
       channels.channelOptions[keys].channel = event.target.value;
       channels.channelOptions[keys].color = colorList[keys];
-      for (let i = 0; i < channelCount; i++) {
+      for (let i = 0; i < currentPlotData.data.length; i++) {
         if (channels.charts.length === 0) {
           charts.push({
             [`plot${keys + 1}`]: currentPlotData.data[i]
@@ -258,7 +258,7 @@ export default function TableChart({
       (item: any) => item.name === event.target.value,
     );
     if (currentPlotData)
-      for (let i = 0; i < channelCount; i++) {
+      for (let i = 0; i < currentPlotData.data.length; i++) {
         if (channels.charts.length === 0) {
           charts.push({
             [`Xplot${channelIndex + 1}`]: currentPlotData.data[i]
@@ -427,7 +427,6 @@ export default function TableChart({
       handleDateChartRetrieve(chartData, 'table');
     };
   }, [chartData]);
-
   return (
     <Box>
       <>
