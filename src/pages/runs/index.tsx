@@ -67,7 +67,7 @@ import Popover from '@mui/material/Popover';
 import TableSkeleton from '../../components/table/TableSkeleton';
 import Emptystate from '../../assets/images/Emptystate.svg';
 import dayjs from 'dayjs';
-import { fetchSingleUserData, fetchUserData } from '../../api/userAPI';
+import { fetchUserData } from '../../api/userAPI';
 import { fetchProcedureData } from '../../api/procedureAPI';
 import { fetchOrganizationById } from '../../api/organizationAPI';
 import { fetchDepartmentById } from '../../api/departmentAPI';
@@ -115,45 +115,43 @@ export default function Runs() {
   const endIndex = startIndex + itemsPerPage;
   const [runsData, setRunsData] = React.useState<any>([]);
   const [rowId, setRowId] = React.useState<any>([]);
-  const [runsRow, setRunsRow] = React.useState<any>([])
+  const [runsRow, setRunsRow] = React.useState<any>([]);
   const dispatch: any = useDispatch();
   const [filter, setFilter] = React.useState<any>(false);
-  const [valuesName,setValuesName]=React.useState(null)
-  console.log("runsRow", rowId, runsRow);
-  const [inputValue, setInputValue] = React.useState(null)
+  const [valuesName, setValuesName] = React.useState(null);
+  console.log('runsRow', rowId, runsRow);
+  const [inputValue, setInputValue] = React.useState(null);
   const [pageInfo, setPageInfo] = React.useState({
     currentPage: 1,
     totalPages: 1,
     hasNextPage: false,
     hasPreviousPage: false,
   });
-  const singleUserData= useSelector((state:any)=> state.user?.data?.get_user)
-  console.log("singleUserData",singleUserData?.laboratoryId);
-  
+  const singleUserData = useSelector(
+    (state: any) => state.user?.data?.get_user,
+  );
+  console.log('singleUserData', singleUserData?.laboratoryId);
+
   const runsSliceData = useSelector(
     (state: any) => state.runs.data?.get_all_runs,
   );
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
-  const[userData, setUserData]=React.useState<any>({})
-  const [getUser, setGetUser]=React.useState([])
-  const credencial = loginUserSliceData?.verifyToken?.role[0]?.runs_management
-console.log(filterOptions,"filterOptions");
+  const loginUserSliceData = useSelector((state: any) => state.userLogin.data);
+  const [getUser, setGetUser] = React.useState([]);
+  const credencial = loginUserSliceData?.verifyToken?.role[0]?.runs_management;
+  console.log(filterOptions, 'filterOptions');
 
-
-  React.useEffect(()=> {
-    let opt=[]
-    if(filterFieldName=="Runs ID"){
-    runsSliceData?.Runs.map((element) => {
-      opt.push({
-        id: element.runNumber,
-        name: element.runNumber,
-        value: element.runNumber,
+  React.useEffect(() => {
+    let opt: any = [];
+    if (filterFieldName == 'Runs ID') {
+      runsSliceData?.Runs.map((element: any) => {
+        opt.push({
+          id: element.runNumber,
+          name: element.runNumber,
+          value: element.runNumber,
+        });
       });
-    })
-    setFilterOptions(opt)
-  }
+      setFilterOptions(opt);
+    }
   }, [runsSliceData]);
 
   const [queryStrings, setQueryString] = React.useState({
@@ -164,8 +162,6 @@ console.log(filterOptions,"filterOptions");
     sortBy: null,
     sortOrder: 'desc',
   });
-
-console.log("userDataRuns",userData)
 
   console.log('runsSliceData', runsSliceData);
 
@@ -183,78 +179,83 @@ console.log("userDataRuns",userData)
     (state: any) => state.procedure.data?.get_all_procedures,
   );
 
-const [loading, setLoading] = React.useState(false);
-
-React.useEffect(()=>{
-  // setOptions(options)
-  let opt=[]
-  
-  procedureSliceData?.Procedures?.map((element:any) => {
-  opt.push({
-    label: element?.name,
-    value: element?.name,
-    id: element?._id,
-  })
-});
-  setFilterOptions(opt)
-},[procedureSliceData])
-
-  const userSliceData = useSelector((state: any) => state.userData.data);
-  console.log("userSliceData",userSliceData);
-  const Data = Rows.slice(startIndex, endIndex);
-  
-
-  React.useEffect(()=>{
-    setGetUser(getUser)
-    let opt=[]
-    getUser?.map((element:any) => {
-        console.log(element?.firstName,'element');
-        
-        opt.push({
-          label: element?.firstName,
-          value: element?.firstName,
-          id: element?._id,
-          email:element?.firstName
-        });
-      });
-      setFilterOptions(opt)
-  },[getUser])
-
-  React.useEffect(()=>{
-    setGetUser(userSliceData?.get_all_users?.Identity)
-  },[userSliceData])
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    if(filterFieldName=="Assigned by"){
+    // setOptions(options)
+    let opt: any = [];
+
+    procedureSliceData?.Procedures?.map((element: any) => {
+      opt.push({
+        label: element?.name,
+        value: element?.name,
+        id: element?._id,
+      });
+    });
+    setFilterOptions(opt);
+  }, [procedureSliceData]);
+
+  const userSliceData = useSelector((state: any) => state.userData.data);
+  console.log('userSliceData', userSliceData);
+  const Data = Rows.slice(startIndex, endIndex);
+
+  React.useEffect(() => {
+    setGetUser(getUser);
+    let opt: any = [];
+    getUser?.map((element: any) => {
+      console.log(element?.firstName, 'element');
+
+      opt.push({
+        label: element?.firstName,
+        value: element?.firstName,
+        id: element?._id,
+        email: element?.firstName,
+      });
+    });
+    setFilterOptions(opt);
+  }, [getUser]);
+
+  React.useEffect(() => {
+    setGetUser(userSliceData?.get_all_users?.Identity);
+  }, [userSliceData]);
+
+  React.useEffect(() => {
+    if (filterFieldName == 'Assigned by') {
       setLoading(true);
-    dispatch(fetchUserData({
-      page: 1,
-      perPage: 10,
-      searchBy: 'firstName',
-      search: inputValue
-    }));
-  }
-  if(filterFieldName=="Procedure name"){
-    setLoading(true);
-    console.log(inputValue,"inputValue");
-    
-    dispatch(fetchProcedureData({
-      page: 1,
-      perPage: 10,
-      searchBy: 'name',
-      search: inputValue,
-      organisationId:singleUserData?.organisationId
-    }));
-  }
-  if(filterFieldName=="Runs ID"){
-    setLoading(true);
-    dispatch(fetchRunsData({
-      page: 1,
-      perPage: 10,
-      searchBy: 'runNumber',
-      search: inputValue
-    }));
-  }
+      dispatch(
+        fetchUserData({
+          page: 1,
+          perPage: 10,
+          searchBy: 'firstName',
+          search: inputValue,
+        }),
+      );
+    }
+    if (filterFieldName == 'Procedure name') {
+      setLoading(true);
+      console.log(inputValue, 'inputValue');
+
+      dispatch(
+        fetchProcedureData({
+          page: 1,
+          perPage: 10,
+          searchBy: 'name',
+          search: inputValue,
+          organisationId: singleUserData?.organisationId,
+        }),
+      );
+    }
+    if (filterFieldName == 'Runs ID') {
+      setLoading(true);
+      dispatch(
+        fetchRunsData({
+          page: 1,
+          perPage: 10,
+          searchBy: 'runNumber',
+          search: inputValue,
+        }),
+      );
+    }
   }, [inputValue]);
 
   const handleFilterPopoverClose = () => {
@@ -276,64 +277,64 @@ React.useEffect(()=>{
     setFilterSearchValue(null);
     setFilterOptions([]);
     setFilterType(null);
-    applyFilters('search','');
+    applyFilters('search', '');
     handleFilterPopoverClose();
     setFilterKey(null);
-    setFilter(false)
-    setValuesName(null)
+    setFilter(false);
+    setValuesName(null);
   };
-   React.useEffect(() => {
-    getAllAsset()
+  React.useEffect(() => {
+    getAllAsset();
     setTableHeaderVisible(false);
     setRowId([]);
     setRunsRow([]);
   }, [queryStrings]);
 
-  const getAllAsset=()=>{
-    const payload:any={
-      page:queryStrings.page ,
-    perPage:queryStrings.perPage ,
-    searchBy:queryStrings.searchBy ,
-    search:queryStrings.search ,
-    sortBy:queryStrings.sortBy ,
-    sortOrder:queryStrings.sortOrder ,
-    }
-    setLoader(true)
-    
+  const getAllAsset = () => {
+    const payload: any = {
+      page: queryStrings.page,
+      perPage: queryStrings.perPage,
+      searchBy: queryStrings.searchBy,
+      search: queryStrings.search,
+      sortBy: queryStrings.sortBy,
+      sortOrder: queryStrings.sortOrder,
+    };
+    setLoader(true);
+
     //requester 65741c069d53d19df8321e6e
-     if(loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
+    if (loginUserSliceData?.verifyToken?.role[0]?.name == 'Requester') {
       // setQueryString({...queryStrings,["assignedTo"]:loginUserSliceData?.verifyToken?._id,["assignedBy"]:loginUserSliceData?.verifyToken?._id})
-      payload["assignedTo"]=loginUserSliceData?.verifyToken?._id
-      payload["assignedBy"]=loginUserSliceData?.verifyToken?._id
-      payload["userId"]=loginUserSliceData?.verifyToken?._id  
+      payload['assignedTo'] = loginUserSliceData?.verifyToken?._id;
+      payload['assignedBy'] = loginUserSliceData?.verifyToken?._id;
+      payload['userId'] = loginUserSliceData?.verifyToken?._id;
     }
     //tester 65741c069d53d19df8321e6c
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"){
-      payload["userId"]=loginUserSliceData?.verifyToken?._id
+    if (loginUserSliceData?.verifyToken?.role[0]?.name == 'Tester') {
+      payload['userId'] = loginUserSliceData?.verifyToken?._id;
       // setQueryString({...queryStrings,["userId"]:loginUserSliceData?.verifyToken?._id})
     }
-    if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
-      payload["organisationId"]=singleUserData?.organisationId
+    if (loginUserSliceData?.verifyToken?.role[0]?.name == 'Admin') {
+      payload['organisationId'] = singleUserData?.organisationId;
     }
-   
-    dispatch(fetchRunsData(payload)).then((res:any)=>{
-      const page: any = { ...pageInfo };
-      page['currentPage'] = res?.get_all_runs?.pageInfo.currentPage;
-      page['totalPages'] = res?.get_all_runs?.pageInfo.totalPages;
-      page['hasNextPage'] = res?.get_all_runs?.pageInfo.hasNextPage;
-      page['hasPreviousPage'] = res?.get_all_runs?.pageInfo.hasPreviousPage;
-      page['totalCount'] = res?.get_all_runs?.pageInfo.totalCount;
-      setRunsData(res?.get_all_runs?.Runs);
-      setPageInfo(page);
-      setLoader(false)
 
-    }).catch((err:any)=>{
-      console.log(err);
-      
-    })
-  }
+    dispatch(fetchRunsData(payload))
+      .then((res: any) => {
+        const page: any = { ...pageInfo };
+        page['currentPage'] = res?.get_all_runs?.pageInfo.currentPage;
+        page['totalPages'] = res?.get_all_runs?.pageInfo.totalPages;
+        page['hasNextPage'] = res?.get_all_runs?.pageInfo.hasNextPage;
+        page['hasPreviousPage'] = res?.get_all_runs?.pageInfo.hasPreviousPage;
+        page['totalCount'] = res?.get_all_runs?.pageInfo.totalCount;
+        setRunsData(res?.get_all_runs?.Runs);
+        setPageInfo(page);
+        setLoader(false);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
   console.log(loginUserSliceData?.verifyToken?.role[0]?._id);
-  
+
   React.useEffect(() => {
     //admin 65741c069d53d19df8321e6d
     const payload: any = {
@@ -344,7 +345,7 @@ React.useEffect(()=>{
     dispatch(fetchUserData(payload));
     return () => {
       const headersList: any = [...headers];
-      headersList.map((item) => {
+      headersList.map((item: any) => {
         return (item.sort = 'asc');
       });
       setHeaders(headersList);
@@ -352,15 +353,19 @@ React.useEffect(()=>{
   }, []);
 
   React.useEffect(() => {
-    dispatch(fetchOrganizationById({"instituteId":singleUserData?.instituteId}))
-    dispatch(fetchDepartmentById({ "organisationId":singleUserData?.organisationId}))
-    dispatch(fetchLabById({"departmentId":singleUserData?.departmentId}))
+    dispatch(
+      fetchOrganizationById({ instituteId: singleUserData?.instituteId }),
+    );
+    dispatch(
+      fetchDepartmentById({ organisationId: singleUserData?.organisationId }),
+    );
+    dispatch(fetchLabById({ departmentId: singleUserData?.departmentId }));
   }, []);
-  
-  const handleInputChange = (event, newInputValue) => {
+
+  const handleInputChange = (event: any, newInputValue: any) => {
     // Fetch suggestions when the user types
-    console.log("filterFieldName",filterFieldName);
-    
+    console.log('filterFieldName', filterFieldName);
+
     setInputValue(newInputValue);
   };
 
@@ -397,7 +402,6 @@ React.useEffect(()=>{
     await reload();
   };
 
-
   const handleChange = (event: any, id: any) => {
     handleCheckboxChange(
       runsData,
@@ -428,7 +432,7 @@ React.useEffect(()=>{
     setRowId,
   );
 
-  const handleRequestSort = () => { };
+  const handleRequestSort = () => {};
 
   const getDepartment = (id: any) => {
     let data = DepartmentList.find((item) => item.id === id);
@@ -504,7 +508,7 @@ React.useEffect(()=>{
   };
 
   const runVal: any = { _id: rowId };
-  const handleDeleteConfirmation = async(state: any) => {
+  const handleDeleteConfirmation = async (state: any) => {
     if (state === 1) {
       await dispatch(deleteRunsData(runVal));
       await toast(`Runs deleted !`, {
@@ -523,21 +527,35 @@ React.useEffect(()=>{
     const payload: any = { ...queryStrings };
     payload['searchBy'] = field;
     payload['page'] = 1;
-    payload['search'] =  typeof value === 'string'? value : moment(value).format('MM/DD/YYYY');
+    payload['search'] =
+      typeof value === 'string' ? value : moment(value).format('MM/DD/YYYY');
     setQueryString(payload);
-    setFilter(true)
+    setFilter(true);
   };
-  var arr: any = []
+  var arr: any = [];
   const array = [
-    { id: "65670efa4e0aad001292d6ab", label: "users4@gmail.com", value: "adbul@testrunz.com" },
-    { id: "6561ef0d2f447d0012e3d8cd", label: "users14@gmail.com", value: "users4@gmail.com" },
-    { id: "6561ef0d2f447d0012e3d8cd", label: "users42@gmail.com", value: "users4@gmail.com" },
+    {
+      id: '65670efa4e0aad001292d6ab',
+      label: 'users4@gmail.com',
+      value: 'adbul@testrunz.com',
+    },
+    {
+      id: '6561ef0d2f447d0012e3d8cd',
+      label: 'users14@gmail.com',
+      value: 'users4@gmail.com',
+    },
+    {
+      id: '6561ef0d2f447d0012e3d8cd',
+      label: 'users42@gmail.com',
+      value: 'users4@gmail.com',
+    },
     // ... other objects
   ];
 
-  const labelToFind = "users4@gmail.com";
+  const labelToFind = 'users4@gmail.com';
 
-  const newArray = array.filter(item => item.label !== labelToFind)
+  const newArray = array
+    .filter((item) => item.label !== labelToFind)
     .map(({ id, label }) => ({ id, label }));
 
   console.log(newArray);
@@ -549,26 +567,27 @@ React.useEffect(()=>{
       // If it is, remove it
       setRowId(rowId.filter((rowId: any) => rowId !== id));
 
-      setRunsRow(runsRow.filter(item => item._id !== id)
-        .map((val) => (val)))
+      setRunsRow(
+        runsRow.filter((item: any) => item._id !== id).map((val: any) => val),
+      );
       // setRunsRow(row)
     } else {
       // If it's not, add it
       setRowId([...rowId, id]);
       // console.log("arr",[...row,row]);
 
-      arr.push(row)
-      setRunsRow([...runsRow, row])
+      arr.push(row);
+      setRunsRow([...runsRow, row]);
     }
   };
-  console.log("arr", runsRow);
+  console.log('arr', runsRow);
 
   const emptyRows = 0 > 0 ? Math.max(0, (1 + 0) * 5 - 12) : 0;
   console.log(emptyRows);
 
-  const getFilterOptions = (data) => {
+  const getFilterOptions = (data: any) => {
     const result: any = [];
-    data.forEach((element) => {
+    data.forEach((element: any) => {
       result.push({
         id: element.name,
         name: element.name,
@@ -577,9 +596,9 @@ React.useEffect(()=>{
     });
     return result;
   };
-  const filteredData = headers.filter(item => item.is_show !== false);
+  const filteredData = headers.filter((item: any) => item.is_show !== false);
 
-  console.log("filteredData",filteredData);
+  console.log('filteredData', filteredData);
 
   return (
     <PrivateRoute>
@@ -608,7 +627,7 @@ React.useEffect(()=>{
                   padding: '0px',
                   justifyContent: 'center',
                 }}
-                className="filterButton"                
+                className="filterButton"
               >
                 {/* <FilterAltOutlinedIcon style={{ fontSize: '2rem' }} /> */}
                 <Badge
@@ -665,10 +684,10 @@ React.useEffect(()=>{
                       </Typography>
 
                       <Select
-                      MenuProps={{                   
-                        disableScrollLock: true,                   
-                        marginThreshold: null
-                      }}
+                        MenuProps={{
+                          disableScrollLock: true,
+                          marginThreshold: null,
+                        }}
                         labelId="table-select-label"
                         id="table-select"
                         value={filterSearchBy}
@@ -682,7 +701,7 @@ React.useEffect(()=>{
                           setFilterSearchValue(null);
                           setFilterSearchBy(event.target?.value);
                           setFilterFieldName(data.props.children);
-                          setValuesName(null)
+                          setValuesName(null);
 
                           if (event.target?.value === 'laboratoryId') {
                             setFilterOptions(getFilterOptions(labSliceData));
@@ -694,7 +713,7 @@ React.useEffect(()=>{
                           }
                           if (event.target?.value === 'runNumber') {
                             const data: any = [];
-                            runsSliceData.Runs.forEach((element) => {
+                            runsSliceData.Runs.forEach((element: any) => {
                               data.push({
                                 id: element.runNumber,
                                 name: element.runNumber,
@@ -705,16 +724,18 @@ React.useEffect(()=>{
                           }
                           if (event.target?.value === 'procedureId') {
                             const data: any = [];
-                            
-                            procedureSliceData?.Procedures?.map((element) => {
-                              data.push({
-                                label: element?.name,
-                                value: element?.name,
-                                id: element?._id,
-                              });
-                            });
-                            console.log("data",data);
-                            
+
+                            procedureSliceData?.Procedures?.map(
+                              (element: any) => {
+                                data.push({
+                                  label: element?.name,
+                                  value: element?.name,
+                                  id: element?._id,
+                                });
+                              },
+                            );
+                            console.log('data', data);
+
                             setFilterOptions(data);
                           }
                           if (event.target?.value === 'status') {
@@ -722,16 +743,19 @@ React.useEffect(()=>{
                           }
                           if (event.target?.value === 'assignedBy') {
                             const data: any = [];
-                            console.log("userSliceData?.get_all_users?.Identity",getUser);
-                            
-                            getUser?.map((element:any) => {
-                              console.log(element?.firstName,'element');
-                              
+                            console.log(
+                              'userSliceData?.get_all_users?.Identity',
+                              getUser,
+                            );
+
+                            getUser?.map((element: any) => {
+                              console.log(element?.firstName, 'element');
+
                               data.push({
                                 label: element?.firstName,
                                 value: element?.firstName,
                                 id: element?._id,
-                                email:element?.firstName
+                                email: element?.firstName,
                               });
                             });
                             setFilterOptions(data);
@@ -748,7 +772,9 @@ React.useEffect(()=>{
                             value={element.id}
                             key={element.id}
                             onClick={() => {
-                              {console.log('elementtype',element.id)}
+                              {
+                                console.log('elementtype', element.id);
+                              }
                               setFilterType(element.type);
                               setFilterOptions(element.filters[0]?.options);
                               setFilterKey(element.id);
@@ -765,8 +791,8 @@ React.useEffect(()=>{
                           {filterType === 'text'
                             ? 'Search'
                             : filterType === 'date'
-                              ? `Date ${filterFieldName}`
-                              : `Select ${filterFieldName}`}
+                            ? `Date ${filterFieldName}`
+                            : `Select ${filterFieldName}`}
                         </Typography>
                       )}
 
@@ -791,7 +817,7 @@ React.useEffect(()=>{
                         <Box id="filterDatePicker">
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                              format='MM/DD/YYYY'
+                              format="MM/DD/YYYY"
                               value={dayjs(filterSearchValue)}
                               onChange={(event: any) =>
                                 setFilterSearchValue(event.$d)
@@ -799,28 +825,41 @@ React.useEffect(()=>{
                             />
                           </LocalizationProvider>
                         </Box>
-                      ):filterType === 'autocomplete'?
-                      <Autocomplete
-                      className='autocompleteFilter'
-                      style={{borderRadius: '15px !importnant',paddingTop:"12px"}}
-                      limitTags={3}
-                      loading={loading}
-                      disableClearable={true}
-                      options={filterOptions !== undefined ? filterOptions: []}
-                      getOptionLabel={(option:any) => option?.value}
-                      renderInput={(params) => (
-                        <TextField  {...params} placeholder="Search..." style={{marginTop: "-8px"}} className='place-top'/>
-                      )}
-                      value={valuesName}
-                      onChange={(_, selectedOptions: any) => {setFilterSearchValue(selectedOptions?.id);setValuesName(selectedOptions) }}
-                      onInputChange={handleInputChange}
-                    />
-                      : (
+                      ) : filterType === 'autocomplete' ? (
+                        <Autocomplete
+                          className="autocompleteFilter"
+                          style={{
+                            borderRadius: '15px !importnant',
+                            paddingTop: '12px',
+                          }}
+                          limitTags={3}
+                          loading={loading}
+                          disableClearable={true}
+                          options={
+                            filterOptions !== undefined ? filterOptions : []
+                          }
+                          getOptionLabel={(option: any) => option?.value}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder="Search..."
+                              style={{ marginTop: '-8px' }}
+                              className="place-top"
+                            />
+                          )}
+                          value={valuesName}
+                          onChange={(_, selectedOptions: any) => {
+                            setFilterSearchValue(selectedOptions?.id);
+                            setValuesName(selectedOptions);
+                          }}
+                          onInputChange={handleInputChange}
+                        />
+                      ) : (
                         <Select
-                        MenuProps={{                   
-                          disableScrollLock: true,                   
-                          marginThreshold: null
-                        }}
+                          MenuProps={{
+                            disableScrollLock: true,
+                            marginThreshold: null,
+                          }}
                           value={filterSearchValue}
                           labelId="table-select-label2"
                           id="table-select2"
@@ -872,11 +911,14 @@ React.useEffect(()=>{
                         color: '#181818',
                         textTransform: 'capitalize',
                       }}
-                      disabled={(filterKey!==null && filterSearchValue!==null)?false:true}
+                      disabled={
+                        filterKey !== null && filterSearchValue !== null
+                          ? false
+                          : true
+                      }
                       onClick={() => {
                         handleFilterPopoverClose();
                         applyFilters(filterKey, filterSearchValue);
-
                       }}
                     >
                       Show results
@@ -902,7 +944,9 @@ React.useEffect(()=>{
           applyFilters={applyFilters}
           runzId={rowId}
           runzRow={runsRow}
-          reload={() => { setRowId([]), setRunsRow([]) }}
+          reload={() => {
+            setRowId([]), setRunsRow([]);
+          }}
         />
 
         <Box className="table-outer" sx={{ width: '100%' }}>
@@ -934,16 +978,25 @@ React.useEffect(()=>{
                     image={true}
                     rows={queryStrings.perPage}
                   />
-                </TableBody> 
-              ) :!runsData || runsData?.length === 0 && loader==false? (
+                </TableBody>
+              ) : !runsData || (runsData?.length === 0 && loader == false) ? (
                 <TableBody>
-                    <Box sx={{ textAlign: 'center', position: 'absolute', left: '0rem', right: '0rem', padding: "10%", width: "100%"  }}>
-                      <img src={Emptystate} alt="" />
-                      <Typography className="no-remainder">
-                        Runs not found.
-                      </Typography>
-                    </Box>
-                    {/* </p> */}
+                  <Box
+                    sx={{
+                      textAlign: 'center',
+                      position: 'absolute',
+                      left: '0rem',
+                      right: '0rem',
+                      padding: '10%',
+                      width: '100%',
+                    }}
+                  >
+                    <img src={Emptystate} alt="" />
+                    <Typography className="no-remainder">
+                      Runs not found.
+                    </Typography>
+                  </Box>
+                  {/* </p> */}
                 </TableBody>
               ) : (
                 <TableBody>
@@ -989,19 +1042,37 @@ React.useEffect(()=>{
                                     row.status === 'Created'
                                       ? runCreated
                                       : row.status === 'Started'
-                                        ? runStarted
-                                        : row.status === 'Complete'
-                                          ? runCompleted
-                                          : row.status === 'Submitted'
-                                          ? runSubmitted
-                                          : runStopped
+                                      ? runStarted
+                                      : row.status === 'Complete'
+                                      ? runCompleted
+                                      : row.status === 'Submitted'
+                                      ? runSubmitted
+                                      : runStopped
                                   }
                                   alt="no_image"
                                   style={{ width: '35px', height: '35px' }}
                                 />
                               </Box>
                               <Box sx={{ ml: 1 }}>
-                                <Box>{row.runNumber}</Box>{row.shared && <span style={{color:row?.status == 'Created'?"#8d8d8d":row?.status == 'Started'?"#faaa49":row?.status == 'Stopped'?"red":row?.status == 'Complete'?"#00bf70":"#a01fb1"}}>shared</span>}
+                                <Box>{row.runNumber}</Box>
+                                {row.shared && (
+                                  <span
+                                    style={{
+                                      color:
+                                        row?.status == 'Created'
+                                          ? '#8d8d8d'
+                                          : row?.status == 'Started'
+                                          ? '#faaa49'
+                                          : row?.status == 'Stopped'
+                                          ? 'red'
+                                          : row?.status == 'Complete'
+                                          ? '#00bf70'
+                                          : '#a01fb1',
+                                    }}
+                                  >
+                                    shared
+                                  </span>
+                                )}
                               </Box>
                             </Box>
 
@@ -1133,9 +1204,8 @@ React.useEffect(()=>{
                           {row.createdOn === null
                             ? '-'
                             : moment(row.createdOn).isValid()
-                              ? moment(row.createdOn).local().format('MM/DD/YYYY')
-                              : "-"
-                            }
+                            ? moment(row.createdOn).local().format('MM/DD/YYYY')
+                            : '-'}
                         </TableCell>
                       )}
                       {headers[5].is_show && (
@@ -1143,50 +1213,52 @@ React.useEffect(()=>{
                           {row.dueDate === null
                             ? '-'
                             : moment(row.dueDate).isValid()
-                              ? moment(row.dueDate).local().format('MM/DD/YYYY')
-                              : "-"}
+                            ? moment(row.dueDate).local().format('MM/DD/YYYY')
+                            : '-'}
                         </TableCell>
                       )}
                       {headers[6].is_show && (
                         <TableCell>
                           <Box
-                          className={
-                            row.status === 'Created'
-                              ? 'create-select td-select'
-                              : row.status === 'Started'
+                            className={
+                              row.status === 'Created'
+                                ? 'create-select td-select'
+                                : row.status === 'Started'
                                 ? 'start-select td-select'
                                 : row.status === 'Complete'
-                                  ? 'active-select td-select'
-                                  : row.status === 'Submitted'
-                                    ? 'submit-select td-select'
-                                    : 'inactive-select td-select'
-                          }
-                          style={{
-                            background:
-                              row.status === 'Created'
-                                ? '#8d8d8d'
-                                : row.status === 'Started'
+                                ? 'active-select td-select'
+                                : row.status === 'Submitted'
+                                ? 'submit-select td-select'
+                                : 'inactive-select td-select'
+                            }
+                            style={{
+                              background:
+                                row.status === 'Created'
+                                  ? '#8d8d8d'
+                                  : row.status === 'Started'
                                   ? '#faaa49'
                                   : row.status === 'Stopped'
-                                    ? '#e2445c'
-                                    : row?.status == 'Submitted'
-                                      ? '#a01fb1'
-                                      : '#00bf70',
-                            padding: '6px',
-                            width: '140px',
-                            borderRadius: '20px',
-                            height: '26px',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          {row?.status}
-                        </Box>
+                                  ? '#e2445c'
+                                  : row?.status == 'Submitted'
+                                  ? '#a01fb1'
+                                  : '#00bf70',
+                              padding: '6px',
+                              width: '140px',
+                              borderRadius: '20px',
+                              height: '26px',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            {row?.status}
+                          </Box>
                         </TableCell>
                       )}
                       {headers[7].is_show && (
-                        <TableCell align="center">{row?.assignedBy?.firstName}</TableCell>
+                        <TableCell align="center">
+                          {row?.assignedBy?.firstName}
+                        </TableCell>
                       )}
                     </TableRow>
                   ))}

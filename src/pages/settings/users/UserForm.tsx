@@ -21,11 +21,7 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CheckBoxOutlineBlank } from '@mui/icons-material';
-import {
-  fetchSingleUserData,
-  fetchUpdateUserData,
-  postUserData,
-} from '../../../api/userAPI';
+import { fetchUpdateUserData, postUserData } from '../../../api/userAPI';
 import {
   DepartmentList,
   InstitutionList,
@@ -128,7 +124,6 @@ const UserForm = React.forwardRef(
 
         let temp = { _id: row?._id };
         if (row?._id) {
-          // dispatch(fetchSingleUserData(temp)).then((isSucess) => {
           if (row) {
             console.log(row, 'isSucess', row);
             setUserData(row);
