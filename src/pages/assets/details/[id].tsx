@@ -12,6 +12,7 @@ import {
   Select,
   TextField,
   Typography,
+  CircularProgress
 } from '@mui/material';
 import dayjs from 'dayjs';
 import Tabs from '@mui/material/Tabs';
@@ -132,6 +133,7 @@ export default function AssetDetails() {
   const [organizationData, setOrganizationData] = React.useState([]);
   const assetId = assetValue?._id;
   const [procedureId, setProcedureId] = React.useState([]);
+  const [loader, setLoader] = React.useState(false);
   // const [assetValue, setAssetValue] = React.useState({})
   const [organization, setOrganization] = React.useState([
     {
@@ -433,7 +435,7 @@ export default function AssetDetails() {
       ACL: 'public-read',
       // ContentType: selectedFile.type
     };
-
+    setLoader(true);
     const result = s3.upload(params).promise();
     await result.then((res: any) => {
       formik.setFieldValue('assetImageUrl', res.Location);
@@ -454,6 +456,7 @@ export default function AssetDetails() {
         },
       });
     });
+    setLoader(false);
   };
 
   console.log('formik', formik);
@@ -508,12 +511,14 @@ export default function AssetDetails() {
                 >
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img
+                    {!loader ? <img
                         src={uploadedFile == null ? test : uploadedFile}
                         alt="test"
                         className="dynamic-img"
                         style={{ height: '250px', objectFit: 'contain' }}
                       />
+                      :
+                      <CircularProgress color="inherit" style={{height: '250px',width: '250px',padding:"103px"}}/>}
                     </Box>
 
                     <Box
@@ -724,6 +729,7 @@ export default function AssetDetails() {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             value={formik.values.organisationId}
+                            disabled={true}
                             size="small"
                             error={
                               formik.touched.organisationId &&

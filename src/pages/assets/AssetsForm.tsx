@@ -16,6 +16,7 @@ import {
   InputAdornment,
   Divider,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -50,7 +51,7 @@ import {
   fetchDepartmentData,
 } from '../../api/departmentAPI';
 import { fetchLabById, fetchLabData } from '../../api/labAPI';
-import { fetchOrganizationData } from '../../api/organizationAPI';
+import { fetchOrganizationById, fetchOrganizationData } from '../../api/organizationAPI';
 import SuccessPopup from '../../components/SuccessPopup';
 import Confirmationpopup from '../../components/ConfirmationPopup';
 import moment from 'moment';
@@ -328,12 +329,6 @@ const Addnewpopup = React.forwardRef(
     //     }, []);
 
     // React.useEffect(() => {
-    //   dispatch(fetchDepartmentData())
-    //   dispatch(fetchLabData());
-    //   dispatch(fetchOrganizationData());
-    // }, []);
-
-    // React.useEffect(() => {
     //   const payload = {
     //     organisationId  : formik.values.organisationId
     // }
@@ -467,22 +462,23 @@ const Addnewpopup = React.forwardRef(
                     },
                   }}
                 >
-                  {console.log('formik', !formik.dirty)}
                   <Box>
                     <Box
                       style={{
                         width: '220px',
                         height: '220px',
-                        padding: '10px',
+                        padding: !loader?'10px':'86px',
                         background: '#e4e5e7',
                         margin: 'auto',
                       }}
                     >
-                      <img
+                     {!loader ? <img
                         src={uploadedFile === null ? preview : uploadedFile}
                         alt="assetimg"
                         style={{ width: '100%', height: '100%' }}
                       />
+                      :
+                      <CircularProgress color="inherit" />}
                     </Box>
                     <Box
                       className="edit-profile-btn"

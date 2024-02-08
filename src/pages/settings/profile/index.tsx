@@ -13,6 +13,7 @@ import {
   InputLabel,
   TextField,
   Typography,
+  CircularProgress,
 } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -97,6 +98,7 @@ const Profile = () => {
   const [expanded, setExpanded] = React.useState<string | false>('panel1');
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
+  const [loader, setLoader] = React.useState(false);
   const dispatch: any = useDispatch();
   const fileUploadField = React.useRef<any>(null);
   const handleChange =
@@ -462,7 +464,7 @@ console.log(singleUserData);
       ACL: 'public-read',
       // ContentType: selectedFile.type
     };
-
+    setLoader(true)
     const result = s3.upload(params).promise();
     await result.then((res: any) => {
       setUploadedFile(res.Location);
@@ -482,6 +484,7 @@ console.log(singleUserData);
         },
       });
     });
+    setLoader(false)
   };
 
   return (
@@ -531,7 +534,7 @@ console.log(singleUserData);
         <Box sx={{ paddingLeft: '0rem !important' }}>
           <Box className="profile-camera">
             <div style={{width:"200px", height:'200px'}}>
-              <img
+            {!loader ?  <img
                 src={(uploadedFile == null || uploadedFile == "" ) ? profile : uploadedFile}
                 alt="profiles"
                 style={{
@@ -543,6 +546,14 @@ console.log(singleUserData);
                   padding: uploadedFile === null ? '0px' : '0px',
                 }}
               />
+              :
+           <CircularProgress color="inherit" style={{
+            width: '100%',
+            height: '100%',
+            border: '5px solid #F3F3F3',
+            borderRadius: '200px',
+            padding: "72px",
+          }} />}
             </div>
             <div
               style={{

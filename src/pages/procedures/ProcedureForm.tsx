@@ -197,6 +197,10 @@ const ProcedureForm = React.forwardRef(
                 isSucess?.get_procedure?.procedureDetials ||
                   row?.procedureDetials,
               );
+              formik.setFieldValue(
+                'createdBy',
+                isSucess?.get_procedure?.createdBy || row?.createdBy,
+              );
             }
           }).catch((err)=>{
             console.log(err);
@@ -265,8 +269,8 @@ const ProcedureForm = React.forwardRef(
         name: '',
         createdOn: moment(new Date()).format('MM/DD/YYYY'),
         createdBy: userSliceData?.firstName + userSliceData?.lastName,
-        departmentId: formData?formData.departmentId:"",
-        laboratoryId: formData?formData.laboratoryId:"",
+        departmentId: formData?formData.departmentId:[],
+        laboratoryId: formData?formData.laboratoryId:[],
         organisationId: formData?formData.organisationId:singleUserData?.organisationId,
         procedureDetials:''
       },

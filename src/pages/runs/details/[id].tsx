@@ -1789,38 +1789,41 @@ export default function RunsDetails() {
                         //           : '#e2445c',
                         // }}
                       >
-                        <Select
-                          MenuProps={{
-                            disableScrollLock: true,
-                            marginThreshold: null,
-                          }}
-                          name="status"
-                          style={{ borderRadius: '11px', color: 'white' }}
+                        <Box
                           className={
                             runzValue?.status === 'Created'
                               ? 'create-select td-select'
                               : runzValue?.status === 'Started'
-                              ? 'start-select td-select'
-                              : runzValue?.status === 'Submitted'
-                              ? 'submit-select td-select'
-                              : runzValue?.status === 'Complete'
-                              ? 'active-select td-select'
-                              : 'inactive-select td-select'
+                                ? 'start-select td-select'
+                                : runzValue?.status === 'Complete'
+                                  ? 'active-select td-select'
+                                  : runzValue?.status === 'Submitted'
+                                    ? 'submit-select td-select'
+                                    : 'inactive-select td-select'
                           }
-                          value={
-                            runzValue?.status ? runzValue?.status : 'Stopped'
-                          }
-                          displayEmpty
-                          // onClick={(e: any) => clickHandler(e)}
-                          onChange={(e) => handleOnChange(e, runzValue)}
-                          IconComponent={ExpandMoreOutlinedIcon}
+                          style={{
+                            background:
+                              runzValue?.status === 'Created'
+                                ? '#8d8d8d'
+                                : runzValue?.status === 'Started'
+                                  ? '#faaa49'
+                                  : runzValue?.status === 'Stopped'
+                                    ? '#e2445c'
+                                    : runzValue?.status == 'Submitted'
+                                      ? '#a01fb1'
+                                      : '#00bf70',
+                            padding: '6px',
+                            color:"white",
+                            width: '140px',
+                            borderRadius: '20px',
+                            height: '26px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
                         >
-                          {runsStatus?.map((element: any) => (
-                            <MenuItem value={element.value} key={element.value}>
-                              {element.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                          {runzValue?.status}
+                        </Box>
                         {/* {runzValue?.status == 'Created'
                         ? 'Created'
                         : runzValue?.status == 'Started'

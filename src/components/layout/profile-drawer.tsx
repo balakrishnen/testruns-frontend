@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import {
   Box, Drawer, Toolbar, Typography, Checkbox,
-  Autocomplete, Button, Select, MenuItem
+  Autocomplete, Button, Select, MenuItem, CircularProgress
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -64,6 +64,7 @@ export default function AppProfileDrawer({
   const [roleData, setRoleData] = React.useState([]);
   const fileUploadField = React.useRef<any>(null);
   const [uploadedFile, setUploadedFile] = React.useState(null);
+  const [loader, setLoader]=React.useState(false)
   const triggerFileUploadField = () => {
     fileUploadField.current?.click();
   };
@@ -297,7 +298,7 @@ export default function AppProfileDrawer({
       ACL: 'public-read',
       // ContentType: selectedFile.type
     };
-
+    setLoader(true)
     const result = s3.upload(params).promise();
     await result.then((res: any) => {
       setUploadedFile(res.Location);
@@ -317,6 +318,7 @@ export default function AppProfileDrawer({
         },
       });
     });
+    setLoader(false)
   };
   
   return (
@@ -369,8 +371,8 @@ export default function AppProfileDrawer({
               </Box>
             </Box>
             <Box className="profile-camera">
-              <img src={(uploadedFile == null || uploadedFile == "") ? profile : uploadedFile} alt="profile" className="profile-user" style={{width:"200px", height:"200px",objectFit:"cover",padding: uploadedFile == null ? '0px' : '16px',}} />
-              <img src={camera} alt="camera" className="upload-img" onClick={triggerFileUploadField} />
+             {!loader?<img src={(uploadedFile == null || uploadedFile == "") ? profile : uploadedFile} alt="profile" className="profile-user" style={{width:"200px", height:"200px",objectFit:"cover",padding: uploadedFile == null ? '0px' : '16px',}} />
+             :<CircularProgress color="inherit" style={{width:"200px", height:"200px", padding:"79px"}} className="profile-user"/>}<img src={camera} alt="camera" className="upload-img" onClick={triggerFileUploadField} />
               <input
             style={{ display: 'none' }}
             type="file"
