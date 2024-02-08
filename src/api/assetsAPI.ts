@@ -3,7 +3,7 @@ import {
   fetchAssetsSuccess,
   fetchAssetsFailure,
 } from '../features/assetsSlice';
-import { GET_ASSETS_NAMES, GET_ASSETS, POST_ASSETS, DELETE_ASSETS, GET_SINGLE_ASSETS ,UPDATE_ASSETS} from '../graphql/assets/assets.graphql';
+import { GET_ASSETS_NAMES, GET_ASSETS, POST_ASSETS, DELETE_ASSETS, GET_SINGLE_ASSETS ,UPDATE_ASSETS,GET_PROCEDURE_ASSETS,GET_ALL_RUNS_PROCEDURE} from '../graphql/assets/assets.graphql';
 import { client } from '../utils/config';
 
 export const fetchAssetsData = (payload: any) => async (dispatch: any) => {
@@ -83,5 +83,32 @@ export const fetchAssetsName = () => async (dispatch: any) => {
     dispatch(fetchAssetsSuccess(response.data));
   } catch (error: any) {
     dispatch(fetchAssetsFailure(error.message));
+  }
+};
+
+export const fetchProcedureByAssetsName = (payload:any) => async (dispatch: any) => {
+  dispatch(fetchAssetsStart());
+  try {
+    const response = await client.query({
+      query: GET_PROCEDURE_ASSETS,
+      variables: payload,
+    });
+    dispatch(fetchAssetsSuccess(response.data));
+    return response.data
+  } catch (error: any) {
+    dispatch(fetchAssetsFailure(error.message));
+  }
+};
+export const fetchRunsByProcedure = (payload:any) => async (dispatch: any) => {
+  // dispatch(fetchAssetsStart());
+  try {
+    const response = await client.query({
+      query: GET_ALL_RUNS_PROCEDURE,
+      variables: payload,
+    });
+    // dispatch(fetchAssetsSuccess(response.data));
+    return response.data
+  } catch (error: any) {
+    // dispatch(fetchAssetsFailure(error.message));
   }
 };

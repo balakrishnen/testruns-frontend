@@ -218,7 +218,8 @@ await submitFormPopup();
           await dispatch(postUserData(userValues)).then((res:any)=>{
             toast(res?.create_user?.message, {
               style: {
-                background: res?.create_user?.message=="user already exits"?"red":'#00bf70', color: '#fff'
+                background: res?.create_user?.message=="user already exits"?"red":'#00bf70', color: '#fff',
+                textTransform: "capitalize"
               }
             });
              submitFormPopup();

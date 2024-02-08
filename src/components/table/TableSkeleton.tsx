@@ -1,11 +1,15 @@
 import React from 'react';
 import { TableCell, TableRow, Skeleton, Box } from '@mui/material';
 
-export default function TableSkeleton({ columns, image, data }: any) {
-  let rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export default function TableSkeleton({ columns, image, rows }: any) {
+  // let rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  var row=[]
+  for(let i=0;i<rows;i++){
+row.push(i)
+  }
   return (
     <>
-      {rows.map((_, key) => (
+      {row.map((_, key) => (
         <TableRow key={key}>
           {columns.map((item, index) => (
             <TableCell scope="row" key={index}>

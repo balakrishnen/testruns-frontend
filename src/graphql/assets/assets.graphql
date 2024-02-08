@@ -180,3 +180,65 @@ query Get_all_assets_name {
     }
 }
 `;
+
+export const GET_PROCEDURE_ASSETS = gql`
+query Get_all_procedures_by_asset($assetId: [String]) {
+    get_all_procedures_by_asset(assetId: $assetId) {
+        name
+        _id
+    }
+}
+`;
+
+export const GET_ALL_RUNS_PROCEDURE = gql`
+query Get_all_runs_by_procedure($procedureId:[String],$page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: String, $searchBy: String, $search: String,) {
+    get_all_runs_by_procedure(procedureId: $procedureId, page: $page, perPage: $perPage, sortBy: $sortBy, sortOrder: $sortOrder, searchBy: $searchBy, search: $search) {
+        Runs {
+            _id
+            userId
+            objective
+            runNumber
+            runId
+            procedureName
+            organisationId
+            instituteId
+            dueDate
+            status
+            shared
+            createdOn
+            isActive
+            isDeleted
+            createdAt
+            updatedAt
+             departmentId {
+                _id
+                name
+                departmentNumber
+            }
+            laboratoryId {
+                _id
+                name
+            }
+            assignedTo {
+                _id
+                firstName
+                email
+                role
+            }
+            assignedBy {
+                _id
+                firstName
+                email
+                role
+            }
+        }
+         pageInfo {
+            currentPage
+            totalPages
+            totalCount
+            hasNextPage
+            hasPreviousPage
+        }
+    }
+}
+`;
