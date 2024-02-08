@@ -21,7 +21,11 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CheckBoxOutlineBlank } from '@mui/icons-material';
-import { fetchSingleUserData, fetchUpdateUserData, postUserData } from '../../../api/userAPI';
+import {
+  fetchSingleUserData,
+  fetchUpdateUserData,
+  postUserData,
+} from '../../../api/userAPI';
 import {
   DepartmentList,
   InstitutionList,
@@ -31,7 +35,10 @@ import {
   StatusList,
 } from '../../../utils/data';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDepartmentById, fetchDepartmentData } from '../../../api/departmentAPI';
+import {
+  fetchDepartmentById,
+  fetchDepartmentData,
+} from '../../../api/departmentAPI';
 import { fetchSingleRoleData } from '../../../api/roleApi';
 import { fetchLabById, fetchLabData } from '../../../api/labAPI';
 import SuccessPopup from '../../../components/SuccessPopup';
@@ -41,38 +48,53 @@ import { auth } from '../../../firebase.config';
 import { toast } from 'react-toastify';
 import { fetchinstitutionData } from '../../../api/institutionAPI';
 import moment from 'moment';
-import { fetchOrganizationById, fetchOrganizationData } from '../../../api/organizationAPI';
+import {
+  fetchOrganizationById,
+  fetchOrganizationData,
+} from '../../../api/organizationAPI';
 
-const phoneRegExp= /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required("First name is required").max(30, 'Must be 20 characters'),
-  lastName: Yup.string().required("Last name is required").max(20, 'Must be 20 characters'),
-  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
+  firstName: Yup.string()
+    .required('First name is required')
+    .max(30, 'Must be 20 characters'),
+  lastName: Yup.string()
+    .required('Last name is required')
+    .max(20, 'Must be 20 characters'),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Invalid email')
+    .matches(emailRegex, 'In-correct email'),
   phoneNumber: Yup.string().notRequired(),
   // .matches(phoneRegExp, 'Phone number is not valid')
   // .min(10, "Enter valid number")
   // .max(10, "too long").required("Mobile number is required"),
-  organisationId: Yup.string().required("Organistation is required"),
-  instituteId: Yup.string().required("Institution is required"),
-  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
-  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  organisationId: Yup.string().required('Organistation is required'),
+  instituteId: Yup.string().required('Institution is required'),
+  departmentId: Yup.array()
+    .min(1, 'Please select at least one Department')
+    .required('Department is required'),
+  laboratoryId: Yup.array()
+    .min(1, 'Please select at least one Laboratory')
+    .required('Laboratory is required'),
   // user_id: Yup.string().required(),
-  role: Yup.string().required("Role is required"),
+  role: Yup.string().required('Role is required'),
   // status: Yup.string().required("Status is required"),
 });
 
 const UserForm = React.forwardRef(
-  ({ closeFormPopup, openConfirmationPopup, reload, rowVal}: any, ref) => {
-    const [departments, setDepartments] = React.useState()
+  ({ closeFormPopup, openConfirmationPopup, reload, rowVal }: any, ref) => {
+    const [departments, setDepartments] = React.useState();
     //   rowVal?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj._id == item) ?{
     //     label: item?.name,
     //     value: item?.name,
     //     id: item?._id,
     //   }:"")),
     // ));
-    const [laboratory, setLaboratory] = React.useState()
+    const [laboratory, setLaboratory] = React.useState();
     //   rowVal?.laboratoryId?.map((item: any) => ({
     //     label: item?.name,
     //     value: item?.name,
@@ -89,46 +111,54 @@ const UserForm = React.forwardRef(
     const confirmationPopupRef: any = React.useRef();
     const [organizationData, setOrganizationData] = React.useState([]);
     const [institutionData, setInstitutionData] = React.useState([]);
-    const[userData, setUserData]=React.useState({})
+    const [userData, setUserData] = React.useState({});
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
     console.log(userData);
-    const loginUserSliceData=  useSelector(
-      (state: any) => state.userLogin?.data?.verifyToken, 
+    const loginUserSliceData = useSelector(
+      (state: any) => state.userLogin?.data?.verifyToken,
     );
-    const userSliceData=  useSelector(
-      (state: any) => state.userLogin.data, 
-    );
-      console.log(userSliceData);
+    const userSliceData = useSelector((state: any) => state.userLogin.data);
+    console.log(userSliceData);
     React.useImperativeHandle(ref, () => ({
-      open(state: any, type: any,row: any) {
-        formik.setFieldValue("instituteId",loginUserSliceData?.instituteId)
+      open(state: any, type: any, row: any) {
+        formik.setFieldValue('instituteId', loginUserSliceData?.instituteId);
         setType(type);
-            
-        let temp = { '_id': row?._id }
+
+        let temp = { _id: row?._id };
         if (row?._id) {
           // dispatch(fetchSingleUserData(temp)).then((isSucess) => {
-            if (row) {
-              console.log(row, 'isSucess', row)
-              setUserData(row)
+          if (row) {
+            console.log(row, 'isSucess', row);
+            setUserData(row);
 
-              formik.setFieldValue('firstName', row?.firstName || '');
-              formik.setFieldValue('lastName', row?.lastName || '');
-              formik.setFieldValue('email', row?.email || '');
-              formik.setFieldValue('phoneNumber', row?.phoneNumber || '');
-              formik.setFieldValue('organisationId', row?.organisationId || '');
-              formik.setFieldValue('instituteId', row?.instituteId || '');
-              formik.setFieldValue('departmentId', row?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
-              // formik.setFieldValue('departmentId', departmentSliceData);
-              formik.setFieldValue('laboratoryId', row?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
-              formik.setFieldValue('user_id', row?.user_id || '');
-              formik.setFieldValue('role', row?.role || '');
-              formik.setFieldValue('status', row?.status || '');
-              // setRowValue(row?.get_uesr)
-              setFormPopup(state);
-            }
-            // setFormPopup(state);
+            formik.setFieldValue('firstName', row?.firstName || '');
+            formik.setFieldValue('lastName', row?.lastName || '');
+            formik.setFieldValue('email', row?.email || '');
+            formik.setFieldValue('phoneNumber', row?.phoneNumber || '');
+            formik.setFieldValue('organisationId', row?.organisationId || '');
+            formik.setFieldValue('instituteId', row?.instituteId || '');
+            formik.setFieldValue(
+              'departmentId',
+              row?.departmentId?.map(
+                (item: any) => departmentData?.find((obj) => obj.id == item),
+              ) || [],
+            );
+            // formik.setFieldValue('departmentId', departmentSliceData);
+            formik.setFieldValue(
+              'laboratoryId',
+              row?.laboratoryId?.map(
+                (item: any) => labData?.find((obj) => obj.id == item),
+              ) || [],
+            );
+            formik.setFieldValue('user_id', row?.user_id || '');
+            formik.setFieldValue('role', row?.role || '');
+            formik.setFieldValue('status', row?.status || '');
+            // setRowValue(row?.get_uesr)
+            setFormPopup(state);
+          }
+          // setFormPopup(state);
           // })
           //   .catch((err) => {
           //     console.log(err);
@@ -138,40 +168,49 @@ const UserForm = React.forwardRef(
         }
       },
     }));
-React.useEffect(()=>{
+    React.useEffect(() => {
+      // setDepartments(  userData?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj.id == item) ))))
+      // setLaboratory(  userData?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj.id == item) ))))
+      if (type == 'edit') {
+        dispatch(fetchOrganizationById({ instituteId: userData?.instituteId }));
+        // dispatch(fetchDepartmentById({"organisationId":userData?.organisationId}));
+        // dispatch(fetchLabById({'departmentId': userData?.departmentId}));
 
-  // setDepartments(  userData?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj.id == item) ))))
-  // setLaboratory(  userData?.departmentId?.map((item: any) => (departmentSliceData?.find(obj => (obj.id == item) ))))
-  if(type=='edit'){
-    dispatch(fetchOrganizationById({"instituteId":userData?.instituteId}))
-    // dispatch(fetchDepartmentById({"organisationId":userData?.organisationId}));
-    // dispatch(fetchLabById({'departmentId': userData?.departmentId}));
-
-  formik.setFieldValue('firstName', userData?.firstName || '');
-  formik.setFieldValue('lastName', userData?.lastName || '');
-  formik.setFieldValue('email', userData?.email || '');
-  formik.setFieldValue('phoneNumber', userData?.phoneNumber || '');
-  formik.setFieldValue('organisationId', userData?.organisationId || '');
-  formik.setFieldValue('instituteId', userData?.instituteId || '');
-  formik.setFieldValue('departmentId', userData?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
-  formik.setFieldValue('laboratoryId', userData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
-  formik.setFieldValue('user_id', userData?.user_id || '');
-  formik.setFieldValue('role', userData?.role || '');
-  formik.setFieldValue('status', userData?.status || '');
-  }
-},[institutionData,userData])
+        formik.setFieldValue('firstName', userData?.firstName || '');
+        formik.setFieldValue('lastName', userData?.lastName || '');
+        formik.setFieldValue('email', userData?.email || '');
+        formik.setFieldValue('phoneNumber', userData?.phoneNumber || '');
+        formik.setFieldValue('organisationId', userData?.organisationId || '');
+        formik.setFieldValue('instituteId', userData?.instituteId || '');
+        formik.setFieldValue(
+          'departmentId',
+          userData?.departmentId?.map(
+            (item: any) => departmentData?.find((obj) => obj.id == item),
+          ) || [],
+        );
+        formik.setFieldValue(
+          'laboratoryId',
+          userData?.laboratoryId?.map(
+            (item: any) => labData?.find((obj) => obj.id == item),
+          ) || [],
+        );
+        formik.setFieldValue('user_id', userData?.user_id || '');
+        formik.setFieldValue('role', userData?.role || '');
+        formik.setFieldValue('status', userData?.status || '');
+      }
+    }, [institutionData, userData]);
 
     const checkCredentials = (first_name: any) => {
       return true;
     };
 
-    const onSubmit = async(values: any) => {
+    const onSubmit = async (values: any) => {
       const isMatch = checkCredentials(values.firstName);
       if (isMatch) {
-        var deptArray: any = []
-        departments?.map((item: any) => (deptArray.push(item?.id)))
-        var labArray: any = []
-        laboratory?.map((item: any) => (labArray.push(item?.id)))
+        var deptArray: any = [];
+        departments?.map((item: any) => deptArray.push(item?.id));
+        var labArray: any = [];
+        laboratory?.map((item: any) => labArray.push(item?.id));
         let userValues: any = {
           // uid:"",
           firstName: values.firstName,
@@ -183,60 +222,66 @@ React.useEffect(()=>{
           departmentId: deptArray,
           laboratoryId: labArray,
           role: values.role,
-          createdOn:moment(new Date()).format('MM/DD/YYYY'),
-          createdBy: "Admin"
-        }
+          createdOn: moment(new Date()).format('MM/DD/YYYY'),
+          createdBy: 'Admin',
+        };
         console.log(userValues);
-        
+
         if (type == 'edit') {
-          userValues['_id'] = userData?._id
-          await  dispatch(fetchUpdateUserData(userValues))
-          const auths:any = auth;
+          userValues['_id'] = userData?._id;
+          await dispatch(fetchUpdateUserData(userValues));
+          const auths: any = auth;
           await updateProfile(auths?.currentUser, {
-  displayName: values.firstName
-}).then((res) => {
-  console.log(res);
-  toast(`User ${type=='edit'?"updated" : "created"}  !`, {
-    style: {
-      background: '#00bf70', color: '#fff'
-    }
-  });
-  // Profile updated!
-  // ...
-}).catch((error) => {
-  // An error occurred
-  // ...
-});
-await submitFormPopup();    
-        }
-        else {
-        //   console.log(userValues);
-        //   try {
-        //  createUserWithEmailAndPassword(auth, values.email?.toLowerCase(), "Test@123").then((res)=>{
-          // userValues['uid'] = res.user.uid,
-          await dispatch(postUserData(userValues)).then((res:any)=>{
-            toast(res?.create_user?.message, {
-              style: {
-                background: res?.create_user?.message=="user already exits"?"red":'#00bf70', color: '#fff',
-                textTransform: "capitalize"
-              }
-            });
-             submitFormPopup();
-          }).catch((err)=>{
-            console.log(err);
-            
+            displayName: values.firstName,
           })
-          
-        // }).catch((err)=>{
-        //   toast(`This user email is already exists!`, {
-        //     style: {
-        //       background: '#FFC60B', color: 'black'
-        //     }
-        //     })
-        // })
-        // }catch (err){
-        //   console.error(err);
-        // }
+            .then((res) => {
+              console.log(res);
+              toast(`User ${type == 'edit' ? 'updated' : 'created'}  !`, {
+                style: {
+                  background: '#00bf70',
+                  color: '#fff',
+                },
+              });
+              // Profile updated!
+              // ...
+            })
+            .catch((error) => {
+              // An error occurred
+              // ...
+            });
+          await submitFormPopup();
+        } else {
+          //   try {
+          //  createUserWithEmailAndPassword(auth, values.email?.toLowerCase(), "Test@123").then((res)=>{
+          // userValues['uid'] = res.user.uid,
+          await dispatch(postUserData(userValues))
+            .then((res: any) => {
+              toast(res?.create_user?.message, {
+                style: {
+                  background:
+                    res?.create_user?.message == 'user already exits'
+                      ? 'red'
+                      : '#00bf70',
+                  color: '#fff',
+                  textTransform: 'capitalize',
+                },
+              });
+              submitFormPopup();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          // }).catch((err)=>{
+          //   toast(`This user email is already exists!`, {
+          //     style: {
+          //       background: '#FFC60B', color: 'black'
+          //     }
+          //     })
+          // })
+          // }catch (err){
+          //   console.error(err);
+          // }
         }
         // clearForm()
       } else {
@@ -248,7 +293,7 @@ await submitFormPopup();
     };
     const submitFormPopup = () => {
       setFormPopup(false);
-      reload()
+      reload();
       // toast(`User ${type=='edit'?"updated" : "created"}  !`, {
       //   style: {
       //     background: '#00bf70', color: '#fff'
@@ -258,7 +303,7 @@ await submitFormPopup();
       // setTimeout(() => {
       //   successPopupRef.current.open(false, 'User');
       // }, 3000);
-      clearForm()
+      clearForm();
     };
 
     const handleConfirmationState = (state: any) => {
@@ -267,7 +312,7 @@ await submitFormPopup();
       } else {
         confirmationPopupRef.current.open(false);
         setFormPopup(false);
-        clearForm()
+        clearForm();
       }
     };
 
@@ -278,7 +323,7 @@ await submitFormPopup();
         email: rowVal?.email ? rowVal?.email : '',
         phoneNumber: rowVal?.phoneNumber ? rowVal?.phoneNumber : '',
         organisationId: rowVal?.organisationId ? rowVal?.organisationId : '',
-        instituteId: rowVal?.instituteId ? rowVal?.instituteId:"",
+        instituteId: rowVal?.instituteId ? rowVal?.instituteId : '',
         departmentId: rowVal?.departmentId ? rowVal?.departmentId : [],
         laboratoryId: rowVal?.laboratoryId ? rowVal?.laboratoryId : [],
         user_id: 'USER_12345678',
@@ -306,16 +351,17 @@ await submitFormPopup();
       (state: any) => state.institution.data?.get_all_institute,
     );
 
-    React.useEffect(()=>{
-      dispatch(fetchDepartmentById({"organisationId":formik.values.organisationId}));
-  },[formik.values.organisationId])
+    React.useEffect(() => {
+      dispatch(
+        fetchDepartmentById({ organisationId: formik.values.organisationId }),
+      );
+    }, [formik.values.organisationId]);
 
-  React.useEffect(()=>{
-
-    var dept:any=[];
-     formik.values.departmentId?.map((item: any) => (dept.push(item?.id)))
-    dispatch(fetchLabById({'departmentId': dept}));
-},[formik.values.departmentId])
+    React.useEffect(() => {
+      var dept: any = [];
+      formik.values.departmentId?.map((item: any) => dept.push(item?.id));
+      dispatch(fetchLabById({ departmentId: dept }));
+    }, [formik.values.departmentId]);
     React.useEffect(() => {
       // setDepartmentData(
       //   departmentSliceData?.map((item: any) => ({
@@ -331,111 +377,134 @@ await submitFormPopup();
       //     id: item._id,
       //   })),
       // );
-      console.log("departmentSliceData",departmentSliceData);
-      
+      console.log('departmentSliceData', departmentSliceData);
+
       setRoleData(
         roleSliceData?.map((item: any) => ({
           label: item.name,
           value: item._id,
         })),
       );
-     
-      setOrganizationData(
-        organizationSliceData?.map((item: any) => ({
+      if (type !== 'create') {
+        setOrganizationData(
+          organizationSliceData?.map((item: any) => ({
+            label: item.name,
+            value: item.name,
+            id: item._id,
+          })),
+        );
+      }
+    }, [
+      departmentSliceData,
+      roleSliceData,
+      organizationSliceData,
+      institutionSliceData,
+    ]);
+
+    React.useEffect(() => {
+      const mappedDepartments = (userData?.departmentId || []).map(
+        (id: string) => {
+          var department = departmentSliceData?.find((obj) => obj._id == id);
+          // var dept1=department?.filter((department) => department !== null && department!==undefined)
+          console.log('departments1', department == undefined);
+          console.log('departments1', department);
+          if (department !== undefined) {
+            console.log('departments1', department);
+
+            return {
+              label: department.name,
+              value: department.name,
+              id: department._id,
+            };
+          } else {
+            console.log('departments1', departmentSliceData);
+
+            // Handle the case where the laboratory with the specified ID is not found
+            departmentSliceData.map((item) => {
+              return {
+                label: item.name,
+                value: item.name,
+                id: item._id,
+              };
+            });
+          }
+
+          // Handle the case where the department with the specified ID is not found
+        },
+      );
+
+      console.log('mappedDepartments', mappedDepartments);
+
+      if (type == 'edit') {
+        formik.setFieldValue(
+          'departmentId',
+          mappedDepartments[0] !== undefined && mappedDepartments[0] !== null
+            ? mappedDepartments
+            : [],
+        );
+      }
+      setDepartmentData(
+        type == 'edit'
+          ? mappedDepartments?.length !== 0 &&
+            mappedDepartments[0] !== undefined
+            ? mappedDepartments
+            : departmentSliceData?.map((item: any) => ({
+                label: item.name,
+                value: item.name,
+                id: item._id,
+              }))
+          : departmentSliceData?.map((item: any) => ({
+              label: item.name,
+              value: item.name,
+              id: item._id,
+            })),
+      );
+    }, [departmentSliceData]);
+
+    React.useEffect(() => {
+      const mappedDLabs = userData?.laboratoryId
+        ?.map((id: string) => {
+          var lab = labSliceData?.find((obj) => obj._id === id);
+
+          if (lab !== undefined) {
+            return {
+              label: lab.name,
+              value: lab.name,
+              id: lab._id,
+            };
+          } else {
+            // Handle the case where the laboratory with the specified ID is not found
+            labSliceData.map((item) => {
+              return {
+                label: item.name,
+                value: item.name,
+                id: item._id,
+              };
+            });
+          }
+        })
+        .filter((lab) => lab !== null);
+
+      formik.setFieldValue(
+        'laboratoryId',
+        mappedDLabs !== undefined &&
+          mappedDLabs[0] !== undefined &&
+          mappedDLabs[0] !== null
+          ? mappedDLabs
+          : [],
+      );
+
+      setLabData(
+        labSliceData?.map((item: any) => ({
           label: item.name,
           value: item.name,
           id: item._id,
         })),
       );
-    }, [departmentSliceData, , roleSliceData, organizationSliceData,institutionSliceData]);
+    }, [labSliceData]);
 
-React.useEffect(()=>{
-  const mappedDepartments = (userData?.departmentId || []).map((id: string) => {
-    var department = departmentSliceData?.find(obj => obj._id == id )
-    // var dept1=department?.filter((department) => department !== null && department!==undefined)
-    console.log("departments1",department==undefined);
-    console.log("departments1",department);
-    if (department!==undefined) {
-      console.log("departments1",department);
-      
-        return {
-            label: department.name,
-            value: department.name,
-            id: department._id,
-        };
-    }
-    else {
-      console.log("departments1",departmentSliceData);
-      
-      // Handle the case where the laboratory with the specified ID is not found
-      departmentSliceData.map((item)=>{
-      return {
-        label: item.name,
-        value: item.name,
-        id: item._id,
-  }})
-  }
-    
-    // Handle the case where the department with the specified ID is not found
-})
-
-
-  console.log("mappedDepartments",mappedDepartments);
-  
-  if(type=="edit"){
-formik.setFieldValue('departmentId', (mappedDepartments[0]!==undefined&&mappedDepartments[0]!==null) ? mappedDepartments:[]);
-
-  }
-setDepartmentData(type=="edit"?mappedDepartments?.length!==0 && mappedDepartments[0]!==undefined ?mappedDepartments:departmentSliceData?.map((item: any) => ({
-    label: item.name,
-    value: item.name,
-    id: item._id,
-  })):departmentSliceData?.map((item: any) => ({
-    label: item.name,
-    value: item.name,
-    id: item._id,
-  })),)
-
-
-},[departmentSliceData])
-
-React.useEffect(()=>{
-
-  const mappedDLabs = userData?.laboratoryId?.map((id: string) => {
-    var lab = labSliceData?.find(obj => obj._id === id);
-
-    if (lab!==undefined) {
-        return {
-            label: lab.name,
-            value: lab.name,
-            id: lab._id,
-        };
-    } else {
-        // Handle the case where the laboratory with the specified ID is not found
-        labSliceData.map((item)=>{
-        return {
-          label: item.name,
-          value: item.name,
-          id: item._id,
-    }})
-    }
-}).filter((lab) => lab !== null);
-
-  formik.setFieldValue('laboratoryId', (mappedDLabs!==undefined &&mappedDLabs[0]!==undefined &&mappedDLabs[0]!==null)? mappedDLabs:[]);
-
-  setLabData(labSliceData?.map((item: any) => ({
-    label: item.name,
-    value: item.name,
-    id: item._id,
-  })),)
-},[labSliceData])
-
-    console.log("departmentData",departmentData);
-
-    console.log(DepartmentList);
-    
     React.useEffect(() => {
-      dispatch(fetchinstitutionData())
+      dispatch(fetchinstitutionData());
     }, []);
 
     // React.useEffect(() => {
@@ -457,7 +526,7 @@ React.useEffect(()=>{
     //     // formik.setFieldValue("organisationId","")
     //     // formik.setFieldValue("departmentId",[])
     //     // formik.setFieldValue("laboratoryId",[])
-    
+
     // }, [formik.values.organisationId])
 
     // React.useEffect(() => {
@@ -470,41 +539,55 @@ React.useEffect(()=>{
     //   // formik.setFieldValue("organisationId","")
     //   // formik.setFieldValue("departmentId",[])
     //   // formik.setFieldValue("laboratoryId",[])
-  
+
     //   }, [formik.values.departmentId])
 
-    React.useEffect(()=>{
-      let payload2={
-        instituteId:loginUserSliceData?.instituteId
-      }
+    React.useEffect(() => {
+      let payload2 = {
+        instituteId: loginUserSliceData?.instituteId,
+      };
       dispatch(fetchSingleRoleData(payload2));
-      formik.setFieldValue("instituteId",loginUserSliceData?.instituteId)
-    },[loginUserSliceData])
+      formik.setFieldValue('instituteId', loginUserSliceData?.instituteId);
+      if (type === 'create') {
+        var organization: any = organizationSliceData?.filter(
+          (organization: any) =>
+            organization._id === loginUserSliceData?.organisationId,
+        );
+        setOrganizationData(
+          organization?.map((item: any) => ({
+            label: item.name,
+            value: item.name,
+            id: item._id,
+          })),
+        );
+      }
+    }, [loginUserSliceData]);
 
-    
     return (
       <div>
         <Dialog
-        
           open={formPopup}
           keepMounted
           // onClose={() => {
           //   closeFormPopup(false);
-          //   clearForm(); 
+          //   clearForm();
           // }}
           aria-labelledby="add-new-asset-title"
           aria-describedby="add-new-asset"
           fullWidth
           maxWidth="md"
           className="popup-outer"
-          disableScrollLock={ true }
-          
+          disableScrollLock={true}
         >
           <form onSubmit={formik.handleSubmit}>
             <Box className="popup-section">
               <Box className="title-popup">
                 <Typography>{type} user</Typography>
-                <CloseIcon onClick={() => {closeFormPopup(false) , clearForm()}}/>
+                <CloseIcon
+                  onClick={() => {
+                    closeFormPopup(false), clearForm();
+                  }}
+                />
               </Box>
               <Box>
                 <Grid container spacing={2} className="asset-popup">
@@ -517,7 +600,9 @@ React.useEffect(()=>{
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>First name<span style={{ color: "#E2445C" }}>*</span></label>
+                      <label style={{ display: 'block' }}>
+                        First name<span style={{ color: '#E2445C' }}>*</span>
+                      </label>
                       <TextField
                         margin="none"
                         fullWidth
@@ -535,12 +620,11 @@ React.useEffect(()=>{
                           Boolean(formik.errors.firstName)
                         }
                       />
-                      {formik.touched.firstName &&
-                        formik.errors.firstName && (
-                          <Typography className="error-field">
-                            {formik.errors.firstName}
-                          </Typography>
-                        )}
+                      {formik.touched.firstName && formik.errors.firstName && (
+                        <Typography className="error-field">
+                          {formik.errors.firstName}
+                        </Typography>
+                      )}
                     </Box>
                   </Grid>
                   <Grid
@@ -558,7 +642,9 @@ React.useEffect(()=>{
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Last name<span style={{ color: "#E2445C" }}>*</span></label>
+                      <label style={{ display: 'block' }}>
+                        Last name<span style={{ color: '#E2445C' }}>*</span>
+                      </label>
                       <TextField
                         margin="normal"
                         fullWidth
@@ -579,7 +665,7 @@ React.useEffect(()=>{
                       {formik.touched.lastName && formik.errors.lastName && (
                         <Typography className="error-field">
                           {formik.errors.lastName}
-                        </Typography> 
+                        </Typography>
                       )}
                     </Box>
                   </Grid>
@@ -594,7 +680,9 @@ React.useEffect(()=>{
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Email ID<span style={{ color: "#E2445C" }}>*</span></label>
+                      <label style={{ display: 'block' }}>
+                        Email ID<span style={{ color: '#E2445C' }}>*</span>
+                      </label>
 
                       <TextField
                         margin="normal"
@@ -608,11 +696,10 @@ React.useEffect(()=>{
                         onBlur={formik.handleBlur}
                         value={formik.values.email}
                         size="small"
-                        className={type=="edit" ? "bg-gray-input" : ""}
-                        disabled={type=='edit'? true: false}
+                        className={type == 'edit' ? 'bg-gray-input' : ''}
+                        disabled={type == 'edit' ? true : false}
                         error={
-                          formik.touched.email &&
-                          Boolean(formik.errors.email)
+                          formik.touched.email && Boolean(formik.errors.email)
                         }
                       />
                       {formik.touched.email && formik.errors.email && (
@@ -642,12 +729,14 @@ React.useEffect(()=>{
                         margin="none"
                         fullWidth
                         id="phoneNumber"
-                        type='number'
+                        type="number"
                         name="phoneNumber"
                         autoComplete="off"
-                        onInput={(e:any)=>{ 
-                          e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
-                      }}
+                        onInput={(e: any) => {
+                          e.target.value = Math.max(0, parseInt(e.target.value))
+                            .toString()
+                            .slice(0, 10);
+                        }}
                         InputLabelProps={{ shrink: false }}
                         placeholder="Mobile number"
                         onChange={formik.handleChange}
@@ -676,7 +765,7 @@ React.useEffect(()=>{
                   </Grid>
                 </Grid>
                 <Grid container spacing={2} className="asset-popup">
-                <Grid
+                  <Grid
                     item
                     xs={12}
                     sm={6}
@@ -688,16 +777,18 @@ React.useEffect(()=>{
                         xs: '1rem !important',
                         sm: '1rem !important',
                       },
-                      paddingRight: { sm: '1rem !important' }
+                      paddingRight: { sm: '1rem !important' },
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Select role<span style={{ color: "#E2445C" }}>*</span></label>
+                      <label style={{ display: 'block' }}>
+                        Select role<span style={{ color: '#E2445C' }}>*</span>
+                      </label>
                       <Select
-                       MenuProps={{                   
-                        disableScrollLock: true,                   
-                        marginThreshold: null
-                      }}
+                        MenuProps={{
+                          disableScrollLock: true,
+                          marginThreshold: null,
+                        }}
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
@@ -750,13 +841,15 @@ React.useEffect(()=>{
                     }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Institution<span style={{ color: "#E2445C" }}>*</span></label>
+                      <label style={{ display: 'block' }}>
+                        Institution<span style={{ color: '#E2445C' }}>*</span>
+                      </label>
 
                       <Select
-                      MenuProps={{                   
-                        disableScrollLock: true,                   
-                        marginThreshold: null
-                      }}
+                        MenuProps={{
+                          disableScrollLock: true,
+                          marginThreshold: null,
+                        }}
                         className="placeholder-color"
                         displayEmpty
                         disabled={true}
@@ -765,8 +858,8 @@ React.useEffect(()=>{
                           formik.values.instituteId !== ''
                             ? undefined
                             : () => (
-                              <Placeholder>Select Institution</Placeholder>
-                            )
+                                <Placeholder>Select Institution</Placeholder>
+                              )
                         }
                         margin="none"
                         fullWidth
@@ -775,7 +868,14 @@ React.useEffect(()=>{
                         autoComplete="off"
                         placeholder="Institution"
                         onChange={formik.handleChange}
-                        onBlur={()=>{formik.handleBlur,dispatch(fetchOrganizationById({"instituteId"  : formik.values.instituteId}))}}
+                        onBlur={() => {
+                          formik.handleBlur,
+                            dispatch(
+                              fetchOrganizationById({
+                                instituteId: formik.values.instituteId,
+                              }),
+                            );
+                        }}
                         value={formik.values.instituteId}
                         size="small"
                         error={
@@ -783,7 +883,7 @@ React.useEffect(()=>{
                           Boolean(formik.errors.instituteId)
                         }
                       >
-                        {institutionSliceData?.map((item:any) => (
+                        {institutionSliceData?.map((item: any) => (
                           <MenuItem key={item._id} value={item._id}>
                             {item.name}
                           </MenuItem>
@@ -798,7 +898,6 @@ React.useEffect(()=>{
                         )}
                     </Box>
                   </Grid>
-                 
                 </Grid>
                 <Grid
                   container
@@ -814,25 +913,28 @@ React.useEffect(()=>{
                     sx={{ paddingRight: { sm: '1rem !important' } }}
                   >
                     <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Organisation<span style={{ color: "#E2445C" }}>*</span></label>
+                      <label style={{ display: 'block' }}>
+                        Organisation<span style={{ color: '#E2445C' }}>*</span>
+                      </label>
 
                       <Select
-                      MenuProps={{                   
-                        disableScrollLock: true,                   
-                        marginThreshold: null
-                      }}
+                        MenuProps={{
+                          disableScrollLock: true,
+                          marginThreshold: null,
+                        }}
                         className="placeholder-color"
                         displayEmpty
                         IconComponent={ExpandMoreOutlinedIcon}
-                        disabled={formik.values.instituteId !== ''?false:true}
+                        // disabled={
+                        //   formik.values.instituteId !== '' ? false : true
+                        // }
+                        disabled={type === 'edit'}
                         renderValue={
                           formik.values.organisationId !== ''
                             ? undefined
                             : () => (
-                              <Placeholder>
-                                Select Organization
-                              </Placeholder>
-                            )
+                                <Placeholder>Select Organization</Placeholder>
+                              )
                         }
                         margin="none"
                         fullWidth
@@ -841,7 +943,14 @@ React.useEffect(()=>{
                         autoComplete="off"
                         placeholder="Organization"
                         onChange={formik.handleChange}
-                        onBlur={()=>{formik.handleBlur,dispatch(fetchDepartmentById({"organisationId"  : formik.values.organisationId}))}}
+                        onBlur={() => {
+                          formik.handleBlur,
+                            dispatch(
+                              fetchDepartmentById({
+                                organisationId: formik.values.organisationId,
+                              }),
+                            );
+                        }}
                         value={formik.values.organisationId}
                         size="small"
                         error={
@@ -864,146 +973,182 @@ React.useEffect(()=>{
                         )}
                     </Box>
                   </Grid>
-                  {formik.values.role !== '65741c069d53d19df8321e6c' &&
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{
-                      paddingLeft: { sm: '1rem !important' },
-                      paddingTop: {
-                        xs: '0rem !important',
-                        sm: '1rem !important',
-                      },
-                    }}
-                  >
-                    <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Department/s<span style={{ color: "#E2445C" }}>*</span></label>
-                      {/* {JSON.stringify(formik.values.departmentId)} */}
-                      <Autocomplete
-                              multiple
-                              id="departmentId"
-                              disableCloseOnSelect
-                              value={formik.values.departmentId}
-                              disabled={formik.values.organisationId !== ''?false:true}
-                              options={
-                                departmentData !== undefined
-                                  ? departmentData
-                                  : []
+                  {formik.values.role !== '65741c069d53d19df8321e6c' && (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={6}
+                      lg={6}
+                      sx={{
+                        paddingLeft: { sm: '1rem !important' },
+                        paddingTop: {
+                          xs: '0rem !important',
+                          sm: '1rem !important',
+                        },
+                      }}
+                    >
+                      <Box style={{ position: 'relative' }}>
+                        <label style={{ display: 'block' }}>
+                          Department/s
+                          <span style={{ color: '#E2445C' }}>*</span>
+                        </label>
+                        {/* {JSON.stringify(formik.values.departmentId)} */}
+                        <Autocomplete
+                          multiple
+                          id="departmentId"
+                          disableCloseOnSelect
+                          value={formik.values.departmentId}
+                          disabled={
+                            formik.values.organisationId !== '' ? false : true
+                          }
+                          options={
+                            departmentData !== undefined ? departmentData : []
+                          }
+                          getOptionLabel={(option: any) => option?.label}
+                          isOptionEqualToValue={(option: any, value: any) =>
+                            value?.id == option?.id
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder={
+                                formik.values.departmentId?.length == 0
+                                  ? 'Department/s'
+                                  : ''
                               }
-                              getOptionLabel={(option: any) =>option?.label }
-                              isOptionEqualToValue={(option: any, value: any) =>
-                              value?.id == option?.id
-                              }
-                              renderInput={(params) => (
-                                <TextField {...params} placeholder={formik.values.departmentId?.length==0?"Department/s":""} />
-                              )}
-                              fullWidth
-                              placeholder="Department"
-                              size="medium"
-                              renderOption={(
-                                props,
-                                option: any,
-                                
-                                { selected },
-                                
-                              ) => (
-                                <React.Fragment>
-                                  <li {...props}>
-                                    <Checkbox
-                                      style={{ marginRight: 0 }}
-                                      checked={selected}
-                                    />
-                                    {option?.value}
-                                  </li>
-                                </React.Fragment>
-                              )}
-                              onChange={(_, selectedOptions: any) =>{
-                                setDepartments(selectedOptions);formik.setValues({...formik.values,'departmentId':selectedOptions})}
-                              }
-                              onBlur={()=>{
-                                var dept: any = []
-                                  formik.values.departmentId?.map((item: any) => (dept.push(item?.id)))
-                                  let payload:any = {
-                                    departmentId : dept
-                                }
-                                dispatch(fetchLabById(payload));}}
                             />
-                      {formik.touched.departmentId &&
-                        formik.errors.departmentId && (
-                          <Typography className="error-field">
-                            {formik.errors.departmentId}
-                          </Typography>
-                        )}
-                    </Box>
-                  </Grid>
-  }
-                </Grid>
-                <Grid container spacing={2} className="asset-popup prod-input-auto prod-multi">
-                {formik.values.role !== '65741c069d53d19df8321e6c' && <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{
-                      paddingLeft: { sm: '1rem !important' },
-                      paddingTop: {
-                        xs: '1rem !important',
-                        sm: '1rem !important',
-                      },
-                      paddingRight: { sm: '1rem !important' }
-                    }}
-                  >
-                    <Box style={{ position: 'relative' }}>
-                      <label style={{ display: 'block' }}>Laboratory/ies<span style={{ color: "#E2445C" }}>*</span></label>
+                          )}
+                          fullWidth
+                          placeholder="Department"
+                          size="medium"
+                          renderOption={(
+                            props,
+                            option: any,
 
-                      <Autocomplete
-                                multiple
-                                id="departmentId"
-                                value={formik.values.laboratoryId}
-                                options={labData !== undefined ? labData : []}
-                                disabled={formik.values.departmentId?.length!==0?false:true}
-                                getOptionLabel={(option: any) => option?.label}
-                                isOptionEqualToValue={(option: any, value: any) =>
-                                  value?.id == option?.id
-                                }
-                                disableCloseOnSelect
-                               
-                                renderInput={(params) => <TextField {...params} placeholder={formik.values.laboratoryId?.length==0?"Laboratory/ies":""}/>}
-                                fullWidth
-                                placeholder="Laboratory"
-                                size="medium"
-                                renderOption={(
-                                  props,
-                                  option: any,
-                                  { selected },
-                                ) => (
-                                  <React.Fragment>
-                                    <li {...props}>
-                                      <Checkbox
-                                        style={{ marginRight: 0 }}
-                                        checked={selected}
-                                      />
-                                      {option?.value}
-                                    </li>
-                                  </React.Fragment>
-                                )}
-                                onChange={(_, selectedOptions: any) =>{
-                                  setLaboratory(selectedOptions);formik.setValues({...formik.values,'laboratoryId':selectedOptions}) }
-                                }
-                              />
-                      {formik.touched.laboratoryId &&
-                        formik.errors.laboratoryId && (
-                          <Typography className="error-field">
-                            {formik.errors.laboratoryId}
-                          </Typography>
-                        )}
-                    </Box>
-                  </Grid>
-                        }
+                            { selected },
+                          ) => (
+                            <React.Fragment>
+                              <li {...props}>
+                                <Checkbox
+                                  style={{ marginRight: 0 }}
+                                  checked={selected}
+                                />
+                                {option?.value}
+                              </li>
+                            </React.Fragment>
+                          )}
+                          onChange={(_, selectedOptions: any) => {
+                            setDepartments(selectedOptions);
+                            formik.setValues({
+                              ...formik.values,
+                              departmentId: selectedOptions,
+                            });
+                          }}
+                          onBlur={() => {
+                            var dept: any = [];
+                            formik.values.departmentId?.map((item: any) =>
+                              dept.push(item?.id),
+                            );
+                            let payload: any = {
+                              departmentId: dept,
+                            };
+                            dispatch(fetchLabById(payload));
+                          }}
+                        />
+                        {formik.touched.departmentId &&
+                          formik.errors.departmentId && (
+                            <Typography className="error-field">
+                              {formik.errors.departmentId}
+                            </Typography>
+                          )}
+                      </Box>
+                    </Grid>
+                  )}
+                </Grid>
+                <Grid
+                  container
+                  spacing={2}
+                  className="asset-popup prod-input-auto prod-multi"
+                >
+                  {formik.values.role !== '65741c069d53d19df8321e6c' && (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={6}
+                      lg={6}
+                      sx={{
+                        paddingLeft: { sm: '1rem !important' },
+                        paddingTop: {
+                          xs: '1rem !important',
+                          sm: '1rem !important',
+                        },
+                        paddingRight: { sm: '1rem !important' },
+                      }}
+                    >
+                      <Box style={{ position: 'relative' }}>
+                        <label style={{ display: 'block' }}>
+                          Laboratory/ies
+                          <span style={{ color: '#E2445C' }}>*</span>
+                        </label>
+
+                        <Autocomplete
+                          multiple
+                          id="departmentId"
+                          value={formik.values.laboratoryId}
+                          options={labData !== undefined ? labData : []}
+                          disabled={
+                            formik.values.departmentId?.length !== 0
+                              ? false
+                              : true
+                          }
+                          getOptionLabel={(option: any) => option?.label}
+                          isOptionEqualToValue={(option: any, value: any) =>
+                            value?.id == option?.id
+                          }
+                          disableCloseOnSelect
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder={
+                                formik.values.laboratoryId?.length == 0
+                                  ? 'Laboratory/ies'
+                                  : ''
+                              }
+                            />
+                          )}
+                          fullWidth
+                          placeholder="Laboratory"
+                          size="medium"
+                          renderOption={(props, option: any, { selected }) => (
+                            <React.Fragment>
+                              <li {...props}>
+                                <Checkbox
+                                  style={{ marginRight: 0 }}
+                                  checked={selected}
+                                />
+                                {option?.value}
+                              </li>
+                            </React.Fragment>
+                          )}
+                          onChange={(_, selectedOptions: any) => {
+                            setLaboratory(selectedOptions);
+                            formik.setValues({
+                              ...formik.values,
+                              laboratoryId: selectedOptions,
+                            });
+                          }}
+                        />
+                        {formik.touched.laboratoryId &&
+                          formik.errors.laboratoryId && (
+                            <Typography className="error-field">
+                              {formik.errors.laboratoryId}
+                            </Typography>
+                          )}
+                      </Box>
+                    </Grid>
+                  )}
                   {/* <Grid
                     item
                     xs={12}
@@ -1041,7 +1186,6 @@ React.useEffect(()=>{
                       )}
                     </Box>
                   </Grid> */}
-                  
                 </Grid>
                 <Grid container spacing={2} className="asset-popup">
                   {/* <Grid
@@ -1112,7 +1256,13 @@ React.useEffect(()=>{
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={type=='edit'?!formik.dirty:Object.keys(formik.errors).length==0 ?false:true}
+                  disabled={
+                    type == 'edit'
+                      ? !formik.dirty
+                      : Object.keys(formik.errors).length == 0
+                      ? false
+                      : true
+                  }
                   // onClick={submitFormPopup}
                   className="add-btn"
                 >
