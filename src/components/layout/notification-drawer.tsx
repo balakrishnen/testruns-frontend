@@ -100,7 +100,10 @@ export default function AppNotificationDrawer({
       setLoader(false)
       console.log(res?.data?.get_notification_message);
       
-    });
+    }).catch((err)=>{
+      console.log(err);
+      
+    })
   }
   const getTimeDifference = (notificationTime: any) => {
     const currentTime: any = moment();
@@ -158,7 +161,10 @@ export default function AppNotificationDrawer({
         setNotificationMesssage(res?.data?.get_notification_message)
         console.log(res?.data?.get_notification_message);
         
-      });
+      }).catch((err)=>{
+        console.log(err);
+        
+      })
     }
   }
   console.log("notificationMesssage",notificationMesssage);

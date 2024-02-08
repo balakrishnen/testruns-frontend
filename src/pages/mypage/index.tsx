@@ -391,7 +391,10 @@ export default function MyPage() {
       setNotificationMesssage(res?.data?.get_notification_message)
       console.log(res?.data?.get_notification_message);
 
-    });
+    }).catch((err)=>{
+      console.log(err);
+      
+    })
   }
 
   // React.useEffect(() => {

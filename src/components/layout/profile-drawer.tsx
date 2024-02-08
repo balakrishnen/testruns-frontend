@@ -131,29 +131,19 @@ export default function AppProfileDrawer({
   const credencial =  loginUserSliceData?.role[0]
 
   React.useEffect(() => {
-    dispatch(fetchOrganizationById({"instituteId":loginUserSliceData?.instituteId}))
-    dispatch(fetchDepartmentById({ "organisationId":loginUserSliceData?.organisationId}))
-    dispatch(fetchLabById({"departmentId":loginUserSliceData?.departmentId}))
-  }, [loginUserSliceData]);
-
-  React.useEffect(() => {
     if (openDrawer) {
       
       let payload = {
         _id: loginUserSliceData?._id
       };
 
-      // Dispatch API calls only when the profile drawer is open
-      // dispatch(fetchDepartmentData({"organisationId":loginUserSliceData?.organisationId}));
-      // dispatch(fetchLabData());
-      // dispatch(fetchOrganizationData());
-
       dispatch(fetchSingleRoleData(payload2));
       dispatch(fetchSingleUserData(payload));
-
+      dispatch(fetchOrganizationById({"instituteId":loginUserSliceData?.instituteId}))
+      dispatch(fetchDepartmentById({ "organisationId":loginUserSliceData?.organisationId}))
+      dispatch(fetchLabById({"departmentId":loginUserSliceData?.departmentId}))
       // Other logic specific to the profile drawer
       setEdit(true);
-      // setUploadedFile(null);
     }
   }, [openDrawer, loginUserSliceData]);
   

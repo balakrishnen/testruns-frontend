@@ -154,7 +154,6 @@ React.useEffect(()=>{
   formik.setFieldValue('organisationId', userData?.organisationId || '');
   formik.setFieldValue('instituteId', userData?.instituteId || '');
   formik.setFieldValue('departmentId', userData?.departmentId?.map((item: any) => (departmentData?.find(obj => (obj.id == item) ))) || []);
-  // formik.setFieldValue('departmentId', departmentSliceData);
   formik.setFieldValue('laboratoryId', userData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj.id == item) ))) || []);
   formik.setFieldValue('user_id', userData?.user_id || '');
   formik.setFieldValue('role', userData?.role || '');
@@ -223,6 +222,9 @@ await submitFormPopup();
               }
             });
              submitFormPopup();
+          }).catch((err)=>{
+            console.log(err);
+            
           })
           
         // }).catch((err)=>{

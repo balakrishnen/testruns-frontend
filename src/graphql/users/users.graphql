@@ -32,6 +32,7 @@ query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
             status
              departmentId
             laboratoryId
+            imageUrl
             createdOn
             isDeleted
             createdAt

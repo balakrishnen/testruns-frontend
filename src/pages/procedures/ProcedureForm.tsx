@@ -198,7 +198,10 @@ const ProcedureForm = React.forwardRef(
                   row?.procedureDetials,
               );
             }
-          });
+          }).catch((err)=>{
+            console.log(err);
+            
+          })
         } else if (row !== undefined) {
           let department = row?.departmentId?.map((item: any) => ({
             label: item?.name,

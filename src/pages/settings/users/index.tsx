@@ -264,7 +264,7 @@ console.log("userSliceData",userSliceData);
       // organizationId:loginUserSliceData?.verifyToken?.organizationId
       instituteId:loginUserSliceData?.verifyToken?.instituteId,
     };
-    dispatch(fetchUserData(payload));
+    dispatch(fetchUserData(queryStrings));
   };
 
   const handleCloseTableHeader = (status: boolean) => {
@@ -786,9 +786,9 @@ console.log("filteredData",filteredData);
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                               <Box>
                                 <img
-                                  src={userr}
+                                  src={row?.imageUrl!==null && row.imageUrl!=="" ?row?.imageUrl : userr}
                                   alt="no_image"
-                                  style={{ width: '45px', height: '45px' }}
+                                  style={{width: "42px", height: "42px", borderRadius: "28px"}}
                                 />
                               </Box>
                               <Box sx={{ ml: 1 }}>

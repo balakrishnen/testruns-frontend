@@ -344,7 +344,10 @@ export default function RunsDetails() {
         else {
           setUserRunzResult(userRunzResult);
         }
-      });
+      }).catch((err)=>{
+        console.log(err);
+        
+      })
     }
   }, [value, runzValue]);
 
@@ -389,7 +392,10 @@ export default function RunsDetails() {
       setUserRunzResult(
         res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
       );
-    });
+    }).catch((err)=>{
+      console.log(err);
+      
+    })
     // setRunzValue(procedureSliceData.get_run)
   };
 
@@ -868,7 +874,10 @@ export default function RunsDetails() {
               },
             });
           }
-        });
+        }).catch((err)=>{
+          console.log(err);
+          
+        })
       } else {
         let payload2 = {
           _id: userRunzID?._id,
@@ -885,7 +894,10 @@ export default function RunsDetails() {
               color: '#fff',
             },
           });
-        });
+        }).catch((err)=>{
+          console.log(err);
+          
+        })
       }
       const data: any = {
         value_1ZyZJXD: '0',
@@ -952,7 +964,10 @@ export default function RunsDetails() {
               if (text !== '') {
                 setUserRunzResult(text + '</ul>');
               }
-            });
+            }).catch((err)=>{
+              console.log(err);
+              
+            })
         })
         .catch((err) => {
           console.log(err);

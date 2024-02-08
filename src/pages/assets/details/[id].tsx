@@ -22,7 +22,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import moment from 'moment';
 import test from '../../../assets/images/Noimage.png';
-import HistoryTable from "../details/history";
+import HistoryTable from '../details/history';
 import {
   fetchProcedureByAssetsName,
   fetchRunsByProcedure,
@@ -78,16 +78,22 @@ function a11yProps(index: number) {
   };
 }
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Asset Name is required').max(50, 'Must be 50 characters or less'),
+  name: Yup.string()
+    .required('Asset Name is required')
+    .max(50, 'Must be 50 characters or less'),
   assetId: Yup.string().required(),
-  departmentId: Yup.array().min(1, 'Please select at least one Department').required('Department is required'),
-  laboratoryId: Yup.array().min(1, 'Please select at least one Laboratory').required('Laboratory is required'),
+  departmentId: Yup.array()
+    .min(1, 'Please select at least one Department')
+    .required('Department is required'),
+  laboratoryId: Yup.array()
+    .min(1, 'Please select at least one Laboratory')
+    .required('Laboratory is required'),
   organisationId: Yup.string().required('Organisation is required'),
   status: Yup.string().required('Status is required'),
   availability: Yup.string().required('Availability is required'),
   perchasedDate: Yup.string().required('Purchase date is required').nullable(),
   expiryDate: Yup.string().required('Expiry date is required').nullable(),
-  assetImageUrl: Yup.string().notRequired()
+  assetImageUrl: Yup.string().notRequired(),
 
   // lastUsedDate: Yup.string().required(),
 });
@@ -100,15 +106,17 @@ export default function AssetDetails() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const today = moment().format('MM/DD/YYYY')
+  const today = moment().format('MM/DD/YYYY');
 
   const location: any = useLocation();
   const assetValue = location.state?.props;
   const getFunction = location.state?.func;
   const fileUploadField = React.useRef<any>(null);
 
-  console.log("assetValue", assetValue?.assetImageUrl);
-  const [uploadedFile, setUploadedFile] = React.useState<any>(assetValue?.assetImageUrl);
+  console.log('assetValue', assetValue?.assetImageUrl);
+  const [uploadedFile, setUploadedFile] = React.useState<any>(
+    assetValue?.assetImageUrl,
+  );
   const triggerFileUploadField = () => {
     fileUploadField.current?.click();
   };
@@ -119,14 +127,19 @@ export default function AssetDetails() {
   const [openSuccess, setSuccessOpen] = React.useState(false);
   const [departmentData, setDepartmentData] = React.useState([]);
   const [labData, setLabData] = React.useState([]);
+  const purchasedDateInputRef: any = React.useRef(null);
+  const expiryDateInputRef: any = React.useRef(null);
   const [organizationData, setOrganizationData] = React.useState([]);
-  const assetId = assetValue?._id
-  const [procedureId, setProcedureId] = React.useState([])
+  const assetId = assetValue?._id;
+  const [procedureId, setProcedureId] = React.useState([]);
   // const [assetValue, setAssetValue] = React.useState({})
-  const [organization, setOrganization] = React.useState([{
-    label: '',
-    value: '', id: assetValue?.organisationId
-  }])
+  const [organization, setOrganization] = React.useState([
+    {
+      label: '',
+      value: '',
+      id: assetValue?.organisationId,
+    },
+  ]);
   const [departments, setDepartments] = React.useState(
     assetValue?.departmentId?.map((item: any) => ({
       label: item?.name,
@@ -145,36 +158,44 @@ export default function AssetDetails() {
   // console.log(assetsData?.assetNumber);
 
   const dispatch: any = useDispatch();
-  const loginUserSliceData = useSelector(
-    (state: any) => state.userLogin.data,
-  );
+  const loginUserSliceData = useSelector((state: any) => state.userLogin.data);
 
   React.useEffect(() => {
-    console.log(assetValue._id, "assetValue._id");
-
-    seteditAcces(loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit)
-    let payload = {
-      assetId: [assetId]
+    if (purchasedDateInputRef.current) {
+      purchasedDateInputRef.current.disabled = true;
     }
-    dispatch(fetchProcedureByAssetsName(payload)).then((res: any) => {
-      if (res?.get_all_procedures_by_asset?.length !== 0) {
-        var procedrueList: any = []
+    if (expiryDateInputRef.current) {
+      expiryDateInputRef.current.disabled = true;
+    }
+  }, [purchasedDateInputRef.current, expiryDateInputRef.current]);
 
-        res?.get_all_procedures_by_asset.map((item) => {
-          procedrueList.push(item._id)
-        })
-        console.log("procedrueList", procedrueList);
-        setProcedureId(procedrueList)
-      }
-      else {
-        setProcedureId([])
-      }
-    }).catch((err: any) => {
-      console.log(err);
+  React.useEffect(() => {
+    console.log(assetValue._id, 'assetValue._id');
 
-    })
+    seteditAcces(
+      loginUserSliceData?.verifyToken?.role[0]?.asset_management?.edit,
+    );
+    let payload = {
+      assetId: [assetId],
+    };
+    dispatch(fetchProcedureByAssetsName(payload))
+      .then((res: any) => {
+        if (res?.get_all_procedures_by_asset?.length !== 0) {
+          var procedrueList: any = [];
 
-  }, [])
+          res?.get_all_procedures_by_asset.map((item) => {
+            procedrueList.push(item._id);
+          });
+          console.log('procedrueList', procedrueList);
+          setProcedureId(procedrueList);
+        } else {
+          setProcedureId([]);
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }, []);
   // const departments: any =
   // // []
   // assetValue.departmentId?.map((item: any) => ({
@@ -207,7 +228,7 @@ export default function AssetDetails() {
   //     laboratoryId: assetValue?.laboratoryId,
   //     organisationId: assetValue?.organisationId,
   //     departmentId: assetValue?.departmentId,
-  //     // userId: 'USER_1001', 
+  //     // userId: 'USER_1001',
   //     status: assetValue?.status,
   //     availability: assetValue?.availability,
   //     // assets_id: assetValue.assets_id,
@@ -260,11 +281,11 @@ export default function AssetDetails() {
     const isMatch = checkCredentials(values.name);
     if (isMatch) {
       console.log('final', departments);
-      var deptArray: any = []
-      departments.map((item: any) => (deptArray.push(item?.id)))
-      var labArray: any = []
-      laboratory.map((item: any) => (labArray.push(item?.id)))
-      var org = organization
+      var deptArray: any = [];
+      departments.map((item: any) => deptArray.push(item?.id));
+      var labArray: any = [];
+      laboratory.map((item: any) => labArray.push(item?.id));
+      var org = organization;
       console.log('labArray', organization);
       var assetValues = {
         _id: assetValue._id,
@@ -278,7 +299,7 @@ export default function AssetDetails() {
         departmentId: deptArray,
         laboratoryId: labArray,
         status: values.status,
-      }
+      };
       console.log(organization, laboratory, departments);
 
       console.log('labArray', assetValues);
@@ -286,7 +307,7 @@ export default function AssetDetails() {
       dispatch(fetchUpdateAssetsData(assetValues));
 
       submitFormPopup();
-      getFunction
+      getFunction;
     } else {
       formik.setFieldError('name', 'Invalid first name');
     }
@@ -306,13 +327,14 @@ export default function AssetDetails() {
     // successPopupRef.current.open(true, 'Asset');
     toast(`Assets updated !`, {
       style: {
-        background: '#00bf70', color: '#fff'
-      }
+        background: '#00bf70',
+        color: '#fff',
+      },
     });
     setTimeout(() => {
       // successPopupRef.current.open(false, 'Asset');
       // getFunction
-      navigate('/assets')
+      navigate('/assets');
     }, 2000);
   };
 
@@ -356,9 +378,13 @@ export default function AssetDetails() {
   //     dispatch(fetchSingleAssetsData(AssetId));
   //    }
   // }, []);
-  const purchaseDate = moment(assetValue?.perchasedDate).local().format('MM/DD/YYYY')
-  const expireDate = moment(assetValue?.expiryDate).local().format('MM/DD/YYYY')
-  console.log(assetValue?.organisationId,);
+  const purchaseDate = moment(assetValue?.perchasedDate)
+    .local()
+    .format('MM/DD/YYYY');
+  const expireDate = moment(assetValue?.expiryDate)
+    .local()
+    .format('MM/DD/YYYY');
+  console.log(assetValue?.organisationId);
 
   const formik = useFormik({
     initialValues: {
@@ -367,14 +393,14 @@ export default function AssetDetails() {
       laboratoryId: assetValue?.laboratoryId,
       organisationId: assetValue?.organisationId,
       departmentId: assetValue?.departmentId,
-      // userId: 'USER_1001', 
+      // userId: 'USER_1001',
       status: assetValue?.status,
       availability: assetValue?.availability,
       assetImageUrl: uploadedFile,
       // assets_id: assetValue.assets_id,
       lastUsedDate: assetValue?.lastUsedDate,
       perchasedDate: dayjs(purchaseDate),
-      expiryDate: dayjs(expireDate)
+      expiryDate: dayjs(expireDate),
       // perchasedDate:dayjs(today),
       // expiryDate: dayjs(today)
     },
@@ -410,7 +436,7 @@ export default function AssetDetails() {
 
     const result = s3.upload(params).promise();
     await result.then((res: any) => {
-      formik.setFieldValue('assetImageUrl', res.Location)
+      formik.setFieldValue('assetImageUrl', res.Location);
       setUploadedFile(res.Location);
       toast(`Image uploaded successfully !`, {
         style: {
@@ -430,7 +456,7 @@ export default function AssetDetails() {
     });
   };
 
-  console.log("formik", formik);
+  console.log('formik', formik);
 
   return (
     <PrivateRoute>
@@ -482,7 +508,11 @@ export default function AssetDetails() {
                 >
                   <Box>
                     <Box sx={{ textAlign: 'center' }}>
-                      <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img" style={{ height: "250px", objectFit: "contain" }}
+                      <img
+                        src={uploadedFile == null ? test : uploadedFile}
+                        alt="test"
+                        className="dynamic-img"
+                        style={{ height: '250px', objectFit: 'contain' }}
                       />
                     </Box>
 
@@ -490,7 +520,9 @@ export default function AssetDetails() {
                       className="edit-profile-btn"
                       sx={{ mt: 3, mb: 3, pb: '0px !important' }}
                     >
-                      <Button onClick={triggerFileUploadField}>Upload photo</Button>
+                      <Button onClick={triggerFileUploadField}>
+                        Upload photo
+                      </Button>
                       <input
                         style={{ display: 'none' }}
                         type="file"
@@ -518,7 +550,10 @@ export default function AssetDetails() {
                     <Grid container spacing={2} className="asset-popup">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label>Asset Name <span style={{ color: "#E2445C" }}>*</span></label>
+                          <label>
+                            Asset Name{' '}
+                            <span style={{ color: '#E2445C' }}>*</span>
+                          </label>
                           <TextField
                             margin="none"
                             fullWidth
@@ -545,8 +580,14 @@ export default function AssetDetails() {
                     </Grid>
                     <Grid container spacing={2} className="asset-popup">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <Box className="asset-id" style={{ position: 'relative' }}>
-                          <label>Asset Id (autogenerated)<span style={{ color: "#E2445C" }}>*</span></label>
+                        <Box
+                          className="asset-id"
+                          style={{ position: 'relative' }}
+                        >
+                          <label>
+                            Asset Id (autogenerated)
+                            <span style={{ color: '#E2445C' }}>*</span>
+                          </label>
                           <TextField
                             margin="normal"
                             fullWidth
@@ -588,9 +629,19 @@ export default function AssetDetails() {
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
                         <Box style={{ position: 'relative' }}>
-                          <label>Purchase date<span style={{ color: "#E2445C" }}>*</span></label>
+                          <label>
+                            Purchase date
+                            <span style={{ color: '#E2445C' }}>*</span>
+                          </label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker format="MM/DD/YYYY" onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'perchasedDate')} value={formik.values.perchasedDate} />
+                            <DatePicker
+                              inputRef={purchasedDateInputRef}
+                              format="MM/DD/YYYY"
+                              onChange={(selectedDate: any) =>
+                                handleDateChanges(selectedDate, 'perchasedDate')
+                              }
+                              value={formik.values.perchasedDate}
+                            />
                           </LocalizationProvider>
                           {formik.touched.perchasedDate &&
                             formik.errors.perchasedDate && (
@@ -615,9 +666,20 @@ export default function AssetDetails() {
                         }}
                       >
                         <Box style={{ position: 'relative' }}>
-                          <label>Guaranty/warranty/expiry date<span style={{ color: "#E2445C" }}>*</span></label>
+                          <label>
+                            Guaranty/warranty/expiry date
+                            <span style={{ color: '#E2445C' }}>*</span>
+                          </label>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker disablePast format="MM/DD/YYYY" onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'expiryDate')} value={formik.values.expiryDate} />
+                            <DatePicker
+                              inputRef={expiryDateInputRef}
+                              disablePast
+                              format="MM/DD/YYYY"
+                              onChange={(selectedDate: any) =>
+                                handleDateChanges(selectedDate, 'expiryDate')
+                              }
+                              value={formik.values.expiryDate}
+                            />
                           </LocalizationProvider>
                           {formik.touched.expiryDate &&
                             formik.errors.expiryDate && (
@@ -632,13 +694,14 @@ export default function AssetDetails() {
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Organisation<span style={{ color: "#E2445C" }}>*</span>
+                            Organisation
+                            <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           {/* <FormControl sx={{ width: '100%' }}> */}
                           <Select
                             MenuProps={{
                               disableScrollLock: true,
-                              marginThreshold: null
+                              marginThreshold: null,
                             }}
                             className="placeholder-color"
                             displayEmpty
@@ -647,10 +710,10 @@ export default function AssetDetails() {
                               formik.values.organisationId !== ''
                                 ? undefined
                                 : () => (
-                                  <Placeholder>
-                                    Select Organization
-                                  </Placeholder>
-                                )
+                                    <Placeholder>
+                                      Select Organization
+                                    </Placeholder>
+                                  )
                             }
                             margin="none"
                             fullWidth
@@ -690,8 +753,9 @@ export default function AssetDetails() {
                     >
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
-                          <label style={{ display: 'block' }} >
-                            Department/s<span style={{ color: "#E2445C" }}>*</span>
+                          <label style={{ display: 'block' }}>
+                            Department/s
+                            <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           {/* <FormControl sx={{ width: '100%' }}> */}
                           <Autocomplete
@@ -700,16 +764,19 @@ export default function AssetDetails() {
                             disableCloseOnSelect
                             value={departments}
                             options={
-                              departmentData !== undefined
-                                ? departmentData
-                                : []
+                              departmentData !== undefined ? departmentData : []
                             }
                             getOptionLabel={(option: any) => option.label}
                             isOptionEqualToValue={(option: any, value: any) =>
                               value.id == option.id
                             }
                             renderInput={(params) => (
-                              <TextField {...params} placeholder={departments?.length == 0 ? "Department/s" : ""} />
+                              <TextField
+                                {...params}
+                                placeholder={
+                                  departments?.length == 0 ? 'Department/s' : ''
+                                }
+                              />
                             )}
                             fullWidth
                             placeholder="Department"
@@ -730,10 +797,14 @@ export default function AssetDetails() {
                               </React.Fragment>
                             )}
                             onChange={(_, selectedOptions: any) => {
-                              setDepartments(selectedOptions); formik.setValues({ ...formik.values, 'departmentId': selectedOptions })
-                            }
-                            }
-                          />   {formik.touched.departmentId &&
+                              setDepartments(selectedOptions);
+                              formik.setValues({
+                                ...formik.values,
+                                departmentId: selectedOptions,
+                              });
+                            }}
+                          />{' '}
+                          {formik.touched.departmentId &&
                             formik.errors.departmentId && (
                               <Typography className="error-field">
                                 {formik.errors.departmentId}
@@ -797,7 +868,8 @@ export default function AssetDetails() {
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Laboratory/ies<span style={{ color: "#E2445C" }}>*</span>
+                            Laboratory/ies
+                            <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           <Autocomplete
                             multiple
@@ -809,7 +881,16 @@ export default function AssetDetails() {
                             }
                             disableCloseOnSelect
                             value={laboratory}
-                            renderInput={(params) => <TextField {...params} placeholder={laboratory?.length == 0 ? "Laboratory/ies" : ""} />}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                placeholder={
+                                  laboratory?.length == 0
+                                    ? 'Laboratory/ies'
+                                    : ''
+                                }
+                              />
+                            )}
                             fullWidth
                             placeholder="Laboratory"
                             size="medium"
@@ -829,9 +910,12 @@ export default function AssetDetails() {
                               </React.Fragment>
                             )}
                             onChange={(_, selectedOptions: any) => {
-                              setLaboratory(selectedOptions); formik.setValues({ ...formik.values, 'laboratoryId': selectedOptions })
-                            }
-                            }
+                              setLaboratory(selectedOptions);
+                              formik.setValues({
+                                ...formik.values,
+                                laboratoryId: selectedOptions,
+                              });
+                            }}
                           />
                           {formik.touched.laboratoryId &&
                             formik.errors.laboratoryId && (
@@ -852,11 +936,13 @@ export default function AssetDetails() {
                         sx={{ paddingRight: { sm: '1rem !important' } }}
                       >
                         <Box style={{ position: 'relative' }}>
-                          <label style={{ display: 'block' }}>Status<span style={{ color: "#E2445C" }}>*</span></label>
+                          <label style={{ display: 'block' }}>
+                            Status<span style={{ color: '#E2445C' }}>*</span>
+                          </label>
                           <Select
                             MenuProps={{
                               disableScrollLock: true,
-                              marginThreshold: null
+                              marginThreshold: null,
                             }}
                             className="placeholder-color"
                             displayEmpty
@@ -881,10 +967,8 @@ export default function AssetDetails() {
                               Boolean(formik.errors.status)
                             }
                           >
-                            <MenuItem value={"Active"}>
-                              Active
-                            </MenuItem>
-                            <MenuItem value={"Inactive"}>In-Active</MenuItem>
+                            <MenuItem value={'Active'}>Active</MenuItem>
+                            <MenuItem value={'Inactive'}>In-Active</MenuItem>
                             {/* {StatusList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
@@ -914,12 +998,13 @@ export default function AssetDetails() {
                       >
                         <Box style={{ position: 'relative' }}>
                           <label style={{ display: 'block' }}>
-                            Availability<span style={{ color: "#E2445C" }}>*</span>
+                            Availability
+                            <span style={{ color: '#E2445C' }}>*</span>
                           </label>
                           <Select
                             MenuProps={{
                               disableScrollLock: true,
-                              marginThreshold: null
+                              marginThreshold: null,
                             }}
                             className="placeholder-color"
                             displayEmpty
@@ -928,10 +1013,10 @@ export default function AssetDetails() {
                               formik.values.availability !== ''
                                 ? undefined
                                 : () => (
-                                  <Placeholder>
-                                    Select Availability
-                                  </Placeholder>
-                                )
+                                    <Placeholder>
+                                      Select Availability
+                                    </Placeholder>
+                                  )
                             }
                             margin="none"
                             fullWidth
@@ -949,10 +1034,10 @@ export default function AssetDetails() {
                             }
                           >
                             <MenuItem value={'Available'}>Available</MenuItem>
-                            <MenuItem value={'In_Use'}>
-                              In Use
+                            <MenuItem value={'In_Use'}>In Use</MenuItem>
+                            <MenuItem value={'Not_Available'}>
+                              Not Available
                             </MenuItem>
-                            <MenuItem value={'Not_Available'}>Not Available</MenuItem>
                             {/* {AvailabilityList.map((item: any) => (
                               <MenuItem key={item.id} value={item.state}>
                                 {item.name}
@@ -972,10 +1057,19 @@ export default function AssetDetails() {
                 </Grid>
               </Grid>
               <Box className="edit-details">
-                <Button variant="contained" className="cancel-btn" onClick={() => navigate('/assets')}>
+                <Button
+                  variant="contained"
+                  className="cancel-btn"
+                  onClick={() => navigate('/assets')}
+                >
                   Back
                 </Button>
-                <Button type="submit" variant="contained" disabled={!formik.dirty} className="add-btn">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={!formik.dirty}
+                  className="add-btn"
+                >
                   Save
                 </Button>
               </Box>
@@ -983,7 +1077,11 @@ export default function AssetDetails() {
           </form>
           <CustomTabPanel value={value} index={1}>
             <Box className="asset-id-name">
-              <img src={uploadedFile == null ? test : uploadedFile} alt="test" className="dynamic-img" />
+              <img
+                src={uploadedFile == null ? test : uploadedFile}
+                alt="test"
+                className="dynamic-img"
+              />
               <Box className="asset-name">
                 <Typography>{assetValue?.assetNumber}</Typography>
                 <Typography>{assetValue?.name}</Typography>
