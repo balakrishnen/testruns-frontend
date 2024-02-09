@@ -6,7 +6,7 @@ const httpLink = createHttpLink({
 });
 
 const customHeaders = {
-  Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+  Authorization: `Bearer ${ typeof window !== 'undefined' && window.localStorage.getItem('accessToken')}`,
 };
 
 const authorizedLink: any = setContext((_, { headers }) => {

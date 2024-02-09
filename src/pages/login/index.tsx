@@ -80,9 +80,12 @@ const Login = () => {
         signInWithEmailAndPassword(auth, values.email, values.password)
           .then((userCredential: any) => {
             console.log(userCredential.user?.accessToken);
+            // let payload = {
+            //   idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUzZWFiMDBhNzc5MTk3Yzc0MWQ2NjJmY2EzODE1OGJkN2JlNGEyY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiRGV2YSIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS90ZXN0cnVuc3Byb2QiLCJhdWQiOiJ0ZXN0cnVuc3Byb2QiLCJhdXRoX3RpbWUiOjE3MDc0MDg0NzUsInVzZXJfaWQiOiJpQjZuYzhJdUtkVHVxRWNab09HMGZ3VHNETjQzIiwic3ViIjoiaUI2bmM4SXVLZFR1cUVjWm9PRzBmd1RzRE40MyIsImlhdCI6MTcwNzQwODQ3NSwiZXhwIjoxNzA3NDEyMDc1LCJlbWFpbCI6ImFkbWlub25lQHlvcG1haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWlub25lQHlvcG1haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.M10P98qvAAbM4kjQUPXo9cRJr0V-2yMc81ukGyJhSBVmRywDBwTc89o_6dXK6QY8xNCLeMuNO_O8nqAuDHiKWO0Bl-6Vr0dVxIxJdA8nXbDt4NIloIn4wsn2h0vEcq7-nxqqmxK34c-qOeoqH9bTCbZr6aPW2Pl9gdGR2mKCiMHRwsUJYaOgd2uqAWOo8i6pn9t0z3Cflw7cFmXS6XgqG4GpVFV_BNF7xUl2OBpWtwK_YtlyM-faLZN_jE1XNAsQkkIH3i3_YwpucK0SklbSUCv_hnNzXm6ob4YAe_iyyVBdLDVl7CRbS1bcpvp3IqPq628GWtQLfV_d76NwGW61Kw",
+            // };
             let payload = {
-              idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUzZWFiMDBhNzc5MTk3Yzc0MWQ2NjJmY2EzODE1OGJkN2JlNGEyY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiRGV2YSIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS90ZXN0cnVuc3Byb2QiLCJhdWQiOiJ0ZXN0cnVuc3Byb2QiLCJhdXRoX3RpbWUiOjE3MDc0MDg0NzUsInVzZXJfaWQiOiJpQjZuYzhJdUtkVHVxRWNab09HMGZ3VHNETjQzIiwic3ViIjoiaUI2bmM4SXVLZFR1cUVjWm9PRzBmd1RzRE40MyIsImlhdCI6MTcwNzQwODQ3NSwiZXhwIjoxNzA3NDEyMDc1LCJlbWFpbCI6ImFkbWlub25lQHlvcG1haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWlub25lQHlvcG1haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.M10P98qvAAbM4kjQUPXo9cRJr0V-2yMc81ukGyJhSBVmRywDBwTc89o_6dXK6QY8xNCLeMuNO_O8nqAuDHiKWO0Bl-6Vr0dVxIxJdA8nXbDt4NIloIn4wsn2h0vEcq7-nxqqmxK34c-qOeoqH9bTCbZr6aPW2Pl9gdGR2mKCiMHRwsUJYaOgd2uqAWOo8i6pn9t0z3Cflw7cFmXS6XgqG4GpVFV_BNF7xUl2OBpWtwK_YtlyM-faLZN_jE1XNAsQkkIH3i3_YwpucK0SklbSUCv_hnNzXm6ob4YAe_iyyVBdLDVl7CRbS1bcpvp3IqPq628GWtQLfV_d76NwGW61Kw",
-            };
+              idToken:  userCredential.user?.accessToken
+            }
             // let temp = { _id: userSliceData?.verifyToken?._id };
             window.localStorage.setItem(
               'accessToken',
@@ -323,7 +326,7 @@ const Login = () => {
         </Box>
       </form>
       <Box sx={{ marginTop: { xs: '1rem', sm: '2rem' } }}>
-        <Typography className="forgot-pass1">version 2. 4. 9</Typography>
+        <Typography className="forgot-pass1">version 2. 5. 0</Typography>
       </Box>
       <Box sx={{ mt: '2rem' }}>
         <Typography className="read-text">

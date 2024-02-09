@@ -793,7 +793,7 @@ console.log("filteredData",filteredData);
                               </Box>
                               <Box sx={{ ml: 1 }}>
                                 <Box>
-                                  {row.firstName} {row.lastName}
+                                  {row?.fullName}
                                 </Box>
                               </Box>
                             </Box>

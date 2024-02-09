@@ -18,13 +18,13 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAssetsName } from '../../api/assetsAPI';
 import { InfluxDB } from '@influxdata/influxdb-client';
-import { Line } from 'react-chartjs-2';
-import 'chartjs-plugin-streaming';
+// import { Line } from 'react-chartjs-2';
+// import 'chartjs-plugin-streaming';
 import { toast } from 'react-toastify';
 import ReactApexChart from 'react-apexcharts';
 import SpinerLoader from '../SpinnerLoader';
 
-const Chart = require('react-chartjs-2').Chart;
+// const Chart = require('react-chartjs-2').Chart;
 
 const url = 'https://us-east-1-1.aws.cloud2.influxdata.com';
 const token =

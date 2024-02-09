@@ -938,7 +938,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
                           // selected={isItemSelected}
                           sx={{ cursor: 'pointer' }}
                           onClick={(e: any) =>
-                            credencial?.procedure_management?.edit &&
+                            credencial?.procedure_management?.view &&
                             navigate(`/procedures/details/${row._id}`, {
                               state: { props: row },
                             })

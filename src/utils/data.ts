@@ -294,7 +294,7 @@ export const UserHeaders: any = [
   //   type: 'select',
   // },
   {
-    id: 'firstName',
+    id: 'fullName',
     label: 'User Name',
     filters: [
       {

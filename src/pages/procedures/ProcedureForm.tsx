@@ -824,7 +824,7 @@ const ProcedureForm = React.forwardRef(
                   type="submit"
                   variant="contained"
                   className="add-btn"
-                  disabled={type == 'edit' ? !formik.dirty : !formik.isValid}
+                  disabled={type == 'edit' ? !formik.dirty : Object.keys(formik.errors).length==0 && formik.dirty? false:true}
                 >
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>

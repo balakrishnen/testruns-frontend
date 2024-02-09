@@ -261,6 +261,13 @@ const Addnewpopup = React.forwardRef(
       //     id: item._id,
       //   })),
       // );
+      setOrganizationData(
+        organizationSliceData?.map((item: any) => ({
+          label: item.name,
+          value: item.name,
+          id: item._id,
+        })),
+      );
       const mappedDepartments = (singleUserData?.departmentId || [])
         .map((id: string) => {
           var department = departmentSliceData?.find((obj) => obj._id === id);
@@ -300,13 +307,7 @@ const Addnewpopup = React.forwardRef(
       setLabData(mappedDLabs);
       // formik.setFieldValue("laboratoryId",mappedDLabs)
       // formik.setFieldValue('laboratoryId', singleUserData?.laboratoryId?.map((item: any) => (labData?.find(obj => (obj?.id == item) ))) || []);
-      setOrganizationData(
-        organizationSliceData?.map((item: any) => ({
-          label: item.name,
-          value: item.name,
-          id: item._id,
-        })),
-      );
+
     }, [departmentSliceData, labSliceData, organizationSliceData]);
 
     //     React.useEffect(() => {

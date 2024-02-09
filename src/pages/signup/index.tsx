@@ -26,7 +26,8 @@ import moment from "moment";
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const validationSchema = Yup.object().shape({
-  fullname: Yup.string().required("Fullname is required"),
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Last name is required"),
   email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
   password: Yup.string()
     .required("Password is required")
@@ -78,7 +79,8 @@ const userSliceData = useSelector(
 );
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(
-      values.fullname,
+      values.firstName,
+      values.lastName,
       values.email.toLowerCase(),
       values.password,
       values.confirm_password,
@@ -92,8 +94,8 @@ const userSliceData = useSelector(
           .then((res) => {
             console.log(res.user.uid);
             let payload = {
-              firstName: values.fullname,
-              lastName: "",
+              firstName: values.firstName,
+              lastName: values.lastName,
               email: values.email.toLowerCase(),
               uid: res.user.uid,
               organisationId: process.env.ORGANIZATION_ID,
@@ -138,7 +140,8 @@ const userSliceData = useSelector(
         });
       }
     } else {
-      formik.setFieldError("fullname", "Invalid fullname");
+      formik.setFieldError("firstName", "Invalid First name");
+      formik.setFieldError("lastName", "Invalid Last name");
       formik.setFieldError("email", "Invalid email");
       formik.setFieldError("password", "Invalid password");
       formik.setFieldError("confirm_password", "Invalid confirm password");
@@ -146,13 +149,14 @@ const userSliceData = useSelector(
   };
 
   const checkCredentials = (
-    fullname: any,
+    firstName: any,
+    lastName:any,
     email: any,
     password: any,
     confirm_password: any,
     termsAndConditions: boolean
   ) => {
-    if (fullname !== "" && email !== "" && password !== "" && confirm_password !== "" && termsAndConditions === true) {
+    if (firstName !== "" &&lastName !== "" && email !== "" && password !== "" && confirm_password !== "" && termsAndConditions === true) {
       return true
     }
     else {
@@ -162,7 +166,8 @@ const userSliceData = useSelector(
 
   const formik = useFormik({
     initialValues: {
-      fullname: "",
+      firstName: "",
+      lastName:"",
       email: "",
       password: "",
       confirm_password: "",
@@ -187,23 +192,44 @@ const userSliceData = useSelector(
       <form onSubmit={formik.handleSubmit} autoComplete="off">
         <Box sx={{ mt: 4 }} className="auth-inner">
           <Box style={{ position: "relative" }}>
-            <InputLabel>Full name</InputLabel>
+            <InputLabel>First name</InputLabel>
             <TextField
               margin="normal"
               fullWidth
-              name="fullname"
-              id="fullname"
+              name="firstName"
+              id="firstName"
               InputLabelProps={{ shrink: false }}
-              placeholder="Fullname"
+              placeholder="firstName"
               inputProps={{ maxLength: 50 }}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.fullname}
-              error={formik.touched.fullname && Boolean(formik.errors.fullname)}
+              value={formik.values.firstName}
+              error={formik.touched.firstName && Boolean(formik.errors.firstName)}
             />
-            {formik.touched.fullname && formik.errors.fullname && (
+            {formik.touched.firstName && formik.errors.firstName && (
               <Typography className="error-field">
-                {formik.errors.fullname}
+                {formik.errors.firstName}
+              </Typography>
+            )}
+          </Box>
+          <Box style={{ position: "relative" }}>
+            <InputLabel>Last name</InputLabel>
+            <TextField
+              margin="normal"
+              fullWidth
+              name="lastName"
+              id="lastName"
+              InputLabelProps={{ shrink: false }}
+              placeholder="lastName"
+              inputProps={{ maxLength: 50 }}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.lastName}
+              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+            />
+            {formik.touched.lastName && formik.errors.lastName && (
+              <Typography className="error-field">
+                {formik.errors.lastName}
               </Typography>
             )}
           </Box>

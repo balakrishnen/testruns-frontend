@@ -66,8 +66,8 @@ const RunsForm = React.forwardRef(
     const [answers, setAnswers] = React.useState('');
     const [procedureData, setprocedureData] = React.useState('');
     const [assignUser, setAssignUser] = React.useState('');
-    console.log("assignUser",assignUser);
-    
+    console.log("assignUser", assignUser);
+
     const [departmentData, setDepartmentData] = React.useState([]);
 
     let DepartmentData = formData?.departmentId?.map((item: any) => ({
@@ -107,6 +107,7 @@ const RunsForm = React.forwardRef(
     const dispatch: any = useDispatch();
     const confirmationPopupRef: any = React.useRef();
     const successPopupRef: any = React.useRef();
+    const dueDateInputRef: any = React.useRef(null);
     const Placeholder = ({ children }: any) => {
       return <div>{children}</div>;
     };
@@ -118,9 +119,9 @@ const RunsForm = React.forwardRef(
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState(null)
-    const [isAssigned,setIsAssigned]=React.useState(false)
-    const [dueDate, setDueDate] = useState('');
-    const [error, setError]=React.useState("")
+    const [isAssigned, setIsAssigned] = React.useState(false)
+    const [dueDate, setDueDate] = useState(null);
+    const [error, setError] = React.useState("")
 
     //   const fetchProcedureSuggestions = async (inputValue) => {
     //   setLoading(true);
@@ -142,15 +143,19 @@ const RunsForm = React.forwardRef(
       // Fetch suggestions when the user types
       setInputValue(newInputValue);
     };
-
+    React.useEffect(() => {
+      if (dueDateInputRef.current) {
+        dueDateInputRef.current.disabled = true;
+      }
+    }, [dueDateInputRef.current]);
     React.useEffect(() => {
       formik.setFieldValue('objective', runzSliceData?.get_run?.objective)
       formik.setFieldValue('laboratoryId', runzSliceData?.get_run?.laboratoryId)
       formik.setFieldValue('departmentId', runzSliceData?.get_run?.departmentId)
       formik.setFieldValue('procedureId', runzSliceData?.get_run?.procedureId)
       formik.setFieldValue('dueDate', type == 'edit' ? dayjs(runzSliceData?.get_run?.dueDate) : null)
-      if(type == 'edit'){
-      setDueDate(dayjs(runzSliceData?.get_run?.dueDate, 'MM/DD/YYYY'))
+      if (type == 'edit') {
+        setDueDate(dayjs(runzSliceData?.get_run?.dueDate, 'MM/DD/YYYY'))
       }
       // console.log("dayjs(runzSliceData?.get_run?.dueDate",dayjs(runzSliceData?.get_run?.dueDate))
     }, [runzSliceData])
@@ -169,8 +174,8 @@ const RunsForm = React.forwardRef(
             formik.setFieldValue("procedureId", runzSliceData?.get_run?.procedureId);
             formik.setFieldValue('laboratoryId', runzSliceData?.get_run?.laboratoryId)
             formik.setFieldValue('departmentId', runzSliceData?.get_run?.departmentId)
-            console.log("dayjs(runzSliceData?.get_run?.dueDate",dayjs(runzSliceData?.get_run?.dueDate))
-            formik.setFieldValue('dueDate',dayjs(runzSliceData?.get_run?.dueDate) )
+            console.log("dayjs(runzSliceData?.get_run?.dueDate", dayjs(runzSliceData?.get_run?.dueDate))
+            formik.setFieldValue('dueDate', dayjs(runzSliceData?.get_run?.dueDate))
             setDepartment(runzSliceData?.get_run?.departmentId?.map((item: any) => ({
               label: item.name,
               value: item.name,
@@ -194,25 +199,26 @@ const RunsForm = React.forwardRef(
     // const laboratory: any = [];
     // console.log("isMatch",type);
     const checkCredentials = () => {
-      if(type!=='edit'){
-        if(isAssigned){
-          return true;}
-          else{
-            setIsAssigned(false)
-          }
+      if (type !== 'edit') {
+        if (isAssigned) {
+          return true;
+        }
+        else {
+          setIsAssigned(false)
+        }
       }
-      else{
-         setIsAssigned(true)
+      else {
+        setIsAssigned(true)
         return true
       }
-     
+
     };
     const singleUserData = useSelector((state: any) => state.user?.data?.get_user)
     var deptArray: any = []
     var labArray: any = []
     const onSubmit = async (values: any) => {
       console.log("submit");
-      
+
       // if(dueDate==null){
       //   setDueDateError("Due Date is required")
       // }
@@ -220,16 +226,16 @@ const RunsForm = React.forwardRef(
       //   setDueDateError("")
       // }
       const isMatch = checkCredentials();
-     console.log("isMatch",values);
-     console.log("isMatch",isMatch);
-      if (isMatch==true) {
-        console.log("isMatch",type);
-        
+      console.log("isMatch", values);
+      console.log("isMatch", isMatch);
+      if (isMatch == true) {
+        console.log("isMatch", type);
+
         department?.map((item: any) => (deptArray.push(item?.id)))
-        
+
         lab?.map((item: any) => (labArray.push(item?.id)))
-        console.log("deptArray",deptArray,labArray);
-        
+        console.log("deptArray", deptArray, labArray);
+
         let runsValues: any = {
           objective: values.objective,
           procedureId: values.procedureId?._id,
@@ -245,11 +251,11 @@ const RunsForm = React.forwardRef(
           // procedureDetials:values.procedureDetials
 
         };
-        console.log("isMatch",runsValues);
-        console.log("isMatch",type);
-        
+        console.log("isMatch", runsValues);
+        console.log("isMatch", type);
+
         if (type == 'edit') {
-          console.log("isMatch",runsValues);
+          console.log("isMatch", runsValues);
           runsValues['_id'] = formData._id
           await dispatch(fetchUpdateRunsData(runsValues))
           await handleReloadSingleData()
@@ -261,7 +267,7 @@ const RunsForm = React.forwardRef(
             runsValues["shared"] = false
             runsValues["assignedTo"] = loginUserSliceData?.verifyToken?._id
             runsValues["createdOn"] = moment(new Date()).format('MM/DD/YYYY'),
-            runsValues["assignedBy"] = loginUserSliceData?.verifyToken?._id
+              runsValues["assignedBy"] = loginUserSliceData?.verifyToken?._id
             runsValues["userId"] = assignUser
             // delete runsValues.organisationId
             // delete runsValues.createdOn
@@ -308,7 +314,7 @@ const RunsForm = React.forwardRef(
     });
 
     // console.log("createdDate",type == 'edit' ? "1"+createdDate : "3"+moment(new Date()).format('MM/DD/YYYY')  );
-    
+
     const departmentSliceData = useSelector(
       (state: any) => state.department.data?.get_all_departments,
     );
@@ -342,9 +348,10 @@ const RunsForm = React.forwardRef(
       const formattedDate = moment(selectedDate?.$d).format('MM/DD/YYYY');
       formik.handleChange(name)(formattedDate);
       setDueDate(formattedDate);
-      if(!moment(formattedDate).isValid()){
-        setError("Invaild Date")}
-        else{setError("")}
+      if (!moment(formattedDate).isValid()) {
+        setError("Invaild Date")
+      }
+      else { setError("") }
     }
     const handleConfirmationState = (state: number) => {
       if (state === 0) {
@@ -387,17 +394,17 @@ const RunsForm = React.forwardRef(
     );
     React.useEffect(() => {
       setLoading(true);
-      let payload:any={
+      let payload: any = {
         page: 1,
         perPage: 10,
         searchBy: 'name',
         search: inputValue
       }
-      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Tester"|| loginUserSliceData?.verifyToken?.role[0]?.name=="Requester"){
-        payload["laboratoryId"]=singleUserData?.laboratoryId
+      if (loginUserSliceData?.verifyToken?.role[0]?.name == "Tester" || loginUserSliceData?.verifyToken?.role[0]?.name == "Requester") {
+        payload["laboratoryId"] = singleUserData?.laboratoryId
       }
-      if(loginUserSliceData?.verifyToken?.role[0]?.name=="Admin"){
-        payload["organisationId"]=singleUserData?.organisationId
+      if (loginUserSliceData?.verifyToken?.role[0]?.name == "Admin") {
+        payload["organisationId"] = singleUserData?.organisationId
       }
       dispatch(fetchProcedureData(payload));
     }, [inputValue]);
@@ -416,14 +423,14 @@ const RunsForm = React.forwardRef(
     }
 
     const handleAssign = (userList: any) => {
-      console.log("userList1",userList);
-      
+      console.log("userList1", userList);
+
       setIsAssigned(true)
       setAssignUser(userList?.id)
     }
 
     const opt = procedureSliceData?.Procedures;
-console.log(formik,'dueDate');
+    console.log(formik, 'dueDate');
 
     return (
       <div>
@@ -454,14 +461,14 @@ console.log(formik,'dueDate');
                       <Autocomplete
                         loading={loading}
                         value={formik.values.procedureId}
-                        options={opt}
+                        options={opt !== undefined ? opt : []}
                         disableClearable={true}
                         getOptionLabel={(option: any) => option.name}
-                        isOptionEqualToValue={(option: any, value: any) => 
+                        isOptionEqualToValue={(option: any, value: any) =>
                           // console.log("value?._id == option?._id", value, option?._id);
 
-                         value == option?._id
-                        
+                          value == option?._id
+
                         }
                         onChange={(event, value) => {
                           formik.setFieldValue('procedureId', value || '');
@@ -497,7 +504,7 @@ console.log(formik,'dueDate');
                         renderInput={(procedureNames) => (
                           <TextField
                             {...procedureNames}
-                            margin="none"
+                            margin="none" placeholder='Select procedure'
                           />
                         )}
                       />
@@ -684,7 +691,7 @@ console.log(formik,'dueDate');
                     <Box style={{ position: 'relative' }}>
                       <label style={{ display: 'block' }}>Department/s</label>
                       <Autocomplete
-                        
+
                         value={department}
                         options={
                           departmentData !== undefined ? departmentData : []
@@ -730,7 +737,7 @@ console.log(formik,'dueDate');
 
                       <Autocomplete
                         value={lab}
-                        options={(labData !== undefined && labData?.length!==0) ? labData : []}
+                        options={(labData !== undefined && labData?.length !== 0) ? labData : []}
                         disableCloseOnSelect
                         multiple
                         id="laboratoryId"
@@ -806,74 +813,70 @@ console.log(formik,'dueDate');
                     <Box style={{ position: 'relative' }}>
                       <label>Due date<span style={{ color: "#E2445C" }}>*</span></label>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-       
-          format="MM/DD/YYYY"
-          disablePast
-          value={dueDate}
-          onChange={(selectedDate) => handleDateChanges(selectedDate,'dueDate')}
-          renderInput={(props) => (
-            <TextField {...props} label="Select Date" inputProps={{ readOnly: true }} />
-          )}
-          
-        />
-          </LocalizationProvider>
+                        <DatePicker
+                          disablePast
+                          format="MM/DD/YYYY"
+                          onChange={(selectedDate) => handleDateChanges(selectedDate, 'dueDate')}
+                          value={dueDate}
+                          inputRef={dueDateInputRef}
+                        />
+                      </LocalizationProvider>
                       {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker format="MM/DD/YYYY" disablePast onChange={(selectedDate: any) => handleDateChanges(selectedDate, 'dueDate')} value={formik.values.dueDate} />
                       </LocalizationProvider> */}
                       {/* {formik.touched.dueDate && formik.errors.dueDate && ( */}
-                        <Typography className="error-field">
-                         {error}
-                        </Typography>
+                      <Typography className="error-field">
+                        {error}
+                      </Typography>
                       {/* )} */}
                     </Box>
                   </Grid>
 
                   <Grid item xs={0} sm={6} md={6} lg={6} />
-                  {type!=='edit' &&
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    sx={{ paddingRight: { sm: '1rem !important' } }}
-                  >
-                    <Box style={{ position: 'relative' }}>
-                      <label
-                        style={{ display: 'block', marginBottom: '0.8rem' }}
-                      >
-                        Assign to<span style={{ color: "#E2445C" }}>*</span>
-                      </label>
-                      {formik.touched.userId &&
-                        formik.errors.userId && (
-                          <Typography className="error-field">
-                            {formik.errors.userId}
-                          </Typography>
-                        )}
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={Avatars} alt="Avatars" />
-                        <Button
-                          disabled={(Object.keys(formik.errors).length == 0 &&  moment(dueDate).isValid())? false : true}
-                          variant="contained"
-                          className="avatar-add"
-                          onClick={() => {
-                            setRunsOpen(true);
-                          }}
+                  {type !== 'edit' &&
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={6}
+                      lg={6}
+                      sx={{ paddingRight: { sm: '1rem !important' } }}
+                    >
+                      <Box style={{ position: 'relative' }}>
+                        <label
+                          style={{ display: 'block', marginBottom: '0.8rem' }}
                         >
-                          <AddIcon sx={{ mr: 1 }} />
-                          Add
-                        </Button>
-                        {/* {isAssigned &&<img src={Avatars} alt="Avatars" style={{paddingLeft:"10px"}} />} */}
+                          Assign to<span style={{ color: "#E2445C" }}>*</span>
+                        </label>
+                        {formik.touched.userId &&
+                          formik.errors.userId && (
+                            <Typography className="error-field">
+                              {formik.errors.userId}
+                            </Typography>
+                          )}
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <img src={Avatars} alt="Avatars" />
+                          <Button
+                            disabled={(Object.keys(formik.errors).length == 0 && moment(dueDate).isValid()) ? false : true}
+                            variant="contained"
+                            className="avatar-add"
+                            onClick={() => {
+                              setRunsOpen(true);
+                            }}
+                          >
+                            <AddIcon sx={{ mr: 1 }} />
+                            Add
+                          </Button>
+                          {/* {isAssigned &&<img src={Avatars} alt="Avatars" style={{paddingLeft:"10px"}} />} */}
+                        </Box>
+                        {/* {JSON.stringify(Object.keys(formik.errors).length == 0 )} */}
+                        {Object.keys(formik.errors).length == 0 && moment(dueDate).isValid() && !isAssigned &&
+                          <Typography className="error-field">
+                            Please assign at least one people
+                          </Typography>}
                       </Box>
-                      {/* {JSON.stringify(Object.keys(formik.errors).length == 0 )} */}
-                      {Object.keys(formik.errors).length == 0 &&  moment(dueDate).isValid() && !isAssigned &&
-                        <Typography className="error-field">
-                        Please assign at least one people
-                        </Typography>}
-                    </Box>
-                  </Grid>
-  }
+                    </Grid>
+                  }
                 </Grid>
 
               </Box>
@@ -894,14 +897,14 @@ console.log(formik,'dueDate');
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="contained" disabled={type === 'edit' ? !formik.dirty : (Object.keys(formik.errors).length==0 && moment(dueDate).isValid() &&isAssigned)?false:true} className="add-btn">
+                <Button type="submit" variant="contained" disabled={type === 'edit' ? !formik.dirty : (Object.keys(formik.errors).length == 0 && moment(dueDate).isValid() && isAssigned) ? false : true} className="add-btn">
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>
               </Box>
             </Box>
           </form>
         </Dialog>
-        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} typePopup={"assign"} formValue={formik.values} handleAssign={handleAssign} assigned={(Object.keys(formik.errors).length == 0 &&  moment(dueDate).isValid() && isAssigned )}
+        <AddPeoplePopup open={runsOpen} close={() => setRunsOpen(false)} typePopup={"assign"} formValue={formik.values} handleAssign={handleAssign} assigned={(Object.keys(formik.errors).length == 0 && moment(dueDate).isValid() && isAssigned)}
         // runzId={runzId}
         //         runzRow={runzRow}
         //         typePopup={typePopup}

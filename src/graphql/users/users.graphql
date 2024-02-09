@@ -22,6 +22,7 @@ query get_all_users($page: Int!, $perPage: Int!, $sortBy: String, $sortOrder: St
         }
         Identity {
             _id
+            fullName
             firstName
             lastName
             organisationId
