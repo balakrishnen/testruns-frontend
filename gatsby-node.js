@@ -2,10 +2,10 @@ const path = require('path');
 
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   actions.setWebpackConfig({
-    module: {
+module: {
       rules: [
         {
-          test: /apexcharts/,
+          test: '/apexcharts/',
           use: loaders.null(),
         },
       ],
