@@ -72,16 +72,10 @@ export const fetchProcedure = (payload: any) => async (dispatch: any) => {
 };
 
 export const fetchUpdateProcedureData = (payload: any) => async () => {
-  try {
-    const response = await client.mutate({
+  return await client.mutate({
       mutation: UPDATE_PROCEDURE,
       variables: payload,
     });
-    return response.data
-    // console.log(response);
-  } catch (error: any) {
-    console.log(error);
-  }
 };
 export const fetchProcedureName = () => async (dispatch: any) => {
   try {

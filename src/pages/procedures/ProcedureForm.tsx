@@ -26,7 +26,6 @@ import { fetchDepartmentData } from '../../api/departmentAPI';
 import { fetchLabById, fetchLabData } from '../../api/labAPI';
 import {
   fetchProcedure,
-  fetchSingleProcedureData,
   fetchUpdateProcedureData,
   postProcedureData,
 } from '../../api/procedureAPI';
@@ -147,7 +146,7 @@ const ProcedureForm = React.forwardRef(
       if (isMatch) {
         if (type == 'edit') {
           dispatch(fetchUpdateProcedureData(procedures))
-            .then((res) => {
+            .then(() => {
               // setTimeout(()=>{
               reloadSingleData();
               // },3000)
@@ -155,8 +154,13 @@ const ProcedureForm = React.forwardRef(
               submitFormPopup();
               clearForm();
             })
-            .catch((err) => {
-              console.log(err);
+            .catch(() => {
+              toast('Procedure is not updated !', {
+                style: {
+                  background: '#d92828',
+                  color: '#fff',
+                },
+              });
             });
           // reload()
 
