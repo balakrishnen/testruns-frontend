@@ -129,13 +129,12 @@ export default function RealtimeChart({
     dataLabels: {
       enabled: false,
     },
-    colors: [],
+    colors: colorsList,
     stroke: {
-      colors: [],
+      colors: colorsList,
       curve: 'straight',
       width: 3,
     },
-
     xaxis: {
       title: {
         text: 'Data',
@@ -144,7 +143,10 @@ export default function RealtimeChart({
       type: 'datetime',
       range: 1000 * 10,
       tickAmount: 15, // Specifies the number of ticks on the y-axis
-      categories: [],
+      categories: realTimeData.map(
+        (_item: any, index: number) =>
+          new Date().getTime() - (realTimeData.length - index),
+      ),
     },
     yaxis: {
       title: {
@@ -635,15 +637,6 @@ export default function RealtimeChart({
     },
   };
 
-  React.useEffect(() => {
-    if (realTimeData.length !== 0) {
-      const RealTimeOptionsChage: any = [...RealTimeOptions];
-      RealTimeOptionsChage.xaxis.categories = realTimeData.map(
-        (_item: any, index: number) =>
-          new Date().getTime() - (realTimeData.length - index),
-      );
-    }
-  }, [realTimeData]);
 
   React.useEffect(() => {
     let interval: any = 0;

@@ -38,15 +38,6 @@ import AddPeoplePopup from '../../../components/AddPeoplePopup';
 import * as html2json from 'html2json';
 import parse from 'html-react-parser';
 import {
-  LineChart,
-  Line,
-  XAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  YAxis,
-} from 'recharts';
-import {
   AddOutlined,
   CloseOutlined,
   Delete,
@@ -275,22 +266,6 @@ export default function RunsDetails() {
     const value = inputRefs.current[id]?.[column]?.value;
     console.log(`Input ${id}, Column ${column}: ${value}`);
   };
-  const [axisList, setAxisList] = React.useState<any>([
-    { name: 'Y1', value: 'Y1' },
-    { name: 'Y2', value: 'Y2' },
-    { name: 'Y3', value: 'Y3' },
-    { name: 'Y4', value: 'Y4' },
-  ]);
-  const [channelsList, setChannelsList] = React.useState<any>([
-    { name: 'Concentration', value: 'Concentration' },
-    { name: 'Density', value: 'Density' },
-    { name: 'Velocity', value: 'Velocity' },
-  ]);
-  const [xAxisList, setXAxisList] = React.useState<any>([
-    { name: 'Temperature', value: 'Temperature' },
-    { name: 'Speed', value: 'Speed' },
-    { name: 'Time', value: 'Time' },
-  ]);
 
   const loginUserSliceData = useSelector((state: any) => state.userLogin.data);
   const credencial = loginUserSliceData?.verifyToken?.role[0];
@@ -322,32 +297,33 @@ export default function RunsDetails() {
             : window.location.pathname.split('/')[3],
         // runId: window.location.pathname.split('/')[3],
       };
-      dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
-        setUserRunzID(res?.get_userRun);
-        setRemarks(res?.get_userRun?.remarks);
-        setStartDate(res?.get_userRun?.startTime);
-        setEndDate(res?.get_userRun?.endTime);
-        if (
-          res?.get_userRun?.used_Asset &&
-          res?.get_userRun?.used_Asset.length > 0
-        ) {
-          setUsedAsset(res?.get_userRun?.used_Asset[0]);
-        }
-        if (
-          res?.get_userRun?.results !== null &&
-          res?.get_userRun?.results !== ''
-        )
-          setUserRunzResult(
-            res?.get_userRun?.results !== undefined &&
-              res?.get_userRun?.results,
-          );
-        else {
-          setUserRunzResult(userRunzResult);
-        }
-      }).catch((err)=>{
-        console.log(err);
-        
-      })
+      dispatch(fetchSingleUserRunzData(runz))
+        .then((res: any) => {
+          setUserRunzID(res?.get_userRun);
+          setRemarks(res?.get_userRun?.remarks);
+          setStartDate(res?.get_userRun?.startTime);
+          setEndDate(res?.get_userRun?.endTime);
+          if (
+            res?.get_userRun?.used_Asset &&
+            res?.get_userRun?.used_Asset.length > 0
+          ) {
+            setUsedAsset(res?.get_userRun?.used_Asset[0]);
+          }
+          if (
+            res?.get_userRun?.results !== null &&
+            res?.get_userRun?.results !== ''
+          )
+            setUserRunzResult(
+              res?.get_userRun?.results !== undefined &&
+                res?.get_userRun?.results,
+            );
+          else {
+            setUserRunzResult(userRunzResult);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   }, [value, runzValue]);
 
@@ -387,15 +363,16 @@ export default function RunsDetails() {
         ? runzValue.runId
         : window.location.pathname.split('/')[3],
     };
-    dispatch(fetchSingleUserRunzData(runz)).then((res: any) => {
-      setUserRunzID(res?.get_userRun);
-      setUserRunzResult(
-        res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
-      );
-    }).catch((err)=>{
-      console.log(err);
-      
-    })
+    dispatch(fetchSingleUserRunzData(runz))
+      .then((res: any) => {
+        setUserRunzID(res?.get_userRun);
+        setUserRunzResult(
+          res?.get_userRun?.results !== undefined && res?.get_userRun?.results,
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     // setRunzValue(procedureSliceData.get_run)
   };
 
@@ -483,12 +460,12 @@ export default function RunsDetails() {
     handleHtmlInput();
   }, [state?.content, userRunzID?.userProcedure, value]);
 
-  React.useEffect(() => {
-    if (htmlToJSON.child && htmlToJSON.child !== prevStateRef.current.child) {
-      getSateicDate();
-      prevStateRef.current = htmlToJSON;
-    }
-  }, [htmlToJSON]);
+  // React.useEffect(() => {
+  //   if (htmlToJSON.child && htmlToJSON.child !== prevStateRef.current.child) {
+  //     getSateicDate();
+  //     prevStateRef.current = htmlToJSON;
+  //   }
+  // }, [htmlToJSON]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -651,11 +628,8 @@ export default function RunsDetails() {
   const handleChanges = (content: any) => {
     setState({ content });
   };
-  const [arr, setArr] = React.useState<any>([]);
-  const mergedData: any = [];
 
   const getSateicDate = () => {
-    handleHtmlInput();
     const tablesEles: any = document
       ?.getElementById('content')
       ?.querySelectorAll('table');
@@ -714,19 +688,17 @@ export default function RunsDetails() {
           const values: any = [];
           dataset?.forEach((item: any) => {
             if (item[key]) {
-              if(!Number.isInteger(parseFloat(item[key]))){
+              if (!Number.isInteger(parseFloat(item[key]))) {
                 values.push(parseFloat(item[key]));
+              } else {
+                values.push(parseInt(item[key]));
               }
-             else{           
-              values.push(parseInt(item[key]));
             }
-          }
           });
           subResult.push({ label, values });
         }
         return subResult;
       });
-      console.log("results",results);
 
       const tablesin = document
         ?.getElementById('content')
@@ -740,8 +712,6 @@ export default function RunsDetails() {
       finalTableTitleResult = getTitle?.map((list: any, index: any) => {
         return { label: list, value: list, data: results[index] };
       });
-      console.log("finalTableTitleResult",finalTableTitleResult);
-      
       setStaticChartData(finalTableTitleResult);
     }
   };
@@ -806,13 +776,12 @@ export default function RunsDetails() {
           const values: any = [];
           dataset?.forEach((item: any) => {
             if (item[key]) {
-              if(!Number.isInteger(parseFloat(item[key]))){
+              if (!Number.isInteger(parseFloat(item[key]))) {
                 values.push(parseFloat(item[key]));
+              } else {
+                values.push(parseInt(item[key]));
               }
-             else{           
-              values.push(parseInt(item[key]));
             }
-          }
           });
           subResult.push({ label, values });
         }
@@ -853,31 +822,32 @@ export default function RunsDetails() {
         startTime: moment(new Date()).toISOString(),
       };
       if (!userRunzID?._id) {
-        dispatch(postUserRunsData(payload)).then((res: any) => {
-          if (res.create_userRunz._id) {
-            let payload1 = {
-              _id: runzValue._id,
-              status: 'Started',
-            };
-            dispatch(fetchUpdateRunsData(payload1));
-            toast(`Runs table readings created successfully !`, {
-              style: {
-                background: '#00bf70',
-                color: '#fff',
-              },
-            });
-          } else {
-            toast('Something went wrong', {
-              style: {
-                background: '#d92828',
-                color: '#fff',
-              },
-            });
-          }
-        }).catch((err)=>{
-          console.log(err);
-          
-        })
+        dispatch(postUserRunsData(payload))
+          .then((res: any) => {
+            if (res.create_userRunz._id) {
+              let payload1 = {
+                _id: runzValue._id,
+                status: 'Started',
+              };
+              dispatch(fetchUpdateRunsData(payload1));
+              toast(`Runs table readings created successfully !`, {
+                style: {
+                  background: '#00bf70',
+                  color: '#fff',
+                },
+              });
+            } else {
+              toast('Something went wrong', {
+                style: {
+                  background: '#d92828',
+                  color: '#fff',
+                },
+              });
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       } else {
         let payload2 = {
           _id: userRunzID?._id,
@@ -885,19 +855,20 @@ export default function RunsDetails() {
           userProcedure: JSON.stringify(htmlInput),
           static_chart_data: JSON.stringify(finalTableTitleResult),
         };
-        dispatch(UpdateUserRunsData(payload2)).then((res: any) => {
-          setStaticChartData(finalTableTitleResult);
-          setSavedChartData(null);
-          toast(`Runs table readings updated successfully !`, {
-            style: {
-              background: '#00bf70',
-              color: '#fff',
-            },
+        dispatch(UpdateUserRunsData(payload2))
+          .then((res: any) => {
+            setStaticChartData(finalTableTitleResult);
+            setSavedChartData(null);
+            toast(`Runs table readings updated successfully !`, {
+              style: {
+                background: '#00bf70',
+                color: '#fff',
+              },
+            });
+          })
+          .catch((err) => {
+            console.error(err);
           });
-        }).catch((err)=>{
-          console.log(err);
-          
-        })
       }
       const data: any = {
         value_1ZyZJXD: '0',
@@ -964,13 +935,13 @@ export default function RunsDetails() {
               if (text !== '') {
                 setUserRunzResult(text + '</ul>');
               }
-            }).catch((err)=>{
-              console.log(err);
-              
             })
+            .catch((err) => {
+              console.error(err);
+            });
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     }
   };
@@ -1136,7 +1107,6 @@ export default function RunsDetails() {
   //           static_chart_data:JSON.stringify(finalTableTitleResult)
 
   //         }
-  //         console.log(runzValue.status);
 
   //        if(runzValue.status=="Created") {
   //         dispatch(postUserRunsData(payload))
@@ -1169,14 +1139,12 @@ export default function RunsDetails() {
   // }
   // }
   //   const onSubmit=()=>{
-  //     console.log(runzValue,state.content)
   //     var payload:any ={
   //       runId: runzValue._id,
   //       organisationId:"655376d2659b7b0012108a33",
   //       userProcedure:JSON.stringify(htmlInput),
 
   //     }
-  //     console.log(runzValue.status);
 
   //    if(runzValue.status=="Created") {
   //     dispatch(postUserRunsData(payload))
@@ -1268,7 +1236,7 @@ export default function RunsDetails() {
         pdf.save('chart.pdf');
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 
@@ -1318,8 +1286,10 @@ export default function RunsDetails() {
         // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
       };
     });
+    getSateicDate();
     // setHtmlInput((prev: any) => ({ ...prev, title: procedureSliceData?.get_run?.procedureId?.name}));
   };
+
   const uploadVideo = async (e: any) => {
     const file = e.target.files[0];
     if (file) {
@@ -1794,26 +1764,26 @@ export default function RunsDetails() {
                             runzValue?.status === 'Created'
                               ? 'create-select td-select'
                               : runzValue?.status === 'Started'
-                                ? 'start-select td-select'
-                                : runzValue?.status === 'Complete'
-                                  ? 'active-select td-select'
-                                  : runzValue?.status === 'Submitted'
-                                    ? 'submit-select td-select'
-                                    : 'inactive-select td-select'
+                              ? 'start-select td-select'
+                              : runzValue?.status === 'Complete'
+                              ? 'active-select td-select'
+                              : runzValue?.status === 'Submitted'
+                              ? 'submit-select td-select'
+                              : 'inactive-select td-select'
                           }
                           style={{
                             background:
                               runzValue?.status === 'Created'
                                 ? '#8d8d8d'
                                 : runzValue?.status === 'Started'
-                                  ? '#faaa49'
-                                  : runzValue?.status === 'Stopped'
-                                    ? '#e2445c'
-                                    : runzValue?.status == 'Submitted'
-                                      ? '#a01fb1'
-                                      : '#00bf70',
+                                ? '#faaa49'
+                                : runzValue?.status === 'Stopped'
+                                ? '#e2445c'
+                                : runzValue?.status == 'Submitted'
+                                ? '#a01fb1'
+                                : '#00bf70',
                             padding: '6px',
-                            color:"white",
+                            color: 'white',
                             width: '140px',
                             borderRadius: '20px',
                             height: '26px',
@@ -1981,8 +1951,7 @@ export default function RunsDetails() {
                           const userInput = window.prompt(
                             'Enter data key attribute',
                           );
-                          console.log(userInput);
-                        },
+                         },
                       });
                     },
                     content_style:
@@ -2125,7 +2094,6 @@ export default function RunsDetails() {
                               const userInput = window.prompt(
                                 'Enter data key attribute',
                               );
-                              // console.log(userInput);
                             },
                           });
                         },
@@ -2198,7 +2166,6 @@ export default function RunsDetails() {
                               const userInput = window.prompt(
                                 'Enter data key attribute',
                               );
-                              // console.log(userInput);
                             },
                           });
                           editor.ui.registry.addButton('customVideoUpload', {
