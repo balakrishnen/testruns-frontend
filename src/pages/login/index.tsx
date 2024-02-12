@@ -61,6 +61,7 @@ const Login = () => {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const [loading, setLoading] = React.useState(false);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -72,6 +73,7 @@ const Login = () => {
   console.log(userSliceData);
 
   const onSubmit = (values: any) => {
+    setLoading(true);
     const isMatch = checkCredentials(values.email, values.password);
     console.log('isMatch', isMatch);
     setIsSubmitted(true);
@@ -81,11 +83,12 @@ const Login = () => {
           .then((userCredential: any) => {
             console.log(userCredential.user?.accessToken);
             // let payload = {
-            //   idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUzZWFiMDBhNzc5MTk3Yzc0MWQ2NjJmY2EzODE1OGJkN2JlNGEyY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiRGV2YSIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS90ZXN0cnVuc3Byb2QiLCJhdWQiOiJ0ZXN0cnVuc3Byb2QiLCJhdXRoX3RpbWUiOjE3MDc0MDg0NzUsInVzZXJfaWQiOiJpQjZuYzhJdUtkVHVxRWNab09HMGZ3VHNETjQzIiwic3ViIjoiaUI2bmM4SXVLZFR1cUVjWm9PRzBmd1RzRE40MyIsImlhdCI6MTcwNzQwODQ3NSwiZXhwIjoxNzA3NDEyMDc1LCJlbWFpbCI6ImFkbWlub25lQHlvcG1haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImFkbWlub25lQHlvcG1haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.M10P98qvAAbM4kjQUPXo9cRJr0V-2yMc81ukGyJhSBVmRywDBwTc89o_6dXK6QY8xNCLeMuNO_O8nqAuDHiKWO0Bl-6Vr0dVxIxJdA8nXbDt4NIloIn4wsn2h0vEcq7-nxqqmxK34c-qOeoqH9bTCbZr6aPW2Pl9gdGR2mKCiMHRwsUJYaOgd2uqAWOo8i6pn9t0z3Cflw7cFmXS6XgqG4GpVFV_BNF7xUl2OBpWtwK_YtlyM-faLZN_jE1XNAsQkkIH3i3_YwpucK0SklbSUCv_hnNzXm6ob4YAe_iyyVBdLDVl7CRbS1bcpvp3IqPq628GWtQLfV_d76NwGW61Kw",
+            //   idToken:
+            //     'eyJhbGciOiJSUzI1NiIsImtpZCI6IjUzZWFiMDBhNzc5MTk3Yzc0MWQ2NjJmY2EzODE1OGJkN2JlNGEyY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiTmF6YXIiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGVzdHJ1bnNwcm9kIiwiYXVkIjoidGVzdHJ1bnNwcm9kIiwiYXV0aF90aW1lIjoxNzA3NTcyNzYxLCJ1c2VyX2lkIjoiaUI2bmM4SXVLZFR1cUVjWm9PRzBmd1RzRE40MyIsInN1YiI6ImlCNm5jOEl1S2RUdXFFY1pvT0cwZndUc0RONDMiLCJpYXQiOjE3MDc1NzI3NjEsImV4cCI6MTcwNzU3NjM2MSwiZW1haWwiOiJhZG1pbm9uZUB5b3BtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhZG1pbm9uZUB5b3BtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.EJ-TKsPWz0n1w-Ydz_SmZk3HTbIoPWAt7TsqqwZKsE3H0lGahP1oFUPkrXqHSzGEAGCmdW_wjwpiZv9oSs1LdCJLnGwNB-2Qn-j5tguDt1F4sUxLWMSWyvmgszW3nnF0oV1FTeMGyNT_WsrbKIZ0ULHroW3PStPQXD5CdLXV8jQFpw8tJSTNGumYMcuucoHjBXKaGf_gCSf05zPw87U6dCdP3Pf0pqS8hkxQeHIC_KtRHhWI4njB0Gq-FsC_D2LtUP-hCYHns93nl0VF-PW0GT-dDzlWlNDQx_-JITb8jmdXuTaDtONxQpUHW_rDxaMTMnckfNDxJvXJ4gd73dkjmA',
             // };
-            let payload = {
-              idToken:  userCredential.user?.accessToken
-            }
+            const payload = {
+              idToken: userCredential.user?.accessToken,
+            };
             // let temp = { _id: userSliceData?.verifyToken?._id };
             window.localStorage.setItem(
               'accessToken',
@@ -96,6 +99,7 @@ const Login = () => {
                 const temp = { _id: res?.verifyToken?._id };
                 dispatch(fetchSingleUserData(temp))
                   .then((isSuccess: any) => {
+                    setLoading(false);
                     const data = isSuccess?.get_user ?? {};
                     window.localStorage.setItem(
                       'userProfileDetails',
@@ -108,10 +112,8 @@ const Login = () => {
                           color: '#fff',
                         },
                       });
-                      setTimeout(() => {
-                        navigate('/login');
-                        setIsSubmitted(isSubmitted);
-                      }, 2000);
+                      // navigate('/login');
+                      setIsSubmitted(isSubmitted);
                     } else {
                       window.localStorage.setItem('isLoggedIn', 'true');
 
@@ -121,9 +123,7 @@ const Login = () => {
                           color: '#fff',
                         },
                       });
-                      setTimeout(() => {
-                        navigate('/mypage');
-                      }, 2000);
+                      navigate('/mypage');
                     }
 
                     // }
@@ -195,6 +195,9 @@ const Login = () => {
 
   return (
     <>
+      <Typography variant="h5" className="title-text">
+        Log in to your Test Runs account
+      </Typography>
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -203,9 +206,6 @@ const Login = () => {
         draggable={false}
         hideProgressBar={true}
       />
-      <Typography variant="h5" className="title-text">
-        Log in to your Test Runs account
-      </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Box sx={{ mt: 4 }} className="auth-inner">
           <Box style={{ position: 'relative' }}>
@@ -318,16 +318,21 @@ const Login = () => {
                 // background: "#FFC60B",
               }}
               className="signup-btn"
-              disabled={isSubmitted}
+              disabled={loading}
             >
-              Log in
+              {!loading ? (
+                'Log in'
+              ) : (
+                <CircularProgress color="warning" size={30} />
+              )}
             </Button>
           </Box>
         </Box>
       </form>
       <Box sx={{ marginTop: { xs: '1rem', sm: '2rem' } }}>
-        <Typography className="forgot-pass1">version 2. 5. 0</Typography>
+        <Typography className="forgot-pass1">version 2.4.9</Typography>
       </Box>
+
       <Box sx={{ mt: '2rem' }}>
         <Typography className="read-text">
           Don't have an account yet?{' '}
