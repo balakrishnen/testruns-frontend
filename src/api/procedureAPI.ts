@@ -4,15 +4,10 @@ import {  POST_PROCEDURE ,GET_PROCEDURE, DELETE_PROCEDURE, UPDATE_PROCEDURE, GET
 import { client } from '../utils/config';
 
 export const postProcedureData = (payload: any) => async () => {
-    try {
-      const response = await client.mutate({
-        mutation: POST_PROCEDURE,
-        variables: payload,
-      });
-      console.log(response);
-    } catch (error: any) {
-      console.log(error);
-    }
+  return await client.mutate({
+    mutation: POST_PROCEDURE,
+    variables: payload,
+  });
   };
   
 export const fetchProcedureData = (payload: any) => async (dispatch: any) => {
@@ -71,16 +66,10 @@ export const fetchProcedure = (payload: any) => async (dispatch: any) => {
 };
 
 export const fetchUpdateProcedureData = (payload: any) => async () => {
-  try {
-    const response = await client.mutate({
+  return await client.mutate({
       mutation: UPDATE_PROCEDURE,
       variables: payload,
     });
-    return response.data
-    // console.log(response);
-  } catch (error: any) {
-    console.log(error);
-  }
 };
 export const fetchProcedureName = () => async (dispatch: any) => {
   try {
