@@ -20,12 +20,13 @@ import ProfilePage from './settings/profile';
 import RolesPage from './settings/roles';
 // import CustomFields from "./settings/custom-fields";
 import { Provider } from 'react-redux';
-import store, {  persistor } from '../utils/store';
+import store, { persistor } from '../utils/store';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '../utils/config';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Helmet } from 'react-helmet';
 import favicon from '../assets/images/common/favicon.svg';
+import { ToastContainer } from 'react-toastify';
 
 const IndexPage: React.FC = () => {
   return (
@@ -34,6 +35,14 @@ const IndexPage: React.FC = () => {
         <title>Test Runs</title>
         <link rel="icon" href={favicon} type="image/x-icon" />
       </Helmet>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        closeOnClick={true}
+        pauseOnHover={true}
+        draggable={false}
+        hideProgressBar={true}
+      />
       <PersistGate loading={null} persistor={persistor}>
         <ApolloProvider client={client}>
           <Router basepath="/">
