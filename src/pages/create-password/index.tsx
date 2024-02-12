@@ -14,11 +14,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "../../assets/styles/App.scss";
 import { ToastContainer, toast } from "react-toastify";
+import { updatePassword } from "firebase/auth";
+import { auth } from "../../firebase.config";
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
+  // email: Yup.string().required("Email is required").email("Invalid email").matches(emailRegex, "In-correct email"),
   password: Yup.string()
     .required("Password is required")
     .matches(
@@ -61,20 +63,41 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
 
   const onSubmit = (values: any) => {
     const isMatch = checkCredentials(
-      values.email,
+      // values.email,
       values.password,
       values.confirm_password
     );
-
+    const user = auth.currentUser
     if (isMatch) {
-      toast(`Password Reset successful !`, {
-        style: {
-          background: '#00bf70', color: '#fff'
-        }
-      });
-      setTimeout(()=>{
-        navigate('/login')
+      console.log("user",user);
+      
+      updatePassword(user, values.confirm_password).then((res) => {
+        // Update successful.
+        console.log(res);
+        toast(`Password created successful !`, {
+          style: {
+            background: "#00bf70",
+            color: "#fff",
+          },
+        });
+        setTimeout(()=>{
+        navigate('/mypage')
       },2000)
+
+      }).catch((error) => {
+        console.log(error);
+        
+        // An error ocurred
+        // ...
+      });
+      // toast(`Password Reset successful !`, {
+      //   style: {
+      //     background: '#00bf70', color: '#fff'
+      //   }
+      // });
+      // setTimeout(()=>{
+      //   navigate('/login')
+      // },2000)
       // alert("Reset successful!");
       // navigate('/login')
     } else {
@@ -85,11 +108,11 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
   };
 
   const checkCredentials = (
-    email: any,
+ 
     password: any,
     confirm_password: any
   ) => {
-    if (email!=="" && password !== "" && confirm_password!== "") {
+    if (password !== "" && confirm_password!== "") {
       return true;
     } else {
       return false;
@@ -98,7 +121,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      // email: "",
       password: "",
       confirm_password: "",
     },
@@ -116,16 +139,16 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
     hideProgressBar={true}
   />
       <Typography variant="h5" className="title-text">
-        Reset Password
+        Create Password
       </Typography>
       <Box sx={{ pt: 3 }}>
-        <Typography className="reg-text">
+        {/* <Typography className="reg-text">
           We will send you an OTP on your registered email-ID.
-        </Typography>
+        </Typography> */}
       </Box>
       <form onSubmit={formik.handleSubmit}>
         <Box sx={{ mt: 4 }} className="auth-inner">
-          <Box style={{ position: "relative" }}>
+          {/* <Box style={{ position: "relative" }}>
             <InputLabel> Registered email-id</InputLabel>
             <TextField
               margin="normal"
@@ -145,7 +168,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
                 {formik.errors.email}
               </Typography>
             )}
-          </Box>
+          </Box> */}
           <Box style={{ position: "relative" }}>
             <InputLabel>New password</InputLabel>
             <TextField
@@ -241,7 +264,7 @@ const handleClickShowPassword = (key: keyof FormValidation, newValue: boolean) =
               sx={{ mt: 0, mb: 0 }}
               className="signup-btn"
             >
-              Reset
+              Submit
             </Button>
           </Box>
         </Box>

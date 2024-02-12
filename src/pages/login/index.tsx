@@ -129,10 +129,12 @@ const Login = () => {
                     // }
                   })
                   .catch((err) => {
+                    setLoading(false);
                     console.log(err);
                   });
               })
               .catch((err) => {
+                setLoading(false);
                 console.log(err);
               });
           })
@@ -151,6 +153,7 @@ const Login = () => {
               },
             });
             setTimeout(() => {
+              setLoading(false);
               setIsSubmitted(isSubmitted);
               console.log('isSubmitted', isSubmitted);
             }, 2000);

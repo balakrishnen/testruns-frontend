@@ -36,6 +36,7 @@ import { fetchUpdateAssetsData } from '../../api/assetsAPI';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { navigate } from 'gatsby';
 // import Confirmationpopup from "../../components/ConfirmationPopup";
 // import Successpopup from "../../components/SuccessPopup";
 const validationSchema = Yup.object().shape({
@@ -53,10 +54,10 @@ const validationSchema = Yup.object().shape({
     .trim()
     .required('Procedure name is required')
     .max(50, 'Must be 50 characters or less')
-    // .matches(
-    //   /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/,
-    //   'Label cannot have empty spaces',
-    // ),
+  // .matches(
+  //   /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/,
+  //   'Label cannot have empty spaces',
+  // ),
 });
 
 const ProcedureForm = React.forwardRef(
@@ -87,19 +88,19 @@ const ProcedureForm = React.forwardRef(
     const [departments, setDepartments] = React.useState(
       formData !== undefined
         ? formData?.departmentId?.map((item: any) => ({
-            label: item?.name,
-            value: item?.name,
-            id: item?._id,
-          }))
+          label: item?.name,
+          value: item?.name,
+          id: item?._id,
+        }))
         : [],
     );
     const [laboratory, setLaboratory] = React.useState(
       formData !== undefined
         ? formData?.laboratoryId?.map((item: any) => ({
-            label: item?.name,
-            value: item?.name,
-            id: item?._id,
-          }))
+          label: item?.name,
+          value: item?.name,
+          id: item?._id,
+        }))
         : [],
     );
     // const handleAddButtonClick = () => {
@@ -133,7 +134,7 @@ const ProcedureForm = React.forwardRef(
         laboratoryId: labArray,
         createdBy: values.createdBy,
         procedureDetials: values.procedureDetials,
-        instituteId:process.env.INSTITUTION_ID
+        instituteId: process.env.INSTITUTION_ID
       };
       if (type == 'create') {
         procedures['organisationId'] = values.organisationId;
@@ -163,9 +164,22 @@ const ProcedureForm = React.forwardRef(
 
           // }
         } else {
-          await dispatch(postProcedureData(procedures));
-          submitFormPopup();
+          await dispatch(postProcedureData(procedures)).then((res) => {
+            console.log("res?.data?.", res);
+            submitFormPopup();
+            setTimeout(() => {
+              navigate(`/procedures/details/${res?.create_procedure?._id}`)
+
+            }, 1000)
+
+          }
+          ).catch((err) => {
+            console.log(err);
+
+          })
+
           clearForm();
+          // navigate(`/procedures/details/${}`)
           reload();
         }
       }
@@ -195,16 +209,16 @@ const ProcedureForm = React.forwardRef(
               formik.setFieldValue(
                 'procedureDetials',
                 isSucess?.get_procedure?.procedureDetials ||
-                  row?.procedureDetials,
+                row?.procedureDetials,
               );
               formik.setFieldValue(
                 'createdBy',
                 isSucess?.get_procedure?.createdBy || row?.createdBy,
               );
             }
-          }).catch((err)=>{
+          }).catch((err) => {
             console.log(err);
-            
+
           })
         } else if (row !== undefined) {
           let department = row?.departmentId?.map((item: any) => ({
@@ -269,10 +283,10 @@ const ProcedureForm = React.forwardRef(
         name: '',
         createdOn: moment(new Date()).format('MM/DD/YYYY'),
         createdBy: userSliceData?.firstName + userSliceData?.lastName,
-        departmentId: formData?formData.departmentId:[],
-        laboratoryId: formData?formData.laboratoryId:[],
-        organisationId: formData?formData.organisationId:singleUserData?.organisationId,
-        procedureDetials:''
+        departmentId: formData ? formData.departmentId : [],
+        laboratoryId: formData ? formData.laboratoryId : [],
+        organisationId: formData ? formData.organisationId : singleUserData?.organisationId,
+        procedureDetials: ''
       },
       validationSchema: validationSchema,
       onSubmit: onSubmit,
@@ -296,21 +310,21 @@ const ProcedureForm = React.forwardRef(
     React.useEffect(() => {
       const mappedDepartments = (singleUserData?.departmentId || []).map((id: string) => {
         var department = departmentSliceData?.find(obj => obj._id === id);
-      
+
         if (department) {
-            return {
-                label: department.name,
-                value: department.name,
-                id: department._id,
-            };
+          return {
+            label: department.name,
+            value: department.name,
+            id: department._id,
+          };
         }
-      
+
         return null; // Handle the case where the department with the specified ID is not found
-    }).filter((department) => department !== null) 
+      }).filter((department) => department !== null)
 
       const mappedDLabs = singleUserData?.laboratoryId?.map((id: string) => {
         var lab = labSliceData?.find(obj => obj._id === id);
-      
+
         if (lab) {
           return {
             label: lab.name,
@@ -318,14 +332,14 @@ const ProcedureForm = React.forwardRef(
             id: lab._id,
           };
         }
-     
+
         return null // Handle the case where the department with the specified ID is not found
-      }).filter((lab) => lab !== null) 
-      
-      
-      console.log("mappedDepartments",mappedDepartments);
-      console.log("mappedDepartments",mappedDLabs);
-      
+      }).filter((lab) => lab !== null)
+
+
+      console.log("mappedDepartments", mappedDepartments);
+      console.log("mappedDepartments", mappedDLabs);
+
       setDepartmentData(mappedDepartments)
       setLabData(mappedDLabs)
       // setDepartmentData(
@@ -350,7 +364,7 @@ const ProcedureForm = React.forwardRef(
 
     // React.useEffect(() => {
     //   let payload={
-        
+
     //   }
     //   dispatch(fetchDepartmentData());
     //   dispatch(fetchLabData());
@@ -383,14 +397,14 @@ const ProcedureForm = React.forwardRef(
     const createdOn =
       type == 'edit'
         ? dayjs(
-            moment(parseInt(formData?.createdAt))
-              .local()
-              .format('MM/DD/YYYY'),
-          )
+          moment(parseInt(formData?.createdAt))
+            .local()
+            .format('MM/DD/YYYY'),
+        )
         : dayjs(moment().format('MM/DD/YYYY'));
 
-        console.log(formik.errors);
-        
+    console.log(formik.errors);
+
     return (
       <div>
         {/* <Confirmationpopup
@@ -456,10 +470,10 @@ const ProcedureForm = React.forwardRef(
                         value={formData?.procedureNumber}
                         disabled
                         size="small"
-                        // error={
-                        //   formik.touched.procedureNumber &&
-                        //   Boolean(formik.errors.procedureNumber)
-                        // }
+                      // error={
+                      //   formik.touched.procedureNumber &&
+                      //   Boolean(formik.errors.procedureNumber)
+                      // }
                       />
                       {/* {formik.touched.procedureNumber &&
                         formik.errors.procedureNumber && (
@@ -523,8 +537,8 @@ const ProcedureForm = React.forwardRef(
                         Department<span style={{ color: '#E2445C' }}>*</span>
                       </label>
                       {type == 'edit' &&
-                      departments &&
-                      departments.length > 0 ? (
+                        departments &&
+                        departments.length > 0 ? (
                         <Autocomplete
                           multiple
                           id="departmentId"
@@ -534,7 +548,7 @@ const ProcedureForm = React.forwardRef(
                             departmentData !== undefined ? departmentData : []
                           }
                           getOptionLabel={(option: any) => option.label}
-                          isOptionEqualToValue={(option: any, value: any) => 
+                          isOptionEqualToValue={(option: any, value: any) =>
                             value.id == option.id
                           }
                           renderInput={(params) => (
@@ -577,7 +591,7 @@ const ProcedureForm = React.forwardRef(
                             departmentData !== undefined ? departmentData : []
                           }
                           getOptionLabel={(option: any) => option.label}
-                          isOptionEqualToValue={(option: any, value: any) => 
+                          isOptionEqualToValue={(option: any, value: any) =>
                             value.id == option.id
                           }
                           renderInput={(params) => (
@@ -602,9 +616,10 @@ const ProcedureForm = React.forwardRef(
                               </li>
                             </React.Fragment>
                           )}
-                          onBlur={()=>{
-                            var dept:any=[];
-                            formik.values.departmentId?.map((item: any) => (dept.push(item?.id))); dispatch(fetchLabById({departmentId : dept}));setLaboratory([])}
+                          onBlur={() => {
+                            var dept: any = [];
+                            formik.values.departmentId?.map((item: any) => (dept.push(item?.id))); dispatch(fetchLabById({ departmentId: dept })); setLaboratory([])
+                          }
                           }
                           onChange={(_, selectedOptions: any) => {
                             setDepartments(selectedOptions);
@@ -678,45 +693,45 @@ const ProcedureForm = React.forwardRef(
                       </label>
                       {type == 'edit' && laboratory && laboratory.length > 0 ? (
                         <Autocomplete
-                        multiple
-                        id="departmentId"
-                        options={labData !== undefined ? labData : []}
-                        getOptionLabel={(option: any) => option.label}
-                        isOptionEqualToValue={(option: any, value: any) =>
-                          value.id == option.id
-                        }
-                        disableCloseOnSelect
-                        value={laboratory}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            placeholder={
-                              laboratory?.length == 0 ? 'Laboratory/ies' : ''
-                            }
-                          />
-                        )}
-                        fullWidth
-                        placeholder="Laboratory"
-                        size="medium"
-                        renderOption={(props, option: any, { selected }) => (
-                          <React.Fragment>
-                            <li {...props}>
-                              <Checkbox
-                                style={{ marginRight: 0 }}
-                                checked={selected}
-                              />
-                              {option.value}
-                            </li>
-                          </React.Fragment>
-                        )}
-                        onChange={(_, selectedOptions: any) => {
-                          setLaboratory(selectedOptions);
-                          formik.setValues({
-                            ...formik.values,
-                            laboratoryId: selectedOptions,
-                          });
-                        }}
-                      />
+                          multiple
+                          id="departmentId"
+                          options={labData !== undefined ? labData : []}
+                          getOptionLabel={(option: any) => option.label}
+                          isOptionEqualToValue={(option: any, value: any) =>
+                            value.id == option.id
+                          }
+                          disableCloseOnSelect
+                          value={laboratory}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder={
+                                laboratory?.length == 0 ? 'Laboratory/ies' : ''
+                              }
+                            />
+                          )}
+                          fullWidth
+                          placeholder="Laboratory"
+                          size="medium"
+                          renderOption={(props, option: any, { selected }) => (
+                            <React.Fragment>
+                              <li {...props}>
+                                <Checkbox
+                                  style={{ marginRight: 0 }}
+                                  checked={selected}
+                                />
+                                {option.value}
+                              </li>
+                            </React.Fragment>
+                          )}
+                          onChange={(_, selectedOptions: any) => {
+                            setLaboratory(selectedOptions);
+                            formik.setValues({
+                              ...formik.values,
+                              laboratoryId: selectedOptions,
+                            });
+                          }}
+                        />
                       ) : (
                         <Autocomplete
                           multiple
@@ -739,7 +754,7 @@ const ProcedureForm = React.forwardRef(
                           fullWidth
                           placeholder="Laboratory"
                           size="medium"
-                          disabled={departments.length==0?true:false}
+                          disabled={departments.length == 0 ? true : false}
                           renderOption={(props, option: any, { selected }) => (
                             <React.Fragment>
                               <li {...props}>
@@ -824,7 +839,7 @@ const ProcedureForm = React.forwardRef(
                   type="submit"
                   variant="contained"
                   className="add-btn"
-                  disabled={type == 'edit' ? !formik.dirty : Object.keys(formik.errors).length==0 && formik.dirty? false:true}
+                  disabled={type == 'edit' ? !formik.dirty : Object.keys(formik.errors).length == 0 && formik.dirty ? false : true}
                 >
                   {type === 'edit' ? 'Update' : 'Create'}
                 </Button>

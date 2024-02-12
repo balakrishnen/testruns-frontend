@@ -6,7 +6,7 @@ import Runs from './runs';
 import RunsDetails from './runs/details/[id]';
 import Login from './login';
 import ForgotPassword from './forgot-password';
-import ResetPassword from './reset-password';
+import ResetPassword from './create-password';
 import OTP from './otp';
 import Procedures from './procedures';
 import ProcedureDetails from './procedures/details/[id]';
@@ -49,7 +49,7 @@ const IndexPage: React.FC = () => {
             <Login path="/" />
             <Login path="/login" />
             <OTP path="/otp" />
-            <ResetPassword path="/reset-password" />
+            <ResetPassword path="/create-password" />
             <ForgotPassword path="/forgot-password" />
             <PrivateRoute path="/mypage" component={MyPage} />
             <PrivateRoute path="/runs" component={Runs} />

@@ -18,6 +18,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   OAuthProvider,
+  updatePassword,
 } from "firebase/auth";
 import { navigate } from "gatsby";
 import { toast } from "react-toastify";
@@ -44,7 +45,7 @@ export const CardLayout = ({ children }: any, props: any) => {
   );
     console.log(userSliceData);
   
-  const googleSignup = async () => {
+  const googleSignup = async (socailType:any) => {
     try {
       const googleProvider = provider("google.com");
       const result:any = await signInWithPopup(auth, googleProvider);
@@ -77,6 +78,8 @@ export const CardLayout = ({ children }: any, props: any) => {
 
       await dispatch(fetchLoginUser(payload2)).then((res)=>{
         const temp = { _id: res?.verifyToken?._id };
+        console.log(res);
+        
          dispatch(fetchSingleUserData(temp)).then((isSuccess: any) => {
           const data = isSuccess?.get_user ?? {};
           window.localStorage.setItem("userProfileDetails",JSON.stringify(isSuccess?.get_user))
@@ -100,10 +103,19 @@ export const CardLayout = ({ children }: any, props: any) => {
                 color: "#fff",
               },
             });
+            console.log("passwordHash",result?.user);
+            if(result?.user?.reloadUserInfo.hasOwnProperty('passwordHash')){
             setTimeout(()=>{
               navigate("/mypage");
 
             },2000)
+          }
+          else{
+            setTimeout(()=>{
+              navigate("/create-password");
+
+            },2000)
+          }
           }
        
       // }
@@ -112,16 +124,22 @@ export const CardLayout = ({ children }: any, props: any) => {
 
   } catch (error) {
     console.log(error);
+    toast(`The user is inactive !`, {
+      style: {
+        background: '#d92828',
+        color: '#fff',
+      } 
+    });
   }
 };
-  const microsoftSignup = async () => {
+  const microsoftSignup = async (socailType:any) => {
     try {
       const microsoftProvider = provider("microsoft.com");
       const result: any = await signInWithPopup(auth, microsoftProvider);
 
       const payload = {
         firstName: result.user.displayName,
-        lastName: "",
+        lastName: result.user.lastName,
         email: result.user.email,
         uid: result.user.uid,
         organisationId: process.env.ORGANIZATION_ID,
@@ -177,10 +195,19 @@ export const CardLayout = ({ children }: any, props: any) => {
                   color: "#fff",
                 },
               });
-              setTimeout(()=>{
-                navigate("/mypage");
-
-              },2000)
+              // console.log("passwordHash",result.users.passwordHash);
+              if(result?.user?.reloadUserInfo.hasOwnProperty('passwordHash')){
+                setTimeout(()=>{
+                  navigate("/mypage");
+    
+                },2000)
+              }
+              else{
+                setTimeout(()=>{
+                  navigate("/create-password");
+    
+                },2000)
+              }
             }
          
         // }
@@ -189,6 +216,12 @@ export const CardLayout = ({ children }: any, props: any) => {
 
     } catch (error) {
       console.log(error);
+      toast(`The user is inactive !`, {
+        style: {
+          background: '#d92828',
+          color: '#fff',
+        } 
+      });
     }
   };
   return (
@@ -248,7 +281,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => googleSignup()}
+                  onClick={() => googleSignup("SignIn")}
                 >
                   {" "}
                   <img src={google} alt="google" />
@@ -278,7 +311,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => microsoftSignup()}
+                  onClick={() => microsoftSignup("SignIn")}
                 >
                   {" "}
                   <img src={microsoft} alt="microsoft" />
@@ -343,7 +376,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => googleSignup()}
+                  onClick={() => googleSignup("SignUp")}
                 >
                   {" "}
                   <img src={google} alt="google" />
@@ -373,7 +406,7 @@ export const CardLayout = ({ children }: any, props: any) => {
                     fontSize: "15px",
                     textTransform: "none",
                   }}
-                  onClick={() => microsoftSignup()}
+                  onClick={() => microsoftSignup("SignUp")}
                 >
                   {" "}
                   <img src={microsoft} alt="microsoft" />
@@ -425,10 +458,10 @@ export const CardLayout = ({ children }: any, props: any) => {
                 </Box>
               </Box>
             )}
-            {children.props.uri === "/reset-password" && (
+            {children.props.uri === "/create-password" && (
               <Box className="auth-inner-text">
                 <Box>
-                  <Typography variant="h5">Forgot your password?</Typography>
+                  <Typography variant="h5">Create your password?</Typography>
                 </Box>
                 <Box>
                   <Typography variant="h4">Don't worry we got you</Typography>

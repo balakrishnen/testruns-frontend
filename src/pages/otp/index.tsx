@@ -55,9 +55,9 @@ const OTP = () => {
           background: '#00bf70', color: '#fff'
         }
       });
-      setTimeout(()=>{
-        navigate('/reset-password')
-      },2000)
+      // setTimeout(()=>{
+      //   navigate('/reset-password')
+      // },2000)
       // alert("OTP successful!");
       // navigate('/reset-password')
     } else {

@@ -479,9 +479,9 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
   console.log(visibleRow);
   const Procedure: any = [];
   const ProcedureVal: any = { _id: rowId };
-  const handleDeleteConfirmation = (state: any) => {
+  const handleDeleteConfirmation = async(state: any) => {
     if (state === 1) {
-      dispatch(deleteProcedureData(ProcedureVal));
+    await  dispatch(deleteProcedureData(ProcedureVal));
       toast(`Procedure deleted !`, {
         style: {
           background: '#00bf70',
@@ -492,7 +492,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
       // setTimeout(() => {
       // deleteSuccessPopupRef.current.open(false);
       // }, 3000);
-      reload();
+      await reload();
       setTableHeaderVisible(false);
       // deletePopupRef.current.open(false);
     }
@@ -569,7 +569,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
         <Box className="title-main">
           <Typography>Procedures</Typography>
           <div className="buttonFilter">
-            {rowId.length !== 0 ? (
+            {/* {rowId.length !== 0 ? (
               <Button
                 variant="contained"
                 onClick={() => {
@@ -585,7 +585,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
                 <AddIcon sx={{ mr: 1 }} />
                 Duplicate 
               </Button>
-            ) : (
+            ) : ( */}
               <Button
                 variant="contained"
                 onClick={() => {
@@ -596,7 +596,7 @@ console.log(loginUserSliceData?.verifyToken?.role[0]?._id!=="65741c069d53d19df83
                 <AddIcon sx={{ mr: 1 }} />
                 Create Procedure
               </Button>
-            )}
+            {/* )} */}
             <Box sx={{ position: 'relative' }}>
               <Button
                 // aria-describedby={id}
