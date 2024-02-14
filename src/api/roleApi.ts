@@ -20,6 +20,7 @@ export const fetchRoleData = (payload:any) => async (dispatch: any) => {
         dispatch(fetchRoleFailure(error.message));
     }
 };
+//Checking 
 export const fetchSingleRoleData = (payload: any) => async (dispatch: any) => {
     dispatch(fetchRoleStart());
     try {
